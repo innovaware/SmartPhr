@@ -36,6 +36,8 @@ import { OspitiComponent } from './pages/ospiti/ospiti.component';
 import { TableOspitiComponent } from './component/table-ospiti/table-ospiti.component';
 import { AreaEducativaComponent } from './pages/area-educativa/area-educativa.component';
 import { AreaFisioterapiaComponent } from './pages/area-fisioterapia/area-fisioterapia.component';
+import { AreaMedicaComponent } from './pages/area-medica/area-medica.component';
+import { AreaInfermieristicaComponent } from './pages/area-infermieristica/area-infermieristica.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +54,9 @@ import { AreaFisioterapiaComponent } from './pages/area-fisioterapia/area-fisiot
     OspitiComponent,
     TableOspitiComponent,
     AreaEducativaComponent,
-    AreaFisioterapiaComponent
+    AreaFisioterapiaComponent,
+    AreaMedicaComponent,
+    AreaInfermieristicaComponent
   ],
   imports: [
     BrowserModule,
