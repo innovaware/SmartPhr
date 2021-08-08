@@ -1,0 +1,154 @@
+<div class="tabcontent">
+
+  <table>
+    <tbody>
+      <tr>
+        <td>
+          <h5>Cognome: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.cognome" [disabled]=disable>
+        </td>
+
+        <td>
+          <h5>Nome: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.nome" [disabled]=disable>
+        </td>
+
+
+      <tr>
+        <td>
+          <label>
+            <h5>Luogo di nascita: </h5>
+          </label>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.luogoNascita" [disabled]=disable>
+        </td>
+        <td>
+          <h5 class="font-normal">Data di nascita:</h5>
+        </td>
+        <td>
+          <div class="form-group" id="input_data_nascita">
+            <mat-form-field appearance="fill" >
+              <mat-label>Scegli una date</mat-label>
+              <input matInput [matDatepicker]="dataNascita" [(ngModel)]="data.dataNascita" [disabled]=disable>
+              <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
+              <mat-datepicker #dataNascita></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </td>
+
+      </tr>
+
+      <tr>
+        <td>
+          <label>
+            <h5>Residenza: </h5>
+          </label>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.residenza" [disabled]=disable>
+        </td>
+
+        <td>
+          <h5 class="lblrdb">SESSO</h5>
+        </td>
+        <td>
+          <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+            [(ngModel)]="data.sesso"  [disabled]=disable [disabled]=true>
+            <mat-radio-button class="example-radio-button" value='M' >M</mat-radio-button>
+            <mat-radio-button class="example-radio-button" value='F' >F</mat-radio-button>
+          </mat-radio-group>
+
+
+        </td>
+      </tr>
+
+
+      <tr>
+        <td>
+          <h5>Stato Civile: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.statoCivile" [disabled]=disable>
+        </td>
+        <td>
+          <label>
+            <h5>Figli: </h5>
+          </label>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.figli" [disabled]=disable>
+        </td>
+
+      </tr>
+
+
+      <tr>
+        <td>
+          <h5>Scolarità: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.scolarita" [disabled]=disable>
+        </td>
+        <td>
+          <h5>Situazione lavorativa: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.situazioneLavorativa" [disabled]=disable>
+        </td>
+
+      </tr>
+
+
+
+      <tr>
+        <td>
+          <h5>Persone di riferimento: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.personeRiferimento" [disabled]=disable>
+        </td>
+        <td>
+          <h5>Tel: </h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.telefono" [disabled]=disable>
+        </td>
+
+      </tr>
+
+
+      <tr>
+        <td>
+          <h5 class="font-normal">DATA D'INGRESSO:</h5>
+        </td>
+        <td>
+          <div class="form-group" id="input_data_ingresso">
+            <mat-form-field appearance="fill">
+              <mat-label>Scegli data</mat-label>
+              <input matInput [matDatepicker]="dataIngresso" [(ngModel)]="data.dataIngresso" [disabled]=disable>
+              <mat-datepicker-toggle matSuffix [for]="dataIngresso"></mat-datepicker-toggle>
+              <mat-datepicker #dataIngresso></mat-datepicker>
+            </mat-form-field>
+          </div>
+
+        </td>
+        <td>
+          <h5>PROVENIENZA</h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.provenienza" [disabled]=disable>
+        </td>
+
+      </tr>
+
+
+    </tbody>
+  </table>
+
+</div>

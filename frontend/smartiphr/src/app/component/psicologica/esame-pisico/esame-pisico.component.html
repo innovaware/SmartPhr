@@ -1,0 +1,353 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Stato emotivo</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.statoEmotivo" multiple>
+              <option value="ansioso">ansioso</option>
+              <option value="apatico">apatico</option>
+              <option value="aggressivo">aggressivo</option>
+              <option value="euforico">euforico</option>
+              <option value="disinibito">disinibito</option>
+              <option value="preoccupato">preoccupato</option>
+              <option value="distratto">distratto</option>
+              <option value="assonnato">assonnato</option>
+              <option value="depresso">depresso</option>
+              <option value="adeguato">adeguato</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.statoEmotivo, 'altro')"></textarea>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Personalità e comportamento sociale </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.personalita" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="irrequietezza">irrequietezza motoria</option>
+              <option value="vagabondaggio">vagabondaggio</option>
+
+              <option value="trascuratezza_cura">trascuratezza nella cura della persona</option>
+              <option value="apatia">apatia</option>
+              <option value="anergia">anergia</option>
+              <option value="risposta_emotiva">risposta emotiva inadeguata</option>
+              <option value="incontinenza">incontinenza</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.personalita, 'altro')"></textarea>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Linguaggio (aspetti formali) </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.linguaggio" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="fluente">fluente</option>
+              <option value="no_fluente">non fluente</option>
+
+              <option value="anomie">anomie</option>
+              <option value="circonlocuzioni">circonlocuzioni</option>
+              <option value="ripetizioni">ripetizioni</option>
+              <option value="confabulazione">confabulazione</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.linguaggio, 'altro')"></textarea>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Memoria </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.memoria" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="difficolta_rec">difficoltà nel ricordare avvenimenti recenti</option>
+              <option value="difficolta_nuove_info">difficoltà nel ricordare e apprendere nuove informazioni</option>
+              <option value="difficolta_ogg">difficoltà nel ricordare dove ha riposto gli oggetti</option>
+              <option value="difficolta_app">difficoltà nel ricordare appuntamenti e scadenza</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.memoria, 'altro')"></textarea>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Orientamento </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.orientamento" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="dis_spaziale">disorientamento spaziale</option>
+              <option value="dis_personale">disorientamento personale</option>
+              <option value="dis_temporale">disorientamento temporale</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.orientamento, 'altro')"></textarea>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Abilità percettivo-spaziali e prassiche </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.abilitaPercettivo" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="imprecisione">imprecisione a raggiungere con la mano un oggetto</option>
+              <option value="difficoltà_prassi">difficoltà prassiche</option>
+              <option value="difficoltà_costruttive">difficoltà costruttive</option>
+
+              <option value="difficoltà_lett_scritt">difficoltà nella lettura e scrittura</option>
+              <option value="difficoltà_local">difficoltà di localizzazione di oggetti nello spazio</option>
+              <option value="difficoltà_riconoscere">difficoltà nel riconoscere volti di persone famigliari o
+                l'architettura,struttura di edifici conosciuti</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.abilitaPercettivo, 'altro')"></textarea>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Abilità esecutive </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.abilitaEsecutive" multiple>
+              <option selected="">Seleziona ...</option>
+              <option selected="">Seleziona ...</option>
+              <option value="deficit_pian">deficit di pianificazione</option>
+              <option value="deficit_pro">deficit di problem solving </option>
+              <option value="disattenzione">disattenzione</option>
+
+
+              <option value="inflessibilita">inflessibilità</option>
+              <option value="perseverazione">perseverazione </option>
+              <option value="mancanza">mancanza di critica e giudizio</option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.abilitaEsecutive, 'altro')"></textarea>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Ideazione/Percezione </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.ideazione" multiple>
+              <option selected="">Seleziona ...</option>
+              <option value="sospettosita">sospettosità</option>
+              <option value="persecuzione">deliri di persecuzione </option>
+              <option value="furto">deliri di furto</option>
+
+
+              <option value="allucinazioni">allucinazioni</option>
+              <option value="falsi_riconoscimenti">falsi riconoscimenti </option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.ideazione, 'altro')"></textarea>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Affettività Umore</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <select matNativeControl required [(ngModel)]="data.schedaPisico.esame.umore" multiple>
+              <option selected="">Seleziona ...</option>
+              <option selected="">Seleziona ...</option>
+              <option value="eutimico">eutimico</option>
+              <option value="depresso">depresso </option>
+              <option value="euforico">euforico</option>
+              <option value="sereno">sereno</option>
+              <option value="fluttuante">fluttuante </option>
+              <option value="altro">altro</option>
+            </select>
+          </mat-form-field>
+
+          <textarea class="form-control value_input" rows="1" cols="150"
+            *ngIf="showInput(data.schedaPisico.esame.umore, 'altro')"></textarea>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Partecipazione emotiva alle circostanze attuali ed ai contenuti di coscienza:
+          </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+
+          <mat-radio-group [(ngModel)]="data.schedaPisico.esame.partecipazioni">
+            <mat-radio-button value="adeguata">Adeguata</mat-radio-button>
+            <mat-radio-button value="noadeguata">Non adeguata</mat-radio-button>
+          </mat-radio-group>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Ansia </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-radio-group aria-label="" [(ngModel)]="data.schedaPisico.esame.ansia">
+            <mat-radio-button value="Assente">Assente</mat-radio-button>
+            <mat-radio-button value="Presente">Presente</mat-radio-button>
+          </mat-radio-group>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Test Eseguiti </mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-radio-group aria-label="" [(ngModel)]="data.schedaPisico.esame.testEsecutivi">
+            <mat-radio-button value="No">No</mat-radio-button>
+            <mat-radio-button value="Si">Si</mat-radio-button>
+          </mat-radio-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
+  <div style="padding-top:30px"></div>
+</div>

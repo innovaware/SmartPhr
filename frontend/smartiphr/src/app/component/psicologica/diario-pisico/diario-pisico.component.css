@@ -1,0 +1,27 @@
+.tabcontent {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+table {
+  width: 100%;
+}
+
+
+.mat-column-action {
+  /* width: 32px; */
+  text-align: right;
+}
+
+
+.mat-form-field {
+  width: 100%;
+}
+
+.button-info {
+  color: #fff;
+  background-color: #23c6c8;
+  border-color: #23c6c8;
+  margin-bottom: 7px;
+}

@@ -1,0 +1,50 @@
+<div class="container-fluid">
+  <div class="row">
+
+    <!-- MENU -->
+    <div class="col-3 col-md-2 col-lg-2 col-xl-2 col-xxl-2  without_padding">
+      <app-menu style="width: 100%;"></app-menu>
+    </div>
+
+
+    <div class="col without_padding" style="padding-right: calc(var(--bs-gutter-x) / 2);">
+      <div class="container-flud ">
+        <!-- HEADER -->
+        <div class="row head">
+          <div class="col">
+            <input type="text" placeholder="Cerca qualcosa..." class="form-control">
+          </div>
+
+          <div class="col-md-6 col-sm-8" style="text-align: right; padding-right: 30px;">
+            <div class="container-flud ">
+              <div class="row">
+                <div class="col">
+                  <a routerLink="/" routerLinkActive="active" title="Nuovo Messaggio" class="btnAddMess pad"> Nuovo
+                    Messaggio</a>
+                  <span class="pad welcome-message">Benvenuto in SmartiPHR</span>
+                  <a routerLink="/" routerLinkActive="active" title="Nuovo Messaggio">
+                    <fa-icon icon="sign-out-alt"></fa-icon>
+                    Log out
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="row">
+          <router-outlet class="content-page"></router-outlet>
+
+          <!-- <app-paziente-generale></app-paziente-generale> -->
+        </div>
+
+
+      </div>
+    </div>
+
+
+  </div>
+
+
+</div>

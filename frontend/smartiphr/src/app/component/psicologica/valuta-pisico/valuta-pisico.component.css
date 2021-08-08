@@ -1,0 +1,12 @@
+.tabcontent {
+  padding-top: 10px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
+
+textarea {
+  background-color: #ffffff;
+  background-image: none;
+  border: 1px solid #e5e6e7;
+  color: #676a6c;
+}
