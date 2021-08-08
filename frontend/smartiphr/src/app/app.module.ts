@@ -32,6 +32,10 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import { OspitiComponent } from './pages/ospiti/ospiti.component';
+import { TableOspitiComponent } from './component/table-ospiti/table-ospiti.component';
+import { AreaEducativaComponent } from './pages/area-educativa/area-educativa.component';
+import { AreaFisioterapiaComponent } from './pages/area-fisioterapia/area-fisioterapia.component';
 
 @NgModule({
   declarations: [
@@ -44,7 +48,11 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     EsamePisicoComponent,
     ValutaPisicoComponent,
     DiarioPisicoComponent,
-    DialogDiarioComponent
+    DialogDiarioComponent,
+    OspitiComponent,
+    TableOspitiComponent,
+    AreaEducativaComponent,
+    AreaFisioterapiaComponent
   ],
   imports: [
     BrowserModule,

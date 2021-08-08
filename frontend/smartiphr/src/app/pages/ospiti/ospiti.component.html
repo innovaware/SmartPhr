@@ -1,0 +1,24 @@
+
+
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA OSPITI</h1>
+      AM = Documenti Amministrativi, CC = Cartella Clinica, CI = Cartella Infermieristica, AC = Autocertificazione Covid-19
+
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button class="button-info">Inserisci</button>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <app-table-ospiti (showItemEmiter)="show($event)"></app-table-ospiti>
+    </div>
+  </div>
+</div>
