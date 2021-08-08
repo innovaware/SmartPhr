@@ -18,6 +18,7 @@ import { PazienteGeneraleComponent } from './component/paziente-generale/pazient
 import { EsamePisicoComponent } from './component/psicologica/esame-pisico/esame-pisico.component';
 import { ValutaPisicoComponent } from './component/psicologica/valuta-pisico/valuta-pisico.component';
 import { DiarioPisicoComponent } from './component/psicologica/diario-pisico/diario-pisico.component';
+import { DialogDiarioComponent } from './dialogs/dialog-diario/dialog-diario.component';
 
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -42,7 +43,8 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
     PazienteGeneraleComponent,
     EsamePisicoComponent,
     ValutaPisicoComponent,
-    DiarioPisicoComponent
+    DiarioPisicoComponent,
+    DialogDiarioComponent
   ],
   imports: [
     BrowserModule,
@@ -66,7 +68,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],
-  entryComponents: [DialogPisicologicaComponent]
+  entryComponents: [DialogPisicologicaComponent, DialogDiarioComponent]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {

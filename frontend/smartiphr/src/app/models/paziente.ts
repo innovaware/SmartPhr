@@ -1,3 +1,5 @@
+import { Diario } from './diario';
+
 export class Paziente {
   cognome: string;
   nome: string;
@@ -33,10 +35,6 @@ export class Paziente {
       testEsecutivi: string;
     },
     valutazione: string;
-    diario: {
-      data: Date;
-      valore: string;
-      firma: string;
-    } []
+    diario: Diario[]
   };
 }
