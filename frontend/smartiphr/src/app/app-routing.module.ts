@@ -4,6 +4,9 @@ import { AreaEducativaComponent } from './pages/area-educativa/area-educativa.co
 import { AreaFisioterapiaComponent } from './pages/area-fisioterapia/area-fisioterapia.component';
 import { AreaInfermieristicaComponent } from './pages/area-infermieristica/area-infermieristica.component';
 import { AreaMedicaComponent } from './pages/area-medica/area-medica.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { GestStanzeComponent } from './pages/gest-stanze/gest-stanze.component';
+import { GestUtentiComponent } from './pages/gest-utenti/gest-utenti.component';
 import { OspitiComponent } from './pages/ospiti/ospiti.component';
 import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
 
@@ -14,6 +17,9 @@ const routes: Routes = [
   { path: "fisioterapia", component: AreaFisioterapiaComponent }, // Wildcard route for a 404 page
   { path: "medica", component: AreaMedicaComponent }, // Wildcard route for a 404 page
   { path: "infermieristica", component: AreaInfermieristicaComponent }, // Wildcard route for a 404 page
+  { path: "gest_utenti", component: GestUtentiComponent }, // Wildcard route for a 404 page
+  { path: "gest_stanze", component: GestStanzeComponent }, // Wildcard route for a 404 page
+  { path: "", component: DashboardComponent }, // Wildcard route for a 404 page
 
   //  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
 ];

@@ -1,5 +1,4 @@
 /* You can add global styles to this file, and also import other style files */
-@import "../node_modules/angular-calendar/css/angular-calendar.css";
 
 html,
 body {
@@ -30,3 +29,8 @@ body {
   font-size: 13px;
 }
 
+.button-insert {
+  color: #fff;
+  background-color: #1ab394;
+  border-color: #1ab394;
+}

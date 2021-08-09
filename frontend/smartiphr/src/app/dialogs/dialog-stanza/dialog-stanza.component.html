@@ -1,0 +1,62 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>STANZA</h3>
+      </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="input-full" appearance="fill">
+          <mat-label>Numero</mat-label>
+          <input matInput [(ngModel)]="data.numero">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="input-full" appearance="fill">
+          <mat-label>Descrizione</mat-label>
+          <input matInput [(ngModel)]="data.descrizione">
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="input-full" appearance="fill">
+          <mat-label>Piano</mat-label>
+          <input matInput [(ngModel)]="data.piano">
+        </mat-form-field>
+      </div>
+    </div>
+
+
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    <button mat-button class="button-insert" (click)="save()">Salva</button>
+  </div>
+</div>

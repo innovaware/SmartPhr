@@ -54,9 +54,38 @@ li > a {
 
 ul {
   list-style-type: none;
-  padding: 0
+  padding: 0;
 }
 
 fa-icon {
   margin-right: 6px;
+}
+
+.mat-expansion-panel {
+  background: transparent;
+  color: rgba(0, 0, 0, 0.87);
+  display: unset;
+}
+
+.mat-expansion-panel-header {
+  padding: 0px;
+}
+
+.mat-expansion-panel-header {
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+}
+
+::ng-deep .mat-expansion-panel-body {
+  color: #a7b1c2;
+}
+
+::ng-deep .mat-expanded {
+  border-left: 4px solid #19aa8d;
+  border-radius: 0px !important;
+}
+
+::ng-deep .mat-expansion-panel-content {
+  border-left: 4px solid #19aa8d;
 }

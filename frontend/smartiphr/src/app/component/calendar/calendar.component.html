@@ -1,0 +1,82 @@
+<h2>{{today.format('MMMM YYYY')}}</h2>
+
+<table class="table_mese">
+  <tbody>
+    <tr>
+
+      <td>
+        <div class="cal_head">Lun</div>
+      </td>
+      <td>
+        <div class="cal_head">Mar</div>
+      </td>
+      <td>
+        <div class="cal_head">Mer</div>
+      </td>
+      <td>
+        <div class="cal_head">Gio</div>
+      </td>
+      <td>
+        <div class="cal_head">Ven</div>
+      </td>
+      <td>
+        <div class="cal_head">Sab</div>
+      </td>
+      <td>
+        <div class="cal_head festivo_day">Dom</div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[0].days">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+        <div class="container_event droppable" tipo_cont="mese">
+
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[1].days">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+        <div class="container_event droppable" tipo_cont="mese"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[2].days">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+        <div class="container_event droppable" tipo_cont="mese">
+          <!-- <div class="event_type">
+            <span class="badge ">10:10</span><span>evento 1 </span>
+          </div> -->
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[3].days">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+        <div class="container_event droppable" tipo_cont="mese"></div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[4].days">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+        <div class="container_event droppable" tipo_cont="mese"></div>
+      </td>
+    </tr>
+    <tr></tr>
+  </tbody>
+</table>

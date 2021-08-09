@@ -1,0 +1,73 @@
+h2 {
+  font-size: 24px;
+  text-transform: capitalize;
+  color: #676a6c;
+}
+
+.table_mese {
+  border: 1px #ddd solid;
+  width: 100%;
+}
+
+table {
+  display: table;
+  border-collapse: collapse;
+  border-spacing: 2px;
+}
+
+.cal_head {
+  color: #676a6c;
+  font-weight: bold;
+  text-align: center;
+}
+
+
+tbody {
+  display: table-row-group;
+  vertical-align: middle;
+  border-color: inherit;
+}
+
+.label_day {
+  font-size: 12px;
+  font-weight: bold;
+  text-align: right;
+  padding: 2px;
+}
+
+.cal_day {
+  padding: 0px;
+  border: 1px solid #ddd;
+  width: 150px;
+}
+
+.container_event {
+  min-height: 100px;
+}
+
+
+.ferial_day {
+  color: #676a6c;
+}
+
+.festivo_day {
+  color: red;
+}
+
+.disabled {
+  background-color: #80808042;
+}
+
+.badge{
+  font-size: inherit;
+}
+
+.event_type {
+  background-color: #3788d8;
+  margin: 0 3px 0px 3px;
+  font-size: 11px;
+  color: white;
+  padding: 3px;
+  border-radius: 5px;
+  /* margin: 3px; */
+}

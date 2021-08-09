@@ -3,7 +3,6 @@
   margin: 0px;
 }
 
-
 h3 {
   margin-top: 5px;
   font-weight: 600;
@@ -11,19 +10,19 @@ h3 {
   color: #676a6c;
 }
 
-.close-button{
+.close-button {
   font-size: 1.5rem;
   font-weight: 700;
   line-height: 1;
   color: #000;
   text-shadow: 0 1px 0 #fff;
-  opacity: .5;
+  opacity: 0.5;
   background: transparent;
   border: transparent;
 
   float: right;
-  top:-24px;
-  right:-24px;
+  top: -24px;
+  right: -24px;
 }
 
 .close-icon {
@@ -34,21 +33,31 @@ h3 {
   transform: rotate(180deg);
 }
 
-::ng-deep .icon-outside .close-button{
+::ng-deep .icon-outside .close-button {
   float: right;
-  top:-52px;
-  right:-52px;
+  top: -52px;
+  right: -52px;
 }
 
 ::ng-deep .icon-outside .mat-dialog-container {
- overflow: unset
+  overflow: unset;
 }
 
-button, select {
+button,
+select {
   text-transform: none;
 }
 
 .bottom-actions {
   width: 100%;
   text-align: right;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  /* background-color: rgba(0, 0, 0, 0.04); */
+  background-color: white;
+}
+
+.input-full {
+  width: 100%;
 }

@@ -5,6 +5,7 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Diario } from 'src/app/models/diario';
 import { Paziente } from "src/app/models/paziente";
+import { PazienteService } from 'src/app/service/paziente.service';
 
 @Component({
   selector: 'app-table-ospiti',
@@ -27,62 +28,16 @@ export class TableOspitiComponent implements OnInit {
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog) {
-    var diario: Diario = {
-      data: new Date(),
-      firma: "firma",
-      valore: "valore"
-    };
+  constructor(
+    public dialog: MatDialog,
+    public pazienteService: PazienteService
+    ) {
 
-    var ELEMENT_DATA: Paziente[] = [
-      {
-        cognome: "Test",
-        nome: "Test",
-        sesso: "F",
-        luogoNascita: "Catania",
-        dataNascita: new Date("01-01-1980"),
-        residenza: "via prova",
-        statoCivile: "Sposata",
-        figli: 2,
-        scolarita: "Media",
-        situazioneLavorativa: "Disoccupata",
-        personeRiferimento: "Nessuno",
-        telefono: "12345667895",
-        dataIngresso: new Date(),
-        provincia: "CT",
-        localita: "Melfi",
+    this.pazienteService.getPazienti().then( (result)=>{
+      let pazienti: Paziente[] = result;
 
-        schedaPisico: {
-          esame: {
-            statoEmotivo: ["ansioso"],
-            personalita: ["apatia"],
-            linguaggio: ["fluente"],
-            memoria: ["difficolta_rec"],
-            orientamento: ["dis_temporale"],
-            abilitaPercettivo: ["difficoltà_lett_scritt"],
-            abilitaEsecutive: ["inflessibilita"],
-            ideazione: ["allucinazioni"],
-            umore: ["euforico"],
-
-            partecipazioni: "noadeguata",
-            ansia: "Presente",
-            testEsecutivi: "Si"
-          },
-
-          valutazione: "Ciao",
-
-          diario: [diario]
-          // diario: [
-          //   { data: new Date(), valore: 'diario1', firma: ''},
-          //   { data: new Date(), valore: 'diario2', firma: 'firma2'},
-          //   { data: new Date(), valore: 'diario3', firma: ''}
-          // ]
-        }
-      },
-    ];
-
-    this.dataSource = new MatTableDataSource<Paziente>(ELEMENT_DATA);
-
+      this.dataSource = new MatTableDataSource<Paziente>(pazienti);
+    });
   }
 
   ngOnInit() {

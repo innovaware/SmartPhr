@@ -32,12 +32,20 @@ import {MatIconModule} from '@angular/material/icon';
 import {MatTabsModule} from '@angular/material/tabs';
 import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {MatButtonToggleModule} from '@angular/material/button-toggle';
+
 import { OspitiComponent } from './pages/ospiti/ospiti.component';
 import { TableOspitiComponent } from './component/table-ospiti/table-ospiti.component';
 import { AreaEducativaComponent } from './pages/area-educativa/area-educativa.component';
 import { AreaFisioterapiaComponent } from './pages/area-fisioterapia/area-fisioterapia.component';
 import { AreaMedicaComponent } from './pages/area-medica/area-medica.component';
 import { AreaInfermieristicaComponent } from './pages/area-infermieristica/area-infermieristica.component';
+import { GestUtentiComponent } from './pages/gest-utenti/gest-utenti.component';
+import { GestStanzeComponent } from './pages/gest-stanze/gest-stanze.component';
+import { DialogStanzaComponent } from './dialogs/dialog-stanza/dialog-stanza.component';
+import { CalendarComponent } from './component/calendar/calendar.component';
+import { DashboardComponent } from './pages/dashboard/dashboard.component';
 
 @NgModule({
   declarations: [
@@ -56,7 +64,12 @@ import { AreaInfermieristicaComponent } from './pages/area-infermieristica/area-
     AreaEducativaComponent,
     AreaFisioterapiaComponent,
     AreaMedicaComponent,
-    AreaInfermieristicaComponent
+    AreaInfermieristicaComponent,
+    GestUtentiComponent,
+    GestStanzeComponent,
+    DialogStanzaComponent,
+    CalendarComponent,
+    DashboardComponent
   ],
   imports: [
     BrowserModule,
@@ -76,11 +89,13 @@ import { AreaInfermieristicaComponent } from './pages/area-infermieristica/area-
     MatRadioModule,
     MatDatepickerModule,
     MatNativeDateModule,
+    MatExpansionModule,
+    MatButtonToggleModule,
     FormsModule,
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],
-  entryComponents: [DialogPisicologicaComponent, DialogDiarioComponent]
+  entryComponents: [DialogPisicologicaComponent, DialogDiarioComponent, DialogStanzaComponent]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {
