@@ -11,17 +11,17 @@ import { OspitiComponent } from './pages/ospiti/ospiti.component';
 import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
 
 const routes: Routes = [
-  { path: "ospiti", component: OspitiComponent }, // Wildcard route for a 404 page
-  { path: "educativa", component: AreaEducativaComponent }, // Wildcard route for a 404 page
-  { path: "pisicologica", component: PisicologicaComponent }, // Wildcard route for a 404 page
-  { path: "fisioterapia", component: AreaFisioterapiaComponent }, // Wildcard route for a 404 page
-  { path: "medica", component: AreaMedicaComponent }, // Wildcard route for a 404 page
-  { path: "infermieristica", component: AreaInfermieristicaComponent }, // Wildcard route for a 404 page
-  { path: "gest_utenti", component: GestUtentiComponent }, // Wildcard route for a 404 page
-  { path: "gest_stanze", component: GestStanzeComponent }, // Wildcard route for a 404 page
-  { path: "", component: DashboardComponent }, // Wildcard route for a 404 page
+  { path: "ospiti", component: OspitiComponent },
+  { path: "educativa", component: AreaEducativaComponent },
+  { path: "pisicologica", component: PisicologicaComponent },
+  { path: "fisioterapia", component: AreaFisioterapiaComponent },
+  { path: "medica", component: AreaMedicaComponent },
+  { path: "infermieristica", component: AreaInfermieristicaComponent },
+  { path: "gest_utenti", component: GestUtentiComponent },
+  { path: "gest_stanze", component: GestStanzeComponent },
+  { path: "", component: DashboardComponent },
 
-  //  { path: '**', component: PageNotFoundComponent },  // Wildcard route for a 404 page
+  //  { path: '**', component: PageNotFoundComponent },
 ];
 
 @NgModule({

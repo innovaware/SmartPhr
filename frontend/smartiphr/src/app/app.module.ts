@@ -46,6 +46,7 @@ import { GestStanzeComponent } from './pages/gest-stanze/gest-stanze.component';
 import { DialogStanzaComponent } from './dialogs/dialog-stanza/dialog-stanza.component';
 import { CalendarComponent } from './component/calendar/calendar.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -92,6 +93,7 @@ import { DashboardComponent } from './pages/dashboard/dashboard.component';
     MatExpansionModule,
     MatButtonToggleModule,
     FormsModule,
+    HttpClientModule,
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],

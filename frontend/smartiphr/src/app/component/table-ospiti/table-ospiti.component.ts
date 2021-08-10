@@ -37,6 +37,7 @@ export class TableOspitiComponent implements OnInit {
       let pazienti: Paziente[] = result;
 
       this.dataSource = new MatTableDataSource<Paziente>(pazienti);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
@@ -44,7 +45,6 @@ export class TableOspitiComponent implements OnInit {
   }
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
   }
 
   applyFilter(event: Event) {
