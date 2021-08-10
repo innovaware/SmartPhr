@@ -1,19 +1,20 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { Output, EventEmitter } from '@angular/core';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Output, EventEmitter } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { Diario } from 'src/app/models/diario';
+import { Diario } from "src/app/models/diario";
 import { Paziente } from "src/app/models/paziente";
-import { PazienteService } from 'src/app/service/paziente.service';
+import { PazienteService } from "src/app/service/paziente.service";
 
 @Component({
-  selector: 'app-table-ospiti',
-  templateUrl: './table-ospiti.component.html',
-  styleUrls: ['./table-ospiti.component.css']
+  selector: "app-table-ospiti",
+  templateUrl: "./table-ospiti.component.html",
+  styleUrls: ["./table-ospiti.component.css"],
 })
 export class TableOspitiComponent implements OnInit {
-  @Output() showItemEmiter = new EventEmitter<Paziente>();
+  @Output() showItemEmiter = new EventEmitter<{paziente: Paziente, button: string}>();
+  @Input() buttons: string[];
 
   displayedColumns: string[] = [
     "cognome",
@@ -31,9 +32,8 @@ export class TableOspitiComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public pazienteService: PazienteService
-    ) {
-
-    this.pazienteService.getPazienti().then( (result)=>{
+  ) {
+    this.pazienteService.getPazienti().then((result) => {
       let pazienti: Paziente[] = result;
 
       this.dataSource = new MatTableDataSource<Paziente>(pazienti);
@@ -41,19 +41,16 @@ export class TableOspitiComponent implements OnInit {
     });
   }
 
-  ngOnInit() {
-  }
+  ngOnInit() {}
 
-  ngAfterViewInit() {
-  }
+  ngAfterViewInit() {}
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  showPaziente(paziente: Paziente) {
-    this.showItemEmiter.emit(paziente);
+  call(paziente: Paziente, item: string) {
+    this.showItemEmiter.emit({ paziente: paziente, button: item });
   }
-
 }

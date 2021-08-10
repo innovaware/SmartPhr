@@ -20,9 +20,9 @@ export class PisicologicaComponent implements OnInit {
   }
 
 
-  show(paziente: Paziente) {
+  show(event: {paziente: Paziente, button: string}) {
     const dialogRef = this.dialog.open(DialogPisicologicaComponent, {
-      data: paziente
+      data: event.paziente
     });
 
     dialogRef.afterClosed().subscribe((result) => {

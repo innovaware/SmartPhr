@@ -1,3 +1,4 @@
+import { CartellaClinica } from './cartellaClinica';
 import { Diario } from './diario';
 
 export class Paziente {
@@ -18,23 +19,24 @@ export class Paziente {
   localita: string;
   provenienza?: string;
 
-  schedaPisico?: {
-    esame?: {
-      statoEmotivo: string[];
-      personalita: string[];
-      linguaggio: string[];
-      memoria: string[];
-      orientamento: string[];
-      abilitaPercettivo: string[];
-      abilitaEsecutive: string[];
-      ideazione: string[];
-      umore: string[];
+  cartellaClinica: CartellaClinica[];
+  // schedaPisico?: {
+  //   esame?: {
+  //     statoEmotivo: string[];
+  //     personalita: string[];
+  //     linguaggio: string[];
+  //     memoria: string[];
+  //     orientamento: string[];
+  //     abilitaPercettivo: string[];
+  //     abilitaEsecutive: string[];
+  //     ideazione: string[];
+  //     umore: string[];
 
-      partecipazioni: string;
-      ansia: string;
-      testEsecutivi: string;
-    },
-    valutazione: string;
-    diario: Diario[]
-  };
+  //     partecipazioni: string;
+  //     ansia: string;
+  //     testEsecutivi: string;
+  //   },
+  //   valutazione: string;
+  //   diario: Diario[]
+  // };
 }

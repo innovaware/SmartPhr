@@ -13,12 +13,15 @@ import { far } from '@fortawesome/free-regular-svg-icons';
 
 import { MenuComponent } from './component/menu/menu.component';
 import { PisicologicaComponent } from './pages/pisicologica/pisicologica.component';
-import { DialogPisicologicaComponent } from './dialogs/dialog-pisicologica/dialog-pisicologica.component';
 import { PazienteGeneraleComponent } from './component/paziente-generale/paziente-generale.component';
 import { EsamePisicoComponent } from './component/psicologica/esame-pisico/esame-pisico.component';
 import { ValutaPisicoComponent } from './component/psicologica/valuta-pisico/valuta-pisico.component';
 import { DiarioPisicoComponent } from './component/psicologica/diario-pisico/diario-pisico.component';
+
+import { DialogPisicologicaComponent } from './dialogs/dialog-pisicologica/dialog-pisicologica.component';
 import { DialogDiarioComponent } from './dialogs/dialog-diario/dialog-diario.component';
+import { DialogCartellaClinicaComponent } from './dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component';
+import { DialogCartellaInfermeristicaComponent } from './dialogs/dialog-cartella-infermeristica/dialog-cartella-infermeristica.component';
 
 import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -47,6 +50,14 @@ import { DialogStanzaComponent } from './dialogs/dialog-stanza/dialog-stanza.com
 import { CalendarComponent } from './component/calendar/calendar.component';
 import { DashboardComponent } from './pages/dashboard/dashboard.component';
 import { HttpClientModule } from '@angular/common/http';
+import { AnamnesiFamigliareComponent } from './component/medica/anamnesi-famigliare/anamnesi-famigliare.component';
+import { EsameGeneraleComponent } from './component/medica/esame-generale/esame-generale.component';
+import { EsameNeurologicaComponent } from './component/medica/esame-neurologica/esame-neurologica.component';
+import { MezziContenzioneComponent } from './component/medica/mezzi-contenzione/mezzi-contenzione.component';
+import { ValutazioneTecnicheComponent } from './component/medica/valutazione-tecniche/valutazione-tecniche.component';
+import { VisiteSpecialisticheComponent } from './component/medica/visite-specialistiche/visite-specialistiche.component';
+import { AnamnesiPatologicaComponent } from './component/medica/anamnesi-patologica/anamnesi-patologica.component';
+
 
 @NgModule({
   declarations: [
@@ -70,7 +81,16 @@ import { HttpClientModule } from '@angular/common/http';
     GestStanzeComponent,
     DialogStanzaComponent,
     CalendarComponent,
-    DashboardComponent
+    DashboardComponent,
+    DialogCartellaClinicaComponent,
+    DialogCartellaInfermeristicaComponent,
+    AnamnesiFamigliareComponent,
+    EsameGeneraleComponent,
+    EsameNeurologicaComponent,
+    MezziContenzioneComponent,
+    ValutazioneTecnicheComponent,
+    VisiteSpecialisticheComponent,
+    AnamnesiPatologicaComponent,
   ],
   imports: [
     BrowserModule,
@@ -97,7 +117,13 @@ import { HttpClientModule } from '@angular/common/http';
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],
-  entryComponents: [DialogPisicologicaComponent, DialogDiarioComponent, DialogStanzaComponent]
+  entryComponents: [
+    DialogPisicologicaComponent,
+    DialogDiarioComponent,
+    DialogStanzaComponent,
+    DialogCartellaClinicaComponent,
+    DialogCartellaInfermeristicaComponent,
+  ]
 })
 export class AppModule {
   constructor(library: FaIconLibrary) {

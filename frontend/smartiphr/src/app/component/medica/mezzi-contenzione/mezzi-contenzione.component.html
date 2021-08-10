@@ -1,0 +1,256 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>USO DEI MEZZI DI CONTENZIONE FISICA</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-radio-group aria-label="Seleziona una opzione">
+            <mat-radio-button value="1">Si</mat-radio-button>
+            <mat-radio-button value="2">No</mat-radio-button>
+          </mat-radio-group>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>USO DEI MEZZI DI CONTENZIONE FISICA</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">SPONDINE AL LETTO</mat-checkbox>
+              </div>
+              <div class="col">
+                <mat-radio-group aria-label="Seleziona una opzione">
+                  <mat-radio-button value="1">SX</mat-radio-button>
+                  <mat-radio-button value="2">DX</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">CONTENZIONE PELVICA</mat-checkbox>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">PETTORINA</mat-checkbox>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">CINTURA ADDOMINALE</mat-checkbox>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">CINTURA A LETTO</mat-checkbox>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">CINGHIA FERMABRACCIO</mat-checkbox>
+              </div>
+              <div class="col">
+                <mat-radio-group aria-label="Seleziona una opzione">
+                  <mat-radio-button value="1">SX</mat-radio-button>
+                  <mat-radio-button value="2">DX</mat-radio-button>
+                </mat-radio-group>
+              </div>
+            </div>
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">TAVOLINO PER CARROZZINA</mat-checkbox>
+              </div>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>PRESENZA DI CONSENSO INFORMATO</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-radio-group aria-label="Seleziona una opzione">
+            <mat-radio-button value="1">Si</mat-radio-button>
+            <mat-radio-button value="2">No</mat-radio-button>
+          </mat-radio-group>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>DATA DI INZIO</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">All'ingresso</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="form-group" >
+                  <mat-form-field appearance="fill" >
+                    <mat-label>Scegli una date</mat-label>
+                    <input matInput [matDatepicker]="dataNascita" >
+                    <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
+                    <mat-datepicker #dataNascita></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>MOTIVO</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Motivo</mat-label>
+            <textarea matInput placeholder="Inserisci qui"></textarea>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>TEMPI</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Tempi</mat-label>
+            <textarea matInput placeholder="Inserisci qui"></textarea>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>DURATA PREVISTA</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Durata Prevista</mat-label>
+            <textarea matInput placeholder="Inserisci qui"></textarea>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>INTERRUZIONE</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Interruzione</mat-label>
+            <textarea matInput placeholder="Inserisci qui"></textarea>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>MOTIVO DELL'INTERRUZIONE</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+
+          <mat-form-field appearance="fill">
+            <mat-label>Motivo dell'interruzione</mat-label>
+            <textarea matInput placeholder="Inserisci qui"></textarea>
+          </mat-form-field>
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

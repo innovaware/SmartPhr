@@ -1,6 +1,7 @@
 import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { DialogDiarioComponent } from 'src/app/dialogs/dialog-diario/dialog-diario.component';
+import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { Diario } from 'src/app/models/diario';
 import { Paziente } from 'src/app/models/paziente';
 
@@ -17,10 +18,12 @@ export interface DiarioPisicologico {
   styleUrls: ['./diario-pisico.component.css']
 })
 export class DiarioPisicoComponent implements OnInit, AfterViewInit {
-  @Input() data: Paziente;
+  @Input() paziente: Paziente;
+
+  diario: Diario[];
 
   displayedColumns: string[] = ['data', 'valore' ,'firma', 'action'];
-  dataSource: MatTableDataSource<DiarioPisicologico>;
+  dataSource: MatTableDataSource<Diario>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
@@ -29,7 +32,14 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<DiarioPisicologico>(this.data.schedaPisico.diario);
+    this.diario = this.paziente.cartellaClinica.sort(
+      (a: CartellaClinica, b: CartellaClinica) => {
+        return a.data.getTime() - b.data.getTime();
+      }
+    )[0].schedaPisico.diario;
+
+    console.log("Diario", this.diario);
+    this.dataSource = new MatTableDataSource<Diario>(this.diario);
 
   }
 
@@ -50,8 +60,8 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result:", result);
-      this.data.schedaPisico.diario.push(result);
-      this.dataSource.data = this.data.schedaPisico.diario;
+      this.diario.push(result);
+      this.dataSource.data = this.diario;
     });
   }
 
@@ -64,7 +74,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result:", result);
       //this.data.schedaPisico.diario.push(result);
-      this.dataSource.data = this.data.schedaPisico.diario;
+      this.dataSource.data = this.diario;
     });
   }
 
