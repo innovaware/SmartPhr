@@ -42,7 +42,7 @@
 | Agenda Infermieristica    | agenda_infermieristica |
 | Gestione Farmaci          | ?                      |
 | Gestione Presidi          | ?                      |
-| Gestione Carello          | ?                      |
+| Gestione Carrello          | ?                      |
 
 <br>
 <br>

@@ -1,20 +1,147 @@
-Cartella Infermeristica:
-    ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m40s)
+   
+Area Amministrativa:
+    Gestione Pazienti:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Dipendenti:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Consulenti:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Fornitori:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione ASP:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione CV:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
 
-Cartella Medica:
-    ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m38s)
-
+Area Personale:
+    Area Messaggi:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
 
 
 Area Medica:
-    ✔ Creazione View @done(21-08-11 16:40)
-    ☐ Creazione backend
-    ☐ Binding dati
+    Cartelle Cliniche:
+        ✔ View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m38s)
+        ☐ Backend
+        ☐ Accesso Dati
+    Agenda Clinica:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
 
-Area Infermeristica:
-    ✔ Creazione View @done(21-08-11 16:40)
-    ☐ Creazione backend
-    ☐ Binding dati
+Area Infermieristica:
+    Cartella Infermieristiche:
+        ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m40s)
+        ☐ Backend
+        ☐ Accesso Dati
+    Agenda Infermieristica:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Farmaci:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Presidi:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Carello:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+     
+
+Area OSS:
+    Gestione Pazienti:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Presidi:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Armadi:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    Gestione Carrello:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Area Assistente Sociale:
+    Cartelle Assistente Sociale:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Area Ausiliari:
+    Area Ausiliari:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Cucina:
+    Gestione Menu:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+    HACCP:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Area Sicurezza:
+    Gestione Covid-19:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+
+Area Privacy:
+    Area Privacy:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Area Qualita:
+    Area Qualita:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+PAI:
+    PAI:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Archivi:
+    Archivi:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
+Impostazioni:
+    Impostazioni:
+        ☐ View
+        ☐ Backend
+        ☐ Accesso Dati
+
 
 Menu:
     ✔ Organizzare menu @started(21-08-11 16:30) @done(21-08-11 17:34) @lasted(1h4m23s)
