@@ -1,0 +1,24 @@
+Cartella Infermeristica:
+    ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m40s)
+
+Cartella Medica:
+    ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m38s)
+
+
+
+Area Medica:
+    ✔ Creazione View @done(21-08-11 16:40)
+    ☐ Creazione backend
+    ☐ Binding dati
+
+Area Infermeristica:
+    ✔ Creazione View @done(21-08-11 16:40)
+    ☐ Creazione backend
+    ☐ Binding dati
+
+Menu:
+    ☐ Organizzare menu @started(21-08-11 16:30)
+
+Scripts:
+    ✔ Creazione script per deploy (Linux) @started(21-08-11 16:20) @done(21-08-11 16:40) @lasted(20m35s)
+
