@@ -57,6 +57,14 @@ import { MezziContenzioneComponent } from './component/medica/mezzi-contenzione/
 import { ValutazioneTecnicheComponent } from './component/medica/valutazione-tecniche/valutazione-tecniche.component';
 import { VisiteSpecialisticheComponent } from './component/medica/visite-specialistiche/visite-specialistiche.component';
 import { AnamnesiPatologicaComponent } from './component/medica/anamnesi-patologica/anamnesi-patologica.component';
+import { SchedaBAIComponent } from './component/infermeristica/scheda-bai/scheda-bai.component';
+import { SchedaUlcereComponent } from './component/infermeristica/scheda-ulcere/scheda-ulcere.component';
+import { SchedaMNARComponent } from './component/infermeristica/scheda-mnar/scheda-mnar.component';
+import { SchedaVASComponent } from './component/infermeristica/scheda-vas/scheda-vas.component';
+import { SchedaUlcereDiabeteComponent } from './component/infermeristica/scheda-ulcere-diabete/scheda-ulcere-diabete.component';
+import { SchedaLesioniCutaneeComponent } from './component/infermeristica/scheda-lesioni-cutanee/scheda-lesioni-cutanee.component';
+import { SchedaLesioniDecubitoComponent } from './component/infermeristica/scheda-lesioni-decubito/scheda-lesioni-decubito.component';
+import { SchedaInterventiComponent } from './component/infermeristica/scheda-interventi/scheda-interventi.component';
 
 
 @NgModule({
@@ -91,6 +99,14 @@ import { AnamnesiPatologicaComponent } from './component/medica/anamnesi-patolog
     ValutazioneTecnicheComponent,
     VisiteSpecialisticheComponent,
     AnamnesiPatologicaComponent,
+    SchedaBAIComponent,
+    SchedaUlcereComponent,
+    SchedaMNARComponent,
+    SchedaVASComponent,
+    SchedaUlcereDiabeteComponent,
+    SchedaLesioniCutaneeComponent,
+    SchedaLesioniDecubitoComponent,
+    SchedaInterventiComponent,
   ],
   imports: [
     BrowserModule,

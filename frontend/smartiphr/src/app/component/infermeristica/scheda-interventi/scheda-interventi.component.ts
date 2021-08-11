@@ -5,16 +5,16 @@ import { Diario } from 'src/app/models/diario';
 import { Paziente } from 'src/app/models/paziente';
 
 @Component({
-  selector: 'app-visite-specialistiche',
-  templateUrl: './visite-specialistiche.component.html',
-  styleUrls: ['./visite-specialistiche.component.css']
+  selector: 'app-scheda-interventi',
+  templateUrl: './scheda-interventi.component.html',
+  styleUrls: ['./scheda-interventi.component.css']
 })
-export class VisiteSpecialisticheComponent implements OnInit {
+export class SchedaInterventiComponent implements OnInit {
   @Input() paziente: Paziente;
 
   diario: Diario[];
 
-  displayedColumns: string[] = ['data', 'valore' ,'firma', 'action'];
+  displayedColumns: string[] = ['data', 'diagnosi' ,'obiettivi' ,'intervento' ,'firma', 'action'];
   dataSource: MatTableDataSource<Diario>;
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
@@ -24,8 +24,6 @@ export class VisiteSpecialisticheComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-
-
   }
 
   ngAfterViewInit() {

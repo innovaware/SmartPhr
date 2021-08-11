@@ -1,1 +1,82 @@
-<p>dialog-cartella-infermeristica works!</p>
+<div mat-dialog-title>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col">
+        <h3>CARTELLA CLINICA</h3>
+      </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col">
+
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Generale">
+            <app-paziente-generale [disable]=true [data]=data></app-paziente-generale>
+          </mat-tab>
+
+          <mat-tab label="B.A.I.">
+            <app-scheda-bai></app-scheda-bai>
+          </mat-tab>
+
+          <mat-tab label="Ulcere">
+            <app-scheda-ulcere></app-scheda-ulcere>
+          </mat-tab>
+
+          <mat-tab label="MNAR">
+            <app-scheda-mnar></app-scheda-mnar>
+          </mat-tab>
+
+          <mat-tab label="VAS">
+            <app-scheda-vas></app-scheda-vas>
+          </mat-tab>
+
+          <mat-tab label="Ulcere diabetiche">
+            <app-scheda-ulcere-diabete></app-scheda-ulcere-diabete>
+          </mat-tab>
+
+          <mat-tab label="Lesioni cutanee">
+            <app-scheda-lesioni-cutanee></app-scheda-lesioni-cutanee>
+          </mat-tab>
+
+          <mat-tab label="Lesioni da decubito">
+            <app-scheda-lesioni-decubito></app-scheda-lesioni-decubito>
+          </mat-tab>
+
+
+          <mat-tab label="Interventi">
+            <app-scheda-interventi></app-scheda-interventi>
+          </mat-tab>
+
+          <mat-tab label="Diario">
+            <app-diario-pisico [paziente]=data></app-diario-pisico>
+          </mat-tab>
+
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+  <button mat-button [mat-dialog-close]="true">Chiudi</button>
+  <button mat-button class="button-insert">Salva</button>
+</div>
+</div>

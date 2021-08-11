@@ -35,14 +35,27 @@
             </ng-container>
 
             <!-- Name Column -->
-            <ng-container matColumnDef="valore">
-              <th mat-header-cell *matHeaderCellDef> Visite specialistiche/Esami paraclinici </th>
+            <ng-container matColumnDef="diagnosi">
+              <th mat-header-cell *matHeaderCellDef> Diagnosi </th>
               <td mat-cell *matCellDef="let element"> {{element.valore}} </td>
             </ng-container>
 
             <!-- Weight Column -->
+            <ng-container matColumnDef="obiettivi">
+              <th mat-header-cell *matHeaderCellDef> Obiettivi </th>
+              <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy' }} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="intervento">
+              <th mat-header-cell *matHeaderCellDef> Intervento </th>
+              <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy' }} </td>
+            </ng-container>
+
+
+            <!-- Weight Column -->
             <ng-container matColumnDef="firma">
-              <th mat-header-cell *matHeaderCellDef> Data esecuzione </th>
+              <th mat-header-cell *matHeaderCellDef> Valutazione/Firma </th>
               <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy' }} </td>
             </ng-container>
 

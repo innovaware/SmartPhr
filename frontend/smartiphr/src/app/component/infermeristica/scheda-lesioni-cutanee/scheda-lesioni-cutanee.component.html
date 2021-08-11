@@ -1,0 +1,519 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-content>
+
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                <h4>SCALA VALUTAZONE DELLE LESIONI CUTANEE</h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>STADIAZIONE</label>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">Stadio I arrossamento della cute intatta,eritema irreversibile
+                </mat-checkbox>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">StaStadio II lesione superficiale,abrasione,flittene,lieve cavità
+                </mat-checkbox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">Stadio III profonda cavità nel tessuno sottocutaneo con estensione
+                  fino alla fascia muscolare</mat-checkbox>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col">
+                <mat-checkbox class="example-margin">Stadio IV profonda cavità con interessamento di
+                  muscoli,ossa,tendini,articolazioni</mat-checkbox>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                <label>Varianti: </label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <section class="example-section">
+                  <mat-checkbox type="checkbox" id="escara"> Escara</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="emoraggia"> Emoraggia</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="essudativa"> Essudativa</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="necrotica"> Necrotica</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="fibrinosa"> Fibrinosa</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="cavitaria"> Cavitaria</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="granulleggiante"> Granulleggiante</mat-checkbox>
+                  <mat-checkbox type="checkbox" id="infetta"> Infetta</mat-checkbox>
+                </section>
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
+                <h4>SEDE E GRADO:</h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <table class="table">
+                  <tbody>
+                    <tr>
+                      <td>OCCIPITE</td>
+                      <td>
+                        <select class="custom-select" id="occipite" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="1">I</option>
+                          <option value="2">II</option>
+                          <option value="3">III</option>
+                          <option value="4">IV</option>
+                          <option value="4">E</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>STERNO</td>
+                      <td>
+                        <select class="custom-select" id="sterno" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="1">I</option>
+                          <option value="2">II</option>
+                          <option value="3">III</option>
+                          <option value="4">IV</option>
+                          <option value="4">E</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>PROMINENZE VERTEBRALI</td>
+                      <td>
+                        <select class="custom-select" id="prominenze" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="1">I</option>
+                          <option value="2">II</option>
+                          <option value="3">III</option>
+                          <option value="4">IV</option>
+                          <option value="4">E</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>SACRO</td>
+                      <td>
+                        <select class="custom-select" id="sacro" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="1">I</option>
+                          <option value="2">II</option>
+                          <option value="3">III</option>
+                          <option value="4">IV</option>
+                          <option value="4">E</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>PUBE</td>
+                      <td>
+                        <select class="custom-select" id="pube" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I</option>
+                          <option value="II">II</option>
+                          <option value="III">III</option>
+                          <option value="IV">IV</option>
+                          <option value="E">E</option>
+                        </select>
+                      </td>
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <table class="table">
+                  <thead>
+                    <tr>
+                      <td></td>
+                      <td>DX</td>
+                      <td>SX</td>
+                      <td>GRADO</td>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td>ORECCHIO</td>
+                      <td>
+                        <input type="checkbox" value="dx_orecchio">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_orecchio">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-orecchio" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+                      <td>ZIGOMI</td>
+                      <td>
+                        <input type="checkbox" value="dx_zigomi">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_zigomi">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-zigomi" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+                    <tr>
+                      <td>CLAVICOLE</td>
+                      <td>
+                        <input type="checkbox" value="dx_clavicole">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_clavicole">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-clavicole"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+                    <tr>
+                      <td>SPALLA</td>
+                      <td>
+                        <input type="checkbox" value="dx_spalla">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_spalla">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-spalla" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+
+                    <tr>
+                      <td>SCAPOLE</td>
+                      <td>
+                        <input type="checkbox" value="dx_scapole">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_scapole">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-scapole" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+
+
+                    <tr>
+                      <td>COSTATO</td>
+                      <td>
+                        <input type="checkbox" value="dx_costato">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_costato">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-costato" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+
+                    <tr>
+                      <td>CRESTE ILIACHE</td>
+                      <td>
+                        <input type="checkbox" value="dx_creste">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_creste">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-creste" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+                      <td>TROCANTIERI</td>
+                      <td>
+                        <input type="checkbox" value="dx_trocantieri">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_trocantieri">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-trocantieri"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+
+                    <tr>
+                      <td>PROMINENZE ISCHIATRICHE</td>
+                      <td>
+                        <input type="checkbox" value="dx_prominenze">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_prominenze">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-prominenze"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+                    <tr>
+                      <td>GINOCCHIO</td>
+                      <td>
+                        <input type="checkbox" value="dx_ginocchio">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_ginocchio">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-ginocchio"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>MALLEOLI TIBIALI MEDIALI</td>
+                      <td>
+                        <input type="checkbox" value="dx_tibia_med">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_tibia_med">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-tibia_med"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>MALLEOLI TIBIALI LATERALI</td>
+                      <td>
+                        <input type="checkbox" value="dx_tibia_lat">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_tibia_lat">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-tibia_lat"
+                          aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+                    <tr>
+                      <td>DORSO PIEDE</td>
+                      <td>
+                        <input type="checkbox" value="dx_piede">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_piede">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-piede" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+                    <tr>
+                      <td>TALLONI</td>
+                      <td>
+                        <input type="checkbox" value="dx_talloni">
+                      </td>
+                      <td>
+                        <input type="checkbox" value="sx_talloni">
+                      </td>
+                      <td>
+                        <select class="custom-select" id="grado-talloni" aria-label="Example select with button addon">
+                          <option selected="">Seleziona ...</option>
+                          <option value="I">I Variante</option>
+                          <option value="II">II Variante</option>
+                          <option value="III">III Variante</option>
+                          <option value="IV">IV Variante</option>
+                          <option value="E">E Variante</option>
+                        </select>
+                      </td>
+
+                    </tr>
+
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <label>DESCRIZIONE</label>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <mat-form-field class="example-full-width" appearance="fill">
+                  <textarea matInput placeholder=""></textarea>
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

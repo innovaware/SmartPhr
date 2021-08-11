@@ -10,6 +10,7 @@ body {
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
   background-color: #f3f3f4 !important;
+  color: #676a6c;
 }
 
 
@@ -33,4 +34,8 @@ body {
   color: #fff;
   background-color: #1ab394;
   border-color: #1ab394;
+}
+
+select {
+  background-color: white;
 }

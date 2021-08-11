@@ -51,29 +51,29 @@ select.custom-select {
   padding: 10px;
 }
 
-select {
-  background-color: white;
+h4 {
+  font-size: 17px;
+  color: #676a6c;
+}
+
+label {
+  font-size: 13px;
+  color: #676a6c;
 }
 
 
-table {
+.table > thead > tr > th {
+  border-bottom: 1px solid #DDDDDD;
+  vertical-align: bottom;
+}
+
+
+.table {
+
+  font-size: 13px;
+  color: #676a6c;
+}
+
+input {
   width: 100%;
-}
-
-
-.mat-column-action {
-  /* width: 32px; */
-  text-align: right;
-}
-
-
-.mat-form-field {
-  width: 100%;
-}
-
-.button-info {
-  color: #fff;
-  background-color: #23c6c8;
-  border-color: #23c6c8;
-  margin-bottom: 7px;
 }
