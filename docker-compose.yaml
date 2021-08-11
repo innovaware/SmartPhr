@@ -28,7 +28,7 @@ services:
       - mongo
 
   frontend:
-    image: smartphr_frontend
+    image: smartphr_frontend:v1
     restart: always
     ports:
       - "8080:80"

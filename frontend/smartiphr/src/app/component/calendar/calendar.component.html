@@ -28,53 +28,77 @@
     </tr>
     <tr>
       <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
-        *ngFor="let item of this.calendar[0].days">
+        *ngFor="let item of this.calendar[0].days; let indexOfelement=index;"
+        (click)="createEvent(item, this.calendar[0], indexOfelement)">
         <div class="label_day ferial_day"
           [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
           {{item.format("DD")}}</div>
-        <div class="container_event droppable" tipo_cont="mese">
 
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
-        *ngFor="let item of this.calendar[1].days">
-        <div class="label_day ferial_day"
-          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-          {{item.format("DD")}}</div>
-        <div class="container_event droppable" tipo_cont="mese"></div>
-      </td>
-    </tr>
-    <tr>
-      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
-        *ngFor="let item of this.calendar[2].days">
-        <div class="label_day ferial_day"
-          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-          {{item.format("DD")}}</div>
         <div class="container_event droppable" tipo_cont="mese">
-          <!-- <div class="event_type">
-            <span class="badge ">10:10</span><span>evento 1 </span>
-          </div> -->
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[0], indexOfelement )">
+            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          </div>
         </div>
       </td>
     </tr>
     <tr>
       <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
-        *ngFor="let item of this.calendar[3].days">
+        *ngFor="let item of this.calendar[1].days; let indexOfelement=index;"
+        (click)="createEvent(item, this.calendar[1], indexOfelement)">
         <div class="label_day ferial_day"
           [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
           {{item.format("DD")}}</div>
-        <div class="container_event droppable" tipo_cont="mese"></div>
+
+        <div class="container_event droppable" tipo_cont="mese">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[1], indexOfelement )">
+            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          </div>
+        </div>
       </td>
     </tr>
     <tr>
       <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
-        *ngFor="let item of this.calendar[4].days">
+        *ngFor="let item of this.calendar[2].days; let indexOfelement=index;"
+        (click)="createEvent(item, this.calendar[2], indexOfelement)">
         <div class="label_day ferial_day"
           [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
           {{item.format("DD")}}</div>
-        <div class="container_event droppable" tipo_cont="mese"></div>
+
+        <div class="container_event droppable" tipo_cont="mese">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[2], indexOfelement )">
+            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[3].days; let indexOfelement=index;"
+        (click)="createEvent(item, this.calendar[3], indexOfelement)">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+
+        <div class="container_event droppable" tipo_cont="mese">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[3], indexOfelement )">
+            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          </div>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td class="cal_day" [ngClass]="{'disabled': item.isBefore(today,'day')}"
+        *ngFor="let item of this.calendar[4].days; let indexOfelement=index;"
+        (click)="createEvent(item, this.calendar[4], indexOfelement)">
+        <div class="label_day ferial_day"
+          [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+          {{item.format("DD")}}</div>
+
+        <div class="container_event droppable" tipo_cont="mese">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[4], indexOfelement )">
+            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          </div>
+        </div>
       </td>
     </tr>
     <tr></tr>

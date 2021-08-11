@@ -65,6 +65,9 @@ import { SchedaUlcereDiabeteComponent } from './component/infermeristica/scheda-
 import { SchedaLesioniCutaneeComponent } from './component/infermeristica/scheda-lesioni-cutanee/scheda-lesioni-cutanee.component';
 import { SchedaLesioniDecubitoComponent } from './component/infermeristica/scheda-lesioni-decubito/scheda-lesioni-decubito.component';
 import { SchedaInterventiComponent } from './component/infermeristica/scheda-interventi/scheda-interventi.component';
+import { DialogEventComponent } from './dialogs/dialog-event/dialog-event.component';
+
+import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
 
 
 @NgModule({
@@ -107,6 +110,8 @@ import { SchedaInterventiComponent } from './component/infermeristica/scheda-int
     SchedaLesioniCutaneeComponent,
     SchedaLesioniDecubitoComponent,
     SchedaInterventiComponent,
+    DialogEventComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -130,6 +135,9 @@ import { SchedaInterventiComponent } from './component/infermeristica/scheda-int
     MatButtonToggleModule,
     FormsModule,
     HttpClientModule,
+    NgxMatDatetimePickerModule,
+    NgxMatTimepickerModule,
+    NgxMatNativeDateModule,
   ],
   providers: [MatDatepickerModule],
   bootstrap: [AppComponent],
@@ -139,6 +147,7 @@ import { SchedaInterventiComponent } from './component/infermeristica/scheda-int
     DialogStanzaComponent,
     DialogCartellaClinicaComponent,
     DialogCartellaInfermeristicaComponent,
+    DialogEventComponent,
   ]
 })
 export class AppModule {
