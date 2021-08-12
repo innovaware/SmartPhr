@@ -43,7 +43,9 @@ Area Personale:
 
 Area Medica:
     Cartelle Cliniche:
-        ✔ View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m38s)
+        View:
+            ✔ View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m38s)
+            ✔ Inserimento flag per read o write @started(21-08-12 20:00) @done(21-08-12 20:25) @lasted(2s)
         ☐ Backend
         ☐ Accesso Dati
     Agenda Clinica:
@@ -53,11 +55,14 @@ Area Medica:
 
 Area Infermieristica:
     Cartella Infermieristiche:
-        ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m40s)
+        View:
+            ✔ Creazione View @started(21-08-10 16:37) @done(21-08-11 16:40) @lasted(1d3m40s)
+            ✔ Inserimento flag per read o write @started(21-08-12 20:00) @done(21-08-12 20:25) @lasted(2s)
         ☐ Backend
         ☐ Accesso Dati
     Agenda Infermieristica:
-        ☐ View
+        View:
+            
         ☐ Backend
         ☐ Accesso Dati
     Gestione Farmaci:
