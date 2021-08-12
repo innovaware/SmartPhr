@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-scheda-lesioni-cutanee',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./scheda-lesioni-cutanee.component.css']
 })
 export class SchedaLesioniCutaneeComponent implements OnInit {
+  @Input() data;
+  @Input() disable: boolean;
 
   constructor() { }
 

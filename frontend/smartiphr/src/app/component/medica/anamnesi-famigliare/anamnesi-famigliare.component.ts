@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-anamnesi-famigliare',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./anamnesi-famigliare.component.css']
 })
 export class AnamnesiFamigliareComponent implements OnInit {
+  @Input() data;
+  @Input() disable: boolean;
 
   constructor() { }
 

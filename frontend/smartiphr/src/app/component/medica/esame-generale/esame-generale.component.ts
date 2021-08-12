@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-esame-generale',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./esame-generale.component.css']
 })
 export class EsameGeneraleComponent implements OnInit {
+  @Input() data;
+  @Input() disable: boolean;
 
   constructor() { }
 

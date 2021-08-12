@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-scheda-mnar',
@@ -6,6 +6,8 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./scheda-mnar.component.css']
 })
 export class SchedaMNARComponent implements OnInit {
+  @Input() data;
+  @Input() disable: boolean;
 
   constructor() { }
 

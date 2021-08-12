@@ -10,7 +10,8 @@ import { Paziente } from 'src/app/models/paziente';
   styleUrls: ['./visite-specialistiche.component.css']
 })
 export class VisiteSpecialisticheComponent implements OnInit {
-  @Input() paziente: Paziente;
+  @Input() data;
+  @Input() disable: boolean;
 
   diario: Diario[];
 

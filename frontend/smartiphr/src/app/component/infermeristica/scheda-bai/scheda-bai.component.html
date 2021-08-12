@@ -10,7 +10,7 @@
               <div class="col">
 
                 <label>Apparato Respiratorio:</label>
-                <select class="custom-select" id="app_respiratorio_ossig">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="cianosi">Cianosi</option>
@@ -29,7 +29,7 @@
               <div class="col">
 
                 <label>Apparato Circolatorio:</label>
-                <select class="custom-select" id="app_circolatorio_ossig">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="gonfiori">Gonfiori</option>
@@ -48,7 +48,7 @@
             <div class="row">
               <div class="col">
                 <h4>STATO DI COSCIENZA</h4>
-                <select class="custom-select" id="coscienza">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="cosciente">Cosciente</option>
                   <option value="disorientamento_temp">Disorientamento temporale</option>
@@ -64,7 +64,7 @@
             <div class="row">
               <div class="col">
                 <h4>STATO D'ANIMO</h4>
-                <select class="custom-select" id="stato_animo">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="tranquillo">Tranquillo</option>
                   <option value="ansioso">Ansioso</option>
@@ -80,7 +80,7 @@
             <div class="row">
               <div class="col">
                 <h4>MOBILIT&Agrave;</h4>
-                <select class="custom-select" id="mobilita">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="bisogno_sostegno">Bisogno di sostegno</option>
@@ -102,7 +102,7 @@
             <div class="row">
               <div class="col">
                 <label>Apparato Urinario:</label>
-                <select class="custom-select" id="app_urinario">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="incontinenza">Incontinenza</option>
@@ -119,7 +119,7 @@
             <div class="row">
               <div class="col">
                 <label>Apparato Intestinale:</label>
-                <select class="custom-select" id="app_intestinale">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="regolare">Regolare</option>
                   <option value="irregolare">Irregolare</option>
@@ -137,7 +137,7 @@
             <div class="row">
               <div class="col">
                 <label>Apparato sessuale:</label>
-                <select class="custom-select" id="app_sessuale">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="amonorrea">Amonorrea</option>
@@ -153,7 +153,7 @@
               <div class="col">
                 <h4>STATO CURE E MUCOSE</h4>
 
-                <select class="custom-select" id="cure_mucose">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="integra">Integra</option>
                   <option value="rosea">Rosea</option>
@@ -172,7 +172,7 @@
             <div class="row">
               <div class="col">
                 <h4>IGIENE PERSONALE</h4>
-                <select class="custom-select" id="igiene">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="autonomo">Autonomo/a</option>
                   <option value="supporto_tot">Necessità di supporto totale</option>
@@ -180,7 +180,7 @@
 
                 </select>
 
-                <input type="text" id="supp_parziale" placeholder="Supporto parziale">
+                <input type="text" placeholder="Supporto parziale" [disabled]=disable>
               </div>
             </div>
 
@@ -190,7 +190,7 @@
             <div class="row">
               <div class="col">
                 <h4>VESTIZIONE</h4>
-                <select class="custom-select" id="vestizione">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="autonomo">Autonomo/a</option>
                   <option value="supporto_tot">Necessità di supporto totale</option>
@@ -198,7 +198,7 @@
 
                 </select>
 
-                <input type="text" id="supp_parziale_vest" placeholder="Supporto parziale">
+                <input type="text" placeholder="Supporto parziale"  [disabled]=disable>
               </div>
             </div>
 
@@ -207,7 +207,7 @@
             <div class="row">
               <div class="col">
                 <h4>ALIMENTAZIONE</h4>
-                <select class="custom-select" id="alimentazione">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="os_libera">Per os libera</option>
                   <option value="os_precauzioni">Per os con precauzioni</option>
@@ -224,7 +224,7 @@
             <div class="row">
               <div class="col">
                 <h4>RIPOSO</h4>
-                <select class="custom-select" id="riposo">
+                <select class="custom-select" [disabled]=disable>
                   <option selected="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="insonnia">Insonnia iniziale</option>

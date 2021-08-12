@@ -8,8 +8,8 @@
         <mat-card-content>
 
           <mat-radio-group aria-label="Seleziona una opzione">
-            <mat-radio-button value="1">Si</mat-radio-button>
-            <mat-radio-button value="2">No</mat-radio-button>
+            <mat-radio-button value="1" [disabled]=disable>Si</mat-radio-button>
+            <mat-radio-button value="2" [disabled]=disable>No</mat-radio-button>
           </mat-radio-group>
 
 
@@ -31,12 +31,12 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">SPONDINE AL LETTO</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>SPONDINE AL LETTO</mat-checkbox>
               </div>
               <div class="col">
                 <mat-radio-group aria-label="Seleziona una opzione">
-                  <mat-radio-button value="1">SX</mat-radio-button>
-                  <mat-radio-button value="2">DX</mat-radio-button>
+                  <mat-radio-button value="1" [disabled]=disable>SX</mat-radio-button>
+                  <mat-radio-button value="2" [disabled]=disable>DX</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
@@ -45,40 +45,40 @@
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">CONTENZIONE PELVICA</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>CONTENZIONE PELVICA</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">PETTORINA</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>PETTORINA</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">CINTURA ADDOMINALE</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>CINTURA ADDOMINALE</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">CINTURA A LETTO</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>CINTURA A LETTO</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">CINGHIA FERMABRACCIO</mat-checkbox>
+                <mat-checkbox class="example-margin" [disabled]=disable>CINGHIA FERMABRACCIO</mat-checkbox>
               </div>
               <div class="col">
                 <mat-radio-group aria-label="Seleziona una opzione">
-                  <mat-radio-button value="1">SX</mat-radio-button>
-                  <mat-radio-button value="2">DX</mat-radio-button>
+                  <mat-radio-button value="1" [disabled]=disable>SX</mat-radio-button>
+                  <mat-radio-button value="2" [disabled]=disable>DX</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
@@ -107,8 +107,8 @@
         <mat-card-content>
 
           <mat-radio-group aria-label="Seleziona una opzione">
-            <mat-radio-button value="1">Si</mat-radio-button>
-            <mat-radio-button value="2">No</mat-radio-button>
+            <mat-radio-button value="1" [disabled]=disable>Si</mat-radio-button>
+            <mat-radio-button value="2" [disabled]=disable>No</mat-radio-button>
           </mat-radio-group>
 
         </mat-card-content>
@@ -139,7 +139,7 @@
                 <div class="form-group" >
                   <mat-form-field appearance="fill" >
                     <mat-label>Scegli una date</mat-label>
-                    <input matInput [matDatepicker]="dataNascita" >
+                    <input matInput [matDatepicker]="dataNascita"  [disabled]=disable>
                     <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
                     <mat-datepicker #dataNascita></mat-datepicker>
                   </mat-form-field>
@@ -166,7 +166,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Motivo</mat-label>
-            <textarea matInput placeholder="Inserisci qui"></textarea>
+            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -186,7 +186,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Tempi</mat-label>
-            <textarea matInput placeholder="Inserisci qui"></textarea>
+            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -206,7 +206,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Durata Prevista</mat-label>
-            <textarea matInput placeholder="Inserisci qui"></textarea>
+            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -226,7 +226,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Interruzione</mat-label>
-            <textarea matInput placeholder="Inserisci qui"></textarea>
+            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -246,7 +246,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Motivo dell'interruzione</mat-label>
-            <textarea matInput placeholder="Inserisci qui"></textarea>
+            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
           </mat-form-field>
 
         </mat-card-content>

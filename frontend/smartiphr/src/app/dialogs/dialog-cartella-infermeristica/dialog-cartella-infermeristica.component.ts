@@ -11,9 +11,13 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogCartellaInfermeristicaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Paziente
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+      paziente: Paziente;
+      readonly: boolean;
+    }
   ) {
-
+    console.log("Dialog Cartella Infermeristica")
   }
 
   ngOnInit() {}

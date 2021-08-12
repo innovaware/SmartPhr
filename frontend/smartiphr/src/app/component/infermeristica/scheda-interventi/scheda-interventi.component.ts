@@ -10,7 +10,8 @@ import { Paziente } from 'src/app/models/paziente';
   styleUrls: ['./scheda-interventi.component.css']
 })
 export class SchedaInterventiComponent implements OnInit {
-  @Input() paziente: Paziente;
+  @Input() data;
+  @Input() disable: boolean;
 
   diario: Diario[];
 

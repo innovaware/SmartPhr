@@ -8,18 +8,18 @@
         </mat-card-header>
         <mat-card-content>
 
-          <section class="example-section">
-            <mat-checkbox class="">Ipertensione</mat-checkbox>
-            <mat-checkbox class=""> Ipertensione</mat-checkbox>
-            <mat-checkbox class=""> Diabete</mat-checkbox>
-            <mat-checkbox class=""> Malattie Cardiovascolari</mat-checkbox>
-            <mat-checkbox class=""> Malattie Cerebrovascolari</mat-checkbox>
-            <mat-checkbox class=""> Demenza</mat-checkbox>
-            <mat-checkbox class=""> Neoplasie</mat-checkbox>
-            <mat-checkbox class=""> Altro</mat-checkbox>
+          <section class="example-section" >
+            <mat-checkbox class="" [disabled]=disable>Ipertensione</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Ipertensione</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Diabete</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Malattie Cardiovascolari</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Malattie Cerebrovascolari</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Demenza</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Neoplasie</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Altro</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -37,13 +37,13 @@
         <mat-card-content>
 
           <section class="example-section">
-            <mat-checkbox class="">Antitetanica</mat-checkbox>
-            <mat-checkbox class=""> Antiepatite B</mat-checkbox>
-            <mat-checkbox class=""> Antinfluenzale</mat-checkbox>
-            <mat-checkbox class=""> Altre</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable>Antitetanica</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Antiepatite B</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Antinfluenzale</mat-checkbox>
+            <mat-checkbox class="" [disabled]=disable> Altre</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -61,7 +61,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; lavorative</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorative" >
+            <input matInput placeholder="Inserisci attivit&agrave; lavorative" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -82,7 +82,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Scolarit&agrave;</mat-label>
-            <input matInput placeholder="Inserisci scolarit&agrave;" >
+            <input matInput placeholder="Inserisci scolarit&agrave;" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -103,7 +103,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; lavorativa principale</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" >
+            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -123,7 +123,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; lavorativa principale</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" >
+            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -143,7 +143,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Servizio militare</mat-label>
-            <input matInput placeholder="Inserisci servizio militare" >
+            <input matInput placeholder="Inserisci servizio militare" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -163,7 +163,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Menarca</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -181,9 +181,9 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Select una opzione">
-            <mat-radio-button value="1">fisiologica</mat-radio-button>
-            <mat-radio-button value="2">chirurgica</mat-radio-button>
+          <mat-radio-group aria-label="Select una opzione" >
+            <mat-radio-button value="1" [disabled]=disable>fisiologica</mat-radio-button>
+            <mat-radio-button value="2" [disabled]=disable>chirurgica</mat-radio-button>
           </mat-radio-group>
 
         </mat-card-content>
@@ -204,7 +204,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; Fisica</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -224,7 +224,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alimentazione</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -245,7 +245,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alvo</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -266,7 +266,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Diurisi</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -286,7 +286,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alcolici</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -306,7 +306,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Fumo</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>
@@ -326,7 +326,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Sonno</mat-label>
-            <input matInput placeholder="Inserisci" >
+            <input matInput placeholder="Inserisci" [disabled]=disable>
           </mat-form-field>
 
         </mat-card-content>

@@ -13,6 +13,7 @@ export class PazienteGeneraleComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
+    console.log("Cartella generale paziente: ", this.data);
   }
 
 }

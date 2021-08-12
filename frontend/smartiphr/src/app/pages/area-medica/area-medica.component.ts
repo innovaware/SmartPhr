@@ -22,13 +22,13 @@ export class AreaMedicaComponent implements OnInit {
       case "CC":
         console.log("Cartella Clinica");
         dialogRef = this.dialog.open(DialogCartellaClinicaComponent, {
-          data: event.paziente
+          data: {paziente: event.paziente, readonly: false}
         });
         break;
       case "CI":
         console.log("Cartella Infermeristica");
         dialogRef = this.dialog.open(DialogCartellaInfermeristicaComponent, {
-          data: event.paziente
+          data: {paziente: event.paziente, readonly: true}
         });
         break;
       default:

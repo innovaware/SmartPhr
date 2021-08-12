@@ -96,9 +96,9 @@
             <div class="row">
               <div class="col">
                 <mat-radio-group>
-                  <mat-radio-button value="1">20 - 15 rischio assente</mat-radio-button>
-                  <mat-radio-button value="2">14 - 13 rischio lieve</mat-radio-button>
-                  <mat-radio-button value="2">12 - 5 rischio elevato</mat-radio-button>
+                  <mat-radio-button value="1" [disabled]=disable>20 - 15 rischio assente</mat-radio-button>
+                  <mat-radio-button value="2" [disabled]=disable>14 - 13 rischio lieve</mat-radio-button>
+                  <mat-radio-button value="2" [disabled]=disable>12 - 5 rischio elevato</mat-radio-button>
                 </mat-radio-group>
               </div>
             </div>
@@ -112,7 +112,7 @@
 
             <div class="row">
               <div class="col">
-                <input type="text">
+                <input type="text" [disabled]=disable>
               </div>
             </div>
           </div>

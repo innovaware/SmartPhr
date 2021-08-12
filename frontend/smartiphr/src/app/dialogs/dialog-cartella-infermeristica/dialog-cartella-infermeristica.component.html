@@ -26,44 +26,44 @@
 
         <mat-tab-group mat-align-tabs="start">
           <mat-tab label="Generale">
-            <app-paziente-generale [disable]=true [data]=data></app-paziente-generale>
+            <app-paziente-generale [disable]=true [data]=data.paziente></app-paziente-generale>
           </mat-tab>
 
           <mat-tab label="B.A.I.">
-            <app-scheda-bai></app-scheda-bai>
+            <app-scheda-bai [data]=data.paziente [disable]=data.readonly></app-scheda-bai>
           </mat-tab>
 
           <mat-tab label="Ulcere">
-            <app-scheda-ulcere></app-scheda-ulcere>
+            <app-scheda-ulcere [data]=data.paziente [disable]=data.readonly></app-scheda-ulcere>
           </mat-tab>
 
           <mat-tab label="MNAR">
-            <app-scheda-mnar></app-scheda-mnar>
+            <app-scheda-mnar [data]=data.paziente [disable]=data.readonly></app-scheda-mnar>
           </mat-tab>
 
           <mat-tab label="VAS">
-            <app-scheda-vas></app-scheda-vas>
+            <app-scheda-vas [data]=data.paziente [disable]=data.readonly></app-scheda-vas>
           </mat-tab>
 
           <mat-tab label="Ulcere diabetiche">
-            <app-scheda-ulcere-diabete></app-scheda-ulcere-diabete>
+            <app-scheda-ulcere-diabete [data]=data.paziente [disable]=data.readonly></app-scheda-ulcere-diabete>
           </mat-tab>
 
           <mat-tab label="Lesioni cutanee">
-            <app-scheda-lesioni-cutanee></app-scheda-lesioni-cutanee>
+            <app-scheda-lesioni-cutanee [data]=data.paziente [disable]=data.readonly></app-scheda-lesioni-cutanee>
           </mat-tab>
 
           <mat-tab label="Lesioni da decubito">
-            <app-scheda-lesioni-decubito></app-scheda-lesioni-decubito>
+            <app-scheda-lesioni-decubito [data]=data.paziente [disable]=data.readonly></app-scheda-lesioni-decubito>
           </mat-tab>
 
 
           <mat-tab label="Interventi">
-            <app-scheda-interventi></app-scheda-interventi>
+            <app-scheda-interventi [data]=data.paziente [disable]=data.readonly></app-scheda-interventi>
           </mat-tab>
 
           <mat-tab label="Diario">
-            <app-diario-pisico [paziente]=data></app-diario-pisico>
+            <app-diario-pisico [paziente]=data.paziente [disable]=data.readonly></app-diario-pisico>
           </mat-tab>
 
         </mat-tab-group>
