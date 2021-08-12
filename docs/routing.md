@@ -40,9 +40,9 @@
 | ------------------------- | ---------------------- |
 | Cartella Infermieristiche | infermieristica        |
 | Agenda Infermieristica    | agenda_infermieristica |
-| Gestione Farmaci          | ?                      |
-| Gestione Presidi          | ?                      |
-| Gestione Carrello          | ?                      |
+| Gestione Farmaci          | gest_farmaci           |
+| Gestione Presidi          | gest_presidi           |
+| Gestione Carrello         | gest_carrello          |
 
 <br>
 <br>

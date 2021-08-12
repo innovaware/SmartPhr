@@ -31,12 +31,31 @@ MongoClient.connect(mongoConnectionString, function(err, db) {
   mongo = db;
 });
 
+// Pazienti API
 app.get('/api/pazienti', (req, res) => {
     mongo.collection('pazienti').find().toArray(function(err, result) {
         // console.log(result);
         res.json(result);
     });
 });
+
+// Dipendenti API
+
+app.get('/api/dipendenti', (req, res) => {
+  mongo.collection('dipendenti').find().toArray(function(err, result) {
+      // console.log(result);
+      res.json(result);
+  });
+});
+
+
+app.get('/api/consulenti', (req, res) => {
+  mongo.collection('consulenti').find().toArray(function(err, result) {
+      // console.log(result);
+      res.json(result);
+  });
+});
+
 
 
 app.listen(PORT, () => console.log(`Innova Backend App listening on port ${PORT}!`))

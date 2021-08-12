@@ -68,6 +68,11 @@ import { SchedaInterventiComponent } from './component/infermeristica/scheda-int
 import { DialogEventComponent } from './dialogs/dialog-event/dialog-event.component';
 
 import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateModule } from '@angular-material-components/datetime-picker';
+import { ConsulentiComponent } from './pages/consulenti/consulenti.component';
+import { FornitoriComponent } from './pages/fornitori/fornitori.component';
+import { AspComponent } from './pages/asp/asp.component';
+import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
+import { FarmaciComponent } from './pages/farmaci/farmaci.component';
 
 
 @NgModule({
@@ -111,7 +116,11 @@ import { NgxMatDatetimePickerModule, NgxMatTimepickerModule, NgxMatNativeDateMod
     SchedaLesioniDecubitoComponent,
     SchedaInterventiComponent,
     DialogEventComponent,
-
+    ConsulentiComponent,
+    FornitoriComponent,
+    AspComponent,
+    PagenotfoundComponent,
+    FarmaciComponent,
   ],
   imports: [
     BrowserModule,

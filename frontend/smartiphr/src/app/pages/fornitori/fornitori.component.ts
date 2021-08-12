@@ -1,31 +1,31 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
-import { Dipendenti } from "src/app/models/dipendenti";
-import { DipendentiService } from "src/app/service/dipendenti.service";
+import { Fornitori } from "src/app/models/fornitori";
+import { FornitoriService } from "src/app/service/fornitori.service";
 
 @Component({
-  selector: "app-gest-utenti",
-  templateUrl: "./gest-utenti.component.html",
-  styleUrls: ["./gest-utenti.component.css"],
+  selector: "app-fornitori",
+  templateUrl: "./fornitori.component.html",
+  styleUrls: ["./fornitori.component.css"],
 })
-export class GestUtentiComponent implements OnInit {
+export class FornitoriComponent implements OnInit {
   displayedColumns: string[] = ["cognome", "nome", "email", "user", "action"];
-  dataSource: MatTableDataSource<Dipendenti>;
+  dataSource: MatTableDataSource<Fornitori>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(
     public dialog: MatDialog,
-    public utentiService: DipendentiService
+    public fornitoriService: FornitoriService
   ) {}
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.utentiService.getDipendenti().then((result) => {
-      let utenti: Dipendenti[] = result;
+    this.fornitoriService.getFornitori().then((result) => {
+      let utenti: Fornitori[] = result;
 
-      this.dataSource = new MatTableDataSource<Dipendenti>(utenti);
+      this.dataSource = new MatTableDataSource<Fornitori>(utenti);
       this.dataSource.paginator = this.paginator;
     });
   }

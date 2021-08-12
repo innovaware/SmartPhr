@@ -30,9 +30,9 @@ export class CalendarComponent implements OnInit {
         events: Array<Evento[]>(7)
       });
 
-    console.log(this.startDay.format("DD/MM/YYYY"));
-    console.log(this.endDay.format("DD/MM/YYYY"));
-    console.log(this.calendar[0].days[0]);
+    // console.log(this.startDay.format("DD/MM/YYYY"));
+    // console.log(this.endDay.format("DD/MM/YYYY"));
+    // console.log(this.calendar[0].days[0]);
   }
 
   ngOnInit() {}

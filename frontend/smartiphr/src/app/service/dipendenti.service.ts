@@ -4,17 +4,18 @@ import { environment } from 'src/environments/environment';
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { Paziente } from "../models/paziente";
+import { Dipendenti } from '../models/dipendenti';
 
 @Injectable({
   providedIn: "root",
 })
-export class PazienteService {
+export class DipendentiService {
 
   api: string = environment.api;
 
   constructor(private http: HttpClient) {}
 
-  getPazienti(): Promise<Paziente[]> {
-    return this.http.get<Paziente[]>(this.api + "/api/pazienti").toPromise();
+  async getDipendenti(): Promise<Dipendenti[]> {
+    return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti").toPromise();
   }
 }
