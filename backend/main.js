@@ -7,13 +7,19 @@ mongo = undefined;
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const {
-    MONGO_USERNAME,
-    MONGO_PASSWORD,
-    MONGO_HOSTNAME,
-    MONGO_PORT,
-    MONGO_DB
-  } = process.env;
+// const {
+//     MONGO_USERNAME,
+//     MONGO_PASSWORD,
+//     MONGO_HOSTNAME,
+//     MONGO_PORT,
+//     MONGO_DB
+//   } = process.env;
+
+MONGO_USERNAME = "innova"
+MONGO_PASSWORD = "innova2019"
+MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net"
+MONGO_PORT = "27017"
+MONGO_DB = "smartphr"
 //'mongodb://innova:innova2019@192.168.1.10:27017/smartphr?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false';
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
@@ -48,9 +54,18 @@ app.get('/api/dipendenti', (req, res) => {
   });
 });
 
-
+// Consulenti API
 app.get('/api/consulenti', (req, res) => {
   mongo.collection('consulenti').find().toArray(function(err, result) {
+      // console.log(result);
+      res.json(result);
+  });
+});
+
+// Farmaci API
+
+app.get('/api/farmaci', (req, res) => {
+  mongo.collection('farmaci').find().toArray(function(err, result) {
       // console.log(result);
       res.json(result);
   });

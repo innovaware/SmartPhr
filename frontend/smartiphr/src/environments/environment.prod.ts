@@ -1,3 +1,5 @@
 export const environment = {
-  production: true
+  production: true,
+  api: "http://smart-iphr.innovaware.it:3000"
+
 };

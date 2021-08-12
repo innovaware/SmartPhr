@@ -73,6 +73,7 @@ import { FornitoriComponent } from './pages/fornitori/fornitori.component';
 import { AspComponent } from './pages/asp/asp.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { FarmaciComponent } from './pages/farmaci/farmaci.component';
+import { DialogFarmacoComponent } from './dialogs/dialog-farmaco/dialog-farmaco.component';
 
 
 @NgModule({
@@ -121,6 +122,7 @@ import { FarmaciComponent } from './pages/farmaci/farmaci.component';
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,
+    DialogFarmacoComponent,
   ],
   imports: [
     BrowserModule,
@@ -157,6 +159,7 @@ import { FarmaciComponent } from './pages/farmaci/farmaci.component';
     DialogCartellaClinicaComponent,
     DialogCartellaInfermeristicaComponent,
     DialogEventComponent,
+    DialogFarmacoComponent,
   ]
 })
 export class AppModule {
