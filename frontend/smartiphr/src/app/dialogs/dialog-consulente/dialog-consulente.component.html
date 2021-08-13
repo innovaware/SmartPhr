@@ -1,0 +1,58 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>Gestione consulente</h3>
+      </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <span>Tutti i campi indicati con * sono obbligatori.</span>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Cognome</mat-label>
+          <input matInput [(ngModel)]="item.consulente.cognome" [disabled]=disable>
+        </mat-form-field>
+      </div>
+
+      <div class="col">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>Nome</mat-label>
+          <input matInput [(ngModel)]="item.consulente.nome" [disabled]=disable>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="example-full-width" appearance="fill">
+          <mat-label>email</mat-label>
+          <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    <button mat-button class="button-save" (click)="saveDiario()" [disabled]=disable>Salva</button>
+  </div>
+</div>

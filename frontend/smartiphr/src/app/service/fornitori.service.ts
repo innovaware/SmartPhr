@@ -15,4 +15,15 @@ export class FornitoriService {
   async getFornitori(): Promise<Fornitori[]> {
     return this.http.get<Fornitori[]>(this.api + "/api/fornitori").toPromise();
   }
+
+  async insertFornitore(fornitori: Fornitori) {
+    var body = fornitori;
+    return this.http.post(this.api + "/api/fornitori", body).toPromise();
+  }
+
+  async updateFornitore(fornitori: Fornitori) {
+    var body = fornitori;
+    console.log("body: ", body);
+    return this.http.put(this.api + "/api/fornitori/" + fornitori._id, body).toPromise();
+  }
 }

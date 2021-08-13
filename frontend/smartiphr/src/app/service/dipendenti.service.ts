@@ -18,4 +18,15 @@ export class DipendentiService {
   async getDipendenti(): Promise<Dipendenti[]> {
     return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti").toPromise();
   }
+
+  async insertDipendente(dipendente: Dipendenti) {
+    var body = dipendente;
+    return this.http.post(this.api + "/api/dipendenti", body).toPromise();
+  }
+
+  async updateDipendete(dipendente: Dipendenti) {
+    var body = dipendente;
+    console.log("body: ", body);
+    return this.http.put(this.api + "/api/dipendenti/" + dipendente._id, body).toPromise();
+  }
 }

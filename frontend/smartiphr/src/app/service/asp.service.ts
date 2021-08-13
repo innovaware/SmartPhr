@@ -15,4 +15,15 @@ export class AspService {
   async getAsp(): Promise<Asp[]> {
     return this.http.get<Asp[]>(this.api + "/api/asp").toPromise();
   }
+
+  async insertAsp(asp: Asp) {
+    var body = asp;
+    return this.http.post(this.api + "/api/asp", body).toPromise();
+  }
+
+  async updateAsp(asp: Asp) {
+    var body = asp;
+    console.log("body: ", body);
+    return this.http.put(this.api + "/api/asp/" + asp._id, body).toPromise();
+  }
 }

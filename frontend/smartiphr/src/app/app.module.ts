@@ -74,6 +74,10 @@ import { AspComponent } from './pages/asp/asp.component';
 import { PagenotfoundComponent } from './pages/pagenotfound/pagenotfound.component';
 import { FarmaciComponent } from './pages/farmaci/farmaci.component';
 import { DialogFarmacoComponent } from './dialogs/dialog-farmaco/dialog-farmaco.component';
+import { DialogDipendenteComponent } from './dialogs/dialog-dipendente/dialog-dipendente.component';
+import { DialogConsulenteComponent } from './dialogs/dialog-consulente/dialog-consulente.component';
+import { DialogFornitoriComponent } from './dialogs/dialog-fornitori/dialog-fornitori.component';
+import { DialogAspComponent } from './dialogs/dialog-asp/dialog-asp.component';
 
 
 @NgModule({
@@ -123,6 +127,10 @@ import { DialogFarmacoComponent } from './dialogs/dialog-farmaco/dialog-farmaco.
     PagenotfoundComponent,
     FarmaciComponent,
     DialogFarmacoComponent,
+    DialogDipendenteComponent,
+    DialogConsulenteComponent,
+    DialogFornitoriComponent,
+    DialogAspComponent,
   ],
   imports: [
     BrowserModule,
@@ -160,6 +168,10 @@ import { DialogFarmacoComponent } from './dialogs/dialog-farmaco/dialog-farmaco.
     DialogCartellaInfermeristicaComponent,
     DialogEventComponent,
     DialogFarmacoComponent,
+    DialogDipendenteComponent,
+    DialogConsulenteComponent,
+    DialogFornitoriComponent,
+    DialogAspComponent,
   ]
 })
 export class AppModule {

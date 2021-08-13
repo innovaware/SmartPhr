@@ -15,4 +15,15 @@ export class ConsulentiService {
   async getConsulenti(): Promise<Consulenti[]> {
     return this.http.get<Consulenti[]>(this.api + "/api/consulenti").toPromise();
   }
+
+  async insertConsulenti(consulente: Consulenti) {
+    var body = consulente;
+    return this.http.post(this.api + "/api/consulenti", body).toPromise();
+  }
+
+  async updateConsulenti(consulente: Consulenti) {
+    var body = consulente;
+    console.log("body: ", body);
+    return this.http.put(this.api + "/api/consulenti/" + consulente._id, body).toPromise();
+  }
 }
