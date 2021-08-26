@@ -21,6 +21,8 @@ MONGO_PASSWORD = "innova2019";
 MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
 MONGO_PORT = "27017";
 MONGO_DB = "smartphr";
+
+
 //'mongodb://innova:innova2019@192.168.1.10:27017/smartphr?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false';
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
@@ -43,15 +45,8 @@ mongoose.connect(mongoConnectionString,
   }, () => console.log("Connected to DB"));
 
 // Pazienti API
-app.get("/api/pazienti", (req, res) => {
-  mongo
-    .collection("pazienti")
-    .find()
-    .toArray(function (err, result) {
-      // console.log(result);
-      res.json(result);
-    });
-});
+const pazientiRouter = require("./routes/pazienti");
+app.use("/api/pazienti", pazientiRouter);
 
 // Dipendenti API
 const dipendentiRouter = require("./routes/dipendenti");
@@ -68,17 +63,11 @@ app.use("/api/fornitori", fornitoriRouter);
 // ASP API 
 const aspRouter = require("./routes/asp");
 app.use("/api/asp", aspRouter);
-// Farmaci API
 
-app.get("/api/farmaci", (req, res) => {
-  mongo
-    .collection("farmaci")
-    .find()
-    .toArray(function (err, result) {
-      // console.log(result);
-      res.json(result);
-    });
-});
+// Farmaci API
+const farmaciRouter = require("./routes/farmaci");
+app.use("/api/farmaci", farmaciRouter);
+
 
 app.listen(PORT, () =>
   console.log(`Innova Backend App listening on port ${PORT}!`)

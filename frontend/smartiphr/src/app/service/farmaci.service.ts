@@ -17,7 +17,7 @@ export class FarmaciService {
 
   async update(item: Farmaci) {
     var body = item;
-    return this.http.put<Farmaci>(this.api + "/api/farmaci", body).toPromise();
+    return this.http.put<Farmaci>(this.api + "/api/farmaci/" + item._id, body).toPromise();
   }
 
   async insert(item: Farmaci) {
