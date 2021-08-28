@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material";
 import * as moment from "moment";
 import { DialogEventComponent } from "src/app/dialogs/dialog-event/dialog-event.component";
 import { Evento } from "src/app/models/evento";
+import { EventiService } from "src/app/service/eventi.service";
 
 @Component({
   selector: "app-calendar",
@@ -22,9 +23,9 @@ export class CalendarComponent implements OnInit {
 
   calendar = [];
 
-  constructor(public dialog: MatDialog) {
-    // this.isCalendarMonthEnabled = true;
-    this.isCalendarWeekEnabled = true;
+  constructor(public dialog: MatDialog, public eventiService: EventiService) {
+    this.isCalendarMonthEnabled = true;
+    // this.isCalendarWeekEnabled = true;
     this.update_calendar();
   }
 
@@ -34,27 +35,34 @@ export class CalendarComponent implements OnInit {
     let date = this.startDay.clone().subtract(1, "day");
 
     let start_week: moment.Moment = this.calendar_day.clone().startOf("week");
-    let end_week: moment.Moment = this.calendar_day.clone().endOf("week");
-    let date_week = start_week.clone().subtract(1, "day");
-
 
     this.calendar = [];
+    console.log("date: ", date);
 
-
-    while (date.isBefore(this.endDay, "day"))
-      this.calendar.push({
+    while (date.isBefore(this.endDay, "day")) {
+      let item = {
         days: Array(7)
           .fill(0)
           .map(() => date.add(1, "day").clone()),
         events: Array<Evento[]>(7),
-      });
+      };
 
+      this.calendar.push(item);
 
-    console.log("calculate index week");
-    this.index_week = this.calendar.findIndex( c => c.days.findIndex( d=> d.isSame(start_week))>-1)
-    // console.log(this.startDay.format("DD/MM/YYYY"));
-    // console.log(this.endDay.format("DD/MM/YYYY"));
-    // console.log(this.calendar[0].days[0]);
+      console.log("calculate index week", this.calendar);
+      this.index_week = this.calendar.findIndex(
+        (c) => c.days.findIndex((d) => d.isSame(start_week)) > -1
+      );
+
+      item.days.map((d, index) =>
+        this.eventiService.getEventiByDay(d).then((e) => {
+          if (item.events[index] == undefined) item.events[index] = [];
+          e.forEach((evt) => item.events[index].push(evt));
+        }).catch(err=> {
+          console.error("Error to get Events");
+        })
+      );
+    }
   }
 
   ngOnInit() {}
@@ -90,19 +98,20 @@ export class CalendarComponent implements OnInit {
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed", result);
-        console.log("this.calendar", this.calendar);
-        console.log("item", item);
-        //this.calendar
-        // this.calendar.findIndex( c=> c.days.findIndex)
-        // item.isSame()
-        if (result instanceof Object) {
-          // if (calendar_week.events[index] === undefined) calendar_week.events[index] = [];
-          let index_week = this.calendar.findIndex(c=> c.days.findIndex( d=> d.isSame(item))>-1);
-          if (index_week >= 0) this.calendar[index_week].events[index] = [];
 
-          this.calendar[index_week].events[index].push(result);
+        if (result instanceof Object) {
+          let index_week = this.calendar.findIndex(
+            (c) => c.days.findIndex((d) => d.isSame(item)) > -1
+          );
+          if (this.calendar[index_week].events[index] == undefined)
+            this.calendar[index_week].events[index] = [];
+
+          this.eventiService.insertEvento(result).then((res) => {
+            this.calendar[index_week].events[index].push(result);
+          }).catch(err=> {
+            console.error("Error to insert Events");
+          });
         }
-        //  this.animal = result;
       });
   }
 
@@ -112,12 +121,11 @@ export class CalendarComponent implements OnInit {
         .add(-1, "M")
         .clone()
         .startOf("month");
-    }
-    else {
+    } else {
       this.calendar_day = moment(this.calendar_day)
-      .add(-1, "w")
-      .clone()
-      .startOf("week");
+        .add(-1, "w")
+        .clone()
+        .startOf("week");
     }
 
     this.update_calendar();
@@ -129,12 +137,11 @@ export class CalendarComponent implements OnInit {
         .add(1, "M")
         .clone()
         .startOf("month");
-    }
-    else {
+    } else {
       this.calendar_day = moment(this.calendar_day)
-      .add(1, "w")
-      .clone()
-      .startOf("week");
+        .add(1, "w")
+        .clone()
+        .startOf("week");
     }
 
     this.update_calendar();

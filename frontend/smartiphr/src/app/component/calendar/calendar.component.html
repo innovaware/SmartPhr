@@ -1,7 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-1">
-      <button mat-button (click)="prev()">
+      <button mat-button (click)="prev()" title="Precedente">
         <fa-icon icon="chevron-left"></fa-icon>
       </button>
     </div>
@@ -9,18 +9,18 @@
       <h2 class="title">{{calendar_day.format('MMMM YYYY')}}</h2>
     </div>
     <div class="col-1">
-      <button mat-button (click)="succ()">
+      <button mat-button (click)="succ()" title="Successivo">
         <fa-icon icon="chevron-right"></fa-icon>
       </button>
     </div>
 
     <div class="col-1">
-      <button mat-button (click)="calendarWeek()">
+      <button mat-button (click)="calendarWeek()" title="Visualiz. Settimana">
         <fa-icon icon="calendar-week"></fa-icon>
       </button>
     </div>
     <div class="col-1">
-      <button mat-button (click)="calendarMonth()">
+      <button mat-button (click)="calendarMonth()" title="Visualiz. Mensile">
         <fa-icon icon="calendar-alt"></fa-icon>
       </button>
     </div>
