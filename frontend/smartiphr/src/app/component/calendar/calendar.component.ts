@@ -15,12 +15,12 @@ export class CalendarComponent implements OnInit {
   calendar_day: moment.Moment = moment().locale("it");
   startDay: moment.Moment;
   endDay: moment.Moment;
+  index_week: number;
 
   isCalendarMonthEnabled: boolean = false;
   isCalendarWeekEnabled: boolean = false;
 
   calendar = [];
-  calendar_current_week = [];
 
   constructor(public dialog: MatDialog) {
     // this.isCalendarMonthEnabled = true;
@@ -37,17 +37,9 @@ export class CalendarComponent implements OnInit {
     let end_week: moment.Moment = this.calendar_day.clone().endOf("week");
     let date_week = start_week.clone().subtract(1, "day");
 
-    this.calendar = [];
-    this.calendar_current_week = [];
 
-    while (date_week.isBefore(end_week, "day")) {
-      this.calendar_current_week.push({
-        days: Array(7)
-          .fill(0)
-          .map(() => date_week.add(1, "day").clone()),
-        events: Array<Evento[]>(7),
-      });
-    }
+    this.calendar = [];
+
 
     while (date.isBefore(this.endDay, "day"))
       this.calendar.push({
@@ -57,6 +49,9 @@ export class CalendarComponent implements OnInit {
         events: Array<Evento[]>(7),
       });
 
+
+    console.log("calculate index week");
+    this.index_week = this.calendar.findIndex( c => c.days.findIndex( d=> d.isSame(start_week))>-1)
     // console.log(this.startDay.format("DD/MM/YYYY"));
     // console.log(this.endDay.format("DD/MM/YYYY"));
     // console.log(this.calendar[0].days[0]);
@@ -72,8 +67,8 @@ export class CalendarComponent implements OnInit {
     if (c[index][1] != undefined) return c[index][1];
   }
 
-  createEvent(item: moment.Moment, calendar: any, index: number) {
-    console.log(item, calendar, index);
+  createEvent(item: moment.Moment, calendar_week: any, index: number) {
+    console.log(item, calendar_week, index);
 
     if (item.isBefore(this.today, "day")) {
       return;
@@ -95,10 +90,17 @@ export class CalendarComponent implements OnInit {
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed", result);
+        console.log("this.calendar", this.calendar);
+        console.log("item", item);
+        //this.calendar
+        // this.calendar.findIndex( c=> c.days.findIndex)
+        // item.isSame()
         if (result instanceof Object) {
-          if (calendar.events[index] === undefined) calendar.events[index] = [];
+          // if (calendar_week.events[index] === undefined) calendar_week.events[index] = [];
+          let index_week = this.calendar.findIndex(c=> c.days.findIndex( d=> d.isSame(item))>-1);
+          if (index_week >= 0) this.calendar[index_week].events[index] = [];
 
-          calendar.events[index].push(result);
+          this.calendar[index_week].events[index].push(result);
         }
         //  this.animal = result;
       });

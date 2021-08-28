@@ -137,8 +137,7 @@
 <table class="table_mese" *ngIf="isCalendarWeekEnabled">
   <thead>
     <tr>
-
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[0].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[0].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -146,13 +145,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[0] | date: 'dd' }}
+                {{this.calendar[index_week].days[0] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[1].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[1].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -160,13 +159,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[1] | date: 'dd' }}
+                {{this.calendar[index_week].days[1] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[2].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[2].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -174,13 +173,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[2] | date: 'dd' }}
+                {{this.calendar[index_week].days[2] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[3].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[3].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -188,13 +187,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[3] | date: 'dd' }}
+                {{this.calendar[index_week].days[3] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[4].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[4].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -202,13 +201,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[4] | date: 'dd' }}
+                {{this.calendar[index_week].days[4] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[5].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[5].isBefore(today,'day')}">
         <div class="cal_head">
           <div class="conteiner-fluid">
             <div class="row">
@@ -216,13 +215,13 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[5] | date: 'dd' }}
+                {{this.calendar[index_week].days[5] | date: 'dd' }}
               </div>
             </div>
           </div>
         </div>
       </td>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[6].isBefore(today,'day')}">
+      <td [ngClass]="{'disabled': this.calendar[index_week].days[6].isBefore(today,'day')}">
         <div class="cal_head festivo_day">
           <div class="conteiner-fluid">
             <div class="row">
@@ -230,7 +229,7 @@
             </div>
             <div class="row">
               <div class="col">
-                {{this.calendar_current_week[0].days[6] | date: 'dd' }}
+                {{this.calendar[index_week].days[6] | date: 'dd' }}
               </div>
             </div>
           </div>
@@ -240,64 +239,64 @@
   </thead>
   <tbody>
     <tr>
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[0].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[0], this.calendar_current_week[0], 0)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[0].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[0], this.calendar[index_week], 0)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 0)">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 0)">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[1].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[1], this.calendar_current_week[0], 1)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[1].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[1], this.calendar[index_week], 1)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 1 )">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 1 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[2].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[2], this.calendar_current_week[0], 2)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[2].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[2], this.calendar[index_week], 2)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 2)">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 2)">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[3].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[3], this.calendar_current_week[0], 3)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[3].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[3], this.calendar[index_week], 3)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 3 )">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 3 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[4].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[4], this.calendar_current_week[0], 4)">
+      <td  class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[4].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[4], this.calendar[index_week], 4)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 4 )">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 4 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[5].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[5], this.calendar_current_week[0], 5)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[5].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[5], this.calendar[index_week], 5)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 5 )">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 5 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
       </td>
 
-      <td [ngClass]="{'disabled': this.calendar_current_week[0].days[6].isBefore(today,'day')}"
-        (click)="createEvent(this.calendar_current_week[0].days[6], this.calendar_current_week[0], 6)">
+      <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[6].isBefore(today,'day')}"
+        (click)="createEvent(this.calendar[index_week].days[6], this.calendar[index_week], 6)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar_current_week[0], 6 )">
+          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 6 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
