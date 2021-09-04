@@ -1,7 +1,8 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from 'src/environments/environment';
 import { Evento } from '../models/evento';
+import { UserInfo } from '../models/user';
 
 @Injectable({
   providedIn: "root",
@@ -16,14 +17,13 @@ export class EventiService {
     return this.http.get<Evento[]>(this.api + "/api/eventi").toPromise();
   }
 
-  async getEventiByDay(day: moment.Moment): Promise<Evento[]> {
-    return this.http.get<Evento[]>(this.api + "/api/eventi/"+ day.format("YYYYMMDD")).toPromise();
-    // return new Promise((resolve, reject) => {
-    //   let eventi: Evento[] = [];
-    //   eventi.push({ data:  new Date(), descrizione: "dd", tipo: "", utente: ""});
+  async getEventiByDay(day: moment.Moment, user: UserInfo): Promise<Evento[]> {
+    const data: string = day.format("YYYYMMDD");
+    const headers = new HttpHeaders().append('Authorization', 'Basic ZGQ6ZGQ=');
+    const params = new HttpParams().append('user', user.identify);
 
-    //   resolve(eventi);
-    // });
+    return this.http.get<Evento[]>(this.api + "/api/eventi/search/"+ data, {headers, params}).toPromise();
+
   }
 
   async insertEvento(evento: Evento) {

@@ -1,8 +1,11 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import * as moment from "moment";
+import { userInfo } from 'os';
 import { DialogEventComponent } from "src/app/dialogs/dialog-event/dialog-event.component";
+import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Evento } from "src/app/models/evento";
+import { UserInfo } from 'src/app/models/user';
 import { EventiService } from "src/app/service/eventi.service";
 
 @Component({
@@ -22,10 +25,18 @@ export class CalendarComponent implements OnInit {
   isCalendarWeekEnabled: boolean = false;
 
   calendar = [];
+  public user: UserInfo;
 
   constructor(public dialog: MatDialog, public eventiService: EventiService) {
     this.isCalendarMonthEnabled = true;
-    // this.isCalendarWeekEnabled = true;
+
+    //TODO da recuperare le info del utente
+    this.user = {
+      identify: "123456",
+      mansione: "cuoco"
+    };
+    console.log("user:", this.user);
+
     this.update_calendar();
   }
 
@@ -55,7 +66,7 @@ export class CalendarComponent implements OnInit {
       );
 
       item.days.map((d, index) =>
-        this.eventiService.getEventiByDay(d).then((e) => {
+        this.eventiService.getEventiByDay(d, this.user).then((e) => {
           if (item.events[index] == undefined) item.events[index] = [];
           e.forEach((evt) => item.events[index].push(evt));
         }).catch(err=> {
@@ -72,7 +83,14 @@ export class CalendarComponent implements OnInit {
       return [e, calendar.events[i]];
     });
 
-    if (c[index][1] != undefined) return c[index][1];
+    if (c[index][1] != undefined)
+      return c[index][1].sort((a,b)=>
+        (new Date(a.data)).getTime() - (new Date(b.data)).getTime()
+      );
+  }
+
+  showEvent(evento: Evento) {
+    console.log("evento:", evento);
   }
 
   createEvent(item: moment.Moment, calendar_week: any, index: number) {
@@ -106,10 +124,15 @@ export class CalendarComponent implements OnInit {
           if (this.calendar[index_week].events[index] == undefined)
             this.calendar[index_week].events[index] = [];
 
-          this.eventiService.insertEvento(result).then((res) => {
-            this.calendar[index_week].events[index].push(result);
+          let evento: Evento =  result;
+          evento.utente = this.user.identify;
+          evento.tipo = this.user.mansione;
+
+          this.eventiService.insertEvento(evento).then((res) => {
+            this.calendar[index_week].events[index].push(evento);
           }).catch(err=> {
             console.error("Error to insert Events");
+            this.showMessageError("Errore: Inserimento Evento fallito (" + err['status'] + ")");
           });
         }
       });
@@ -155,5 +178,19 @@ export class CalendarComponent implements OnInit {
   async calendarWeek() {
     this.isCalendarMonthEnabled = false;
     this.isCalendarWeekEnabled = true;
+  }
+
+
+  async showMessageError(messageError: string) {
+    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
+      panelClass: 'custom-modalbox',
+      data: messageError,
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed", result);
+
+      });
   }
 }

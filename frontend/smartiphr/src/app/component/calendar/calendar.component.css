@@ -60,16 +60,50 @@ tbody {
 
 .badge{
   font-size: inherit;
+  color: inherit;
 }
 
 .event_type {
-  background-color: #3788d8;
+  background-color: white;
   margin: 0 3px 0px 3px;
   font-size: 11px;
-  color: white;
+  color: black;
   padding: 3px;
   border-radius: 5px;
   margin-top: 2px;
+}
+
+.event_type_medico {
+  background-color: #ff9100;
+  color: white;
+}
+.event_type_admin {
+  background-color: #ff0000;
+  color: white;
+}
+.event_type_infermiere {
+  background-color: #ffd000;
+  color: black;
+}
+.event_type_oss {
+  background-color: #34bb1a;
+  color: white;
+}
+.event_type_psicologo {
+  background-color: #9b32c4;
+  color: white;
+}
+.event_type_sociale {
+  background-color: #000000;
+  color: white;
+}
+.event_type_ausiliare {
+  background-color: #0084ff;
+  color: white;
+}
+.event_type_cuoco {
+  background-color: #8a575e;
+  color: white;
 }
 
 .title {

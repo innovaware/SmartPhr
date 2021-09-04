@@ -78,6 +78,7 @@ import { DialogDipendenteComponent } from './dialogs/dialog-dipendente/dialog-di
 import { DialogConsulenteComponent } from './dialogs/dialog-consulente/dialog-consulente.component';
 import { DialogFornitoriComponent } from './dialogs/dialog-fornitori/dialog-fornitori.component';
 import { DialogAspComponent } from './dialogs/dialog-asp/dialog-asp.component';
+import { DialogMessageErrorComponent } from './dialogs/dialog-message-error/dialog-message-error.component';
 
 
 @NgModule({
@@ -131,6 +132,7 @@ import { DialogAspComponent } from './dialogs/dialog-asp/dialog-asp.component';
     DialogConsulenteComponent,
     DialogFornitoriComponent,
     DialogAspComponent,
+    DialogMessageErrorComponent,
   ],
   imports: [
     BrowserModule,
@@ -172,6 +174,7 @@ import { DialogAspComponent } from './dialogs/dialog-asp/dialog-asp.component';
     DialogConsulenteComponent,
     DialogFornitoriComponent,
     DialogAspComponent,
+    DialogMessageErrorComponent,
   ]
 })
 export class AppModule {

@@ -4,8 +4,8 @@
 
 export const environment = {
   production: false,
-  //  api: "http://localhost:3000"
-  api: "http://smart-iphr.innovaware.it:3000"
+  api: "http://localhost:3000"
+  //api: "http://smart-iphr.innovaware.it:3000"
 
 };
 

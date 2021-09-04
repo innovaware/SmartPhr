@@ -68,6 +68,10 @@ app.use("/api/asp", aspRouter);
 const farmaciRouter = require("./routes/farmaci");
 app.use("/api/farmaci", farmaciRouter);
 
+// Eventi API
+const eventiRouter = require("./routes/eventi");
+app.use("/api/eventi", eventiRouter);
+
 
 app.listen(PORT, () =>
   console.log(`Innova Backend App listening on port ${PORT}!`)

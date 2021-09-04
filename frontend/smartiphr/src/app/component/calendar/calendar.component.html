@@ -62,7 +62,7 @@
           {{item.format("DD")}}</div>
 
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[0], indexOfelement )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[0], indexOfelement )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -77,7 +77,7 @@
           {{item.format("DD")}}</div>
 
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[1], indexOfelement )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[1], indexOfelement )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -92,7 +92,7 @@
           {{item.format("DD")}}</div>
 
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[2], indexOfelement )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[2], indexOfelement )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -107,7 +107,7 @@
           {{item.format("DD")}}</div>
 
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[3], indexOfelement )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[3], indexOfelement )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -122,7 +122,7 @@
           {{item.format("DD")}}</div>
 
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[4], indexOfelement )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[4], indexOfelement )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -242,7 +242,7 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[0].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[0], this.calendar[index_week], 0)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 0)">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[index_week], 0)">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -251,7 +251,7 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[1].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[1], this.calendar[index_week], 1)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 1 )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[index_week], 1 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -260,7 +260,7 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[2].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[2], this.calendar[index_week], 2)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 2)">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[index_week], 2)">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -269,7 +269,7 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[3].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[3], this.calendar[index_week], 3)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 3 )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[index_week], 3 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -278,7 +278,7 @@
       <td  class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[4].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[4], this.calendar[index_week], 4)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 4 )">
+          <div class="event_type {{'event_type_' + user.mansione}}" *ngFor="let event of getEvent(this.calendar[index_week], 4 )">
             <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
           </div>
         </div>
@@ -287,8 +287,12 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[5].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[5], this.calendar[index_week], 5)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 5 )">
-            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          <div class="event_type {{'event_type_' + user.mansione}}"
+            *ngFor="let event of getEvent(this.calendar[index_week], 5 ); let indexEvent=index;">
+            <div>
+              <span class="badge ">{{event?.data | date: 'HH:mm'}}</span>
+              <span>{{event?.descrizione}}</span>
+            </div>
           </div>
         </div>
       </td>
@@ -296,8 +300,10 @@
       <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week].days[6].isBefore(today,'day')}"
         (click)="createEvent(this.calendar[index_week].days[6], this.calendar[index_week], 6)">
         <div class="container_event droppable" tipo_cont="mese">
-          <div class="event_type" *ngFor="let event of getEvent(this.calendar[index_week], 6 )">
-            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
+          <div class="event_type {{'event_type_' + user.mansione}}"
+              *ngFor="let event of getEvent(this.calendar[index_week], 6 )">
+              <span class="badge ">{{event?.data | date: 'HH:mm'}}</span>
+              <span>{{event?.descrizione}}</span>
           </div>
         </div>
       </td>
