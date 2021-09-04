@@ -84,7 +84,7 @@ router.post("/", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500);
-    res.json("Error", err);
+    res.json({"Error": err});
   }
 });
 

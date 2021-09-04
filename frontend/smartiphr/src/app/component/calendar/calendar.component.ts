@@ -1,7 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import * as moment from "moment";
-import { userInfo } from 'os';
 import { DialogEventComponent } from "src/app/dialogs/dialog-event/dialog-event.component";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Evento } from "src/app/models/evento";

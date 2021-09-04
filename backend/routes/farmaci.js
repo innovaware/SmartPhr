@@ -9,7 +9,7 @@ router.get("/", async (req, res) => {
 
   } catch (err) {
     console.error("Error: ", err);
-    res.status(500).json("Error", err);
+    res.status(500).json({"Error": err});
   }
 });
 
@@ -20,7 +20,7 @@ router.get("/:id", async (req, res) => {
     res.status(200);
     res.json(farmaci);
   } catch (err) {
-    res.status(500).json("Error", err);
+    res.status(500).json({"Error": err});
   }
 });
 

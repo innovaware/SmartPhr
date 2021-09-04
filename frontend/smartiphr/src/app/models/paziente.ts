@@ -2,6 +2,7 @@ import { CartellaClinica } from './cartellaClinica';
 import { Diario } from './diario';
 
 export class Paziente {
+  _id?: string;
   cognome: string;
   nome: string;
   sesso: string;

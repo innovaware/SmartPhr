@@ -152,3 +152,10 @@
   </table>
 
 </div>
+
+
+<div mat-dialog-actions *ngIf="!disable">
+  <div class="bottom-actions">
+  <button mat-button [mat-dialog-close]="true">Chiudi</button>
+  <button mat-button class="button-insert" (click)="save()">Salva</button>
+</div>

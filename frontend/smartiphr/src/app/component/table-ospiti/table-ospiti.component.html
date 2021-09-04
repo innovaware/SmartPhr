@@ -1,4 +1,11 @@
 <div class="containter pad">
+  <div class="row" *ngIf="showInsert">
+    <div class="col">
+      <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Paziente</button>
+    </div>
+  </div>
+
+
   <div class="row">
     <div class="col">
       <mat-form-field appearance="standard">
@@ -7,6 +14,8 @@
       </mat-form-field>
     </div>
   </div>
+
+
 
   <div class="row">
     <div class="col">

@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from 'src/environments/environment';
+import { environment } from "src/environments/environment";
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { Paziente } from "../models/paziente";
@@ -9,12 +9,26 @@ import { Paziente } from "../models/paziente";
   providedIn: "root",
 })
 export class PazienteService {
-
   api: string = environment.api;
 
   constructor(private http: HttpClient) {}
 
   getPazienti(): Promise<Paziente[]> {
     return this.http.get<Paziente[]>(this.api + "/api/pazienti").toPromise();
+  }
+
+  save(data: Paziente): Promise<Paziente> {
+    var body = data;
+    console.log("body: ", body);
+    return this.http
+      .put<Paziente>(this.api + "/api/pazienti/" + data._id, body)
+      .toPromise();
+  }
+
+  insert(data: Paziente): Promise<Paziente> {
+    var body = data;
+    return this.http
+      .post<Paziente>(this.api + "/api/pazienti", body)
+      .toPromise();
   }
 }

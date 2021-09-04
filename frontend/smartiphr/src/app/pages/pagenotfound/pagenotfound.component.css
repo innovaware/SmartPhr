@@ -1,0 +1,12 @@
+
+.card-notfound {
+  text-align: center;
+  margin-left: 15px;
+  height: calc(100vh - 80px);
+  margin-top: 15px;
+}
+
+mat-card-content {
+  top: calc(50% - 100px);
+  position: relative;
+}

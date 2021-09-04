@@ -1,0 +1,19 @@
+
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Amministrativa Pazienti</h1>
+    </div>
+  </div>
+
+  <hr>
+
+
+
+
+  <div class="row">
+    <div class="col">
+      <app-table-ospiti (showItemEmiter)="show($event)" [buttons]='["Mostra"]' [showInsert]=true></app-table-ospiti>
+    </div>
+  </div>
+</div>

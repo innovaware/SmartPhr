@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { AdminPazientiComponent } from './pages/admin-pazienti/admin-pazienti.component';
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
 import { AreaFisioterapiaComponent } from "./pages/area-fisioterapia/area-fisioterapia.component";
 import { AreaInfermieristicaComponent } from "./pages/area-infermieristica/area-infermieristica.component";
@@ -23,7 +24,7 @@ const routes: Routes = [
   { path: "medica", component: AreaMedicaComponent },
   { path: "infermieristica", component: AreaInfermieristicaComponent },
 
-  { path: "gest_pazienti", component: PagenotfoundComponent },
+  { path: "gest_pazienti", component: AdminPazientiComponent },
   { path: "gest_dipendenti", component: GestUtentiComponent },
   { path: "gest_consulenti", component: ConsulentiComponent },
   { path: "gest_fornitori", component: FornitoriComponent },

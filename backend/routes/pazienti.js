@@ -8,7 +8,7 @@ router.get("/", async (req, res) => {
     res.status(200).json(pazienti);
   } catch (err) {
     console.error("Error: ", err);
-    res.status(500).json("Error", err);
+    res.status(500).json({"Error": err});
   }
 });
 
@@ -19,7 +19,7 @@ router.get("/:id", async (req, res) => {
     res.status(200);
     res.json(pazienti);
   } catch (err) {
-    res.status(500).json("Error", err);
+    res.status(500).json({"Error": err});
   }
 });
 
@@ -48,7 +48,7 @@ router.post("/", async (req, res) => {
     res.json(result);
   } catch (err) {
     res.status(500);
-    res.json("Error", err);
+    res.json({"Error": err});
   }
 });
 
@@ -80,7 +80,7 @@ router.put("/:id", async (req, res) => {
     res.status(200);
     res.json(pazienti);
   } catch (err) {
-    res.status(500).json("Error", err);
+    res.status(500).json({"Error": err});
   }
 });
 
