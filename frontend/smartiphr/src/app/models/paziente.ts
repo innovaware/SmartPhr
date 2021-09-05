@@ -18,6 +18,8 @@ export class Paziente {
   dataIngresso: Date;
   provincia: string;
   localita: string;
+  comuneNascita: string;
+  provinciaNascita: string;
   provenienza?: string;
 
   cartellaClinica: CartellaClinica[];

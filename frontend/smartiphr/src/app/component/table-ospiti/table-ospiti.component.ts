@@ -80,6 +80,8 @@ export class TableOspitiComponent implements OnInit {
       dataIngresso: new Date(),
       provincia: "",
       localita: "",
+      comuneNascita: "",
+      provinciaNascita: "",
       cartellaClinica: [],
     };
 
