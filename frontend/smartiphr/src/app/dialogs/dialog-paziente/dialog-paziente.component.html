@@ -1,1 +1,13 @@
-<app-paziente-generale [disable]=false [data]=paziente (saveEmiter)="save()"></app-paziente-generale>
+
+
+
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Generale">
+    <app-paziente-generale [disable]=false [data]=paziente (saveEmiter)="save()"></app-paziente-generale>
+  </mat-tab>
+<!--
+  <mat-tab label="Anamnesi Famigliare">
+    <app-anamnesi-famigliare [data]=paziente [disable]=false></app-anamnesi-famigliare>
+  </mat-tab> -->
+
+</mat-tab-group>

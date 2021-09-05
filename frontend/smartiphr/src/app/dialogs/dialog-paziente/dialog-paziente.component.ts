@@ -39,8 +39,8 @@ export class DialogPazienteComponent implements OnInit {
     this.data.paziente.provincia = this.paziente.provincia;
     this.data.paziente.localita = this.paziente.localita;
     this.data.paziente.provenienza = this.paziente.provenienza;
-
-
+    this.data.paziente.comuneNascita = this.paziente.comuneNascita;
+    this.data.paziente.provinciaNascita = this.paziente.provinciaNascita;
 
     this.dialogRef.close(this.data.paziente);
   }
