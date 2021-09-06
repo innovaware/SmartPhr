@@ -1,13 +1,114 @@
-
-
-
 <mat-tab-group mat-align-tabs="start">
-  <mat-tab label="Generale">
+  <mat-tab label="Dati anagrafici generale">
     <app-paziente-generale [disable]=false [data]=paziente (saveEmiter)="save()"></app-paziente-generale>
   </mat-tab>
-<!--
-  <mat-tab label="Anamnesi Famigliare">
-    <app-anamnesi-famigliare [data]=paziente [disable]=false></app-anamnesi-famigliare>
-  </mat-tab> -->
+
+  <mat-tab label="Documentazione">
+    <div class="container-fluid">
+      <div class="row title">
+        <div class="col-1"></div>
+        <div class="col">Nome</div>
+        <div class="col">Data</div>
+        <div class="col-2"></div>
+      </div>
+
+      <hr>
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Contratto ricovero</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Doc identit&aacute;</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Consenso al ricovero</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Autorizzazione alla contenzione</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Autorizzazione alle uscite</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Autorizzazione alle riprese audio, video e foto</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Consenso somministrazione vaccino</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-1 success">
+          <fa-icon icon="check-circle"></fa-icon>
+        </div>
+        <div class="col">Check list indumenti ed effetti personali</div>
+        <div class="col">06/09/2021</div>
+        <div class="col-2">
+          <button mat-button>Upload</button>
+        </div>
+      </div>
+
+    </div>
+
+  </mat-tab>
+  <mat-tab label="Archivio Fatture">
+  </mat-tab>
+  <mat-tab label="Archivio note di credito">
+  </mat-tab>
+  <mat-tab label="Archivio bonifici, assegni, contanti">
+  </mat-tab>
 
 </mat-tab-group>
