@@ -9,95 +9,100 @@
         <div class="col-1"></div>
         <div class="col">Nome</div>
         <div class="col">Data</div>
-        <div class="col-2"></div>
+        <div class="col"></div>
       </div>
 
       <hr>
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1" [ngClass]="document['CONTRATTO_RICOVERO']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Contratto ricovero</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" (change)="upload('CONTRATTO_RICOVERO', $event)" accept=".pdf">
+
+
+
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['DOC_IDENTITA']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Doc identit&aacute;</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf" />
+
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['CONS_RICOVERO']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Consenso al ricovero</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('CONS_RICOVERO', $event)" accept=".pdf" />
+
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['AUTORI_CONTENZIONE']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Autorizzazione alla contenzione</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('AUTORI_CONTENZIONE', $event)" accept=".pdf" />
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['AUTORI_USCITE']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Autorizzazione alle uscite</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('AUTORI_USCITE', $event)" accept=".pdf" />
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['AUTORI_RIPRESE']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Autorizzazione alle riprese audio, video e foto</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('AUTORI_RIPRESE', $event)" accept=".pdf" />
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['AUTORI_VACCINO']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Consenso somministrazione vaccino</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('AUTORI_VACCINO', $event)" accept=".pdf" />
         </div>
       </div>
 
       <div class="row">
-        <div class="col-1 success">
+        <div class="col-1"  [ngClass]="document['LIST_EFFETTIPERSONALI']?.status ? 'success': 'notload'">
           <fa-icon icon="check-circle"></fa-icon>
         </div>
         <div class="col">Check list indumenti ed effetti personali</div>
         <div class="col">06/09/2021</div>
-        <div class="col-2">
-          <button mat-button>Upload</button>
+        <div class="col">
+          <input type="file" id="input-file-id" (change)="upload('LIST_EFFETTIPERSONALI', $event)" accept=".pdf" />
         </div>
       </div>
 

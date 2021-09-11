@@ -28,8 +28,6 @@ router.get("/search/:data", async (req, res) => {
   const { data } = req.params;
   const { user } = req.query;
 
-  console.log("data", data);
-  console.log("user", user);
   try {
     if (data == undefined) {
       res.status(400);

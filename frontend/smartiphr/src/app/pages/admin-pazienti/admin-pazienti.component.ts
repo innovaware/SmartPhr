@@ -21,17 +21,21 @@ export class AdminPazientiComponent implements OnInit {
     var dialogRef = undefined;
     console.log("show: ", event);
 
-    switch (event.button) {
-      case "Mostra":
-        console.log("Area amministrativa pazienti");
-        dialogRef = this.dialog.open(DialogPazienteComponent, {
-          data: { paziente: event.paziente, readonly: true },
-        });
-        break;
+    this.pazienteService.getPaziente(event.paziente._id).then((paziente) => {
+      switch (event.button) {
+        case "Mostra":
+          console.log("Area amministrativa pazienti");
+          dialogRef = this.dialog.open(DialogPazienteComponent, {
+            data: { paziente: event.paziente, readonly: true },
+          });
+          break;
 
-      default:
-        break;
-    }
+        default:
+          break;
+      }
+    }).catch(err=>{
+      console.error(err);
+    });
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {

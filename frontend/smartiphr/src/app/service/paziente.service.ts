@@ -13,8 +13,12 @@ export class PazienteService {
 
   constructor(private http: HttpClient) {}
 
-  getPazienti(): Promise<Paziente[]> {
+  async getPazienti(): Promise<Paziente[]> {
     return this.http.get<Paziente[]>(this.api + "/api/pazienti").toPromise();
+  }
+
+  async getPaziente(id: string): Promise<Paziente[]> {
+    return this.http.get<Paziente[]>(`${this.api}/api/pazienti/${id}`).toPromise();
   }
 
   save(data: Paziente): Promise<Paziente> {

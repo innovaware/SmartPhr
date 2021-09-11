@@ -1,7 +1,9 @@
 import { Component, Inject, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
+import { Documento } from "src/app/models/documento";
 import { Paziente } from "src/app/models/paziente";
+import { UploadService } from "src/app/service/upload.service";
 
 @Component({
   selector: "app-dialog-paziente",
@@ -10,8 +12,10 @@ import { Paziente } from "src/app/models/paziente";
 })
 export class DialogPazienteComponent implements OnInit {
   public paziente: Paziente;
+  public document: any[] = [];
 
   constructor(
+    public uploadService: UploadService,
     public dialogRef: MatDialogRef<PazienteGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
     public data: { paziente: Paziente; readonly: boolean }
@@ -46,4 +50,33 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  async upload(typeDocument: string, event) {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+      let formData: FormData = new FormData();
+
+      const nameDocument: string = file.name;
+
+      formData.append("file", file);
+      formData.append("typeDocument", typeDocument);
+      formData.append("path", `${this.paziente._id}`);
+      formData.append("name", nameDocument);
+
+      // switch (typeDocument) {
+      //   case "CONTRATTO_RICOVERO":
+      //     break;
+      //   default:
+      //     break;
+      // }
+
+      this.uploadService.uploadDocument(formData).then((x) => {
+        this.document[typeDocument] = {
+          status: true,
+          name: nameDocument,
+        };
+      });
+    }
+  }
 }
