@@ -22,7 +22,11 @@ export class UploadService {
 
     //const req = new HttpRequest('POST', url, formData, options);
     //return this.http.request(req);
-    return this.http.post(this.api + "/api/upload", body, options).toPromise();
+    return this.http.post(`${this.api}/api/upload`, body, options).toPromise();
+  }
+
+  async getFiles(path: string){
+    return this.http.get(`${this.api}/api/files/${path}`).toPromise();
   }
 
 }

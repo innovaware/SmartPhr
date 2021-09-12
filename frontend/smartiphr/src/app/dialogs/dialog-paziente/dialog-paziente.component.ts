@@ -1,9 +1,18 @@
-import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MatPaginator,
+  MatTableDataSource,
+  MAT_DIALOG_DATA,
+} from "@angular/material";
 import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
 import { Documento } from "src/app/models/documento";
+import { Fatture } from "src/app/models/fatture";
 import { Paziente } from "src/app/models/paziente";
+import { FattureService } from "src/app/service/fatture.service";
 import { UploadService } from "src/app/service/upload.service";
+import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
   selector: "app-dialog-paziente",
@@ -14,11 +23,27 @@ export class DialogPazienteComponent implements OnInit {
   public paziente: Paziente;
   public document: any[] = [];
 
+  fattureDisplayedColumns: string[] = [
+    "cognome",
+    "nome",
+    "dataNascita",
+    "indirizzo",
+    "localita",
+    "provincia",
+    "action",
+  ];
+
+  public fattureDataSource: MatTableDataSource<Fatture>;
+  @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
+  public fatture: Fatture[];
+
   constructor(
     public uploadService: UploadService,
     public dialogRef: MatDialogRef<PazienteGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { paziente: Paziente; readonly: boolean }
+    public data: { paziente: Paziente; readonly: boolean },
+    public fattureService: FattureService,
+    public dialog: MatDialog
   ) {
     this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
     console.log("Dialog paziente generale", this.data);
@@ -49,7 +74,52 @@ export class DialogPazienteComponent implements OnInit {
     this.dialogRef.close(this.data.paziente);
   }
 
-  ngOnInit() {}
+  async getFatture() {
+    console.log(`Get Fatture paziente: ${this.paziente._id}`);
+    this.fattureService
+      .getFatture(this.paziente)
+      .then((f: Fatture[]) => {
+        this.fatture = f;
+
+        this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
+        this.fattureDataSource.paginator = this.fatturePaginator;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento lista fatture");
+        console.error(err);
+      });
+  }
+
+  async getNoteCredito() {}
+
+  async getBonificiAssegniContanti() {}
+
+  async getListFile() {
+    console.log(`Get list files paziente: ${this.paziente._id}`);
+    this.uploadService.getFiles(this.paziente._id)
+      .then( (documents: Documento[]) => {
+
+          documents.forEach((doc: Documento) => {
+            (documents: Documento[]) => {
+              this.document[doc.typeDocument] = {
+                status: true,
+                name: doc.name,
+              }
+            }
+          });
+        })
+      .catch(err=> {
+        this.showMessageError("Errore caricamento lista Files");
+        console.error(err);
+      })
+  }
+
+  ngOnInit() {
+    this.getListFile();
+    this.getFatture();
+    this.getNoteCredito();
+    this.getBonificiAssegniContanti();
+  }
 
   async upload(typeDocument: string, event) {
     let fileList: FileList = event.target.files;
@@ -64,19 +134,27 @@ export class DialogPazienteComponent implements OnInit {
       formData.append("path", `${this.paziente._id}`);
       formData.append("name", nameDocument);
 
-      // switch (typeDocument) {
-      //   case "CONTRATTO_RICOVERO":
-      //     break;
-      //   default:
-      //     break;
-      // }
-
       this.uploadService.uploadDocument(formData).then((x) => {
         this.document[typeDocument] = {
           status: true,
           name: nameDocument,
         };
+      }).catch(err=> {
+        this.showMessageError("Errore nel caricamento file");
+        console.error(err);
       });
     }
+  }
+
+  async showMessageError(messageError: string) {
+    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
+      panelClass: "custom-modalbox",
+      data: messageError,
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed", result);
+      });
   }
 }
