@@ -30,7 +30,7 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const searchTerm = `ASPBY${id}`;
+    const searchTerm = `FARMACIBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
