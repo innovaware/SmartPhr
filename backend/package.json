@@ -10,7 +10,8 @@
     "mongodb": "^2.2.33",
     "mongoose": "^5.13.7",
     "nextcloud-node-client": "^1.8.1",
-    "node-nextcloud": "^1.1.2"
+    "node-nextcloud": "^1.1.2",
+    "redis": "^3.1.2"
   },
   "devDependencies": {
     "@types/cors": "^2.8.12",

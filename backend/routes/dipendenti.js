@@ -1,11 +1,25 @@
 const express = require("express");
 const router = express.Router();
 const Dipendenti = require("../models/dipendenti");
+const redis = require("redis");
+const redisPort = 6379
+const client = redis.createClient(redisPort);
 
 router.get("/", async (req, res) => {
   try {
-    const dipendenti = await Dipendenti.find();
-    res.status(200).json(dipendenti);
+    const searchTerm = `DIPENDENTIALL`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const dipendenti = await Dipendenti.find();
+
+        client.setex(searchTerm, 600, JSON.stringify(dipendenti));
+        res.status(200).json(dipendenti);
+      }
+    });
 
   } catch (err) {
     console.error("Error: ", err);
@@ -16,9 +30,20 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const dipendenti = await Dipendenti.findById(id);
-    res.status(200);
-    res.json(dipendenti);
+    const searchTerm = `ASPBY${id}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const dipendenti = await Dipendenti.findById(id);
+
+        client.setex(searchTerm, 600, JSON.stringify(dipendenti));
+        res.status(200).json(dipendenti);
+      }
+    });
+   
   } catch (err) {
     res.status(500).json({"Error": err});
   }
