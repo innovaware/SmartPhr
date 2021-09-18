@@ -2,8 +2,10 @@ const express = require("express");
 const router = express.Router();
 const Farmaci = require("../models/farmaci");
 const redis = require("redis");
-const redisPort = 6379
-const client = redis.createClient(redisPort);
+const redisPort = process.env.REDISPORT || 6379;
+const redisHost = process.env.REDISHOST || 'redis';
+
+const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
