@@ -6,7 +6,7 @@ const Fatture = require("../models/fatture");
 
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || 'redis';
+const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
@@ -21,10 +21,11 @@ router.get("/paziente/:id", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
+        console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
         const fatture = await Fatture.find({
-          paziente: id
+          paziente: id,
         });
         client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
         res.status(200).json(fatture);
@@ -33,10 +34,9 @@ router.get("/paziente/:id", async (req, res) => {
 
     // const fatture = await fatture.find();
     // res.status(200).json(fatture);
-
   } catch (err) {
     console.error("Error: ", err);
-    res.status(500).json({ "Error": err });
+    res.status(500).json({ Error: err });
   }
 });
 
@@ -55,27 +55,33 @@ router.get("/:id", async (req, res) => {
         res.status(200).json(fatture);
       }
     });
-    
   } catch (err) {
-    res.status(500).json({ "Error": err });
+    res.status(500).json({ Error: err });
   }
 });
 
-router.post("/", async (req, res) => {
+router.post("/paziente/:id", async (req, res) => {
   try {
+    const { id } = req.params;
     const fatture = new Fatture({
-      paziente: req.body.pazienteID,
+      paziente: id,
+      filename: req.body.filename,
+      dateupload: Date.now(),
     });
 
     console.log("Insert fattura: ", fatture);
 
     const result = await fatture.save();
+
+
+    const searchTerm = `fatturePaziente${id}`;
+    client.del(searchTerm);
+
     res.status(200);
     res.json(result);
-
   } catch (err) {
     res.status(500);
-    res.json({ "Error": err });
+    res.json({ Error: err });
   }
 });
 
@@ -87,6 +93,7 @@ router.put("/:id", async (req, res) => {
       {
         $set: {
           paziente: req.body.pazienteID,
+          filename: req.body.filename,
         },
       }
     );
@@ -96,9 +103,25 @@ router.put("/:id", async (req, res) => {
 
     res.status(200);
     res.json(fatture);
-
   } catch (err) {
-    res.status(500).json({ "Error": err });
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const fatture = await Fatture.remove(
+      { _id: id });
+
+    const searchTerm = `fattureBY${id}`;
+    client.del(searchTerm);
+
+    res.status(200);
+    res.json(fatture);
+  } catch (err) {
+    res.status(500).json({ Error: err });
   }
 });
 

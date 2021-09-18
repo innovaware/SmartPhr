@@ -25,7 +25,7 @@ export class FattureService {
 
   async insertFattura(fattura: Fatture, paziente: Paziente) {
     var body = fattura;
-    return this.http.post(this.api + "/api/fatture", body).toPromise();
+    return this.http.post(`${this.api}/api/fatture/paziente/${paziente._id}`, body).toPromise();
   }
 
   async updateFattura(fattura: Fatture) {
@@ -33,4 +33,9 @@ export class FattureService {
     console.log("body: ", body);
     return this.http.put(this.api + "/api/fatture/" + fattura._id, body).toPromise();
   }
+
+  async remove(fattura: Fatture) {
+    return this.http.delete(`${this.api}/api/fatture/${fattura._id}`).toPromise();
+  }
+
 }

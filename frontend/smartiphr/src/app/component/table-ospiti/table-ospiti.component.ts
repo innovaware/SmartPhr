@@ -86,7 +86,7 @@ export class TableOspitiComponent implements OnInit {
     };
 
     const dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: true },
+      data: { paziente: paziente, readonly: true, newItem: true },
     });
 
     dialogRef.afterClosed().subscribe((result) => {

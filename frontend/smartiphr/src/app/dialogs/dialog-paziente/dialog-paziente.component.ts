@@ -11,6 +11,7 @@ import { Documento } from "src/app/models/documento";
 import { Fatture } from "src/app/models/fatture";
 import { Paziente } from "src/app/models/paziente";
 import { FattureService } from "src/app/service/fatture.service";
+import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
@@ -21,35 +22,36 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
 })
 export class DialogPazienteComponent implements OnInit {
   public paziente: Paziente;
+  public newItem: boolean;
   public document: any[] = [];
+  public uploading: boolean;
+  public uploadingFattura: boolean;
 
-  fattureDisplayedColumns: string[] = [
-    "pazienteID",
-    "nome",
-    "dataNascita",
-    "indirizzo",
-    "localita",
-    "provincia",
-    "action",
-  ];
+  fattureDisplayedColumns: string[] = ["namefile", "date", "action"];
 
   public fattureDataSource: MatTableDataSource<Fatture>;
-  @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
+  // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
+  @ViewChild("paginatorFatture", { static: false }) fatturePaginator: MatPaginator;
   public fatture: Fatture[];
 
   constructor(
     public uploadService: UploadService,
     public dialogRef: MatDialogRef<PazienteGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { paziente: Paziente; readonly: boolean },
+    public data: { paziente: Paziente; readonly: boolean; newItem: boolean },
     public fattureService: FattureService,
+    public pazienteService: PazienteService,
     public dialog: MatDialog
   ) {
-    this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
+    this.uploading = false;
+    this.paziente = this.data.paziente;
+    this.newItem = this.data.newItem || false;
+    this.uploadingFattura = false;
+    //this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
     console.log("Dialog paziente generale", this.data);
   }
 
-  async save() {
+  async save(saveAndClose: boolean) {
     // this.data.paziente = this.paziente;
     console.log("update paziente");
     this.data.paziente.cognome = this.paziente.cognome;
@@ -71,7 +73,43 @@ export class DialogPazienteComponent implements OnInit {
     this.data.paziente.comuneNascita = this.paziente.comuneNascita;
     this.data.paziente.provinciaNascita = this.paziente.provinciaNascita;
 
-    this.dialogRef.close(this.data.paziente);
+    if (saveAndClose) {
+      this.dialogRef.close(this.data.paziente);
+    } else {
+      this.uploading = true;
+
+      if (this.newItem) {
+        this.pazienteService
+          .insert(this.data.paziente)
+          .then((x) => {
+            console.log("Save paziente: ", x);
+            this.data.paziente = x;
+            this.paziente = x;
+            this.uploading = false;
+            this.newItem = false;
+          })
+          .catch((err) => {
+            this.showMessageError(
+              "Errore Inserimento Paziente (" + err["status"] + ")"
+            );
+            this.uploading = false;
+          });
+      } else {
+        this.pazienteService
+          .save(this.data.paziente)
+          .then((x) => {
+            console.log("Save paziente: ", x);
+            this.uploading = false;
+            this.newItem = false;
+          })
+          .catch((err) => {
+            this.showMessageError(
+              "Errore salvataggio Paziente (" + err["status"] + ")"
+            );
+            this.uploading = false;
+          });
+      }
+    }
   }
 
   async changeData($event: Paziente) {
@@ -91,6 +129,48 @@ export class DialogPazienteComponent implements OnInit {
       })
       .catch((err) => {
         this.showMessageError("Errore caricamento lista fatture");
+        console.error(err);
+      });
+  }
+
+  async deleteFattura(fattura: Fatture) {
+    console.log("Cancella fattura: ", fattura);
+
+    this.fattureService
+      .remove(fattura)
+      .then((x) => {
+        console.log("Fattura cancellata");
+        const index = this.fatture.indexOf(fattura);
+        console.log("Fattura cancellata index: ", index);
+        if (index > -1) {
+          this.fatture.splice(index, 1);
+        }
+
+        console.log("Fattura cancellata this.fatture: ", this.fatture);
+        this.fattureDataSource.data = this.fatture;
+
+      })
+      .catch((err) => {});
+  }
+
+  async uploadFattura($event) {
+    this.uploadingFattura = true;
+    console.log("upload fattura: ", $event);
+  }
+
+  async addFattura() {
+    let fattura: Fatture = {
+      filename: "filename",
+    };
+    this.fattureService
+      .insertFattura(fattura, this.paziente)
+      .then((result: Fatture) => {
+        console.log("Insert fattura: ", result);
+        this.fatture.push(result);
+        this.fattureDataSource.data = this.fatture;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
   }
@@ -119,10 +199,12 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.getListFile();
-    this.getFatture();
-    this.getNoteCredito();
-    this.getBonificiAssegniContanti();
+    if (this.paziente._id != undefined) {
+      this.getListFile();
+      this.getFatture();
+      this.getNoteCredito();
+      this.getBonificiAssegniContanti();
+    }
   }
 
   async upload(typeDocument: string, event) {
@@ -138,9 +220,11 @@ export class DialogPazienteComponent implements OnInit {
       formData.append("path", `${this.paziente._id}`);
       formData.append("name", nameDocument);
 
+      this.uploading = true;
       this.uploadService
         .uploadDocument(formData)
         .then((x) => {
+          this.uploading = false;
           this.document[typeDocument] = {
             status: true,
             name: nameDocument,
@@ -149,6 +233,7 @@ export class DialogPazienteComponent implements OnInit {
         .catch((err) => {
           this.showMessageError("Errore nel caricamento file");
           console.error(err);
+          this.uploading = false;
         });
     }
   }

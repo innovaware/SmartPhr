@@ -17,7 +17,7 @@ router.get("/:id", async (req, res) => {
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      console.log(`Data from redis: ${data}`);
+      // console.log(`Data from redis: ${data}`);
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {

@@ -85,6 +85,7 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    
     const pazienti = await Pazienti.updateOne(
       { _id: id },
       {
