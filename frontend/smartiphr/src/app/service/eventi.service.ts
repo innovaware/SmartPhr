@@ -2,7 +2,7 @@ import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { environment } from 'src/environments/environment';
 import { Evento } from '../models/evento';
-import { UserInfo } from '../models/user';
+import { UserInfo } from '../models/userInfo';
 
 @Injectable({
   providedIn: "root",

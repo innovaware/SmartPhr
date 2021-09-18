@@ -4,7 +4,7 @@ import * as moment from "moment";
 import { DialogEventComponent } from "src/app/dialogs/dialog-event/dialog-event.component";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Evento } from "src/app/models/evento";
-import { UserInfo } from 'src/app/models/user';
+import { UserInfo } from 'src/app/models/userInfo';
 import { EventiService } from "src/app/service/eventi.service";
 
 @Component({

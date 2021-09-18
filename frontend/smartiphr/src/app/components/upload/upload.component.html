@@ -1,0 +1,39 @@
+<div class="form-group">
+  <div class="container-flex">
+    <div class="row" *ngIf="!showUploadForm">
+      <div class="col">
+        <button class="btn btn-primary" (click)="showUploadForm=!showUploadForm">
+          Upload
+          <img src="../../../assets/upload.svg" style="width: 28px;" >
+          <!-- <img src="../../../assets/images/csv-file.svg" style="width: 28px;" > -->
+
+          <!-- [icon]="csv-file.svg" -->
+        </button>
+      </div>
+    </div>
+
+    <div class="row" *ngIf="showUploadForm">
+      <div class="col">
+        <input type="file" id="file" accept="{{accept}}" (change)="handleFileInput($event.target.files)">
+
+
+      </div>
+
+      <div class="col">
+        <button class="btn btn-primary" (click)="uploadPDF()" *ngIf="!uploading && this.fileToUpload != undefined">Upload</button>
+      </div>
+    </div>
+
+
+    <div class="row" *ngIf="uploading">
+      <div class="col-2">
+        Uploading
+      </div>
+      <div class="col-1">
+        <!-- <mat-spinner [diameter]="20"></mat-spinner> -->
+      </div>
+    </div>
+
+
+  </div>
+</div>

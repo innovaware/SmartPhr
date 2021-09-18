@@ -1,6 +1,9 @@
 const express = require("express");
+//const jwt_decode = require("jwt-decode");
+
 const router = express.Router();
-const Farmaci = require("../models/farmaci");
+const Fatture = require("../models/fatture");
+
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || 'redis';
@@ -9,93 +12,93 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-router.get("/", async (req, res) => {
+router.get("/paziente/:id", async (req, res) => {
   try {
-    const searchTerm = `FARMACIALL`;
+    const { id } = req.params;
+
+    const searchTerm = `fatturePaziente${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await Farmaci.find();
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
-        res.status(200).json(farmaci);
+        const fatture = await Fatture.find({
+          paziente: id
+        });
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
+        res.status(200).json(fatture);
       }
     });
 
+    // const fatture = await fatture.find();
+    // res.status(200).json(fatture);
+
   } catch (err) {
     console.error("Error: ", err);
-    res.status(500).json({"Error": err});
+    res.status(500).json({ "Error": err });
   }
 });
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const searchTerm = `FARMACIBY${id}`;
+    const searchTerm = `fattureBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await Farmaci.findById(id);
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
-        res.status(200).json(farmaci);
+        const fatture = await Fatture.findById(id);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
+        res.status(200).json(fatture);
       }
     });
+    
   } catch (err) {
-    res.status(500).json({"Error": err});
+    res.status(500).json({ "Error": err });
   }
 });
 
 router.post("/", async (req, res) => {
   try {
-    const farmaci = new Farmaci({
-      nome: req.body.nome,
-      descrizione: req.body.descrizione,
-      formato: req.body.formato,
-      dose: req.body.dose,
-      qty: req.body.qty,
-      codice_interno: req.body.codice_interno
+    const fatture = new Fatture({
+      paziente: req.body.pazienteID,
     });
 
-    const result = await farmaci.save();
+    console.log("Insert fattura: ", fatture);
+
+    const result = await fatture.save();
     res.status(200);
     res.json(result);
 
   } catch (err) {
-    res.status(500).json({error: err}) 
+    res.status(500);
+    res.json({ "Error": err });
   }
 });
 
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const farmaci = await Farmaci.updateOne(
+    const fatture = await Fatture.updateOne(
       { _id: id },
       {
         $set: {
-          nome: req.body.nome,
-          descrizione: req.body.descrizione,
-          formato: req.body.formato,
-          dose: req.body.dose,
-          qty: req.body.qty,
-          codice_interno: req.body.codice_interno
+          paziente: req.body.pazienteID,
         },
       }
     );
 
-    const searchTerm = `FARMACIBY${id}`;
+    const searchTerm = `fattureBY${id}`;
     client.del(searchTerm);
+
     res.status(200);
-    res.json(farmaci);
+    res.json(fatture);
 
   } catch (err) {
-    res.status(500).json({error: err}) 
+    res.status(500).json({ "Error": err });
   }
 });
 

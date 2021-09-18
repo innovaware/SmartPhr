@@ -1,6 +1,8 @@
 
-export class UserInfo {
+export class User {
   _id?: string;
-  identify: string;
-  mansione: string;
+  group: string;
+  username: string;
+  password: string;
+  active: boolean;
 }

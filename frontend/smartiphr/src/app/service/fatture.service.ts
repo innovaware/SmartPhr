@@ -19,7 +19,7 @@ export class FattureService {
     }
 
     return this.http
-      .get<Fatture[]>(this.api + "/api/fatture", { headers })
+      .get<Fatture[]>(`${this.api}/api/fatture/paziente/${paziente._id}`, { headers })
       .toPromise();
   }
 

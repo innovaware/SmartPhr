@@ -24,7 +24,7 @@ export class DialogPazienteComponent implements OnInit {
   public document: any[] = [];
 
   fattureDisplayedColumns: string[] = [
-    "cognome",
+    "pazienteID",
     "nome",
     "dataNascita",
     "indirizzo",
@@ -74,6 +74,11 @@ export class DialogPazienteComponent implements OnInit {
     this.dialogRef.close(this.data.paziente);
   }
 
+  async changeData($event: Paziente) {
+    console.log("Change paziente info", $event);
+    this.paziente = $event;
+  }
+
   async getFatture() {
     console.log(`Get Fatture paziente: ${this.paziente._id}`);
     this.fattureService
@@ -96,22 +101,21 @@ export class DialogPazienteComponent implements OnInit {
 
   async getListFile() {
     console.log(`Get list files paziente: ${this.paziente._id}`);
-    this.uploadService.getFiles(this.paziente._id)
-      .then( (documents: Documento[]) => {
-
-          documents.forEach((doc: Documento) => {
-            (documents: Documento[]) => {
-              this.document[doc.typeDocument] = {
-                status: true,
-                name: doc.name,
-              }
-            }
-          });
-        })
-      .catch(err=> {
+    this.uploadService
+      .getFiles(this.paziente._id)
+      .then((documents: Documento[]) => {
+        documents.forEach((doc: Documento) => {
+          console.log("document:", doc);
+          this.document[doc.typeDocument] = {
+            status: true,
+            name: doc.name,
+          };
+        });
+      })
+      .catch((err) => {
         this.showMessageError("Errore caricamento lista Files");
         console.error(err);
-      })
+      });
   }
 
   ngOnInit() {
@@ -134,15 +138,18 @@ export class DialogPazienteComponent implements OnInit {
       formData.append("path", `${this.paziente._id}`);
       formData.append("name", nameDocument);
 
-      this.uploadService.uploadDocument(formData).then((x) => {
-        this.document[typeDocument] = {
-          status: true,
-          name: nameDocument,
-        };
-      }).catch(err=> {
-        this.showMessageError("Errore nel caricamento file");
-        console.error(err);
-      });
+      this.uploadService
+        .uploadDocument(formData)
+        .then((x) => {
+          this.document[typeDocument] = {
+            status: true,
+            name: nameDocument,
+          };
+        })
+        .catch((err) => {
+          this.showMessageError("Errore nel caricamento file");
+          console.error(err);
+        });
     }
   }
 

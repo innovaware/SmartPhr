@@ -11,6 +11,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 export class PazienteGeneraleComponent implements OnInit {
   @Input() data: Paziente;
   @Input() disable: boolean;
+  @Output() dataChange = new EventEmitter<Paziente>();
   @Output() saveEmiter = new EventEmitter<Paziente>();
 
   constructor() { }
@@ -22,6 +23,11 @@ export class PazienteGeneraleComponent implements OnInit {
   async save() {
     console.log("save: ", this.data);
     this.saveEmiter.emit(this.data);
+  }
+
+  async change() {
+    console.log("change: ", this.data);
+    this.dataChange.emit(this.data);
   }
 
 }
