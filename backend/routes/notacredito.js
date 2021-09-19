@@ -2,7 +2,7 @@ const express = require("express");
 //const jwt_decode = require("jwt-decode");
 
 const router = express.Router();
-const Fatture = require("../models/fatture");
+const NotaCredito = require("../models/notacredito");
 
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
@@ -16,7 +16,7 @@ router.get("/paziente/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const searchTerm = `fatturePaziente${id}`;
+    const searchTerm = `notacreditoPaziente${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -24,16 +24,14 @@ router.get("/paziente/:id", async (req, res) => {
         console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const fatture = await Fatture.find({
+        const notacredito = await NotaCredito.find({
           paziente: id,
         });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
-        res.status(200).json(fatture);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
+        res.status(200).json(notacredito);
       }
     });
 
-    // const fatture = await fatture.find();
-    // res.status(200).json(fatture);
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
@@ -43,16 +41,16 @@ router.get("/paziente/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const searchTerm = `fattureBY${id}`;
+    const searchTerm = `notacreditoBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const fatture = await Fatture.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
-        res.status(200).json(fatture);
+        const notacredito = await NotaCredito.findById(id);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
+        res.status(200).json(notacredito);
       }
     });
   } catch (err) {
@@ -63,18 +61,18 @@ router.get("/:id", async (req, res) => {
 router.post("/paziente/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fatture = new Fatture({
+    const notacredito = new NotaCredito({
       paziente: id,
       filename: req.body.filename,
       dateupload: Date.now(),
     });
 
-    console.log("Insert fattura: ", fatture);
+    console.log("Insert fattura: ", notacredito);
 
-    const result = await fatture.save();
+    const result = await notacredito.save();
 
 
-    const searchTerm = `fatturePaziente${id}`;
+    const searchTerm = `notacreditoPaziente${id}`;
     client.del(searchTerm);
 
     res.status(200);
@@ -88,7 +86,7 @@ router.post("/paziente/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fatture = await Fatture.updateOne(
+    const notacredito = await NotaCredito.updateOne(
       { _id: id },
       {
         $set: {
@@ -98,11 +96,11 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `fattureBY${id}`;
+    const searchTerm = `notacreditoBY${id}`;
     client.del(searchTerm);
 
     res.status(200);
-    res.json(fatture);
+    res.json(notacredito);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
@@ -112,16 +110,14 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fatture = await Fatture.remove(
+    const notacredito = await NotaCredito.remove(
       { _id: id });
 
-    let searchTerm = `fattureBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `fatturePaziente${id}`;
+    const searchTerm = `notacreditoBY${id}`;
     client.del(searchTerm);
 
     res.status(200);
-    res.json(fatture);
+    res.json(notacredito);
   } catch (err) {
     res.status(500).json({ Error: err });
   }

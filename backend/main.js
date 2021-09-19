@@ -24,6 +24,8 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client_redis = redis.createClient(redisPort, redisHost);
 
+console.log(`Redis Host ${redisHost}:${redisPort}`);
+
 app.use(cors());
 app.use(
   basicAuth({
@@ -109,7 +111,6 @@ app.use(
         console.error(err);
         return next(null, result_authorization);
       }
-
     },
     authorizeAsync: true,
   })
@@ -170,18 +171,50 @@ client.getSystemInfo().then(function (x) {
 var writeHandler = function (req, res, next) {
   let result = res.locals.result;
   console.log("result", result);
-  let root = `${result.path[0]}`;
+  // let root = `${result.path[0]}`;
+  let root = `${result.path}`;
 
   console.log("root", root);
-  client.createFolder(root).then((folder) => {
-    folder.createFile(result.name, result.file.data).then((file) => {
-      file.addTag(result.typeDocument);
-      file.addTag(`paziente ${root}`);
+  client
+    .createFolder(root)
+    .then((folder) => {
+      folder.createFile(result.name, result.file.data).then((file) => {
+        file.addTag(result.typeDocument);
+        file.addTag(`paziente ${root}`);
+        //file.addComment("");
 
-      res.status(200);
-      res.json({ result: result });
+        res.status(200);
+        res.json({ result: result });
+      });
+    })
+    .catch((err) => {
+      res.status(500);
+      res.json({ result: err });
     });
-  });
+};
+
+var readHandler = function (req, res, next) {
+  let fileName = decodeURIComponent(req.query.fileName);
+
+  console.log("req.query: ", req.query);
+  console.log("Filename: ", fileName);
+  client
+    .getContent(fileName)
+    .then((data) => {
+
+      res.set({
+        'Content-Type': 'application/pdf',
+        'Content-Disposition': "attachment; filename=" + `${fileName}.pdf`,
+        'Content-Length': data.length,
+      })
+
+      res.end(data);
+      // res.end(Buffer.from(data, "base64"));
+    })
+    .catch((err) => {
+      res.status(500);
+      res.json({ result: err });
+    });
 };
 
 // Pazienti API
@@ -210,9 +243,15 @@ var uploadRouter = require("./routes/upload");
 app.use("/api/upload", logHandler, uploadRouter, writeHandler);
 app.use("/api/files", logHandler, uploadRouter);
 
+app.get("/api/download", logHandler, readHandler);
+
 // Fatture API
 var fattureRouter = require("./routes/fatture");
 app.use("/api/fatture", logHandler, fattureRouter);
+
+// NotaCredito API
+var notacreditoRouter = require("./routes/notacredito");
+app.use("/api/notacredito", logHandler, notacreditoRouter);
 
 // create folder
 // client.createFolder("/products/brooms")

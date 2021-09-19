@@ -11,9 +11,10 @@ const router = express.Router();
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+  console.log(`GET FILES from paziente: ${id}`);
+  
   try {
     const searchTerm = `FILEBYUSER${id}`;
-    console.log(`Find document from user: ${id}`);
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -21,8 +22,8 @@ router.get("/:id", async (req, res) => {
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        console.log(`Find document from user: ${id}`);
         const documents = await SmartDocument.find({ user: id });
+        console.log(`From MONGO document from user: ${id} ${documents.length}`);
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(documents));
         res.status(200).json(documents);
@@ -45,7 +46,7 @@ router.post("/", async (req, res, next) => {
 
       let file = req.files.file;
       let typeDocument = req.body.typeDocument;
-      let path = req.body.path.split("/");
+      let path = req.body.path;//.split("/");
       let name = req.body.name;
 
       result = {
@@ -57,19 +58,20 @@ router.post("/", async (req, res, next) => {
       res.locals.result = result;
       // res.json({ result: result });
 
-      let root = `${result.path[0]}`;
       const document = new SmartDocument({
         typeDocument: typeDocument,
-        path: root,
+        // path: root,
+        path: path,
         name: name,
-        user: root,
+        user: path,
       });
 
+      console.log(`From MONGO save document: ${document}`);
       document
         .save()
         .then((x) => {
           console.log(x);
-          const searchTerm = `FILEBYUSER${root}`;
+          const searchTerm = `FILEBYUSER${path}`;
           client.del(searchTerm);
         })
         .catch((err) => {

@@ -9,8 +9,10 @@ import {
 import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
 import { Documento } from "src/app/models/documento";
 import { Fatture } from "src/app/models/fatture";
+import { NotaCredito } from "src/app/models/notacredito";
 import { Paziente } from "src/app/models/paziente";
 import { FattureService } from "src/app/service/fatture.service";
+import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
@@ -26,13 +28,23 @@ export class DialogPazienteComponent implements OnInit {
   public document: any[] = [];
   public uploading: boolean;
   public uploadingFattura: boolean;
+  public uploadingNotaCredito: boolean;
+  public addingFattura: boolean;
+  public addingNotaCredito: boolean;
 
   fattureDisplayedColumns: string[] = ["namefile", "date", "action"];
 
   public fattureDataSource: MatTableDataSource<Fatture>;
+  public noteCreditoDataSource: MatTableDataSource<NotaCredito>;
+
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture", { static: false }) fatturePaginator: MatPaginator;
+  @ViewChild("paginatorFatture", { static: false })
+  fatturePaginator: MatPaginator;
+  @ViewChild("paginatorNoteCredito", { static: false })
+  notacreditoPaginator: MatPaginator;
+
   public fatture: Fatture[];
+  public noteCredito: NotaCredito[];
 
   constructor(
     public uploadService: UploadService,
@@ -40,6 +52,7 @@ export class DialogPazienteComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: { paziente: Paziente; readonly: boolean; newItem: boolean },
     public fattureService: FattureService,
+    public notacreditoService: NotaCreditoService,
     public pazienteService: PazienteService,
     public dialog: MatDialog
   ) {
@@ -47,6 +60,10 @@ export class DialogPazienteComponent implements OnInit {
     this.paziente = this.data.paziente;
     this.newItem = this.data.newItem || false;
     this.uploadingFattura = false;
+    this.addingFattura = false;
+    this.addingNotaCredito = false;
+    this.uploadingNotaCredito = false;
+
     //this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
     console.log("Dialog paziente generale", this.data);
   }
@@ -148,34 +165,224 @@ export class DialogPazienteComponent implements OnInit {
 
         console.log("Fattura cancellata this.fatture: ", this.fatture);
         this.fattureDataSource.data = this.fatture;
-
-      })
-      .catch((err) => {});
-  }
-
-  async uploadFattura($event) {
-    this.uploadingFattura = true;
-    console.log("upload fattura: ", $event);
-  }
-
-  async addFattura() {
-    let fattura: Fatture = {
-      filename: "filename",
-    };
-    this.fattureService
-      .insertFattura(fattura, this.paziente)
-      .then((result: Fatture) => {
-        console.log("Insert fattura: ", result);
-        this.fatture.push(result);
-        this.fattureDataSource.data = this.fatture;
       })
       .catch((err) => {
-        this.showMessageError("Errore Inserimento fattura");
+        this.showMessageError("Errore nella cancellazione Fattura");
         console.error(err);
       });
   }
 
-  async getNoteCredito() {}
+  async showFattureDocument(fattura: Fatture) {
+    this.uploadService
+      .download(fattura.filename, this.paziente)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+  async addFattura() {
+    this.addingFattura = true;
+  }
+
+  async uploadFattura($event) {
+    const typeDocument = "FATTURE";
+    const path = "fatture";
+
+    let fileList: FileList = $event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+
+      this.uploadingFattura = true;
+      console.log("upload fattura: ", $event);
+      let fattura: Fatture = {
+        filename: file.name,
+      };
+      this.fattureService
+        .insertFattura(fattura, this.paziente)
+        .then((result: Fatture) => {
+          console.log("Insert fattura: ", result);
+          this.fatture.push(result);
+          this.fattureDataSource.data = this.fatture;
+          this.addingFattura = false;
+          this.uploadingFattura = false;
+
+          let formData: FormData = new FormData();
+
+          const nameDocument: string = file.name;
+
+          formData.append("file", file);
+          formData.append("typeDocument", typeDocument);
+          formData.append("path", `${this.paziente._id}/${path}`);
+          formData.append("name", nameDocument);
+          this.uploadService
+            .uploadDocument(formData)
+            .then((x) => {
+              this.uploading = false;
+
+              console.log("Uploading completed: ", x);
+            })
+            .catch((err) => {
+              this.showMessageError("Errore nel caricamento file");
+              console.error(err);
+              this.uploading = false;
+            });
+        })
+        .catch((err) => {
+          this.showMessageError("Errore Inserimento fattura");
+          console.error(err);
+        });
+    } else {
+      this.showMessageError("File non valido");
+      console.error("File non valido o non presente");
+    }
+  }
+
+  async showNoteCreditoDocument(notacredito: NotaCredito) {
+    this.uploadService
+      .download(notacredito.filename, this.paziente)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+  async deleteNotaCredito(notacredito: NotaCredito) {
+    console.log("Cancella NotaCredito: ", notacredito);
+
+    this.notacreditoService
+      .remove(notacredito)
+      .then((x) => {
+        console.log("Fattura cancellata");
+        const index = this.noteCredito.indexOf(notacredito);
+        console.log("Fattura cancellata index: ", index);
+        if (index > -1) {
+          this.noteCredito.splice(index, 1);
+        }
+
+        console.log("Fattura cancellata this.fatture: ", this.noteCredito);
+        this.noteCreditoDataSource.data = this.noteCredito;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore nella cancellazione Fattura");
+        console.error(err);
+      });
+  }
+  async addNotaCredito() {
+    this.addingNotaCredito = true;
+  }
+
+  async uploadNotaCredito($event) {
+    const typeDocument = "NOTACREDITO";
+    const path = "notacredito";
+
+    let fileList: FileList = $event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+
+      this.uploadingNotaCredito = true;
+      console.log("upload notacredito: ", $event);
+      let notacredito: NotaCredito = {
+        filename: file.name,
+      };
+      this.notacreditoService
+        .insertNotaCredito(notacredito, this.paziente)
+        .then((result: NotaCredito) => {
+          console.log("Insert notacredito: ", result);
+          this.noteCredito.push(result);
+          this.noteCreditoDataSource.data = this.noteCredito;
+          this.addingNotaCredito = false;
+          this.uploadingNotaCredito = false;
+
+          let formData: FormData = new FormData();
+
+          const nameDocument: string = file.name;
+
+          formData.append("file", file);
+          formData.append("typeDocument", typeDocument);
+          formData.append("path", `${this.paziente._id}/${path}`);
+          formData.append("name", nameDocument);
+          this.uploadService
+            .uploadDocument(formData)
+            .then((x) => {
+              this.uploading = false;
+
+              console.log("Uploading completed: ", x);
+            })
+            .catch((err) => {
+              this.showMessageError("Errore nel caricamento file");
+              console.error(err);
+              this.uploading = false;
+            });
+        })
+        .catch((err) => {
+          this.showMessageError("Errore Inserimento Nota Credito");
+          console.error(err);
+        });
+    } else {
+      this.showMessageError("File non valido");
+      console.error("File non valido o non presente");
+    }
+  }
+
+  async getNoteCredito() {
+    console.log(`Get NotaCredito paziente: ${this.paziente._id}`);
+    this.notacreditoService
+      .getNotaCredito(this.paziente)
+      .then((f: NotaCredito[]) => {
+        this.noteCredito = f;
+
+        this.noteCreditoDataSource = new MatTableDataSource<NotaCredito>(
+          this.noteCredito
+        );
+        this.noteCreditoDataSource.paginator = this.notacreditoPaginator;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento lista fatture");
+        console.error(err);
+      });
+  }
 
   async getBonificiAssegniContanti() {}
 
