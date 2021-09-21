@@ -24,7 +24,7 @@ jobs:
         id: docker_build
         uses: docker/build-push-action@v2
         with:
-          context: ./backend/
-          file: ./Dockerfile
+          context: .
+          file: ./backend/Dockerfile
           push: true
           tags: smart-iphr.innovaware.it:5000/backend:latest
