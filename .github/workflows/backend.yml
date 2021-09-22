@@ -1,10 +1,15 @@
 name: Backend
 
-on:
-  release:
-    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
-    types: [published, created, edited]
-    
+on: workflow_dispatch
+#  release:
+#    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
+#    types: [published, created, edited]
+#    paths-ignore:
+#      - 'docs/**'
+#      - 'scripts/**'
+#      - 'certificate/**'
+#    paths:
+#      - '!README.md'
 jobs:
 
   build:
