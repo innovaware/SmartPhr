@@ -1,0 +1,1 @@
+[![Backend Actions Status](https://github.com/Dan83/SmartPhr/workflows/Backend/badge.svg)](https://github.com/Dan83/SmartPhr/actions)
