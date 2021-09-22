@@ -89,7 +89,8 @@ import { DialogMessageErrorComponent } from "./dialogs/dialog-message-error/dial
 import { AdminPazientiComponent } from "./pages/admin-pazienti/admin-pazienti.component";
 import { DialogPazienteComponent } from "./dialogs/dialog-paziente/dialog-paziente.component";
 import { UploadComponent } from "./components/upload/upload.component";
-import { BasicAuthInterceptor } from './_helpers/basic-auth.interceptor';
+import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
 @NgModule({
   declarations: [
@@ -167,6 +168,7 @@ import { BasicAuthInterceptor } from './_helpers/basic-auth.interceptor';
     MatNativeDateModule,
     MatExpansionModule,
     MatButtonToggleModule,
+    MatProgressSpinnerModule,
     FormsModule,
     HttpClientModule,
     NgxMatDatetimePickerModule,

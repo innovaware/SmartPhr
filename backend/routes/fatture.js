@@ -67,6 +67,7 @@ router.post("/paziente/:id", async (req, res) => {
       paziente: id,
       filename: req.body.filename,
       dateupload: Date.now(),
+      note: req.body.note,
     });
 
     console.log("Insert fattura: ", fatture);
@@ -94,6 +95,7 @@ router.put("/:id", async (req, res) => {
         $set: {
           paziente: req.body.pazienteID,
           filename: req.body.filename,
+          note: req.body.note,
         },
       }
     );
@@ -112,13 +114,16 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const fatture = await Fatture.remove(
-      { _id: id });
+
+    const item = await Fatture.findById(id);
+    const idPaziente = item.paziente;
+    const fatture = await Fatture.remove({ _id: id });
 
     let searchTerm = `fattureBY${id}`;
     client.del(searchTerm);
-    searchTerm = `fatturePaziente${id}`;
+    searchTerm = `fatturePaziente${idPaziente}`;
     client.del(searchTerm);
+
 
     res.status(200);
     res.json(fatture);

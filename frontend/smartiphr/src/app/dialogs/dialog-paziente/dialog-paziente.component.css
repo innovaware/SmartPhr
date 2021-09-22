@@ -62,3 +62,12 @@ input[type="file" i] {
   position: absolute !important;
   bottom: 0px !important;
 }
+
+.full {
+  width: 100%;
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #0099ff;
+}

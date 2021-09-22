@@ -2,7 +2,7 @@ const express = require("express");
 //const jwt_decode = require("jwt-decode");
 
 const router = express.Router();
-const NotaCredito = require("../models/notacredito");
+const Bonifici = require("../models/bonifici");
 
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
@@ -12,68 +12,73 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-router.get("/paziente/:id", async (req, res) => {
+async function getBonificoByIdPaziente(req, res) {
   try {
     const { id } = req.params;
 
-    const searchTerm = `notacreditoPaziente${id}`;
+    const searchTerm = `bonificiPaziente${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
+        //console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const notacredito = await NotaCredito.find({
+        const bonifici = await Bonifici.find({
           paziente: id,
         });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
-        res.status(200).json(notacredito);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
+        console.log("Add caching: ", searchTerm);
+
+        res.status(200).json(bonifici);
       }
     });
 
+    // const bonifici = await bonifici.find();
+    // res.status(200).json(bonifici);
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
   }
-});
+}
 
-router.get("/:id", async (req, res) => {
+async function getBonificoById(req, res) {
   const { id } = req.params;
   try {
-    const searchTerm = `notacreditoBY${id}`;
+    const searchTerm = `bonificiBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const notacredito = await NotaCredito.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
-        res.status(200).json(notacredito);
+        const bonifici = await Bonifici.findById(id);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
+        console.log("Add caching: ", searchTerm);
+
+        res.status(200).json(bonifici);
       }
     });
   } catch (err) {
     res.status(500).json({ Error: err });
   }
-});
+}
 
-router.post("/paziente/:id", async (req, res) => {
+async function insertBonificoByPazienteId(req, res) {
   try {
     const { id } = req.params;
-    const notacredito = new NotaCredito({
+    const bonifici = new Bonifici({
       paziente: id,
       filename: req.body.filename,
       dateupload: Date.now(),
       note: req.body.note,
     });
 
-    console.log("Insert fattura: ", notacredito);
+    console.log("Insert bonifici: ", bonifici);
 
-    const result = await notacredito.save();
+    const result = await bonifici.save();
 
-
-    const searchTerm = `notacreditoPaziente${id}`;
+    const searchTerm = `bonificiPaziente${id}`;
     client.del(searchTerm);
 
     res.status(200);
@@ -82,12 +87,12 @@ router.post("/paziente/:id", async (req, res) => {
     res.status(500);
     res.json({ Error: err });
   }
-});
+}
 
-router.put("/:id", async (req, res) => {
+async function modifyBonificoByPazienteId(req, res) {
   try {
     const { id } = req.params;
-    const notacredito = await NotaCredito.updateOne(
+    const bonifici = await Bonifici.updateOne(
       { _id: id },
       {
         $set: {
@@ -98,36 +103,46 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `notacreditoBY${id}`;
+    const searchTerm = `bonificiBY${id}`;
     client.del(searchTerm);
+    console.log("Delete caching: ", searchTerm);
 
     res.status(200);
-    res.json(notacredito);
+    res.json(bonifici);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
-});
+}
 
-
-router.delete("/:id", async (req, res) => {
+async function deleteBonifico(req, res) {
   try {
     const { id } = req.params;
-    
-    const item = await NotaCredito.findById(id);
-    const idPaziente = item.paziente;
-    
-    const notacredito = await NotaCredito.remove({ _id: id });
-    
-    let searchTerm = `notacreditoBY${id}`;
+
+    const bonifici_item = await Bonifici.findById(id);
+    const idPaziente = bonifici_item.paziente;
+
+    const bonifici = await Bonifici.remove({ _id: id });
+
+
+    let searchTerm = `bonificiBY${id}`;
     client.del(searchTerm);
-    searchTerm = `notacreditoPaziente${idPaziente}`;
+    console.log("Delete caching: ", searchTerm);
+
+    searchTerm = `bonificiPaziente${idPaziente}`;
     client.del(searchTerm);
+    console.log("Delete caching: ", searchTerm);
 
     res.status(200);
-    res.json(notacredito);
+    res.json(bonifici);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
-});
+}
+
+router.get("/paziente/:id", getBonificoByIdPaziente);
+router.get("/:id", getBonificoById);
+router.post("/paziente/:id", insertBonificoByPazienteId);
+router.put("/:id", modifyBonificoByPazienteId);
+router.delete("/:id", deleteBonifico);
 
 module.exports = router;

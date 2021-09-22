@@ -1,4 +1,5 @@
 version: "3.1"
+
 volumes:
   db:
 
@@ -16,9 +17,12 @@ services:
 
   redis:
     image: "redis:alpine"
+    # TODO data disattivare in release
+    ports:
+      - "6379:6379"
 
   backend:
-    build: ./backend
+    image: localhost:5000/backend
     restart: always
     environment: 
       - MONGO_USERNAME=innova
@@ -26,6 +30,7 @@ services:
       - MONGO_HOSTNAME=mongo
       - MONGO_PORT=27017
       - MONGO_DB=smartphr
+     
     ports:
       - "3000:3000"
     depends_on:
@@ -34,7 +39,7 @@ services:
   nextcloud_db:
     image: mariadb
     restart: always
-    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW
+    command: --transaction-isolation=READ-COMMITTED --binlog-format=ROW --innodb-file-per-table=1 --skip-innodb-read-only-compressed
     volumes:
       - db:/var/lib/mysql
     environment:
@@ -59,7 +64,7 @@ services:
       - MYSQL_HOST=nextcloud_db
 
   frontend:
-    image: smartphr_frontend:v1
+    image: localhost:5000/frontend
     restart: always
     ports:
       - "8080:80"
@@ -67,3 +72,20 @@ services:
       - mongo
       - backend
 
+  # prometheus:
+  #   image: prom/prometheus:v2.21.0
+  #   ports:
+  #     - 9000:9090
+  #   volumes:
+  #     - ./monitoring/prometheus:/etc/prometheus
+  #     #- prometheus-data:/prometheus
+  #   command: --web.enable-lifecycle  --config.file=/etc/prometheus/prometheus.yml
+
+  # grafana:
+  #   image: grafana/grafana:7.5.7
+  #   ports:
+  #     - 3030:3000
+  #   restart: unless-stopped
+  #   volumes:
+  #     - ./monitoring/grafana/provisioning/datasources:/etc/grafana/provisioning/datasources
+  #     #- grafana-data:/var/lib/grafana

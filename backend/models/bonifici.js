@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const FattureSchema = mongoose.Schema({
+const BonificiSchema = mongoose.Schema({
   paziente: String,
   filename: String,
   dateupload: Date,
@@ -8,7 +8,7 @@ const FattureSchema = mongoose.Schema({
 });
 
 module.exports = mongoose.model(
-  "Fatture",
-  FattureSchema,
-  "fatture"
+  "Bonifici",
+  BonificiSchema,
+  "bonifici"
 );

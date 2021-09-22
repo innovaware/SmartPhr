@@ -141,13 +141,35 @@ var mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MON
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-console.log("mongoConnectionString: ", mongoConnectionString);
+
+
+// console.log("Prometheus Client init")
+// const Prometheus = require('prom-client');
+// const register = new Prometheus.Registry()
+// // Add a default label which is added to all metrics
+// register.setDefaultLabels({
+//   app: 'backend-app-metrics'
+// })
+
+// // Enable the collection of default metrics
+// Prometheus.collectDefaultMetrics({ register })
+
+// // Metrics endpoint
+// app.get('/metrics', async (req, res) => {
+
+//   console.log("req:", req.header);
+//   res.set('Content-Type', Prometheus.register.contentType)
+//   res.send(await Prometheus.register.metrics())
+//   //res.end(Prometheus.register.metrics())
+// })
+
 
 var logHandler = function (req, res, next) {
   console.log(req.url);
   next();
 };
 
+console.log("mongoConnectionString: ", mongoConnectionString);
 mongoose.connect(
   mongoConnectionString,
   {
@@ -253,11 +275,9 @@ app.use("/api/fatture", logHandler, fattureRouter);
 var notacreditoRouter = require("./routes/notacredito");
 app.use("/api/notacredito", logHandler, notacreditoRouter);
 
-// create folder
-// client.createFolder("/products/brooms")
-// .then( folder=> {
-//     folder.createSubFolder("soft brooms");
-// })
+// Bonifici API
+var bonificiRouter = require("./routes/bonifici");
+app.use("/api/bonifici", logHandler, bonificiRouter);
 
 app.listen(PORT, function () {
   return console.log("Innova Backend App listening on port " + PORT + "!");
