@@ -4,13 +4,15 @@
   "description": "Innova Backend",
   "main": "index.js",
   "dependencies": {
+    "bson": "^4.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-fileupload": "^1.2.1",
     "jwt-decode": "^3.1.2",
-    "mongodb": "^2.2.33",
+    "mongodb": "^4.1.2",
     "mongoose": "^5.13.7",
+    "mpath": "^0.8.4",
     "nextcloud-node-client": "^1.8.1",
     "node-nextcloud": "^1.1.2",
     "redis": "^3.1.2"
