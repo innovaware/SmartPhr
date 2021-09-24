@@ -16,15 +16,17 @@ var mongoose = require("mongoose");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
+console.log("args:", process.argv);
+
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client_redis = redis.createClient(redisPort, redisHost);
 
 console.log(`Redis Host ${redisHost}:${redisPort}`);
+const client_redis = redis.createClient(redisPort, redisHost);
 
 app.use(cors());
 app.use(
@@ -36,85 +38,132 @@ app.use(
       var passwordMatches = false;
       var result_authorization = false;
 
-      try {
-        const searchTerm = `AUTH${username}${password}`;
-        // console.log("Redis find: " + searchTerm);
-
-        client_redis.get(searchTerm, async (err, data) => {
-          if (err) throw err;
-
-          // console.log("Redis data: " + searchTerm, data);
-
-          if (data && !redisDisabled) {
-            var user_find = JSON.parse(data);
-            userMatches =
-              user_find.username != undefined && user_find.active == true;
-            passwordMatches = user_find.password != undefined;
-
-            // console.log("user_find: ", user_find);
-            // console.log("userMatches: ", userMatches);
-            // console.log("passwordMatches: ", passwordMatches);
-            result_authorization = userMatches & passwordMatches;
-          } else {
-            const users_find = await user.find({
-              $and: [{ username: username }, { password: password }],
-            });
-
-            // console.log(`Mongo ${searchTerm} length: ${user_find.length}`);
-            if (users_find.length > 0) {
-              let user_find = users_find[0];
-
-              client_redis.setex(
-                searchTerm,
-                redisTimeCache,
-                JSON.stringify(user_find)
-              );
-
-              userMatches =
-                user_find.username != undefined && user_find.active == true;
-              passwordMatches = user_find.password != undefined;
-
-              result_authorization = userMatches & passwordMatches;
-
-              // console.log("user_find: ", user_find);
-              // console.log("userMatches: ", userMatches);
-              // console.log("passwordMatches: ", passwordMatches);
-              console.log(
-                `User ${username} authorized ${result_authorization}`
-              );
-            } else {
-              userMatches = false;
-              passwordMatches = false;
-              console.log(`User ${username}:${password} not authorized`);
-              // const u = new user({
-              //   group: "",
-              //   username: "dan",
-              //   password: "dan",
-              //   active: true,
-              // });
-
-              // console.log("Insert data " + searchTerm, u);
-              // u.save()
-              //   .then((x) => {
-              //     console.log("Save user: ", x);
-              //   })
-              //   .catch((err) => {
-              //     console.error(err);
-              //   });
-              result_authorization = userMatches & passwordMatches;
-            }
-          }
-
+      getUser(username, password).then(
+        user => {
+          userMatches = user.username != undefined && user.active == true;
+          passwordMatches = user.password != undefined;
+          result_authorization = userMatches & passwordMatches;
           return next(null, result_authorization);
-        });
-      } catch (err) {
-        console.error(err);
-        return next(null, result_authorization);
-      }
+        })
+        .catch(err => {
+          return next(null, result_authorization);
+        })
+
+      // try {
+      //   const searchTerm = `AUTH${username}${password}`;
+      //   // console.log("Redis find: " + searchTerm);
+
+      //   client_redis.get(searchTerm, async (err, data) => {
+      //     if (err) throw err;
+
+      //     // console.log("Redis data: " + searchTerm, data);
+
+      //     if (data && !redisDisabled) {
+      //       var user_find = JSON.parse(data);
+      //       userMatches =
+      //         user_find.username != undefined && user_find.active == true;
+      //       passwordMatches = user_find.password != undefined;
+
+      //       // console.log("user_find: ", user_find);
+      //       // console.log("userMatches: ", userMatches);
+      //       // console.log("passwordMatches: ", passwordMatches);
+      //       result_authorization = userMatches & passwordMatches;
+      //     } else {
+      //       const users_find = await user.find({
+      //         $and: [{ username: username }, { password: password }],
+      //       });
+
+      //       // console.log(`Mongo ${searchTerm} length: ${user_find.length}`);
+      //       if (users_find.length > 0) {
+      //         let user_find = users_find[0];
+
+      //         client_redis.setex(
+      //           searchTerm,
+      //           redisTimeCache,
+      //           JSON.stringify(user_find)
+      //         );
+
+      //         userMatches =
+      //           user_find.username != undefined && user_find.active == true;
+      //         passwordMatches = user_find.password != undefined;
+
+      //         result_authorization = userMatches & passwordMatches;
+
+      //         // console.log("user_find: ", user_find);
+      //         // console.log("userMatches: ", userMatches);
+      //         // console.log("passwordMatches: ", passwordMatches);
+      //         console.log(
+      //           `User ${username} authorized ${result_authorization}`
+      //         );
+      //       } else {
+      //         userMatches = false;
+      //         passwordMatches = false;
+      //         console.log(`User ${username}:${password} not authorized`);
+      //         // const u = new user({
+      //         //   group: "",
+      //         //   username: "dan",
+      //         //   password: "dan",
+      //         //   active: true,
+      //         // });
+
+      //         // console.log("Insert data " + searchTerm, u);
+      //         // u.save()
+      //         //   .then((x) => {
+      //         //     console.log("Save user: ", x);
+      //         //   })
+      //         //   .catch((err) => {
+      //         //     console.error(err);
+      //         //   });
+      //         result_authorization = userMatches & passwordMatches;
+      //       }
+      //     }
+
+      //     return next(null, result_authorization);
+      //   });
+      // } catch (err) {
+      //   console.error(err);
+      //   return next(null, result_authorization);
+      // }
     },
     authorizeAsync: true,
   })
 );
+
+function getUser(username, password) {
+  return new Promise((resolve, reject) => {
+    const searchTerm = `AUTH${username}${password}`;
+    client_redis.get(searchTerm, async (err, data) => {
+      if (err) { reject(err); return; }
+
+      if (data && !redisDisabled) {
+        var user_find = JSON.parse(data);
+        console.log("user:", user_find);
+        resolve(user_find);
+
+      } else {
+        const users_find = await user.find({
+          $and: [{ username: username }, { password: password }],
+        });
+
+        // console.log(`Mongo ${searchTerm} length: ${user_find.length}`);
+        if (users_find.length > 0) {
+          let user_find = users_find[0];
+
+          client_redis.setex(
+            searchTerm,
+            redisTimeCache,
+            JSON.stringify(user_find)
+          );
+          
+          console.log("user:", user_find);
+          resolve(user_find);
+        } else {
+          reject("Not found");
+        }
+      }
+    });
+  });
+}
 
 // enable files upload
 app.use(
@@ -128,8 +177,16 @@ app.use(
 //     MONGO_PASSWORD,
 //     MONGO_HOSTNAME,
 //     MONGO_PORT,
-//     MONGO_DB
+//     MONGO_DB,
+//     NEXTCLOUD_HOST,
+//     NEXTCLOUD_USER,
+//     NEXTCLOUD_PASW
 //   } = process.env;
+var NEXTCLOUD_HOST = "http://smart-iphr.innovaware.it:8081";
+var NEXTCLOUD_USER = "admin";
+var NEXTCLOUD_PASW = "admin";
+
+
 var MONGO_USERNAME = "innova";
 var MONGO_PASSWORD = "innova2019";
 var MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
@@ -138,8 +195,10 @@ var MONGO_DB = "smartphr";
 //'mongodb://innova:innova2019@192.168.1.10:27017/smartphr?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false';
 var mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: false }));
+// app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(express.json());
 
 
 
@@ -165,7 +224,7 @@ app.use(bodyParser.json());
 
 
 var logHandler = function (req, res, next) {
-  console.log(req.url);
+  //console.log(req.url);
   next();
 };
 
@@ -182,14 +241,15 @@ mongoose.connect(
 
 // uses explicite credentials
 var server = new nextcloud_node_client_1.Server({
-  basicAuth: { password: "admin", username: "admin" },
-  url: "http://smart-iphr.innovaware.it:8081",
+  basicAuth: { password: NEXTCLOUD_PASW, username: NEXTCLOUD_USER },
+  url: NEXTCLOUD_HOST,
 });
 var client = new nextcloud_node_client_1["default"](server);
 client.getSystemInfo().then(function (x) {
   //console.log("System Information:", x);
 });
 
+// Scrittura file su nextCloud
 var writeHandler = function (req, res, next) {
   let result = res.locals.result;
   console.log("result", result);
@@ -215,6 +275,7 @@ var writeHandler = function (req, res, next) {
     });
 };
 
+// Lettura file da nextCloud
 var readHandler = function (req, res, next) {
   let fileName = decodeURIComponent(req.query.fileName);
 
@@ -278,6 +339,10 @@ app.use("/api/notacredito", logHandler, notacreditoRouter);
 // Bonifici API
 var bonificiRouter = require("./routes/bonifici");
 app.use("/api/bonifici", logHandler, bonificiRouter);
+
+// Menu API
+var menuRouter = require("./routes/menu");
+app.use("/api/menu", logHandler, menuRouter);
 
 app.listen(PORT, function () {
   return console.log("Innova Backend App listening on port " + PORT + "!");
