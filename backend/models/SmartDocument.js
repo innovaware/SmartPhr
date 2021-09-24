@@ -7,6 +7,7 @@ const SmartDocumentSchema = mongoose.Schema({
   path: String,
   name: String,
   user: String,
+  dateupload: Date,
 });
 
 module.exports = mongoose.model(

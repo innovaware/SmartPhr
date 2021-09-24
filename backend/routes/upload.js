@@ -64,6 +64,7 @@ router.post("/", async (req, res, next) => {
         path: path,
         name: name,
         user: path,
+        dateupload: new Date(),
       });
 
       console.log(`From MONGO save document: ${document}`);

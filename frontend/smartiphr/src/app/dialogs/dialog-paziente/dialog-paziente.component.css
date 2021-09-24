@@ -71,3 +71,11 @@ input[type="file" i] {
 .mat-spinner circle {
   stroke: #0099ff;
 }
+
+.right {
+  text-align: right;
+}
+
+.upload-button {
+  top:-12px
+}

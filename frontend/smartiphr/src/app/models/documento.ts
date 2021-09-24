@@ -4,5 +4,6 @@ export class Documento {
   path: string;
   typeDocument: string;
   name: string;
+  dateupload: Date;
   binaryFile: FormData;
 }

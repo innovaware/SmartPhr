@@ -419,7 +419,6 @@ export class DialogPazienteComponent implements OnInit {
       });
   }
 
-
   async addBonifico() {
     console.log("Add Bonifico");
     this.addingBonifici = true;
@@ -564,6 +563,7 @@ export class DialogPazienteComponent implements OnInit {
           this.document[doc.typeDocument] = {
             status: true,
             name: doc.name,
+            dateupload: doc.dateupload
           };
         });
       })
@@ -596,19 +596,33 @@ export class DialogPazienteComponent implements OnInit {
       formData.append("name", nameDocument);
 
       this.uploading = true;
+
+      if (this.document[typeDocument] == undefined) {
+        this.document[typeDocument] = {
+          uploading: true,
+          error: false
+        }
+      }
+
       this.uploadService
         .uploadDocument(formData)
         .then((x) => {
           this.uploading = false;
+
           this.document[typeDocument] = {
             status: true,
             name: nameDocument,
+            uploading: false,
+            error: false
           };
+
         })
         .catch((err) => {
           this.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
+          this.document[typeDocument].uploading = false;
+          this.document[typeDocument].error = true;
         });
     }
   }
