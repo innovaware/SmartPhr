@@ -91,7 +91,7 @@ export class TableOspitiComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result insert paziente", result);
-      if (result != undefined) {
+      if (result !== false) {
         this.pazienteService
           .insert(result)
           .then((x) => {
