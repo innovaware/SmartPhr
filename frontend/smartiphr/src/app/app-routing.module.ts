@@ -1,5 +1,6 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { AuthGuardService as AuthGuard } from './guard/auth-guard.service';
 import { AdminPazientiComponent } from './pages/admin-pazienti/admin-pazienti.component';
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
 import { AreaFisioterapiaComponent } from "./pages/area-fisioterapia/area-fisioterapia.component";
@@ -12,11 +13,14 @@ import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
 import { FornitoriComponent } from "./pages/fornitori/fornitori.component";
 import { GestStanzeComponent } from "./pages/gest-stanze/gest-stanze.component";
 import { GestUtentiComponent } from "./pages/gest-utenti/gest-utenti.component";
+import { LoginComponent } from './pages/login/login.component';
 import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
 
 const routes: Routes = [
+  { path: "login", component: DashboardComponent },
+
   { path: "ospiti", component: OspitiComponent },
   { path: "educativa", component: AreaEducativaComponent },
   { path: "pisicologica", component: PisicologicaComponent },
@@ -24,7 +28,7 @@ const routes: Routes = [
   { path: "medica", component: AreaMedicaComponent },
   { path: "infermieristica", component: AreaInfermieristicaComponent },
 
-  { path: "gest_pazienti", component: AdminPazientiComponent },
+  { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_dipendenti", component: GestUtentiComponent },
   { path: "gest_consulenti", component: ConsulentiComponent },
   { path: "gest_fornitori", component: FornitoriComponent },

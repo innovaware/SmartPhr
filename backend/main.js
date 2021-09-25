@@ -28,29 +28,86 @@ console.log(`Redis Host ${redisHost}:${redisPort}`);
 const client_redis = redis.createClient(redisPort, redisHost);
 
 app.use(cors());
-app.use(
-  basicAuth({
-    authorizer: (username, password, next) => {
-      // const userMatches = basicAuth.safeCompare(username, "customuser");
-      // const passwordMatches = basicAuth.safeCompare(password, "customuser");
-      var userMatches = false;
-      var passwordMatches = false;
-      var result_authorization = false;
+// app.use(
+//   basicAuth({
+//     authorizer: (username, password, next) => {
+//       // const userMatches = basicAuth.safeCompare(username, "customuser");
+//       // const passwordMatches = basicAuth.safeCompare(password, "customuser");
+//       var userMatches = false;
+//       var passwordMatches = false;
+//       var result_authorization = false;
 
-      getUser(username, password)
-        .then((user) => {
-          userMatches = user.username != undefined && user.active == true;
-          passwordMatches = user.password != undefined;
-          result_authorization = userMatches & passwordMatches;
-          return next(null, result_authorization);
-        })
-        .catch((err) => {
-          return next(null, result_authorization);
-        });
-    },
-    authorizeAsync: true,
-  })
-);
+//       getUser(username, password)
+//         .then((user) => {
+//           userMatches = user.username != undefined && user.active == true;
+//           passwordMatches = user.password != undefined;
+//           result_authorization = userMatches & passwordMatches;
+//           return next(null, result_authorization);
+//         })
+//         .catch((err) => {
+//           return next(null, result_authorization);
+//         });
+//     },
+//     authorizeAsync: true,
+//   })
+// );
+
+const getAuth = (req) => {
+  var authheader = req.headers.authorization;
+  if (!authheader) {
+    return null;
+  }
+
+  var auth = new Buffer.from(authheader.split(" ")[1], "base64")
+    .toString()
+    .split(":");
+  var username = auth[0];
+  var password = auth[1];
+
+  return { user: username, password: password };
+};
+
+const authorizationHandler = async (req, res, next) => {
+  const user_auth = getAuth(req);
+
+  if (user_auth == null) {
+    var err = new Error("You are not authenticated!");
+    res.setHeader("WWW-Authenticate", "Basic");
+    err.status = 401;
+    return next(err);
+  }
+
+  var username = user_auth.user;
+  var password = user_auth.password;
+
+  var userMatches = false;
+  var passwordMatches = false;
+  var result_authorization = false;
+  getUser(username, password)
+    .then((user) => {
+      userMatches = user.username != undefined && user.active == true;
+      passwordMatches = user.password != undefined;
+      result_authorization = userMatches & passwordMatches;
+
+      if (!result_authorization) {
+        res.statusCode = 401;
+        res.setHeader("WWW-Authenticate", "Basic");
+        res.end("Not Authorizated");
+
+        console.log("[AUTHORIZATIONHANDLER] User not authorized");
+      } else {
+        res.locals.auth = user;
+        console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
+        return next(null, result_authorization);
+      }
+    })
+    .catch((err) => {
+      // return next(null, result_authorization);
+      res.statusCode = 401;
+      res.setHeader("Content-Type", "text/plain");
+      res.end("Not Authorizated");
+    });
+};
 
 function getUser(username, password) {
   return new Promise((resolve, reject) => {
@@ -102,9 +159,8 @@ function getUser(username, password) {
 }
 
 function checkAuthRole(user) {
-  if (user != undefined)
-    return user.role == "Admin";
-    
+  if (user != undefined) return user.role == "Admin";
+
   return false;
 }
 
@@ -167,22 +223,23 @@ var logHandler = function (req, res, next) {
   next();
 };
 
-var roleHandler = async (req,res,next) => {
+var roleHandler = async (req, res, next) => {
   console.log(`[ROLEHANDLER] Check Role for USER`);
-  // console.log(`[ROLEHANDLER] req:`, req.auth);
+  // console.log(`[ROLEHANDLER] auth:`, res.locals.auth);
 
-  const user = await getUser(req.auth.user, req.auth.password);
+  const user = res.locals.auth;
   // console.log(`[ROLEHANDLER] user:`, user);
 
   if (user != undefined && checkAuthRole(user)) {
-      next();
-  }
-  else {
+    next();
+  } else {
+    console.error(`[ROLEHANDLER] NOT Access:`, user);
+    
     res.statusCode = 401;
-    res.setHeader('Content-Type', 'text/plain');
-    res.end('Not Authorizated');
+    res.setHeader("Content-Type", "text/plain");
+    res.end("Not Authorizated");
   }
-}
+};
 
 console.log("mongoConnectionString: ", mongoConnectionString);
 mongoose.connect(
@@ -257,47 +314,64 @@ var readHandler = function (req, res, next) {
 
 // Pazienti API
 var pazientiRouter = require("./routes/pazienti");
-app.use("/api/pazienti", logHandler, roleHandler, pazientiRouter);
+app.use(
+  "/api/pazienti",
+  logHandler,
+  authorizationHandler,
+  roleHandler,
+  pazientiRouter
+);
 // Dipendenti API
 var dipendentiRouter = require("./routes/dipendenti");
-app.use("/api/dipendenti", logHandler, dipendentiRouter);
+app.use("/api/dipendenti", logHandler, authorizationHandler, dipendentiRouter);
 // Consulenti API
 var consulentiRouter = require("./routes/consulenti");
-app.use("/api/consulenti", logHandler, consulentiRouter);
+app.use("/api/consulenti", logHandler, authorizationHandler, consulentiRouter);
 // Fornitori API
 var fornitoriRouter = require("./routes/fornitori");
-app.use("/api/fornitori", logHandler, fornitoriRouter);
+app.use("/api/fornitori", logHandler, authorizationHandler, fornitoriRouter);
 // ASP API
 var aspRouter = require("./routes/asp");
-app.use("/api/asp", logHandler, aspRouter);
+app.use("/api/asp", logHandler, authorizationHandler, aspRouter);
 // Farmaci API
 var farmaciRouter = require("./routes/farmaci");
-app.use("/api/farmaci", logHandler, farmaciRouter);
+app.use("/api/farmaci", logHandler, authorizationHandler, farmaciRouter);
 // Eventi API
 var eventiRouter = require("./routes/eventi");
-app.use("/api/eventi", logHandler, eventiRouter);
+app.use("/api/eventi", logHandler, authorizationHandler, eventiRouter);
 
 var uploadRouter = require("./routes/upload");
-app.use("/api/upload", logHandler, uploadRouter, writeHandler);
-app.use("/api/files", logHandler, uploadRouter);
+app.use(
+  "/api/upload",
+  logHandler,
+  authorizationHandler,
+  uploadRouter,
+  writeHandler
+);
+app.use("/api/files", logHandler, authorizationHandler, uploadRouter);
 
-app.get("/api/download", logHandler, readHandler);
+app.get("/api/download", logHandler, authorizationHandler, readHandler);
 
 // Fatture API
 var fattureRouter = require("./routes/fatture");
-app.use("/api/fatture", logHandler, fattureRouter);
+app.use("/api/fatture", logHandler, authorizationHandler, fattureRouter);
 
 // NotaCredito API
 var notacreditoRouter = require("./routes/notacredito");
-app.use("/api/notacredito", logHandler, notacreditoRouter);
+app.use(
+  "/api/notacredito",
+  logHandler,
+  authorizationHandler,
+  notacreditoRouter
+);
 
 // Bonifici API
 var bonificiRouter = require("./routes/bonifici");
-app.use("/api/bonifici", logHandler, bonificiRouter);
+app.use("/api/bonifici", logHandler, authorizationHandler, bonificiRouter);
 
 // Menu API
 var menuRouter = require("./routes/menu");
-app.use("/api/menu", logHandler, menuRouter);
+app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
 
 app.listen(PORT, function () {
   return console.log("Innova Backend App listening on port " + PORT + "!");

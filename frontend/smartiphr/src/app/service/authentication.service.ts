@@ -1,42 +1,52 @@
-import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
-import { environment } from 'src/environments/environment';
-import { User } from '../models/user';
-
-
+import { Injectable } from "@angular/core";
+import { HttpClient } from "@angular/common/http";
+import { BehaviorSubject, Observable } from "rxjs";
+import { map } from "rxjs/operators";
+import { environment } from "src/environments/environment";
+import { User } from "../models/user";
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class AuthenticationService {
-  private currentUserSubject: BehaviorSubject<User>;
-    public currentUser: Observable<User>;
+  currentUser: User;
 
-    constructor(private http: HttpClient) {
-        this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-        this.currentUser = this.currentUserSubject.asObservable();
-    }
+  constructor(private http: HttpClient) {
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+  }
 
-    public get currentUserValue(): User {
-        return this.currentUserSubject.value;
-    }
+  public get currentUserValue(): User {
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    return this.currentUser;
+  }
 
-    login(username: string, password: string) {
-        return this.http.post<any>(`${environment.api}/users/authenticate`, { username, password })
-            .pipe(map(user => {
-                // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-                user.authdata = window.btoa(username + ':' + password);
-                localStorage.setItem('currentUser', JSON.stringify(user));
-                this.currentUserSubject.next(user);
-                return user;
-            }));
-    }
+  isAuthenticated(): boolean {
+    const currentUser: User = this.currentUserValue; //JSON.parse(localStorage.getItem("currentUser"));
+    return currentUser != undefined &&
+      currentUser.username != undefined &&
+      currentUser.password != undefined;
+  }
 
-    logout() {
-        // remove user from local storage to log user out
-        localStorage.removeItem('currentUser');
-        this.currentUserSubject.next(null);
-    }
+  login(username: string, password: string) {
+    return this.http
+      .post<any>(`${environment.api}/users/authenticate`, {
+        username,
+        password,
+      })
+      .pipe(
+        map((user) => {
+          // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
+          user.authdata = window.btoa(username + ":" + password);
+          localStorage.setItem("currentUser", JSON.stringify(user));
+          this.currentUser = user
+          return user;
+        })
+      );
+  }
+
+  logout() {
+    // remove user from local storage to log user out
+    localStorage.removeItem("currentUser");
+    this.currentUser = undefined;
+  }
 }

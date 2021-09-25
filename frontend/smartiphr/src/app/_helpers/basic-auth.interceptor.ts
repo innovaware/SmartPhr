@@ -4,40 +4,71 @@ import {
   HttpHandler,
   HttpEvent,
   HttpInterceptor,
+  HttpErrorResponse,
 } from "@angular/common/http";
-import { Observable } from "rxjs";
-import { AuthenticationService } from "../service/authentication.service";
 import { User } from "../models/user";
+
+import { Observable } from "rxjs";
+import { tap } from "rxjs/operators";
+import { Router } from "@angular/router";
+import { AuthenticationService } from '../service/authentication.service';
 
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
-  constructor(private authenticationService: AuthenticationService) {}
+  constructor(
+    private authenticationService: AuthenticationService,
+    private route:Router
+  ) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // add authorization header with basic auth credentials if available
-    //this.authenticationService.currentUserValue;
-    const currentUser: User = {
-      group: "",
-      username: "dan",
-      password: "dan",
-      active: true,
-    };
-    console.debug("intercept currentUser: ", currentUser);
+    // const currentUser: User = {
+    //   group: "",
+    //   username: "dan",
+    //   password: "dan",
+    //   active: true,
+    // };
 
-    //TODO TEMP
-
-    if (currentUser) {
-      const auth = btoa(`${currentUser.username}:${currentUser.password}`);
-      request = request.clone({
-        setHeaders: {
-          Authorization: `Basic ${auth}`,
-        },
-      });
+    if (this.authenticationService.isAuthenticated()) {
+      const currentUser: User = this.authenticationService.currentUserValue;
+      if (currentUser) {
+        const auth = btoa(`${currentUser.username}:${currentUser.password}`);
+        request = request.clone({
+          setHeaders: {
+            Authorization: `Basic ${auth}`,
+          },
+        });
+      } else {
+        this.route.navigate(["/"]);
+      }
     }
 
-    return next.handle(request);
+    // return next.handle(request);
+    return next.handle(request).pipe(
+      tap(
+        (event) => {},
+        (error) => {
+          if (error instanceof HttpErrorResponse) {
+            if (error.status === 401) {
+              this.authenticationService.logout();
+              this.route.navigate(["/"]);
+            }
+          }
+        }
+      )
+    );
+
+    // return next.handle(request).do((event: HttpEvent<any>) => {
+    //   if (event instanceof HttpResponse) {
+    //   }
+    // }, (err: any) => {
+    //   if (err instanceof HttpErrorResponse) {
+    //     if (err.status === 401) {
+    //         this.router.navigate(['login']);
+    //     }
+    //   }
+    // });
   }
 }

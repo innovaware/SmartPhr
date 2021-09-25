@@ -91,6 +91,8 @@ import { DialogPazienteComponent } from "./dialogs/dialog-paziente/dialog-pazien
 import { UploadComponent } from "./components/upload/upload.component";
 import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { LoginComponent } from './pages/login/login.component';
+import { AuthGuardService } from './guard/auth-guard.service';
 
 @NgModule({
   declarations: [
@@ -147,6 +149,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     AdminPazientiComponent,
     DialogPazienteComponent,
     UploadComponent,
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
@@ -176,6 +179,7 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     NgxMatNativeDateModule,
   ],
   providers: [
+    AuthGuardService,
     MatDatepickerModule,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
   ],

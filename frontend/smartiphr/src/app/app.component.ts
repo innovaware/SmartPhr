@@ -1,4 +1,6 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { AuthenticationService } from './service/authentication.service';
 
 @Component({
   selector: 'app-root',
@@ -10,4 +12,18 @@ export class AppComponent {
 
   viewDate: Date = new Date();
   events = [];
+
+  constructor(
+    private authenticationService: AuthenticationService,
+    private route:Router
+  ) {}
+
+  async logout() {
+    this.authenticationService.logout();
+    this.route.navigate(["login"]);
+  }
+
+  isAuthenticated() {
+    return this.authenticationService.isAuthenticated();
+  }
 }
