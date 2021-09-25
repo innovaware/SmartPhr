@@ -79,7 +79,7 @@ router.get("/search/:data", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        console.log(`Event Buffered - ${searchTerm}`);
+        //console.log(`Event Buffered - ${searchTerm}`);
         res.status(200).send(JSON.parse(data));
       } else {
         const query = {

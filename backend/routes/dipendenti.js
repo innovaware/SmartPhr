@@ -12,15 +12,21 @@ const client = redis.createClient(redisPort, redisHost);
 router.get("/", async (req, res) => {
   try {
     const searchTerm = `DIPENDENTIALL`;
+    // Ricerca su Redis Cache
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
+        // Dato trovato in cache - ritorna il json 
         res.status(200).send(JSON.parse(data));
       } else {
+        // Recupero informazioni dal mongodb
         const dipendenti = await Dipendenti.find();
 
+        // Aggiorno la cache con i dati recuperati da mongodb
         client.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
+
+        // Ritorna il json 
         res.status(200).json(dipendenti);
       }
     });
@@ -30,6 +36,7 @@ router.get("/", async (req, res) => {
   }
 });
 
+// http://[HOST]:[PORT]/api/dipendenti/[ID_DIPENDENTE]
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -51,17 +58,23 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// http://[HOST]:[PORT]/api/dipendenti (POST)
+// INSERT dipendente su DB
 router.post("/", async (req, res) => {
   try {
     const dipendente = new Dipendenti({
       cognome: req.body.cognome,
       nome: req.body.nome,
       email: req.body.email,
-      group: req.body.group,
       user: req.body.user,
     });
 
+    // Salva i dati sul mongodb
     const result = await dipendente.save();
+
+    const searchTerm = `DIPENDENTIALL`;
+    client.del(searchTerm);
+
     res.status(200);
     res.json(result);
   } catch (err) {
@@ -70,9 +83,12 @@ router.post("/", async (req, res) => {
   }
 });
 
+// http://[HOST]:[PORT]/api/dipendenti/[ID_DIPENDENTE]
+// Modifica del dipendente
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    // Aggiorna il documento su mongodb
     const dipendenti = await Dipendenti.updateOne(
       { _id: id },
       {
@@ -80,7 +96,6 @@ router.put("/:id", async (req, res) => {
           cognome: req.body.cognome,
           nome: req.body.nome,
           email: req.body.email,
-          group: req.body.group,
           user: req.body.user,
         },
       }
@@ -94,5 +109,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
 
 module.exports = router;
