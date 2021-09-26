@@ -38,190 +38,22 @@
         <ul>
           <app-menu-item link="/" icon="gem" content-title="Home"></app-menu-item>
 
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user-circle" content-title="Area Amministrativa"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/gest_pazienti" icon="" content-title="Pazienti"></app-menu-item>
-              <app-menu-item link="/gest_dipendenti" icon="" content-title="Dipendenti"></app-menu-item>
-              <app-menu-item link="/gest_consulenti" icon="" content-title="Consulenti"></app-menu-item>
-              <app-menu-item link="/gest_fornitori" icon="" content-title="Fornitori"></app-menu-item>
-              <app-menu-item link="/gest_asp" icon="" content-title="ASP"></app-menu-item>
-              <app-menu-item link="/gest_cv" icon="" content-title="CV"></app-menu-item>
-            </ul>
+
+          <mat-expansion-panel hideToggle *ngFor="let item of menu">
+              <mat-expansion-panel-header *ngIf="item.active">
+                <mat-panel-title>
+                  <app-menu-item link="{{item.link}}" icon="{{item.icon}}" content-title="{{item.title}}">
+                  </app-menu-item>
+                </mat-panel-title>
+                <mat-panel-description>
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <ul *ngFor="let subItem of item.subMenu">
+                <app-menu-item link="{{subItem.link}}" icon="{{subItem.icon}}" content-title="{{subItem.title}}" *ngIf="subItem.active">
+                </app-menu-item>
+              </ul>
           </mat-expansion-panel>
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user-circle" content-title="Area Personale"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/messaggi" icon="" content-title="Area Messaggi"></app-menu-item>
-            </ul>
-          </mat-expansion-panel>
-
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="book-medical" content-title="Area Medica"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/medica" icon="book-medical" content-title="Cartelle Cliniche"></app-menu-item>
-              <app-menu-item link="/agenda_clinica" icon="book-medical" content-title="Agenda Clinica"></app-menu-item>
-
-            </ul>
-          </mat-expansion-panel>
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="book-medical" content-title="Area Infermieristica"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/infermieristica" icon="" content-title="Cartella Infermieristiche"></app-menu-item>
-              <app-menu-item link="/" icon="" content-title="Agenda Infermieristica"></app-menu-item>
-              <app-menu-item link="/gest_farmaci" icon="" content-title="Gestione Farmaci"></app-menu-item>
-              <app-menu-item link="/gest_presidi" icon="" content-title="Gestione Presidi"></app-menu-item>
-              <app-menu-item link="/gest_carrello" icon="" content-title="Gestione Carrello"></app-menu-item>
-            </ul>
-          </mat-expansion-panel>
-
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="book-medical" content-title="Area OSS"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/" icon="" content-title="Gestione Pazienti"></app-menu-item>
-              <app-menu-item link="/" icon="" content-title="Gestione Presidi"></app-menu-item>
-              <app-menu-item link="/" icon="" content-title="Gestione Armadi"></app-menu-item>
-              <app-menu-item link="/" icon="" content-title="Gestione Carrello"></app-menu-item>
-            </ul>
-          </mat-expansion-panel>
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="book-medical" content-title="Area Assistente Sociale"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/" icon="" content-title="Cartelle Assistente Sociale"></app-menu-item>
-            </ul>
-          </mat-expansion-panel>
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user" content-title="Area Psicologica"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/pisicologica" icon="" content-title="Cartelle Psicologiche"></app-menu-item>
-            </ul>
-
-          </mat-expansion-panel>
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user" content-title="Area Educativa"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/educativa" icon="" content-title="Cartelle Educative"></app-menu-item>
-            </ul>
-
-          </mat-expansion-panel>
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user" content-title="Area Fisioterapia/Riabilitazione"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/fisioterapia" icon="" content-title="Cartelle Fisioterapia/Riabilitazione"></app-menu-item>
-            </ul>
-
-          </mat-expansion-panel>
-
-          <app-menu-item link="/" icon="" content-title="Area Ausiliari"></app-menu-item>
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user" content-title="Cucina"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/" icon="" content-title="Gestione Men&uacute;"></app-menu-item>
-              <app-menu-item link="/" icon="" content-title="HACCP"></app-menu-item>
-            </ul>
-
-          </mat-expansion-panel>
-
-          <app-menu-item link="/" icon="" content-title="Area Magazzino"></app-menu-item>
-          <app-menu-item link="/gest_stanze" icon="" content-title="Area Stanze"></app-menu-item>
-
-
-          <mat-expansion-panel hideToggle>
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <app-menu-item link="/" icon="user" content-title="Area Sicurezza"></app-menu-item>
-              </mat-panel-title>
-              <mat-panel-description>
-              </mat-panel-description>
-            </mat-expansion-panel-header>
-            <ul>
-              <app-menu-item link="/" icon="" content-title="Gestione Covid-19"></app-menu-item>
-            </ul>
-
-          </mat-expansion-panel>
-
-          <app-menu-item link="/" icon="" content-title="Area Privacy"></app-menu-item>
-          <app-menu-item link="/" icon="" content-title="Area Qualit&agrave;"></app-menu-item>
-          <app-menu-item link="/" icon="" content-title="PAI"></app-menu-item>
-          <app-menu-item link="/" icon="" content-title="Archivi"></app-menu-item>
-          <app-menu-item link="/" icon="" content-title="Impostazioni"></app-menu-item>
-
         </ul>
-
       </div>
     </div>
   </div>
