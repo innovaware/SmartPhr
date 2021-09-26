@@ -65,8 +65,20 @@ router.post("/", async (req, res) => {
     const dipendente = new Dipendenti({
       cognome: req.body.cognome,
       nome: req.body.nome,
+      codiceFiscale: req.body.codiceFiscale,
+      dataNascita: req.body.dataNascita,
+      comuneNascita: req.body.comuneNascita,
+      provinciaNascita: req.body.provinciaNascita,
+      indirizzoNascita: req.body.indirizzoNascita,
+      indirizzoResidenza: req.body.indirizzoResidenza,
+      comuneResidenza: req.body.comuneResidenza,
+      provinciaResidenza: req.body.provinciaResidenza,
+      titoloStudio: req.body.titoloStudio,
+      mansione: req.body.mansione,
+      tipoContratto: req.body.tipoContratto,
+      telefono: req.body.telefono,
       email: req.body.email,
-      user: req.body.user,
+      idUser: req.body.idUser,
     });
 
     // Salva i dati sul mongodb
@@ -95,8 +107,19 @@ router.put("/:id", async (req, res) => {
         $set: {
           cognome: req.body.cognome,
           nome: req.body.nome,
+          codiceFiscale: req.body.codiceFiscale,
+          dataNascita: req.body.dataNascita,
+          comuneNascita: req.body.comuneNascita,
+          provinciaNascita: req.body.provinciaNascita,
+          indirizzoNascita: req.body.indirizzoNascita,
+          indirizzoResidenza: req.body.indirizzoResidenza,
+          comuneResidenza: req.body.comuneResidenza,
+          provinciaResidenza: req.body.provinciaResidenza,
+          titoloStudio: req.body.titoloStudio,
+          mansione: req.body.mansione,
+          tipoContratto: req.body.tipoContratto,
+          telefono: req.body.telefono,
           email: req.body.email,
-          user: req.body.user,
         },
       }
     );
