@@ -39,7 +39,8 @@
               <div class="col">
                 <!-- <button (click)="document['CONTRATTO_RICOVERO'].status=false">Modifica</button> -->
 
-                <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['CONTRATTO_RICOVERO'].status=false" class="upload-button">
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['CONTRATTO_RICOVERO'].status=false" class="upload-button">
                   <fa-icon icon="upload"></fa-icon>
                 </button>
               </div>
@@ -63,22 +64,23 @@
         <div class="col-1">{{document['DOC_IDENTITA']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
           <input type="file" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf"
-          *ngIf="!document['DOC_IDENTITA']?.status">
+            *ngIf="!document['DOC_IDENTITA']?.status">
 
-        <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
-          <div class="row">
-            <div class="col">
-              <label>{{document['DOC_IDENTITA']?.name}}</label>
-            </div>
-            <div class="col">
-              <!-- <button (click)="document['DOC_IDENTITA'].status=false">Modifica</button> -->
+          <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['DOC_IDENTITA']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['DOC_IDENTITA'].status=false">Modifica</button> -->
 
-              <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['DOC_IDENTITA'].status=false" class="upload-button">
-                <fa-icon icon="upload"></fa-icon>
-              </button>
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['DOC_IDENTITA'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -105,7 +107,8 @@
               <div class="col">
                 <!-- <button (click)="document['CONS_RICOVERO'].status=false">Modifica</button> -->
 
-                <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['CONS_RICOVERO'].status=false" class="upload-button">
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['CONS_RICOVERO'].status=false" class="upload-button">
                   <fa-icon icon="upload"></fa-icon>
                 </button>
               </div>
@@ -137,7 +140,8 @@
               <div class="col">
                 <!-- <button (click)="document['AUTORI_CONTENZIONE'].status=false">Modifica</button> -->
 
-                <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['AUTORI_CONTENZIONE'].status=false" class="upload-button">
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_CONTENZIONE'].status=false" class="upload-button">
                   <fa-icon icon="upload"></fa-icon>
                 </button>
               </div>
@@ -159,22 +163,23 @@
         <div class="col-1">{{document['AUTORI_USCITE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
           <input type="file" (change)="upload('AUTORI_USCITE', $event)" accept=".pdf"
-          *ngIf="!document['AUTORI_USCITE']?.status">
+            *ngIf="!document['AUTORI_USCITE']?.status">
 
-        <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
-          <div class="row">
-            <div class="col">
-              <label>{{document['AUTORI_USCITE']?.name}}</label>
-            </div>
-            <div class="col">
-              <!-- <button (click)="document['AUTORI_USCITE'].status=false">Modifica</button> -->
+          <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_USCITE']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_USCITE'].status=false">Modifica</button> -->
 
-              <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['AUTORI_USCITE'].status=false" class="upload-button">
-                <fa-icon icon="upload"></fa-icon>
-              </button>
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_USCITE'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -191,22 +196,23 @@
         <div class="col-1">{{document['AUTORI_RIPRESE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
           <input type="file" (change)="upload('AUTORI_RIPRESE', $event)" accept=".pdf"
-          *ngIf="!document['AUTORI_RIPRESE']?.status">
+            *ngIf="!document['AUTORI_RIPRESE']?.status">
 
-        <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
-          <div class="row">
-            <div class="col">
-              <label>{{document['AUTORI_RIPRESE']?.name}}</label>
-            </div>
-            <div class="col">
-              <!-- <button (click)="document['AUTORI_RIPRESE'].status=false">Modifica</button> -->
+          <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_RIPRESE']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_RIPRESE'].status=false">Modifica</button> -->
 
-              <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['AUTORI_RIPRESE'].status=false" class="upload-button">
-                <fa-icon icon="upload"></fa-icon>
-              </button>
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_RIPRESE'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -223,22 +229,23 @@
         <div class="col-1">{{document['AUTORI_VACCINO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
           <input type="file" (change)="upload('AUTORI_VACCINO', $event)" accept=".pdf"
-          *ngIf="!document['AUTORI_VACCINO']?.status">
+            *ngIf="!document['AUTORI_VACCINO']?.status">
 
-        <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
-          <div class="row">
-            <div class="col">
-              <label>{{document['AUTORI_VACCINO']?.name}}</label>
-            </div>
-            <div class="col">
-              <!-- <button (click)="document['AUTORI_VACCINO'].status=false">Modifica</button> -->
+          <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_VACCINO']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_VACCINO'].status=false">Modifica</button> -->
 
-              <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['AUTORI_VACCINO'].status=false" class="upload-button">
-                <fa-icon icon="upload"></fa-icon>
-              </button>
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_VACCINO'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
             </div>
           </div>
-        </div>
         </div>
       </div>
 
@@ -265,7 +272,8 @@
               <div class="col">
                 <!-- <button (click)="document['LIST_EFFETTIPERSONALI'].status=false">Modifica</button> -->
 
-                <button mat-icon-button color="warn" aria-label="Carica file" (click)="document['LIST_EFFETTIPERSONALI'].status=false" class="upload-button">
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['LIST_EFFETTIPERSONALI'].status=false" class="upload-button">
                   <fa-icon icon="upload"></fa-icon>
                 </button>
               </div>
@@ -365,9 +373,12 @@
       <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
     </table>
 
-    <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
-      aria-label="Select page of periodic elements">
-    </mat-paginator>
+    <div class="paginator-container">
+
+      <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
 
   </mat-tab>
 
@@ -461,9 +472,11 @@
       <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
     </table>
 
-    <mat-paginator #paginatorNoteCredito [pageSizeOptions]="[5]" showFirstLastButtons
-      aria-label="Select page of periodic elements">
-    </mat-paginator>
+    <div class="paginator-container">
+      <mat-paginator #paginatorNoteCredito [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
 
 
 
@@ -551,10 +564,11 @@
       <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
     </table>
 
-    <mat-paginator #paginatorBonifici [pageSizeOptions]="[5]" showFirstLastButtons
-      aria-label="Select page of periodic elements">
-    </mat-paginator>
-
+    <div class="paginator-container">
+      <mat-paginator #paginatorBonifici [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
 
   </mat-tab>
 
