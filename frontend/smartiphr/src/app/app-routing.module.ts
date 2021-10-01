@@ -1,5 +1,7 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { FerieComponent } from "./component/ferie/ferie.component";
+import { PermessiComponent } from "./component/permessi/permessi.component";
 import { AuthGuardService as AuthGuard } from './guard/auth-guard.service';
 import { AdminPazientiComponent } from './pages/admin-pazienti/admin-pazienti.component';
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
@@ -29,7 +31,18 @@ const routes: Routes = [
   { path: "infermieristica", component: AreaInfermieristicaComponent },
 
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
+
+// PERSONALE
   { path: "gest_dipendenti", component: GestUtentiComponent },
+  { path: "gest_ferie", component: FerieComponent },
+  { path: "gest_permessi", component: PermessiComponent },
+  /*{ path: "gest_dipendenti", component: GestUtentiComponent },
+  { path: "gest_dipendenti", component: GestUtentiComponent },
+  { path: "gest_dipendenti", component: GestUtentiComponent },
+  { path: "gest_dipendenti", component: GestUtentiComponent },*/
+
+
+
   { path: "gest_consulenti", component: ConsulentiComponent },
   { path: "gest_fornitori", component: FornitoriComponent },
   { path: "gest_asp", component: AspComponent },

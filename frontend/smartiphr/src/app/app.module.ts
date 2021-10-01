@@ -93,6 +93,9 @@ import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuardService } from './guard/auth-guard.service';
+import { TableDipendentiComponent } from './component/table-dipendenti/table-dipendenti.component';
+import { FerieComponent } from './component/ferie/ferie.component';
+import { PermessiComponent } from './component/permessi/permessi.component';
 
 @NgModule({
   declarations: [
@@ -150,6 +153,9 @@ import { AuthGuardService } from './guard/auth-guard.service';
     DialogPazienteComponent,
     UploadComponent,
     LoginComponent,
+    TableDipendentiComponent,
+    FerieComponent,
+    PermessiComponent,
   ],
   imports: [
     BrowserModule,

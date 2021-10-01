@@ -17,7 +17,12 @@
 
 | Nome          | path     |
 | ------------- | -------- |
-| Area Messaggi | messaggi |
+| Gestione personale | messaggi |
+| Ferie | messaggi |
+| Permessi | messaggi |
+| Cambi turno | messaggi |
+| Presenze | messaggi |
+| Turni mensili | messaggi |
 
 <br>
 <br>

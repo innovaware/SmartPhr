@@ -3,9 +3,21 @@ export class Dipendenti {
   _id?: string;
   cognome: string;
   nome: string;
+  cf: string;
+  indirizzoNascita: string;
+  luogoNascita: string;
+  provinciaNascita: string;
+  dataNascita: Date;
+  indirizzoResidenza: string;
+  luogoResidenza: string;
+  provinciaResidenza: string;
+  titoloStudio: string;
+  mansione: string;
+  contratto: string;
+  telefono: string;
   email: string;
-  user: string;
 
   group: string;
-
+  user: string;
+ 
 }

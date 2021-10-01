@@ -373,6 +373,36 @@ app.use("/api/bonifici", logHandler, authorizationHandler, bonificiRouter);
 var menuRouter = require("./routes/menu");
 app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
 
+
+
+/*** GESTIONE PERSONALE ***/
+
+// Ferie API
+var ferieRouter = require("./routes/ferie");
+app.use("/api/ferie", logHandler, authorizationHandler, ferieRouter);
+
+
+// Permessi API
+var permessiRouter = require("./routes/permessi");
+app.use("/api/permessi", logHandler, authorizationHandler, permessiRouter);
+
+
+/*// Cambi turno API
+var cambiTurnoRouter = require("./routes/cambiTurno");
+app.use("/api/cambiTurno", logHandler, authorizationHandler, cambiTurnoRouter);
+
+
+// Presenze API
+var presenzeRouter = require("./routes/presenze");
+app.use("/api/presenze", logHandler, authorizationHandler, presenzeRouter);
+
+
+// Turni mensili API
+var turniMensiliRouter = require("./routes/turniMensili");
+app.use("/api/turniMensili", logHandler, authorizationHandler, turniMensiliRouter);*/
+
+/*** FINE GESTIONE PERSONALE ***/
+
 app.listen(PORT, function () {
   return console.log("Innova Backend App listening on port " + PORT + "!");
 });
