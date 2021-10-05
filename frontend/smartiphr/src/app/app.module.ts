@@ -96,6 +96,9 @@ import { AuthGuardService } from './guard/auth-guard.service';
 import { TableDipendentiComponent } from './component/table-dipendenti/table-dipendenti.component';
 import { FerieComponent } from './component/ferie/ferie.component';
 import { PermessiComponent } from './component/permessi/permessi.component';
+import { TurnimensiliComponent } from './turnimensili/turnimensili.component';
+import { CambiturnoComponent } from './cambiturno/cambiturno.component';
+import { PresenzeComponent } from './presenze/presenze.component';
 
 @NgModule({
   declarations: [
@@ -156,6 +159,9 @@ import { PermessiComponent } from './component/permessi/permessi.component';
     TableDipendentiComponent,
     FerieComponent,
     PermessiComponent,
+    TurnimensiliComponent,
+    CambiturnoComponent,
+    PresenzeComponent,
   ],
   imports: [
     BrowserModule,

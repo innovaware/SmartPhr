@@ -1,7 +1,10 @@
 import { NgModule } from "@angular/core";
 import { Routes, RouterModule } from "@angular/router";
+import { CambiturnoComponent } from "./component/cambiturno/cambiturno.component";
 import { FerieComponent } from "./component/ferie/ferie.component";
 import { PermessiComponent } from "./component/permessi/permessi.component";
+import { PresenzeComponent } from "./component/presenze/presenze.component";
+import { TurnimensiliComponent } from "./component/turnimensili/turnimensili.component";
 import { AuthGuardService as AuthGuard } from './guard/auth-guard.service';
 import { AdminPazientiComponent } from './pages/admin-pazienti/admin-pazienti.component';
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
@@ -36,10 +39,10 @@ const routes: Routes = [
   { path: "gest_dipendenti", component: GestUtentiComponent },
   { path: "gest_ferie", component: FerieComponent },
   { path: "gest_permessi", component: PermessiComponent },
-  /*{ path: "gest_dipendenti", component: GestUtentiComponent },
-  { path: "gest_dipendenti", component: GestUtentiComponent },
-  { path: "gest_dipendenti", component: GestUtentiComponent },
-  { path: "gest_dipendenti", component: GestUtentiComponent },*/
+  { path: "gest_cambiturno", component: CambiturnoComponent },
+  { path: "gest_presenze", component: PresenzeComponent },
+  { path: "gest_turnimensili", component: TurnimensiliComponent },
+
 
 
 

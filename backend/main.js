@@ -387,19 +387,18 @@ var permessiRouter = require("./routes/permessi");
 app.use("/api/permessi", logHandler, authorizationHandler, permessiRouter);
 
 
-/*// Cambi turno API
-var cambiTurnoRouter = require("./routes/cambiTurno");
-app.use("/api/cambiTurno", logHandler, authorizationHandler, cambiTurnoRouter);
-
+// Cambi turno API
+var cambiTurnoRouter = require("./routes/cambiturno");
+app.use("/api/cambiturno", logHandler, authorizationHandler, cambiTurnoRouter);
 
 // Presenze API
 var presenzeRouter = require("./routes/presenze");
 app.use("/api/presenze", logHandler, authorizationHandler, presenzeRouter);
 
-
 // Turni mensili API
-var turniMensiliRouter = require("./routes/turniMensili");
-app.use("/api/turniMensili", logHandler, authorizationHandler, turniMensiliRouter);*/
+var turniMensiliRouter = require("./routes/turnimensili");
+app.use("/api/turnimensili", logHandler, authorizationHandler, turniMensiliRouter);
+
 
 /*** FINE GESTIONE PERSONALE ***/
 
