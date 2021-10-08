@@ -16,14 +16,22 @@ export class FornitoriService {
     return this.http.get<Fornitori[]>(this.api + "/api/fornitori").toPromise();
   }
 
-  async insertFornitore(fornitori: Fornitori) {
-    var body = fornitori;
-    return this.http.post(this.api + "/api/fornitori", body).toPromise();
+  async getFornitore(id: string): Promise<Fornitori[]> {
+    return this.http.get<Fornitori[]>(`${this.api}/api/fornitori/${id}`).toPromise();
   }
 
-  async updateFornitore(fornitori: Fornitori) {
-    var body = fornitori;
+  save(data: Fornitori): Promise<Fornitori> {
+    var body = data;
     console.log("body: ", body);
-    return this.http.put(this.api + "/api/fornitori/" + fornitori._id, body).toPromise();
+    return this.http
+      .put<Fornitori>(this.api + "/api/fornitori/" + data._id, body)
+      .toPromise();
+  }
+
+  insert(data: Fornitori): Promise<Fornitori> {
+    var body = data;
+    return this.http
+      .post<Fornitori>(this.api + "/api/fornitori", body)
+      .toPromise();
   }
 }

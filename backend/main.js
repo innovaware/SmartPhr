@@ -329,7 +329,7 @@ var consulentiRouter = require("./routes/consulenti");
 app.use("/api/consulenti", logHandler, authorizationHandler, consulentiRouter);
 // Fornitori API
 var fornitoriRouter = require("./routes/fornitori");
-app.use("/api/fornitori", logHandler, authorizationHandler, fornitoriRouter);
+app.use("/api/fornitori", logHandler, authorizationHandler, roleHandler, fornitoriRouter);
 // ASP API
 var aspRouter = require("./routes/asp");
 app.use("/api/asp", logHandler, authorizationHandler, aspRouter);
