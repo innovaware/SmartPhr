@@ -42,8 +42,17 @@ export class FornitoriComponent implements OnInit {
       cognome: "",
       nome: "",
       email: "",
-      group: "",
-      user: "",
+      codiceFiscale: "",
+      dataNascita: new Date(),
+      comuneNascita: "",
+      provinciaNascita: "",
+      indirizzoNascita: "",
+      indirizzoResidenza: "",
+      comuneResidenza: "",
+      provinciaResidenza: "",
+      mansione: "",
+      tipoContratto: "",
+      telefono: "",
     };
 
     var dialogRef = this.dialog.open(DialogFornitoriComponent, {
@@ -54,7 +63,7 @@ export class FornitoriComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed", result);
         if (result != undefined) {
-          this.fornitoriService.insertFornitore(result.fornitore).then((r: Fornitori) => {
+          this.fornitoriService.insert(result.fornitore).then((r: Fornitori) => {
             this.data.push(r);
             this.dataSource.data = this.data;
           });
@@ -72,7 +81,7 @@ export class FornitoriComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         if (result != undefined) {
           console.debug("Update fornitore: ", result.fornitore);
-          this.fornitoriService.updateFornitore(result.fornitore).then(r=>{
+          this.fornitoriService.save(result.fornitore).then(r=>{
             console.log("Modifica eseguita con successo");
           }).catch(err=> {
             console.error("Errore aggiornamento fornitore", err);
