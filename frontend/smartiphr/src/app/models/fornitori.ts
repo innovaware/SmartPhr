@@ -5,6 +5,7 @@ export class Fornitori {
   nome: string;
   codiceFiscale: string;
   dataNascita: Date;
+  luogoNascita: string;
   comuneNascita: string;
   provinciaNascita: string;
   indirizzoNascita: string;

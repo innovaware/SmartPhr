@@ -44,6 +44,7 @@ export class FornitoriComponent implements OnInit {
       email: "",
       codiceFiscale: "",
       dataNascita: new Date(),
+      luogoNascita: "",
       comuneNascita: "",
       provinciaNascita: "",
       indirizzoNascita: "",

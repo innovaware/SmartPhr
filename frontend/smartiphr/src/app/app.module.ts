@@ -99,6 +99,7 @@ import { PermessiComponent } from './component/permessi/permessi.component';
 import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
 import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
 import { PresenzeComponent } from './component/presenze/presenze.component';
+import { FornitoreGeneraleComponent } from './component/fornitore/fornitore.component';
 
 @NgModule({
   declarations: [
@@ -162,6 +163,7 @@ import { PresenzeComponent } from './component/presenze/presenze.component';
     TurnimensiliComponent,
     CambiturnoComponent,
     PresenzeComponent,
+    FornitoreGeneraleComponent,
   ],
   imports: [
     BrowserModule,
