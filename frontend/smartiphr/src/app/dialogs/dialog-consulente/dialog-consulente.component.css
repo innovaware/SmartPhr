@@ -48,11 +48,6 @@ select {
   text-transform: none;
 }
 
-.bottom-actions {
-  width: 100%;
-  text-align: right;
-}
-
 .button-save {
   color: #fff;
   background-color: #1ab394;
@@ -79,10 +74,70 @@ label {
   color: #676a6c;
 }
 
+/* .mat-tab-group {
+  height: 593px;
+} */
+
 span {
-  font-size: 10px
+  font-size: 10px;
 }
 
-::ng-deep .mat-dialog-container {
-  min-width: 800px !important;
+::ng-deep .mat-tab-group {
+  min-height: 593px !important;
+}
+
+::ng-deep .mat-tab-body-wrapper {
+  min-height: 540px;
+}
+
+.notPresent {
+  text-align: center;
+  padding-top: 42px;
+}
+
+.paginator-container {
+  position: absolute !important;
+  bottom: 0px !important;
+  width: 100%;
+}
+
+table {
+  width: 100%;
+}
+
+.full {
+  width: 100%;
+}
+
+::ng-deep .mat-progress-spinner circle,
+.mat-spinner circle {
+  stroke: #0099ff;
+}
+
+.right {
+  text-align: right;
+}
+
+.upload-button {
+  top: -12px;
+}
+
+.example-card {
+  max-width: 400px;
+}
+
+.mat-card-avatar {
+  border-radius: unset;
+}
+
+.example-header-image {
+  background-image: url("../../../assets/contratto.png");
+  background-size: cover;
+}
+
+.mat-card {
+  margin: 0 auto; /* Added */
+  float: none; /* Added */
+  margin-bottom: 10px; /* Added */
+  box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 3px 2px 16px 0px rgba(0, 0, 0, 0.48);
 }

@@ -11,7 +11,7 @@ export class MessagesService {
     public dialog: MatDialog,
   ) { }
 
-  async showMessageError(messageError: string) {
+  showMessageError(messageError: string) {
     var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
       panelClass: "custom-modalbox",
       data: messageError,

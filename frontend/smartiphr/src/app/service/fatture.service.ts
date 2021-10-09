@@ -12,20 +12,20 @@ export class FattureService {
 
   constructor(private http: HttpClient) {}
 
-  async getFatture(paziente: Paziente): Promise<Fatture[]> {
+  async getFatture(id: string): Promise<Fatture[]> {
     const headers = {
       // 'Authorization': 'Bearer ' + this.token,
       // 'x-refresh': this.refreshToken
     }
 
     return this.http
-      .get<Fatture[]>(`${this.api}/api/fatture/paziente/${paziente._id}`, { headers })
+      .get<Fatture[]>(`${this.api}/api/fatture/paziente/${id}`, { headers })
       .toPromise();
   }
 
-  async insertFattura(fattura: Fatture, paziente: Paziente) {
+  async insertFattura(fattura: Fatture, id: string) {
     var body = fattura;
-    return this.http.post(`${this.api}/api/fatture/paziente/${paziente._id}`, body).toPromise();
+    return this.http.post(`${this.api}/api/fatture/paziente/${id}`, body).toPromise();
   }
 
   async updateFattura(fattura: Fatture) {

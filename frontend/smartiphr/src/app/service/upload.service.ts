@@ -30,9 +30,9 @@ export class UploadService {
     return this.http.get(`${this.api}/api/files/${path}`).toPromise();
   }
 
-  async download(filename: string, paziente: Paziente) {
+  async download(filename: string, id: string) {
     // let params = new HttpParams();
-    let path = `${paziente._id}/fatture/${filename}`;
+    let path = `${id}/fatture/${filename}`;
     if (filename[0] != "/") path = `/${path}`;
 
     // const options = {

@@ -154,7 +154,7 @@ export class DialogPazienteComponent implements OnInit {
   async getFatture() {
     console.log(`Get Fatture paziente: ${this.paziente._id}`);
     this.fattureService
-      .getFatture(this.paziente)
+      .getFatture(this.paziente._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 
@@ -191,7 +191,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.paziente)
+      .download(fattura.filename, this.paziente._id)
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -250,7 +250,7 @@ export class DialogPazienteComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insertFattura(fattura, this.paziente)
+    .insertFattura(fattura, this.paziente._id)
     .then((result: Fatture) => {
       console.log("Insert fattura: ", result);
       this.fatture.push(result);
@@ -287,7 +287,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showNoteCreditoDocument(notacredito: NotaCredito) {
     this.uploadService
-      .download(notacredito.filename, this.paziente)
+      .download(notacredito.filename, this.paziente._id)
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -453,7 +453,7 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insertBonifico(bonifico, this.paziente)
+        .insertBonifico(bonifico, this.paziente._id)
         .then((result: Bonifico) => {
           console.log("Insert bonifico: ", result);
           this.bonifici.push(result);
@@ -491,7 +491,7 @@ export class DialogPazienteComponent implements OnInit {
   async getBonificiAssegniContanti() {
     console.log(`Get Bonifici e altro paziente: ${this.paziente._id}`);
     this.bonficoService
-      .getBonifico(this.paziente)
+      .getBonifico(this.paziente._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 
@@ -506,7 +506,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.paziente)
+      .download(bonifico.filename, this.paziente._id)
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {

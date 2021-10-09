@@ -374,6 +374,10 @@ var menuRouter = require("./routes/menu");
 app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
 
 
+// Contratto API
+var contrattoRouter = require("./routes/contratto");
+app.use("/api/contratto", logHandler, authorizationHandler, contrattoRouter);
+
 
 /*** GESTIONE PERSONALE ***/
 

@@ -30,9 +30,10 @@ router.get("/", async (req, res) => {
         if (data && !redisDisabled) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const pazienti = await Pazienti.find({
+          const query = {
             $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          });
+          };
+          const pazienti = await Pazienti.find(query);
 
           if (pazienti.length > 0) res.status(200).json(pazienti);
           else res.status(404).json({ error: "No patients found" });
@@ -51,12 +52,10 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-
-    // console.log("Check input parameters ", (id === "undefined"));
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
-      return
+      return;
     }
 
     const searchTerm = `PAZIENTIBY${id}`;
@@ -122,7 +121,7 @@ router.put("/:id", async (req, res) => {
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
-      return
+      return;
     }
 
     const pazienti = await Pazienti.updateOne(
@@ -166,7 +165,7 @@ router.delete("/:id", async (req, res) => {
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
-      return
+      return;
     }
 
     if (id == null) {
