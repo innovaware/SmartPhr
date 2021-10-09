@@ -269,7 +269,7 @@ export class DialogConsulenteComponent implements OnInit {
             this.addingContratto = false;
             this.uploadingContratto = false;
             this.uploading = false;
-            this.contratto = contratto;
+            this.contratto = result;
 
             console.log("Uploading completed: ", x);
           })

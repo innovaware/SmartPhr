@@ -82,7 +82,7 @@ export class AdminPazientiComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result insert paziente", result);
-      if (result !== false) {
+      if (result !== false && result != undefined) {
 
         this.pazienteService
           .insert(result)
