@@ -30,9 +30,9 @@ export class UploadService {
     return this.http.get(`${this.api}/api/files/${path}`).toPromise();
   }
 
-  async download(filename: string, id: string) {
+  async download(filename: string, id: string, subPath: string) {
     // let params = new HttpParams();
-    let path = `${id}/fatture/${filename}`;
+    let path = `${id}/${subPath}/${filename}`;
     if (filename[0] != "/") path = `/${path}`;
 
     // const options = {

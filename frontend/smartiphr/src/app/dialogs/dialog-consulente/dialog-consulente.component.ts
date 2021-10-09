@@ -184,7 +184,7 @@ export class DialogConsulenteComponent implements OnInit {
 
   async showContratto(contratto: Contratto) {
     this.uploadService
-      .download(contratto.filename, this.item.consulente._id)
+      .download(contratto.filename, this.item.consulente._id, 'contratti')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -373,7 +373,7 @@ export class DialogConsulenteComponent implements OnInit {
   }
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.item.consulente._id)
+      .download(fattura.filename, this.item.consulente._id, 'fatture')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -512,7 +512,7 @@ export class DialogConsulenteComponent implements OnInit {
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.item.consulente._id)
+      .download(bonifico.filename, this.item.consulente._id, 'bonifico')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {

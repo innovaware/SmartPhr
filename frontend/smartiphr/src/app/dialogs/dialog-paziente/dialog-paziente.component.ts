@@ -191,7 +191,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.paziente._id)
+      .download(fattura.filename, this.paziente._id, 'fatture')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -287,7 +287,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showNoteCreditoDocument(notacredito: NotaCredito) {
     this.uploadService
-      .download(notacredito.filename, this.paziente._id)
+      .download(notacredito.filename, this.paziente._id, 'notacredito')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -506,7 +506,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.paziente._id)
+      .download(bonifico.filename, this.paziente._id, 'bonifico')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
