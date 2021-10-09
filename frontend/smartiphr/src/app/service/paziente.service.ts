@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from 'rxjs';
 import { environment } from "src/environments/environment";
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
@@ -34,5 +35,10 @@ export class PazienteService {
     return this.http
       .post<Paziente>(this.api + "/api/pazienti", body)
       .toPromise();
+  }
+
+  delete(data: Paziente): Observable<any> {
+    return this.http
+    .delete(this.api + "/api/pazienti/" + data._id);
   }
 }
