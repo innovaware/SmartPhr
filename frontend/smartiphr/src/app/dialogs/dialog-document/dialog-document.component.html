@@ -1,0 +1,57 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <h3>Nuovo*</h3>
+        </div>
+  
+        <div class="col">
+          <button class="close-button" [mat-dialog-close]="true">×
+          </button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <span>Tutti i campi indicati con * sono obbligatori.</span>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-dialog-content>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+            <input type="file" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf"
+            *ngIf="!document['DOC_IDENTITA']?.status">
+        </div>
+      </div>
+        
+      <div class="row">
+        <div class="col">
+          <label>Descrizione*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.descrizione"
+              [disabled]=disable></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+  
+  </mat-dialog-content>
+  
+  
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+      <button mat-button [mat-dialog-close]="true">Chiudi</button>
+      <button mat-button class="button-save" (click)="save()">Salva</button>
+    </div>
+  </div>
+  

@@ -99,6 +99,9 @@ import { PermessiComponent } from './component/permessi/permessi.component';
 import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
 import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
 import { PresenzeComponent } from './component/presenze/presenze.component';
+import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
+import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
+import { TableDocumentComponent } from './component/table-document/table-document.component';
 
 @NgModule({
   declarations: [
@@ -162,6 +165,9 @@ import { PresenzeComponent } from './component/presenze/presenze.component';
     TurnimensiliComponent,
     CambiturnoComponent,
     PresenzeComponent,
+    DipendenteGeneraleComponent,
+    DialogDocumentComponent,
+    TableDocumentComponent,
   ],
   imports: [
     BrowserModule,

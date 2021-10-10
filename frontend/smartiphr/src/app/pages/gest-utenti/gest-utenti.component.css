@@ -9,6 +9,7 @@
   color: #676a6c;
 }
 
+
 table {
   width: 100%;
 }
@@ -21,21 +22,3 @@ table {
 .mat-column-action {
   width: 32px;
 }
-
-.mat-column-title {
-  flex: 2;
-}
-
-.mat-column-cognome {
-  width: 100px !important;
-}
-.mat-column-nome {
-  width: 100px !important;
-}
-.mat-column-email {
-  width: 100px !important;
-}
-.mat-column-user {
-  width: 100px !important;
-}
-

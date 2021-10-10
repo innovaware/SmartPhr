@@ -15,18 +15,28 @@ export class DipendentiService {
 
   constructor(private http: HttpClient) {}
 
-  async getDipendenti(): Promise<Dipendenti[]> {
+  async get(): Promise<Dipendenti[]> {
     return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti").toPromise();
   }
 
-  async insertDipendente(dipendente: Dipendenti) {
-    var body = dipendente;
-    return this.http.post(this.api + "/api/dipendenti", body).toPromise();
+  async getById(id: string): Promise<Dipendenti[]> {
+    return this.http.get<Dipendenti[]>(`${this.api}/api/dipendenti/${id}`).toPromise();
   }
 
-  async updateDipendete(dipendente: Dipendenti) {
-    var body = dipendente;
+  save(data: Dipendenti): Promise<Dipendenti> {
+    var body = data;
     console.log("body: ", body);
-    return this.http.put(this.api + "/api/dipendenti/" + dipendente._id, body).toPromise();
+    return this.http
+      .put<Dipendenti>(this.api + "/api/dipendenti/" + data._id, body)
+      .toPromise();
   }
+
+  insert(data: Dipendenti): Promise<Dipendenti> {
+    var body = data;
+    return this.http
+      .post<Dipendenti>(this.api + "/api/dipendenti", body)
+      .toPromise();
+  }
+
+
 }

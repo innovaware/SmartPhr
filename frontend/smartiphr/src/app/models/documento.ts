@@ -5,5 +5,5 @@ export class Documento {
   typeDocument: string;
   name: string;
   dateupload: Date;
-  binaryFile: FormData;
+  binaryFile?: FormData;
 }

@@ -1,58 +1,311 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>Gestione Dipendente</h3>
-      </div>
+<mat-tab-group mat-align-tabs="start">
+  <mat-tab label="Dati anagrafici generale">
+    <app-dipendente-generale [disable]=false [data]=dipendente (dataChange)="changeData($event)">
+    </app-dipendente-generale>
+  </mat-tab>
 
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">×
-        </button>
+   <!-- DOCUMENTI D'IDENTITA -->
+   <mat-tab label="Documenti d'identità" [disabled]="dipendente?._id === undefined">
+
+    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDocIdentita">
+      <button mat-button class="button-insert" (click)="addDocIdentita()">Aggiungi Documento</button>
+    </div>
+
+    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+      *ngIf="addingDocIdentita && !uploadingDocIdentita">
+      <div class="row">
+        <div class="col">
+          <input type="file" (change)="uploadDocIdentita($event)" accept=".pdf" *ngIf="!uploadingDocIdentita">
+          <label *ngIf="uploadingDocIdentita">Caricamento in corso ...</label>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Note</mat-label>
+            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumentoIdentita.note">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-button class="button-insert" (click)="saveDocIdentita(nuovoDocumentoIdentita)">Salva</button>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <span>Tutti i campi indicati con * sono obbligatori.</span>
-        <hr>
-      </div>
-    </div>
-  </div>
-</div>
-
-<mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Cognome</mat-label>
-          <input matInput [(ngModel)]="item.dipendente.cognome" [disabled]=disable>
-        </mat-form-field>
-      </div>
-
-      <div class="col">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>Nome</mat-label>
-          <input matInput [(ngModel)]="item.dipendente.nome" [disabled]=disable>
-        </mat-form-field>
+    <div>
+      <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingDocIdentita">
+        <div class="row">
+          <div class="col-1">
+            <mat-spinner [diameter]="24"></mat-spinner>
+          </div>
+          <div class="col">
+            <label>Caricamento in corso ...</label>
+          </div>
+        </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="example-full-width" appearance="fill">
-          <mat-label>email</mat-label>
-          <input type="email" matInput [(ngModel)]="item.dipendente.email" [disabled]=disable>
-        </mat-form-field>
+
+    <div *ngIf="this.docsIdentita?.length <= 0" class="notPresent">
+      Nessuna documento presente
+    </div>
+
+    <table mat-table [dataSource]="docIdentitaDataSource" class="mat-elevation-z8" *ngIf="this.docsIdentita?.length > 0">
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let row" style="text-align: right;">
+          <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+          <button mat-button (click)="showDocument(row)">
+            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+          </button>
+
+          <button mat-button (click)="deleteDocIdentita(row)">
+            <img src="../../../assets/cestino.png" style="width:26px">
+          </button>
+
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="namefile">
+        <th mat-header-cell *matHeaderCellDef> Nome file </th>
+        <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef> Note </th>
+        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+    </table>
+
+    <div class="paginator-container">
+
+      <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+
+  </mat-tab>
+
+
+
+   <!-- CONTRATTI LAVORO -->
+   <mat-tab label="Contratti di lavoro" [disabled]="dipendente?._id === undefined">
+
+    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingContratto">
+      <button mat-button class="button-insert" (click)="addContratto()">Aggiungi Documento</button>
+    </div>
+
+    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+      *ngIf="addingContratto && !uploadingContratto">
+      <div class="row">
+        <div class="col">
+          <input type="file" (change)="uploadContratto($event)" accept=".pdf" *ngIf="!uploadingContratto">
+          <label *ngIf="uploadingContratto">Caricamento in corso ...</label>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Note</mat-label>
+            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoContratto.note">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-button class="button-insert" (click)="saveContratto(nuovoContratto)">Salva</button>
+        </div>
       </div>
     </div>
-  </div>
-</mat-dialog-content>
+
+    <div>
+      <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingContratto">
+        <div class="row">
+          <div class="col-1">
+            <mat-spinner [diameter]="24"></mat-spinner>
+          </div>
+          <div class="col">
+            <label>Caricamento in corso ...</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="this.contratti?.length <= 0" class="notPresent">
+      Nessuna documento presente
+    </div>
+
+    <table mat-table [dataSource]="contrattiDataSource" class="mat-elevation-z8" *ngIf="this.contratti?.length > 0">
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let row" style="text-align: right;">
+          <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+          <button mat-button (click)="showDocument(row)">
+            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+          </button>
+
+          <button mat-button (click)="deleteContratto(row)">
+            <img src="../../../assets/cestino.png" style="width:26px">
+          </button>
+
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="namefile">
+        <th mat-header-cell *matHeaderCellDef> Nome file </th>
+        <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef> Note </th>
+        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+    </table>
+
+    <div class="paginator-container">
+
+      <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+
+  </mat-tab>
+
+
+
+
+   <!-- PRIVACY -->
+   <mat-tab label="Privacy" [disabled]="dipendente?._id === undefined">
+
+    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPrivacy">
+      <button mat-button class="button-insert" (click)="addPrivacy()">Aggiungi Documento</button>
+    </div>
+
+    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+      *ngIf="addingPrivacy && !uploadingPrivacy">
+      <div class="row">
+        <div class="col">
+          <input type="file" (change)="uploadPrivacy($event)" accept=".pdf" *ngIf="!uploadingPrivacy">
+          <label *ngIf="uploadingPrivacy">Caricamento in corso ...</label>
+        </div>
+        <div class="col">
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Note</mat-label>
+            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoPrivacy.note">
+          </mat-form-field>
+        </div>
+        <div class="col-2">
+          <button mat-button class="button-insert" (click)="savePrivacy(nuovoPrivacy)">Salva</button>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingPrivacy">
+        <div class="row">
+          <div class="col-1">
+            <mat-spinner [diameter]="24"></mat-spinner>
+          </div>
+          <div class="col">
+            <label>Caricamento in corso ...</label>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="this.docsprivacy?.length <= 0" class="notPresent">
+      Nessuna documento presente
+    </div>
+
+    <table mat-table [dataSource]="docsprivacyDataSource" class="mat-elevation-z8" *ngIf="this.docsprivacy?.length > 0">
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef>
+        </th>
+        <td mat-cell *matCellDef="let row" style="text-align: right;">
+          <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+          <button mat-button (click)="showDocument(row)">
+            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+          </button>
+
+          <button mat-button (click)="deletePrivacy(row)">
+            <img src="../../../assets/cestino.png" style="width:26px">
+          </button>
+
+
+        </td>
+      </ng-container>
+
+      <ng-container matColumnDef="namefile">
+        <th mat-header-cell *matHeaderCellDef> Nome file </th>
+        <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="date">
+        <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+        <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="note">
+        <th mat-header-cell *matHeaderCellDef> Note </th>
+        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+    </table>
+
+    <div class="paginator-container">
+
+      <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+
+  </mat-tab>
+
+ 
+
+
+</mat-tab-group>
 
 
 <div mat-dialog-actions>
   <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-    <button mat-button class="button-save" (click)="saveDiario()" [disabled]=disable>Salva</button>
+    <button mat-button [mat-dialog-close]="false">Chiudi</button>
+    <button mat-button class="button-insert" (click)="save(false)" [disabled]=uploading>Salva</button>
+    <button mat-button class="button-insert" (click)="save(true)" [disabled]=uploading>Salva e Chiudi</button>
   </div>
-</div>

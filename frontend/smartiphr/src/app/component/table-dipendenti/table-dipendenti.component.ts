@@ -43,7 +43,7 @@ export class TableDipendentiComponent implements OnInit {
     public dialog: MatDialog,
     public dipendentiService: DipendentiService
   ) {
-    this.dipendentiService.getDipendenti().then((result) => {
+    this.dipendentiService.get().then((result) => {
       this.dipendenti = result;
 
       this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
@@ -78,10 +78,11 @@ ngOnInit() {}
       nome: "",
       cf: "",
       indirizzoNascita: "",
-      luogoNascita: "",
+      comuneNascita: "",
       provinciaNascita: "",
       dataNascita: undefined,
       indirizzoResidenza: "",
+      residenza: "",
       luogoResidenza: "",
       provinciaResidenza: "",
       titoloStudio: "",
@@ -102,7 +103,7 @@ ngOnInit() {}
       console.log("result insert dipendente", result);
       if (result !== false) {
         this.dipendentiService
-          .insertDipendente(result)
+          .insert(result)
           .then((x) => {
             let data = this.dataSource.data;
             data.push(result);

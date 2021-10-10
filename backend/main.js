@@ -400,6 +400,11 @@ var turniMensiliRouter = require("./routes/turnimensili");
 app.use("/api/turnimensili", logHandler, authorizationHandler, turniMensiliRouter);
 
 
+// Turni mensili API
+var documentiDipendentiRouter = require("./routes/documentidipendenti");
+app.use("/api/documentidipendenti", logHandler, authorizationHandler, documentiDipendentiRouter);
+
+
 /*** FINE GESTIONE PERSONALE ***/
 
 app.listen(PORT, function () {

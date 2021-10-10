@@ -4,6 +4,7 @@ import { environment } from "src/environments/environment";
 import { Fatture } from "../models/fatture";
 import { Paziente } from '../models/paziente';
 import { map } from "rxjs/operators";
+import { Dipendenti } from "../models/dipendenti";
 
 @Injectable({
   providedIn: "root",
@@ -33,6 +34,48 @@ export class UploadService {
   async download(filename: string, paziente: Paziente) {
     // let params = new HttpParams();
     let path = `${paziente._id}/fatture/${filename}`;
+    if (filename[0] != "/") path = `/${path}`;
+
+    // const options = {
+    //   params: params,
+    //   reportProgress: true,
+    // };
+
+    // const body = {
+    //   fileName: path,
+    // };
+
+    let formData: FormData = new FormData();
+    formData.append("fileName", path);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    let params = {
+      params: {
+      }
+    }
+
+    let options = {
+      params: {
+        fileName: encodeURIComponent(path)
+      },
+      reportProgress: true,
+      responseType: 'arraybuffer' as 'json'
+    }
+
+    // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
+    //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
+    return this.http.get(`${this.api}/api/download`, options);
+  }
+
+
+
+  async downloadDocDipendente(filename: string, type: string, dipendente: Dipendenti) {
+    // let params = new HttpParams();
+    let path = `${dipendente._id}/${type}/${filename}`;
     if (filename[0] != "/") path = `/${path}`;
 
     // const options = {

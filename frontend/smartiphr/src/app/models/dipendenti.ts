@@ -5,9 +5,10 @@ export class Dipendenti {
   nome: string;
   cf: string;
   indirizzoNascita: string;
-  luogoNascita: string;
+  comuneNascita: string;
   provinciaNascita: string;
   dataNascita: Date;
+  residenza: string;
   indirizzoResidenza: string;
   luogoResidenza: string;
   provinciaResidenza: string;

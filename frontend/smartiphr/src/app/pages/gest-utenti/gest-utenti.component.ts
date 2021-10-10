@@ -10,6 +10,8 @@ import { DipendentiService } from "src/app/service/dipendenti.service";
   styleUrls: ["./gest-utenti.component.css"],
 })
 export class GestUtentiComponent implements OnInit {
+
+  /*
   displayedColumns: string[] = ["cognome", "nome", "email", "user", "action"];
   dataSource: MatTableDataSource<Dipendenti>;
 
@@ -24,7 +26,7 @@ export class GestUtentiComponent implements OnInit {
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.utentiService.getDipendenti().then((result) => {
+    this.utentiService.get().then((result) => {
       this.data = result;
 
       this.dataSource = new MatTableDataSource<Dipendenti>(this.data);
@@ -44,10 +46,11 @@ export class GestUtentiComponent implements OnInit {
       email: "",
       cf: "",
       indirizzoNascita: "",
-      luogoNascita: "",
+      comuneNascita: "",
       provinciaNascita: "",
       dataNascita: null,
       indirizzoResidenza: "",
+      residenza: "",
       luogoResidenza: "",
       provinciaResidenza: "",
       titoloStudio: "",
@@ -66,7 +69,7 @@ export class GestUtentiComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
         if (result != undefined) {
-          this.utentiService.insertDipendente(result.dipendente).then((r: Dipendenti) => {
+          this.utentiService.insert(result.dipendente).then((r: Dipendenti) => {
             this.data.push(r);
             this.dataSource.data = this.data;
           });
@@ -84,7 +87,7 @@ export class GestUtentiComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         if (result != undefined) {
           console.debug("Update dipendente: ", result.dipendente);
-          this.utentiService.updateDipendete(result.dipendente).then(r=>{
+          this.utentiService.save(result.dipendente).then(r=>{
             console.log("Modifica eseguita con successo");
           }).catch(err=> {
             console.error("Errore aggiornamento dipendente", err);
@@ -92,4 +95,50 @@ export class GestUtentiComponent implements OnInit {
         }
       });
   }
+
+  */
+
+
+
+  constructor(
+    public dialog: MatDialog,
+    public dipendentiService: DipendentiService
+  ) {}
+
+  ngOnInit() {}
+
+  show(event: { dipendente: Dipendenti; button: string }) {
+    var dialogRef = undefined;
+    console.log("show: ", event);
+
+    this.dipendentiService.getById(event.dipendente._id).then((paziente) => {
+      switch (event.button) {
+        case "Mostra":
+          console.log("Area amministrativa pazienti");
+          dialogRef = this.dialog.open(DialogDipendenteComponent, {
+            data: { dipendente: event.dipendente, readonly: true },
+          });
+          break;
+
+        default:
+          break;
+      }
+    }).catch(err=>{
+      console.error(err);
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("resutl", result);
+        if (result != undefined) {
+          this.dipendentiService
+            .save(result)
+            .then((x) => {})
+            .catch((err) => {});
+        }
+      });
+  }
+
+
+
 }

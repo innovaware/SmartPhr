@@ -1,7 +1,7 @@
 <div class="containter pad">
     <div class="row" *ngIf="showInsert">
       <div class="col">
-        <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Dipendente</button>
+        <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Documento</button>
       </div>
     </div>
   
@@ -31,39 +31,22 @@
   
           <!-- Position Column -->
           <ng-container matColumnDef="cognome">
-            <th mat-header-cell *matHeaderCellDef> Cognome </th>
+            <th mat-header-cell *matHeaderCellDef> Nome </th>
             <td mat-cell *matCellDef="let element"> {{element.cognome}} </td>
           </ng-container>
   
           <!-- Name Column -->
           <ng-container matColumnDef="nome">
-            <th mat-header-cell *matHeaderCellDef> Nome </th>
+            <th mat-header-cell *matHeaderCellDef> Data Upload </th>
             <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
           </ng-container>
   
           <!-- Weight Column -->
           <ng-container matColumnDef="dataNascita">
-            <th mat-header-cell *matHeaderCellDef> Data di Nascita </th>
+            <th mat-header-cell *matHeaderCellDef> Note </th>
             <td mat-cell *matCellDef="let element"> {{element.dataNascita | date: 'dd/MM/yyyy'}} </td>
           </ng-container>
   
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="indirizzo">
-            <th mat-header-cell *matHeaderCellDef> Indirizzo </th>
-            <td mat-cell *matCellDef="let element"> {{element.indirizzoResidenza}} </td>
-          </ng-container>
-  
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="localita">
-            <th mat-header-cell *matHeaderCellDef> Localit&#225; </th>
-            <td mat-cell *matCellDef="let element"> {{element.luogoResidenza}} </td>
-          </ng-container>
-  
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="provincia">
-            <th mat-header-cell *matHeaderCellDef> Provincia </th>
-            <td mat-cell *matCellDef="let element"> {{element.provinciaResidenza}} </td>
-          </ng-container>
   
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
