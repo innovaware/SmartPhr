@@ -1,10 +1,12 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { Output, EventEmitter } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
+import { Observable, Subscription } from 'rxjs';
+import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
 import { DialogPazienteComponent } from "src/app/dialogs/dialog-paziente/dialog-paziente.component";
+import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { PazienteService } from "src/app/service/paziente.service";
 
@@ -13,13 +15,17 @@ import { PazienteService } from "src/app/service/paziente.service";
   templateUrl: "./table-ospiti.component.html",
   styleUrls: ["./table-ospiti.component.css"],
 })
-export class TableOspitiComponent implements OnInit {
+export class TableOspitiComponent implements OnInit, OnDestroy {
   @Output() showItemEmiter = new EventEmitter<{
     paziente: Paziente;
-    button: string;
+    button: DinamicButton;
   }>();
-  @Input() buttons: string[];
+  @Input() buttons: DinamicButton[];
+  @Input() insertFunction: any;
   @Input() showInsert: boolean;
+  @Input() eventPazienti: Observable<Paziente[]>;
+
+  private eventsSubscription: Subscription;
 
   displayedColumns: string[] = [
     "cognome",
@@ -33,21 +39,20 @@ export class TableOspitiComponent implements OnInit {
   dataSource: MatTableDataSource<Paziente>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  public pazienti: Paziente[];
 
-  constructor(
-    public dialog: MatDialog,
-    public pazienteService: PazienteService
-  ) {
-    this.pazienteService.getPazienti().then((result) => {
-      this.pazienti = result;
+  constructor() {
+  }
 
-      this.dataSource = new MatTableDataSource<Paziente>(this.pazienti);
+  ngOnInit() {
+    this.eventsSubscription = this.eventPazienti.subscribe((p: Paziente[]) => {
+      this.dataSource = new MatTableDataSource<Paziente>(p);
       this.dataSource.paginator = this.paginator;
     });
   }
 
-  ngOnInit() {}
+  ngOnDestroy() {
+    this.eventsSubscription.unsubscribe();
+  }
 
   ngAfterViewInit() {}
 
@@ -56,67 +61,10 @@ export class TableOspitiComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  call(paziente: Paziente, item: string) {
+  call(paziente: Paziente, item: DinamicButton) {
+    console.log("Table Ospiti emit ");
+
     this.showItemEmiter.emit({ paziente: paziente, button: item });
-
-
   }
 
-  insert() {
-    console.log("Insert");
-    let paziente: Paziente = {
-      cognome: "",
-      nome: "",
-      sesso: "",
-      luogoNascita: "",
-      dataNascita: undefined,
-      residenza: "",
-      statoCivile: "",
-      figli: 0,
-      scolarita: "",
-      situazioneLavorativa: "",
-      personeRiferimento: "",
-      telefono: "",
-      dataIngresso: new Date(),
-      provincia: "",
-      localita: "",
-      comuneNascita: "",
-      provinciaNascita: "",
-      cartellaClinica: [],
-    };
-
-    const dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: true, newItem: true },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("result insert paziente", result);
-      if (result !== false) {
-        this.pazienteService
-          .insert(result)
-          .then((x) => {
-            let data = this.dataSource.data;
-            data.push(result);
-            this.dataSource.data = data;
-          })
-          .catch((err) => {
-            this.showMessageError("Errore Inserimento Paziente (" + err['status'] + ")");
-          });
-      }
-    });
-  }
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: 'custom-modalbox',
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-
-      });
-  }
 }

@@ -12,18 +12,37 @@ const client = redis.createClient(redisPort, redisHost);
 router.get("/", async (req, res) => {
   try {
     const searchTerm = `PAZIENTIALL`;
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
+    const showOnlyCancellati = req.query.show == "deleted";
+    const showAll = req.query.show == "all";
 
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const pazienti = await Pazienti.find();
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-        res.status(200).json(pazienti);
+    if (showOnlyCancellati || showAll) {
+      console.log("Show all or deleted");
+      let query = {};
+      if (showOnlyCancellati) {
+        query = { cancellato: true };
       }
-    });
+      const pazienti = await Pazienti.find(query);
+      res.status(200).json(pazienti);
+    } else {
+      client.get(searchTerm, async (err, data) => {
+        if (err) throw err;
+
+        if (data && !redisDisabled) {
+          res.status(200).send(JSON.parse(data));
+        } else {
+          const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          };
+          const pazienti = await Pazienti.find(query);
+
+          if (pazienti.length > 0) res.status(200).json(pazienti);
+          else res.status(404).json({ error: "No patients found" });
+
+          client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+          //res.status(200).json(pazienti);
+        }
+      });
+    }
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
@@ -33,6 +52,12 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
     const searchTerm = `PAZIENTIBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
@@ -40,10 +65,18 @@ router.get("/:id", async (req, res) => {
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const pazienti = await Pazienti.findById(id);
+        const pazienti = await Pazienti.findOne({
+          $and: [
+            {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            },
+            { _id: id },
+          ],
+        });
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-        res.status(200).json(pazienti);
+        if (pazienti != null) res.status(200).json(pazienti);
+        else res.status(404).json({ error: "No patient found" });
       }
     });
   } catch (err) {
@@ -85,7 +118,12 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
     const pazienti = await Pazienti.updateOne(
       { _id: id },
       {
@@ -113,6 +151,39 @@ router.put("/:id", async (req, res) => {
 
     const searchTerm = `PAZIENTIBY${id}`;
     client.del(searchTerm);
+
+    res.status(200);
+    res.json(pazienti);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (id == null) {
+      res.status(400).json({ error: "id not valid" });
+    }
+
+    const pazienti = await Pazienti.updateOne(
+      { _id: id },
+      {
+        $set: {
+          cancellato: true,
+          dataCancellazione: new Date(),
+        },
+      }
+    );
+
+    client.del(`PAZIENTIBY${id}`);
+    client.del(`PAZIENTIALL`);
 
     res.status(200);
     res.json(pazienti);

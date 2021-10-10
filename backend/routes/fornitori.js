@@ -24,8 +24,6 @@ router.get("/", async (req, res) => {
         res.status(200).json(fornitori);
       }
     });
-
-
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({"Error": err});
@@ -58,9 +56,18 @@ router.post("/", async (req, res) => {
     const fornitore = new Fornitori({
       cognome: req.body.cognome,
       nome: req.body.nome,
+      codiceFiscale: req.body.codiceFiscale,
+      dataNascita: req.body.dataNascita,
+      comuneNascita: req.body.comuneNascita,
+      provinciaNascita: req.body.provinciaNascita,
+      indirizzoNascita: req.body.indirizzoNascita,
+      indirizzoResidenza: req.body.indirizzoResidenza,
+      comuneResidenza: req.body.comuneResidenza,
+      provinciaResidenza: req.body.provinciaResidenza,  
+      mansione: req.body.mansione,
+      tipoContratto: req.body.tipoContratto,
+      telefono: req.body.telefono,
       email: req.body.email,
-      group: req.body.group,
-      user: req.body.user,
     });
 
     console.log(req.body);
@@ -84,9 +91,18 @@ router.put("/:id", async (req, res) => {
         $set: {
           cognome: req.body.cognome,
           nome: req.body.nome,
+          codiceFiscale: req.body.codiceFiscale,
+          dataNascita: req.body.dataNascita,
+          comuneNascita: req.body.comuneNascita,
+          provinciaNascita: req.body.provinciaNascita,
+          indirizzoNascita: req.body.indirizzoNascita,
+          indirizzoResidenza: req.body.indirizzoResidenza,
+          comuneResidenza: req.body.comuneResidenza,
+          provinciaResidenza: req.body.provinciaResidenza,  
+          mansione: req.body.mansione,
+          tipoContratto: req.body.tipoContratto,
+          telefono: req.body.telefono,
           email: req.body.email,
-          group: req.body.group,
-          user: req.body.user,
         },
       }
     );

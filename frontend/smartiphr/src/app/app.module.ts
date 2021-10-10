@@ -99,6 +99,7 @@ import { PermessiComponent } from './component/permessi/permessi.component';
 import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
 import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
 import { PresenzeComponent } from './component/presenze/presenze.component';
+import { FornitoreGeneraleComponent } from './component/fornitore/fornitore.component';
 import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
 import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
 import { TableDocumentComponent } from './component/table-document/table-document.component';
@@ -165,6 +166,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     TurnimensiliComponent,
     CambiturnoComponent,
     PresenzeComponent,
+    FornitoreGeneraleComponent,
     DipendenteGeneraleComponent,
     DialogDocumentComponent,
     TableDocumentComponent,

@@ -18,9 +18,6 @@ table {
   width: 100%;
 }
 
-.mat-column-action {
-  width: 32px;
-}
 
 .mat-column-title {
   flex: 2;
@@ -32,10 +29,18 @@ table {
 .mat-column-nome {
   width: 100px !important;
 }
-.mat-column-email {
-  width: 100px !important;
-}
-.mat-column-user {
-  width: 100px !important;
+
+.mat-column-action{
+  text-align: right;
+  width: 230px;
 }
 
+.mat-raised-button {
+  margin-right: 14px;
+}
+
+.buttonTable{
+  color: #ffffff;
+  background-color: #f8ac59;
+  border-color: #f8ac59;
+}

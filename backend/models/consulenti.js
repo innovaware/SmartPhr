@@ -3,9 +3,20 @@ const mongoose = require("mongoose");
 const ConsulentiSchema = mongoose.Schema({
   cognome: String,
   nome: String,
+  codiceFiscale: String,
+  dataNascita: Date,
+  comuneNascita: String,
+  provinciaNascita: String,
+  indirizzoNascita: String,
+  indirizzoResidenza: String,
+  comuneResidenza: String,
+  provinciaResidenza: String,
+  mansione: String,
+  tipologiaContratto: String,
+  telefono: String,
   email: String,
-  group: String,
-  user: String,
+  cancellato: Boolean,
+  dataCancellazione: Date,
 });
 
 module.exports = mongoose.model('Consulenti', ConsulentiSchema, 'consulenti');

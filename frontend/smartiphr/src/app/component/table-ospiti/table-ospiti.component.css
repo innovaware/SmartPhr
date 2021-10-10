@@ -36,3 +36,9 @@ table {
 .action-button {
   margin-right: 10px
 }
+
+.raised-button {
+  color: #ffffff;
+  background-color: #f8ac59;
+  border-color: #f8ac59;
+}

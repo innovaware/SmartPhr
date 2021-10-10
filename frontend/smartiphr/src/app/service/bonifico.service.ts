@@ -12,20 +12,20 @@ export class BonificoService {
 
   constructor(private http: HttpClient) {}
 
-  async getBonifico(paziente: Paziente): Promise<Bonifico[]> {
+  async getBonifico(id: string): Promise<Bonifico[]> {
     const headers = {
       // 'Authorization': 'Bearer ' + this.token,
       // 'x-refresh': this.refreshToken
     }
 
     return this.http
-      .get<Bonifico[]>(`${this.api}/api/bonifici/paziente/${paziente._id}`, { headers })
+      .get<Bonifico[]>(`${this.api}/api/bonifici/paziente/${id}`, { headers })
       .toPromise();
   }
 
-  async insertBonifico(bonifico: Bonifico, paziente: Paziente) {
+  async insertBonifico(bonifico: Bonifico, id: string) {
     var body = bonifico;
-    return this.http.post(`${this.api}/api/bonifici/paziente/${paziente._id}`, body).toPromise();
+    return this.http.post(`${this.api}/api/bonifici/paziente/${id}`, body).toPromise();
   }
 
   async updateBonifico(bonifico: Bonifico) {

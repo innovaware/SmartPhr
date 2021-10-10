@@ -14,6 +14,7 @@ import { NotaCredito } from "src/app/models/notacredito";
 import { Paziente } from "src/app/models/paziente";
 import { BonificoService } from 'src/app/service/bonifico.service';
 import { FattureService } from "src/app/service/fatture.service";
+import { MessagesService } from 'src/app/service/messages.service';
 import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
@@ -67,6 +68,7 @@ export class DialogPazienteComponent implements OnInit {
     public notacreditoService: NotaCreditoService,
     public bonficoService: BonificoService,
     public pazienteService: PazienteService,
+    public messageService: MessagesService,
     public dialog: MatDialog
   ) {
     this.uploading = false;
@@ -121,7 +123,7 @@ export class DialogPazienteComponent implements OnInit {
             this.newItem = false;
           })
           .catch((err) => {
-            this.showMessageError(
+            this.messageService.showMessageError(
               "Errore Inserimento Paziente (" + err["status"] + ")"
             );
             this.uploading = false;
@@ -135,7 +137,7 @@ export class DialogPazienteComponent implements OnInit {
             this.newItem = false;
           })
           .catch((err) => {
-            this.showMessageError(
+            this.messageService.showMessageError(
               "Errore salvataggio Paziente (" + err["status"] + ")"
             );
             this.uploading = false;
@@ -152,7 +154,7 @@ export class DialogPazienteComponent implements OnInit {
   async getFatture() {
     console.log(`Get Fatture paziente: ${this.paziente._id}`);
     this.fattureService
-      .getFatture(this.paziente)
+      .getFatture(this.paziente._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 
@@ -160,7 +162,7 @@ export class DialogPazienteComponent implements OnInit {
         this.fattureDataSource.paginator = this.fatturePaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista fatture");
+        this.messageService.showMessageError("Errore caricamento lista fatture");
         console.error(err);
       });
   }
@@ -182,14 +184,14 @@ export class DialogPazienteComponent implements OnInit {
         this.fattureDataSource.data = this.fatture;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione Fattura");
+        this.messageService.showMessageError("Errore nella cancellazione Fattura");
         console.error(err);
       });
   }
 
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.paziente)
+      .download(fattura.filename, this.paziente._id, 'fatture')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -212,7 +214,7 @@ export class DialogPazienteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
@@ -235,7 +237,7 @@ export class DialogPazienteComponent implements OnInit {
       this.nuovaFattura.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -248,7 +250,7 @@ export class DialogPazienteComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insertFattura(fattura, this.paziente)
+    .insertFattura(fattura, this.paziente._id)
     .then((result: Fatture) => {
       console.log("Insert fattura: ", result);
       this.fatture.push(result);
@@ -272,20 +274,20 @@ export class DialogPazienteComponent implements OnInit {
           console.log("Uploading completed: ", x);
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
         });
     })
     .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
+      this.messageService.showMessageError("Errore Inserimento fattura");
       console.error(err);
     });
   }
 
   async showNoteCreditoDocument(notacredito: NotaCredito) {
     this.uploadService
-      .download(notacredito.filename, this.paziente)
+      .download(notacredito.filename, this.paziente._id, 'notacredito')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -308,7 +310,7 @@ export class DialogPazienteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
@@ -330,7 +332,7 @@ export class DialogPazienteComponent implements OnInit {
         this.noteCreditoDataSource.data = this.noteCredito;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione NotaCredito");
+        this.messageService.showMessageError("Errore nella cancellazione NotaCredito");
         console.error(err);
       });
   }
@@ -354,7 +356,7 @@ export class DialogPazienteComponent implements OnInit {
       this.nuovaNotacredito.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -390,13 +392,13 @@ export class DialogPazienteComponent implements OnInit {
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
-              this.showMessageError("Errore nel caricamento file");
+              this.messageService.showMessageError("Errore nel caricamento file");
               console.error(err);
               this.uploading = false;
             });
         })
         .catch((err) => {
-          this.showMessageError("Errore Inserimento Nota Credito");
+          this.messageService.showMessageError("Errore Inserimento Nota Credito");
           console.error(err);
         });
   }
@@ -414,7 +416,7 @@ export class DialogPazienteComponent implements OnInit {
         this.noteCreditoDataSource.paginator = this.notacreditoPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista fatture");
+        this.messageService.showMessageError("Errore caricamento lista fatture");
         console.error(err);
       });
   }
@@ -439,7 +441,7 @@ export class DialogPazienteComponent implements OnInit {
       this.nuovaBonifico.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -451,7 +453,7 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insertBonifico(bonifico, this.paziente)
+        .insertBonifico(bonifico, this.paziente._id)
         .then((result: Bonifico) => {
           console.log("Insert bonifico: ", result);
           this.bonifici.push(result);
@@ -475,13 +477,13 @@ export class DialogPazienteComponent implements OnInit {
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
-              this.showMessageError("Errore nel caricamento file");
+              this.messageService.showMessageError("Errore nel caricamento file");
               console.error(err);
               this.uploading = false;
             });
         })
         .catch((err) => {
-          this.showMessageError("Errore Inserimento Nota Credito");
+          this.messageService.showMessageError("Errore Inserimento Nota Credito");
           console.error(err);
         });
   }
@@ -489,7 +491,7 @@ export class DialogPazienteComponent implements OnInit {
   async getBonificiAssegniContanti() {
     console.log(`Get Bonifici e altro paziente: ${this.paziente._id}`);
     this.bonficoService
-      .getBonifico(this.paziente)
+      .getBonifico(this.paziente._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 
@@ -497,14 +499,14 @@ export class DialogPazienteComponent implements OnInit {
         this.bonificiDataSource.paginator = this.bonificiPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista bonifici e altri");
+        this.messageService.showMessageError("Errore caricamento lista bonifici e altri");
         console.error(err);
       });
   }
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.paziente)
+      .download(bonifico.filename, this.paziente._id, 'bonifico')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -526,7 +528,7 @@ export class DialogPazienteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
@@ -548,7 +550,7 @@ export class DialogPazienteComponent implements OnInit {
         this.bonificiDataSource.data = this.bonifici;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione Bonifici e altro");
+        this.messageService.showMessageError("Errore nella cancellazione Bonifici e altro");
         console.error(err);
       });
   }
@@ -559,7 +561,7 @@ export class DialogPazienteComponent implements OnInit {
       .getFiles(this.paziente._id)
       .then((documents: Documento[]) => {
         documents.forEach((doc: Documento) => {
-          console.log("document:", doc);
+          // console.log("document:", doc);
           this.document[doc.typeDocument] = {
             status: true,
             name: doc.name,
@@ -568,7 +570,7 @@ export class DialogPazienteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista Files");
+        this.messageService.showMessageError("Errore caricamento lista Files");
         console.error(err);
       });
   }
@@ -618,24 +620,12 @@ export class DialogPazienteComponent implements OnInit {
 
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
           this.document[typeDocument].uploading = false;
           this.document[typeDocument].error = true;
         });
     }
-  }
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
   }
 }

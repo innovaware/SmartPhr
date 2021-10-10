@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Consulenti } from '../models/consulenti';
 
@@ -16,14 +17,18 @@ export class ConsulentiService {
     return this.http.get<Consulenti[]>(this.api + "/api/consulenti").toPromise();
   }
 
-  async insertConsulenti(consulente: Consulenti) {
+  insert(consulente: Consulenti): Observable<Consulenti> {
     var body = consulente;
-    return this.http.post(this.api + "/api/consulenti", body).toPromise();
+    return this.http.post<Consulenti>(this.api + "/api/consulenti", body);
   }
 
-  async updateConsulenti(consulente: Consulenti) {
+  update(consulente: Consulenti): Observable<Consulenti> {
     var body = consulente;
     console.log("body: ", body);
-    return this.http.put(this.api + "/api/consulenti/" + consulente._id, body).toPromise();
+    return this.http.put<Consulenti>(this.api + "/api/consulenti/" + consulente._id, body);
+  }
+
+  delete(consulente: Consulenti): Observable<Consulenti> {
+    return this.http.delete<Consulenti>(this.api + "/api/consulenti/" + consulente._id);
   }
 }

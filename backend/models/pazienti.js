@@ -18,6 +18,8 @@ const PazienteSchema = mongoose.Schema({
   localita: String,
   comuneNascita: String,
   provinciaNascita: String,
+  cancellato: Boolean,
+  dataCancellazione: Date,
 });
 
 module.exports = mongoose.model("Pazienti", PazienteSchema, "pazienti");

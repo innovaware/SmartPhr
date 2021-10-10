@@ -1,4 +1,3 @@
-
 <div class="containter pad">
   <div class="row">
     <div class="col ">
@@ -8,12 +7,12 @@
 
   <hr>
 
-
-
-
   <div class="row">
     <div class="col">
-      <app-table-ospiti (showItemEmiter)="show($event)" [buttons]='["Mostra"]' [showInsert]=true></app-table-ospiti>
+      <app-table-ospiti (showItemEmiter)="show($event)" [buttons]="getButtons()"
+      [eventPazienti]="eventsSubject.asObservable()"
+      [insertFunction]="getInsertFunction()"
+      [showInsert]=true></app-table-ospiti>
     </div>
   </div>
 </div>
