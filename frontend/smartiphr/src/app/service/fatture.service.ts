@@ -19,13 +19,13 @@ export class FattureService {
     }
 
     return this.http
-      .get<Fatture[]>(`${this.api}/api/fatture/paziente/${id}`, { headers })
+      .get<Fatture[]>(`${this.api}/api/fatture/${id}`, { headers })
       .toPromise();
   }
 
   async insertFattura(fattura: Fatture, id: string) {
     var body = fattura;
-    return this.http.post(`${this.api}/api/fatture/paziente/${id}`, body).toPromise();
+    return this.http.post(`${this.api}/api/fatture/${id}`, body).toPromise();
   }
 
   async updateFattura(fattura: Fatture) {

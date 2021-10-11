@@ -12,11 +12,11 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-router.get("/paziente/:id", async (req, res) => {
+router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const searchTerm = `fatturePaziente${id}`;
+    const searchTerm = `fatture${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -25,7 +25,7 @@ router.get("/paziente/:id", async (req, res) => {
         res.status(200).send(JSON.parse(data));
       } else {
         const fatture = await Fatture.find({
-          paziente: id,
+          identifyUser: id,
         });
         client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
         res.status(200).json(fatture);
@@ -60,11 +60,11 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/paziente/:id", async (req, res) => {
+router.post("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const fatture = new Fatture({
-      paziente: id,
+      identifyUser: id,
       filename: req.body.filename,
       dateupload: Date.now(),
       note: req.body.note,
@@ -75,7 +75,7 @@ router.post("/paziente/:id", async (req, res) => {
     const result = await fatture.save();
 
 
-    const searchTerm = `fatturePaziente${id}`;
+    const searchTerm = `fatture${id}`;
     client.del(searchTerm);
 
     res.status(200);
@@ -93,7 +93,7 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-          paziente: req.body.pazienteID,
+          identifyUser: req.body.identifyUser,
           filename: req.body.filename,
           note: req.body.note,
         },
@@ -116,12 +116,12 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
 
     const item = await Fatture.findById(id);
-    const idPaziente = item.paziente;
+    const identifyUser = item.identifyUser;
     const fatture = await Fatture.remove({ _id: id });
 
     let searchTerm = `fattureBY${id}`;
     client.del(searchTerm);
-    searchTerm = `fatturePaziente${idPaziente}`;
+    searchTerm = `fatture${identifyUser}`;
     client.del(searchTerm);
 
 
