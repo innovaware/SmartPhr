@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FornitoriComponent } from './fornitori.component';
+import { AdminFornitoriComponent } from './admin-fornitori.component';
 
-describe('FornitoriComponent', () => {
-  let component: FornitoriComponent;
-  let fixture: ComponentFixture<FornitoriComponent>;
+describe('AdminFornitoriComponent', () => {
+  let component: AdminFornitoriComponent;
+  let fixture: ComponentFixture<AdminFornitoriComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FornitoriComponent ]
+      declarations: [ AdminFornitoriComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(FornitoriComponent);
+    fixture = TestBed.createComponent(AdminFornitoriComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

@@ -1,0 +1,18 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Amministrativa Fornitori</h1>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <app-table-fornitori (showItemEmiter)="show($event)" [buttons]="getButtons()"
+      [eventPazienti]="eventsSubject.asObservable()"
+      [insertFunction]="getInsertFunction()"
+      [showInsert]=true></app-table-fornitori>
+    </div>
+  </div>
+</div>
