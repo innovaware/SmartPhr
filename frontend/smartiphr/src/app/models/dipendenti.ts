@@ -17,6 +17,7 @@ export class Dipendenti {
   contratto: string;
   telefono: string;
   email: string;
+  presaVisRegolamento : boolean;
 
   group: string;
   user: string;
