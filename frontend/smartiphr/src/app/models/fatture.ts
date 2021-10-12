@@ -1,7 +1,7 @@
 
 export class Fatture {
   _id?: string;
-  identifyUser: string;
+  identifyUser?: string;
   filename: string;
   dataupload?: Date;
   note?: string;
