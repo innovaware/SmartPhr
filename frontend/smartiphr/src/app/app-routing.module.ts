@@ -15,7 +15,7 @@ import { AspComponent } from "./pages/asp/asp.component";
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
 import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
-import { FornitoriComponent } from "./pages/fornitori/fornitori.component";
+import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { GestStanzeComponent } from "./pages/gest-stanze/gest-stanze.component";
 import { GestUtentiComponent } from "./pages/gest-utenti/gest-utenti.component";
 import { LoginComponent } from './pages/login/login.component';
@@ -47,7 +47,7 @@ const routes: Routes = [
 
 
   { path: "gest_consulenti", component: ConsulentiComponent },
-  { path: "gest_fornitori", component: FornitoriComponent },
+  { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
   { path: "gest_asp", component: AspComponent },
   { path: "gest_stanze", component: GestStanzeComponent },
   { path: "gest_farmaci", component: FarmaciComponent },

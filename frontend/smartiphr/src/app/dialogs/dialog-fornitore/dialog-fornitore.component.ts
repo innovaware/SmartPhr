@@ -6,139 +6,121 @@ import {
   MatTableDataSource,
   MAT_DIALOG_DATA,
 } from "@angular/material";
-import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
+import { FornitoreGeneraleComponent } from "src/app/component/fornitore-generale/fornitore-generale.component";
 import { Bonifico } from 'src/app/models/bonifico';
 import { Documento } from "src/app/models/documento";
 import { Fatture } from "src/app/models/fatture";
-import { NotaCredito } from "src/app/models/notacredito";
-import { Paziente } from "src/app/models/paziente";
+import { Fornitore } from "src/app/models/fornitore";
 import { BonificoService } from 'src/app/service/bonifico.service';
 import { FattureService } from "src/app/service/fatture.service";
 import { MessagesService } from 'src/app/service/messages.service';
-import { NotaCreditoService } from "src/app/service/notacredito.service";
-import { PazienteService } from "src/app/service/paziente.service";
+import { FornitoreService } from "src/app/service/fornitore.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
-  selector: "app-dialog-paziente",
-  templateUrl: "./dialog-paziente.component.html",
-  styleUrls: ["./dialog-paziente.component.css"],
+  selector: "app-dialog-fornitore",
+  templateUrl: "./dialog-fornitore.component.html",
+  styleUrls: ["./dialog-fornitore.component.css"],
 })
-export class DialogPazienteComponent implements OnInit {
-  public paziente: Paziente;
+export class DialogFornitoreComponent implements OnInit {
+  public fornitore: Fornitore;
   public newItem: boolean;
   public document: any[] = [];
   public uploading: boolean;
   public uploadingFattura: boolean;
-  public uploadingNotaCredito: boolean;
   public uploadingBonifici: boolean;
   public addingFattura: boolean;
-  public addingNotaCredito: boolean;
   public addingBonifici: boolean;
-
   public nuovaFattura: Fatture;
-  public nuovaNotacredito: NotaCredito;
   public nuovaBonifico: Bonifico;
 
   fattureDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
   public fattureDataSource: MatTableDataSource<Fatture>;
-  public noteCreditoDataSource: MatTableDataSource<NotaCredito>;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
   @ViewChild("paginatorFatture", { static: false })
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorNoteCredito", { static: false })
-  notacreditoPaginator: MatPaginator;
   @ViewChild("paginatorBonifici", { static: false })
   bonificiPaginator: MatPaginator;
 
   public fatture: Fatture[];
-  public noteCredito: NotaCredito[];
   public bonifici: Bonifico[];
 
   constructor(
     public uploadService: UploadService,
-    public dialogRef: MatDialogRef<PazienteGeneraleComponent>,
+    public dialogRef: MatDialogRef<FornitoreGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { paziente: Paziente; readonly: boolean; newItem: boolean },
+    public data: { fornitore: Fornitore; readonly: boolean; newItem: boolean },
     public fattureService: FattureService,
-    public notacreditoService: NotaCreditoService,
     public bonficoService: BonificoService,
-    public pazienteService: PazienteService,
+    public fornitoreService: FornitoreService,
     public messageService: MessagesService,
     public dialog: MatDialog
   ) {
     this.uploading = false;
-    this.paziente = this.data.paziente;
+    this.fornitore = this.data.fornitore;
     this.newItem = this.data.newItem || false;
     this.uploadingFattura = false;
     this.addingFattura = false;
-    this.addingNotaCredito = false;
-    this.uploadingNotaCredito = false;
     this.uploadingBonifici = false;
 
 
-    //this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
-    console.log("Dialog paziente generale", this.data);
+    //this.fornitore = JSON.parse(JSON.stringify(this.data.fornitore));
+    console.log("Dialog fornitore generale", this.data);
   }
 
   async save(saveAndClose: boolean) {
-    // this.data.paziente = this.paziente;
-    console.log("update paziente");
-    this.data.paziente.cognome = this.paziente.cognome;
-    this.data.paziente.nome = this.paziente.nome;
-    this.data.paziente.sesso = this.paziente.sesso;
-    this.data.paziente.luogoNascita = this.paziente.luogoNascita;
-    this.data.paziente.dataNascita = this.paziente.dataNascita;
-    this.data.paziente.residenza = this.paziente.residenza;
-    this.data.paziente.statoCivile = this.paziente.statoCivile;
-    this.data.paziente.figli = this.paziente.figli;
-    this.data.paziente.scolarita = this.paziente.scolarita;
-    this.data.paziente.situazioneLavorativa = this.paziente.situazioneLavorativa;
-    this.data.paziente.personeRiferimento = this.paziente.personeRiferimento;
-    this.data.paziente.telefono = this.paziente.telefono;
-    this.data.paziente.dataIngresso = this.paziente.dataIngresso;
-    this.data.paziente.provincia = this.paziente.provincia;
-    this.data.paziente.localita = this.paziente.localita;
-    this.data.paziente.provenienza = this.paziente.provenienza;
-    this.data.paziente.comuneNascita = this.paziente.comuneNascita;
-    this.data.paziente.provinciaNascita = this.paziente.provinciaNascita;
+    // this.data.fornitore = this.fornitore;
+    console.log("update fornitore");
+    this.data.fornitore.cognome = this.fornitore.cognome;
+    this.data.fornitore.nome = this.fornitore.nome;
+    this.data.fornitore.codiceFiscale = this.fornitore.codiceFiscale;
+    this.data.fornitore.comuneResidenza = this.fornitore.comuneResidenza;
+    this.data.fornitore.indirizzoNascita = this.fornitore.indirizzoNascita;
+    this.data.fornitore.indirizzoResidenza = this.fornitore.indirizzoResidenza;
+    
+
+
+    this.data.fornitore.dataNascita = this.fornitore.dataNascita;
+    this.data.fornitore.telefono = this.fornitore.telefono;
+    this.data.fornitore.comuneNascita = this.fornitore.comuneNascita;
+    this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita;
 
     if (saveAndClose) {
-      this.dialogRef.close(this.data.paziente);
+      this.dialogRef.close(this.data.fornitore);
     } else {
       this.uploading = true;
 
       if (this.newItem) {
-        this.pazienteService
-          .insert(this.data.paziente)
+        this.fornitoreService
+          .insert(this.data.fornitore)
           .then((x) => {
-            console.log("Save paziente: ", x);
-            this.data.paziente = x;
-            this.paziente = x;
+            console.log("Save fornitore: ", x);
+            this.data.fornitore = x;
+            this.fornitore = x;
             this.uploading = false;
             this.newItem = false;
           })
           .catch((err) => {
             this.messageService.showMessageError(
-              "Errore Inserimento Paziente (" + err["status"] + ")"
+              "Errore Inserimento Fornitore (" + err["status"] + ")"
             );
             this.uploading = false;
           });
       } else {
-        this.pazienteService
-          .save(this.data.paziente)
+        this.fornitoreService
+          .save(this.data.fornitore)
           .then((x) => {
-            console.log("Save paziente: ", x);
+            console.log("Save fornitore: ", x);
             this.uploading = false;
             this.newItem = false;
           })
           .catch((err) => {
             this.messageService.showMessageError(
-              "Errore salvataggio Paziente (" + err["status"] + ")"
+              "Errore salvataggio Fornitore (" + err["status"] + ")"
             );
             this.uploading = false;
           });
@@ -146,15 +128,15 @@ export class DialogPazienteComponent implements OnInit {
     }
   }
 
-  async changeData($event: Paziente) {
-    console.log("Change paziente info", $event);
-    this.paziente = $event;
+  async changeData($event: Fornitore) {
+    console.log("Change fornitore info", $event);
+    this.fornitore = $event;
   }
 
   async getFatture() {
-    console.log(`Get Fatture paziente: ${this.paziente._id}`);
+    console.log(`Get Fatture fornitore: ${this.fornitore._id}`);
     this.fattureService
-      .getFatture(this.paziente._id)
+      .getFatture(this.fornitore._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 
@@ -191,7 +173,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.paziente._id, 'fatture')
+      .download(fattura.filename, this.fornitore._id, 'fatture')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -222,7 +204,7 @@ export class DialogPazienteComponent implements OnInit {
   async addFattura() {
     this.addingFattura = true;
     this.nuovaFattura = {
-      identifyUser: this.paziente._id,
+      identifyUser: this.fornitore._id,
       filename: undefined,
       note: ""
     };
@@ -251,7 +233,7 @@ export class DialogPazienteComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insertFattura(fattura, this.paziente._id)
+    .insertFattura(fattura, this.fornitore._id)
     .then((result: Fatture) => {
       console.log("Insert fattura: ", result);
       this.fatture.push(result);
@@ -265,7 +247,7 @@ export class DialogPazienteComponent implements OnInit {
 
       formData.append("file", file);
       formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.paziente._id}/${path}`);
+      formData.append("path", `${this.fornitore._id}/${path}`);
       formData.append("name", nameDocument);
       this.uploadService
         .uploadDocument(formData)
@@ -284,142 +266,6 @@ export class DialogPazienteComponent implements OnInit {
       this.messageService.showMessageError("Errore Inserimento fattura");
       console.error(err);
     });
-  }
-
-  async showNoteCreditoDocument(notacredito: NotaCredito) {
-    this.uploadService
-      .download(notacredito.filename, this.paziente._id, 'notacredito')
-      .then((x) => {
-        console.log("download: ", x);
-        x.subscribe((data) => {
-          console.log("download: ", data);
-          const newBlob = new Blob([data as BlobPart], {
-            type: "application/pdf",
-          });
-
-          // IE doesn't allow using a blob object directly as link href
-          // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
-            return;
-          }
-
-          // For other browsers:
-          // Create a link pointing to the ObjectURL containing the blob.
-          const downloadURL = URL.createObjectURL(newBlob);
-          window.open(downloadURL);
-        });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore caricamento file");
-        console.error(err);
-      });
-  }
-
-  async deleteNotaCredito(notacredito: NotaCredito) {
-    console.log("Cancella NotaCredito: ", notacredito);
-
-    this.notacreditoService
-      .remove(notacredito)
-      .then((x) => {
-        console.log("NotaCredito cancellata");
-        const index = this.noteCredito.indexOf(notacredito);
-        console.log("NotaCredito cancellata index: ", index);
-        if (index > -1) {
-          this.noteCredito.splice(index, 1);
-        }
-
-        console.log("NotaCredito cancellata this.fatture: ", this.noteCredito);
-        this.noteCreditoDataSource.data = this.noteCredito;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore nella cancellazione NotaCredito");
-        console.error(err);
-      });
-  }
-
-  async addNotaCredito() {
-    this.addingNotaCredito = true;
-    this.nuovaNotacredito = {
-      filename: undefined,
-      note: ""
-    };
-  }
-
-  async uploadNotaCredito($event) {
-
-    let fileList: FileList = $event.target.files;
-    if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      console.log("upload notacredito: ", $event);
-      this.nuovaNotacredito.filename= file.name;
-      this.nuovaNotacredito.file = file;
-
-    } else {
-      this.messageService.showMessageError("File non valido");
-      console.error("File non valido o non presente");
-    }
-  }
-
-  async saveNotaCredito(notacredito: NotaCredito) {
-    const typeDocument = "NOTACREDITO";
-    const path = "notacredito";
-    const file: File = notacredito.file;
-    this.uploadingNotaCredito = true;
-
-    this.notacreditoService
-        .insertNotaCredito(notacredito, this.paziente)
-        .then((result: NotaCredito) => {
-          console.log("Insert notacredito: ", result);
-          this.noteCredito.push(result);
-          this.noteCreditoDataSource.data = this.noteCredito;
-          this.addingNotaCredito = false;
-          this.uploadingNotaCredito = false;
-
-          let formData: FormData = new FormData();
-
-          const nameDocument: string = notacredito.filename;
-
-          formData.append("file", file);
-          formData.append("typeDocument", typeDocument);
-          formData.append("path", `${this.paziente._id}/${path}`);
-          formData.append("name", nameDocument);
-          this.uploadService
-            .uploadDocument(formData)
-            .then((x) => {
-              this.uploading = false;
-
-              console.log("Uploading completed: ", x);
-            })
-            .catch((err) => {
-              this.messageService.showMessageError("Errore nel caricamento file");
-              console.error(err);
-              this.uploading = false;
-            });
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore Inserimento Nota Credito");
-          console.error(err);
-        });
-  }
-
-  async getNoteCredito() {
-    console.log(`Get NotaCredito paziente: ${this.paziente._id}`);
-    this.notacreditoService
-      .getNotaCredito(this.paziente)
-      .then((f: NotaCredito[]) => {
-        this.noteCredito = f;
-
-        this.noteCreditoDataSource = new MatTableDataSource<NotaCredito>(
-          this.noteCredito
-        );
-        this.noteCreditoDataSource.paginator = this.notacreditoPaginator;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore caricamento lista fatture");
-        console.error(err);
-      });
   }
 
   async addBonifico() {
@@ -454,7 +300,7 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insertBonifico(bonifico, this.paziente._id)
+        .insertBonifico(bonifico, this.fornitore._id)
         .then((result: Bonifico) => {
           console.log("Insert bonifico: ", result);
           this.bonifici.push(result);
@@ -468,7 +314,7 @@ export class DialogPazienteComponent implements OnInit {
 
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
-          formData.append("path", `${this.paziente._id}/${path}`);
+          formData.append("path", `${this.fornitore._id}/${path}`);
           formData.append("name", nameDocument);
           this.uploadService
             .uploadDocument(formData)
@@ -484,15 +330,15 @@ export class DialogPazienteComponent implements OnInit {
             });
         })
         .catch((err) => {
-          this.messageService.showMessageError("Errore Inserimento Nota Credito");
+          this.messageService.showMessageError("Errore Inserimento Bonifico");
           console.error(err);
         });
   }
 
   async getBonificiAssegniContanti() {
-    console.log(`Get Bonifici e altro paziente: ${this.paziente._id}`);
+    console.log(`Get Bonifici e altro fornitore: ${this.fornitore._id}`);
     this.bonficoService
-      .getBonifico(this.paziente._id)
+      .getBonifico(this.fornitore._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 
@@ -507,7 +353,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.paziente._id, 'bonifico')
+      .download(bonifico.filename, this.fornitore._id, 'bonifico')
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -557,12 +403,12 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async getListFile() {
-    console.log(`Get list files paziente: ${this.paziente._id}`);
+    console.log(`Get list files fornitore: ${this.fornitore._id}`);
     this.uploadService
-      .getFiles(this.paziente._id)
+      .getFiles(this.fornitore._id)
       .then((documents: Documento[]) => {
         documents.forEach((doc: Documento) => {
-          // console.log("document:", doc);
+          console.log("document:", doc);
           this.document[doc.typeDocument] = {
             status: true,
             name: doc.name,
@@ -577,10 +423,9 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   ngOnInit() {
-    if (this.paziente._id != undefined) {
+    if (this.fornitore._id != undefined) {
       this.getListFile();
       this.getFatture();
-      this.getNoteCredito();
       this.getBonificiAssegniContanti();
     }
   }
@@ -595,7 +440,7 @@ export class DialogPazienteComponent implements OnInit {
 
       formData.append("file", file);
       formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.paziente._id}`);
+      formData.append("path", `${this.fornitore._id}`);
       formData.append("name", nameDocument);
 
       this.uploading = true;
@@ -629,4 +474,18 @@ export class DialogPazienteComponent implements OnInit {
         });
     }
   }
+
+/*   async showMessageError(messageError: string) {
+    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
+      panelClass: "custom-modalbox",
+      data: messageError,
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed", result);
+      });
+  } */
+
+
 }
