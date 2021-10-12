@@ -222,6 +222,7 @@ export class DialogPazienteComponent implements OnInit {
   async addFattura() {
     this.addingFattura = true;
     this.nuovaFattura = {
+      identifyUser: this.paziente._id,
       filename: undefined,
       note: ""
     };
@@ -546,7 +547,7 @@ export class DialogPazienteComponent implements OnInit {
           this.bonifici.splice(index, 1);
         }
 
-        console.log("Bonifici cancellata this.fatture: ", this.bonifici);
+        console.log("Bonifici cancellata this.bonifici: ", this.bonifici);
         this.bonificiDataSource.data = this.bonifici;
       })
       .catch((err) => {
