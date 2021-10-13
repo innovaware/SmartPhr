@@ -56,22 +56,7 @@ export class AdminFornitoriComponent implements OnInit {
 
   insert() {
     console.log("Inserimento Fornitore");
-    let fornitore: Fornitore = {
-      cognome: "",
-      nome: "",
-      codiceFiscale: "",
-      indirizzoNascita: "",
-      dataNascita: undefined,
-      indirizzoResidenza: "",
-      mansione: "",
-      telefono: "",
-      email: "",
-      tipoContratto: "",
-      provinciaResidenza: "",
-      comuneResidenza: "",
-      comuneNascita: "",
-      provinciaNascita: "",
-    };
+    const fornitore: Fornitore = Fornitore.empty();
 
     const dialogRef = this.dialog.open(DialogFornitoreComponent, {
       data: { fornitore: fornitore, readonly: true, newItem: true },
@@ -136,35 +121,9 @@ export class AdminFornitoriComponent implements OnInit {
   }
 
 
-  show(event: { fornitore: Fornitore; button: string }) {
-    var dialogRef = undefined;
-    console.log("show: ", event);
-
-    this.fornitoreService.getFornitore(event.fornitore._id).then((fornitore) => {
-      switch (event.button) {
-        case "Mostra":
-          console.log("Area amministrativa fornitore");
-          dialogRef = this.dialog.open(DialogFornitoreComponent, {
-            data: { fornitore: event.fornitore, readonly: true },
-          });
-          break;
-
-        default:
-          break;
-      }
-    }).catch(err=>{
-      console.error(err);
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("resutl", result);
-        if (result != undefined) {
-          this.fornitoreService
-            .save(result)
-            .then((x) => {})
-            .catch((err) => {});
-        }
-      });
+  show(event: { fornitore: Fornitore; button: DinamicButton }) {
+    console.log("Show Event");
+    event.button.cmd(event.fornitore);
   }
+
 }

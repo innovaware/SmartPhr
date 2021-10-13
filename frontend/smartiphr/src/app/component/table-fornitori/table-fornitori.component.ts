@@ -23,7 +23,7 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   @Input() buttons: DinamicButton[];
   @Input() insertFunction: any;
   @Input() showInsert: boolean;
-  @Input() eventPazienti: Observable<Fornitore[]>;
+  @Input() eventFornitori: Observable<Fornitore[]>;
 
   private eventsSubscription: Subscription;
 
@@ -44,7 +44,7 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit() {
-    this.eventsSubscription = this.eventPazienti.subscribe((p: Fornitore[]) => {
+    this.eventsSubscription = this.eventFornitori.subscribe((p: Fornitore[]) => {
       this.dataSource = new MatTableDataSource<Fornitore>(p);
       this.dataSource.paginator = this.paginator;
     });
