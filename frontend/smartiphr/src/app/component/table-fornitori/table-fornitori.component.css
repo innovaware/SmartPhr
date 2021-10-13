@@ -1,0 +1,45 @@
+
+
+.title {
+    font-size: 30px;
+    line-height: 1.2;
+    color: #676a6c;
+  }
+  
+  
+  table {
+    width: 100%;
+  }
+  
+  .mat-form-field {
+    font-size: 14px;
+    width: 100%;
+  }
+  
+  .mat-column-action {
+    word-wrap: break-word !important;
+    white-space: unset !important;
+    flex: 0 0 10% !important;
+    width: 20% !important;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+  
+    word-break: break-word;
+  
+    -ms-hyphens: auto;
+    -moz-hyphens: auto;
+    -webkit-hyphens: auto;
+    hyphens: auto;
+  }
+  
+  
+  .action-button {
+    margin-right: 10px
+  }
+  
+  .raised-button {
+    color: #ffffff;
+    background-color: #f8ac59;
+    border-color: #f8ac59;
+  }
+  

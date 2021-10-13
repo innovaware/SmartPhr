@@ -44,6 +44,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
 import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { TableOspitiComponent } from "./component/table-ospiti/table-ospiti.component";
+import { TableFornitoriComponent } from "./component/table-fornitori/table-fornitori.component";
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
 import { AreaFisioterapiaComponent } from "./pages/area-fisioterapia/area-fisioterapia.component";
 import { AreaMedicaComponent } from "./pages/area-medica/area-medica.component";
@@ -120,6 +121,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DialogDiarioComponent,
     OspitiComponent,
     TableOspitiComponent,
+    TableFornitoriComponent,
     AreaEducativaComponent,
     AreaFisioterapiaComponent,
     AreaMedicaComponent,
