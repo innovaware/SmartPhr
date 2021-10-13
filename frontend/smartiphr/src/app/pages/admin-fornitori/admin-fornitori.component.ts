@@ -74,11 +74,11 @@ export class AdminFornitoriComponent implements OnInit {
     };
 
     const dialogRef = this.dialog.open(DialogFornitoreComponent, {
-      data: { paziente: fornitore, readonly: true, newItem: true },
+      data: { fornitore: fornitore, readonly: true, newItem: true },
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("result insert paziente", result);
+      console.log("result insert fornitore", result);
       if (result !== false && result != undefined) {
 
         this.fornitoreService
@@ -97,7 +97,7 @@ export class AdminFornitoriComponent implements OnInit {
   }
 
   deleteAdmin(fornitore: Fornitore) {
-    console.log("Cancella Paziente");
+    console.log("Cancella fornitore");
     this.fornitoreService.delete(fornitore).subscribe(
       (x) => {
         const index = this.fornitori.indexOf(fornitore, 0);
@@ -115,7 +115,7 @@ export class AdminFornitoriComponent implements OnInit {
     this.fornitoreService
       .getFornitore(fornitore._id)
       .then((fornitore) => {
-        console.log("Area amministrativa pazienti");
+        console.log("Area amministrativa fornitori");
         const dialogRef = this.dialog.open(DialogFornitoreComponent, {
           data: { fornitore: fornitore, readonly: true },
         });
