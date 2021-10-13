@@ -90,11 +90,16 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const cambiturno = new CambiTurno({
-        dataInizio: req.body.dataInizio,
-        dataFine: req.body.dataFine,
-        dataRichiesta: req.body.dataRichiesta,
-        accettata: false,
-        userId: req.body.idUser
+      user: req.body.user,
+      cognome: req.body.cognome,
+      nome: req.body.nome,
+      cf: req.body.cf,
+      dataInizioVT: req.body.dataInizioVT,
+      dataFineVT: req.body.dataFineVT,
+      dataInizioNT: req.body.dataInizioNT,
+      dataFineNT: req.body.dataFineNT,
+      motivazione: req.body.motivazione,
+      dataRichiesta: req.body.dataRichiesta
     });
 
     // Salva i dati sul mongodb
@@ -121,9 +126,12 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-            dataInizio: req.body.dataInizio,
-            dataFine: req.body.dataFine,
-            dataRichiesta: req.body.dataRichiesta,
+          dataInizioVT: req.body.dataInizioVT,
+          dataFineVT: req.body.dataFineVT,
+          dataInizioNT: req.body.dataInizioNT,
+          dataFineNT: req.body.dataFineNT,
+          motivazione: req.body.motivazione,
+          dataRichiesta: req.body.dataRichiesta,
             accettata: req.body.accettata
         },
       }

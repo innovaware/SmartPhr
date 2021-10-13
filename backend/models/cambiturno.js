@@ -4,6 +4,7 @@ const CambiTurnoSchema = mongoose.Schema({
   cognome: String,
   nome: String,
   cf: String,
+  user:String,
   dataInizioVT: Date,
   dataFineVT: Date,
   dataInizioNT: Date,
