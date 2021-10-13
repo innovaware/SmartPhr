@@ -414,3 +414,10 @@ app.use("/api/documentidipendenti", logHandler, authorizationHandler, documentiD
 app.listen(PORT, function () {
   return console.log("Innova Backend App listening on port " + PORT + "!");
 });
+
+
+/** GESTIONE FORNITORE */
+
+// Bonifici API
+var documentiFornitoreRouter = require("./routes/documentifornitore");
+app.use("/api/documentifornitore", logHandler, authorizationHandler, documentiFornitoreRouter);
