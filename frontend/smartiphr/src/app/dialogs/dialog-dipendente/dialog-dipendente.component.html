@@ -559,8 +559,8 @@
   <!-- REGOLAMENTO -->
   <mat-tab label="Regolamento interno" [disabled]="dipendente?._id === undefined">
 
-    <ion-label>Presa visione Regolamento interno.</ion-label>
-    <ion-checkbox slot="end" [(ngModel)]="dipendente.presaVisRegolamento"></ion-checkbox>
+    <label>Presa visione Regolamento interno.</label>
+    <input checkbox slot="end" [(ngModel)]="dipendente.presaVisRegolamento"/>
 
   </mat-tab>
 
@@ -611,7 +611,7 @@
     </div>
 
   </mat-tab>
- 
+
 
 
 </mat-tab-group>

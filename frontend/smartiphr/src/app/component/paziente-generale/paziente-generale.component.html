@@ -61,18 +61,38 @@
       </td>
       </tr>
 
+      <br>
+
       <tr>
         <td>
           <label>
-            <h5>Residenza: </h5>
+            <h5>Indirizzo Residenza: </h5>
           </label>
         </td>
         <td>
-          <input class="input-cartelle" type="text" [(ngModel)]="data.residenza" [disabled]=disable (change)="change()">
+          <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoResidenza" [disabled]=disable (change)="change()">
         </td>
 
         <td>
-          <h5 class="lblrdb">SESSO</h5>
+          <h5>Comune di Residenza</h5>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" [disabled]=disable (change)="change()">
+        </td>
+      </tr>
+
+      <tr>
+        <td>
+          <label>
+            <h5>Provincia di Residenza: </h5>
+          </label>
+        </td>
+        <td>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaResidenza" [disabled]=disable (change)="change()">
+        </td>
+
+        <td>
+          <h5 >SESSO</h5>
         </td>
         <td>
           <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
