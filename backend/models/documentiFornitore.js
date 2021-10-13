@@ -9,6 +9,6 @@ const DocumentiFornitoreSchema = mongoose.Schema({
 
 module.exports = mongoose.model(
   "DocumentiFornitore",
-  BonificiSchema,
+  DocumentiFornitoreSchema,
   "DocumentiFornitore"
 );
