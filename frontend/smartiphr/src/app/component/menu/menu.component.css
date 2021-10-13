@@ -81,11 +81,15 @@ fa-icon {
   color: #a7b1c2;
 }
 
-::ng-deep .mat-expanded {
+.menuExpander {
   border-left: 4px solid #19aa8d;
   border-radius: 0px !important;
 }
 
-::ng-deep .mat-expansion-panel-content {
-  border-left: 4px solid #19aa8d;
+.subMenuExpander {
+  border-left: 4px solid transparent !important;
 }
+
+/* ::ng-deep .mat-expansion-panel-content {
+  border-left: 4px solid #19aa8d;
+} */

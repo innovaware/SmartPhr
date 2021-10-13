@@ -14,10 +14,31 @@ import { DipendentiService } from "src/app/service/dipendenti.service";
   styleUrls: ['./table-document.component.css']
 })
 export class TableDocumentComponent implements OnInit {
+  showInsert: boolean;    //TODO
+  dataSource: any;        //TODO
+  buttons: any;           //TODO
+
+  displayedColumns: string[] = [
+    "action",
+    "cognome",
+    "nome",
+    "dataNascita"
+  ];
 
   constructor() { }
 
   ngOnInit() {
   }
 
+  insert() {
+    //TODO
+  }
+
+  applyFilter(param) {
+    //TODO
+  }
+
+  call(row, item) {
+    //TODO
+  }
 }

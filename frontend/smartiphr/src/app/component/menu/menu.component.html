@@ -1,13 +1,11 @@
 <div class="body">
-
   <div class="container-flex header_menu header-pad">
     <div class="row">
       <div class="col">
-
         <div class="container">
           <div class="row">
             <div class="col">
-              <img src="../../../assets/logo.png">
+              <img src="../../../assets/logo.png" />
             </div>
           </div>
 
@@ -19,39 +17,83 @@
 
           <div class="row">
             <div class="col">
-              <span class="text-muted block">SuperUser<b class="caret"></b></span>
+              <span class="text-muted block"
+                >SuperUser<b class="caret"></b
+              ></span>
             </div>
           </div>
-
-
         </div>
       </div>
     </div>
-
-
   </div>
-
 
   <div class="container-flex">
     <div class="row">
       <div class="col">
         <ul>
-          <app-menu-item link="/" icon="gem" content-title="Home"></app-menu-item>
+          <app-menu-item
+            link="/"
+            icon="gem"
+            content-title="Home"
+          ></app-menu-item>
 
-
-          <mat-expansion-panel hideToggle *ngFor="let item of menu">
-              <mat-expansion-panel-header *ngIf="item.active">
-                <mat-panel-title>
-                  <app-menu-item link="{{item.link}}" icon="{{item.icon}}" content-title="{{item.title}}">
-                  </app-menu-item>
-                </mat-panel-title>
-                <mat-panel-description>
-                </mat-panel-description>
-              </mat-expansion-panel-header>
-              <ul *ngFor="let subItem of item.subMenu">
-                <app-menu-item link="{{subItem.link}}" icon="{{subItem.icon}}" content-title="{{subItem.title}}" *ngIf="subItem.active">
+          <mat-expansion-panel
+            hideToggle
+            *ngFor="let item of menu"
+            (closed)="closeAllSubItem(item.subMenu)"
+          >
+            <mat-expansion-panel-header *ngIf="item.active">
+              <mat-panel-title>
+                <app-menu-item
+                  link="{{ item.link }}"
+                  icon="{{ item.icon }}"
+                  content-title="{{ item.title }}"
+                >
                 </app-menu-item>
+              </mat-panel-title>
+              <mat-panel-description> </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent class="menuExpander">
+              <ul *ngFor="let subItem of item.subMenu">
+                <!-- {{subItem.status? '1' : '0'}} -->
+                <app-menu-item
+                  link="{{ subItem.link }}"
+                  icon="{{ subItem.icon }}"
+                  content-title="{{ subItem.title }}"
+                  *ngIf="subItem.active && subItem.subMenu === undefined"
+                >
+                </app-menu-item>
+
+                <mat-expansion-panel
+                  hideToggle
+                  *ngIf="subItem.subMenu != undefined"
+                  [expanded]="subItem.status"
+                  (opened)="subItem.status = true"
+                >
+                  <mat-expansion-panel-header class="subMenuExpander">
+                    <mat-panel-title>
+                      <app-menu-item
+                        link="{{ subItem.link }}"
+                        icon="{{ subItem.icon }}"
+                        content-title="{{ subItem.title }}"
+                      >
+                      </app-menu-item>
+                    </mat-panel-title>
+                    <mat-panel-description> </mat-panel-description>
+                  </mat-expansion-panel-header>
+                  <ng-template matExpansionPanelContent class="subMenuExpander">
+                    <ul *ngFor="let item1 of subItem.subMenu">
+                      <app-menu-item
+                        link="{{ item1.link }}"
+                        icon="{{ item1.icon }}"
+                        content-title="{{ item1.title }}"
+                      >
+                      </app-menu-item>
+                    </ul>
+                  </ng-template>
+                </mat-expansion-panel>
               </ul>
+            </ng-template>
           </mat-expansion-panel>
         </ul>
       </div>

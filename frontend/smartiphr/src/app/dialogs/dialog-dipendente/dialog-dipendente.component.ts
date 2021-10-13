@@ -63,8 +63,7 @@ export class DialogDipendenteComponent implements OnInit {
   public bonifici: Bonifico[];
 
 
-  @ViewChild("paginatorDocIdent", { static: false })
-  docIdentitaPaginator: MatPaginator;
+  @ViewChild("paginatorDocIdent", { static: false }) docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
   public docsIdentita : DocumentoDipendente[];
@@ -73,8 +72,7 @@ export class DialogDipendenteComponent implements OnInit {
 
 
 
-  @ViewChild("paginatorContratto", { static: false })
-  contrattoPaginator: MatPaginator;
+  @ViewChild("paginatorContratto", { static: false }) contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
   public contratti : DocumentoDipendente[];
@@ -83,8 +81,7 @@ export class DialogDipendenteComponent implements OnInit {
 
 
 
-  @ViewChild("paginatorPrivacy", { static: false })
-  privacyPaginator: MatPaginator;
+  @ViewChild("paginatorPrivacy", { static: false }) privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;
   public docsprivacy : DocumentoDipendente[];
@@ -92,8 +89,7 @@ export class DialogDipendenteComponent implements OnInit {
   public addingPrivacy: boolean;
 
 
-  @ViewChild("paginatorDiploma", { static: false })
-  diplomaPaginator: MatPaginator;
+  @ViewChild("paginatorDiploma", { static: false }) diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
   public diplomi : DocumentoDipendente[];
@@ -101,8 +97,7 @@ export class DialogDipendenteComponent implements OnInit {
   public addingDiploma: boolean;
 
 
-  @ViewChild("paginatorAttestatiECM", { static: false })
-  attestatiPaginator: MatPaginator;
+  @ViewChild("paginatorAttestatiECM", { static: false }) attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
   public attestati : DocumentoDipendente[];
