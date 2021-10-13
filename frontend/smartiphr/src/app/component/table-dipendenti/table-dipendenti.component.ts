@@ -92,7 +92,8 @@ ngOnInit() {}
       telefono: "",
 
       user: "",
-      group: ""
+      group: "",
+      presaVisRegolamento: false
     };
 
     const dialogRef = this.dialog.open(DialogDipendenteComponent, {

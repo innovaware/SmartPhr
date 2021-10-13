@@ -4,9 +4,9 @@ import { Output, EventEmitter } from '@angular/core';
 import { FornitoreService } from 'src/app/service/fornitore.service';
 
 @Component({
-  selector: 'app-fornitore',
-  templateUrl: './fornitore.component.html',
-  styleUrls: ['./fornitore.component.css']
+  selector: 'app-fornitore-generale',
+  templateUrl: './fornitore-generale.component.html',
+  styleUrls: ['./fornitore-generale.component.css']
 })
 export class FornitoreGeneraleComponent implements OnInit {
   @Input() data: Fornitore;

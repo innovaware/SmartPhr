@@ -10,6 +10,7 @@ import {
   FontAwesomeModule,
   FaIconLibrary,
 } from "@fortawesome/angular-fontawesome";
+
 import { MenuItemComponent } from "./component/menu-item/menu-item.component";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
@@ -43,6 +44,7 @@ import { MatButtonToggleModule } from "@angular/material/button-toggle";
 
 import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { TableOspitiComponent } from "./component/table-ospiti/table-ospiti.component";
+import { TableFornitoriComponent } from "./component/table-fornitori/table-fornitori.component";
 import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.component";
 import { AreaFisioterapiaComponent } from "./pages/area-fisioterapia/area-fisioterapia.component";
 import { AreaMedicaComponent } from "./pages/area-medica/area-medica.component";
@@ -75,15 +77,16 @@ import {
   NgxMatTimepickerModule,
   NgxMatNativeDateModule,
 } from "@angular-material-components/datetime-picker";
+
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
-import { FornitoriComponent } from "./pages/fornitori/fornitori.component";
+import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
 import { DialogFarmacoComponent } from "./dialogs/dialog-farmaco/dialog-farmaco.component";
 import { DialogDipendenteComponent } from "./dialogs/dialog-dipendente/dialog-dipendente.component";
 import { DialogConsulenteComponent } from "./dialogs/dialog-consulente/dialog-consulente.component";
-import { DialogFornitoriComponent } from "./dialogs/dialog-fornitori/dialog-fornitori.component";
+import { DialogFornitoreComponent } from "./dialogs/dialog-fornitore/dialog-fornitore.component";
 import { DialogAspComponent } from "./dialogs/dialog-asp/dialog-asp.component";
 import { DialogMessageErrorComponent } from "./dialogs/dialog-message-error/dialog-message-error.component";
 import { AdminPazientiComponent } from "./pages/admin-pazienti/admin-pazienti.component";
@@ -99,7 +102,7 @@ import { PermessiComponent } from './component/permessi/permessi.component';
 import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
 import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
 import { PresenzeComponent } from './component/presenze/presenze.component';
-import { FornitoreGeneraleComponent } from './component/fornitore/fornitore.component';
+import { FornitoreGeneraleComponent } from './component/fornitore-generale/fornitore-generale.component';
 import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
 import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
 import { TableDocumentComponent } from './component/table-document/table-document.component';
@@ -118,6 +121,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DialogDiarioComponent,
     OspitiComponent,
     TableOspitiComponent,
+    TableFornitoriComponent,
     AreaEducativaComponent,
     AreaFisioterapiaComponent,
     AreaMedicaComponent,
@@ -146,14 +150,14 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     SchedaInterventiComponent,
     DialogEventComponent,
     ConsulentiComponent,
-    FornitoriComponent,
+    AdminFornitoriComponent,
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,
     DialogFarmacoComponent,
     DialogDipendenteComponent,
     DialogConsulenteComponent,
-    DialogFornitoriComponent,
+    DialogFornitoreComponent,
     DialogAspComponent,
     DialogMessageErrorComponent,
     AdminPazientiComponent,
@@ -214,7 +218,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DialogFarmacoComponent,
     DialogDipendenteComponent,
     DialogConsulenteComponent,
-    DialogFornitoriComponent,
+    DialogFornitoreComponent,
     DialogAspComponent,
     DialogMessageErrorComponent,
     DialogPazienteComponent,
