@@ -1,6 +1,7 @@
 name: Frontend
 
-on: workflow_dispatch
+# on: workflow_dispatch
+
 #  release:
 #    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
 #    types: [published, created, edited]
@@ -10,6 +11,14 @@ on: workflow_dispatch
 #      - 'certificate/**'
 #    paths:
 #      - '!README.md'
+on:
+  push:
+    branches:
+      - test
+  pull_request:
+    branches:
+      - test
+      
 jobs:
 
   build:
