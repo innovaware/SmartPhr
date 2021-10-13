@@ -1,5 +1,5 @@
-import { CartellaClinica } from './cartellaClinica';
-import { Diario } from './diario';
+import { CartellaClinica } from "./cartellaClinica";
+import { Diario } from "./diario";
 
 export class Paziente {
   _id?: string;
@@ -8,7 +8,9 @@ export class Paziente {
   sesso: string;
   luogoNascita: string;
   dataNascita: Date;
-  residenza: string;
+  indirizzoResidenza: string;
+  comuneResidenza: string;
+  provinciaResidenza: string;
   statoCivile: string;
   figli: number;
   scolarita: string;
@@ -23,4 +25,55 @@ export class Paziente {
   provenienza?: string;
 
   cartellaClinica: CartellaClinica[];
+
+
+
+
+  public update(paziente: Paziente): void {
+    this.cognome = paziente.cognome;
+    this.nome = paziente.nome;
+    this.sesso = paziente.sesso;
+    this.luogoNascita = paziente.luogoNascita;
+    this.dataNascita = paziente.dataNascita;
+    this.indirizzoResidenza = paziente.indirizzoResidenza;
+    this.comuneResidenza = paziente.comuneResidenza;
+    this.provinciaResidenza = paziente.provinciaResidenza;
+    this.statoCivile = paziente.statoCivile;
+    this.figli = paziente.figli;
+    this.scolarita = paziente.scolarita;
+    this.situazioneLavorativa = paziente.situazioneLavorativa;
+    this.personeRiferimento = paziente.personeRiferimento;
+    this.telefono = paziente.telefono;
+    this.dataIngresso = paziente.dataIngresso;
+    this.provincia = paziente.provincia;
+    this.localita = paziente.localita;
+    this.provenienza = paziente.provenienza;
+    this.comuneNascita = paziente.comuneNascita;
+    this.provinciaNascita = paziente.provinciaNascita;
+  }
+
+  public static empty(): any {
+    return {
+      cognome: "",
+      nome: "",
+      sesso: "",
+      luogoNascita: "",
+      dataNascita: undefined,
+      indirizzoResidenza: "",
+      comuneResidenza: "",
+      provinciaResidenza: "",
+      statoCivile: "",
+      figli: 0,
+      scolarita: "",
+      situazioneLavorativa: "",
+      personeRiferimento: "",
+      telefono: "",
+      dataIngresso: new Date(),
+      provincia: "",
+      localita: "",
+      comuneNascita: "",
+      provinciaNascita: "",
+      cartellaClinica: [],
+    };
+  }
 }

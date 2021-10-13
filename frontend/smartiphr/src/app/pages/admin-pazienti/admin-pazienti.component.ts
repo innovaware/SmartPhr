@@ -55,26 +55,7 @@ export class AdminPazientiComponent implements OnInit {
 
   insert() {
     console.log("Inserimento Paziente");
-    let paziente: Paziente = {
-      cognome: "",
-      nome: "",
-      sesso: "",
-      luogoNascita: "",
-      dataNascita: undefined,
-      residenza: "",
-      statoCivile: "",
-      figli: 0,
-      scolarita: "",
-      situazioneLavorativa: "",
-      personeRiferimento: "",
-      telefono: "",
-      dataIngresso: new Date(),
-      provincia: "",
-      localita: "",
-      comuneNascita: "",
-      provinciaNascita: "",
-      cartellaClinica: [],
-    };
+    const paziente: Paziente = Paziente.empty();
 
     const dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: true, newItem: true },
