@@ -12,7 +12,7 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-async function getDocumentoFornitoreByIdFornitore(req, res) {
+async function getDocumentiFornitoreByIdFornitore(req, res) {
   try {
     const { id } = req.params;
 
@@ -65,6 +65,7 @@ async function getDocumentoFornitoreById(req, res) {
 }
 
 async function insertDocumentoFornitoreByFornitoreId(req, res) {
+    console.log("Insert documento 2 ");
   try {
     const { id } = req.params;
     const documentiFornitore = new DocumentiFornitore({
@@ -139,7 +140,7 @@ async function deleteDocumentoFornitore(req, res) {
   }
 }
 
-router.get("/fornitore/:id", getDocumentoFornitoreByIdFornitore);
+router.get("/fornitore/:id", getDocumentiFornitoreByIdFornitore);
 router.get("/:id", getDocumentoFornitoreById);
 router.post("/fornitore/:id", insertDocumentoFornitoreByFornitoreId);
 router.put("/:id", modifyDocumentoFornitoreByFornitoreId);

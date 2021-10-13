@@ -24,6 +24,7 @@ export class BonificoService {
   }
 
   async insertBonifico(bonifico: Bonifico, id: string) {
+    console.log("Insert bonifico 0: ", bonifico);
     var body = bonifico;
     return this.http.post(`${this.api}/api/bonifici/paziente/${id}`, body).toPromise();
   }

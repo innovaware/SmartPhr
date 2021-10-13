@@ -315,7 +315,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.bonficoService
         .insertBonifico(bonifico, this.fornitore._id)
         .then((result: Bonifico) => {
-          console.log("Insert bonifico: ", result);
+          console.log("Insert bonifico 1: ", result);
           this.bonifici.push(result);
           this.bonificiDataSource.data = this.bonifici;
           this.addingBonifici = false;
@@ -440,6 +440,7 @@ export class DialogFornitoreComponent implements OnInit {
       this.getListFile();
       this.getFatture();
       this.getBonificiAssegniContanti();
+      this.getDocumentiFornitore();
     }
   }
 
@@ -603,7 +604,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.documentoFornitoreService
     .insertDocumentoFornitore(documentoFornitore, this.fornitore._id)
     .then((result: DocumentoFornitore) => {
-      console.log("Insert documento: ", result);
+      console.log("Insert documento 2: ", result);
       this.documentiFornitore.push(result);
       this.documentiFornitoreDataSource.data = this.documentiFornitore;
       this.addingDocumentoFornitore = false;

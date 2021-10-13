@@ -19,13 +19,14 @@ export class DocumentoFornitoreService {
     }
 
     return this.http
-      .get<DocumentoFornitore[]>(`${this.api}/api/documentifornitore/${id}`, { headers })
+      .get<DocumentoFornitore[]>(`${this.api}/api/documentifornitore/fornitore/${id}`, { headers })
       .toPromise();
   }
 
   async insertDocumentoFornitore(documentoFornitore: DocumentoFornitore, id: string) {
+    console.log("Insert documento 1: ", documentoFornitore);
     var body = documentoFornitore;
-    return this.http.post(`${this.api}/api/documentifornitore/${id}`, body).toPromise();
+    return this.http.post(`${this.api}/api/documentifornitore/fornitore/${id}`, body).toPromise();
   }
 
   async updateDocumentoFornitore(documentoFornitore: DocumentoFornitore) {
