@@ -86,9 +86,9 @@ fa-icon {
   border-radius: 0px !important;
 }
 
-.subMenuExpander {
+/* .subMenuExpander {
   border-left: 4px solid transparent !important;
-}
+} */
 
 /* ::ng-deep .mat-expansion-panel-content {
   border-left: 4px solid #19aa8d;
