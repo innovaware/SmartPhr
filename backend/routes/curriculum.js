@@ -12,26 +12,38 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-router.get("/dipendente/:id", async (req, res) => {
+router.get("/", async (req, res) => {
   try {
-    const { id } = req.params;
+    const searchTerm = `CURRICULUMALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+    const showAll = req.query.show == "all";
 
-    const searchTerm = `CURRICULUMDIPENDENTE${id}`;
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const curriculum = await Curriculum.find({
-          idDipendente: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(curriculum));
-        res.status(200).json(curriculum);
+    if (showOnlyCancellati || showAll) {
+      console.log("Show all or deleted");
+      let query = {};
+      if (showOnlyCancellati) {
+        query = { cancellato: true };
       }
-    });
+      const curriculum = await Curriculum.find(query);
+      res.status(200).json(curriculum);
+    } else {
+      client.get(searchTerm, async (err, data) => {
+        if (err) throw err;
 
+        if (data && !redisDisabled) {
+          res.status(200).send(JSON.parse(data));
+        } else {
+          const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          };
+          const curriculum = await Curriculum.find(query);
+
+          res.status(200).json(curriculum);
+          client.setex(searchTerm, redisTimeCache, JSON.stringify(curriculum));
+          // res.status(200).json(curriculum);
+        }
+      });
+    }
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
@@ -41,6 +53,12 @@ router.get("/dipendente/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
     const searchTerm = `CURRICULUMBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
@@ -48,9 +66,18 @@ router.get("/:id", async (req, res) => {
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const curriculum = await Curriculum.findById(id);
+        const curriculum = await Curriculum.findById({
+          $and: [
+            {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            },
+            { _id: id },
+          ],
+        });
+
         client.setex(searchTerm, redisTimeCache, JSON.stringify(curriculum));
-        res.status(200).json(curriculum);
+        if (curriculum != null) res.status(200).json(curriculum);
+        else res.status(404).json({ error: "No patient found" });
       }
     });
   } catch (err) {
@@ -58,24 +85,19 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.post("/dipendente/:id", async (req, res) => {
+router.post("/", async (req, res) => {
   try {
-    const { id } = req.params;
     const curriculum = new Curriculum({
-      idDipendente: id,
       filename: req.body.filename,
-      dateupload: Date.now(),
+      dateupload: req.body.dateupload,
       note: req.body.note,
+      mansione: req.body.mansione,
+      nome: req.body.nome,
+      cognome: req.body.cognome,
+      codiceFiscale: req.body.codiceFiscale,
     });
 
-    console.log("Insert curriculum: ", curriculum);
-
     const result = await curriculum.save();
-
-
-    const searchTerm = `CURRICULUMDIPENDENTE${id}`;
-    client.del(searchTerm);
-
     res.status(200);
     res.json(result);
   } catch (err) {
@@ -87,13 +109,23 @@ router.post("/dipendente/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
     const curriculum = await Curriculum.updateOne(
       { _id: id },
       {
         $set: {
-          idDipendente: req.body.pazienteID,
           filename: req.body.filename,
+          dateupload: req.body.dateupload,
           note: req.body.note,
+          mansione: req.body.mansione,
+          nome: req.body.nome,
+          cognome: req.body.cognome,
+          codiceFiscale: req.body.codiceFiscale,
         },
       }
     );
@@ -111,16 +143,22 @@ router.put("/:id", async (req, res) => {
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+  
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (id == null) {
+      res.status(400).json({ error: "id not valid" });
+    }
 
     const item = await Curriculum.findById(id);
-    const idDipendente = item.idDipendente;
     const curriculum = await Curriculum.remove({ _id: id });
 
-    let searchTerm = `CURRICULUMBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `CURRICULUMDIPENDENTE${idConsulente}`;
-    client.del(searchTerm);
-
+    client.del(`CURRICULUMBY${id}`);
+    client.del(`CURRICULUMALL`);
 
     res.status(200).json(curriculum);
   } catch (err) {

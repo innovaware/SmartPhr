@@ -1,50 +1,118 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DialogCvComponent } from 'src/app/dialogs/dialog-cv/dialog-cv.component';
-import { Dipendenti } from 'src/app/models/dipendenti';
-import { DipendentiService } from 'src/app/service/dipendenti.service';
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { DialogCvComponent } from "src/app/dialogs/dialog-cv/dialog-cv.component";
+import { Curriculum } from "src/app/models/curriculum";
+import { Dipendenti } from "src/app/models/dipendenti";
+import { CurriculumService } from "src/app/service/curriculum.service";
+import { DipendentiService } from "src/app/service/dipendenti.service";
+import { MessagesService } from "src/app/service/messages.service";
+import { UploadService } from "src/app/service/upload.service";
 
 @Component({
-  selector: 'app-cv',
-  templateUrl: './cv.component.html',
-  styleUrls: ['./cv.component.css']
+  selector: "app-cv",
+  templateUrl: "./cv.component.html",
+  styleUrls: ["./cv.component.css"],
 })
 export class CvComponent implements OnInit {
   displayedColumns: string[] = [
-    "cognome",
     "nome",
+    "cognome",
     "codiceFiscale",
+    "mansione",
+    "note",
     "action",
   ];
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  dataSource: MatTableDataSource<Dipendenti>;
-  dipendenti: Dipendenti[];
+  dataSource: MatTableDataSource<Curriculum>;
+  curriculum: Curriculum[];
 
   constructor(
+    public messageService: MessagesService,
+    public uploadService: UploadService,
     private dialog: MatDialog,
-    private dipendentiService: DipendentiService
+    private curriculumService: CurriculumService
   ) {
-    this.dipendenti = [];
+    this.curriculum = [];
 
-    this.dipendentiService.get().then(
-      (dips: Dipendenti[]) => {
-        this.dipendenti = dips;
-        this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
-        this.dataSource.paginator = this.paginator;
-      }
-    )
-  }
-
-  ngOnInit() {
-  }
-
-  async show(dipendente: Dipendenti) {
-    console.log("Show scheda dipendente:", dipendente);
-    var dialogRef = this.dialog.open(DialogCvComponent, {
-      data: { dipendente: dipendente, readonly: false },
-      width: "1024px"
+    this.curriculumService.get().subscribe((curs: Curriculum[]) => {
+      this.curriculum = curs;
+      this.dataSource = new MatTableDataSource<Curriculum>(this.curriculum);
+      this.dataSource.paginator = this.paginator;
     });
   }
 
+  ngOnInit() {}
+
+  async insert() {
+    var dialogRef = this.dialog.open(DialogCvComponent, {});
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed");
+        if (result != undefined) {
+          this.curriculum.push(result);
+          this.dataSource.data = this.curriculum;
+          console.log("Inserito curriculum", result);
+        }
+      });
+  }
+
+  async show(curriculum: Curriculum) {
+    this.uploadService
+      .download(curriculum.filename, undefined, "curriculum")
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe(
+          (data) => {
+            console.log("download: ", data);
+            const newBlob = new Blob([data as BlobPart], {
+              type: "application/pdf",
+            });
+
+            // IE doesn't allow using a blob object directly as link href
+            // instead it is necessary to use msSaveOrOpenBlob
+            if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+              window.navigator.msSaveOrOpenBlob(newBlob);
+              return;
+            }
+
+            // For other browsers:
+            // Create a link pointing to the ObjectURL containing the blob.
+            const downloadURL = URL.createObjectURL(newBlob);
+            window.open(downloadURL);
+          },
+          (err) => {
+            this.messageService.showMessageError("Errore caricamento file");
+            console.error(err);
+          }
+        );
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+  deleteCV(curriculum: Curriculum) {
+    console.log("Cancella curriculum:", curriculum);
+    this.curriculumService.delete(curriculum).subscribe((result: any) => {
+      if (result.deletedCount == 0) {
+        this.messageService.showMessageError("Errore nell'eliminazione");
+        console.error("Errore nell'eliminazione");
+      } else {
+        console.log("Eliminazione eseguita con successo", result);
+        const index = this.curriculum.indexOf(curriculum, 0);
+        if (index > -1) {
+          this.curriculum.splice(index, 1);
+        }
+        this.dataSource = new MatTableDataSource<Curriculum>(this.curriculum);
+        this.dataSource.paginator = this.paginator;
+      }
+    }),
+      (err) => {
+        this.messageService.showMessageError("Errore nell'eliminazione");
+        console.error("Errore nell'eliminazione", err);
+      };
+  }
 }
