@@ -34,7 +34,11 @@ export class UploadService {
   async download(filename: string, id: string, subPath: string) {
     console.log("Downloading");
 
-    let path = `${id}/${subPath}/${filename}`;
+    let path = `${subPath}/${filename}`;
+    if (id != undefined) {
+      path = `${id}/${subPath}/${filename}`;
+    }
+
     if (filename[0] != "/") path = `/${path}`;
 
 

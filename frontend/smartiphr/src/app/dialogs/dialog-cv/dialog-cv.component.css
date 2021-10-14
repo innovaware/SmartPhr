@@ -1,16 +1,27 @@
-
 .title {
   font-size: 30px;
   line-height: 1.2;
   color: #676a6c;
 }
 
-
 table {
   width: 100%;
 }
 
+.full {
+  width: 100%;
+}
 
 ::ng-deep .mat-dialog-content {
   min-height: 540px;
+  min-width: 800px;
+}
+
+
+select {
+  border-width: thin;
+  border-style: solid;
+  border-color: lightgrey;
+  margin-top: 10px;
+  padding: 0px 3px;
 }

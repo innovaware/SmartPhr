@@ -1,10 +1,13 @@
 const mongoose = require("mongoose");
 
 const CurriculumSchema = mongoose.Schema({
-  idDipendente: String,
   filename: String,
   dateupload: Date,
   note: String,
+  mansione: String,
+  nome: String,
+  cognome: String,
+  codiceFiscale: String,
 });
 
-module.exports = mongoose.model('Curriculum', CurriculumSchema, 'curriculum');
+module.exports = mongoose.model("Curriculum", CurriculumSchema, "curriculum");
