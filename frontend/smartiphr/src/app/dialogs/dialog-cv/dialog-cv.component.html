@@ -1,0 +1,77 @@
+<mat-dialog-content>
+  <h1 class="title">Curriculum Vitae</h1>
+
+
+  <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCV">
+    <button mat-button class="button-insert" (click)="addCV()">Aggiungi Curriculum</button>
+  </div>
+
+  <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+    *ngIf="addingCV && !uploadingCV">
+    <div class="row">
+      <div class="col">
+        <input type="file" (change)="uploadCV($event)" accept=".pdf" *ngIf="!uploadingCV">
+        <label *ngIf="uploadingCV">Caricamento in corso ...</label>
+      </div>
+      <div class="col">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-form-field class="full" appearance="fill">
+          <mat-label>Note</mat-label>
+          <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCv.note">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <button mat-button class="button-insert" (click)="saveCV(nuovoCv)">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingCV">
+      <div class="row">
+        <div class="col-1">
+          <mat-spinner [diameter]="24"></mat-spinner>
+        </div>
+        <div class="col">
+          <label>Caricamento in corso ...</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <div>
+          <button mat-raised-button raised-button class="buttonTable" (click)="show(row)">
+            <span class="nav-label"> Mostra</span>
+          </button>
+
+        </div>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="nome">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="data">
+      <th mat-header-cell *matHeaderCellDef> Data </th>
+      <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="start">
+  <button mat-button [mat-dialog-close]="false">Chiudi</button>
+</mat-dialog-actions>

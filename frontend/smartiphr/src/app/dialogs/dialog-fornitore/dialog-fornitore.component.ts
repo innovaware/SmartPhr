@@ -25,6 +25,7 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
   templateUrl: "./dialog-fornitore.component.html",
   styleUrls: ["./dialog-fornitore.component.css"],
 })
+
 export class DialogFornitoreComponent implements OnInit {
   public fornitore: Fornitore;
   public newItem: boolean;

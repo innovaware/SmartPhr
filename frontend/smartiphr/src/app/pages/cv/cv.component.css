@@ -1,0 +1,39 @@
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+
+.mat-column-title {
+  flex: 2;
+}
+
+.mat-column-action{
+  text-align: right;
+  width: 230px;
+}
+
+.mat-raised-button {
+  margin-right: 14px;
+}
+
+.buttonTable{
+  color: #ffffff;
+  background-color: #f8ac59;
+  border-color: #f8ac59;
+}

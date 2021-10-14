@@ -1,0 +1,16 @@
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+
+table {
+  width: 100%;
+}
+
+
+::ng-deep .mat-dialog-content {
+  min-height: 540px;
+}
