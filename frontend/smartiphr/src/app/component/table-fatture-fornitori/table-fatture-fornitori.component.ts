@@ -17,29 +17,28 @@ import { DocumentoFornitoreService } from 'src/app/service/documentoFornitore.se
 import { MessagesService } from 'src/app/service/messages.service';
 import { FornitoreService } from "src/app/service/fornitore.service";
 import { UploadService } from "src/app/service/upload.service";
-import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
     selector: "app-dialog-fornitore",
-    templateUrl: "./dialog-fornitore.component.html",
-    styleUrls: ["./dialog-fornitore.component.css"],
+    templateUrl: "./table-fatture-fornitori.component.html",
+    styleUrls: ["./table-fatture-fornitori.component.css"],
   })
 
   export class TableFattureFornitoriComponent implements OnInit {
     public fornitore: Fornitore;
     public newItem: boolean;
     public document: any[] = [];
-  
+
     fattureDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
-  
+
     public fattureDataSource: MatTableDataSource<Fatture>;
-  
+
     // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
     @ViewChild("paginatorFatture", { static: false })
     fatturePaginator: MatPaginator;
-  
+
     public fatture: Fatture[];
-  
+
     constructor(
       public uploadService: UploadService,
       public dialogRef: MatDialogRef<FornitoreGeneraleComponent>,
@@ -52,7 +51,7 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
     ) {
       this.fornitore = this.data.fornitore;
       this.newItem = this.data.newItem || false;
-  
+
       //this.fornitore = JSON.parse(JSON.stringify(this.data.fornitore));
       console.log("Dialog fornitore generale", this.data);
     }
@@ -63,7 +62,7 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
           .getFatture(this.fornitore._id)
           .then((f: Fatture[]) => {
             this.fatture = f;
-    
+
             this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
             this.fattureDataSource.paginator = this.fatturePaginator;
           })
@@ -83,14 +82,14 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
               const newBlob = new Blob([data as BlobPart], {
                 type: "application/pdf",
               });
-    
+
               // IE doesn't allow using a blob object directly as link href
               // instead it is necessary to use msSaveOrOpenBlob
               if (window.navigator && window.navigator.msSaveOrOpenBlob) {
                 window.navigator.msSaveOrOpenBlob(newBlob);
                 return;
               }
-    
+
               // For other browsers:
               // Create a link pointing to the ObjectURL containing the blob.
               const downloadURL = URL.createObjectURL(newBlob);
