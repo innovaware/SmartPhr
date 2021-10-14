@@ -3,7 +3,7 @@ export class Curriculum {
     return {
       filename: "",
       note: "",
-      mansione: "altro",
+      mansione: "", //altro
       nome: "",
       cognome: "",
       codiceFiscale: "",
