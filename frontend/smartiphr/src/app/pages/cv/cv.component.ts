@@ -44,6 +44,12 @@ export class CvComponent implements OnInit {
 
   ngOnInit() {}
 
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
   async insert() {
     var dialogRef = this.dialog.open(DialogCvComponent, {});
 

@@ -14,6 +14,16 @@
 
   <hr>
 
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="standard">
+        <mat-label>Cerca</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
+      </mat-form-field>
+    </div>
+  </div>
+
   <div class="row">
     <div class="col">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
