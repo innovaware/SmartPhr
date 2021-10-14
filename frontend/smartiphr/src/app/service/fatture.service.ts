@@ -12,25 +12,15 @@ export class FattureService {
 
   constructor(private http: HttpClient) {}
 
-  async getFatture(): Promise<Fatture[]> {
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
+  async getFattureAll(): Promise<Fatture[]> {
     return this.http
-      .get<Fatture[]>(`${this.api}/api/fatture`, { headers })
+      .get<Fatture[]>(`${this.api}/api/fatture`)
       .toPromise();
   }
 
   async getFatture(id: string): Promise<Fatture[]> {
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
     return this.http
-      .get<Fatture[]>(`${this.api}/api/fatture/${id}`, { headers })
+      .get<Fatture[]>(`${this.api}/api/fatture/${id}`)
       .toPromise();
   }
 
