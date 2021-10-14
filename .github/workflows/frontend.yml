@@ -14,10 +14,10 @@ name: Frontend
 on:
   push:
     branches:
-      - test
+      - master
   pull_request:
     branches:
-      - test
+      - master
       
 jobs:
 

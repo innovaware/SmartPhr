@@ -106,6 +106,8 @@ import { FornitoreGeneraleComponent } from './component/fornitore-generale/forni
 import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
 import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
 import { TableDocumentComponent } from './component/table-document/table-document.component';
+import { CvComponent } from './pages/cv/cv.component';
+import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
 
 @NgModule({
   declarations: [
@@ -174,6 +176,8 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DipendenteGeneraleComponent,
     DialogDocumentComponent,
     TableDocumentComponent,
+    CvComponent,
+    DialogCvComponent,
   ],
   imports: [
     BrowserModule,
@@ -222,6 +226,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DialogAspComponent,
     DialogMessageErrorComponent,
     DialogPazienteComponent,
+    DialogCvComponent,
   ],
 })
 export class AppModule {
