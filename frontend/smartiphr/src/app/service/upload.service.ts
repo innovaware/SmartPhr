@@ -32,18 +32,11 @@ export class UploadService {
   }
 
   async download(filename: string, id: string, subPath: string) {
-    // let params = new HttpParams();
+    console.log("Downloading");
+
     let path = `${id}/${subPath}/${filename}`;
     if (filename[0] != "/") path = `/${path}`;
 
-    // const options = {
-    //   params: params,
-    //   reportProgress: true,
-    // };
-
-    // const body = {
-    //   fileName: path,
-    // };
 
     let formData: FormData = new FormData();
     formData.append("fileName", path);
