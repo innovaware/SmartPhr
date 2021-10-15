@@ -26,7 +26,7 @@
               <th mat-header-cell *matHeaderCellDef>
               </th>
               <td mat-cell *matCellDef="let row">
-                  <button *ngFor="let item of buttons" mat-raised-button color="accent" class="action-button" (click)="call(row, item)">{{item}}</button>
+                <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row, item)">Invia Risposta</button>
               </td>
             </ng-container>
     
@@ -52,25 +52,25 @@
             </ng-container>
   
             <!-- Position Column -->
-            <ng-container matColumnDef="dataInizio">
+            <ng-container matColumnDef="dataInizioVT">
               <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
               <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy'}} </td>
             </ng-container>
     
             <!-- Name Column -->
-            <ng-container matColumnDef="dataFine">
+            <ng-container matColumnDef="dataFineVT">
               <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
               <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy' }} </td>
             </ng-container>
 
              <!-- Position Column -->
-             <ng-container matColumnDef="dataInizio">
+             <ng-container matColumnDef="dataInizioNT">
                 <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
                 <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
       
               <!-- Name Column -->
-              <ng-container matColumnDef="dataFine">
+              <ng-container matColumnDef="dataFineNT">
                 <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
                 <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy' }} </td>
               </ng-container>
@@ -83,7 +83,7 @@
     
            
             <!-- Name Column -->
-            <ng-container matColumnDef="dataFine">
+            <ng-container matColumnDef="motivazione">
                 <th mat-header-cell *matHeaderCellDef> Motivazione </th>
                 <td mat-cell *matCellDef="let element"> {{element.motivazione }} </td>
             </ng-container>
@@ -92,7 +92,7 @@
   
             <ng-container matColumnDef="accettata">
               <th mat-header-cell *matHeaderCellDef> Approvata </th>
-              <td mat-cell *matCellDef="let element"> {{element.accettata}} </td>
+              <td mat-cell *matCellDef="let element">  <input type="checkbox" slot="end" [(ngModel)]="element.accettata"  [disabled]=element.closed/> </td>
             </ng-container>
     
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

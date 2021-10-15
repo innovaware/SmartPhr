@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { environment } from "src/environments/environment";
 import { DocumentoDipendente } from '../models/documentoDipendente';
 import { Dipendenti } from '../models/dipendenti';
+import { DocumentoMedicinaLavoro } from "../models/documentoMedicinaLavoro";
 
 
 @Injectable({
@@ -22,6 +23,19 @@ export class DocumentiService {
 
     return this.http
       .get<DocumentoDipendente[]>(`${this.api}/api/documentidipendenti/dipendente/${dipendente._id}/${type}`, { headers })
+      .toPromise();
+  }
+
+
+
+  async getDocMedicinaLavoro(dipendente: Dipendenti,): Promise<DocumentoMedicinaLavoro[]> {
+    const headers = {
+      // 'Authorization': 'Bearer ' + this.token,
+      // 'x-refresh': this.refreshToken
+    }
+
+    return this.http
+      .get<DocumentoMedicinaLavoro[]>(`${this.api}/api/documentimedicinalavoro/dipendente/${dipendente._id}`, { headers })
       .toPromise();
   }
 

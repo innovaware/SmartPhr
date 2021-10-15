@@ -9,12 +9,12 @@ import {
 import { DipendenteGeneraleComponent } from "src/app/component/dipendente-generale/dipendente-generale.component";
 import { Bonifico } from 'src/app/models/bonifico';
 import { DocumentoDipendente } from "src/app/models/documentoDipendente";
+import { DocumentoMedicinaLavoro } from "src/app/models/documentoMedicinaLavoro";
+
 import { Fatture } from "src/app/models/fatture";
 import { NotaCredito } from "src/app/models/notacredito";
 import { Dipendenti } from "src/app/models/dipendenti";
-import { BonificoService } from 'src/app/service/bonifico.service';
-import { FattureService } from "src/app/service/fatture.service";
-import { NotaCreditoService } from "src/app/service/notacredito.service";
+
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
@@ -46,6 +46,7 @@ export class DialogDipendenteComponent implements OnInit {
 
   DisplayedRichiesteColumns: string[] = ["date", "action"];
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
+  DisplayedColumnsMedicinaLavoro : string[] = ["filenameRichiesta", "dateuploadRichiesta", "noteRichiesta","filenameCertificato", "dateuploadCertificato", "noteCertificato", "action"];
 
  
   public noteCreditoDataSource: MatTableDataSource<NotaCredito>;
@@ -115,6 +116,22 @@ export class DialogDipendenteComponent implements OnInit {
   richiestePaginator: MatPaginator;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;
   public richieste : DocumentoDipendente[];
+
+
+
+  @ViewChild("paginatordocsMedicina", { static: false })
+  docsMedicinaPaginator: MatPaginator;
+  public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
+  public docsMedicina : DocumentoMedicinaLavoro[];
+
+
+  @ViewChild("paginatorCertificatoMalattia", { static: false })
+  certificatiMalattiaPaginator: MatPaginator;
+  public nuovoCertificatoMalattia: DocumentoDipendente;
+  public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;
+  public certificatiMalattia : DocumentoDipendente[];
+  public uploadingCertificatoMalattia: boolean;
+  public addingCertificatoMalattia: boolean;
 
 
 
@@ -219,6 +236,8 @@ export class DialogDipendenteComponent implements OnInit {
       this.getDiplomi();
       this.getAttestatiECM();
       this.getCedolini();
+      this.getDocMedicinaLav();
+      this.getCertificatoMalattia();
      
     }
   }
@@ -389,6 +408,208 @@ export class DialogDipendenteComponent implements OnInit {
 
   // FINE DOCUMENTI IDENTITA
 
+
+
+
+
+  // CERTIFICATI MALATTIA
+  async addCertificatoMalattia() {
+    this.addingCertificatoMalattia = true;
+    this.nuovoCertificatoMalattia = {
+      filename: undefined,
+      note: "",
+      type: 'CertificatoMalattia'
+    };
+  }
+
+  async uploadCertificatoMalattia($event) {
+    let fileList: FileList = $event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+
+      console.log("upload documento: ", $event);
+      this.nuovoCertificatoMalattia.filename = file.name;
+      this.nuovoCertificatoMalattia.file = file;
+
+    } else {
+      this.showMessageError("File non valido");
+      console.error("File non valido o non presente");
+    }
+  }
+
+
+
+  async deleteCertificatoMalattia(doc: DocumentoDipendente) {
+    console.log("Cancella Certificato Malattia: ", doc);
+
+    this.docService
+      .remove(doc)
+      .then((x) => {
+        console.log("Certificato Malattia cancellata");
+        const index = this.certificatiMalattia.indexOf(doc);
+        console.log("Certificato Malattia cancellata index: ", index);
+        if (index > -1) {
+          this.certificatiMalattia.splice(index, 1);
+        }
+
+        console.log("Certificato Malattia cancellata this.fatture: ", this.certificatiMalattia);
+        this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore nella cancellazione doc identita");
+        console.error(err);
+      });
+  }
+  
+  async saveCertificatoMalattia(doc: DocumentoDipendente) {
+    const typeDocument = "CertificatoMalattia";
+    const path = "CertificatoMalattia";
+    const file: File = doc.file;
+    this.uploadingCertificatoMalattia = true;
+
+    console.log("Invio CertificatoMalattia: ", doc);
+    this.docService
+    .insert(doc, this.dipendente)
+    .then((result: DocumentoDipendente) => {
+      console.log("Insert CertificatoMalattia: ", result);
+      this.certificatiMalattia.push(result);
+      this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
+      this.addingCertificatoMalattia = false;
+      this.uploadingCertificatoMalattia = false;
+
+      let formData: FormData = new FormData();
+
+      const nameDocument: string = doc.filename;
+
+      formData.append("file", file);
+      formData.append("typeDocument", typeDocument);
+      formData.append("path", `${this.dipendente._id}/${path}`);
+      formData.append("name", nameDocument);
+      this.uploadService
+        .uploadDocument(formData)
+        .then((x) => {
+          this.uploading = false;
+
+          console.log("Uploading completed: ", x);
+        })
+        .catch((err) => {
+          this.showMessageError("Errore nel caricamento file");
+          console.error(err);
+          this.uploading = false;
+        });
+    })
+    .catch((err) => {
+      this.showMessageError("Errore Inserimento fattura");
+      console.error(err);
+    });
+  }
+
+
+
+  async getCertificatoMalattia() {
+    console.log(`get CertificatoMalattia dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, 'CertificatoMalattia')
+      .then((f: DocumentoDipendente[]) => {
+        this.docsIdentita = f;
+
+        this.certificatiMalattiaDataSource = new MatTableDataSource<DocumentoDipendente>(this.certificatiMalattia);
+        this.certificatiMalattiaDataSource.paginator = this.certificatiMalattiaPaginator;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento lista CERTIFICATI MALATTIA");
+        console.error(err);
+      });
+  }
+
+
+  // FINE CERTIFICATI MALATTIA
+
+
+  // DOCUMENTI MEDICNA LAVORO
+
+
+  async getDocMedicinaLav() {
+    console.log(`get DocMedicinaLav dipendente: ${this.dipendente._id}`);
+    this.docService
+      .getDocMedicinaLavoro(this.dipendente)
+      .then((f: DocumentoMedicinaLavoro[]) => {
+        this.docsMedicina = f;
+
+        this.docsMedicinaDataSource = new MatTableDataSource<DocumentoMedicinaLavoro>(this.docsMedicina);
+        this.docsMedicinaDataSource.paginator = this.docsMedicinaPaginator;
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento lista DocMedicinaLav");
+        console.error(err);
+      });
+  }
+
+
+
+  async showDocumentRichiesta(doc: DocumentoMedicinaLavoro) {
+    this.uploadService
+      .downloadDocMedicinaLavoro(doc.filenameRichiesta, 'medicinaLavoro', this.dipendente)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+
+
+  async showDocumentCertificato(doc: DocumentoMedicinaLavoro) {
+    this.uploadService
+      .downloadDocDipendente(doc.filenameCertificato, 'medicinaLavoro', this.dipendente)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+  // FINE DOCUMENTI IDENTITA
 
 
 

@@ -409,6 +409,11 @@ var documentiDipendentiRouter = require("./routes/documentidipendenti");
 app.use("/api/documentidipendenti", logHandler, authorizationHandler, documentiDipendentiRouter);
 
 
+// MedicinaLavoro API
+var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
+app.use("/api/documentimedicinalavoro", logHandler, authorizationHandler, documentiMedicinaLavoroRouter);
+
+
 /*** FINE GESTIONE PERSONALE ***/
 
 app.listen(PORT, function () {

@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 
 //LISTA PRESENZE DIPENDENTE
 // http://[HOST]:[PORT]/api/presenzeDipendente/[ID_DIPENDENTE]
-router.get("/:id", async (req, res) => {
+router.get("/dipendente/:id", async (req, res) => {
     const { id } = req.params;
     try {
       const searchTerm = `PRESENZEBY${id}`;
@@ -49,7 +49,8 @@ router.get("/:id", async (req, res) => {
         if (data && !redisDisabled) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const presenze = await Presenze.find(({ userId }) => userId === id);
+
+          const presenze = await Presenze.find({ user: id });
   
           client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
           res.status(200).json(presenze);

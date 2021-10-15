@@ -13,6 +13,12 @@ export class PermessiService {
 
   constructor(private http: HttpClient) {}
 
+
+  async getPermessiByDipendente(id): Promise<Permessi[]> {
+    return this.http.get<Permessi[]>(this.api + "/api/permessi/dipendente/" + id).toPromise();
+  }
+
+
   async getPermessi(): Promise<Permessi[]> {
     return this.http.get<Permessi[]>(this.api + "/api/permessi").toPromise();
   }
