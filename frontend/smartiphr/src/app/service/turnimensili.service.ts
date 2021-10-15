@@ -12,6 +12,12 @@ export class TurnimensiliService {
 
   constructor(private http: HttpClient) {}
 
+
+  async getTurnimensiliByDipendente(id): Promise<Turnimensili[]> {
+    return this.http.get<Turnimensili[]>(this.api + "/api/turnimensili/dipendente/" + id).toPromise();
+  }
+
+
   async getTurnimensili(): Promise<Turnimensili[]> {
     return this.http.get<Turnimensili[]>(this.api + "/api/turnimensili").toPromise();
   }

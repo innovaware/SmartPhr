@@ -12,6 +12,12 @@ export class CambiturniService {
 
   constructor(private http: HttpClient) {}
 
+
+  async getCambiturnoByDipendente(id): Promise<Cambiturno[]> {
+    return this.http.get<Cambiturno[]>(this.api + "/api/cambiturno/dipendente/" + id).toPromise();
+  }
+
+
   async getCambiturno(): Promise<Cambiturno[]> {
     return this.http.get<Cambiturno[]>(this.api + "/api/cambiturno").toPromise();
   }

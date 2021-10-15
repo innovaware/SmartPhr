@@ -8,5 +8,6 @@ export class Ferie {
     dataFine?: Date;
     dataRichiesta?: Date;
     accettata?: boolean;
+    closed?: boolean;
   }
   

@@ -11,7 +11,8 @@ const CambiTurnoSchema = mongoose.Schema({
   dataFineNT: Date,
   motivazione: String,
   dataRichiesta: Date,
-  accettata: Boolean
+  accettata: Boolean,
+  closed: Boolean
 });
 
 module.exports = mongoose.model("CambiTurno", CambiTurnoSchema, "cambiturno");

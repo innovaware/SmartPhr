@@ -16,6 +16,11 @@ export class FerieService {
     return this.http.get<Ferie[]>(this.api + "/api/ferie").toPromise();
   }
 
+
+  async getFerieByDipendente(id): Promise<Ferie[]> {
+    return this.http.get<Ferie[]>(this.api + "/api/ferie/dipendente/" + id).toPromise();
+  }
+
   async insertFerie(ferie: Ferie) {
     var body = ferie;
     return this.http.post(this.api + "/api/ferie", body).toPromise();

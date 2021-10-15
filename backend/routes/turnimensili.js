@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 
 //LISTA TURNIMENSILI DIPENDENTE
 // http://[HOST]:[PORT]/api/turnimensiliDipendente/[ID_DIPENDENTE]
-router.get("/:id", async (req, res) => {
+router.get("/dipendente/:id", async (req, res) => {
     const { id } = req.params;
     try {
       const searchTerm = `TURNIMENSILIBY${id}`;
@@ -49,7 +49,8 @@ router.get("/:id", async (req, res) => {
         if (data && !redisDisabled) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const turnimensili = await Turnimensili.find(({ userId }) => userId === id);
+          
+          const turnimensili = await Turnimensili.find({ user: id });
   
           client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
           res.status(200).json(turnimensili);

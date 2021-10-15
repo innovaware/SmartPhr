@@ -7,7 +7,9 @@ const PermessiSchema = mongoose.Schema({
   dataInizio: Date,
   dataFine: Date,
   dataRichiesta: Date,
-  accettata: Boolean
+  accettata: Boolean,
+  user: String,
+  closed: Boolean
 });
 
 module.exports = mongoose.model("Permessi", PermessiSchema, "permessi");

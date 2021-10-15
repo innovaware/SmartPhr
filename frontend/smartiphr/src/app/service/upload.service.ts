@@ -22,6 +22,13 @@ export class UploadService {
       reportProgress: true,
     };
 
+
+    let type = body.get('type');
+    console.log('uploadDocument type: ' + type);
+
+    if( type == 'richiestaMedico' || type == 'certificatoMedico')
+      return this.http.post(`${this.api}/api/upload`, body, options).toPromise();
+      
     //const req = new HttpRequest('POST', url, formData, options);
     //return this.http.request(req);
     return this.http.post(`${this.api}/api/upload`, body, options).toPromise();
@@ -66,6 +73,9 @@ export class UploadService {
       responseType: 'arraybuffer' as 'json'
     }
 
+
+    
+
     // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
     //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
     return this.http.get(`${this.api}/api/download`, options);
@@ -74,6 +84,51 @@ export class UploadService {
 
 
   async downloadDocDipendente(filename: string, type: string, dipendente: Dipendenti) {
+    // let params = new HttpParams();
+    let path = `${dipendente._id}/${type}/${filename}`;
+    if (filename[0] != "/") path = `/${path}`;
+
+    // const options = {
+    //   params: params,
+    //   reportProgress: true,
+    // };
+
+    // const body = {
+    //   fileName: path,
+    // };
+
+    let formData: FormData = new FormData();
+    formData.append("fileName", path);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    let params = {
+      params: {
+      }
+    }
+
+    let options = {
+      params: {
+        fileName: encodeURIComponent(path)
+      },
+      reportProgress: true,
+      responseType: 'arraybuffer' as 'json'
+    }
+
+    // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
+    //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
+    return this.http.get(`${this.api}/api/download`, options);
+  }
+
+
+
+
+
+
+  async downloadDocMedicinaLavoro(filename: string, type: string, dipendente: Dipendenti) {
     // let params = new HttpParams();
     let path = `${dipendente._id}/${type}/${filename}`;
     if (filename[0] != "/") path = `/${path}`;

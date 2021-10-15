@@ -106,6 +106,7 @@ import { FornitoreGeneraleComponent } from './component/fornitore-generale/forni
 import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
 import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
 import { TableDocumentComponent } from './component/table-document/table-document.component';
+import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
   declarations: [
@@ -174,6 +175,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
     DipendenteGeneraleComponent,
     DialogDocumentComponent,
     TableDocumentComponent,
+    ConfirmationDialogComponent,
   ],
   imports: [
     BrowserModule,

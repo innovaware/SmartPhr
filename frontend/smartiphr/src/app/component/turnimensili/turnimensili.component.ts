@@ -4,6 +4,7 @@ import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
+import { Dipendenti } from "src/app/models/dipendenti";
 import { Turnimensili } from "src/app/models/turnimensili";
 import {TurnimensiliService } from "src/app/service/turnimensili.service";
 @Component({
@@ -13,6 +14,9 @@ import {TurnimensiliService } from "src/app/service/turnimensili.service";
 })
 export class TurnimensiliComponent implements OnInit {
 
+  @Input() data: Dipendenti;
+  @Input() disable: boolean;
+  
   @Output() showItemEmiter = new EventEmitter<{
     turnimensili: Turnimensili;
     button: string;
@@ -25,11 +29,8 @@ export class TurnimensiliComponent implements OnInit {
   displayedColumns: string[] = [
     "cognome",
     "nome",
-    "data",
     "cf",
-    "mansione",
-    "turno",
-    "action",
+    "turno"
   ];
 
 
@@ -42,19 +43,29 @@ export class TurnimensiliComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public turnimensiliService: TurnimensiliService
-  ) {
-    this.turnimensiliService.getTurnimensili().then((result) => {
+  ) {}
+
+
+
+ngOnInit() {
+  if(this.data){
+
+    this.turnimensiliService.getTurnimensiliByDipendente(this.data._id).then((result) => {
       this.turnimensili = result;
 
       this.dataSource = new MatTableDataSource<Turnimensili>(this.turnimensili);
       this.dataSource.paginator = this.paginator;
     });
+  }
+  else{
+  this.turnimensiliService.getTurnimensili().then((result) => {
+    this.turnimensili = result;
 
+    this.dataSource = new MatTableDataSource<Turnimensili>(this.turnimensili);
+    this.dataSource.paginator = this.paginator;
+  });
+  } 
 }
-
-
-
-ngOnInit() {}
 
   ngAfterViewInit() {}
 
