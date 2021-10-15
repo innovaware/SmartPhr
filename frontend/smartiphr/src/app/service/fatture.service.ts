@@ -1,8 +1,8 @@
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { Fatture } from '../models/fatture';
-import { Paziente } from '../models/paziente';
 
 @Injectable({
   providedIn: "root",
@@ -12,10 +12,8 @@ export class FattureService {
 
   constructor(private http: HttpClient) {}
 
-  async getFattureAll(): Promise<Fatture[]> {
-    return this.http
-      .get<Fatture[]>(`${this.api}/api/fatture`)
-      .toPromise();
+  getFattureAll(): Observable<Fatture[]> {
+    return this.http.get<Fatture[]>(`${this.api}/api/fatture`);
   }
 
   async getFatture(id: string): Promise<Fatture[]> {
@@ -38,6 +36,10 @@ export class FattureService {
 
   async remove(fattura: Fatture) {
     return this.http.delete(`${this.api}/api/fatture/${fattura._id}`).toPromise();
+  }
+
+  delete(fattura: Fatture): Observable<Fatture> {
+    return this.http.delete<Fatture>(this.api + "/api/curriculum/" + fattura._id);
   }
 
 }
