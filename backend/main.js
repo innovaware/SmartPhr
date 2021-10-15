@@ -426,3 +426,6 @@ app.listen(PORT, function () {
 // Bonifici API
 var documentiFornitoreRouter = require("./routes/documentifornitore");
 app.use("/api/documentifornitore", logHandler, authorizationHandler, documentiFornitoreRouter);
+
+var curriculumRouter = require("./routes/curriculum");
+app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);

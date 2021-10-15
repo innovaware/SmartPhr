@@ -80,6 +80,7 @@ import {
 
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
+import { FattureFornitoriComponent } from "./pages/fatture-fornitori/fatture-fornitori.component";
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
@@ -107,6 +108,9 @@ import { DipendenteGeneraleComponent } from './component/dipendente-generale/dip
 import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
 import { TableDocumentComponent } from './component/table-document/table-document.component';
 import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-dialog.component';
+import { CvComponent } from './pages/cv/cv.component';
+import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
+import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
 
 @NgModule({
   declarations: [
@@ -152,6 +156,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     DialogEventComponent,
     ConsulentiComponent,
     AdminFornitoriComponent,
+    FattureFornitoriComponent,
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,
@@ -176,6 +181,9 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     DialogDocumentComponent,
     TableDocumentComponent,
     ConfirmationDialogComponent,
+    CvComponent,
+    DialogCvComponent,
+    TableFattureFornitoriComponent,
   ],
   imports: [
     BrowserModule,
@@ -224,6 +232,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
     DialogAspComponent,
     DialogMessageErrorComponent,
     DialogPazienteComponent,
+    DialogCvComponent,
   ],
 })
 export class AppModule {

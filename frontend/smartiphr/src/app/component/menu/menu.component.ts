@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Menu } from 'src/app/models/menu';
+import { SubMenu } from 'src/app/models/subItem';
 import { MenuService } from 'src/app/service/menu.service';
 
 @Component({
@@ -25,4 +26,9 @@ export class MenuComponent implements OnInit {
       });
   }
 
+  closeAllSubItem(subMenu: SubMenu[]) {
+    console.log("Close All sub Items")
+
+    subMenu.map(x=> x.status = false);
+  }
 }

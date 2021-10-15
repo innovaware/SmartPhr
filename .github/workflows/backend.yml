@@ -1,15 +1,15 @@
 name: Backend
 
-on: workflow_dispatch
-#  release:
-#    # Only use the types keyword to narrow down the activity types that will trigger your workflow.
-#    types: [published, created, edited]
-#    paths-ignore:
-#      - 'docs/**'
-#      - 'scripts/**'
-#      - 'certificate/**'
-#    paths:
-#      - '!README.md'
+# on: workflow_dispatch
+on:
+  # Trigger the workflow on push or pull request,
+  # but only for the main branch
+  push:
+    branches:
+      - test
+  pull_request:
+    branches:
+      - test
 jobs:
 
   build:

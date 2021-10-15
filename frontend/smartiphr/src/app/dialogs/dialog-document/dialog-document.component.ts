@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { Component, Inject, Input, OnInit, ViewChild } from "@angular/core";
 import {
   MatDialog,
   MatDialogRef,
@@ -26,7 +26,9 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
   styleUrls: ['./dialog-document.component.css']
 })
 export class DialogDocumentComponent implements OnInit {
+  @Input() disable: boolean;
 
+  item: any; //TODO
 
   public dipendente: Dipendenti;
   public newItem: boolean;
@@ -147,5 +149,12 @@ export class DialogDocumentComponent implements OnInit {
         console.log("The dialog was closed", result);
       });
   }
+
+
+  save() {
+    //TODO
+  }
+
+
 
 }

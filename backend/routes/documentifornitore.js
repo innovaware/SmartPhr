@@ -2,7 +2,7 @@ const express = require("express");
 //const jwt_decode = require("jwt-decode");
 
 const router = express.Router();
-const DocumentiFornitore = require("../models/documentiFornitore");
+const DocumentiFornitore = require("../models/documentifornitore");
 
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
