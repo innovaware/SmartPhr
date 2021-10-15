@@ -42,6 +42,7 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+  console.error("Fatture get/:id: ", id);
   try {
     const searchTerm = `fattureBY${id}`;
     client.get(searchTerm, async (err, data) => {
@@ -51,6 +52,7 @@ router.get("/:id", async (req, res) => {
         res.status(200).send(JSON.parse(data));
       } else {
         const fatture = await Fatture.findById(id);
+        console.error("Fatture.findById(id): ", JSON.stringify(fatture));
         client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
         res.status(200).json(fatture);
       }
