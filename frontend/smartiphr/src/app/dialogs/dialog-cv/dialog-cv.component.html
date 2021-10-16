@@ -1,122 +1,8 @@
 <mat-dialog-content>
   <h1 class="title">Curriculum Vitae</h1>
 
-  <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="this.uploadingCV">
-    <div class="row">
-      <div class="col-1">
-        <mat-spinner [diameter]="24"></mat-spinner>
-      </div>
-      <div class="col">
-        <label>Caricamento in corso ...</label>
-      </div>
-    </div>
-  </div>
-
-  <div class="container-flex" *ngIf="!this.uploadingCV">
-    <div class="row">
-      <div class="row">
-        <div class="col">
-          <input type="file" (change)="uploadCV($event)" accept=".pdf">
-        </div>
-        <div class="col">
-        </div>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="full" appearance="fill">
-          <mat-label>Nome</mat-label>
-          <input matInput placeholder="Inserisci delle Nome" [(ngModel)]="nuovoCurriculum.nome">
-        </mat-form-field>
-      </div>
-
-      <div class="col">
-        <mat-form-field class="full" appearance="fill">
-          <mat-label>Cognome</mat-label>
-          <input matInput placeholder="Inserisci delle cognome" [(ngModel)]="nuovoCurriculum.cognome">
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="full" appearance="fill">
-          <mat-label>Codice Fiscale</mat-label>
-          <input matInput placeholder="Inserisci delle codice Fiscale" [(ngModel)]="nuovoCurriculum.codiceFiscale">
-        </mat-form-field>
-      </div>
-    </div>
-
-
-    <div class="row">
-      <div class="col">
-        <label>Mansione</label>
-      </div>
-      <div class="col">
-        <select matNativeControl required [(ngModel)]="nuovoCurriculum.mansione" >
-          <option selected="" value="">Seleziona ...</option>
-          <option value="Amministrativo">Amministrativo</option>
-          <option value="neurologo">neurologo</option>
-          <option value="medico">medico</option>
-          <option value="psicologo">psicologo</option>
-          <option value="assistente">assistente</option>
-          <option value="sociale">sociale</option>
-          <option value="oss">oss</option>
-          <option value="fisioterapista">fisioterapista</option>
-          <option value="infermiere">infermiere</option>
-          <option value="educatore">educatore</option>
-          <option value="ausiliare">ausiliare</option>
-          <option value="cuoco">cuoco</option>
-          <option value="altro">altro</option>
-        </select>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="full" appearance="fill">
-          <mat-label>Note</mat-label>
-          <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCurriculum.note">
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
-
-<!--
-  <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCV">
-    <button mat-button class="button-insert" (click)="addCV()">Aggiungi Curriculum</button>
-  </div>
-
-  <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-    *ngIf="addingCV && !uploadingCV">
-    <div class="row">
-      <div class="col">
-        <input type="file" (change)="uploadCV($event)" accept=".pdf" *ngIf="!uploadingCV">
-        <label *ngIf="uploadingCV">Caricamento in corso ...</label>
-      </div>
-      <div class="col">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <mat-form-field class="full" appearance="fill">
-          <mat-label>Note</mat-label>
-          <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCv.note">
-        </mat-form-field>
-      </div>
-      <div class="col-2">
-        <button mat-button class="button-insert" (click)="saveCV(nuovoCv)">Salva</button>
-      </div>
-    </div>
-  </div>
-
-  <div>
-    <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingCV">
+  <form #formCV>
+    <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="this.uploadingCV">
       <div class="row">
         <div class="col-1">
           <mat-spinner [diameter]="24"></mat-spinner>
@@ -126,11 +12,94 @@
         </div>
       </div>
     </div>
-  </div> -->
+
+    <div class="container-flex" *ngIf="!this.uploadingCV">
+      <div class="row">
+        <div class="row">
+          <div class="col">
+            <input type="file" (change)="uploadCV($event)" accept=".pdf" required name="fileCV">
+          </div>
+          <div class="col">
+          </div>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Nome</mat-label>
+            <input matInput placeholder="Inserisci delle Nome" [(ngModel)]="nuovoCurriculum.nome" required name="nomeCV">
+          </mat-form-field>
+        </div>
+
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Cognome</mat-label>
+            <input matInput placeholder="Inserisci delle cognome" [(ngModel)]="nuovoCurriculum.cognome" required name="cognomeCV">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Codice Fiscale</mat-label>
+            <input matInput placeholder="Inserisci delle codice Fiscale" [(ngModel)]="nuovoCurriculum.codiceFiscale" required name="codiceFiscaleCV">
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <label>Mansione</label>
+        </div>
+        <div class="col">
+          <select matNativeControl required [(ngModel)]="nuovoCurriculum.mansione"  name="mansioneCV">
+            <option selected="" value="">Seleziona ...</option>
+            <option value="Amministrativo">Amministrativo</option>
+            <option value="neurologo">neurologo</option>
+            <option value="medico">medico</option>
+            <option value="psicologo">psicologo</option>
+            <option value="assistente">assistente</option>
+            <option value="sociale">sociale</option>
+            <option value="oss">oss</option>
+            <option value="fisioterapista">fisioterapista</option>
+            <option value="infermiere">infermiere</option>
+            <option value="educatore">educatore</option>
+            <option value="ausiliare">ausiliare</option>
+            <option value="cuoco">cuoco</option>
+            <option value="altro">altro</option>
+          </select>
+        </div>
+      </div>
+
+      <hr>
+
+      <div class="row">
+        <div class="col">
+          <mat-form-field class="full" appearance="fill">
+            <mat-label>Note</mat-label>
+            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCurriculum.note" name="noteCV">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row" *ngIf="errorConsulente">
+        <div class="col">
+            <pre class="error">Compila tutti i Campi</pre>
+        </div>
+      </div>
+
+    </div>
+  </form>
+
 
 </mat-dialog-content>
 
 <mat-dialog-actions align="start">
-  <button mat-button [mat-dialog-close]="false">Chiudi</button>
+  <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
   <button mat-button class="button-insert" (click)="save()">Salva</button>
 </mat-dialog-actions>

@@ -19,6 +19,7 @@ import { MessagesService } from "src/app/service/messages.service";
 export class DialogCvComponent implements OnInit {
   nuovoCurriculum: Curriculum;
   uploadingCV: boolean;
+  errorConsulente: boolean;
 
   constructor(
     public messageService: MessagesService,
@@ -47,40 +48,48 @@ export class DialogCvComponent implements OnInit {
   }
 
   async save() {
+    this.errorConsulente = false;
     const typeDocument = "CURRICULUM";
     const path = "curriculum";
     const file: File = this.nuovoCurriculum.file;
-    this.uploadingCV = true;
 
-    console.log("Invio curriculum: ", this.nuovoCurriculum);
-    this.curriculumService.insert(this.nuovoCurriculum).subscribe(
-      (result: Curriculum) => {
-        console.log("Insert curriculum: ", result);
+    if (Curriculum.check(this.nuovoCurriculum)) {
+      console.log("Invio curriculum: ", this.nuovoCurriculum);
+      this.uploadingCV = true;
+      this.curriculumService.insert(this.nuovoCurriculum).subscribe(
+        (result: Curriculum) => {
+          console.log("Insert curriculum: ", result);
 
-        let formData: FormData = new FormData();
-        const nameDocument: string = this.nuovoCurriculum.filename;
+          let formData: FormData = new FormData();
+          const nameDocument: string = this.nuovoCurriculum.filename;
 
-        formData.append("file", file);
-        formData.append("typeDocument", typeDocument);
-        formData.append("path", `${path}`);
-        formData.append("name", nameDocument);
-        this.uploadService
-          .uploadDocument(formData)
-          .then((x) => {
-            this.uploadingCV = false;
+          formData.append("file", file);
+          formData.append("typeDocument", typeDocument);
+          formData.append("path", `${path}`);
+          formData.append("name", nameDocument);
+          this.uploadService
+            .uploadDocument(formData)
+            .then((x) => {
+              this.uploadingCV = false;
 
-            console.log("Uploading completed: ", x);
-            this.dialogRef.close(this.nuovoCurriculum);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore nel caricamento file");
-            console.error(err);
-          });
-      },
-      (err) => {
-        this.messageService.showMessageError("Errore Inserimento fattura");
-        console.error(err);
-      }
-    );
+              console.log("Uploading completed: ", result);
+              this.dialogRef.close(result);
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore nel caricamento file"
+              );
+              console.error(err);
+            });
+        },
+        (err) => {
+          this.messageService.showMessageError("Errore Inserimento fattura");
+          console.error(err);
+        }
+      );
+    } else {
+      console.error("Error: validation");
+      this.errorConsulente = true;
+    }
   }
 }

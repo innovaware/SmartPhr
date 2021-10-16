@@ -1,4 +1,3 @@
-import { ThrowStmt } from "@angular/compiler";
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import {
   MatDialogRef,
@@ -26,6 +25,7 @@ import { UploadService } from "src/app/service/upload.service";
 export class DialogConsulenteComponent implements OnInit {
   disable: boolean;
   result: Consulenti;
+  errorConsulente: boolean;
 
   public uploading: boolean;
 
@@ -79,6 +79,8 @@ export class DialogConsulenteComponent implements OnInit {
     this.addingFattura = false;
 
     this.uploadingBonifici = false;
+
+    this.errorConsulente = false;
   }
 
   ngOnInit() {
@@ -90,11 +92,10 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   save() {
-    //this.dialogRef.close(this.item);
     if (this.item.isNew) {
-      this.item.isNew = false;
       this.insert().subscribe(
         (consulente: Consulenti) => {
+          this.item.isNew = false;
           this.item.consulente = consulente;
           this.result = this.item.consulente;
         },
@@ -102,7 +103,7 @@ export class DialogConsulenteComponent implements OnInit {
       );
     } else {
       this.update().subscribe(
-        (x) => {
+        () => {
           console.log("Save");
           this.result = this.item.consulente;
         },
@@ -113,16 +114,23 @@ export class DialogConsulenteComponent implements OnInit {
 
   private insert(): Observable<Consulenti> {
     return new Observable<Consulenti>((subscriber) => {
-      this.consulenteService.insert(this.item.consulente).subscribe(
-        (consulente: Consulenti) => {
-          console.log("Inserito consulente", consulente);
-          subscriber.next(consulente);
-        },
-        (err) => {
-          console.error("Error:", err);
-          subscriber.error(err);
-        }
-      );
+      this.errorConsulente = false;
+      if (Consulenti.check(this.item.consulente)) {
+        this.consulenteService.insert(this.item.consulente).subscribe(
+          (consulente: Consulenti) => {
+            console.log("Inserito consulente", consulente);
+            subscriber.next(consulente);
+          },
+          (err) => {
+            console.error("Error:", err);
+            subscriber.error(err);
+          }
+        );
+      } else {
+        console.error("Error: validation");
+        this.errorConsulente = true;
+        subscriber.error("Error in validation");
+      }
     });
   }
 
@@ -184,7 +192,7 @@ export class DialogConsulenteComponent implements OnInit {
 
   async showContratto(contratto: Contratto) {
     this.uploadService
-      .download(contratto.filename, this.item.consulente._id, 'contratti')
+      .download(contratto.filename, this.item.consulente._id, "contratti")
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -217,7 +225,7 @@ export class DialogConsulenteComponent implements OnInit {
 
     this.contrattoService
       .remove(contratto)
-      .then((x) => {
+      .then(() => {
         console.log("Contratto cancellato");
         this.contratto = undefined;
       })
@@ -373,7 +381,7 @@ export class DialogConsulenteComponent implements OnInit {
   }
   async showFattureDocument(fattura: Fatture) {
     this.uploadService
-      .download(fattura.filename, this.item.consulente._id, 'fatture')
+      .download(fattura.filename, this.item.consulente._id, "fatture")
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -406,7 +414,7 @@ export class DialogConsulenteComponent implements OnInit {
 
     this.fattureService
       .remove(fattura)
-      .then((x) => {
+      .then(() => {
         console.log("Fattura cancellata");
         const index = this.fatture.indexOf(fattura);
         console.log("Fattura cancellata index: ", index);
@@ -512,7 +520,7 @@ export class DialogConsulenteComponent implements OnInit {
 
   async showBonificoDocument(bonifico: Bonifico) {
     this.uploadService
-      .download(bonifico.filename, this.item.consulente._id, 'bonifico')
+      .download(bonifico.filename, this.item.consulente._id, "bonifico")
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -544,7 +552,7 @@ export class DialogConsulenteComponent implements OnInit {
 
     this.bonficoService
       .remove(bonifico)
-      .then((x) => {
+      .then(() => {
         console.log("Bonifici cancellata");
         const index = this.bonifici.indexOf(bonifico);
         console.log("Bonifici cancellata index: ", index);

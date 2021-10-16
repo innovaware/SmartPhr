@@ -1,4 +1,11 @@
 export class Curriculum {
+  static check(curriculum: Curriculum): boolean {
+    return ( curriculum.nome != "" && curriculum.nome != undefined) &&
+           ( curriculum.cognome != "" && curriculum.cognome != undefined) &&
+           ( curriculum.codiceFiscale != "" && curriculum.codiceFiscale != undefined) &&
+           ( curriculum.file != undefined)
+  }
+
   static create(): Curriculum {
     return {
       filename: "",

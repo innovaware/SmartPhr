@@ -38,4 +38,10 @@ export class Consulenti {
       email: "",
     };
   }
+
+  public static check(consulente: Consulenti): boolean {
+    return ( consulente.nome != "" && consulente.nome != undefined) &&
+           ( consulente.cognome != "" && consulente.cognome != undefined) &&
+           ( consulente.codiceFiscale != "" && consulente.codiceFiscale != undefined)
+  }
 }

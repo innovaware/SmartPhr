@@ -1,79 +1,86 @@
 <mat-dialog-content>
   <mat-tab-group mat-align-tabs="start">
     <mat-tab label="Generale">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Cognome</mat-label>
-              <input matInput [(ngModel)]="item.consulente.cognome" [disabled]=disable>
-            </mat-form-field>
+      <form #formConsulenti>
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Cognome</mat-label>
+                <input matInput [(ngModel)]="item.consulente.cognome" [disabled]=disable required name="cognomeInputForm">
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Nome</mat-label>
+                <input matInput [(ngModel)]="item.consulente.nome" [disabled]=disable required name="nomeInputForm">
+              </mat-form-field>
+            </div>
           </div>
 
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Nome</mat-label>
-              <input matInput [(ngModel)]="item.consulente.nome" [disabled]=disable>
-            </mat-form-field>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>email</mat-label>
+                <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable name="emailInputForm">
+              </mat-form-field>
+            </div>
           </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>codice fiscale</mat-label>
+                <input matInput [(ngModel)]="item.consulente.codiceFiscale" [disabled]=disable name="codiceFiscaleInputForm" required>
+              </mat-form-field>
+            </div>
+          </div>
+
+          <!-- Cognome, Nome, Codice Fiscale, Data di nascita, Indirizzo di nascita, Comune di nascita, Provincia di nascita -->
+          <div class="row">
+            <div class="col">
+              <mat-form-field appearance="fill">
+                <mat-label>Scegli una date</mat-label>
+                <input matInput [matDatepicker]="dataNascita" [(ngModel)]="item.consulente.dataNascita"
+                  [disabled]=disable name="dataNascitaInputForm">
+                <mat-datepicker-toggle matSuffix [for]="dataNascita"></mat-datepicker-toggle>
+                <mat-datepicker #dataNascita></mat-datepicker>
+              </mat-form-field>
+            </div>
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Indirizzo Nascita</mat-label>
+                <input matInput [(ngModel)]="item.consulente.indirizzoNascita" [disabled]=disable name="indirizzoNascitaInputForm">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Comune di nascita</mat-label>
+                <input matInput [(ngModel)]="item.consulente.comuneNascita" [disabled]=disable name="comuneNascitaInputForm">
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field class="example-full-width" appearance="fill">
+                <mat-label>Provincia di nascita</mat-label>
+                <input matInput [(ngModel)]="item.consulente.provinciaNascita" [disabled]=disable name="provinciaNascitaInputForm">
+              </mat-form-field>
+            </div>
+          </div>
+
+          <div class="row" *ngIf="errorConsulente">
+            <div class="col">
+                <pre class="error">Compila tutti i Campi</pre>
+            </div>
+          </div>
+
         </div>
-
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>email</mat-label>
-              <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>codice fiscale</mat-label>
-              <input matInput [(ngModel)]="item.consulente.codiceFiscale" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <!-- Cognome, Nome, Codice Fiscale, Data di nascita, Indirizzo di nascita, Comune di nascita, Provincia di nascita -->
-        <div class="row">
-          <div class="col">
-            <mat-form-field appearance="fill">
-              <mat-label>Scegli una date</mat-label>
-              <input matInput [matDatepicker]="dataNascita" [(ngModel)]="item.consulente.dataNascita"
-                [disabled]=disable>
-              <mat-datepicker-toggle matSuffix [for]="dataNascita"></mat-datepicker-toggle>
-              <mat-datepicker #dataNascita></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Indirizzo Nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.indirizzoNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Comune di nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.comuneNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
-
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Provincia di nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.provinciaNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
-
-      </div>
-
+      </form>
     </mat-tab>
-    <mat-tab label="Contratto"  [disabled]="this.item.consulente?._id === undefined">
+    <mat-tab label="Contratto" [disabled]="this.item.consulente?._id === undefined">
 
       <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingContratto">
         <button mat-button class="button-insert" (click)="addContratto()">Aggiungi Contratto</button>
