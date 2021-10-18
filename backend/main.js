@@ -429,3 +429,8 @@ app.use("/api/documentifornitore", logHandler, authorizationHandler, documentiFo
 
 var curriculumRouter = require("./routes/curriculum");
 app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
+
+/** GESTIONE FATTURE FORNITORI */
+
+var fattureFornitoriRouter = require("./routes/fatturefornitori");
+app.use("/api/fatturefornitori", logHandler, authorizationHandler, fattureFornitoriRouter);

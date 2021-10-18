@@ -1,129 +1,126 @@
-import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
-import { Subject } from "rxjs";
-import { DialogFornitoreComponent } from 'src/app/dialogs/dialog-fornitore/dialog-fornitore.component';
-import { DinamicButton } from "src/app/models/dinamicButton";
-import { Fornitore } from "src/app/models/fornitore";
-import { MessagesService } from 'src/app/service/messages.service';
-import { FornitoreService } from "src/app/service/fornitore.service";
+import { Component, OnInit, ViewChild } from "@angular/core";
+import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+// import { DialogFattureFornitoriComponent } from 'src/app/dialogs/dialog-fatture-fornitori/dialog-fatture-fornitori.component';
+import { FattureFornitori } from "src/app/models/fattureFornitori";
+import { FattureService } from "src/app/service/fatture.service";
+import { FattureFornitoriService } from "src/app/service/fattureFornitori.service";
+import { MessagesService } from "src/app/service/messages.service";
+import { UploadService } from "src/app/service/upload.service";
 
 @Component({
-  selector: "app-fatture-fornitori",
-  templateUrl: "./fatture-fornitori.component.html",
-  styleUrls: ["./fatture-fornitori.component.css"],
-})
-export class FattureFornitoriComponent implements OnInit {
-  fornitori: Fornitore[];
-
-  constructor(
-    public dialog: MatDialog,
-    public messageService: MessagesService,
-    public fornitoreService: FornitoreService
-  ) {}
-
-  ngOnInit() {
-    this.fornitoreService.getFornitori().then((forn: Fornitore[]) => {
-      this.fornitori = forn;
-
-      this.eventsSubject.next(this.fornitori);
-    });
-  }
-
+    selector: "app-fatture-fornitori",
+    templateUrl: "./fatture-fornitori.component.html",
+    styleUrls: ["./fatture-fornitori.component.css"],
+  })
+  export class FattureFornitoriComponent implements OnInit {
+    displayedColumns: string[] = [
+      "filename",
+      "dataUpload",
+      "note",
+      "nome",
+      "cognome",
+      "codiceFiscale",
+      "action",
+    ];
   
-  getButtons() {
-    const showButton: DinamicButton = {
-      label: "Mostra",
-      icon: "",
-      cmd: this.showAdmin.bind({ ...this }),
-    };
+    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    dataSource: MatTableDataSource<FattureFornitori>;
+    fattureFornitori: FattureFornitori[];
+  
+    constructor(
+      public messageService: MessagesService,
+      public uploadService: UploadService,
+    //   private dialog: MatDialog,
+      private fattureFornitoriService: FattureFornitoriService
+    ) {
+      this.fattureFornitori = [];
+  
+      this.fattureFornitoriService.get().subscribe((curs: FattureFornitori[]) => {
+        this.fattureFornitori = curs;
+        this.dataSource = new MatTableDataSource<FattureFornitori>(this.fattureFornitori);
+        this.dataSource.paginator = this.paginator;
+      });
+    }
+  
+    ngOnInit() {}
+  
+  
+    applyFilter(event: Event) {
+      const filterValue = (event.target as HTMLInputElement).value;
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    }
+  
+/*     async insert() {
+      var dialogRef = this.dialog.open(DialogFattureFornitoriComponent, {});
+  
+      if (dialogRef != undefined)
+        dialogRef.afterClosed().subscribe((result) => {
+          console.log("The dialog was closed");
+          if (result != undefined) {
+            this.fatture.push(result);
+            this.dataSource.data = this.fatture;
+            console.log("Inserita fattura", result);
+          }
+        });
+    } */
 
-    const deleteButton: DinamicButton = {
-      label: "Cancella",
-      icon: "",
-      cmd: this.deleteAdmin.bind({ ...this }),
-    };
-
-    return [showButton, deleteButton];
-  }
-
-  getInsertFunction(): any {
-    return this.insert.bind({...this})
-  }
-
-  eventsSubject: Subject<Fornitore[]> = new Subject<Fornitore[]>();
-
-  //'["Mostra", "Cancella"]'
-
-  insert() {
-    console.log("Inserimento Fornitore");
-    const fornitore: Fornitore = Fornitore.empty();
-
-    const dialogRef = this.dialog.open(DialogFornitoreComponent, {
-      data: { fornitore: fornitore, readonly: true, newItem: true },
-    });
-
-    dialogRef.afterClosed().subscribe((result) => {
-      console.log("result insert fornitore", result);
-      if (result !== false && result != undefined) {
-
-        this.fornitoreService
-          .insert(result)
+    async show(fattura: FattureFornitori) {
+        this.uploadService
+          .download(fattura.filename, fattura.identifyUserObj, "fatture")
           .then((x) => {
-            this.fornitori.push(x);
-            this.eventsSubject.next(this.fornitori);
+            console.log("download: ", x);
+            x.subscribe(
+              (data) => {
+                console.log("download: ", data);
+                const newBlob = new Blob([data as BlobPart], {
+                  type: "application/pdf",
+                });
+    
+                // IE doesn't allow using a blob object directly as link href
+                // instead it is necessary to use msSaveOrOpenBlob
+                if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+                  window.navigator.msSaveOrOpenBlob(newBlob);
+                  return;
+                }
+    
+                // For other browsers:
+                // Create a link pointing to the ObjectURL containing the blob.
+                const downloadURL = URL.createObjectURL(newBlob);
+                window.open(downloadURL);
+              },
+              (err) => {
+                this.messageService.showMessageError("Errore caricamento file");
+                console.error(err);
+              }
+            );
           })
           .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore Inserimento Fornitore (" + err["status"] + ")"
-            );
+            this.messageService.showMessageError("Errore caricamento file");
+            console.error(err);
           });
       }
-    });
-  }
-
-  deleteAdmin(fornitore: Fornitore) {
-    console.log("Cancella fornitore");
-    this.fornitoreService.delete(fornitore).subscribe(
-      (x) => {
-        const index = this.fornitori.indexOf(fornitore, 0);
-        if (index > -1) {
-          this.fornitori.splice(index, 1);
+    
+/*     delete(fattura: FattureFornitori) {
+      console.log("Cancella fattura:", fattura);
+      this.fattureService.delete(fattura).subscribe((result: any) => {
+        if (result.deletedCount == 0) {
+          this.messageService.showMessageError("Errore nell'eliminazione");
+          console.error("Errore nell'eliminazione");
+        } else {
+          console.log("Eliminazione eseguita con successo", result);
+          const index = this.fatture.indexOf(fattura, 0);
+          if (index > -1) {
+            this.fatture.splice(index, 1);
+          }
+          this.dataSource = new MatTableDataSource<FattureFornitori>(this.fatture);
+          this.dataSource.paginator = this.paginator;
         }
-        console.log("Cancella Fornitore eseguita con successo");
-        this.eventsSubject.next(this.fornitori);
-      },
-      (err) => console.error(`Error Cancellazione fornitore: ${err.message}`)
-    );
+      }),
+        (err) => {
+          this.messageService.showMessageError("Errore nell'eliminazione");
+          console.error("Errore nell'eliminazione", err);
+        };
+    } */
+
   }
-
-  showAdmin(fornitore: Fornitore) {
-    this.fornitoreService
-      .getFornitore(fornitore._id)
-      .then((fornitore) => {
-        console.log("Area amministrativa fornitori");
-        const dialogRef = this.dialog.open(DialogFornitoreComponent, {
-          data: { fornitore: fornitore, readonly: true },
-        });
-
-        if (dialogRef != undefined)
-          dialogRef.afterClosed().subscribe((result) => {
-            if (result != undefined) {
-              this.fornitoreService
-                .save(result)
-                .then((x) => {})
-                .catch((err) => {});
-            }
-          });
-      })
-      .catch((err) => {
-        console.error(err);
-      });
-  }
-
-
-  show(event: { fornitore: Fornitore; button: DinamicButton }) {
-    console.log("Show Event");
-    event.button.cmd(event.fornitore);
-  }
-
-}
+  

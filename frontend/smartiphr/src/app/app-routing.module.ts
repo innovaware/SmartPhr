@@ -23,6 +23,7 @@ import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
 import { CvComponent } from './pages/cv/cv.component';
+import { FattureFornitoriComponent } from './pages/fatture-fornitori/fatture-fornitori.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -49,6 +50,7 @@ const routes: Routes = [
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_consulenti", component: ConsulentiComponent, canActivate: [AuthGuard] },
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
+  { path: "fatture_fornitori", component: FattureFornitoriComponent, canActivate: [AuthGuard] },
   { path: "gest_asp", component: AspComponent, canActivate: [AuthGuard]  },
   { path: "gest_cv", component: CvComponent, canActivate: [AuthGuard]  },
 

@@ -9,7 +9,6 @@
     color: #676a6c;
   }
   
-  
   table {
     width: 100%;
   }
@@ -19,7 +18,23 @@
     width: 100%;
   }
   
-  .mat-column-action {
-    width: 32px;
+  
+  .mat-column-title {
+    flex: 2;
+  }
+  
+  .mat-column-action{
+    text-align: right;
+    width: 230px;
+  }
+  
+  .mat-raised-button {
+    margin-right: 14px;
+  }
+  
+  .buttonTable{
+    color: #ffffff;
+    background-color: #f8ac59;
+    border-color: #f8ac59;
   }
   
