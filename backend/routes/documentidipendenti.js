@@ -21,7 +21,7 @@ router.get("/dipendente/:id/:type", async (req, res) => {
     let type = req.params.type;
 
     const searchTerm = `documentiDipendente${id}`;
-    client.get(searchTerm, async (err, data) => {
+    /*client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
@@ -35,8 +35,18 @@ router.get("/dipendente/:id/:type", async (req, res) => {
         client.setex(searchTerm, redisTimeCache, JSON.stringify(documenti));
         res.status(200).json(documenti);
       }
+    });*/
+
+
+    const documenti = await DocDipendente.find({
+      dipendente: id,
+      type : type
     });
 
+    client.setex(searchTerm, redisTimeCache, JSON.stringify(documenti));
+        res.status(200).json(documenti);
+
+        
     // const fatture = await fatture.find();
     // res.status(200).json(fatture);
   } catch (err) {
@@ -74,6 +84,8 @@ router.post("/:id", async (req, res) => {
       dateupload: Date.now(),
       note: req.body.note,
       type: req.body.type,
+      descrizione:  req.body.descrizione,
+      filenameesito:  req.body.filenameesito
     });
 
     console.log("Insert doc: ", doc);

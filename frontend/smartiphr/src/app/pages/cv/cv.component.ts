@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
 import { DialogCvComponent } from "src/app/dialogs/dialog-cv/dialog-cv.component";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { Curriculum } from "src/app/models/curriculum";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { CurriculumService } from "src/app/service/curriculum.service";
@@ -43,6 +44,11 @@ export class CvComponent implements OnInit {
   }
 
   ngOnInit() {}
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
 
   async insert() {
     var dialogRef = this.dialog.open(DialogCvComponent, {});
@@ -96,23 +102,50 @@ export class CvComponent implements OnInit {
 
   deleteCV(curriculum: Curriculum) {
     console.log("Cancella curriculum:", curriculum);
-    this.curriculumService.delete(curriculum).subscribe((result: any) => {
-      if (result.deletedCount == 0) {
-        this.messageService.showMessageError("Errore nell'eliminazione");
-        console.error("Errore nell'eliminazione");
-      } else {
-        console.log("Eliminazione eseguita con successo", result);
-        const index = this.curriculum.indexOf(curriculum, 0);
-        if (index > -1) {
-          this.curriculum.splice(index, 1);
-        }
-        this.dataSource = new MatTableDataSource<Curriculum>(this.curriculum);
-        this.dataSource.paginator = this.paginator;
-      }
-    }),
-      (err) => {
-        this.messageService.showMessageError("Errore nell'eliminazione");
-        console.error("Errore nell'eliminazione", err);
-      };
+    this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il consulente ?" },
+        //width: "600px",
+        height: "auto !important"
+      })
+      .afterClosed()
+      .subscribe(
+        (result) => {
+          if (result == true) {
+            this.curriculumService
+              .delete(curriculum)
+              .subscribe((result: any) => {
+                if (result.deletedCount == 0) {
+                  this.messageService.showMessageError(
+                    "Errore nell'eliminazione"
+                  );
+                  console.error("Errore nell'eliminazione");
+                } else {
+                  console.log("Eliminazione eseguita con successo", result);
+                  const index = this.curriculum.indexOf(curriculum, 0);
+                  if (index > -1) {
+                    this.curriculum.splice(index, 1);
+                  }
+                  this.dataSource = new MatTableDataSource<Curriculum>(
+                    this.curriculum
+                  );
+                  this.dataSource.paginator = this.paginator;
+                }
+              }),
+              (err) => {
+                this.messageService.showMessageError(
+                  "Errore nell'eliminazione"
+                );
+                console.error("Errore nell'eliminazione", err);
+              };
+          } else {
+            console.log("Cancellazione CV annullata");
+            this.messageService.showMessageError(
+              "Cancellazione Curriculumn Annullata"
+            );
+          }
+        },
+        (err) => console.error(`Error Cancellazione curriculumn: ${err}`)
+      );
   }
 }

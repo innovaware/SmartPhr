@@ -6,6 +6,8 @@ const DocDipendenteSchema = mongoose.Schema({
   dateupload: Date,
   note: String,
   type: String,
+  descrizione: String,
+  filenameesito: String
 });
 
 module.exports = mongoose.model(

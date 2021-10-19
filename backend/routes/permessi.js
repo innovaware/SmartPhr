@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 
 //LISTA PERMESSI DIPENDENTE
 // http://[HOST]:[PORT]/api/permessiDipendente/[ID_DIPENDENTE]
-router.get("/:id", async (req, res) => {
+router.get("/dipendente/:id", async (req, res) => {
     const { id } = req.params;
     try {
       const searchTerm = `PERMESSIBY${id}`;
@@ -49,7 +49,8 @@ router.get("/:id", async (req, res) => {
         if (data && !redisDisabled) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const permessi = await Permessi.find(({ userId }) => userId === id);
+         
+          const permessi = await Permessi.find({ user: id });
   
           client.setex(searchTerm, redisTimeCache, JSON.stringify(permessi));
           res.status(200).json(permessi);
@@ -94,7 +95,8 @@ router.post("/", async (req, res) => {
         dataFine: req.body.dataFine,
         dataRichiesta: req.body.dataRichiesta,
         accettata: false,
-        userId: req.body.idUser
+        user: req.body.user,
+        closed: false
     });
 
     // Salva i dati sul mongodb
@@ -124,7 +126,9 @@ router.put("/:id", async (req, res) => {
             dataInizio: req.body.dataInizio,
             dataFine: req.body.dataFine,
             dataRichiesta: req.body.dataRichiesta,
-            accettata: req.body.accettata
+            accettata: req.body.accettata,
+            user: req.body.user,
+            closed: true
         },
       }
     );

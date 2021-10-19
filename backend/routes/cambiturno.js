@@ -39,7 +39,7 @@ router.get("/", async (req, res) => {
 
 //LISTA CAMBITURNO DIPENDENTE
 // http://[HOST]:[PORT]/api/cambiturnoDipendente/[ID_DIPENDENTE]
-router.get("/:id", async (req, res) => {
+router.get("/dipendente/:id", async (req, res) => {
     const { id } = req.params;
     try {
       const searchTerm = `CAMBITURNOBY${id}`;
@@ -49,7 +49,8 @@ router.get("/:id", async (req, res) => {
         if (data && !redisDisabled) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const cambiturno = await CambiTurno.find(({ userId }) => userId === id);
+          
+          const cambiturno = await CambiTurno.find({ user: id });
   
           client.setex(searchTerm, redisTimeCache, JSON.stringify(cambiturno));
           res.status(200).json(cambiturno);
@@ -94,12 +95,15 @@ router.post("/", async (req, res) => {
       cognome: req.body.cognome,
       nome: req.body.nome,
       cf: req.body.cf,
+      user: req.body.user,
       dataInizioVT: req.body.dataInizioVT,
       dataFineVT: req.body.dataFineVT,
       dataInizioNT: req.body.dataInizioNT,
       dataFineNT: req.body.dataFineNT,
       motivazione: req.body.motivazione,
-      dataRichiesta: req.body.dataRichiesta
+      dataRichiesta: req.body.dataRichiesta,
+      accettata: false,
+      closed: false
     });
 
     // Salva i dati sul mongodb
@@ -132,7 +136,9 @@ router.put("/:id", async (req, res) => {
           dataFineNT: req.body.dataFineNT,
           motivazione: req.body.motivazione,
           dataRichiesta: req.body.dataRichiesta,
-            accettata: req.body.accettata
+          accettata: req.body.accettata,
+          user: req.body.user,
+          closed: true
         },
       }
     );

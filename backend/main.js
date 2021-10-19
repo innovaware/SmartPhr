@@ -409,6 +409,11 @@ var documentiDipendentiRouter = require("./routes/documentidipendenti");
 app.use("/api/documentidipendenti", logHandler, authorizationHandler, documentiDipendentiRouter);
 
 
+// MedicinaLavoro API
+var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
+app.use("/api/documentimedicinalavoro", logHandler, authorizationHandler, documentiMedicinaLavoroRouter);
+
+
 /*** FINE GESTIONE PERSONALE ***/
 
 app.listen(PORT, function () {
@@ -424,3 +429,13 @@ app.use("/api/documentifornitore", logHandler, authorizationHandler, documentiFo
 
 var curriculumRouter = require("./routes/curriculum");
 app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
+
+/** GESTIONE FATTURE FORNITORI */
+
+var fattureFornitoriRouter = require("./routes/fattureFornitori");
+app.use("/api/fatturefornitori", logHandler, authorizationHandler, fattureFornitoriRouter);
+
+/** GESTIONE BONIFICI FORNITORI */
+
+var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
+app.use("/api/bonificifornitori", logHandler, authorizationHandler, bonificiFornitoriRouter);

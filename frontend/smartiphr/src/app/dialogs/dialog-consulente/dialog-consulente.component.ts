@@ -294,7 +294,7 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   async getFatture() {
-    console.log(`Get Fatture paziente: ${this.item.consulente._id}`);
+    console.log(`Get Fatture consulente: ${this.item.consulente._id}`);
 
     if (this.item.consulente._id != undefined) {
       this.fattureService
@@ -319,6 +319,7 @@ export class DialogConsulenteComponent implements OnInit {
   async addFattura() {
     this.addingFattura = true;
     this.nuovaFattura = {
+      identifyUser: this.item.consulente._id,
       filename: undefined,
       note: "",
     };
@@ -437,6 +438,7 @@ export class DialogConsulenteComponent implements OnInit {
     console.log("Add Bonifico");
     this.addingBonifici = true;
     this.nuovaBonifico = {
+      identifyUser: this.item.consulente._id,
       filename: undefined,
       note: "",
     };

@@ -11,5 +11,6 @@ export class Cambiturno {
     motivazione?: string;
     dataRichiesta?: Date;
     accettata?: boolean;
+    closed?: boolean;
   }
   

@@ -16,6 +16,11 @@ export class PresenzeService {
     return this.http.get<Presenze[]>(this.api + "/api/presenze").toPromise();
   }
 
+
+  async getPresenzeByDipendente(id): Promise<Presenze[]> {
+    return this.http.get<Presenze[]>(this.api + "/api/presenze/dipendente/" + id).toPromise();
+  }
+
   async insertPresenza(presenza: Presenze) {
     var body = presenza;
     return this.http.post(this.api + "/api/presenza", body).toPromise();

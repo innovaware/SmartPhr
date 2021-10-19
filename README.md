@@ -1,4 +1,4 @@
-[![Backend](https://github.com/Dan83/SmartPhr/actions/workflows/backend_auto.yml/badge.svg)](https://github.com/Dan83/SmartPhr/actions/workflows/backend_auto.yml)
+[![Backend](https://github.com/Dan83/SmartPhr/actions/workflows/backend.yml/badge.svg)](https://github.com/Dan83/SmartPhr/actions/workflows/backend.yml)
 
 ![Fronted](https://github.com/Dan83/SmartPhr/actions/workflows/frontend.yml/badge.svg)
 
