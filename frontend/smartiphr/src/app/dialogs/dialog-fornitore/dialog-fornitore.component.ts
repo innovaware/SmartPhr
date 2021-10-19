@@ -286,6 +286,7 @@ export class DialogFornitoreComponent implements OnInit {
     console.log("Add Bonifico");
     this.addingBonifici = true;
     this.nuovaBonifico = {
+      identifyUser: this.fornitore._id,
       filename: undefined,
       note: ""
     };
