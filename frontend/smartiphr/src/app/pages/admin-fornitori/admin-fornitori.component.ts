@@ -2,6 +2,7 @@ import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { Subject } from "rxjs";
 import { DialogFornitoreComponent } from 'src/app/dialogs/dialog-fornitore/dialog-fornitore.component';
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
 import { Fornitore } from "src/app/models/fornitore";
 import { MessagesService } from 'src/app/service/messages.service';
@@ -83,6 +84,16 @@ export class AdminFornitoriComponent implements OnInit {
 
   deleteAdmin(fornitore: Fornitore) {
     console.log("Cancella fornitore");
+    this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il fornitore?" },
+        //width: "600px",
+      })
+      .afterClosed()
+      .subscribe(
+        (result) => {
+          if (result == true) {
+
     this.fornitoreService.delete(fornitore).subscribe(
       (x) => {
         const index = this.fornitori.indexOf(fornitore, 0);
@@ -94,6 +105,16 @@ export class AdminFornitoriComponent implements OnInit {
       },
       (err) => console.error(`Error Cancellazione fornitore: ${err.message}`)
     );
+  } else {
+    console.log("Cancellazione fornitore annullata");
+    this.messageService.showMessageError(
+      "Cancellazione Paziente Annullata"
+    );
+  }
+},
+(err) => console.error(`Error Cancellazione fornitore: ${err}`)
+);
+
   }
 
   showAdmin(fornitore: Fornitore) {

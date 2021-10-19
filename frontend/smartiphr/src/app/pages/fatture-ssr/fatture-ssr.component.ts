@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { Fatture } from "src/app/models/fatture";
 import { FattureService } from "src/app/service/fatture.service";
 import { MessagesService } from "src/app/service/messages.service";
@@ -28,6 +29,7 @@ import { UploadService } from "src/app/service/upload.service";
     fattureSSR: Fatture[];
   
     constructor(
+        public dialog: MatDialog,
       public messageService: MessagesService,
       public uploadService: UploadService,
     //   private dialog: MatDialog,
@@ -69,7 +71,16 @@ import { UploadService } from "src/app/service/upload.service";
 
     async deleteFattura(fattura: Fatture) {
         console.log("Cancella fattura: ", fattura);
-    
+        this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il paziente?" },
+        //width: "600px",
+      })
+      .afterClosed()
+      .subscribe(
+        (result) => {
+          if (result == true) {
+            
         this.fattureSSRService
           .remove(fattura)
           .then((x) => {
@@ -87,6 +98,16 @@ import { UploadService } from "src/app/service/upload.service";
             this.messageService.showMessageError("Errore nella cancellazione Fattura");
             console.error(err);
           });
+
+        } else {
+            console.log("Cancellazione Paziente annullata");
+            this.messageService.showMessageError(
+              "Cancellazione Paziente Annullata"
+            );
+          }
+        },
+        (err) => console.error(`Error Cancellazione paziente: ${err}`)
+      );
       }
 
     async addFattura() {

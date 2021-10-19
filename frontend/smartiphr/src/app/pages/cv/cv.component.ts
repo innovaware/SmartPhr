@@ -104,7 +104,7 @@ export class CvComponent implements OnInit {
     console.log("Cancella curriculum:", curriculum);
     this.dialog
       .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il consulente ?" },
+        data: { message: "Cancellare il cv?" },
         //width: "600px",
         height: "auto !important"
       })

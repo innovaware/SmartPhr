@@ -84,13 +84,14 @@ export class AdminPazientiComponent implements OnInit {
     console.log("Cancella Paziente");
     this.dialog
       .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il consulente ?" },
+        data: { message: "Cancellare il paziente?" },
         //width: "600px",
       })
       .afterClosed()
       .subscribe(
         (result) => {
           if (result == true) {
+            
             this.pazienteService.delete(paziente).subscribe(
               (x) => {
                 const index = this.pazienti.indexOf(paziente, 0);
@@ -103,6 +104,7 @@ export class AdminPazientiComponent implements OnInit {
               (err) =>
                 console.error(`Error Cancellazione paziente: ${err.message}`)
             );
+
           } else {
             console.log("Cancellazione Paziente annullata");
             this.messageService.showMessageError(

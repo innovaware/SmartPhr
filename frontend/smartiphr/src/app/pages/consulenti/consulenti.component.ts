@@ -86,7 +86,7 @@ export class ConsulentiComponent implements OnInit {
 
     this.dialog
       .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il consulente ?" },
+        data: { message: "Cancellare il consulente?" },
         //width: "600px",
       })
       .afterClosed()
