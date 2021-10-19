@@ -73,7 +73,7 @@ import { UploadService } from "src/app/service/upload.service";
         console.log("Cancella fattura: ", fattura);
         this.dialog
       .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il paziente?" },
+        data: { message: "Cancellare la fattura?" },
         //width: "600px",
       })
       .afterClosed()
@@ -100,13 +100,13 @@ import { UploadService } from "src/app/service/upload.service";
           });
 
         } else {
-            console.log("Cancellazione Paziente annullata");
+            console.log("Cancellazione fattura annullata");
             this.messageService.showMessageError(
-              "Cancellazione Paziente Annullata"
+              "Cancellazione fattura Annullata"
             );
           }
         },
-        (err) => console.error(`Error Cancellazione paziente: ${err}`)
+        (err) => console.error(`Error Cancellazione fattura: ${err}`)
       );
       }
 
