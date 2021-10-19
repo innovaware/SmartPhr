@@ -38,5 +38,9 @@ export class DipendentiService {
       .toPromise();
   }
 
+  async remove(contratto: Dipendenti) {
+    return this.http.delete(`${this.api}/api/dipendenti/${contratto._id}`).toPromise();
+  }
+
 
 }

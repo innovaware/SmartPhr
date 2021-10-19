@@ -110,7 +110,13 @@ ngOnInit() {
     this.ferieService
     .updateFerie(ferie)
     .then((result: Ferie) => {
-     ferie.accettata;
+      
+      const index = this.ferie.indexOf(ferie);
+      ferie.closed = true;
+      this.ferie[index] = ferie;
+
+      this.dataSource.data = this.ferie;
+
     })
     .catch((err) => {
       this.showMessageError("Errore modifica stato ferie");
@@ -119,7 +125,7 @@ ngOnInit() {
   }
 
 
-  sendResp(row, item){
+  sendResp(row){
     let fId = row._id;
     let status = row.accettata;
     let message = 'Sei sicuro di voler respingere questa richiesta?';
@@ -130,6 +136,7 @@ ngOnInit() {
     let result = window.confirm(message);
     if(result){
         this.updateFerie(row);
+       
     }
 
   }

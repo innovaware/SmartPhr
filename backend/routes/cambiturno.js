@@ -95,6 +95,7 @@ router.post("/", async (req, res) => {
       cognome: req.body.cognome,
       nome: req.body.nome,
       cf: req.body.cf,
+      user: req.body.user,
       dataInizioVT: req.body.dataInizioVT,
       dataFineVT: req.body.dataFineVT,
       dataInizioNT: req.body.dataInizioNT,
@@ -136,6 +137,7 @@ router.put("/:id", async (req, res) => {
           motivazione: req.body.motivazione,
           dataRichiesta: req.body.dataRichiesta,
           accettata: req.body.accettata,
+          user: req.body.user,
           closed: true
         },
       }

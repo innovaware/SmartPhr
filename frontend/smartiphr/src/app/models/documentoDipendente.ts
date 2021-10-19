@@ -5,6 +5,8 @@ export class DocumentoDipendente {
     filename: string;
     dateupload?: Date;
     note?: string;
+    descrizione?: string;
+    filenameesito?: string;
     file? : File;
   }
   

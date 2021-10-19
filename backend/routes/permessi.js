@@ -95,7 +95,7 @@ router.post("/", async (req, res) => {
         dataFine: req.body.dataFine,
         dataRichiesta: req.body.dataRichiesta,
         accettata: false,
-        user: req.body.idUser,
+        user: req.body.user,
         closed: false
     });
 
@@ -127,6 +127,7 @@ router.put("/:id", async (req, res) => {
             dataFine: req.body.dataFine,
             dataRichiesta: req.body.dataRichiesta,
             accettata: req.body.accettata,
+            user: req.body.user,
             closed: true
         },
       }

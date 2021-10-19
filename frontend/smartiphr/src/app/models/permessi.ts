@@ -8,5 +8,6 @@ export class Permessi {
     dataFine?: Date;
     dataRichiesta?: Date;
     accettata?: boolean;
+    closed?: boolean;
   }
   

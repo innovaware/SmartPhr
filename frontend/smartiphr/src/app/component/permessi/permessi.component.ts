@@ -109,12 +109,16 @@ ngOnInit() {
   }
 
 
-  updatePermesso(permesso: Permessi) {
+  async updatePermesso(permesso: Permessi) {
    
     this.permessiService
     .updatePermesso(permesso)
     .then((result: Permessi) => {
-      this.loadTable();
+      const index = this.permessi.indexOf(permesso);
+      permesso.closed = true;
+      this.permessi[index] = permesso;
+
+      this.dataSource.data = this.permessi;
     })
     .catch((err) => {
       this.showMessageError("Errore modifica stato Permessi");
