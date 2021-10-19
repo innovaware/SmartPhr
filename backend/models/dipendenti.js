@@ -17,7 +17,7 @@ const DipendentiSchema = mongoose.Schema({
   telefono: String,
   email: String,
   idUser: String,
-  presaVisRegolamento : Boolean
+  accettatoRegolamento : Boolean
 });
 
 module.exports = mongoose.model('Dipendenti', DipendentiSchema, 'dipendenti');

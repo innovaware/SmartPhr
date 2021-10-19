@@ -26,7 +26,7 @@
             <th mat-header-cell *matHeaderCellDef>
             </th>
             <td mat-cell *matCellDef="let row">
-                <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row, item)">Invia Risposta</button>
+                <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row)">Invia Risposta</button>
             </td>
           </ng-container>
   

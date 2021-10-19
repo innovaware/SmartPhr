@@ -134,4 +134,25 @@ router.put("/:id", async (req, res) => {
 });
 
 
+
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    console.log('id:' + id);
+    const dipendente = await Dipendenti.remove({ _id: id });
+
+    let searchTerm = `DipendenteBY${id}`;
+    client.del(searchTerm);
+    searchTerm = `Dipendente${id}`;
+    client.del(searchTerm);
+
+
+    res.status(200);
+    res.json(dipendente);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
 module.exports = router;

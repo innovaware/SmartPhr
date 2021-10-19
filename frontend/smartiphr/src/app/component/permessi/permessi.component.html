@@ -26,7 +26,7 @@
               <th mat-header-cell *matHeaderCellDef>
               </th>
               <td mat-cell *matCellDef="let row">
-                  <button *ngFor="let item of buttons" mat-raised-button color="accent" class="action-button" (click)="call(row, item)">{{item}}</button>
+                <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row, item)">Invia Risposta</button>
               </td>
             </ng-container>
     
@@ -76,7 +76,7 @@
   
             <ng-container matColumnDef="accettata">
               <th mat-header-cell *matHeaderCellDef> Approvata </th>
-              <td mat-cell *matCellDef="let element"> {{element.accettata}} </td>
+              <td mat-cell *matCellDef="let element">  <input type="checkbox" slot="end" [(ngModel)]="element.accettata"  [disabled]=element.closed/></td>
             </ng-container>
     
             <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

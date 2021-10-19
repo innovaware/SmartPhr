@@ -119,12 +119,15 @@ loadTable(){
   }
 
 
-  updateCambioturno(cambio: Cambiturno) {
+  async updateCambioturno(cambio: Cambiturno) {
    
     this.cambiturniService
     .updateCambioturno(cambio)
     .then((result: Cambiturno) => {
-      this.loadTable();
+      const index = this.cambiturno.indexOf(cambio);
+      cambio.closed = true;
+      this.cambiturno[index] = cambio;
+      this.dataSource.data = this.cambiturno;
     })
     .catch((err) => {
       this.showMessageError("Errore modifica stato Cambiturno");

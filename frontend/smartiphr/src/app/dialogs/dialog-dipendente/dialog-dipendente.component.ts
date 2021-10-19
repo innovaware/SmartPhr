@@ -46,6 +46,7 @@ export class DialogDipendenteComponent implements OnInit {
 
   DisplayedRichiesteColumns: string[] = ["date", "action"];
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
+  DisplayedColumnsCertMalattia: string[] = ["descrizione", "namefile", "date", "note", "action"];
   DisplayedColumnsMedicinaLavoro : string[] = ["filenameRichiesta", "dateuploadRichiesta", "noteRichiesta","filenameCertificato", "dateuploadCertificato", "noteCertificato", "action"];
 
  
@@ -418,7 +419,8 @@ export class DialogDipendenteComponent implements OnInit {
     this.nuovoCertificatoMalattia = {
       filename: undefined,
       note: "",
-      type: 'CertificatoMalattia'
+      type: 'CertificatoMalattia',
+      filenameesito: ''
     };
   }
 
@@ -499,19 +501,19 @@ export class DialogDipendenteComponent implements OnInit {
         });
     })
     .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
+      this.showMessageError("Errore Inserimento CertificatoMalattia");
       console.error(err);
     });
   }
 
-
+  showEsit(doc: DocumentoDipendente){}
 
   async getCertificatoMalattia() {
     console.log(`get CertificatoMalattia dipendente: ${this.dipendente._id}`);
     this.docService
       .get(this.dipendente, 'CertificatoMalattia')
       .then((f: DocumentoDipendente[]) => {
-        this.docsIdentita = f;
+        this.certificatiMalattia = f;
 
         this.certificatiMalattiaDataSource = new MatTableDataSource<DocumentoDipendente>(this.certificatiMalattia);
         this.certificatiMalattiaDataSource.paginator = this.certificatiMalattiaPaginator;
