@@ -19,7 +19,6 @@ export class MessagesService {
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
       });
   }
 }

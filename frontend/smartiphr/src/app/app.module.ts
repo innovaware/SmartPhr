@@ -112,6 +112,7 @@ import { TableDocumentComponent } from './component/table-document/table-documen
 import { CvComponent } from './pages/cv/cv.component';
 import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
 import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
+import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
 
 @NgModule({
   declarations: [
@@ -186,6 +187,7 @@ import { TableFattureFornitoriComponent } from './component/table-fatture-fornit
     CvComponent,
     DialogCvComponent,
     TableFattureFornitoriComponent,
+    DialogQuestionComponent,
   ],
   imports: [
     BrowserModule,
@@ -235,6 +237,7 @@ import { TableFattureFornitoriComponent } from './component/table-fatture-fornit
     DialogMessageErrorComponent,
     DialogPazienteComponent,
     DialogCvComponent,
+    DialogQuestionComponent,
   ],
 })
 export class AppModule {

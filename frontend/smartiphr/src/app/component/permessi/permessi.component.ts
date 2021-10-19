@@ -19,7 +19,7 @@ export class PermessiComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
-  
+
   @Output() showItemEmiter = new EventEmitter<{
     permessi: Permessi;
     button: string;
@@ -110,7 +110,7 @@ ngOnInit() {
 
 
   async updatePermesso(permesso: Permessi) {
-   
+
     this.permessiService
     .updatePermesso(permesso)
     .then((result: Permessi) => {
@@ -127,7 +127,7 @@ ngOnInit() {
   }
 
 
-  sendResp(row, item){
+  sendResp(row){
     let fId = row._id;
     let status = row.accettata;
     let message = 'Sei sicuro di voler respingere questa richiesta?';
