@@ -82,6 +82,7 @@ import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { FattureFornitoriComponent } from "./pages/fatture-fornitori/fatture-fornitori.component";
 import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-fornitori.component";
+import { FattureSSRComponent } from "./pages/fatture-ssr/fatture-ssr.component";
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
@@ -159,6 +160,7 @@ import { TableFattureFornitoriComponent } from './component/table-fatture-fornit
     AdminFornitoriComponent,
     FattureFornitoriComponent,
     BonificiFornitoriComponent,
+    FattureSSRComponent,
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,

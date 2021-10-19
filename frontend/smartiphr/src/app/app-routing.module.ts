@@ -25,6 +25,7 @@ import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.compone
 import { CvComponent } from './pages/cv/cv.component';
 import { FattureFornitoriComponent } from './pages/fatture-fornitori/fatture-fornitori.component';
 import { BonificiFornitoriComponent } from './pages/bonifici-fornitori/bonifici-fornitori.component';
+import { FattureSSRComponent } from './pages/fatture-ssr/fatture-ssr.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -53,6 +54,7 @@ const routes: Routes = [
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
   { path: "fatture_fornitori", component: FattureFornitoriComponent, canActivate: [AuthGuard] },
   { path: "bonifici_fornitori", component: BonificiFornitoriComponent, canActivate: [AuthGuard] },
+  { path: "fatture_ssr", component: FattureSSRComponent, canActivate: [AuthGuard] },
   { path: "gest_asp", component: AspComponent, canActivate: [AuthGuard]  },
   { path: "gest_cv", component: CvComponent, canActivate: [AuthGuard]  },
 
