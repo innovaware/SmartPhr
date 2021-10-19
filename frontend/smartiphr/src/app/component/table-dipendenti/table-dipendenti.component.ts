@@ -124,7 +124,7 @@ ngOnInit() {}
 
       user: "",
       group: "",
-      presaVisRegolamento: false
+      accettatoRegolamento: false
     };
 
     const dialogRef = this.dialog.open(DialogDipendenteComponent, {
