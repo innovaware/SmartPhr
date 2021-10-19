@@ -434,3 +434,8 @@ app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
 
 var fattureFornitoriRouter = require("./routes/fatturefornitori");
 app.use("/api/fatturefornitori", logHandler, authorizationHandler, fattureFornitoriRouter);
+
+/** GESTIONE BONIFICI FORNITORI */
+
+var bonificiFornitoriRouter = require("./routes/bonificifornitori");
+app.use("/api/bonificifornitori", logHandler, authorizationHandler, bonificiFornitoriRouter);

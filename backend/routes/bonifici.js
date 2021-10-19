@@ -12,11 +12,11 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
-async function getBonificoByIdPaziente(req, res) {
+async function get(req, res) {
   try {
     const { id } = req.params;
 
-    const searchTerm = `bonificiPaziente${id}`;
+    const searchTerm = `bonifici${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -25,7 +25,7 @@ async function getBonificoByIdPaziente(req, res) {
         res.status(200).send(JSON.parse(data));
       } else {
         const bonifici = await Bonifici.find({
-          paziente: id,
+          identifyUser: id,
         });
         client.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
         console.log("Add caching: ", searchTerm);
@@ -64,11 +64,11 @@ async function getBonificoById(req, res) {
   }
 }
 
-async function insertBonificoByPazienteId(req, res) {
+async function insertBonifico(req, res) {
   try {
     const { id } = req.params;
     const bonifici = new Bonifici({
-      paziente: id,
+      identifyUser: id,
       filename: req.body.filename,
       dateupload: Date.now(),
       note: req.body.note,
@@ -78,7 +78,7 @@ async function insertBonificoByPazienteId(req, res) {
 
     const result = await bonifici.save();
 
-    const searchTerm = `bonificiPaziente${id}`;
+    const searchTerm = `bonifici${id}`;
     client.del(searchTerm);
 
     res.status(200);
@@ -89,14 +89,14 @@ async function insertBonificoByPazienteId(req, res) {
   }
 }
 
-async function modifyBonificoByPazienteId(req, res) {
+async function modifyBonifico(req, res) {
   try {
     const { id } = req.params;
     const bonifici = await Bonifici.updateOne(
       { _id: id },
       {
         $set: {
-          paziente: req.body.pazienteID,
+          identifyUser: req.body.identifyUser,
           filename: req.body.filename,
           note: req.body.note,
         },
@@ -119,7 +119,7 @@ async function deleteBonifico(req, res) {
     const { id } = req.params;
 
     const bonifici_item = await Bonifici.findById(id);
-    const idPaziente = bonifici_item.paziente;
+    const identifyUser = bonifici_item.identifyUser;
 
     const bonifici = await Bonifici.remove({ _id: id });
 
@@ -128,7 +128,7 @@ async function deleteBonifico(req, res) {
     client.del(searchTerm);
     console.log("Delete caching: ", searchTerm);
 
-    searchTerm = `bonificiPaziente${idPaziente}`;
+    searchTerm = `bonifici${identifyUser}`;
     client.del(searchTerm);
     console.log("Delete caching: ", searchTerm);
 
@@ -139,10 +139,10 @@ async function deleteBonifico(req, res) {
   }
 }
 
-router.get("/paziente/:id", getBonificoByIdPaziente);
+router.get("/:id", get);
 router.get("/:id", getBonificoById);
-router.post("/paziente/:id", insertBonificoByPazienteId);
-router.put("/:id", modifyBonificoByPazienteId);
+router.post("/:id", insertBonifico);
+router.put("/:id", modifyBonifico);
 router.delete("/:id", deleteBonifico);
 
 module.exports = router;

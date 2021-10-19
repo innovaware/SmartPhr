@@ -2,7 +2,7 @@ const express = require("express");
 //const jwt_decode = require("jwt-decode");
 
 const router = express.Router();
-const Fatture = require("../models/fatture");
+const Bonifici = require("../models/bonifici");
 
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
@@ -13,9 +13,9 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
-    console.log("get fatture fornitori");
+    console.log("get bonifici fornitori");
   try {
-    const searchTerm = `FATTUREFORNITORIALL`;
+    const searchTerm = `BONIFICIFORNITORIALL`;
     
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
@@ -23,7 +23,7 @@ router.get("/", async (req, res) => {
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const fattureFornitori = await Fatture.aggregate([
+        const bonificiFornitori = await Bonifici.aggregate([
             { $project: { identifyUserObj: { "$toObjectId": "$identifyUser" }, filename: 1, dateupload: 1, note: 1 }},
             { $lookup: {
               localField: "identifyUserObj",
@@ -36,8 +36,8 @@ router.get("/", async (req, res) => {
              },
              { $project: { dataNascita: 0, comuneNascita: 0, provinciaNascita: 0, indirizzoNascita: 0, indirizzoResidenza: 0, comuneResidenza: 0, provinciaResidenza: 0, mansione: 0, tipoContratto: 0, telefono: 0, email: 0, fromFornitori: 0 } }
           ]);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fattureFornitori));
-        res.status(200).json(fattureFornitori);
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(bonificiFornitori));
+        res.status(200).json(bonificiFornitori);
       }
     });
   } catch (err) {

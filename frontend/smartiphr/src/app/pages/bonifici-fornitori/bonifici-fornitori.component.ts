@@ -1,16 +1,16 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatPaginator, MatTableDataSource } from "@angular/material";
-import { FattureFornitori } from "src/app/models/fattureFornitori";
-import { FattureFornitoriService } from "src/app/service/fattureFornitori.service";
+import { BonificiFornitori } from "src/app/models/bonificiFornitori";
+import { BonificiFornitoriService } from "src/app/service/bonificiFornitori.service";
 import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
 
 @Component({
-    selector: "app-fatture-fornitori",
-    templateUrl: "./fatture-fornitori.component.html",
-    styleUrls: ["./fatture-fornitori.component.css"],
+    selector: "app-bonifici-fornitori",
+    templateUrl: "./bonifici-fornitori.component.html",
+    styleUrls: ["./bonifici-fornitori.component.css"],
   })
-  export class FattureFornitoriComponent implements OnInit {
+  export class BonificiFornitoriComponent implements OnInit {
     displayedColumns: string[] = [
       "filename",
       "dataUpload",
@@ -22,20 +22,20 @@ import { UploadService } from "src/app/service/upload.service";
     ];
   
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    dataSource: MatTableDataSource<FattureFornitori>;
-    fattureFornitori: FattureFornitori[];
+    dataSource: MatTableDataSource<BonificiFornitori>;
+    bonificiFornitori: BonificiFornitori[];
   
     constructor(
       public messageService: MessagesService,
       public uploadService: UploadService,
     //   private dialog: MatDialog,
-      private fattureFornitoriService: FattureFornitoriService
+      private bonificiFornitoriService: BonificiFornitoriService
     ) {
-      this.fattureFornitori = [];
+      this.bonificiFornitori = [];
   
-      this.fattureFornitoriService.get().subscribe((curs: FattureFornitori[]) => {
-        this.fattureFornitori = curs;
-        this.dataSource = new MatTableDataSource<FattureFornitori>(this.fattureFornitori);
+      this.bonificiFornitoriService.get().subscribe((curs: BonificiFornitori[]) => {
+        this.bonificiFornitori = curs;
+        this.dataSource = new MatTableDataSource<BonificiFornitori>(this.bonificiFornitori);
         this.dataSource.paginator = this.paginator;
       });
     }
@@ -49,22 +49,22 @@ import { UploadService } from "src/app/service/upload.service";
     }
   
 /*     async insert() {
-      var dialogRef = this.dialog.open(DialogFattureFornitoriComponent, {});
+      var dialogRef = this.dialog.open(DialogBonificiFornitoriComponent, {});
   
       if (dialogRef != undefined)
         dialogRef.afterClosed().subscribe((result) => {
           console.log("The dialog was closed");
           if (result != undefined) {
-            this.fatture.push(result);
-            this.dataSource.data = this.fatture;
-            console.log("Inserita fattura", result);
+            this.bonifici.push(result);
+            this.dataSource.data = this.bonifici;
+            console.log("Inserita bonifico", result);
           }
         });
     } */
 
-    async show(fattura: FattureFornitori) {
+    async show(bonifico: BonificiFornitori) {
         this.uploadService
-          .download(fattura.filename, fattura.identifyUserObj, "fatture")
+          .download(bonifico.filename, bonifico.identifyUserObj, "bonifici")
           .then((x) => {
             console.log("download: ", x);
             x.subscribe(
@@ -98,19 +98,19 @@ import { UploadService } from "src/app/service/upload.service";
           });
       }
     
-/*     delete(fattura: FattureFornitori) {
-      console.log("Cancella fattura:", fattura);
-      this.fattureService.delete(fattura).subscribe((result: any) => {
+/*     delete(bonifico: BonificiFornitori) {
+      console.log("Cancella bonifico:", bonifico);
+      this.bonificiService.delete(bonifico).subscribe((result: any) => {
         if (result.deletedCount == 0) {
           this.messageService.showMessageError("Errore nell'eliminazione");
           console.error("Errore nell'eliminazione");
         } else {
           console.log("Eliminazione eseguita con successo", result);
-          const index = this.fatture.indexOf(fattura, 0);
+          const index = this.bonifici.indexOf(bonifico, 0);
           if (index > -1) {
-            this.fatture.splice(index, 1);
+            this.bonifici.splice(index, 1);
           }
-          this.dataSource = new MatTableDataSource<FattureFornitori>(this.fatture);
+          this.dataSource = new MatTableDataSource<BonificiFornitori>(this.bonifici);
           this.dataSource.paginator = this.paginator;
         }
       }),
