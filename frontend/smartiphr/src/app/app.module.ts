@@ -88,8 +88,8 @@ import { FattureSSComponent } from "./pages/fatture-ss/fatture-ss.component";
  
 import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
 import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
-/*import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
-import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component'; */
+import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
+/*import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component'; */
 
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
@@ -173,8 +173,8 @@ import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-questi
     FattureSSComponent,
     AnticipoFattureASPComponent,
     NoteCreditoASPComponent,
-    /*ProspettoCMASPComponent,
-    PuntoFattureASPComponent, */
+    ProspettoCMASPComponent,
+    /*PuntoFattureASPComponent, */
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,

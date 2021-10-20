@@ -31,8 +31,8 @@ import { FattureSSComponent } from './pages/fatture-ss/fatture-ss.component';
  
 import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
 import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
-/*import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
-import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component'; */
+import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
+/*import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component'; */
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -67,8 +67,8 @@ const routes: Routes = [
    
   { path: "anticipi_fatture_asp", component: AnticipoFattureASPComponent, canActivate: [AuthGuard] },
   { path: "note_credito_asp", component: NoteCreditoASPComponent, canActivate: [AuthGuard] },
-  /*{ path: "prospetto_mensile_asp", component: ProspettoCMASPComponent, canActivate: [AuthGuard] },
-  { path: "punto_fatture_asp", component: PuntoFattureASPComponent, canActivate: [AuthGuard] }, */
+  { path: "prospetto_mensile_asp", component: ProspettoCMASPComponent, canActivate: [AuthGuard] },
+  /*{ path: "punto_fatture_asp", component: PuntoFattureASPComponent, canActivate: [AuthGuard] }, */
 
   { path: "gest_asp", component: AspComponent, canActivate: [AuthGuard]  },
   { path: "gest_cv", component: CvComponent, canActivate: [AuthGuard]  },
