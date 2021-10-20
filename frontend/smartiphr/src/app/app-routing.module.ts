@@ -27,7 +27,12 @@ import { FattureFornitoriComponent } from './pages/fatture-fornitori/fatture-for
 import { BonificiFornitoriComponent } from './pages/bonifici-fornitori/bonifici-fornitori.component';
 import { FattureSSRComponent } from './pages/fatture-ssr/fatture-ssr.component';
 import { FattureSSComponent } from './pages/fatture-ss/fatture-ss.component';
-// import { ProspettoCMComponent } from './pages/prospetto-cm/prospetto-cm.component';
+
+ 
+import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
+import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
+/*import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
+import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component'; */
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -59,10 +64,11 @@ const routes: Routes = [
   
   { path: "fatture_ssr", component: FattureSSRComponent, canActivate: [AuthGuard] },
   { path: "fatture_ss", component: FattureSSComponent, canActivate: [AuthGuard] },
-/*   { path: "prospetto_mensile", component: FattureSSComponent, canActivate: [AuthGuard] },
-  { path: "anticipi_fatture", component: FattureSSComponent, canActivate: [AuthGuard] },
-  { path: "note_credito", component: FattureSSComponent, canActivate: [AuthGuard] },
-  { path: "punto_fatture", component: FattureSSComponent, canActivate: [AuthGuard] }, */
+   
+  { path: "anticipi_fatture_asp", component: AnticipoFattureASPComponent, canActivate: [AuthGuard] },
+  { path: "note_credito_asp", component: NoteCreditoASPComponent, canActivate: [AuthGuard] },
+  /*{ path: "prospetto_mensile_asp", component: ProspettoCMASPComponent, canActivate: [AuthGuard] },
+  { path: "punto_fatture_asp", component: PuntoFattureASPComponent, canActivate: [AuthGuard] }, */
 
   { path: "gest_asp", component: AspComponent, canActivate: [AuthGuard]  },
   { path: "gest_cv", component: CvComponent, canActivate: [AuthGuard]  },

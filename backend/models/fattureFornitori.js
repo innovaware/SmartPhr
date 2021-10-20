@@ -13,5 +13,5 @@ const FattureFornitoriSchema = mongoose.Schema({
 module.exports = mongoose.model(
   "FattureFornitori",
   FattureFornitoriSchema,
-  "FattureFornitori"
+  "fattureFornitori"
 );

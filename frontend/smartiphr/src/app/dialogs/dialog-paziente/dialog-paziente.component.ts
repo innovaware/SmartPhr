@@ -352,7 +352,7 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadingNotaCredito = true;
 
     this.notacreditoService
-        .insertNotaCredito(notacredito, this.paziente)
+        .insertNotaCredito(notacredito, this.paziente._id)
         .then((result: NotaCredito) => {
           console.log("Insert notacredito: ", result);
           this.noteCredito.push(result);
@@ -390,7 +390,7 @@ export class DialogPazienteComponent implements OnInit {
   async getNoteCredito() {
     console.log(`Get NotaCredito paziente: ${this.paziente._id}`);
     this.notacreditoService
-      .getNotaCredito(this.paziente)
+      .getNotaCredito(this.paziente._id)
       .then((f: NotaCredito[]) => {
         this.noteCredito = f;
 

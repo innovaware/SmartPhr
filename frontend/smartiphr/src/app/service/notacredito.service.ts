@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from "src/environments/environment";
 import { NotaCredito } from '../models/notacredito';
 import { Paziente } from '../models/paziente';
@@ -12,20 +13,19 @@ export class NotaCreditoService {
 
   constructor(private http: HttpClient) {}
 
-  async getNotaCredito(paziente: Paziente): Promise<NotaCredito[]> {
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
+  getNoteCreditoAll(): Observable<NotaCredito[]> {
+    return this.http.get<NotaCredito[]>(`${this.api}/api/notecredito`);
+  }
 
+  async getNotaCredito(id: string): Promise<NotaCredito[]> {
     return this.http
-      .get<NotaCredito[]>(`${this.api}/api/notacredito/paziente/${paziente._id}`, { headers })
+      .get<NotaCredito[]>(`${this.api}/api/notacredito/${id}`)
       .toPromise();
   }
 
-  async insertNotaCredito(notacredito: NotaCredito, paziente: Paziente) {
+  async insertNotaCredito(notacredito: NotaCredito, id: string) {
     var body = notacredito;
-    return this.http.post(`${this.api}/api/notacredito/paziente/${paziente._id}`, body).toPromise();
+    return this.http.post(`${this.api}/api/notacredito/${id}`, body).toPromise();
   }
 
   async updateNotaCredito(notacredito: NotaCredito) {

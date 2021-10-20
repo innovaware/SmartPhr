@@ -439,3 +439,18 @@ app.use("/api/fatturefornitori", logHandler, authorizationHandler, fattureFornit
 
 var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
 app.use("/api/bonificifornitori", logHandler, authorizationHandler, bonificiFornitoriRouter);
+
+/** GESTIONE ANTICIPO FATTURE ASP */
+
+var anticipoFattureRouter = require("./routes/anticipoFatture");
+app.use("/api/anticipofatture", logHandler, authorizationHandler, anticipoFattureRouter);
+
+/** GESTIONE PROSPETTO FATTURE ASP */
+
+var prospettoCMRouter = require("./routes/prospettoCM");
+app.use("/api/prospettocm", logHandler, authorizationHandler, prospettoCMRouter);
+
+/** GESTIONE PUNTO FATTURE ASP */
+
+var puntoFattureRouter = require("./routes/puntoFatture");
+app.use("/api/puntofatture", logHandler, authorizationHandler, puntoFattureRouter);
