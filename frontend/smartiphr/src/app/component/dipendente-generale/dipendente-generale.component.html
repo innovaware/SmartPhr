@@ -4,14 +4,14 @@
       <tbody>
         <tr>
           <td>
-            <h5>Cognome: </h5>
+            <h5>Cognome*: </h5>
           </td>
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.cognome" [disabled]=disable (change)="change()">
           </td>
   
           <td>
-            <h5>Nome: </h5>
+            <h5>Nome*: </h5>
           </td>
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.nome" [disabled]=disable (change)="change()">
@@ -24,7 +24,7 @@
           <tr>
             <td>
               <label>
-                <h5>Codice fiscale: </h5>
+                <h5>Codice fiscale*: </h5>
               </label>
             </td>
             <td>
@@ -167,6 +167,8 @@
   
       </tbody>
     </table>
+
+    <strong>I campi indicati con * sono obbligatori!</strong>
   
   </div>
   
