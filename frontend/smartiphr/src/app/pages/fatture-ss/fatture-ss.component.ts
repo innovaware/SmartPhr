@@ -7,11 +7,11 @@ import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
 
 @Component({
-    selector: "app-fatture-ssr",
-    templateUrl: "./fatture-ssr.component.html",
-    styleUrls: ["./fatture-ssr.component.css"],
+    selector: "app-fatture-ss",
+    templateUrl: "./fatture-ss.component.html",
+    styleUrls: ["./fatture-ss.component.css"],
   })
-  export class FattureSSRComponent implements OnInit {
+  export class FattureSSComponent implements OnInit {
     public uploading: boolean;
     public uploadingFattura: boolean;
     public addingFattura: boolean;
@@ -26,20 +26,20 @@ import { UploadService } from "src/app/service/upload.service";
   
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
     dataSource: MatTableDataSource<Fatture>;
-    fattureSSR: Fatture[];
+    fattureSS: Fatture[];
   
     constructor(
         public dialog: MatDialog,
       public messageService: MessagesService,
       public uploadService: UploadService,
     //   private dialog: MatDialog,
-      private fattureSSRService: FattureService
+      private fattureSSService: FattureService
     ) {
-      this.fattureSSR = [];
+      this.fattureSS = [];
   
-      this.fattureSSRService.getFatture("ASPSSRCZ01").then((f: Fatture[]) => {
-        this.fattureSSR = f;
-        this.dataSource = new MatTableDataSource<Fatture>(this.fattureSSR);
+      this.fattureSSService.getFatture("ASPSSCZ01").then((f: Fatture[]) => {
+        this.fattureSS = f;
+        this.dataSource = new MatTableDataSource<Fatture>(this.fattureSS);
         this.dataSource.paginator = this.paginator;
       });
 
@@ -81,18 +81,18 @@ import { UploadService } from "src/app/service/upload.service";
         (result) => {
           if (result == true) {
             
-        this.fattureSSRService
+        this.fattureSSService
           .remove(fattura)
           .then((x) => {
             console.log("Fattura cancellata");
-            const index = this.fattureSSR.indexOf(fattura);
+            const index = this.fattureSS.indexOf(fattura);
             console.log("Fattura cancellata index: ", index);
             if (index > -1) {
-              this.fattureSSR.splice(index, 1);
+              this.fattureSS.splice(index, 1);
             }
     
-            console.log("Fattura cancellata this.fatture: ", this.fattureSSR);
-            this.dataSource.data = this.fattureSSR;
+            console.log("Fattura cancellata this.fatture: ", this.fattureSS);
+            this.dataSource.data = this.fattureSS;
           })
           .catch((err) => {
             this.messageService.showMessageError("Errore nella cancellazione Fattura");
@@ -113,7 +113,7 @@ import { UploadService } from "src/app/service/upload.service";
     async addFattura() {
         this.addingFattura = true;
         this.nuovaFattura = {
-          identifyUser: "ASPSSRCZ01",
+          identifyUser: "ASPSSCZ01",
           filename: undefined,
           note: ""
         };
@@ -141,12 +141,12 @@ import { UploadService } from "src/app/service/upload.service";
         this.uploadingFattura = true;
     
         console.log("Invio fattura: ", fattura);
-        this.fattureSSRService
-        .insertFattura(fattura, "ASPSSRCZ01")
+        this.fattureSSService
+        .insertFattura(fattura, "ASPSSCZ01")
         .then((result: Fatture) => {
           console.log("Insert fattura: ", result);
-          this.fattureSSR.push(result);
-          this.dataSource.data = this.fattureSSR;
+          this.fattureSS.push(result);
+          this.dataSource.data = this.fattureSS;
           this.addingFattura = false;
           this.uploadingFattura = false;
     
@@ -156,7 +156,7 @@ import { UploadService } from "src/app/service/upload.service";
     
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
-          formData.append("path", `${"ASPSSRCZ01"}/${path}`);
+          formData.append("path", `${"ASPSSCZ01"}/${path}`);
           formData.append("name", nameDocument);
           this.uploadService
             .uploadDocument(formData)
