@@ -64,7 +64,7 @@ import { UploadService } from "src/app/service/upload.service";
 
     async show(bonifico: BonificiFornitori) {
         this.uploadService
-          .download(bonifico.filename, bonifico.identifyUserObj, "bonifici")
+          .download(bonifico.filename, bonifico.identifyUserObj, "bonifico")
           .then((x) => {
             console.log("download: ", x);
             x.subscribe(

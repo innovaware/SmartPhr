@@ -18,7 +18,7 @@ export class CambiturnoComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
-  
+
   @Output() showItemEmiter = new EventEmitter<{
     cambiturno: Cambiturno;
     button: string;
@@ -77,7 +77,7 @@ loadTable(){
     this.dataSource = new MatTableDataSource<Cambiturno>(this.cambiturno);
     this.dataSource.paginator = this.paginator;
   });
-  } 
+  }
 }
 
   ngOnInit() {
@@ -120,7 +120,7 @@ loadTable(){
 
 
   async updateCambioturno(cambio: Cambiturno) {
-   
+
     this.cambiturniService
     .updateCambioturno(cambio)
     .then((result: Cambiturno) => {
@@ -136,7 +136,7 @@ loadTable(){
   }
 
 
-  sendResp(row, item){
+  sendResp(row){
     let fId = row._id;
     let status = row.accettata;
     let message = 'Sei sicuro di voler respingere questa richiesta?';

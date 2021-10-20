@@ -38,8 +38,8 @@ export class FattureService {
     return this.http.delete(`${this.api}/api/fatture/${fattura._id}`).toPromise();
   }
 
-  delete(fattura: Fatture): Observable<Fatture> {
+/*   delete(fattura: Fatture): Observable<Fatture> {
     return this.http.delete<Fatture>(this.api + "/api/curriculum/" + fattura._id);
-  }
+  } */
 
 }

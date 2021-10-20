@@ -82,6 +82,7 @@ import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { FattureFornitoriComponent } from "./pages/fatture-fornitori/fatture-fornitori.component";
 import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-fornitori.component";
+import { FattureSSRComponent } from "./pages/fatture-ssr/fatture-ssr.component";
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { FarmaciComponent } from "./pages/farmaci/farmaci.component";
@@ -112,6 +113,7 @@ import { CvComponent } from './pages/cv/cv.component';
 import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
 import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
 import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
+import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
 
 @NgModule({
   declarations: [
@@ -159,6 +161,7 @@ import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento
     AdminFornitoriComponent,
     FattureFornitoriComponent,
     BonificiFornitoriComponent,
+    FattureSSRComponent,
     AspComponent,
     PagenotfoundComponent,
     FarmaciComponent,
@@ -186,6 +189,7 @@ import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento
     DialogCvComponent,
     TableFattureFornitoriComponent,
     DialogCaricadocumentoComponent,
+    DialogQuestionComponent,
   ],
   imports: [
     BrowserModule,
@@ -236,6 +240,7 @@ import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento
     DialogPazienteComponent,
     DialogCvComponent,
     DialogCaricadocumentoComponent,
+    DialogQuestionComponent,
   ],
 })
 export class AppModule {
