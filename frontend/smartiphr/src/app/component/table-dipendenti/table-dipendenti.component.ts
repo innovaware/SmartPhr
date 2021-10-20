@@ -124,9 +124,11 @@ ngOnInit() {}
       data: { dipendente: dipendente, readonly: true, newItem: true },
     });
 
+    
+
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result insert dipendente", result);
-      if (result !== false) {
+      if (result !== false && result !== undefined) {
         this.dipendentiService
           .insert(result)
           .then((x) => {

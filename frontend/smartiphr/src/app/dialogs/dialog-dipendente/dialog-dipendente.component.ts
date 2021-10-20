@@ -166,7 +166,7 @@ export class DialogDipendenteComponent implements OnInit {
 
   async save(saveAndClose: boolean) {
     // this.data.dipendente = this.dipendente;
-    console.log("update dipendente");
+    console.log("insert dipendente");
     this.data.dipendente.cognome = this.dipendente.cognome;
     this.data.dipendente.nome = this.dipendente.nome;
     this.data.dipendente.cf = this.dipendente.cf;
@@ -183,6 +183,11 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.telefono = this.dipendente.telefono;
     this.data.dipendente.email = this.dipendente.email;
    
+
+    if(this.dipendente.cognome == "" || this.dipendente.nome == "" || this.dipendente.cf == ""  ){
+      alert('Alcuni campi obbligatori sono mancanti!');
+      return;
+    }else{
 
     if (saveAndClose) {
       this.dialogRef.close(this.data.dipendente);
@@ -221,6 +226,7 @@ export class DialogDipendenteComponent implements OnInit {
           });
       }
     }
+  }
   }
 
 
