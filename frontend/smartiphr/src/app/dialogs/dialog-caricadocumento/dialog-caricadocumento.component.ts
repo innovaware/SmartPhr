@@ -21,7 +21,7 @@ export class DialogCaricadocumentoComponent implements OnInit {
   public dipendente: Dipendenti;
   public documento: DocumentoDipendente;
   constructor( public uploadService: UploadService,public docService: DocumentiService, 
-    @Inject(MAT_DIALOG_DATA) public data: { dipendente: Dipendenti; doc: DocumentoDipendente},
+    @Inject(MAT_DIALOG_DATA) public data: { dipendente: Dipendenti; doc: DocumentoDipendente},private dialogRef: MatDialogRef<DialogCaricadocumentoComponent>,
               public dialog: MatDialog) { 
                     this.dipendente = data.dipendente;
                     this.documento = data.doc;
@@ -76,7 +76,7 @@ export class DialogCaricadocumentoComponent implements OnInit {
     this.docService
     .update(this.documento)
     .then((result: DocumentoDipendente) => {
-      console.log("update doc identita: ", result);
+      console.log("update VMCF Certificato Malattia: ", result);
     
       let formData: FormData = new FormData();
 
@@ -91,6 +91,8 @@ export class DialogCaricadocumentoComponent implements OnInit {
         .then((x) => {
 
           console.log("Uploading completed: ", x);
+          this.dialogRef.close();
+          
         })
         .catch((err) => {
           this.showMessageError("Errore nel caricamento file");

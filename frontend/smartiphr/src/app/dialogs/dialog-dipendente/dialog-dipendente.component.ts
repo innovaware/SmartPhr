@@ -573,9 +573,11 @@ export class DialogDipendenteComponent implements OnInit {
             this.certificatiMalattia[index] = doc;
       
             this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
+            //dialogDocCMCF.close(result);
   
           })
           .catch((err) => {
+            if(err['status'] != undefined && err['status'] != 500)
             this.showMessageError("Errore upload VMCF (" + err['status'] + ")");
           });
       }

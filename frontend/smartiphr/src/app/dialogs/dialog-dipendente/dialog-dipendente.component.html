@@ -707,11 +707,11 @@
 
 
           <button mat-button (click)="showDocument(row)">
-            <img src="../../../assets/pdf.jpg" style="width: 26px;">Certificato
+            <img src="../../../assets/pdf.jpg" style="width: 26px;">&nbsp; Certificato
           </button>
 
-          <button *ngIf="this.filenameesito != '' " mat-button (click)="showEsitoVMCF(row)">
-            <img src="../../../assets/pdf.jpg" style="width:26px">Esito VMCF
+          <button *ngIf="row.filenameesito != '' " mat-button (click)="showEsitoVMCF(row)">
+            <img src="../../../assets/pdf.jpg" style="width:26px">&nbsp; Esito VMCF
           </button>
 
 
