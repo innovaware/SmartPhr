@@ -53,14 +53,7 @@ export class TableDipendentiComponent implements OnInit {
 }
 
 
-loadTable(){
-  this.dipendentiService.get().then((result) => {
-    this.dipendenti = result;
 
-    this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
-    this.dataSource.paginator = this.paginator;
-  });
-}
 
 delete(row){
   if (window.confirm("Sei sicuro di voler eliminare questo dipendente?")) {

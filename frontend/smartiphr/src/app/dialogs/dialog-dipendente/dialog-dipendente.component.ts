@@ -19,6 +19,7 @@ import { DipendentiService } from "src/app/service/dipendenti.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { DocumentiService } from "src/app/service/documenti.service";
+import { DialogCaricadocumentoComponent } from "../dialog-caricadocumento/dialog-caricadocumento.component";
 
 @Component({
   selector: 'app-dialog-dipendente',
@@ -506,7 +507,35 @@ export class DialogDipendenteComponent implements OnInit {
     });
   }
 
-  showEsit(doc: DocumentoDipendente){}
+  async showEsitoVMCF(doc: DocumentoDipendente) {
+    this.uploadService
+      .downloadDocDipendente(doc.filenameesito, doc.type, this.dipendente)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
 
   async getCertificatoMalattia() {
     console.log(`get CertificatoMalattia dipendente: ${this.dipendente._id}`);
@@ -524,6 +553,37 @@ export class DialogDipendenteComponent implements OnInit {
       });
   }
 
+
+
+
+  uploadVMCF(doc: DocumentoDipendente){
+    const dialogDocCMCF = this.dialog.open(DialogCaricadocumentoComponent, {
+      data: { dipendente: this.dipendente, doc: doc  },
+    });
+  
+  
+    dialogDocCMCF.afterClosed().subscribe((result) => {
+      console.log("result upload VMCF", result);
+      if (result !== false) {
+        this.docService
+          .update(result)
+          .then((x) => {
+            const index = this.certificatiMalattia.indexOf(doc);
+  
+            this.certificatiMalattia[index] = doc;
+      
+            this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
+  
+          })
+          .catch((err) => {
+            this.showMessageError("Errore upload VMCF (" + err['status'] + ")");
+          });
+      }
+    });
+  
+  
+  }
+    
 
   // FINE CERTIFICATI MALATTIA
 
