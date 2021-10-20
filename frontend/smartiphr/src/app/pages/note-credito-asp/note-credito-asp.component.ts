@@ -134,7 +134,7 @@ import { UploadService } from "src/app/service/upload.service";
         }
       }
     
-      async saveAnticipo(nota: NotaCredito) {
+      async saveNota(nota: NotaCredito) {
         const typeDocument = "NOTACREDITO";
         const path = "notacredito";
         const file: File = nota.file;
