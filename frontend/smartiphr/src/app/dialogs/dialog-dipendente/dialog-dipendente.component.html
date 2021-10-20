@@ -701,12 +701,17 @@
           <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
           <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
 
+
+          <button mat-raised-button color="accent" class="action-button" (click)="uploadVMCF(row)">Allega esito VMCF</button>
+          
+
+
           <button mat-button (click)="showDocument(row)">
-            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+            <img src="../../../assets/pdf.jpg" style="width: 26px;">&nbsp; Certificato
           </button>
 
-          <button mat-button (click)="showEsit(row)">
-            <img src="../../../assets/cestino.png" style="width:26px">
+          <button *ngIf="row.filenameesito != '' " mat-button (click)="showEsitoVMCF(row)">
+            <img src="../../../assets/pdf.jpg" style="width:26px">&nbsp; Esito VMCF
           </button>
 
 

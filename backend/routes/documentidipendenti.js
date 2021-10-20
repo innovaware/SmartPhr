@@ -104,7 +104,7 @@ router.post("/:id", async (req, res) => {
   }
 });
 
-router.put("/documentidipendente/:id", async (req, res) => {
+router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await DocDipendente.updateOne(
@@ -113,6 +113,7 @@ router.put("/documentidipendente/:id", async (req, res) => {
         $set: {
           dipendente: req.body.dipendente,
           filename: req.body.filename,
+          filenameesito: req.body.filenameesito,
           note: req.body.note,
         },
       }
