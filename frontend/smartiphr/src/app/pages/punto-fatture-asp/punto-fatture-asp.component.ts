@@ -1,21 +1,21 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
-import { AnticipoFatture } from "src/app/models/anticipoFatture";
-import { AnticipoFattureService } from "src/app/service/anticipoFatture.service";
+import { PuntoFatture } from "src/app/models/puntoFatture";
+import { PuntoFattureService } from "src/app/service/puntoFatture.service";
 import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
 
 @Component({
-    selector: "app-anticipo-fatture-asp",
-    templateUrl: "./anticipo-fatture-asp.component.html",
-    styleUrls: ["./anticipo-fatture-asp.component.css"],
+    selector: "app-punto-fatture-asp",
+    templateUrl: "./punto-fatture-asp.component.html",
+    styleUrls: ["./punto-fatture-asp.component.css"],
   })
-  export class AnticipoFattureASPComponent implements OnInit {
+  export class PuntoFattureASPComponent implements OnInit {
     public uploading: boolean;
-    public uploadingAnticipo: boolean;
-    public addingAnticipo: boolean;
-    public nuovoAnticipo: AnticipoFatture;
+    public uploadingPunto: boolean;
+    public addingPunto: boolean;
+    public nuovoPunto: PuntoFatture;
 
     displayedColumns: string[] = [
       "filename",
@@ -25,26 +25,26 @@ import { UploadService } from "src/app/service/upload.service";
     ];
   
     @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-    dataSource: MatTableDataSource<AnticipoFatture>;
-    anticipoFatture: AnticipoFatture[];
+    dataSource: MatTableDataSource<PuntoFatture>;
+    puntoFatture: PuntoFatture[];
   
     constructor(
         public dialog: MatDialog,
       public messageService: MessagesService,
       public uploadService: UploadService,
     //   private dialog: MatDialog,
-      private anticipoFattureService: AnticipoFattureService
+      private puntoFattureService: PuntoFattureService
     ) {
-      this.anticipoFatture = [];
+      this.puntoFatture = [];
   
-      this.anticipoFattureService.getAnticipoFattureAll().subscribe((f: AnticipoFatture[]) => {
-        this.anticipoFatture = f;
-        this.dataSource = new MatTableDataSource<AnticipoFatture>(this.anticipoFatture);
+      this.puntoFattureService.getPuntoFattureAll().subscribe((f: PuntoFatture[]) => {
+        this.puntoFatture = f;
+        this.dataSource = new MatTableDataSource<PuntoFatture>(this.puntoFatture);
         this.dataSource.paginator = this.paginator;
       });
 
-      this.uploadingAnticipo = false;
-      this.addingAnticipo = false;
+      this.uploadingPunto = false;
+      this.addingPunto = false;
     }
   
     ngOnInit() {}
@@ -64,16 +64,16 @@ import { UploadService } from "src/app/service/upload.service";
           if (result != undefined) {
             this.fatture.push(result);
             this.dataSource.data = this.fatture;
-            console.log("Inserita anticipo", result);
+            console.log("Inserita punto", result);
           }
         });
     } */
 
-    async deleteAnticipo(anticipo: AnticipoFatture) {
-        console.log("Cancella anticipo: ", anticipo);
+    async deletePunto(punto: PuntoFatture) {
+        console.log("Cancella punto: ", punto);
         this.dialog
       .open(DialogQuestionComponent, {
-        data: { message: "Cancellare l anticipo?" },
+        data: { message: "Cancellare l punto?" },
         //width: "600px",
       })
       .afterClosed()
@@ -81,52 +81,52 @@ import { UploadService } from "src/app/service/upload.service";
         (result) => {
           if (result == true) {
             
-        this.anticipoFattureService
-          .remove(anticipo)
+        this.puntoFattureService
+          .remove(punto)
           .then((x) => {
-            console.log("Anticipo cancellata");
-            const index = this.anticipoFatture.indexOf(anticipo);
-            console.log("Anticipo cancellata index: ", index);
+            console.log("Punto cancellata");
+            const index = this.puntoFatture.indexOf(punto);
+            console.log("Punto cancellata index: ", index);
             if (index > -1) {
-              this.anticipoFatture.splice(index, 1);
+              this.puntoFatture.splice(index, 1);
             }
     
-            console.log("Anticipo cancellata this.anticipoFatture: ", this.anticipoFatture);
-            this.dataSource.data = this.anticipoFatture;
+            console.log("Punto cancellata this.puntoFatture: ", this.puntoFatture);
+            this.dataSource.data = this.puntoFatture;
           })
           .catch((err) => {
-            this.messageService.showMessageError("Errore nella cancellazione Anticipo");
+            this.messageService.showMessageError("Errore nella cancellazione Punto");
             console.error(err);
           });
 
         } else {
-            console.log("Cancellazione anticipo annullata");
+            console.log("Cancellazione punto annullata");
             this.messageService.showMessageError(
-              "Cancellazione anticipo Annullata"
+              "Cancellazione punto Annullata"
             );
           }
         },
-        (err) => console.error(`Error Cancellazione anticipo: ${err}`)
+        (err) => console.error(`Error Cancellazione punto: ${err}`)
       );
       }
 
-    async addAnticipo() {
-        this.addingAnticipo = true;
-        this.nuovoAnticipo = {
+    async addPunto() {
+        this.addingPunto = true;
+        this.nuovoPunto = {
           identifyUser: "ASPCZ01",
           filename: undefined,
           note: ""
         };
       }
     
-      async uploadAnticipo($event) {
+      async uploadPunto($event) {
         let fileList: FileList = $event.target.files;
         if (fileList.length > 0) {
           let file: File = fileList[0];
     
-          console.log("upload anticipo: ", $event);
-          this.nuovoAnticipo.filename = file.name;
-          this.nuovoAnticipo.file = file;
+          console.log("upload punto: ", $event);
+          this.nuovoPunto.filename = file.name;
+          this.nuovoPunto.file = file;
     
         } else {
           this.messageService.showMessageError("File non valido");
@@ -134,25 +134,25 @@ import { UploadService } from "src/app/service/upload.service";
         }
       }
     
-      async saveAnticipo(anticipo: AnticipoFatture) {
-        const typeDocument = "ANTICIPO";
-        const path = "anticipo";
-        const file: File = anticipo.file;
-        this.uploadingAnticipo = true;
+      async savePunto(punto: PuntoFatture) {
+        const typeDocument = "PUNTO";
+        const path = "punto";
+        const file: File = punto.file;
+        this.uploadingPunto = true;
     
-        console.log("Invio anticipo: ", anticipo);
-        this.anticipoFattureService
-        .insertAnticipo(anticipo, "ASPCZ01")
-        .then((result: AnticipoFatture) => {
-          console.log("Insert anticipo: ", result);
-          this.anticipoFatture.push(result);
-          this.dataSource.data = this.anticipoFatture;
-          this.addingAnticipo = false;
-          this.uploadingAnticipo = false;
+        console.log("Invio punto: ", punto);
+        this.puntoFattureService
+        .insertPunto(punto, "ASPCZ01")
+        .then((result: PuntoFatture) => {
+          console.log("Insert punto: ", result);
+          this.puntoFatture.push(result);
+          this.dataSource.data = this.puntoFatture;
+          this.addingPunto = false;
+          this.uploadingPunto = false;
     
           let formData: FormData = new FormData();
     
-          const nameDocument: string = anticipo.filename;
+          const nameDocument: string = punto.filename;
     
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
@@ -172,14 +172,14 @@ import { UploadService } from "src/app/service/upload.service";
             });
         })
         .catch((err) => {
-          this.messageService.showMessageError("Errore Inserimento anticipo");
+          this.messageService.showMessageError("Errore Inserimento punto");
           console.error(err);
         });
       }
 
-    async show(anticipo: AnticipoFatture) {
+    async show(punto: PuntoFatture) {
         this.uploadService
-          .download(anticipo.filename, anticipo.identifyUser, "anticipofatture")
+          .download(punto.filename, punto.identifyUser, "puntofatture")
           .then((x) => {
             console.log("download: ", x);
             x.subscribe(

@@ -22,13 +22,13 @@ export class PuntoFattureService {
       .toPromise();
   }
 
-  async insertPuntoFatture(punto: PuntoFatture, id: string) {
+  async insertPunto(punto: PuntoFatture, id: string) {
     console.log("Insert punto: ", punto);
     var body = punto;
     return this.http.post(`${this.api}/api/puntofatture/${id}`, body).toPromise();
   }
 
-  async updatePuntoFatture(punto: PuntoFatture) {
+  async updatePunto(punto: PuntoFatture) {
     var body = punto;
     console.log("body: ", body);
     return this.http.put(this.api + "/api/puntofatture/" + punto._id, body).toPromise();
