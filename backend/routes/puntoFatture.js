@@ -12,6 +12,44 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
+router.get("/", async (req, res) => {
+    try {
+      const searchTerm = `PUNTOFATTUREALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+      const showAll = req.query.show == "all";
+  
+      if (showOnlyCancellati || showAll) {
+        console.log("Show all or deleted");
+        let query = {};
+        if (showOnlyCancellati) {
+          query = { cancellato: true };
+        }
+        const puntoFatture = await PuntoFatture.find(query);
+        res.status(200).json(puntoFatture);
+      } else { 
+        client.get(searchTerm, async (err, data) => {
+          if (err) throw err;
+  
+          if (data && !redisDisabled) {
+            res.status(200).send(JSON.parse(data));
+          } else {
+            const query = {
+                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+              };
+            const puntoFatture = await PuntoFatture.find(query);
+  
+            res.status(200).json(puntoFatture);
+            client.setex(searchTerm, redisTimeCache, JSON.stringify(puntoFatture));
+            // res.status(200).json(curriculum);
+          }
+        });
+       }
+    } catch (err) {
+      console.error("Error: ", err);
+      res.status(500).json({ Error: err });
+    }
+  });
+
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -44,7 +82,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   console.error("PuntoFatture get/:id: ", id);
   try {
-    const searchTerm = `puntoFattureBY${id}`;
+    const searchTerm = `PUNTOFATTUREBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -121,9 +159,9 @@ router.delete("/:id", async (req, res) => {
     const identifyUser = item.identifyUser;
     const puntoFatture = await PuntoFatture.remove({ _id: id });
 
-    let searchTerm = `puntoFattureBY${id}`;
+    let searchTerm = `PUNTOFATTUREBY${id}`;
     client.del(searchTerm);
-    searchTerm = `puntoFatture${identifyUser}`;
+    searchTerm = `PUNTOFATTUREALL`;
     client.del(searchTerm);
 
 

@@ -12,11 +12,49 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
+router.get("/", async (req, res) => {
+    try {
+      const searchTerm = `PROSPETTOCMALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+      const showAll = req.query.show == "all";
+  
+      if (showOnlyCancellati || showAll) {
+        console.log("Show all or deleted");
+        let query = {};
+        if (showOnlyCancellati) {
+          query = { cancellato: true };
+        }
+        const prospettoCM = await ProspettoCM.find(query);
+        res.status(200).json(prospettoCM);
+      } else { 
+        client.get(searchTerm, async (err, data) => {
+          if (err) throw err;
+  
+          if (data && !redisDisabled) {
+            res.status(200).send(JSON.parse(data));
+          } else {
+            const query = {
+                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+              };
+            const prospettoCM = await ProspettoCM.find(query);
+  
+            res.status(200).json(prospettoCM);
+            client.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
+            // res.status(200).json(curriculum);
+          }
+        });
+       }
+    } catch (err) {
+      console.error("Error: ", err);
+      res.status(500).json({ Error: err });
+    }
+  });
+
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const searchTerm = `prospettoCM${id}`;
+    const searchTerm = `PROSPETTOCM${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -44,7 +82,7 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   console.error("ProspettoCM get/:id: ", id);
   try {
-    const searchTerm = `prospettoCMBY${id}`;
+    const searchTerm = `PROSPETTOCMBY${id}`;
     client.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -121,9 +159,9 @@ router.delete("/:id", async (req, res) => {
     const identifyUser = item.identifyUser;
     const prospettoCM = await ProspettoCM.remove({ _id: id });
 
-    let searchTerm = `prospettoCMBY${id}`;
+    let searchTerm = `PROSPETTOCMBY${id}`;
     client.del(searchTerm);
-    searchTerm = `prospettoCM${identifyUser}`;
+    searchTerm = `PROSPETTOCMALL`;
     client.del(searchTerm);
 
 

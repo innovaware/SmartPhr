@@ -12,6 +12,44 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
+router.get("/", async (req, res) => {
+    try {
+      const searchTerm = `ANTICIPOFATTUREALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+      const showAll = req.query.show == "all";
+  
+      if (showOnlyCancellati || showAll) {
+        console.log("Show all or deleted");
+        let query = {};
+        if (showOnlyCancellati) {
+          query = { cancellato: true };
+        }
+        const anticipoFatture = await AnticipoFatture.find(query);
+        res.status(200).json(anticipoFatture);
+      } else { 
+        client.get(searchTerm, async (err, data) => {
+          if (err) throw err;
+  
+          if (data && !redisDisabled) {
+            res.status(200).send(JSON.parse(data));
+          } else {
+            const query = {
+                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+              };
+            const anticipoFatture = await AnticipoFatture.find(query);
+  
+            res.status(200).json(anticipoFatture);
+            client.setex(searchTerm, redisTimeCache, JSON.stringify(anticipoFatture));
+            // res.status(200).json(curriculum);
+          }
+        });
+       }
+    } catch (err) {
+      console.error("Error: ", err);
+      res.status(500).json({ Error: err });
+    }
+  });
+
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -123,7 +161,7 @@ router.delete("/:id", async (req, res) => {
 
     let searchTerm = `anticipoFattureBY${id}`;
     client.del(searchTerm);
-    searchTerm = `anticipoFatture${identifyUser}`;
+    searchTerm = `ANTICIPOFATTUREALL`;
     client.del(searchTerm);
 
 
