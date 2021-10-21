@@ -324,6 +324,7 @@ export class DialogPazienteComponent implements OnInit {
   async addNotaCredito() {
     this.addingNotaCredito = true;
     this.nuovaNotacredito = {
+      identifyUser: this.paziente._id,
       filename: undefined,
       note: ""
     };
@@ -409,6 +410,7 @@ export class DialogPazienteComponent implements OnInit {
     console.log("Add Bonifico");
     this.addingBonifici = true;
     this.nuovaBonifico = {
+      identifyUser: this.paziente._id,
       filename: undefined,
       note: ""
     };

@@ -358,12 +358,7 @@ app.use("/api/fatture", logHandler, authorizationHandler, fattureRouter);
 
 // NotaCredito API
 var notacreditoRouter = require("./routes/notacredito");
-app.use(
-  "/api/notacredito",
-  logHandler,
-  authorizationHandler,
-  notacreditoRouter
-);
+app.use("/api/notacredito", logHandler, authorizationHandler, notacreditoRouter);
 
 // Bonifici API
 var bonificiRouter = require("./routes/bonifici");
