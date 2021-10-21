@@ -100,6 +100,8 @@ router.get("/:id", async (req, res) => {
 
 router.post("/:id", async (req, res) => {
   try {
+    console.log("id: " + id);
+    
     const { id } = req.params;
     const notacredito = new NotaCredito({
       identifyUser: id,
@@ -108,7 +110,7 @@ router.post("/:id", async (req, res) => {
       note: req.body.note,
     });
 
-    console.log("Insert fattura: ", notacredito);
+    console.log("Insert nota: ", notacredito);
 
     const result = await notacredito.save();
 

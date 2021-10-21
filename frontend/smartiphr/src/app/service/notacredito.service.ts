@@ -23,6 +23,8 @@ export class NotaCreditoService {
   }
 
   async insertNotaCredito(notacredito: NotaCredito, id: string) {
+    console.log("insertNotaCredito: " + notacredito);
+    console.log("id: " + id);
     var body = notacredito;
     return this.http.post(`${this.api}/api/notacredito/${id}`, body).toPromise();
   }

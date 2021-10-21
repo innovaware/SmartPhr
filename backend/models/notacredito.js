@@ -1,7 +1,7 @@
 const mongoose = require("mongoose");
 
 const NotaCreditoSchema = mongoose.Schema({
-  paziente: String,
+  identifyUser: String,
   filename: String,
   dateupload: Date,
   note: String,

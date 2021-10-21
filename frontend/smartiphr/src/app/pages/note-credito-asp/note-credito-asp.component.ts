@@ -37,7 +37,7 @@ import { UploadService } from "src/app/service/upload.service";
     ) {
       this.notaCredito = [];
   
-      this.notaCreditoService.getNoteCreditoAll().subscribe((n: NotaCredito[]) => {
+      this.notaCreditoService.getNotaCredito("ASPCZ01").then((n: NotaCredito[]) => {
         this.notaCredito = n;
         this.dataSource = new MatTableDataSource<NotaCredito>(this.notaCredito);
         this.dataSource.paginator = this.paginator;
