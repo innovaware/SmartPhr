@@ -23,7 +23,8 @@ export class FattureService {
   }
 
   async insertFattura(fattura: Fatture, id: string) {
-    console.log("Insert fattura: ", fattura);
+    console.log("insertFattura: " + JSON.stringify(fattura));
+    console.log("id: " + id);
     var body = fattura;
     return this.http.post(`${this.api}/api/fatture/${id}`, body).toPromise();
   }

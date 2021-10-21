@@ -100,8 +100,6 @@ router.get("/:id", async (req, res) => {
 
 router.post("/:id", async (req, res) => {
   try {
-    console.log("id: " + id);
-    
     const { id } = req.params;
     const notacredito = new NotaCredito({
       identifyUser: id,

@@ -227,6 +227,7 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    console.log("saveFattura: ", fattura);
     const typeDocument = "FATTURE";
     const path = "fatture";
     const file: File = fattura.file;
@@ -347,11 +348,13 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveNotaCredito(notacredito: NotaCredito) {
+    console.log("saveNotaCredito: ", notacredito);
     const typeDocument = "NOTACREDITO";
     const path = "notacredito";
     const file: File = notacredito.file;
     this.uploadingNotaCredito = true;
 
+    console.log("Invio notacredito: ", notacredito);
     this.notacreditoService
         .insertNotaCredito(notacredito, this.paziente._id)
         .then((result: NotaCredito) => {
