@@ -12,6 +12,46 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
 
+
+router.get("/", async (req, res) => {
+  try {
+    const searchTerm = `NOTACREDITOALL`;
+  const showOnlyCancellati = req.query.show == "deleted";
+    const showAll = req.query.show == "all";
+
+    if (showOnlyCancellati || showAll) {
+      console.log("Show all or deleted");
+      let query = {};
+      if (showOnlyCancellati) {
+        query = { cancellato: true };
+      }
+      const nota = await NotaCredito.find(query);
+      res.status(200).json(nota);
+    } else { 
+      client.get(searchTerm, async (err, data) => {
+        if (err) throw err;
+
+        if (data && !redisDisabled) {
+          res.status(200).send(JSON.parse(data));
+        } else {
+          const query = {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            };
+          const nota = await NotaCredito.find(query);
+
+          res.status(200).json(nota);
+          client.setex(searchTerm, redisTimeCache, JSON.stringify(nota));
+          // res.status(200).json(curriculum);
+        }
+      });
+     }
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -122,6 +162,7 @@ router.delete("/:id", async (req, res) => {
     client.del(searchTerm);
     searchTerm = `notacredito${identifyUser}`;
     client.del(searchTerm);
+    client.del(`NOTACREDITOALL`);
 
     res.status(200);
     res.json(notacredito);
