@@ -16,12 +16,14 @@ export class ValutaPisicoComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    this.schedaPisico = this.paziente.cartellaClinica.sort(
+
+/*     this.schedaPisico = this.paziente.cartellaClinica.sort(
       (a: CartellaClinica, b: CartellaClinica) => {
         return a.data.getTime() - b.data.getTime();
       }
-    )[0].schedaPisico;
-    console.log("this.schedaPisico: ", this.schedaPisico);
+    )[0].schedaPisico;  
+    console.log("this.schedaPisico: ", this.schedaPisico); */
+
   }
 
 }

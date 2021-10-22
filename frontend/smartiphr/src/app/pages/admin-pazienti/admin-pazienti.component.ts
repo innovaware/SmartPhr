@@ -92,9 +92,9 @@ export class AdminPazientiComponent implements OnInit {
         (result) => {
           if (result == true) {
 
-            this.pazienteService.delete(paziente).subscribe(
-              (x) => {
-                const index = this.pazienti.indexOf(paziente, 0);
+            this.pazienteService.delete(paziente).then(
+              () => {
+                const index = this.pazienti.indexOf(paziente);
                 if (index > -1) {
                   this.pazienti.splice(index, 1);
                 }

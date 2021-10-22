@@ -1,6 +1,3 @@
-import { CartellaClinica } from "./cartellaClinica";
-import { Diario } from "./diario";
-
 export class Paziente {
   _id?: string;
   cognome: string;
@@ -22,10 +19,6 @@ export class Paziente {
   comuneNascita: string;
   provinciaNascita: string;
   provenienza?: string;
-
-  cartellaClinica: CartellaClinica[];
-
-
 
 
   public update(paziente: Paziente): void {
@@ -69,8 +62,7 @@ export class Paziente {
       dataIngresso: new Date(),
       indirizzoNascita: "",
       comuneNascita: "",
-      provinciaNascita: "",
-      cartellaClinica: [],
+      provinciaNascita: ""
     };
   }
 }

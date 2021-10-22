@@ -40,7 +40,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Paziente>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  data: Paziente[];
+  public data: Paziente[];
 
   constructor(
     public dialog: MatDialog,
@@ -75,7 +75,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   }
 
   async show(paziente: Paziente) {
-    console.log("Show scheda consulente:", paziente);
+    console.log("Show scheda paziente:", paziente);
     var dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: false },
       width: "1024px",
@@ -95,14 +95,14 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
         if (result == true) {
           this.pazienteService
             .delete(paziente)
-            .subscribe((result: Paziente) => {
+            .then(() => {
               console.log("Eliminazione eseguita con successo", result);
-              const index = this.data.indexOf(paziente, 0);
+              const index = this.data.indexOf(paziente);
               if (index > -1) {
                 this.data.splice(index, 1);
               }
-              this.dataSource = new MatTableDataSource<Paziente>(this.data);
-              this.dataSource.paginator = this.paginator;
+              this.dataSource.data = this.data;
+              //this.dataSource.paginator = this.paginator;
             }),
             (err) => {
               console.error("Errore nell'eliminazione", err);
