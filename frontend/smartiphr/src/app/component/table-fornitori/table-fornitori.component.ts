@@ -83,7 +83,7 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
     });
   }
 
-  async deletePaziente(fornitore: Fornitore) {
+  async deleteFornitore(fornitore: Fornitore) {
     console.log("Cancella fornitore:", fornitore);
 
     this.dialog
