@@ -30,7 +30,7 @@ export class AdminPazientiComponent implements OnInit {
     });
   }
 
-  getButtons() {
+/*   getButtons() {
     const showButton: DinamicButton = {
       label: "Mostra",
       icon: "",
@@ -44,7 +44,7 @@ export class AdminPazientiComponent implements OnInit {
     };
 
     return [showButton, deleteButton];
-  }
+  } */
 
   getInsertFunction(): any {
     return this.insert.bind({ ...this });
@@ -91,7 +91,7 @@ export class AdminPazientiComponent implements OnInit {
       .subscribe(
         (result) => {
           if (result == true) {
-            
+
             this.pazienteService.delete(paziente).subscribe(
               (x) => {
                 const index = this.pazienti.indexOf(paziente, 0);
@@ -140,8 +140,8 @@ export class AdminPazientiComponent implements OnInit {
       });
   }
 
-  show(event: { paziente: Paziente; button: DinamicButton }) {
+/*   show(event: { paziente: Paziente; button: DinamicButton }) {
     console.log("Show Event");
     event.button.cmd(event.paziente);
-  }
+  } */
 }

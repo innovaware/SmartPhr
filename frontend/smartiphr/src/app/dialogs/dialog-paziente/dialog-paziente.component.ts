@@ -87,7 +87,7 @@ export class DialogPazienteComponent implements OnInit {
 
   async save(saveAndClose: boolean) {
     // this.data.paziente = this.paziente;
-    console.log("update paziente");
+    console.log("update paziente: " + JSON.stringify(this.paziente));
     this.data.paziente.update(this.paziente);
 
     if (saveAndClose) {

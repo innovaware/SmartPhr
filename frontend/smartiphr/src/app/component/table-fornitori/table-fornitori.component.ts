@@ -4,11 +4,12 @@ import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable, Subscription } from 'rxjs';
-import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
 import { DialogFornitoreComponent } from "src/app/dialogs/dialog-fornitore/dialog-fornitore.component";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
 import { Fornitore } from "src/app/models/fornitore";
 import { FornitoreService } from "src/app/service/fornitore.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: "app-table-fornitori",
@@ -40,9 +41,15 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Fornitore>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  data: Fornitore[];
 
-  constructor() {
-  }
+  constructor(
+    public dialog: MatDialog,
+    public messageService: MessagesService,
+    public fornitoreService: FornitoreService
+    ) {
+      this.data = [];
+    }
 
   ngOnInit() {
     this.eventsSubscription = this.eventFornitori.subscribe((p: Fornitore[]) => {
@@ -63,9 +70,49 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   }
 
   call(fornitore: Fornitore, item: DinamicButton) {
-    console.log("Table Ospiti emit ");
+    console.log("Table Fornitori emit ");
 
     this.showItemEmiter.emit({ fornitore: fornitore, button: item });
+  }
+
+  async show(fornitore: Fornitore) {
+    console.log("Show scheda fornitore:", fornitore);
+    var dialogRef = this.dialog.open(DialogFornitoreComponent, {
+      data: { fornitore: fornitore, readonly: false },
+      width: "1024px",
+    });
+  }
+
+  async deletePaziente(fornitore: Fornitore) {
+    console.log("Cancella fornitore:", fornitore);
+
+    this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il fornitore?" },
+        //width: "600px",
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result == true) {
+          this.fornitoreService
+            .delete(fornitore)
+            .subscribe((result: Fornitore) => {
+              console.log("Eliminazione eseguita con successo", result);
+              const index = this.data.indexOf(fornitore, 0);
+              if (index > -1) {
+                this.data.splice(index, 1);
+              }
+              this.dataSource = new MatTableDataSource<Fornitore>(this.data);
+              this.dataSource.paginator = this.paginator;
+            }),
+            (err) => {
+              console.error("Errore nell'eliminazione", err);
+            };
+        } else {
+          console.log("Cancellazione fornitore annullata");
+          this.messageService.showMessageError("Cancellazione fornitore Annullata");
+        }
+      });
   }
 
 }

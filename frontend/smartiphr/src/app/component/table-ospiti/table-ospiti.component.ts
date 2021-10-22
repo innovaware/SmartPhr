@@ -4,11 +4,12 @@ import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable, Subscription } from 'rxjs';
-import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
 import { DialogPazienteComponent } from "src/app/dialogs/dialog-paziente/dialog-paziente.component";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { PazienteService } from "src/app/service/paziente.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: "app-table-ospiti",
@@ -39,9 +40,15 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Paziente>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  data: Paziente[];
 
-  constructor() {
-  }
+  constructor(
+    public dialog: MatDialog,
+    public messageService: MessagesService,
+    public pazienteService: PazienteService
+    ) {
+      this.data = [];
+    }
 
   ngOnInit() {
     this.eventsSubscription = this.eventPazienti.subscribe((p: Paziente[]) => {
@@ -65,6 +72,46 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     console.log("Table Ospiti emit ");
 
     this.showItemEmiter.emit({ paziente: paziente, button: item });
+  }
+
+  async show(paziente: Paziente) {
+    console.log("Show scheda consulente:", paziente);
+    var dialogRef = this.dialog.open(DialogPazienteComponent, {
+      data: { paziente: paziente, readonly: false },
+      width: "1024px",
+    });
+  }
+
+  async deletePaziente(paziente: Paziente) {
+    console.log("Cancella paziente:", paziente);
+
+    this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il paziente?" },
+        //width: "600px",
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result == true) {
+          this.pazienteService
+            .delete(paziente)
+            .subscribe((result: Paziente) => {
+              console.log("Eliminazione eseguita con successo", result);
+              const index = this.data.indexOf(paziente, 0);
+              if (index > -1) {
+                this.data.splice(index, 1);
+              }
+              this.dataSource = new MatTableDataSource<Paziente>(this.data);
+              this.dataSource.paginator = this.paginator;
+            }),
+            (err) => {
+              console.error("Errore nell'eliminazione", err);
+            };
+        } else {
+          console.log("Cancellazione paziente annullata");
+          this.messageService.showMessageError("Cancellazione paziente Annullata");
+        }
+      });
   }
 
 }
