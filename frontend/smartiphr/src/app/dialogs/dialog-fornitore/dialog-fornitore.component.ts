@@ -89,7 +89,10 @@ export class DialogFornitoreComponent implements OnInit {
   async save(saveAndClose: boolean) {
     // this.data.fornitore = this.fornitore;
     console.log("update fornitore");
-    this.data.fornitore.cognome = this.fornitore.cognome;
+    
+    this.data.fornitore = this.fornitore;
+    
+/*     this.data.fornitore.cognome = this.fornitore.cognome;
     this.data.fornitore.nome = this.fornitore.nome;
     this.data.fornitore.codiceFiscale = this.fornitore.codiceFiscale;
     this.data.fornitore.comuneResidenza = this.fornitore.comuneResidenza;
@@ -101,7 +104,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.data.fornitore.dataNascita = this.fornitore.dataNascita;
     this.data.fornitore.telefono = this.fornitore.telefono;
     this.data.fornitore.comuneNascita = this.fornitore.comuneNascita;
-    this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita;
+    this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita */;
 
     if (saveAndClose) {
       this.dialogRef.close(this.data.fornitore);

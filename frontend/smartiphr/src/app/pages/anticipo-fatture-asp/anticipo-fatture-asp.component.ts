@@ -135,8 +135,8 @@ import { UploadService } from "src/app/service/upload.service";
       }
     
       async saveAnticipo(anticipo: AnticipoFatture) {
-        const typeDocument = "ANTICIPO";
-        const path = "anticipo";
+        const typeDocument = "ANTICIPOFATTURE";
+        const path = "anticipofatture";
         const file: File = anticipo.file;
         this.uploadingAnticipo = true;
     

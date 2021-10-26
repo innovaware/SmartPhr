@@ -135,8 +135,8 @@ import { UploadService } from "src/app/service/upload.service";
       }
     
       async savePunto(punto: PuntoFatture) {
-        const typeDocument = "PUNTO";
-        const path = "punto";
+        const typeDocument = "PUNTOFATTURE";
+        const path = "puntofatture";
         const file: File = punto.file;
         this.uploadingPunto = true;
     

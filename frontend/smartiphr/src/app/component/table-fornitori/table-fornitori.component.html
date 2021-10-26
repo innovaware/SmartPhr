@@ -23,11 +23,15 @@
             <th mat-header-cell *matHeaderCellDef>
             </th>
             <td mat-cell *matCellDef="let row">
-              <button (click)="call(row, item)" class="mat-raised-button raised-button action-button"
-                *ngFor="let item of buttons">
-                <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
-                <span class="nav-label"> {{item.label}}</span>
-              </button>
+                <div>
+                    <button mat-button (click)="show(row)">
+                      <img src="../../../assets/read.png" style="height:31px">
+                    </button>
+      
+                    <button mat-button (click)="deleteFornitore(row)">
+                      <img src="../../../assets/cestino.png" style="width:26px">
+                    </button>
+                  </div>
             </td>
           </ng-container>
   
@@ -58,19 +62,19 @@
           <!-- Symbol Column -->
           <ng-container matColumnDef="indirizzo">
             <th mat-header-cell *matHeaderCellDef> Indirizzo </th>
-            <td mat-cell *matCellDef="let element"> {{element.residenza}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.indirizzoResidenza}} </td>
           </ng-container>
   
           <!-- Symbol Column -->
           <ng-container matColumnDef="localita">
-            <th mat-header-cell *matHeaderCellDef> Localit&#225; </th>
-            <td mat-cell *matCellDef="let element"> {{element.localita}} </td>
+            <th mat-header-cell *matHeaderCellDef> Comune </th>
+            <td mat-cell *matCellDef="let element"> {{element.comuneResidenza}} </td>
           </ng-container>
   
           <!-- Symbol Column -->
           <ng-container matColumnDef="provincia">
             <th mat-header-cell *matHeaderCellDef> Provincia </th>
-            <td mat-cell *matCellDef="let element"> {{element.provincia}} </td>
+            <td mat-cell *matCellDef="let element"> {{element.provinciaResidenza}} </td>
           </ng-container>
   
           <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

@@ -9,7 +9,7 @@
 
   <div class="row">
     <div class="col">
-      <app-table-ospiti (showItemEmiter)="show($event)" [buttons]="getButtons()"
+      <app-table-ospiti
       [eventPazienti]="eventsSubject.asObservable()"
       [insertFunction]="getInsertFunction()"
       [showInsert]=true></app-table-ospiti>

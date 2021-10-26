@@ -135,8 +135,8 @@ import { UploadService } from "src/app/service/upload.service";
       }
     
       async saveProspetto(prospetto: ProspettoCM) {
-        const typeDocument = "PROSPETTO";
-        const path = "prospetto";
+        const typeDocument = "PROSPETTOCM";
+        const path = "prospettocm";
         const file: File = prospetto.file;
         this.uploadingProspetto = true;
     
@@ -179,7 +179,7 @@ import { UploadService } from "src/app/service/upload.service";
 
     async show(prospetto: ProspettoCM) {
         this.uploadService
-          .download(prospetto.filename, prospetto.identifyUser, "prospetto")
+          .download(prospetto.filename, prospetto.identifyUser, "prospettocm")
           .then((x) => {
             console.log("download: ", x);
             x.subscribe(

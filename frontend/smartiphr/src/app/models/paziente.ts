@@ -1,6 +1,3 @@
-import { CartellaClinica } from "./cartellaClinica";
-import { Diario } from "./diario";
-
 export class Paziente {
   _id?: string;
   cognome: string;
@@ -18,15 +15,10 @@ export class Paziente {
   personeRiferimento: string;
   telefono: string;
   dataIngresso: Date;
-  provincia: string;
-  localita: string;
+  indirizzoNascita: string;
   comuneNascita: string;
   provinciaNascita: string;
   provenienza?: string;
-
-  cartellaClinica: CartellaClinica[];
-
-
 
 
   public update(paziente: Paziente): void {
@@ -45,11 +37,10 @@ export class Paziente {
     this.personeRiferimento = paziente.personeRiferimento;
     this.telefono = paziente.telefono;
     this.dataIngresso = paziente.dataIngresso;
-    this.provincia = paziente.provincia;
-    this.localita = paziente.localita;
+    this.provinciaNascita = paziente.provinciaNascita;
+    this.indirizzoNascita = paziente.indirizzoNascita;
     this.provenienza = paziente.provenienza;
     this.comuneNascita = paziente.comuneNascita;
-    this.provinciaNascita = paziente.provinciaNascita;
   }
 
   public static empty(): any {
@@ -69,11 +60,9 @@ export class Paziente {
       personeRiferimento: "",
       telefono: "",
       dataIngresso: new Date(),
-      provincia: "",
-      localita: "",
+      indirizzoNascita: "",
       comuneNascita: "",
-      provinciaNascita: "",
-      cartellaClinica: [],
+      provinciaNascita: ""
     };
   }
 }
