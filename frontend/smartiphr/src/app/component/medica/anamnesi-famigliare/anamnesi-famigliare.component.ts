@@ -1,4 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
+import { MAT_DIALOG_DATA } from '@angular/material';
+import { CartellaClinica } from 'src/app/models/cartellaClinica';
 
 @Component({
   selector: 'app-anamnesi-famigliare',
@@ -6,12 +8,19 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./anamnesi-famigliare.component.css']
 })
 export class AnamnesiFamigliareComponent implements OnInit {
-  @Input() data;
-  @Input() disable: boolean;
 
-  constructor() { }
+  @Input() data;
+  public element: CartellaClinica = new CartellaClinica();
+
+
+
+  constructor() { 
+    if(this.data != undefined)
+      this.element = this.data;
+  }
 
   ngOnInit() {
+    
   }
 
 }

@@ -13,7 +13,7 @@
 
   <div class="row">
     <div class="col">
-      <app-table-ospiti (showItemEmiter)="show($event)" [buttons]='["CC", "CI"]'></app-table-ospiti>
+      <app-table-ospiti (showItemEmiter)="show($event)"  [eventPazienti]="eventsSubject.asObservable()" [buttons]='["CC", "CI"]'></app-table-ospiti>
     </div>
   </div>
 </div>

@@ -9,17 +9,16 @@
         <mat-card-content>
 
           <section class="example-section" >
-            <mat-checkbox class="" [disabled]=disable>Ipertensione</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Ipertensione</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Diabete</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Malattie Cardiovascolari</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Malattie Cerebrovascolari</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Demenza</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Neoplasie</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Altro</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.ipertensione" > Ipertensione</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.diabete" > Diabete</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.malatCardiovascolari" > Malattie Cardiovascolari</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.malatCerebrovascolari" > Malattie Cerebrovascolari</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.demenza" > Demenza</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.neoplasie" > Neoplasie</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="element.altro" > Altro</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150" [disabled]=disable></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="element.testoAltro" ></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -37,13 +36,13 @@
         <mat-card-content>
 
           <section class="example-section">
-            <mat-checkbox class="" [disabled]=disable>Antitetanica</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Antiepatite B</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Antinfluenzale</mat-checkbox>
-            <mat-checkbox class="" [disabled]=disable> Altre</mat-checkbox>
+            <mat-checkbox [(ngModel)]="element.antitetanica" class="" >Antitetanica</mat-checkbox>
+            <mat-checkbox [(ngModel)]="element.antiepatiteB" class="" > Antiepatite B</mat-checkbox>
+            <mat-checkbox [(ngModel)]="element.antinfluenzale" class="" > Antinfluenzale</mat-checkbox>
+            <mat-checkbox [(ngModel)]="element.altre" class="" > Altre</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150" [disabled]=disable></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="element.testoAltre" ></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -61,7 +60,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; lavorative</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorative" [disabled]=disable>
+            <input matInput placeholder="Inserisci attivit&agrave; lavorative" [(ngModel)]="element.attLavorative" >
           </mat-form-field>
 
         </mat-card-content>
@@ -76,13 +75,13 @@
     <div class="col">
       <mat-card>
         <mat-card-header>
-          <mat-card-title>SCOLARITA&Agrave;</mat-card-title>
+          <mat-card-title>SCOLARIT&Agrave;</mat-card-title>
         </mat-card-header>
         <mat-card-content>
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Scolarit&agrave;</mat-label>
-            <input matInput placeholder="Inserisci scolarit&agrave;" [disabled]=disable>
+            <input matInput placeholder="Inserisci scolarit&agrave;" [(ngModel)]="element.scolarita" >
           </mat-form-field>
 
         </mat-card-content>
@@ -92,45 +91,9 @@
 </div>
 
 
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Attivit&Agrave; lavorativa principale</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
 
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Attivit&agrave; lavorativa principale</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" [disabled]=disable>
-          </mat-form-field>
 
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-</div>
 
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-header>
-          <mat-card-title>Attivit&Agrave; lavorativa principale</mat-card-title>
-        </mat-card-header>
-        <mat-card-content>
-
-          <mat-form-field class="example-full-width" appearance="fill">
-            <mat-label>Attivit&agrave; lavorativa principale</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorativa principale" [disabled]=disable>
-          </mat-form-field>
-
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-</div>
 
 <div class="container-fluid tabcontent">
   <div class="row">
@@ -143,7 +106,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Servizio militare</mat-label>
-            <input matInput placeholder="Inserisci servizio militare" [disabled]=disable>
+            <input matInput placeholder="Inserisci servizio militare" [(ngModel)]="element.servizioMilitare" >
           </mat-form-field>
 
         </mat-card-content>
@@ -163,7 +126,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Menarca</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.menarca" >
           </mat-form-field>
 
         </mat-card-content>
@@ -181,9 +144,9 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Select una opzione" >
-            <mat-radio-button value="1" [disabled]=disable>fisiologica</mat-radio-button>
-            <mat-radio-button value="2" [disabled]=disable>chirurgica</mat-radio-button>
+          <mat-radio-group aria-label="Select una opzione"  [(ngModel)]="element.menopausa">
+            <mat-radio-button value="1" >fisiologica</mat-radio-button>
+            <mat-radio-button value="2" >chirurgica</mat-radio-button>
           </mat-radio-group>
 
         </mat-card-content>
@@ -204,7 +167,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; Fisica</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci"  [(ngModel)]="element.attFisica" >
           </mat-form-field>
 
         </mat-card-content>
@@ -224,7 +187,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alimentazione</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.alimentazione" >
           </mat-form-field>
 
         </mat-card-content>
@@ -245,7 +208,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alvo</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.alvo" >
           </mat-form-field>
 
         </mat-card-content>
@@ -266,7 +229,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Diurisi</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.diurisi" >
           </mat-form-field>
 
         </mat-card-content>
@@ -286,7 +249,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alcolici</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.alcolici" >
           </mat-form-field>
 
         </mat-card-content>
@@ -306,7 +269,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Fumo</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.fumo" >
           </mat-form-field>
 
         </mat-card-content>
@@ -326,7 +289,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Sonno</mat-label>
-            <input matInput placeholder="Inserisci" [disabled]=disable>
+            <input matInput placeholder="Inserisci" [(ngModel)]="element.sonno" >
           </mat-form-field>
 
         </mat-card-content>

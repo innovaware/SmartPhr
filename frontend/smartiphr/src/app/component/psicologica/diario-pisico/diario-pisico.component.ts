@@ -36,7 +36,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
-    if (this.paziente.cartellaClinica != undefined) {
+    /*if (this.paziente.cartellaClinica != undefined) {
       this.diario = this.paziente.cartellaClinica.sort(
         (a: CartellaClinica, b: CartellaClinica) => {
           return a.data.getTime() - b.data.getTime();
@@ -44,7 +44,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       )[0].schedaPisico.diario;
     } else {
       this.diario = [];
-    }
+    }*/
 
     console.log("Diario", this.diario);
     this.dataSource = new MatTableDataSource<Diario>(this.diario);

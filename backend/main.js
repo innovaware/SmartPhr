@@ -409,6 +409,11 @@ var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
 app.use("/api/documentimedicinalavoro", logHandler, authorizationHandler, documentiMedicinaLavoroRouter);
 
 
+// CartellaClinica API
+var CartellaClinicaRouter = require("./routes/cartellaClinica");
+app.use("/api/cartellaClinica", logHandler, authorizationHandler, CartellaClinicaRouter);
+
+
 /*** FINE GESTIONE PERSONALE ***/
 
 app.listen(PORT, function () {

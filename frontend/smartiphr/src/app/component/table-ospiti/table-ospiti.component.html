@@ -15,6 +15,7 @@
     </div>
   </div>
 
+
   <div class="row">
     <div class="col">
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
@@ -26,7 +27,7 @@
             <button (click)="call(row, item)" class="mat-raised-button raised-button action-button"
               *ngFor="let item of buttons">
               <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
-              <span class="nav-label"> {{item.label}}</span>
+              <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
             </button>
           </td>
         </ng-container>

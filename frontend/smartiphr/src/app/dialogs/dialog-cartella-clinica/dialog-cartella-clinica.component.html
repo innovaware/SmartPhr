@@ -30,11 +30,11 @@
           </mat-tab>
 
           <mat-tab label="Anamnesi Famigliare">
-            <app-anamnesi-famigliare [data]=data.paziente [disable]=data.readonly></app-anamnesi-famigliare>
+            <app-anamnesi-famigliare [(data)]=cartella></app-anamnesi-famigliare>
           </mat-tab>
 
           <mat-tab label="Anamnesi Patologica">
-            <app-anamnesi-patologica [data]=data.paziente [disable]=data.readonly></app-anamnesi-patologica>
+            <app-anamnesi-patologica [(data)]=cartella></app-anamnesi-patologica>
           </mat-tab>
 
           <mat-tab label="Esame Generale">
@@ -72,6 +72,6 @@
 <div mat-dialog-actions>
   <div class="bottom-actions">
   <button mat-button [mat-dialog-close]="true">Chiudi</button>
-  <button mat-button class="button-insert">Salva</button>
+  <button mat-button (click)="salva()" class="button-insert">Salva</button>
 </div>
 </div>

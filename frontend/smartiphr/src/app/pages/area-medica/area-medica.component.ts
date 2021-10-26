@@ -1,8 +1,12 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material";
+import { Subject } from "rxjs";
 import { DialogCartellaClinicaComponent } from 'src/app/dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component';
 import { DialogCartellaInfermeristicaComponent } from 'src/app/dialogs/dialog-cartella-infermeristica/dialog-cartella-infermeristica.component';
+import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
+import { MessagesService } from "src/app/service/messages.service";
+import { PazienteService } from "src/app/service/paziente.service";
 
 @Component({
   selector: "app-area-medica",
@@ -10,9 +14,18 @@ import { Paziente } from "src/app/models/paziente";
   styleUrls: ["./area-medica.component.css"],
 })
 export class AreaMedicaComponent implements OnInit {
-  constructor(public dialog: MatDialog) {}
+  pazienti: Paziente[];
+  constructor(public dialog: MatDialog,
+    public messageService: MessagesService,
+    public pazienteService: PazienteService) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+      this.pazienti = paz;
+
+      this.eventsSubject.next(this.pazienti);
+    });
+  }
 
   show(event: { paziente: Paziente; button: string }) {
 
@@ -41,4 +54,7 @@ export class AreaMedicaComponent implements OnInit {
         //  this.animal = result;
       });
   }
+
+  eventsSubject: Subject<Paziente[]> = new Subject<Paziente[]>();
+ 
 }
