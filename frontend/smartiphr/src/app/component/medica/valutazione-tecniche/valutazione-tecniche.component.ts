@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { CartellaClinica } from 'src/app/models/cartellaClinica';
 
 @Component({
   selector: 'app-valutazione-tecniche',
@@ -7,9 +8,13 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class ValutazioneTecnicheComponent implements OnInit {
   @Input() data;
-  @Input() disable: boolean;
+  public element: CartellaClinica = new CartellaClinica();
 
-  constructor() { }
+  constructor() { 
+    if(this.data != undefined)
+      this.element = this.data;
+  }
+
 
   ngOnInit() {
   }

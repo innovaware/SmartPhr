@@ -26,7 +26,7 @@
 
         <mat-tab-group mat-align-tabs="start">
           <mat-tab label="Generale">
-            <app-paziente-generale [disable]=true [data]=data.paziente></app-paziente-generale>
+            <app-paziente-generale [disable]=true [(data)]=cartella></app-paziente-generale>
           </mat-tab>
 
           <mat-tab label="Anamnesi Famigliare">
@@ -38,27 +38,27 @@
           </mat-tab>
 
           <mat-tab label="Esame Generale">
-            <app-esame-generale [data]=data.paziente [disable]=data.readonly></app-esame-generale>
+            <app-esame-generale [(data)]=cartella></app-esame-generale>
           </mat-tab>
 
           <mat-tab label="Esame Neurologica">
-            <app-esame-neurologica [data]=data.paziente [disable]=data.readonly></app-esame-neurologica>
+            <app-esame-neurologica [(data)]=cartella ></app-esame-neurologica>
           </mat-tab>
 
           <mat-tab label="Mezzi di Contenzione">
-            <app-mezzi-contenzione [data]=data.paziente [disable]=data.readonly></app-mezzi-contenzione>
+            <app-mezzi-contenzione [(data)]=cartella ></app-mezzi-contenzione>
           </mat-tab>
 
           <mat-tab label="Valutazione Tecniche">
-            <app-valutazione-tecniche [data]=data.paziente [disable]=data.readonly></app-valutazione-tecniche>
+            <app-valutazione-tecniche [(data)]=cartella ></app-valutazione-tecniche>
           </mat-tab>
 
           <mat-tab label="Visite specialistiche/Esami paraclinici">
-            <app-visite-specialistiche [data]=data.paziente [disable]=data.readonly></app-visite-specialistiche>
+            <app-visite-specialistiche [(data)]=cartella ></app-visite-specialistiche>
           </mat-tab>
 
           <mat-tab label="Diario">
-            <app-diario-pisico [paziente]=data.paziente [disable]=data.readonly>></app-diario-pisico>
+            <app-diario-pisico [paziente]=data.paziente >></app-diario-pisico>
           </mat-tab>
 
         </mat-tab-group>

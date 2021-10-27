@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-
+import { CartellaClinica } from 'src/app/models/cartellaClinica';
 @Component({
   selector: 'app-esame-generale',
   templateUrl: './esame-generale.component.html',
@@ -7,9 +7,12 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class EsameGeneraleComponent implements OnInit {
   @Input() data;
-  @Input() disable: boolean;
+  public element: CartellaClinica = new CartellaClinica();
 
-  constructor() { }
+  constructor() { 
+    if(this.data != undefined)
+      this.element = this.data;
+  }
 
   ngOnInit() {
   }

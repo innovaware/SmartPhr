@@ -80,6 +80,80 @@ router.post("/:id", async (req, res) => {
     reazioneAFarmaci: req.body.reazioneAFarmaci,
 
 
+
+    tipocostituzionale: req.body.tipocostituzionale,
+    condizionigenerali: req.body.condizionigenerali,
+    nutrizione: req.body.nutrizione,
+    cute: req.body.cute,
+    sistemalinfo: req.body.sistemalinfo,
+    capocollo: req.body.capocollo,
+    protesi: req.body.apparatourogenitale,
+    apparatourogenitale: req.body.apparatourogenitale,
+    apparatomuscholoscheletrico: req.body.apparatomuscholoscheletrico,
+    apparatocardio: req.body.apparatocardio,
+    frequenza: req.body.frequenza,
+    pressionearteriosa: req.body.pressionearteriosa,
+    polsiarteriosi: req.body.polsiarteriosi,
+    apparatorespiratorio: req.body.apparatorespiratorio,
+    addome: req.body.addome,
+    fegato: req.body.fegato,
+    milza: req.body.milza,
+
+
+
+
+
+
+    facies: req.body.facies,
+    stato_coscienza: req.body.stato_coscienza,
+    stato_emotivo: req.body.stato_emotivo,
+    comportamento: req.body.comportamento,
+    linguaggio: req.body.linguaggio,
+    concentrazione: req.body.concentrazione,
+    disturbi_pensiero: req.body.disturbi_pensiero,
+    orientamentopersonale: req.body.orientamentopersonale,
+    orientamentotemporale: req.body.orientamentotemporale,
+    orientamentospaziale: req.body.orientamentospaziale,
+    stazioneeretta: req.body.stazioneeretta,
+    seduto: req.body.seduto,
+    altreanomalie: req.body.altreanomalie,
+    romberg: req.body.romberg,
+    olfatto: req.body.olfatto,
+    pupille: req.body.pupille,
+    visus: req.body.visus,
+    campovisivo: req.body.campovisivo,
+    fondooculare: req.body.fondooculare,
+    movimentioculari: req.body.movimentioculari,
+    masticazione: req.body.masticazione,
+     motilitafacciale: req.body.motilitafacciale,
+     funzioneuditiva: req.body.funzioneuditiva,
+     funzionevestibolare: req.body.funzionevestibolare,
+     motilitafaringea: req.body.motilitafaringea,
+     trofismo: req.body.trofismo,
+     articolazioneparola: req.body.articolazioneparola,
+     annotazioni: req.body.annotazioni,
+     tono: req.body.tono,
+     forza: req.body.forza,
+     coordinazione: req.body.coordinazione,
+     riflessiosteotendinei: req.body.riflessiosteotendinei,
+     sensibilitasuper: req.body.sensibilitasuper,
+     sensibilitaprofonda: req.body.sensibilitaprofonda,
+     funzionicerebellari: req.body.funzionicerebellari,
+     funzioniextrapirabidali: req.body.funzioniextrapirabidali,
+     segnimeningei: req.body.segnimeningei,
+     sfinteri: req.body.sfinteri,
+     annotazioniriflessi: req.body.annotazioniriflessi,
+
+
+
+
+
+
+    valsociale: req.body.valsociale,
+    valeducativa: req.body.valeducativa,
+    valpsicologica: req.body.valpsicologica,
+    valmotoria: req.body.valmotoria,
+
       user: id,
 
     });
@@ -138,6 +212,82 @@ router.put("/:id", async (req, res) => {
             anamnesiProssima: req.body.anamnesiProssima,
             terapiaDomicilio: req.body.terapiaDomicilio,
             reazioneAFarmaci: req.body.reazioneAFarmaci,
+
+
+           
+
+    tipocostituzionale: req.body.tipocostituzionale,
+    condizionigenerali: req.body.condizionigenerali,
+    nutrizione: req.body.nutrizione,
+    cute: req.body.cute,
+    sistemalinfo: req.body.sistemalinfo,
+    capocollo: req.body.capocollo,
+    protesi: req.body.apparatourogenitale,
+    apparatourogenitale: req.body.apparatourogenitale,
+    apparatomuscholoscheletrico: req.body.apparatomuscholoscheletrico,
+    apparatocardio: req.body.apparatocardio,
+    frequenza: req.body.frequenza,
+    pressionearteriosa: req.body.pressionearteriosa,
+    polsiarteriosi: req.body.polsiarteriosi,
+    apparatorespiratorio: req.body.apparatorespiratorio,
+    addome: req.body.addome,
+    fegato: req.body.fegato,
+    milza: req.body.milza,
+
+
+
+
+
+
+    facies: req.body.facies,
+    stato_coscienza: req.body.stato_coscienza,
+    stato_emotivo: req.body.stato_emotivo,
+    comportamento: req.body.comportamento,
+    linguaggio: req.body.linguaggio,
+    concentrazione: req.body.concentrazione,
+    disturbi_pensiero: req.body.disturbi_pensiero,
+    orientamentopersonale: req.body.orientamentopersonale,
+    orientamentotemporale: req.body.orientamentotemporale,
+    orientamentospaziale: req.body.orientamentospaziale,
+    stazioneeretta: req.body.stazioneeretta,
+    seduto: req.body.seduto,
+    altreanomalie: req.body.altreanomalie,
+    romberg: req.body.romberg,
+    olfatto: req.body.olfatto,
+    pupille: req.body.pupille,
+    visus: req.body.visus,
+    campovisivo: req.body.campovisivo,
+    fondooculare: req.body.fondooculare,
+    movimentioculari: req.body.movimentioculari,
+    masticazione: req.body.masticazione,
+     motilitafacciale: req.body.motilitafacciale,
+     funzioneuditiva: req.body.funzioneuditiva,
+     funzionevestibolare: req.body.funzionevestibolare,
+     motilitafaringea: req.body.motilitafaringea,
+     trofismo: req.body.trofismo,
+     articolazioneparola: req.body.articolazioneparola,
+     annotazioni: req.body.annotazioni,
+     tono: req.body.tono,
+     forza: req.body.forza,
+     coordinazione: req.body.coordinazione,
+     riflessiosteotendinei: req.body.riflessiosteotendinei,
+     sensibilitasuper: req.body.sensibilitasuper,
+     sensibilitaprofonda: req.body.sensibilitaprofonda,
+     funzionicerebellari: req.body.funzionicerebellari,
+     funzioniextrapirabidali: req.body.funzioniextrapirabidali,
+     segnimeningei: req.body.segnimeningei,
+     sfinteri: req.body.sfinteri,
+     annotazioniriflessi: req.body.annotazioniriflessi,
+
+
+
+
+
+
+    valsociale: req.body.valsociale,
+    valeducativa: req.body.valeducativa,
+    valpsicologica: req.body.valpsicologica,
+    valmotoria: req.body.valmotoria,
         
         
         },
