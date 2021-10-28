@@ -1,13 +1,11 @@
 export class Curriculum {
-  static create(): Curriculum {
-    return {
-      filename: "",
-      note: "",
-      mansione: "", //altro
-      nome: "",
-      cognome: "",
-      codiceFiscale: "",
-    };
+  constructor() {
+    this.filename = "";
+    this.note = "";
+    this.mansione = "";
+    this.nome = "";
+    this.cognome = "";
+    this.codiceFiscale = "";
   }
 
   _id?: string;

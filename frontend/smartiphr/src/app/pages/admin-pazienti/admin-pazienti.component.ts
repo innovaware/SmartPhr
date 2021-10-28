@@ -30,21 +30,15 @@ export class AdminPazientiComponent implements OnInit {
     });
   }
 
-/*   getButtons() {
-    const showButton: DinamicButton = {
-      label: "Mostra",
-      icon: "",
-      cmd: this.showAdmin.bind({ ...this }),
-    };
+  showFunction(paziente: Paziente) {
+    //console.log(paziente);
 
-    const deleteButton: DinamicButton = {
-      label: "Cancella",
-      icon: "",
-      cmd: this.deleteAdmin.bind({ ...this }),
-    };
-
-    return [showButton, deleteButton];
-  } */
+    console.log("Show scheda paziente:", paziente);
+    var dialogRef = this.dialog.open(DialogPazienteComponent, {
+      data: { paziente: paziente, readonly: false },
+      width: "1024px",
+    });
+  }
 
   getInsertFunction(): any {
     return this.insert.bind({ ...this });
@@ -56,7 +50,7 @@ export class AdminPazientiComponent implements OnInit {
 
   insert() {
     console.log("Inserimento Paziente");
-    const paziente: Paziente = Paziente.empty();
+    const paziente: Paziente = new Paziente();
 
     const dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: true, newItem: true },

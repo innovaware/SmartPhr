@@ -30,6 +30,7 @@ table {
   -moz-hyphens: auto;
   -webkit-hyphens: auto;
   hyphens: auto;
+  text-align: right;
 }
 
 
@@ -42,3 +43,4 @@ table {
   background-color: #f8ac59;
   border-color: #f8ac59;
 }
+

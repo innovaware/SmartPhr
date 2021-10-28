@@ -13,7 +13,12 @@
 
   <div class="row">
     <div class="col">
-      <app-table-ospiti (showItemEmiter)="show($event)"></app-table-ospiti>
+      <!-- <app-table-ospiti (showItemEmiter)="show($event)"></app-table-ospiti> -->
+      <app-table-ospiti
+      [showPatient]="show"
+      [enableShow]=true
+      [enableDeleting]=false
+      [showInsert]=false></app-table-ospiti>
     </div>
   </div>
 </div>

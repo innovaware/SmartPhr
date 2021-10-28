@@ -1,6 +1,10 @@
 
 export class DinamicButton {
   label: string;
-  icon: string;
+
   cmd: any;
+  css?: string;
+  icon?: string;
+  images?: string;
+  tooltip?: string;
 }

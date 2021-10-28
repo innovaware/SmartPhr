@@ -29,8 +29,8 @@
                         Soluzione fisiologica o Ringer Lattato
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.protocolloFisiologicaRigerLattato">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">Pellicola semipermeabile trasparente di poliuretano(I)</option>
                           <option value="2">Idrocolloidi ultrasottili(I-II)</option>
                           <option value="3">Schiuma di pliuretano(II)</option>
@@ -51,8 +51,8 @@
                         Idem
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.protocolloFlittene">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">Forare senza rimuovere il tetto</option>
                           <option value="3">Schiuma di pliuretano</option>
                         </select>
@@ -110,8 +110,8 @@
                     <tr>
                       <td>Escara</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.escara">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">Pomate enzimatiche + garze</option>
                           <option value="2">Idrogeli + schiuma pliuretano</option>
                           <option value="3">Rimozione chirurgica graduale</option>
@@ -129,8 +129,8 @@
                     <tr>
                       <td>Emorragica</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.emorragica">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">Alginati + garze sterili</option>
                         </select>
                       </td>
@@ -143,8 +143,8 @@
                     <tr>
                       <td>Essudativa/Necrotica/Fibrinosa</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.essudativaNecroticaFibbrinosa">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">Idrogeli + schiuma di poliuretano o placca idrocolloidale</option>
                           <option value="1">fibra idrocolloidale + placca </option>
                         </select>
@@ -159,8 +159,8 @@
                     <tr>
                       <td>Cavitaria e/o con abbondante essudato</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.cavitaria">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">tampone schiuma di poliuretano + schiuma di poliuretano</option>
                           <option value="1">fibra idrocolloidale + placca </option>
                         </select>
@@ -174,8 +174,8 @@
                     <tr>
                       <td>Granuleggiante</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.granuleggiante">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">schiuma di poliuretano</option>
                           <option value="1">placca idrocolloidale</option>
                         </select>
@@ -189,8 +189,8 @@
                     <tr>
                       <td>Infetta</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.infetta">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">fibra idrocolloidale + garza(Evitare l'occlusione)</option>
                         </select>
                       </td>

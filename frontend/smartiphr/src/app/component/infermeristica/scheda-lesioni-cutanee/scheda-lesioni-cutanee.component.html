@@ -20,26 +20,26 @@
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>Stadio I arrossamento della cute intatta,eritema irreversibile
+                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio1">Stadio I arrossamento della cute intatta,eritema irreversibile
                 </mat-checkbox>
               </div>
             </div>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>StaStadio II lesione superficiale,abrasione,flittene,lieve cavità
+                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio2">Stadio II lesione superficiale,abrasione,flittene,lieve cavità
                 </mat-checkbox>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>Stadio III profonda cavità nel tessuno sottocutaneo con estensione
+                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio3">Stadio III profonda cavità nel tessuno sottocutaneo con estensione
                   fino alla fascia muscolare</mat-checkbox>
               </div>
             </div>
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>Stadio IV profonda cavità con interessamento di
+                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio4">Stadio IV profonda cavità con interessamento di
                   muscoli,ossa,tendini,articolazioni</mat-checkbox>
               </div>
             </div>
@@ -54,15 +54,15 @@
 
             <div class="row">
               <div class="col">
-                <section class="example-section">
-                  <mat-checkbox type="checkbox" [disabled]=disable> Escara</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Emoraggia</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Essudativa</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Necrotica</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Fibrinosa</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Cavitaria</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Granulleggiante</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable> Infetta</mat-checkbox>
+                <section class="example-section" >
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti1"> Escara</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti2"> Emoraggia</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti3"> Essudativa</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti4"> Necrotica</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti5"> Fibrinosa</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti6"> Cavitaria</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti7"> Granulleggiante</mat-checkbox>
+                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti8"> Infetta</mat-checkbox>
                 </section>
               </div>
             </div>
@@ -81,8 +81,8 @@
                     <tr>
                       <td>OCCIPITE</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.occipite">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">I</option>
                           <option value="2">II</option>
                           <option value="3">III</option>
@@ -96,8 +96,8 @@
                     <tr>
                       <td>STERNO</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.sterno">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">I</option>
                           <option value="2">II</option>
                           <option value="3">III</option>
@@ -111,8 +111,8 @@
                     <tr>
                       <td>PROMINENZE VERTEBRALI</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.prominenzeVertebrali">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">I</option>
                           <option value="2">II</option>
                           <option value="3">III</option>
@@ -126,8 +126,8 @@
                     <tr>
                       <td>SACRO</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.sacro">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="1">I</option>
                           <option value="2">II</option>
                           <option value="3">III</option>
@@ -141,8 +141,8 @@
                     <tr>
                       <td>PUBE</td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.pube">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I</option>
                           <option value="II">II</option>
                           <option value="III">III</option>
@@ -172,14 +172,14 @@
                     <tr>
                       <td>ORECCHIO</td>
                       <td>
-                        <input type="checkbox" value="dx_orecchio" [disabled]=disable>
+                        <input type="checkbox" value="dx_orecchio" [disabled]=disable [(ngModel)]="data.orecchioDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_orecchio" [disabled]=disable>
+                        <input type="checkbox" value="sx_orecchio" [disabled]=disable [(ngModel)]="data.orecchioDx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.orecchioVariante">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -194,14 +194,14 @@
                     <tr>
                       <td>ZIGOMI</td>
                       <td>
-                        <input type="checkbox" value="dx_zigomi" [disabled]=disable>
+                        <input type="checkbox" value="dx_zigomi" [disabled]=disable [(ngModel)]="data.zigomiDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_zigomi" [disabled]=disable>
+                        <input type="checkbox" value="sx_zigomi" [disabled]=disable [(ngModel)]="data.zigomiSx">
                       </td>
                       <td>
-                        <select class="custom-select" id="grado-zigomi" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" id="grado-zigomi" [disabled]=disable> [(ngModel)]="data.zigomiVariante">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -217,14 +217,14 @@
                     <tr>
                       <td>CLAVICOLE</td>
                       <td>
-                        <input type="checkbox" value="dx_clavicole" [disabled]=disable>
+                        <input type="checkbox" value="dx_clavicole" [disabled]=disable [(ngModel)]="data.clavicoleDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_clavicole" [disabled]=disable>
+                        <input type="checkbox" value="sx_clavicole" [disabled]=disable [(ngModel)]="data.clavicoleSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.clavicoleVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -240,14 +240,14 @@
                     <tr>
                       <td>SPALLA</td>
                       <td>
-                        <input type="checkbox" value="dx_spalla" [disabled]=disable>
+                        <input type="checkbox" value="dx_spalla" [disabled]=disable [(ngModel)]="data.spallaDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_spalla" [disabled]=disable>
+                        <input type="checkbox" value="sx_spalla" [disabled]=disable [(ngModel)]="data.spallaSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.spallaVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -264,14 +264,14 @@
                     <tr>
                       <td>SCAPOLE</td>
                       <td>
-                        <input type="checkbox" value="dx_scapole" [disabled]=disable>
+                        <input type="checkbox" value="dx_scapole" [disabled]=disable [(ngModel)]="data.scapoleDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_scapole" [disabled]=disable>
+                        <input type="checkbox" value="sx_scapole" [disabled]=disable [(ngModel)]="data.scapoleSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.scapoleVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -289,14 +289,14 @@
                     <tr>
                       <td>COSTATO</td>
                       <td>
-                        <input type="checkbox" value="dx_costato" [disabled]=disable>
+                        <input type="checkbox" value="dx_costato" [disabled]=disable [(ngModel)]="data.costatoDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_costato" [disabled]=disable>
+                        <input type="checkbox" value="sx_costato" [disabled]=disable [(ngModel)]="data.costatoSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.costatoVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -313,14 +313,14 @@
                     <tr>
                       <td>CRESTE ILIACHE</td>
                       <td>
-                        <input type="checkbox" value="dx_creste" [disabled]=disable>
+                        <input type="checkbox" value="dx_creste" [disabled]=disable [(ngModel)]="data.cresteIliacheDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_creste" [disabled]=disable>
+                        <input type="checkbox" value="sx_creste" [disabled]=disable [(ngModel)]="data.cresteIliacheSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.cresteIliacheVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -335,14 +335,14 @@
                     <tr>
                       <td>TROCANTIERI</td>
                       <td>
-                        <input type="checkbox" value="dx_trocantieri" [disabled]=disable>
+                        <input type="checkbox" value="dx_trocantieri" [disabled]=disable [(ngModel)]="data.troncatieriDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_trocantieri" [disabled]=disable>
+                        <input type="checkbox" value="sx_trocantieri" [disabled]=disable [(ngModel)]="data.troncatieriSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.troncatieriVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -358,14 +358,14 @@
                     <tr>
                       <td>PROMINENZE ISCHIATRICHE</td>
                       <td>
-                        <input type="checkbox" value="dx_prominenze" [disabled]=disable>
+                        <input type="checkbox" value="dx_prominenze" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_prominenze" [disabled]=disable>
+                        <input type="checkbox" value="sx_prominenze" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -380,13 +380,13 @@
                     <tr>
                       <td>GINOCCHIO</td>
                       <td>
-                        <input type="checkbox" value="dx_ginocchio" [disabled]=disable>
+                        <input type="checkbox" value="dx_ginocchio" [disabled]=disable [(ngModel)]="data.ginocchioDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_ginocchio" [disabled]=disable>
+                        <input type="checkbox" value="sx_ginocchio" [disabled]=disable [(ngModel)]="data.ginocchioSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.ginocchioVarianti">
                           <option selected="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
@@ -401,14 +401,14 @@
                     <tr>
                       <td>MALLEOLI TIBIALI MEDIALI</td>
                       <td>
-                        <input type="checkbox" value="dx_tibia_med" [disabled]=disable>
+                        <input type="checkbox" value="dx_tibia_med" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_tibia_med" [disabled]=disable>
+                        <input type="checkbox" value="sx_tibia_med" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -422,14 +422,14 @@
                     <tr>
                       <td>MALLEOLI TIBIALI LATERALI</td>
                       <td>
-                        <input type="checkbox" value="dx_tibia_lat" [disabled]=disable>
+                        <input type="checkbox" value="dx_tibia_lat" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_tibia_lat" [disabled]=disable>
+                        <input type="checkbox" value="sx_tibia_lat" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -443,14 +443,14 @@
                     <tr>
                       <td>DORSO PIEDE</td>
                       <td>
-                        <input type="checkbox" value="dx_piede" [disabled]=disable>
+                        <input type="checkbox" value="dx_piede" [disabled]=disable [(ngModel)]="data.dorsoPiedeDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_piede" [disabled]=disable>
+                        <input type="checkbox" value="sx_piede" [disabled]=disable [(ngModel)]="data.dorsoPiedeSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.dorsoPiedeVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -463,14 +463,14 @@
                     <tr>
                       <td>TALLONI</td>
                       <td>
-                        <input type="checkbox" value="dx_talloni" [disabled]=disable>
+                        <input type="checkbox" value="dx_talloni" [disabled]=disable [(ngModel)]="data.talloniDx">
                       </td>
                       <td>
-                        <input type="checkbox" value="sx_talloni" [disabled]=disable>
+                        <input type="checkbox" value="sx_talloni" [disabled]=disable [(ngModel)]="data.talloniSx">
                       </td>
                       <td>
-                        <select class="custom-select" [disabled]=disable>
-                          <option selected="">Seleziona ...</option>
+                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.talloniVarianti">
+                          <option selected="" value="">Seleziona ...</option>
                           <option value="I">I Variante</option>
                           <option value="II">II Variante</option>
                           <option value="III">III Variante</option>
@@ -496,7 +496,7 @@
             <div class="row">
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
-                  <textarea matInput placeholder="" [disabled]=disable></textarea>
+                  <textarea matInput placeholder="" [disabled]=disable  [(ngModel)]="data.descrizione"></textarea>
                 </mat-form-field>
               </div>
             </div>
