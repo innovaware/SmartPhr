@@ -33,28 +33,15 @@ export class Fornitore {
     this.tipoContratto = fornitore.tipoContratto;
   }
 
-  public static empty(): any {
-    return {
-      cognome: "",
-      nome: "",
-      sesso: "",
-      luogoNascita: "",
-      dataNascita: undefined,
-      indirizzoResidenza: "",
-      comuneResidenza: "",
-      provinciaResidenza: "",
-      statoCivile: "",
-      figli: 0,
-      scolarita: "",
-      situazioneLavorativa: "",
-      personeRiferimento: "",
-      telefono: "",
-      dataIngresso: new Date(),
-      provincia: "",
-      localita: "",
-      comuneNascita: "",
-      provinciaNascita: "",
-      cartellaClinica: [],
-    };
+  constructor() {
+    this.cognome = "";
+    this.nome = "";
+    this.dataNascita = undefined;
+    this.indirizzoResidenza = "";
+    this.comuneResidenza = "";
+    this.provinciaResidenza = "";
+    this.telefono = "";
+    this.comuneNascita = "";
+    this.provinciaNascita = "";
   }
 }

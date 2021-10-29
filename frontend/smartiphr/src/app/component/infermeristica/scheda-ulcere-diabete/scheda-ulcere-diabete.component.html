@@ -15,7 +15,7 @@
               <div class="row">
                 <div class="col">
                   <label>Descrizione</label>
-                  <textarea class="form-control" rows="5" cols="150" [disabled]=disable></textarea>
+                  <textarea class="form-control" rows="5" cols="150" [disabled]=disable  [(ngModel)]="data.descrizione"></textarea>
 
                 </div>
               </div>
@@ -78,14 +78,14 @@
               <div class="row">
                 <div class="col">
                   <label>Valutazione: </label>
-                  <input type="text" placeholder="  /  " [disabled]=disable>
+                  <input type="text" placeholder="  /  " [disabled]=disable  [(ngModel)]="data.valutazione">
                 </div>
               </div>
 
               <div class="row">
                 <div class="col">
                   <label>Conclusione</label>
-                  <textarea class="form-control" rows="5" cols="150" [disabled]=disable></textarea>
+                  <textarea class="form-control" rows="5" cols="150" [disabled]=disable  [(ngModel)]="data.conclusione"></textarea>
                 </div>
               </div>
 

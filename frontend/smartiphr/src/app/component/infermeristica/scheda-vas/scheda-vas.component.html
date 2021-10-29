@@ -17,8 +17,8 @@
                   <label>Indicare qual'è la quantità di dolore che si sta sperimentando partendo da 0 (nessun dolore) a
                     10
                     (massimo dolore)</label>
-                  <select class="custom-select" [disabled]=disable>
-                    <option selected="">Seleziona ...</option>
+                  <select class="custom-select" [disabled]=disable  [(ngModel)]="data.punteggio">
+                    <option selected="" value="">Seleziona ...</option>
                     <option value="0 - 1">0 - 1 </option>
                     <option value="1 - 2">1 - 2 </option>
                     <option value="2 - 3">2 - 3 </option>

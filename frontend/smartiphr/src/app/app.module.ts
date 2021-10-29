@@ -85,7 +85,7 @@ import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-
 import { FattureSSRComponent } from "./pages/fatture-ssr/fatture-ssr.component";
 import { FattureSSComponent } from "./pages/fatture-ss/fatture-ss.component";
 
- 
+
 import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
 import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
 import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
@@ -123,6 +123,7 @@ import { TableFattureFornitoriComponent } from './component/table-fatture-fornit
 import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
 import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
 import { DiarioClinicoComponent } from './component/medica/diario-clinico/diario-clinico.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
 
 @NgModule({
   declarations: [
@@ -216,6 +217,7 @@ import { DiarioClinicoComponent } from './component/medica/diario-clinico/diario
     MatButtonModule,
     MatPaginatorModule,
     MatInputModule,
+    MatTooltipModule,
     MatFormFieldModule,
     MatDialogModule,
     MatCardModule,

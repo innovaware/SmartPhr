@@ -24,11 +24,25 @@
           <th mat-header-cell *matHeaderCellDef>
           </th>
           <td mat-cell *matCellDef="let row">
-            <button (click)="call(row, item)" class="mat-raised-button raised-button action-button"
-              *ngFor="let item of buttons">
-              <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
-              <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
+            <button mat-button
+              *ngIf="enableShow" (click)="showPatient(row)" >
+              <img src="../../../assets/read.png" style="height:31px">
             </button>
+
+            <button mat-button
+              *ngIf="enableDeleting" (click)="deletePatient(row)" >
+              <img src="../../../assets/cestino.png" style="width:26px">
+            </button>
+
+            <div *ngIf="enableCustomButton">
+              <button mat-button *ngFor="let item of CustomButtons" (click)="item.cmd(row)" [ngClass]="item.css"
+                matTooltip={{item.tooltip}} matTooltipPosition="above">
+                <img *ngIf="item.images != undefined" [src]="item.images" style="width:26px">
+
+                <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
+                <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
+              </button>
+            </div>
           </td>
         </ng-container>
 

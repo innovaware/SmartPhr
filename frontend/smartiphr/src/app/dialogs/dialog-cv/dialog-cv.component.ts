@@ -26,7 +26,7 @@ export class DialogCvComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogCvComponent>,
     private curriculumService: CurriculumService
   ) {
-    this.nuovoCurriculum = Curriculum.create();
+    this.nuovoCurriculum = new Curriculum();
     this.uploadingCV = false;
   }
 

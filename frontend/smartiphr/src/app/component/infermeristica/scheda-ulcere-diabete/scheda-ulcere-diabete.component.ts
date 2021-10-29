@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SchedaUlcereDiabete } from 'src/app/models/SchedaUlcereDiabete';
 
 @Component({
   selector: 'app-scheda-ulcere-diabete',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./scheda-ulcere-diabete.component.css']
 })
 export class SchedaUlcereDiabeteComponent implements OnInit {
-  @Input() data;
+  @Input() data: SchedaUlcereDiabete;
   @Input() disable: boolean;
 
   constructor() { }
