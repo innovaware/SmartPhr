@@ -53,7 +53,19 @@ export class AreaInfermieristicaComponent implements OnInit {
         this.dialog.open(DialogCartellaInfermeristicaComponent, {
           data: { paziente: paziente, readonly: false },
           width: "1024px",
-        }),
+        }).afterClosed().subscribe( (data: Paziente)=> {
+          if (data != undefined || data) {
+            this.pazienti.push(data);
+
+            const index = this.pazienti.indexOf(paziente, 0);
+            if (index > -1) {
+              this.pazienti.splice(index, 1);
+              console.log("Removed item");
+
+            }
+            this.eventsSubject.next(this.pazienti);
+          }
+        })
       // css: "mat-raised-button raised-button action-button",
     });
 

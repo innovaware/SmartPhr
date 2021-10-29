@@ -28,10 +28,9 @@ export class DiarioClinicoComponent implements OnInit {
     this.cartellaclinicaService
       .getById( String(this.data._id) )
       .then((f) => {
-        console.log(JSON.stringify(f));
 
         //this.cartella = f;
-  
+
       })
       .catch((err) => {
         this.showMessageError("Errore caricamento diario");

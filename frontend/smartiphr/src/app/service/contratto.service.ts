@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 import { Contratto } from '../models/contratto';
 
@@ -20,6 +21,14 @@ export class ContrattoService {
     return this.http
       .get<Contratto[]>(`${this.api}/api/contratto/consulente/${id}`, { headers })
       .toPromise();
+  }
+
+  getAll(): Observable<Contratto[]> {
+    const headers = {
+    }
+
+    return this.http
+      .get<Contratto[]>(`${this.api}/api/contratto`, { headers })
   }
 
   async insert(contratto: Contratto, id: string) {
