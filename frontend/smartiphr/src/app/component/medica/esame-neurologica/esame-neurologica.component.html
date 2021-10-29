@@ -9,7 +9,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Facies</mat-label>
-            <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.facies"></textarea>
+            <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.facies"></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -30,7 +30,7 @@
               <tr>
                 <td>
                   <label>Stato di coscienza</label>
-                  <select class="custom-select" id="stato_coscienza"   [(ngModel)]="element.stato_coscienza">
+                  <select class="custom-select" id="stato_coscienza"  (change)="change()"  [(ngModel)]="cartella.stato_coscienza">
                     <option selected="">Seleziona...</option>
                     <option value="adeguata">Vigile</option>
                     <option value="insufficiente">Confuso</option>
@@ -40,7 +40,7 @@
                 </td>
                 <td>
                   <label>Stato emotivo</label>
-                  <select class="custom-select" id="stato_emotivo"   [(ngModel)]="element.stato_emotivo">
+                  <select class="custom-select" id="stato_emotivo"  (change)="change()"  [(ngModel)]="cartella.stato_emotivo">
                     <option selected="">Seleziona...</option>
                     <option value="adeguata">Adeguato</option>
                     <option value="insufficiente">Ansia</option>
@@ -50,7 +50,7 @@
                 </td>
                 <td>
                   <label>Comportamento</label>
-                  <select class="custom-select" id="comportamento"   [(ngModel)]="element.comportamento">
+                  <select class="custom-select" id="comportamento"  (change)="change()"  [(ngModel)]="cartella.comportamento">
                     <option selected="">Seleziona...</option>
                     <option value="adeguata">Adeguato</option>
                     <option value="albilita">Labilità emotiva</option>
@@ -65,7 +65,7 @@
               <tr>
                 <td>
                   <label>linguaggio</label>
-                  <select class="custom-select" id="linguaggio"   [(ngModel)]="element.linguaggio">
+                  <select class="custom-select" id="linguaggio"  (change)="change()"  [(ngModel)]="cartella.linguaggio">
                     <option selected="">Seleziona...</option>
                     <option value="normale">Normale</option>
                     <option value="afasico">Afasico</option>
@@ -76,7 +76,7 @@
                 </td>
                 <td>
                   <label>Concentrazione</label>
-                  <select class="custom-select" id="concentrazione"   [(ngModel)]="element.concentrazione">
+                  <select class="custom-select" id="concentrazione"  (change)="change()"  [(ngModel)]="cartella.concentrazione">
                     <option selected="">Seleziona...</option>
                     <option value="adeguata">Adeguata</option>
                     <option value="distraibile">Facil.Distraibile</option>
@@ -86,7 +86,7 @@
                 </td>
                 <td>
                   <label>Disturbi del pensiero</label>
-                  <select class="custom-select" id="disturbi_pensiero"   [(ngModel)]="element.disturbi_pensiero">
+                  <select class="custom-select" id="disturbi_pensiero"  (change)="change()"  [(ngModel)]="cartella.disturbi_pensiero">
                     <option selected="">Seleziona...</option>
                     <option value="assenti">Assenti</option>
                     <option value="deliranti">Idee deliranti</option>
@@ -100,7 +100,7 @@
               <tr>
                 <td>
                   <label>Orientamento personale</label>
-                  <select class="custom-select"  [(ngModel)]="element.orientamentopersonale">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.orientamentopersonale">
                     <option selected="">Seleziona...</option>
                     <option value="orientato">Orientato</option>
                     <option value="parzialmente">Parzialmente</option>
@@ -109,7 +109,7 @@
                 </td>
                 <td>
                   <label>Orientamento temporale</label>
-                  <select class="custom-select"  [(ngModel)]="element.orientamentotemporale">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.orientamentotemporale">
                     <option selected="">Seleziona...</option>
                     <option value="orientato">Orientato</option>
                     <option value="parzialmente">Parzialmente</option>
@@ -118,7 +118,7 @@
                 </td>
                 <td>
                   <label>Orientamento spaziale</label>
-                  <select class="custom-select"  [(ngModel)]="element.orientamentospaziale">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.orientamentospaziale">
                     <option selected="">Seleziona...</option>
                     <option value="orientato">Orientato</option>
                     <option value="parzialmente">Parzialmente</option>
@@ -131,7 +131,7 @@
               <tr>
                 <td>
                   <label>Stazione eretta</label>
-                  <select class="custom-select"  [(ngModel)]="element.stazioneeretta">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.stazioneeretta">
                     <option selected="">Seleziona...</option>
                     <option value="normale">Normale</option>
                     <option value="no_valutabile">Non valutabile</option>
@@ -144,7 +144,7 @@
                 </td>
                 <td>
                   <label>Seduto</label>
-                  <select class="custom-select"  [(ngModel)]="element.seduto">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.seduto">
                     <option selected="">Seleziona...</option>
                     <option value="normale">Normale</option>
                     <option value="lateropulsione">Lateropulsione</option>
@@ -155,7 +155,7 @@
                 </td>
                 <td>
                   <label>Altre anomalie posturali</label>
-                  <select class="custom-select"  [(ngModel)]="element.altreanomalie">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.altreanomalie">
                     <option selected="">Seleziona...</option>
                     <option value="capo">Capo</option>
                     <option value="tronco">Tronco</option>
@@ -184,7 +184,7 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Seleziona una opzione" [(ngModel)]="element.romberg">
+          <mat-radio-group aria-label="Seleziona una opzione"(change)="change()"  [(ngModel)]="cartella.romberg">
             <mat-radio-button value="1"  >Positivo</mat-radio-button>
             <mat-radio-button value="2"  >Negativo</mat-radio-button>
           </mat-radio-group>
@@ -209,13 +209,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Olfatto</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.olfatto"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.olfatto"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Pupille</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.pupille"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.pupille"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -224,13 +224,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Visus</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.visus"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.visus"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Campo visivo</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.campovisivo"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.campovisivo"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -239,13 +239,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Fondo oculare</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.fondooculare"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.fondooculare"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Movimenti oculari e palpebrali</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.movimentioculari"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.movimentioculari"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -254,13 +254,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Masticazione</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.masticazione"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.masticazione"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Motilità facciale</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.motilitafacciale"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.motilitafacciale"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -269,13 +269,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Funzione uditiva</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.funzioneuditiva"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.funzioneuditiva"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Funzione vestibolare</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.funzionevestibolare"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.funzionevestibolare"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -284,13 +284,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Motilità faringea</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.motilitafaringea"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.motilitafaringea"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Trofismo e motilità linguale</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.trofismo"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.trofismo"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -299,13 +299,13 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Articolazione della parola</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.articolazioneparola"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.articolazioneparola"></textarea>
                 </mat-form-field>
               </div>
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Annotazioni</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.annotazioni"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.annotazioni"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -335,7 +335,7 @@
               <tr>
                 <td>
                   <label>Tono</label>
-                  <select class="custom-select"  [(ngModel)]="element.tono">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.tono">
                     <option selected="">Seleziona...</option>
                     <option value="Normale">Normale</option>
                     <option value="ip_spastica">Ipertonia spastica</option>
@@ -346,7 +346,7 @@
                 </td>
                 <td>
                   <label>Forza</label>
-                  <select class="custom-select"  [(ngModel)]="element.forza">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.forza">
                     <option selected="">Seleziona...</option>
                     <option value="Normale">Normale</option>
                     <option value="ipostenia">Ipostenia</option>
@@ -356,7 +356,7 @@
                 </td>
                 <td>
                   <label>Coordinazione</label>
-                  <select class="custom-select"  [(ngModel)]="element.coordinazione">
+                  <select class="custom-select" (change)="change()"  [(ngModel)]="cartella.coordinazione">
                     <option selected="">Seleziona...</option>
                     <option value="normale">Normale</option>
                     <option value="dismetria">Dismetria</option>
@@ -387,7 +387,7 @@
               <div class="col">
                 <mat-form-field appearance="fill">
                   <mat-label>Riflessi osteotendinei</mat-label>
-                  <textarea matInput placeholder="Inserisci qui"  [(ngModel)]="element.riflessiosteotendinei"></textarea>
+                  <textarea matInput placeholder="Inserisci qui" (change)="change()"  [(ngModel)]="cartella.riflessiosteotendinei"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -396,7 +396,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Sensibilit&agrave; superficiale</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.sensibilitasuper"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.sensibilitasuper"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -405,7 +405,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Sensibilit&agrave; profonda</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.sensibilitaprofonda"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.sensibilitaprofonda"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -414,7 +414,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Funzioni cerebellari</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.funzionicerebellari"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.funzionicerebellari"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -423,7 +423,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Funzioni extrapirabidali</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.funzioniextrapirabidali"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.funzioniextrapirabidali"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -432,7 +432,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Segni meningei</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.segnimeningei"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.segnimeningei"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -441,7 +441,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Sfinteri</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.sfinteri"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.sfinteri"></textarea>
                 </mat-form-field>
               </div>
             </div>
@@ -450,7 +450,7 @@
               <div class="col">
                 <mat-form-field class="example-full-width" appearance="fill">
                   <mat-label>Annotazioni</mat-label>
-                  <textarea matInput placeholder="Inserisci"  [(ngModel)]="element.annotazioniriflessi"></textarea>
+                  <textarea matInput placeholder="Inserisci" (change)="change()"  [(ngModel)]="cartella.annotazioniriflessi"></textarea>
                 </mat-form-field>
               </div>
             </div>

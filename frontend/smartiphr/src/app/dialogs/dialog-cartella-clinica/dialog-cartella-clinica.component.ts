@@ -19,18 +19,19 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
 export class DialogCartellaClinicaComponent implements OnInit {
 
 
-public cartella: CartellaClinica;
 
   constructor(
     public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
     public cartellaclinicaService: CartellaclinicaService,
     public dialog: MatDialog,
+    @Inject(MAT_DIALOG_DATA) public cartella : CartellaClinica,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       paziente: Paziente;
-      readonly: boolean    
+      readonly: boolean 
     }
   ) {
+   
   }
 
   ngOnInit() {
@@ -44,11 +45,28 @@ public cartella: CartellaClinica;
     this.cartellaclinicaService
       .getById(this.data.paziente._id )
       .then((f) => {
-        console.log(Object.keys(f).length);
+        console.log(JSON.stringify(f));
     if(Object.keys(f).length > 0)
         this.cartella = f;
-    else
-    this.cartella = new CartellaClinica();
+    else{
+
+      var cc = new CartellaClinica();
+      cc.user = this.data.paziente._id;
+
+      this.cartellaclinicaService
+      .insert(cc )
+      .then((f) => {
+        this.cartella = f;
+            })
+            .catch((err) => {
+        this.showMessageError("Errore inserimento da zero cartella");
+        console.error(err);
+      });
+
+
+
+    }
+   
 
       })
       .catch((err) => {
@@ -74,21 +92,19 @@ public cartella: CartellaClinica;
 
 
   salva(){
-    console.log('this.cartella: ' + this.cartella == 'undefined');
-    if(Object.keys(this.cartella).length == 0 ){
 
       this.cartella.user = this.data.paziente._id;
     this.cartellaclinicaService
-      .insert(this.cartella )
+      .save(this.cartella )
       .then((f: CartellaClinica) => {
         this.cartella = f;
 
       })
       .catch((err) => {
-        this.showMessageError("Errore creazione cartella");
+        this.showMessageError("Errore modifica cartella");
         console.error(err);
       });
-    }
+    
   }
 
 

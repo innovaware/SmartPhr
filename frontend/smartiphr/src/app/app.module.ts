@@ -122,6 +122,7 @@ import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
 import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
 import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
 import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
+import { DiarioClinicoComponent } from './component/medica/diario-clinico/diario-clinico.component';
 
 @NgModule({
   declarations: [
@@ -203,6 +204,7 @@ import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-questi
     TableFattureFornitoriComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
+    DiarioClinicoComponent,
   ],
   imports: [
     BrowserModule,

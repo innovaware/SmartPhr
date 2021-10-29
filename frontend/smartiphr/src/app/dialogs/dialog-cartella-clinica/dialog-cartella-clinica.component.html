@@ -26,39 +26,42 @@
 
         <mat-tab-group mat-align-tabs="start">
           <mat-tab label="Generale">
-            <app-paziente-generale [disable]=true [(data)]=cartella></app-paziente-generale>
+            <app-paziente-generale [disable]=true [data]=data.paziente></app-paziente-generale>
           </mat-tab>
 
-          <mat-tab label="Anamnesi Famigliare">
-            <app-anamnesi-famigliare [(data)]=cartella></app-anamnesi-famigliare>
-          </mat-tab>
 
           <mat-tab label="Anamnesi Patologica">
-            <app-anamnesi-patologica [(data)]=cartella></app-anamnesi-patologica>
+            <app-anamnesi-patologica [cartella]=cartella [data]=data.paziente></app-anamnesi-patologica>
           </mat-tab>
 
+            <mat-tab label="Anamnesi Famigliare">
+            <app-anamnesi-famigliare [cartella]=cartella [data]=data.paziente></app-anamnesi-famigliare>
+          </mat-tab>
+
+       
+  
           <mat-tab label="Esame Generale">
-            <app-esame-generale [(data)]=cartella></app-esame-generale>
+            <app-esame-generale [cartella]=cartella [data]=data.paziente ></app-esame-generale>
           </mat-tab>
 
-          <mat-tab label="Esame Neurologica">
-            <app-esame-neurologica [(data)]=cartella ></app-esame-neurologica>
+         <!-- <mat-tab label="Esame Neurologica">
+            <app-esame-neurologica [cartella]=cartella [data]=data.paziente ></app-esame-neurologica>
           </mat-tab>
 
           <mat-tab label="Mezzi di Contenzione">
-            <app-mezzi-contenzione [(data)]=cartella ></app-mezzi-contenzione>
+            <app-mezzi-contenzione [cartella]=cartella [data]=data.paziente ></app-mezzi-contenzione>
           </mat-tab>
 
           <mat-tab label="Valutazione Tecniche">
-            <app-valutazione-tecniche [(data)]=cartella ></app-valutazione-tecniche>
+            <app-valutazione-tecniche [cartella]=cartella [data]=data.paziente ></app-valutazione-tecniche>
           </mat-tab>
 
-          <mat-tab label="Visite specialistiche/Esami paraclinici">
-            <app-visite-specialistiche [(data)]=cartella ></app-visite-specialistiche>
-          </mat-tab>
+        <mat-tab label="Visite specialistiche/Esami paraclinici">
+            <app-visite-specialistiche [data]=data.paziente ></app-visite-specialistiche>
+          </mat-tab>-->
 
-          <mat-tab label="Diario">
-            <app-diario-pisico [paziente]=data.paziente >></app-diario-pisico>
+         <mat-tab label="Diario">
+            <app-diario-clinico [data]=data.paziente >></app-diario-clinico>
           </mat-tab>
 
         </mat-tab-group>

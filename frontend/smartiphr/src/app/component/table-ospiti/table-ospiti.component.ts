@@ -10,6 +10,9 @@ import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { PazienteService } from "src/app/service/paziente.service";
 import { MessagesService } from 'src/app/service/messages.service';
+import { CartellaClinica } from "src/app/models/cartellaClinica";
+import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
+import { CartellaclinicaService } from "src/app/service/cartellaclinica.service";
 
 @Component({
   selector: "app-table-ospiti",
@@ -21,6 +24,9 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     paziente: Paziente;
     button: DinamicButton;
   }>();
+
+
+
   @Input() buttons: DinamicButton[];
   @Input() insertFunction: any;
   @Input() showInsert: boolean;
@@ -45,7 +51,8 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public pazienteService: PazienteService
+    public pazienteService: PazienteService,
+    public cartellaclinicaService: CartellaclinicaService,
     ) {
       this.data = [];
     }
@@ -54,6 +61,8 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     this.eventsSubscription = this.eventPazienti.subscribe((p: Paziente[]) => {
       this.dataSource = new MatTableDataSource<Paziente>(p);
       this.dataSource.paginator = this.paginator;
+
+      
     });
   }
 
@@ -75,12 +84,16 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   }
 
   async show(paziente: Paziente) {
+
     console.log("Show scheda paziente:", paziente);
     var dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: false },
       width: "1024px",
     });
   }
+
+
+
 
   async deletePaziente(paziente: Paziente) {
     console.log("Cancella paziente:", paziente);
