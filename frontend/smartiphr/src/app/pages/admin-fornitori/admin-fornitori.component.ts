@@ -30,7 +30,7 @@ export class AdminFornitoriComponent implements OnInit {
     });
   }
 
-  
+
   getButtons() {
     const showButton: DinamicButton = {
       label: "Mostra",
@@ -57,7 +57,7 @@ export class AdminFornitoriComponent implements OnInit {
 
   insert() {
     console.log("Inserimento Fornitore");
-    const fornitore: Fornitore = Fornitore.empty();
+    const fornitore: Fornitore = new Fornitore();
 
     const dialogRef = this.dialog.open(DialogFornitoreComponent, {
       data: { fornitore: fornitore, readonly: true, newItem: true },

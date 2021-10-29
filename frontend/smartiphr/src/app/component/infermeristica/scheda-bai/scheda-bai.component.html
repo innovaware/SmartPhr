@@ -10,8 +10,8 @@
               <div class="col">
 
                 <label>Apparato Respiratorio:</label>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.apparatoRespiratorio">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="cianosi">Cianosi</option>
                   <option value="dispneariposo">Dispnea a riposo</option>
@@ -29,8 +29,8 @@
               <div class="col">
 
                 <label>Apparato Circolatorio:</label>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.apparatoCircolatorio">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="gonfiori">Gonfiori</option>
                   <option value="estremita_fredde">Estremità fredde</option>
@@ -48,8 +48,8 @@
             <div class="row">
               <div class="col">
                 <h4>STATO DI COSCIENZA</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.statoCoscienza">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="cosciente">Cosciente</option>
                   <option value="disorientamento_temp">Disorientamento temporale</option>
                   <option value="disorientamento_spaz">Disorientamento spaziale</option>
@@ -64,8 +64,8 @@
             <div class="row">
               <div class="col">
                 <h4>STATO D'ANIMO</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.statoDanimo">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="tranquillo">Tranquillo</option>
                   <option value="ansioso">Ansioso</option>
                   <option value="triste">Triste</option>
@@ -80,8 +80,8 @@
             <div class="row">
               <div class="col">
                 <h4>MOBILIT&Agrave;</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.mobilita">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="bisogno_sostegno">Bisogno di sostegno</option>
                   <option value="incoordinazione">Incoordinazione</option>
@@ -102,8 +102,8 @@
             <div class="row">
               <div class="col">
                 <label>Apparato Urinario:</label>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.apparatoUrinario">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="incontinenza">Incontinenza</option>
                   <option value="incidenti_occasionali">Incidenti occasionali</option>
@@ -119,8 +119,8 @@
             <div class="row">
               <div class="col">
                 <label>Apparato Intestinale:</label>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.apparatoIntestinale">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="regolare">Regolare</option>
                   <option value="irregolare">Irregolare</option>
                   <option value="stitichezza">Stitichezza</option>
@@ -137,8 +137,8 @@
             <div class="row">
               <div class="col">
                 <label>Apparato sessuale:</label>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.apparatoSessuale">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="amonorrea">Amonorrea</option>
                   <option value="dismenorrea">Dismenorrea</option>
@@ -153,8 +153,8 @@
               <div class="col">
                 <h4>STATO CURE E MUCOSE</h4>
 
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.statoCureMucose">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="integra">Integra</option>
                   <option value="rosea">Rosea</option>
                   <option value="pallida">Pallida</option>
@@ -172,15 +172,15 @@
             <div class="row">
               <div class="col">
                 <h4>IGIENE PERSONALE</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.igienePersonale">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="autonomo">Autonomo/a</option>
                   <option value="supporto_tot">Necessità di supporto totale</option>
                   <option value="parziale">Necessità di supporto parziale:</option>
 
                 </select>
 
-                <input type="text" placeholder="Supporto parziale" [disabled]=disable>
+                <input type="text" placeholder="Supporto parziale" [disabled]=disable [(ngModel)]="data.supportoParzialeIginePersonale">
               </div>
             </div>
 
@@ -190,15 +190,15 @@
             <div class="row">
               <div class="col">
                 <h4>VESTIZIONE</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.vestizione">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="autonomo">Autonomo/a</option>
                   <option value="supporto_tot">Necessità di supporto totale</option>
                   <option value="parziale">Necessità di supporto parziale:</option>
 
                 </select>
 
-                <input type="text" placeholder="Supporto parziale"  [disabled]=disable>
+                <input type="text" placeholder="Supporto parziale"  [disabled]=disable [(ngModel)]="data.supportoParzialeVestizione">
               </div>
             </div>
 
@@ -207,8 +207,8 @@
             <div class="row">
               <div class="col">
                 <h4>ALIMENTAZIONE</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.alimentazione">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="os_libera">Per os libera</option>
                   <option value="os_precauzioni">Per os con precauzioni</option>
                   <option value="sng">Enterale SNG</option>
@@ -224,8 +224,8 @@
             <div class="row">
               <div class="col">
                 <h4>RIPOSO</h4>
-                <select class="custom-select" [disabled]=disable>
-                  <option selected="">Seleziona ...</option>
+                <select class="custom-select" [disabled]=disable [(ngModel)]="data.riposo">
+                  <option selected="" value="">Seleziona ...</option>
                   <option value="normale">Normale</option>
                   <option value="insonnia">Insonnia iniziale</option>
                   <option value="risvegli">Risvegli frequenti</option>

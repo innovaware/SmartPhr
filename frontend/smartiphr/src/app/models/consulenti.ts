@@ -17,25 +17,21 @@ export class Consulenti {
   email: String;
 
 
-  /**
-   * create
-   */
-  public static create() {
-    return {
-      cognome: "",
-      nome: "",
-      codiceFiscale: "",
-      dataNascita: new Date(),
-      comuneNascita: "",
-      provinciaNascita: "",
-      indirizzoNascita: "",
-      indirizzoResidenza: "",
-      comuneResidenza: "",
-      provinciaResidenza: "",
-      mansione: "",
-      tipologiaContratto: "",
-      telefono: "",
-      email: "",
-    };
+  constructor() {
+    this.cognome = "";
+    this.nome = "";
+    this.codiceFiscale = "";
+    this.dataNascita = new Date();
+    this.comuneNascita = "";
+    this.provinciaNascita = "";
+    this.indirizzoNascita = "";
+    this.indirizzoResidenza = "";
+    this.comuneResidenza = "";
+    this.provinciaResidenza = "";
+    this.mansione = "";
+    this.tipologiaContratto = "";
+    this.telefono = "";
+    this.email = "";
   }
+
 }

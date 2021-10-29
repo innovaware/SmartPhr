@@ -52,3 +52,7 @@ button, select {
   width: 100%;
   text-align: right;
 }
+
+::ng-deep .mat-tab-body-content {
+  min-height: 800px;
+}

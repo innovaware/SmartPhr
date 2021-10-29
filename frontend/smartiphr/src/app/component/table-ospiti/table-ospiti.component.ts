@@ -21,10 +21,20 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     paziente: Paziente;
     button: DinamicButton;
   }>();
-  @Input() buttons: DinamicButton[];
+
+  @Input() CustomButtons: DinamicButton[];
+
   @Input() insertFunction: any;
-  @Input() showInsert: boolean;
+  @Input() showPatient: any;
+  @Input() deletePatient: any;
+
   @Input() eventPazienti: Observable<Paziente[]>;
+
+  @Input() showInsert: boolean;
+  @Input() enableDeleting: boolean;
+  @Input() enableShow: boolean;
+  @Input() enableCustomButton: boolean;
+
 
   private eventsSubscription: Subscription;
 
@@ -68,19 +78,17 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  call(paziente: Paziente, item: DinamicButton) {
-    console.log("Table Ospiti emit ");
+  // call(paziente: Paziente, item: DinamicButton) {
+  //   console.log("Table Ospiti emit ");
 
-    this.showItemEmiter.emit({ paziente: paziente, button: item });
-  }
+  //   this.showItemEmiter.emit({ paziente: paziente, button: item });
+  // }
 
-  async show(paziente: Paziente) {
-    console.log("Show scheda paziente:", paziente);
-    var dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: false },
-      width: "1024px",
-    });
-  }
+  // async show(paziente: Paziente) {
+  //   if (this.showFunction != undefined) {
+  //     this.showFunction(paziente);
+  //   }
+  // }
 
   async deletePaziente(paziente: Paziente) {
     console.log("Cancella paziente:", paziente);

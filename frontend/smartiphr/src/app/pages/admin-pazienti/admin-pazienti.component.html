@@ -9,9 +9,19 @@
 
   <div class="row">
     <div class="col">
-      <app-table-ospiti
+      <!-- <app-table-ospiti
       [eventPazienti]="eventsSubject.asObservable()"
       [insertFunction]="getInsertFunction()"
+      [showFunction]="showFunction"
+      [enableDeleting]=true
+      [showInsert]=true></app-table-ospiti> -->
+
+
+      <app-table-ospiti
+      [eventPazienti]="eventsSubject.asObservable()"
+      [showPatient]="showFunction"
+      [enableShow]=true
+      [enableDeleting]=true
       [showInsert]=true></app-table-ospiti>
     </div>
   </div>

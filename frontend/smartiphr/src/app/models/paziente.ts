@@ -1,3 +1,5 @@
+import { SchedaInfermeristica } from './SchedaInfermeristica';
+
 export class Paziente {
   _id?: string;
   cognome: string;
@@ -19,6 +21,9 @@ export class Paziente {
   comuneNascita: string;
   provinciaNascita: string;
   provenienza?: string;
+
+
+  schedaInfermeristica: SchedaInfermeristica;
 
 
   public update(paziente: Paziente): void {
@@ -43,26 +48,25 @@ export class Paziente {
     this.comuneNascita = paziente.comuneNascita;
   }
 
-  public static empty(): any {
-    return {
-      cognome: "",
-      nome: "",
-      sesso: "",
-      luogoNascita: "",
-      dataNascita: undefined,
-      indirizzoResidenza: "",
-      comuneResidenza: "",
-      provinciaResidenza: "",
-      statoCivile: "",
-      figli: 0,
-      scolarita: "",
-      situazioneLavorativa: "",
-      personeRiferimento: "",
-      telefono: "",
-      dataIngresso: new Date(),
-      indirizzoNascita: "",
-      comuneNascita: "",
-      provinciaNascita: ""
-    };
+  constructor() {
+    this.cognome= "";
+    this.nome= "";
+    this.sesso= "";
+    this.luogoNascita= "";
+    this.dataNascita= undefined;
+    this.indirizzoResidenza= "";
+    this.comuneResidenza= "";
+    this.provinciaResidenza= "";
+    this.statoCivile= "";
+    this.figli= 0;
+    this.scolarita= "";
+    this.situazioneLavorativa= "";
+    this.personeRiferimento= "";
+    this.telefono= "";
+    this.dataIngresso= new Date();
+    this.indirizzoNascita= "";
+    this.comuneNascita= "";
+    this.provinciaNascita= "";
   }
+
 }

@@ -52,7 +52,7 @@ export class ConsulentiComponent implements OnInit {
   }
 
   async insert() {
-    var consulente: Consulenti = Consulenti.create();
+    var consulente: Consulenti = new Consulenti();
 
     var dialogRef = this.dialog.open(DialogConsulenteComponent, {
       data: {

@@ -1,4 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
+import { SchedaVas } from 'src/app/models/SchedaVas';
 
 @Component({
   selector: 'app-scheda-vas',
@@ -6,7 +7,7 @@ import { Component, Input, OnInit } from '@angular/core';
   styleUrls: ['./scheda-vas.component.css']
 })
 export class SchedaVASComponent implements OnInit {
-  @Input() data;
+  @Input() data: SchedaVas;
   @Input() disable: boolean;
 
   constructor() { }

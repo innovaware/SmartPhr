@@ -3,6 +3,7 @@ import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { Diario } from 'src/app/models/diario';
 import { Paziente } from 'src/app/models/paziente';
+import { SchedaInterventi } from 'src/app/models/SchedaInterventi';
 
 @Component({
   selector: 'app-scheda-interventi',
@@ -10,19 +11,21 @@ import { Paziente } from 'src/app/models/paziente';
   styleUrls: ['./scheda-interventi.component.css']
 })
 export class SchedaInterventiComponent implements OnInit {
-  @Input() data;
+  @Input() data: SchedaInterventi[];
   @Input() disable: boolean;
 
-  diario: Diario[];
 
   displayedColumns: string[] = ['data', 'diagnosi' ,'obiettivi' ,'intervento' ,'firma', 'action'];
-  dataSource: MatTableDataSource<Diario>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  dataSource: MatTableDataSource<SchedaInterventi>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(
     public dialog: MatDialog
-  ) { }
+  ) {
+    this.dataSource = new MatTableDataSource<SchedaInterventi>(this.data);
+    this.dataSource.paginator = this.paginator;
+  }
 
   ngOnInit() {
   }
