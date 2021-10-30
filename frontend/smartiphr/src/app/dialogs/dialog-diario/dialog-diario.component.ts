@@ -15,7 +15,6 @@ export class DialogDiarioComponent implements OnInit {
     public dialogRef: MatDialogRef<DialogDiarioComponent>,
     @Inject(MAT_DIALOG_DATA) public item: Diario) {
 
-      console.log("Diario: ", item);
     }
 
 

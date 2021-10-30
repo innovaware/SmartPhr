@@ -15,7 +15,7 @@ export class SchedaInfermeristica {
 
   constructor() {
     this.schedaBAI = new SchedaBAI();
-    this.schedaInterventi = new SchedaInterventi();
+    this.schedaInterventi = [];
     this.schedaLesioni = new SchedaLesioniCutanee();
     this.schedaLesioniDecubito = new SchedaLesioniDecubito();
     this.schedaMnar = new SchedaMnar();
@@ -23,10 +23,38 @@ export class SchedaInfermeristica {
     this.schedaVas = new SchedaVas();
     this.schedaUlcereDiabete = new SchedaUlcereDiabete();
     this.schedaDiario = new SchedaDiario();
+
+
+    this.diagnosi = "";
+    this.intolleranzeAlimentari = "";
+    this.allergie = "";
+    this.infezioni = "";
+    this.terapiaAtto = "";
+    this.catetereVescicale = false;
+    this.dataInserimentoCatetereVescicale = undefined;
+    this.calibroCatetereVescicale = "";
+    this.diurisiCatetereVescicale = "";
+    this.mezziContenzione = false;
+    this.dimissione = undefined;
   }
 
+
+
+  diagnosi: string;
+  intolleranzeAlimentari: string;
+  allergie: string;
+  infezioni: string;
+  terapiaAtto: string;
+  catetereVescicale: boolean;
+  dataInserimentoCatetereVescicale: Date;
+  calibroCatetereVescicale: string;
+  diurisiCatetereVescicale: string;
+  mezziContenzione:boolean;
+  dimissione: Date;
+
+
   schedaBAI?: SchedaBAI;
-  schedaInterventi?: SchedaInterventi;
+  schedaInterventi?: SchedaInterventi[];
   schedaLesioni?: SchedaLesioniCutanee;
   schedaLesioniDecubito?: SchedaLesioniDecubito;
   schedaMnar?: SchedaMnar;

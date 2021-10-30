@@ -1,0 +1,97 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>Nuovo*</h3>
+      </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <span>Tutti i campi indicati con * sono obbligatori.</span>
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <label>Data*</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+
+
+        <mat-form-field appearance="fill">
+          <mat-label>Scegli una date</mat-label>
+          <input matInput [matDatepicker]="data" [(ngModel)]="item.data" [disabled]=disable>
+          <mat-datepicker-toggle matSuffix [for]="data"></mat-datepicker-toggle>
+          <mat-datepicker #data></mat-datepicker>
+        </mat-form-field>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Diagnosi*</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field appearance="fill">
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.diagnosi"
+            [disabled]=disable></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Intervento*</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field appearance="fill">
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.intervento"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col">
+        <label>Firma</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="fill">
+          <textarea matInput placeholder="Firma" [(ngModel)]="item.firma" [disabled]=disable></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="false">Chiudi</button>
+    <button mat-button class="button-save" (click)="save()">Salva</button>
+  </div>
+</div>

@@ -6,9 +6,7 @@ import {
   ViewChild,
 } from "@angular/core";
 import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
-import { Subject } from "rxjs";
 import { DialogDiarioComponent } from "src/app/dialogs/dialog-diario/dialog-diario.component";
-import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Diario } from "src/app/models/diario";
 import { SchedaDiario } from "src/app/models/SchedaDiario";
 
@@ -35,8 +33,6 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
-    console.log("Data: ", this.data);
-
     this.dataSource = new MatTableDataSource<Diario>(this.data.diario);
     this.dataSource.paginator = this.paginator;
   }

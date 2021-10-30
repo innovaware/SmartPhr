@@ -127,6 +127,7 @@ import { DialogCaricadocumentoComponent } from "./dialogs/dialog-caricadocumento
 import { DialogQuestionComponent } from "./dialogs/dialog-question/dialog-question.component";
 import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { DialogInterventiComponent } from './dialogs/dialog-interventi/dialog-interventi.component';
 
 @NgModule({
   declarations: [
@@ -209,6 +210,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
     DiarioClinicoComponent,
+    DialogInterventiComponent,
   ],
   imports: [
     BrowserModule,
@@ -262,6 +264,7 @@ import { MatTooltipModule } from "@angular/material/tooltip";
     DialogCvComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
+    DialogInterventiComponent,
   ],
 })
 export class AppModule {

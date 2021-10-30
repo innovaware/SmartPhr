@@ -23,6 +23,18 @@ const PazienteSchema = mongoose.Schema({
   dataCancellazione: Date,
 
   schedaInfermeristica: {
+    diagnosi: String,
+    intolleranzeAlimentari: String,
+    allergie: String,
+    infezioni: String,
+    terapiaAtto: String,
+    catetereVescicale: Boolean,
+    dataInserimentoCatetereVescicale: Date,
+    calibroCatetereVescicale: String,
+    diurisiCatetereVescicale: String,
+    mezziContenzione: Boolean,
+    dimissione: Date,
+
     schedaBAI: {
       apparatoRespiratorio: String,
       apparatoCircolatorio: String,
@@ -40,13 +52,7 @@ const PazienteSchema = mongoose.Schema({
       alimentazione: String,
       riposo: String,
     },
-    schedaInterventi: {
-      data: Date,
-      diagnosi: String,
-      obiettivi: String,
-      intervento: String,
-      firma: String,
-    },
+
     schedaLesioni: {
       stadio1: Boolean,
       stadio2: Boolean,
@@ -145,7 +151,16 @@ const PazienteSchema = mongoose.Schema({
     },
     schedaDiario: {
       diario: [{ data: Date, valore: String, firma: String }],
-    }
+    },
+    schedaInterventi: [
+      {
+        data: Date,
+        diagnosi: String,
+        obiettivi: String,
+        intervento: String,
+        firma: String,
+      },
+    ],
   },
 });
 
