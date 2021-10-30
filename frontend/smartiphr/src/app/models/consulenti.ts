@@ -1,4 +1,9 @@
 export class Consulenti {
+
+  static clone(obj: Consulenti) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
   _id?: string;
 
   cognome: string;

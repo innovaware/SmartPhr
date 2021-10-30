@@ -9,9 +9,20 @@ import { SchedaUlcereDiabete } from './SchedaUlcereDiabete';
 import { SchedaVas } from './SchedaVas';
 
 export class SchedaInfermeristica {
+  static clone(obj: SchedaInfermeristica) {
+    return JSON.parse(JSON.stringify(obj));
+  }
 
   constructor() {
     this.schedaBAI = new SchedaBAI();
+    this.schedaInterventi = new SchedaInterventi();
+    this.schedaLesioni = new SchedaLesioniCutanee();
+    this.schedaLesioniDecubito = new SchedaLesioniDecubito();
+    this.schedaMnar = new SchedaMnar();
+    this.schedaUlcere = new SchedaUlcere();
+    this.schedaVas = new SchedaVas();
+    this.schedaUlcereDiabete = new SchedaUlcereDiabete();
+    this.schedaDiario = new SchedaDiario();
   }
 
   schedaBAI?: SchedaBAI;

@@ -5,7 +5,7 @@ import { Diario } from 'src/app/models/diario';
 @Component({
   selector: 'app-dialog-diario',
   templateUrl: './dialog-diario.component.html',
-  styleUrls: ['./dialog-diario.component.css']
+  styleUrls: ['./dialog-diario.component.css'],
 })
 export class DialogDiarioComponent implements OnInit {
   @Input() disable : boolean;

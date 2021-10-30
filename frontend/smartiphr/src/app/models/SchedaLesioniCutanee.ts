@@ -1,4 +1,7 @@
 export class SchedaLesioniCutanee {
+  static clone(obj: SchedaLesioniCutanee) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   constructor() {
     this.stadio1 = false;
     this.stadio2 = false;

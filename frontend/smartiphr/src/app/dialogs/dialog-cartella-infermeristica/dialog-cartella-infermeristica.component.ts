@@ -45,7 +45,7 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
   ) {
     console.log("Dialog Cartella Infermeristica");
 
-    this.paziente = JSON.parse(JSON.stringify(data.paziente))
+    this.paziente = Paziente.clone(data.paziente);
 
     if (this.paziente.schedaInfermeristica == undefined) {
       this.paziente.schedaInfermeristica = new SchedaInfermeristica();

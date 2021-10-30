@@ -23,6 +23,8 @@ export class AreaInfermieristicaComponent implements OnInit {
     public messageService: MessagesService,
     public pazienteService: PazienteService
   ) {
+
+    console.log("Get Patients");
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
@@ -50,22 +52,24 @@ export class AreaInfermieristicaComponent implements OnInit {
       label: "",
       tooltip: "Cartella Infermeristica",
       cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogCartellaInfermeristicaComponent, {
-          data: { paziente: paziente, readonly: false },
-          width: "1024px",
-        }).afterClosed().subscribe( (data: Paziente)=> {
-          if (data != undefined || data) {
-            this.pazienti.push(data);
+        this.dialog
+          .open(DialogCartellaInfermeristicaComponent, {
+            data: { paziente: paziente, readonly: false },
+            width: "1024px",
+          })
+          .afterClosed()
+          .subscribe((data: Paziente) => {
+            if (data != undefined || data) {
+              this.pazienti.push(data);
 
-            const index = this.pazienti.indexOf(paziente, 0);
-            if (index > -1) {
-              this.pazienti.splice(index, 1);
-              console.log("Removed item");
-
+              const index = this.pazienti.indexOf(paziente, 0);
+              if (index > -1) {
+                this.pazienti.splice(index, 1);
+                console.log("Removed item");
+              }
+              this.eventsSubject.next(this.pazienti);
             }
-            this.eventsSubject.next(this.pazienti);
-          }
-        })
+          }),
       // css: "mat-raised-button raised-button action-button",
     });
 

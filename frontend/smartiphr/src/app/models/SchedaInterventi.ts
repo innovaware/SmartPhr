@@ -1,5 +1,8 @@
 
 export class SchedaInterventi {
+  static clone(obj: SchedaInterventi) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   constructor() {
     this.data = new Date();
     this.diagnosi = "";

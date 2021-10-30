@@ -144,9 +144,8 @@ const PazienteSchema = mongoose.Schema({
       conclusione: String,
     },
     schedaDiario: {
-      indiceNorton: String,
-      totale: String,
-    },
+      diario: [{ data: Date, valore: String, firma: String }],
+    }
   },
 });
 

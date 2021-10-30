@@ -2,6 +2,11 @@ import { Diario } from './diario';
 import { schedaPisico } from './schedaPisico';
 
 export class CartellaClinica {
+
+  static clone(obj: CartellaClinica) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
   _id: number;
   ipertensione?: boolean;
   diabete?: boolean;

@@ -1,5 +1,8 @@
 
 export class Presenze {
+  static clone(obj: Presenze) {
+    return JSON.parse(JSON.stringify(obj));
+  }
     _id?: string;
     nome?: string;
     cognome?: string;
@@ -8,4 +11,4 @@ export class Presenze {
     mansione?: string;
     turno?: string;
   }
-  
+

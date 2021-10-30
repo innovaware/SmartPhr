@@ -1,5 +1,8 @@
 
 export class SchedaBAI {
+  static clone(obj: SchedaBAI) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   constructor() {
     this.apparatoRespiratorio = "";
     this.apparatoCircolatorio = "";
