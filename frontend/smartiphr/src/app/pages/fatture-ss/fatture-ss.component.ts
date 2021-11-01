@@ -37,7 +37,7 @@ import { UploadService } from "src/app/service/upload.service";
     ) {
       this.fattureSS = [];
   
-      this.fattureSSService.getFatture("ASPSSCZ01").then((f: Fatture[]) => {
+      this.fattureSSService.getByUserId("ASPSSCZ01").then((f: Fatture[]) => {
         this.fattureSS = f;
         this.dataSource = new MatTableDataSource<Fatture>(this.fattureSS);
         this.dataSource.paginator = this.paginator;
@@ -142,7 +142,7 @@ import { UploadService } from "src/app/service/upload.service";
     
         console.log("Invio fattura: ", fattura);
         this.fattureSSService
-        .insertFattura(fattura, "ASPSSCZ01")
+        .insert(fattura, "ASPSSCZ01")
         .then((result: Fatture) => {
           console.log("Insert fattura: ", result);
           this.fattureSS.push(result);

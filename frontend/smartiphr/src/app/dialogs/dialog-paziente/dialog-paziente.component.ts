@@ -151,7 +151,7 @@ export class DialogPazienteComponent implements OnInit {
   async getFatture() {
     console.log(`Get Fatture paziente: ${this.paziente._id}`);
     this.fattureService
-      .getFatture(this.paziente._id)
+      .getByUserId(this.paziente._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 
@@ -249,13 +249,11 @@ export class DialogPazienteComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insertFattura(fattura, this.paziente._id)
+    .insert(fattura, this.paziente._id)
     .then((result: Fatture) => {
       console.log("Insert fattura: ", result);
-      this.fatture.push(result);
-      this.fattureDataSource.data = this.fatture;
+
       this.addingFattura = false;
-      this.uploadingFattura = false;
 
       let formData: FormData = new FormData();
 
@@ -268,6 +266,9 @@ export class DialogPazienteComponent implements OnInit {
       this.uploadService
         .uploadDocument(formData)
         .then((x) => {
+          this.fatture.push(result);
+          this.fattureDataSource.data = this.fatture;
+          this.uploadingFattura = false;
           this.uploading = false;
 
           console.log("Uploading completed: ", x);
@@ -370,7 +371,7 @@ export class DialogPazienteComponent implements OnInit {
 
     console.log("Invio notacredito: ", notacredito);
     this.notacreditoService
-        .insertNotaCredito(notacredito, this.paziente._id)
+        .insert(notacredito, this.paziente._id)
         .then((result: NotaCredito) => {
           console.log("Insert notacredito: ", result);
           this.noteCredito.push(result);
@@ -408,7 +409,7 @@ export class DialogPazienteComponent implements OnInit {
   async getNoteCredito() {
     console.log(`Get NotaCredito paziente: ${this.paziente._id}`);
     this.notacreditoService
-      .getNotaCredito(this.paziente._id)
+      .getByUserId(this.paziente._id)
       .then((f: NotaCredito[]) => {
         this.noteCredito = f;
 
@@ -456,7 +457,7 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insertBonifico(bonifico, this.paziente._id)
+        .insert(bonifico, this.paziente._id)
         .then((result: Bonifico) => {
           console.log("Insert bonifico: ", result);
           this.bonifici.push(result);
@@ -494,7 +495,7 @@ export class DialogPazienteComponent implements OnInit {
   async getBonificiAssegniContanti() {
     console.log(`Get Bonifici e altro paziente: ${this.paziente._id}`);
     this.bonficoService
-      .getBonifico(this.paziente._id)
+      .getByUserId(this.paziente._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 

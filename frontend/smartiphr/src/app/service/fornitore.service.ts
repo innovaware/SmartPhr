@@ -36,8 +36,7 @@ export class FornitoreService {
       .toPromise();
   }
 
-  delete(data: Fornitore): Observable<any> {
-    return this.http
-    .delete(this.api + "/api/fornitori/" + data._id);
+  async delete(fornitore: Fornitore) {
+    return this.http.delete(`${this.api}/api/fornitori/${fornitore._id}`).toPromise();
   }
 }

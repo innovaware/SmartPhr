@@ -44,29 +44,29 @@
 
     <div class="row">
       <div class="col">
-        <label>Contenuto*</label>
+        <label>Diagnosi*</label>
       </div>
     </div>
     <div class="row">
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.valore"
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.diagnosi"
             [disabled]=disable></textarea>
         </mat-form-field>
       </div>
     </div>
 
-    <div class="row" *ngIf="isNew">
+    <div class="row">
       <div class="col">
-        <label>Nuovo Contenuto*</label>
+        <label>Intervento*</label>
       </div>
     </div>
-    <div class="row" *ngIf="isNew">
+    <div class="row">
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.valore"></textarea>
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.intervento"></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -81,8 +81,7 @@
     <div class="row">
       <div class="col">
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Firma" [(ngModel)]="item.firma"
-            [disabled]=disable></textarea>
+          <textarea matInput placeholder="Firma" [(ngModel)]="item.firma" [disabled]=disable></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -93,6 +92,6 @@
 <div mat-dialog-actions>
   <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="false">Chiudi</button>
-    <button mat-button class="button-save" (click)="saveDiario()">Salva</button>
+    <button mat-button class="button-save" (click)="save()">Salva</button>
   </div>
 </div>

@@ -58,7 +58,7 @@ export class TableFattureFornitoriComponent implements OnInit {
   async getFatture() {
     console.log(`Get Fatture fornitore: ${this.fornitore._id}`);
     this.fattureService
-      .getFatture(this.fornitore._id)
+      .getByUserId(this.fornitore._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 

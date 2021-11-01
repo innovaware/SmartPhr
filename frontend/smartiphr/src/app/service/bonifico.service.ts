@@ -13,27 +13,27 @@ export class BonificoService {
 
   constructor(private http: HttpClient) {}
 
-  getBonificiAll(): Observable<Bonifico[]> {
+/*   getBonificiAll(): Observable<Bonifico[]> {
     return this.http.get<Bonifico[]>(`${this.api}/api/bonifici`);
-  }
+  } */
 
-  async getBonifico(id: string): Promise<Bonifico[]> {
+  async getByUserId(id: string): Promise<Bonifico[]> {
     return this.http
       .get<Bonifico[]>(`${this.api}/api/bonifici/${id}`)
       .toPromise();
   }
 
-  async insertBonifico(bonifico: Bonifico, id: string) {
-    console.log("Insert bonifico 0: ", bonifico);
+  async insert(bonifico: Bonifico, id: string) {
+    console.log("Insert bonifico: ", bonifico);
     var body = bonifico;
     return this.http.post(`${this.api}/api/bonifici/${id}`, body).toPromise();
   }
 
-  async updateBonifico(bonifico: Bonifico) {
+/*   async updateBonifico(bonifico: Bonifico) {
     var body = bonifico;
     console.log("body: ", body);
     return this.http.put(this.api + "/api/bonifici/" + bonifico._id, body).toPromise();
-  }
+  } */
 
   async remove(bonifico: Bonifico) {
     return this.http.delete(`${this.api}/api/bonifici/${bonifico._id}`).toPromise();

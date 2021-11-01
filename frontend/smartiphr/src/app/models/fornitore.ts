@@ -1,5 +1,7 @@
-
 export class Fornitore {
+  static clone(obj: Fornitore) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   _id?: string;
   cognome: string;
   nome: string;

@@ -38,6 +38,34 @@ router.get("/consulente/:id", async (req, res) => {
   }
 });
 
+router.get("/", async (req, res) => {
+  try {
+    const searchTerm = `CONTRATTOALL`;
+    // Ricerca su Redis Cache
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        // Dato trovato in cache - ritorna il json 
+        res.status(200).send(JSON.parse(data));
+      } else {
+        // Recupero informazioni dal mongodb
+        const contratti = await Contratto.find();
+
+        // Aggiorno la cache con i dati recuperati da mongodb
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(contratti));
+
+        // Ritorna il json 
+        res.status(200).json(contratti);
+      }
+    });
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {

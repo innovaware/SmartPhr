@@ -37,7 +37,7 @@ import { UploadService } from "src/app/service/upload.service";
     ) {
       this.notaCredito = [];
   
-      this.notaCreditoService.getNotaCredito("ASPCZ01").then((n: NotaCredito[]) => {
+      this.notaCreditoService.getByUserId("ASPCZ01").then((n: NotaCredito[]) => {
         this.notaCredito = n;
         this.dataSource = new MatTableDataSource<NotaCredito>(this.notaCredito);
         this.dataSource.paginator = this.paginator;
@@ -142,7 +142,7 @@ import { UploadService } from "src/app/service/upload.service";
     
         console.log("Invio nota: ", nota);
         this.notaCreditoService
-        .insertNotaCredito(nota, "ASPCZ01")
+        .insert(nota, "ASPCZ01")
         .then((result: NotaCredito) => {
           console.log("Insert nota: ", result);
           this.notaCredito.push(result);

@@ -7,39 +7,33 @@ import { Paziente } from 'src/app/models/paziente';
 import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
 
 @Component({
-  selector: 'app-anamnesi-famigliare',
-  templateUrl: './anamnesi-famigliare.component.html',
-  styleUrls: ['./anamnesi-famigliare.component.css']
+  selector: 'app-diario-clinico',
+  templateUrl: './diario-clinico.component.html',
+  styleUrls: ['./diario-clinico.component.css']
 })
-export class AnamnesiFamigliareComponent implements OnInit {
+export class DiarioClinicoComponent implements OnInit {
 
   @Input() data: Paziente;
-  @Input() cartella : CartellaClinica;
-  @Output() cartellaChange = new EventEmitter<CartellaClinica>();
 
-
-  constructor( public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
+  constructor(public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
     public cartellaclinicaService: CartellaclinicaService,
-    public dialog: MatDialog,) {
+    public dialog: MatDialog,) { }
 
-  }
   ngOnInit() {
-    this.getDataCartella();
   }
 
 
-
-  async getDataCartella() {
+  async getDataDiario() {
     console.log(`get DataCartella paziente: ${this.data._id}`);
     this.cartellaclinicaService
       .getById( String(this.data._id) )
       .then((f) => {
 
-        this.cartella = f;
+        //this.cartella = f;
 
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento cartella");
+        this.showMessageError("Errore caricamento diario");
         console.error(err);
       });
   }
@@ -59,11 +53,5 @@ export class AnamnesiFamigliareComponent implements OnInit {
   }
 
 
-
-
-  async change() {
-    console.log("change: ", this.cartella);
-    this.cartellaChange.emit(this.cartella);
-  }
 
 }

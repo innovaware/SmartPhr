@@ -9,16 +9,16 @@
         <mat-card-content>
 
           <section class="example-section" >
-            <mat-checkbox class="" [(ngModel)]="element.ipertensione" > Ipertensione</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.diabete" > Diabete</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.malatCardiovascolari" > Malattie Cardiovascolari</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.malatCerebrovascolari" > Malattie Cerebrovascolari</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.demenza" > Demenza</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.neoplasie" > Neoplasie</mat-checkbox>
-            <mat-checkbox class="" [(ngModel)]="element.altro" > Altro</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.ipertensione" (change)="change()" > Ipertensione</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.diabete" (change)="change()" > Diabete</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.malatCardiovascolari" (change)="change()" > Malattie Cardiovascolari</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.malatCerebrovascolari" (change)="change()" > Malattie Cerebrovascolari</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.demenza" (change)="change()" > Demenza</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.neoplasie" (change)="change()" > Neoplasie</mat-checkbox>
+            <mat-checkbox class="" [(ngModel)]="cartella.altro" (change)="change()"> Altro</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="element.testoAltro" ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="cartella.testoAltro" (change)="change()"></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -36,13 +36,13 @@
         <mat-card-content>
 
           <section class="example-section">
-            <mat-checkbox [(ngModel)]="element.antitetanica" class="" >Antitetanica</mat-checkbox>
-            <mat-checkbox [(ngModel)]="element.antiepatiteB" class="" > Antiepatite B</mat-checkbox>
-            <mat-checkbox [(ngModel)]="element.antinfluenzale" class="" > Antinfluenzale</mat-checkbox>
-            <mat-checkbox [(ngModel)]="element.altre" class="" > Altre</mat-checkbox>
+            <mat-checkbox [(ngModel)]="cartella.antitetanica" class="" (change)="change()">Antitetanica</mat-checkbox>
+            <mat-checkbox [(ngModel)]="cartella.antiepatiteB" class="" (change)="change()"> Antiepatite B</mat-checkbox>
+            <mat-checkbox [(ngModel)]="cartella.antinfluenzale" class="" (change)="change()"> Antinfluenzale</mat-checkbox>
+            <mat-checkbox [(ngModel)]="cartella.altre" class="" (change)="change()"> Altre</mat-checkbox>
           </section>
 
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="element.testoAltre" ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="cartella.testoAltre" (change)="change()"></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -60,7 +60,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; lavorative</mat-label>
-            <input matInput placeholder="Inserisci attivit&agrave; lavorative" [(ngModel)]="element.attLavorative" >
+            <input matInput placeholder="Inserisci attivit&agrave; lavorative" [(ngModel)]="cartella.attLavorative" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -81,7 +81,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Scolarit&agrave;</mat-label>
-            <input matInput placeholder="Inserisci scolarit&agrave;" [(ngModel)]="element.scolarita" >
+            <input matInput placeholder="Inserisci scolarit&agrave;" [(ngModel)]="cartella.scolarita" (change)="change()">
           </mat-form-field>
 
         </mat-card-content>
@@ -106,7 +106,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Servizio militare</mat-label>
-            <input matInput placeholder="Inserisci servizio militare" [(ngModel)]="element.servizioMilitare" >
+            <input matInput placeholder="Inserisci servizio militare" [(ngModel)]="cartella.servizioMilitare" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -126,7 +126,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Menarca</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.menarca" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.menarca" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -144,7 +144,7 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Select una opzione"  [(ngModel)]="element.menopausa">
+          <mat-radio-group aria-label="Select una opzione"  [(ngModel)]="cartella.menopausa" (change)="change()">
             <mat-radio-button value="1" >fisiologica</mat-radio-button>
             <mat-radio-button value="2" >chirurgica</mat-radio-button>
           </mat-radio-group>
@@ -167,7 +167,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Attivit&agrave; Fisica</mat-label>
-            <input matInput placeholder="Inserisci"  [(ngModel)]="element.attFisica" >
+            <input matInput placeholder="Inserisci"  [(ngModel)]="cartella.attFisica" (change)="change()">
           </mat-form-field>
 
         </mat-card-content>
@@ -187,7 +187,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alimentazione</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.alimentazione" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.alimentazione" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -208,7 +208,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alvo</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.alvo" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.alvo" (change)="change()">
           </mat-form-field>
 
         </mat-card-content>
@@ -229,7 +229,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Diurisi</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.diurisi" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.diurisi" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -249,7 +249,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Alcolici</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.alcolici" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.alcolici" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -269,7 +269,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Fumo</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.fumo" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.fumo" (change)="change()" >
           </mat-form-field>
 
         </mat-card-content>
@@ -289,7 +289,7 @@
 
           <mat-form-field class="example-full-width" appearance="fill">
             <mat-label>Sonno</mat-label>
-            <input matInput placeholder="Inserisci" [(ngModel)]="element.sonno" >
+            <input matInput placeholder="Inserisci" [(ngModel)]="cartella.sonno" (change)="change()">
           </mat-form-field>
 
         </mat-card-content>

@@ -1,4 +1,7 @@
 export class SchedaMnar {
+  static clone(obj: SchedaMnar) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   constructor() {
     this.peso = "";
     this.statura = "";

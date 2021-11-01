@@ -6,7 +6,7 @@
           <mat-card-title>VALUTAZIONE SOCIALE</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150"  [(ngModel)]="element.valsociale"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150"  (change)="change()"  [(ngModel)]="cartella.valsociale"></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -21,7 +21,7 @@
           <mat-card-title>VALUTAZIONE EDUCATIVA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150"  [(ngModel)]="element.valeducativa"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150"  (change)="change()"  [(ngModel)]="cartella.valeducativa"></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -36,7 +36,7 @@
           <mat-card-title>VALUTAZIONE PSICOLOGICA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150"  [(ngModel)]="element.valpsicologica"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150"  (change)="change()"  [(ngModel)]="cartella.valpsicologica"></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -51,7 +51,7 @@
           <mat-card-title>VALUTAZIONE MOTORIA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150"  [(ngModel)]="element.valmotoria"></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150"  (change)="change()"  [(ngModel)]="cartella.valmotoria"></textarea>
         </mat-card-content>
       </mat-card>
     </div>

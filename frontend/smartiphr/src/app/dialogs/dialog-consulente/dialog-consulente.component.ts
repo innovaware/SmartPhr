@@ -1,4 +1,3 @@
-import { ThrowStmt } from "@angular/compiler";
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
 import {
   MatDialogRef,
@@ -25,7 +24,7 @@ import { UploadService } from "src/app/service/upload.service";
 })
 export class DialogConsulenteComponent implements OnInit {
   disable: boolean;
-  result: Consulenti;
+  public result: Consulenti;
 
   public uploading: boolean;
 
@@ -290,19 +289,15 @@ export class DialogConsulenteComponent implements OnInit {
 
     if (this.item.consulente._id != undefined) {
       this.fattureService
-        .getFatture(this.item.consulente._id)
+        .getByUserId(this.item.consulente._id)
         .then((f: Fatture[]) => {
           this.fatture = f;
 
-          this.fattureDataSource = new MatTableDataSource<Fatture>(
-            this.fatture
-          );
+          this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
           this.fattureDataSource.paginator = this.fatturePaginator;
         })
         .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore caricamento lista fatture"
-          );
+          this.messageService.showMessageError("Errore caricamento lista fatture");
           console.error(err);
         });
     }
@@ -339,7 +334,7 @@ export class DialogConsulenteComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-      .insertFattura(fattura, this.item.consulente._id)
+      .insert(fattura, this.item.consulente._id)
       .then((result: Fatture) => {
         console.log("Insert fattura: ", result);
         this.addingFattura = false;
@@ -457,7 +452,7 @@ export class DialogConsulenteComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-      .insertBonifico(bonifico, this.item.consulente._id)
+      .insert(bonifico, this.item.consulente._id)
       .then((result: Bonifico) => {
         console.log("Insert bonifico: ", result);
         this.bonifici.push(result);
@@ -495,7 +490,7 @@ export class DialogConsulenteComponent implements OnInit {
   async getBonificiAssegniContanti() {
     console.log(`Get Bonifici e altro: ${this.item.consulente._id}`);
     this.bonficoService
-      .getBonifico(this.item.consulente._id)
+      .getByUserId(this.item.consulente._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 

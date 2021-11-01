@@ -1,4 +1,7 @@
 export class SchedaLesioniDecubito {
+  static clone(obj: SchedaLesioniDecubito) {
+    return JSON.parse(JSON.stringify(obj));
+  }
   constructor() {
     this.protocolloFisiologicaRigerLattato = "";
     this.protocolloFlittene = "";

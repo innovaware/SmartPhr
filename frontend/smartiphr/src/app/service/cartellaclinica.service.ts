@@ -23,7 +23,7 @@ export class CartellaclinicaService {
     var body = data;
     console.log("body: ", body);
     return this.http
-      .put<CartellaClinica>(this.api + "/api/cartellaClinica/" + data._id, body)
+      .put<CartellaClinica>(this.api + "/api/cartellaClinica/" + data.user, body)
       .toPromise();
   }
 

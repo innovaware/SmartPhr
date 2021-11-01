@@ -24,7 +24,7 @@ router.get("/:id", async (req, res) => {
         console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const cartellaClinica = await CartellaClinica.find({
+        const cartellaClinica = await CartellaClinica.findOne({
           user: id,
         });
         client.setex(searchTerm, redisTimeCache, JSON.stringify(cartellaClinica));
@@ -160,7 +160,7 @@ router.post("/:id", async (req, res) => {
 
     console.log("Insert CartellaClinica: ", cartellaClinica);
 
-    const result = await CartellaClinica.save();
+    const result = await cartellaClinica.save();
 
 
     const searchTerm = `CartellaClinica${id}`;
@@ -177,8 +177,8 @@ router.post("/:id", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const CartellaClinica = await CartellaClinica.updateOne(
-      { _id: id },
+    const cartellaClinica = await CartellaClinica.updateOne(
+      { user: id },
       {
         $set: {
             ipertensione: req.body.ipertensione,
@@ -298,7 +298,7 @@ router.put("/:id", async (req, res) => {
     client.del(searchTerm);
 
     res.status(200);
-    res.json(CartellaClinica);
+    res.json(cartellaClinica);
   } catch (err) {
     res.status(500).json({ Error: err });
   }

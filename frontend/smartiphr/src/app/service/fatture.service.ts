@@ -12,28 +12,28 @@ export class FattureService {
 
   constructor(private http: HttpClient) {}
 
-  getFattureAll(): Observable<Fatture[]> {
+ /*  getFattureAll(): Observable<Fatture[]> {
     return this.http.get<Fatture[]>(`${this.api}/api/fatture`);
-  }
+  } */
 
-  async getFatture(id: string): Promise<Fatture[]> {
+  async getByUserId(id: string): Promise<Fatture[]> {
     return this.http
       .get<Fatture[]>(`${this.api}/api/fatture/${id}`)
       .toPromise();
   }
 
-  async insertFattura(fattura: Fatture, id: string) {
+  async insert(fattura: Fatture, id: string) {
     console.log("insertFattura: " + JSON.stringify(fattura));
     console.log("id: " + id);
     var body = fattura;
     return this.http.post(`${this.api}/api/fatture/${id}`, body).toPromise();
   }
 
-  async updateFattura(fattura: Fatture) {
+/*   async update(fattura: Fatture) {
     var body = fattura;
     console.log("body: ", body);
     return this.http.put(this.api + "/api/fatture/" + fattura._id, body).toPromise();
-  }
+  } */
 
   async remove(fattura: Fatture) {
     return this.http.delete(`${this.api}/api/fatture/${fattura._id}`).toPromise();

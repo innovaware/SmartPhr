@@ -12,28 +12,28 @@ export class NotaCreditoService {
 
   constructor(private http: HttpClient) {}
 
-  getNoteCreditoAll(): Observable<NotaCredito[]> {
+/*   getNoteCreditoAll(): Observable<NotaCredito[]> {
     return this.http.get<NotaCredito[]>(`${this.api}/api/notacredito`);
-  }
+  } */
 
-  async getNotaCredito(id: string): Promise<NotaCredito[]> {
+  async getByUserId(id: string): Promise<NotaCredito[]> {
     return this.http
       .get<NotaCredito[]>(`${this.api}/api/notacredito/${id}`)
       .toPromise();
   }
 
-  async insertNotaCredito(notacredito: NotaCredito, id: string) {
-    console.log("insertNotaCredito: " + JSON.stringify(notacredito));
+  async insert(notacredito: NotaCredito, id: string) {
+    console.log("insert NotaCredito: " + JSON.stringify(notacredito));
     console.log("id: " + id);
     var body = notacredito;
     return this.http.post(`${this.api}/api/notacredito/${id}`, body).toPromise();
   }
 
-  async updateNotaCredito(notacredito: NotaCredito) {
+/*   async updateNotaCredito(notacredito: NotaCredito) {
     var body = notacredito;
     console.log("body: ", body);
     return this.http.put(this.api + "/api/notacredito/" + notacredito._id, body).toPromise();
-  }
+  } */
 
   async remove(notacredito: NotaCredito) {
     return this.http.delete(`${this.api}/api/notacredito/${notacredito._id}`).toPromise();

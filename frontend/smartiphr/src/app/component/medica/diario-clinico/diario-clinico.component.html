@@ -1,0 +1,50 @@
+<mat-form-field appearance="standard">
+    <mat-label>Cerca</mat-label>
+    <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
+  </mat-form-field>
+  
+  <div class="demo-button-container">
+    <button mat-button class="button-info" (click)="showDiario()" [disabled]=disable>
+      <fa-icon icon="plus"></fa-icon>
+    </button>
+  </div>
+  
+  
+  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>
+      </th>
+      <td mat-cell *matCellDef="let row">
+        <button mat-raised-button (click)="edit(row)" >
+          <fa-icon icon="edit"></fa-icon>
+        </button>
+      </td>
+    </ng-container>
+  
+    <!-- Position Column -->
+    <ng-container matColumnDef="data">
+      <th mat-header-cell *matHeaderCellDef> Data </th>
+      <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy' }} </td>
+    </ng-container>
+  
+    <!-- Name Column -->
+    <ng-container matColumnDef="valore">
+      <th mat-header-cell *matHeaderCellDef> Diario Pisicologico Clinico </th>
+      <td mat-cell *matCellDef="let element"> {{element.valore}} </td>
+    </ng-container>
+  
+    <!-- Weight Column -->
+    <ng-container matColumnDef="firma">
+      <th mat-header-cell *matHeaderCellDef> firma </th>
+      <td mat-cell *matCellDef="let element"> {{element.firma}} </td>
+    </ng-container>
+  
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  
+  
+  <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+  </mat-paginator>
+  

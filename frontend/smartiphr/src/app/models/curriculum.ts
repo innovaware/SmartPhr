@@ -1,4 +1,9 @@
 export class Curriculum {
+
+  static clone(obj: Curriculum) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
   constructor() {
     this.filename = "";
     this.note = "";

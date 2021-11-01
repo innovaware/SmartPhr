@@ -41,14 +41,14 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   dataSource: MatTableDataSource<Fornitore>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-  data: Fornitore[];
+  public fornitore: Fornitore[];
 
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
     public fornitoreService: FornitoreService
     ) {
-      this.data = [];
+      this.fornitore = [];
     }
 
   ngOnInit() {
@@ -96,18 +96,20 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
         if (result == true) {
           this.fornitoreService
             .delete(fornitore)
-            .subscribe((result: Fornitore) => {
-              console.log("Eliminazione eseguita con successo", result);
-              const index = this.data.indexOf(fornitore, 0);
+            .then((x) => {
+              console.log("Fornitore cancellato");
+              const index = this.fornitore.indexOf(fornitore);
+              console.log("Fornitore cancellato index: ", index);
               if (index > -1) {
-                this.data.splice(index, 1);
+                this.fornitore.splice(index, 1);
               }
-              this.dataSource = new MatTableDataSource<Fornitore>(this.data);
-              this.dataSource.paginator = this.paginator;
-            }),
-            (err) => {
-              console.error("Errore nell'eliminazione", err);
-            };
+              this.dataSource.data = this.fornitore;
+              //this.dataSource.paginator = this.paginator;
+            })
+            .catch((err) => {
+              this.messageService.showMessageError("Errore nella cancellazione Fornitore");
+        console.error(err);
+            });
         } else {
           console.log("Cancellazione fornitore annullata");
           this.messageService.showMessageError("Cancellazione fornitore Annullata");
