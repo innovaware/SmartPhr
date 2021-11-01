@@ -140,7 +140,7 @@ async function deleteBonifico(req, res) {
 }
 
 router.get("/:id", get);
-router.get("/:id", getBonificoById);
+//router.get("/:id", getBonificoById);
 router.post("/:id", insertBonifico);
 router.put("/:id", modifyBonifico);
 router.delete("/:id", deleteBonifico);
