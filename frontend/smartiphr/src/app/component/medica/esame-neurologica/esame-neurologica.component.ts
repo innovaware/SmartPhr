@@ -19,8 +19,8 @@ export class EsameNeurologicaComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
     public cartellaclinicaService: CartellaclinicaService,
-    public dialog: MatDialog,) { 
-    
+    public dialog: MatDialog,) {
+
   }
   ngOnInit() {
     this.getDataCartella();
@@ -32,10 +32,9 @@ export class EsameNeurologicaComponent implements OnInit {
     this.cartellaclinicaService
       .getById( String(this.data._id) )
       .then((f) => {
-        console.log(JSON.stringify(f));
 
         this.cartella = f;
-  
+
       })
       .catch((err) => {
         this.showMessageError("Errore caricamento cartella");

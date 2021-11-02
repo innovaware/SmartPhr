@@ -105,6 +105,8 @@ router.post("/", async (req, res) => {
       indirizzoNascita: req.body.indirizzoNascita,
       comuneNascita: req.body.comuneNascita,
       provinciaNascita: req.body.provinciaNascita,
+
+      schedaInfermeristica: req.body.schedaInfermeristica,
     });
 
     const result = await pazienti.save();
@@ -147,6 +149,8 @@ router.put("/:id", async (req, res) => {
           indirizzoNascita: req.body.indirizzoNascita,
           comuneNascita: req.body.comuneNascita,
           provinciaNascita: req.body.provinciaNascita,
+
+          schedaInfermeristica: req.body.schedaInfermeristica,
         },
       }
     );

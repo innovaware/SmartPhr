@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DiarioPisicoComponent } from './diario-pisico.component';
+import { DialogInterventiComponent } from './dialog-interventi.component';
 
-describe('DiarioPisicoComponent', () => {
-  let component: DiarioPisicoComponent;
-  let fixture: ComponentFixture<DiarioPisicoComponent>;
+describe('DialogInterventiComponent', () => {
+  let component: DialogInterventiComponent;
+  let fixture: ComponentFixture<DialogInterventiComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ DiarioPisicoComponent ]
+      declarations: [ DialogInterventiComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(DiarioPisicoComponent);
+    fixture = TestBed.createComponent(DialogInterventiComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

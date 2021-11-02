@@ -13,7 +13,7 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 const client = redis.createClient(redisPort, redisHost);
 
 
-router.get("/", async (req, res) => {
+/* router.get("/", async (req, res) => {
   try {
     const searchTerm = `NOTACREDITOALL`;
   const showOnlyCancellati = req.query.show == "deleted";
@@ -49,7 +49,7 @@ router.get("/", async (req, res) => {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
   }
-});
+}); */
 
 
 router.get("/:id", async (req, res) => {
@@ -78,7 +78,7 @@ router.get("/:id", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+/* router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const searchTerm = `notacreditoBY${id}`;
@@ -96,7 +96,7 @@ router.get("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ Error: err });
   }
-});
+}); */
 
 router.post("/:id", async (req, res) => {
   try {
@@ -162,7 +162,7 @@ router.delete("/:id", async (req, res) => {
     client.del(searchTerm);
     searchTerm = `notacredito${identifyUser}`;
     client.del(searchTerm);
-    client.del(`NOTACREDITOALL`);
+    //client.del(`NOTACREDITOALL`);
 
     res.status(200);
     res.json(notacredito);

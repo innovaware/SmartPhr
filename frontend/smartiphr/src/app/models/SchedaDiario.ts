@@ -1,10 +1,12 @@
-export class SchedaDiario {
-  constructor() {
+import { Diario } from './diario';
 
-    this.indiceNorton = "";
-    this.totale = "";
+export class SchedaDiario {
+  static clone(obj: SchedaDiario) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+  constructor() {
+    this.diario = [];
   }
 
-  indiceNorton: string;
-  totale: string;
+  diario: Diario[];
 }

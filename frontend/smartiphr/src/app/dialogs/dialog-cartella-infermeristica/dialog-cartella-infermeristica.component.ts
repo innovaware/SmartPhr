@@ -22,7 +22,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 })
 export class DialogCartellaInfermeristicaComponent implements OnInit {
   schedaBAI: SchedaBAI;
-  schedaInterventi: SchedaInterventi;
+  schedaInterventi: SchedaInterventi[];
   schedaLesioni: SchedaLesioniCutanee;
   schedaLesioniDecubito: SchedaLesioniDecubito;
   schedaMnar: SchedaMnar;
@@ -45,7 +45,7 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
   ) {
     console.log("Dialog Cartella Infermeristica");
 
-    this.paziente = JSON.parse(JSON.stringify(data.paziente))
+    this.paziente = Paziente.clone(data.paziente);
 
     if (this.paziente.schedaInfermeristica == undefined) {
       this.paziente.schedaInfermeristica = new SchedaInfermeristica();
@@ -53,10 +53,6 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
 
     if (this.paziente.schedaInfermeristica.schedaBAI == undefined) {
       this.paziente.schedaInfermeristica.schedaBAI = new SchedaBAI();
-    }
-
-    if (this.paziente.schedaInfermeristica.schedaInterventi == undefined) {
-      this.paziente.schedaInfermeristica.schedaInterventi = new SchedaInterventi();
     }
 
     if (this.paziente.schedaInfermeristica.schedaLesioni == undefined) {
@@ -87,15 +83,20 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
       this.paziente.schedaInfermeristica.schedaDiario = new SchedaDiario();
     }
 
-    this.schedaBAI = this.paziente.schedaInfermeristica.schedaBAI;
-    this.schedaInterventi = this.paziente.schedaInfermeristica.schedaInterventi;
-    this.schedaLesioni = this.paziente.schedaInfermeristica.schedaLesioni;
-    this.schedaLesioniDecubito = this.paziente.schedaInfermeristica.schedaLesioniDecubito;
-    this.schedaMnar = this.paziente.schedaInfermeristica.schedaMnar;
-    this.schedaUlcere = this.paziente.schedaInfermeristica.schedaUlcere;
-    this.schedaVas = this.paziente.schedaInfermeristica.schedaVas;
-    this.schedaUlcereDiabete = this.paziente.schedaInfermeristica.schedaUlcereDiabete;
-    this.schedaDiario = this.paziente.schedaInfermeristica.schedaDiario;
+    if (this.paziente.schedaInfermeristica.schedaInterventi == undefined) {
+      this.paziente.schedaInfermeristica.schedaInterventi = [];
+    }
+
+    this.schedaBAI = this.paziente.schedaInfermeristica.schedaBAI as SchedaBAI;
+    this.schedaInterventi = this.paziente.schedaInfermeristica.schedaInterventi as SchedaInterventi[];
+    this.schedaLesioni = this.paziente.schedaInfermeristica.schedaLesioni as SchedaLesioniCutanee;
+    this.schedaLesioniDecubito = this.paziente.schedaInfermeristica.schedaLesioniDecubito as SchedaLesioniDecubito;
+    this.schedaMnar = this.paziente.schedaInfermeristica.schedaMnar as SchedaMnar;
+    this.schedaUlcere = this.paziente.schedaInfermeristica.schedaUlcere as SchedaUlcere;
+    this.schedaVas = this.paziente.schedaInfermeristica.schedaVas as SchedaVas;
+    this.schedaUlcereDiabete = this.paziente.schedaInfermeristica.schedaUlcereDiabete as SchedaUlcereDiabete;
+    this.schedaDiario = this.paziente.schedaInfermeristica.schedaDiario as SchedaDiario;
+
   }
 
   ngOnInit() {}

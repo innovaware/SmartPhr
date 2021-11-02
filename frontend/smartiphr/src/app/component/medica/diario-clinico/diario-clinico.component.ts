@@ -39,7 +39,6 @@ export class DiarioClinicoComponent implements OnInit {
     this.cartellaclinicaService
       .getDiarioByUser( String(this.data._id) )
       .then((f) => {
-        console.log(JSON.stringify(f));
 
         this.dataDiario = f;
         this.diarioClinicoDataSource = new MatTableDataSource<DiarioClinico>(this.dataDiario);

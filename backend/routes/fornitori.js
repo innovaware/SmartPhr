@@ -117,4 +117,25 @@ router.put("/:id", async (req, res) => {
   }
 });
 
+router.delete("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const item = await Fornitori.findById(id);
+    const identifyUser = item.identifyUser;
+    const fornitori = await Fornitori.remove({ _id: id });
+
+    let searchTerm = `fornitoriBY${id}`;
+    client.del(searchTerm);
+    searchTerm = `fornitori${identifyUser}`;
+    client.del(searchTerm);
+
+
+    res.status(200);
+    res.json(fornitori);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
 module.exports = router;

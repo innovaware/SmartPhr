@@ -1,5 +1,9 @@
 
 export class Dipendenti {
+  static clone(obj: Dipendenti) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
   _id?: string;
   cognome: string;
   nome: string;
@@ -21,5 +25,5 @@ export class Dipendenti {
 
   group: string;
   user: string;
- 
+
 }

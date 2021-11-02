@@ -1,8 +1,7 @@
-import { Diario } from './diario';
-
 export class QuestionMessage {
-    message: string;
-    // response: any;
+  static clone(obj: QuestionMessage) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+  message: string;
+  // response: any;
 }
-
-

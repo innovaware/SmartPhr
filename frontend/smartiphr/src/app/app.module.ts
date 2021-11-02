@@ -20,7 +20,7 @@ import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.compone
 import { PazienteGeneraleComponent } from "./component/paziente-generale/paziente-generale.component";
 import { EsamePisicoComponent } from "./component/psicologica/esame-pisico/esame-pisico.component";
 import { ValutaPisicoComponent } from "./component/psicologica/valuta-pisico/valuta-pisico.component";
-import { DiarioPisicoComponent } from "./component/psicologica/diario-pisico/diario-pisico.component";
+import { DiarioPisicoComponent } from "./component/diario/diario.component";
 
 import { DialogPisicologicaComponent } from "./dialogs/dialog-pisicologica/dialog-pisicologica.component";
 import { DialogDiarioComponent } from "./dialogs/dialog-diario/dialog-diario.component";
@@ -31,7 +31,11 @@ import { MatTableModule } from "@angular/material/table";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import { MatInputModule, MatNativeDateModule } from "@angular/material";
+import {
+  MatInputModule,
+  MatNativeDateModule,
+  MAT_DATE_LOCALE,
+} from "@angular/material";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatCardModule } from "@angular/material/card";
@@ -85,11 +89,10 @@ import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-
 import { FattureSSRComponent } from "./pages/fatture-ssr/fatture-ssr.component";
 import { FattureSSComponent } from "./pages/fatture-ss/fatture-ss.component";
 
-
-import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
-import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
-import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
-import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component';
+import { AnticipoFattureASPComponent } from "./pages/anticipo-fatture-asp/anticipo-fatture-asp.component";
+import { NoteCreditoASPComponent } from "./pages/note-credito-asp/note-credito-asp.component";
+import { ProspettoCMASPComponent } from "./pages/prospetto-cm-asp/prospetto-cm-asp.component";
+import { PuntoFattureASPComponent } from "./pages/punto-fatture-asp/punto-fatture-asp.component";
 
 import { AspComponent } from "./pages/asp/asp.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
@@ -105,6 +108,7 @@ import { DialogPazienteComponent } from "./dialogs/dialog-paziente/dialog-pazien
 import { UploadComponent } from "./components/upload/upload.component";
 import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+
 import { LoginComponent } from './pages/login/login.component';
 import { AuthGuardService } from './guard/auth-guard.service';
 import { TableDipendentiComponent } from './component/table-dipendenti/table-dipendenti.component';
@@ -119,13 +123,17 @@ import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-docume
 import { TableDocumentComponent } from './component/table-document/table-document.component';
 import { CvComponent } from './pages/cv/cv.component';
 import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
-import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
+//import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
 import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
 import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
-import { DiarioClinicoComponent } from './component/medica/diario-clinico/diario-clinico.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import { DialogDiarioClinicoComponent } from './dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
 import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component';
+import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
+import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-interventi.component";
+
+
+
 
 @NgModule({
   declarations: [
@@ -204,12 +212,14 @@ import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespec
     TableDocumentComponent,
     CvComponent,
     DialogCvComponent,
-    TableFattureFornitoriComponent,
+    //TableFattureFornitoriComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
     DiarioClinicoComponent,
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
+    DialogInterventiComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -243,6 +253,7 @@ import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespec
     AuthGuardService,
     MatDatepickerModule,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+    { provide: MAT_DATE_LOCALE, useValue: "it-IT" },
   ],
   bootstrap: [AppComponent],
   entryComponents: [
@@ -264,6 +275,7 @@ import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespec
     DialogQuestionComponent,
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
+    DialogInterventiComponent,
   ],
 })
 export class AppModule {

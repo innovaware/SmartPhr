@@ -1,6 +1,10 @@
 import { SchedaInfermeristica } from './SchedaInfermeristica';
 
 export class Paziente {
+  static clone(obj: Paziente) {
+    return JSON.parse(JSON.stringify(obj));
+  }
+
   _id?: string;
   cognome: string;
   nome: string;

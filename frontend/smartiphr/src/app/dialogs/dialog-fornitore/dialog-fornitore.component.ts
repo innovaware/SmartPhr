@@ -153,7 +153,7 @@ export class DialogFornitoreComponent implements OnInit {
   async getFatture() {
     console.log(`Get Fatture fornitore: ${this.fornitore._id}`);
     this.fattureService
-      .getFatture(this.fornitore._id)
+      .getByUserId(this.fornitore._id)
       .then((f: Fatture[]) => {
         this.fatture = f;
 
@@ -250,16 +250,13 @@ export class DialogFornitoreComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insertFattura(fattura, this.fornitore._id)
+    .insert(fattura, this.fornitore._id)
     .then((result: Fatture) => {
       console.log("Insert fattura: ", result);
-      this.fatture.push(result);
-      this.fattureDataSource.data = this.fatture;
+
       this.addingFattura = false;
-      this.uploadingFattura = false;
 
       let formData: FormData = new FormData();
-
       const nameDocument: string = fattura.filename;
 
       formData.append("file", file);
@@ -269,6 +266,9 @@ export class DialogFornitoreComponent implements OnInit {
       this.uploadService
         .uploadDocument(formData)
         .then((x) => {
+          this.fatture.push(result);
+          this.fattureDataSource.data = this.fatture;
+          this.uploadingFattura = false;
           this.uploading = false;
 
           console.log("Uploading completed: ", x);
@@ -318,7 +318,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insertBonifico(bonifico, this.fornitore._id)
+        .insert(bonifico, this.fornitore._id)
         .then((result: Bonifico) => {
           console.log("Insert bonifico 1: ", result);
           this.bonifici.push(result);
@@ -356,7 +356,7 @@ export class DialogFornitoreComponent implements OnInit {
   async getBonificiAssegniContanti() {
     console.log(`Get Bonifici e altro fornitore: ${this.fornitore._id}`);
     this.bonficoService
-      .getBonifico(this.fornitore._id)
+      .getByUserId(this.fornitore._id)
       .then((f: Bonifico[]) => {
         this.bonifici = f;
 

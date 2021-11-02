@@ -20,24 +20,23 @@ export class AnamnesiFamigliareComponent implements OnInit {
 
   constructor( public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
     public cartellaclinicaService: CartellaclinicaService,
-    public dialog: MatDialog,) { 
-    
+    public dialog: MatDialog,) {
+
   }
   ngOnInit() {
     this.getDataCartella();
   }
 
 
-  
+
   async getDataCartella() {
     console.log(`get DataCartella paziente: ${this.data._id}`);
     this.cartellaclinicaService
       .getById( String(this.data._id) )
       .then((f) => {
-        console.log(JSON.stringify(f));
 
         this.cartella = f;
-  
+
       })
       .catch((err) => {
         this.showMessageError("Errore caricamento cartella");

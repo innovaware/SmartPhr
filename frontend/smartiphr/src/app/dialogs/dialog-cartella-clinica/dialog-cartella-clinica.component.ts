@@ -28,10 +28,10 @@ export class DialogCartellaClinicaComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA)
     public data: {
       paziente: Paziente;
-      readonly: boolean 
+      readonly: boolean
     }
   ) {
-   
+
   }
 
   ngOnInit() {
@@ -45,7 +45,6 @@ export class DialogCartellaClinicaComponent implements OnInit {
     this.cartellaclinicaService
       .getById(this.data.paziente._id )
       .then((f) => {
-        console.log(JSON.stringify(f));
     if(Object.keys(f).length > 0)
         this.cartella = f;
     else{
@@ -66,7 +65,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
 
 
     }
-   
+
 
       })
       .catch((err) => {
@@ -104,7 +103,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.showMessageError("Errore modifica cartella");
         console.error(err);
       });
-    
+
   }
 
 

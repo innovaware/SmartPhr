@@ -94,17 +94,19 @@ export class AdminFornitoriComponent implements OnInit {
         (result) => {
           if (result == true) {
 
-    this.fornitoreService.delete(fornitore).subscribe(
+    this.fornitoreService.delete(fornitore).then(
       (x) => {
-        const index = this.fornitori.indexOf(fornitore, 0);
+        const index = this.fornitori.indexOf(fornitore);
         if (index > -1) {
           this.fornitori.splice(index, 1);
         }
         console.log("Cancella Fornitore eseguita con successo");
         this.eventsSubject.next(this.fornitori);
-      },
-      (err) => console.error(`Error Cancellazione fornitore: ${err.message}`)
-    );
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore nella cancellazione Fornitore");
+  console.error(err);
+      });
   } else {
     console.log("Cancellazione fornitore annullata");
     this.messageService.showMessageError(

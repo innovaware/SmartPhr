@@ -42,7 +42,7 @@ async function get(req, res) {
   }
 }
 
-async function getBonificoById(req, res) {
+/* async function getBonificoById(req, res) {
   const { id } = req.params;
   try {
     const searchTerm = `bonificiBY${id}`;
@@ -62,7 +62,7 @@ async function getBonificoById(req, res) {
   } catch (err) {
     res.status(500).json({ Error: err });
   }
-}
+} */
 
 async function insertBonifico(req, res) {
   try {

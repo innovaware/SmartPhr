@@ -10,7 +10,7 @@
           </mat-form-field>
 
           <div class="demo-button-container">
-            <button mat-button class="button-info" (click)="showDiario()" [disabled]=disable>
+            <button mat-button class="button-info" (click)="newItem()" [disabled]=disable>
               <fa-icon icon="plus"></fa-icon>
             </button>
           </div>
@@ -22,7 +22,7 @@
               <th mat-header-cell *matHeaderCellDef>
               </th>
               <td mat-cell *matCellDef="let row">
-                <button mat-raised-button (click)="edit(row)">
+                <button mat-raised-button (click)="editItem(row)">
                   <fa-icon icon="edit"></fa-icon>
                 </button>
               </td>
