@@ -454,3 +454,11 @@ app.use("/api/prospettocm", logHandler, authorizationHandler, prospettoCMRouter)
 
 var puntoFattureRouter = require("./routes/puntoFatture");
 app.use("/api/puntofatture", logHandler, authorizationHandler, puntoFattureRouter);
+
+
+// GESTIONE VISITE E DIARIO CLINICO
+var DiarioClinicoRouter = require("./routes/diarioClinico");
+app.use("/api/diarioClinico", logHandler, authorizationHandler, DiarioClinicoRouter);
+
+var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
+app.use("/api/visiteSpecialistiche", logHandler, authorizationHandler, VisiteSpecialisticheRouter);

@@ -108,26 +108,32 @@ import { DialogPazienteComponent } from "./dialogs/dialog-paziente/dialog-pazien
 import { UploadComponent } from "./components/upload/upload.component";
 import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
-import { LoginComponent } from "./pages/login/login.component";
-import { AuthGuardService } from "./guard/auth-guard.service";
-import { TableDipendentiComponent } from "./component/table-dipendenti/table-dipendenti.component";
-import { FerieComponent } from "./component/ferie/ferie.component";
-import { PermessiComponent } from "./component/permessi/permessi.component";
-import { TurnimensiliComponent } from "./component/turnimensili/turnimensili.component";
-import { CambiturnoComponent } from "./component/cambiturno/cambiturno.component";
-import { PresenzeComponent } from "./component/presenze/presenze.component";
-import { FornitoreGeneraleComponent } from "./component/fornitore-generale/fornitore-generale.component";
-import { DipendenteGeneraleComponent } from "./component/dipendente-generale/dipendente-generale.component";
-import { DialogDocumentComponent } from "./dialogs/dialog-document/dialog-document.component";
-import { TableDocumentComponent } from "./component/table-document/table-document.component";
-import { CvComponent } from "./pages/cv/cv.component";
-import { DialogCvComponent } from "./dialogs/dialog-cv/dialog-cv.component";
-import { TableFattureFornitoriComponent } from "./component/table-fatture-fornitori/table-fatture-fornitori.component";
-import { DialogCaricadocumentoComponent } from "./dialogs/dialog-caricadocumento/dialog-caricadocumento.component";
-import { DialogQuestionComponent } from "./dialogs/dialog-question/dialog-question.component";
+
+import { LoginComponent } from './pages/login/login.component';
+import { AuthGuardService } from './guard/auth-guard.service';
+import { TableDipendentiComponent } from './component/table-dipendenti/table-dipendenti.component';
+import { FerieComponent } from './component/ferie/ferie.component';
+import { PermessiComponent } from './component/permessi/permessi.component';
+import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
+import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
+import { PresenzeComponent } from './component/presenze/presenze.component';
+import { FornitoreGeneraleComponent } from './component/fornitore-generale/fornitore-generale.component';
+import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
+import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
+import { TableDocumentComponent } from './component/table-document/table-document.component';
+import { CvComponent } from './pages/cv/cv.component';
+import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
+//import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
+import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
+import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
+import {MatTooltipModule} from '@angular/material/tooltip';
+import { DialogDiarioClinicoComponent } from './dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
+import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component';
 import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
-import { MatTooltipModule } from "@angular/material/tooltip";
-import { DialogInterventiComponent } from './dialogs/dialog-interventi/dialog-interventi.component';
+import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-interventi.component";
+
+
+
 
 @NgModule({
   declarations: [
@@ -206,11 +212,14 @@ import { DialogInterventiComponent } from './dialogs/dialog-interventi/dialog-in
     TableDocumentComponent,
     CvComponent,
     DialogCvComponent,
-    TableFattureFornitoriComponent,
+    //TableFattureFornitoriComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
     DiarioClinicoComponent,
+    DialogDiarioClinicoComponent,
+    DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -264,6 +273,8 @@ import { DialogInterventiComponent } from './dialogs/dialog-interventi/dialog-in
     DialogCvComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
+    DialogDiarioClinicoComponent,
+    DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
   ],
 })
