@@ -41,7 +41,7 @@ export class PazienteService {
     return this.http.delete(this.api + "/api/pazienti/" + data._id);
   } */
 
-  async delete(paziente: Paziente) {
-    return this.http.delete(`${this.api}/api/pazienti/${paziente._id}`).toPromise();
+  delete(paziente: Paziente): Observable<Paziente> {
+    return this.http.delete<Paziente>(this.api + "/api/pazienti/" + paziente._id);
   }
 }

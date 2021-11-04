@@ -28,12 +28,13 @@ export class AreaMedicaComponent implements OnInit {
     console.log("Init Area Medica");
 
     this.customButtons.push({
-      icon: "",
-      label: "CC",
+      images: "../../../assets/medico.png",
+      label: "",
+      tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
-        this.dialog
-          .open(DialogCartellaClinicaComponent, {
+        this.dialog.open(DialogCartellaClinicaComponent, {
             data: { paziente: paziente, readonly: false },
+            width: "1024px",
           })
           .afterClosed()
           .subscribe((data: Paziente) => {
@@ -48,17 +49,18 @@ export class AreaMedicaComponent implements OnInit {
               this.eventsSubject.next(this.pazienti);
             }
           }),
-      css: "mat-raised-button raised-button action-button",
+      //css: "mat-raised-button raised-button action-button",
     });
 
     this.customButtons.push({
-      icon: "",
-      label: "CI",
+      images: "../../../assets/areaInfermeristica.png",
+      label: "",
+      tooltip: "Cartella Infermeristica",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogCartellaInfermeristicaComponent, {
           data: { paziente: paziente, readonly: true },
         }),
-      css: "mat-raised-button raised-button action-button",
+      //css: "mat-raised-button raised-button action-button",
     });
 
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {

@@ -108,38 +108,37 @@ export class DialogPazienteComponent implements OnInit {
       this.dialogRef.close(this.data.paziente);
     } else {
       this.uploading = true;
-
-      if (this.newItem) {
-        this.pazienteService
-          .insert(this.data.paziente)
-          .then((x) => {
-            console.log("Save paziente: ", x);
-            this.data.paziente = x;
-            this.paziente = x;
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore Inserimento Paziente (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
-      } else {
-        this.pazienteService
-          .save(this.data.paziente)
-          .then((x) => {
-            console.log("Save paziente: ", x);
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore salvataggio Paziente (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
-      }
+    }
+    if (this.newItem) {
+      this.pazienteService
+        .insert(this.data.paziente)
+        .then((x) => {
+          console.log("Save paziente: ", x);
+          this.data.paziente = x;
+          this.paziente = x;
+          this.uploading = false;
+          this.newItem = false;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Inserimento Paziente (" + err["status"] + ")"
+          );
+          this.uploading = false;
+        });
+    } else {
+      this.pazienteService
+        .save(this.data.paziente)
+        .then((x) => {
+          console.log("Save paziente: ", x);
+          this.uploading = false;
+          this.newItem = false;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore salvataggio Paziente (" + err["status"] + ")"
+          );
+          this.uploading = false;
+        });
     }
   }
 

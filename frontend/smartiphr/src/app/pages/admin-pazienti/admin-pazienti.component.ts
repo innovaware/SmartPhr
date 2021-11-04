@@ -20,9 +20,13 @@ export class AdminPazientiComponent implements OnInit {
     public dialog: MatDialog,
     public messageService: MessagesService,
     public pazienteService: PazienteService
-  ) {}
+  ) {
+    this.pazienti = [];
+  }
 
-  ngOnInit() {
+  ngOnInit() {}
+
+  ngAfterViewInit() {
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
@@ -74,8 +78,8 @@ export class AdminPazientiComponent implements OnInit {
     });
   }
 
-  deleteAdmin(paziente: Paziente) {
-    console.log("Cancella Paziente");
+  deletePaziente(paziente: Paziente) {
+    console.log("Cancella Paziente 1", this.pazienti);
     this.dialog
       .open(DialogQuestionComponent, {
         data: { message: "Cancellare il paziente?" },
@@ -86,13 +90,14 @@ export class AdminPazientiComponent implements OnInit {
         (result) => {
           if (result == true) {
 
-            this.pazienteService.delete(paziente).then(
-              () => {
-                const index = this.pazienti.indexOf(paziente);
+            this.pazienteService
+            .delete(paziente)
+            .subscribe((result: Paziente) => {
+                const index = this.pazienti.indexOf(paziente, 0);
                 if (index > -1) {
                   this.pazienti.splice(index, 1);
                 }
-                console.log("Cancella Paziente eseguita con successo");
+                console.log("Cancella Paziente eseguita con successo", result);
                 this.eventsSubject.next(this.pazienti);
               },
               (err) =>

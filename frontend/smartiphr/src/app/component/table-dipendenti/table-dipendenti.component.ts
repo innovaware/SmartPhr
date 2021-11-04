@@ -3,10 +3,13 @@ import { Output, EventEmitter } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { Observable, Subscription } from 'rxjs';
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { DialogDipendenteComponent } from "src/app/dialogs/dialog-dipendente/dialog-dipendente.component";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { DipendentiService } from "src/app/service/dipendenti.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: 'app-table-dipendenti',
@@ -20,8 +23,16 @@ export class TableDipendentiComponent implements OnInit {
     dipendente: Dipendenti;
     button: string;
   }>();
+
   @Input() buttons: string[];
   @Input() showInsert: boolean;
+
+  @Input() eventDipendente: Observable<Dipendenti[]>;
+  @Input() showDipendente: any;
+  @Input() enableShow: boolean;
+  @Input() enableDeleting: boolean;
+
+  private eventsSubscription: Subscription;
 
   displayedColumns: string[] = [
     "cognome",
@@ -41,6 +52,7 @@ export class TableDipendentiComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    public messageService: MessagesService,
     public dipendentiService: DipendentiService
   ) {
     this.dipendentiService.get().then((result) => {
@@ -78,9 +90,18 @@ delete(row){
   }
 }
 
-ngOnInit() {}
+ngOnInit() {
+  this.eventsSubscription = this.eventDipendente.subscribe((p: Dipendenti[]) => {
+    this.dataSource = new MatTableDataSource<Dipendenti>(p);
+    this.dataSource.paginator = this.paginator;
+  });
+}
 
-  ngAfterViewInit() {}
+ngOnDestroy() {
+  this.eventsSubscription.unsubscribe();
+}
+
+  ngAfterViewInit() { }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -156,5 +177,48 @@ ngOnInit() {}
 
       });
   }
+
+  async show(dipendente: Dipendenti) {
+
+    console.log("Show scheda dipendente:", dipendente);
+    var dialogRef = this.dialog.open(DialogDipendenteComponent, {
+      data: { dipendente: dipendente, readonly: false },
+      width: "1024px",
+    });
+  }
+
+  
+  async deleteDipendente(dipendente: Dipendenti) {
+    console.log("Cancella dipendente:", dipendente);
+
+    this.dialog
+      .open(DialogQuestionComponent, {
+        data: { message: "Cancellare il dipendente?" },
+        //width: "600px",
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        if (result == true) {
+          this.dipendentiService
+            .remove(dipendente)
+            .then(() => {
+              console.log("Eliminazione eseguita con successo", result);
+              const index = this.dipendenti.indexOf(dipendente);
+              if (index > -1) {
+                this.dipendenti.splice(index, 1);
+              }
+              this.dataSource.data = this.dipendenti;
+              //this.dataSource.paginator = this.paginator;
+            }),
+            (err) => {
+              console.error("Errore nell'eliminazione", err);
+            };
+        } else {
+          console.log("Cancellazione dipendente annullata");
+          this.messageService.showMessageError("Cancellazione dipendente Annullata");
+        }
+      });
+  }
+
 
 }

@@ -1,7 +1,9 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { Component, OnInit } from "@angular/core";
+import { MatDialog } from "@angular/material";
+import { Subject } from "rxjs";
 import { DialogDipendenteComponent } from "src/app/dialogs/dialog-dipendente/dialog-dipendente.component";
 import { Dipendenti } from "src/app/models/dipendenti";
+import { MessagesService } from "src/app/service/messages.service";
 import { DipendentiService } from "src/app/service/dipendenti.service";
 
 @Component({
@@ -10,7 +12,7 @@ import { DipendentiService } from "src/app/service/dipendenti.service";
   styleUrls: ["./gest-utenti.component.css"],
 })
 export class GestUtentiComponent implements OnInit {
-
+  dipendenti: Dipendenti[];
   /*
   displayedColumns: string[] = ["cognome", "nome", "email", "user", "action"];
   dataSource: MatTableDataSource<Dipendenti>;
@@ -102,10 +104,29 @@ export class GestUtentiComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    public messageService: MessagesService,
     public dipendentiService: DipendentiService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.dipendentiService.get().then((dip: Dipendenti[]) => {
+      this.dipendenti = dip;
+
+      this.eventsSubject.next(this.dipendenti);
+    });
+  }
+
+  eventsSubject: Subject<Dipendenti[]> = new Subject<Dipendenti[]>();
+
+  showFunction(dipendente: Dipendenti) {
+    //console.log(paziente);
+
+    console.log("Show scheda dipendente:", dipendente);
+    var dialogRef = this.dialog.open(DialogDipendenteComponent, {
+      data: { dipendente: dipendente, readonly: false },
+      width: "1024px",
+    });
+  }
 
   show(event: { dipendente: Dipendenti; button: string }) {
     var dialogRef = undefined;
