@@ -123,7 +123,7 @@ import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-docume
 import { TableDocumentComponent } from './component/table-document/table-document.component';
 import { CvComponent } from './pages/cv/cv.component';
 import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
-//import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
+import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
 import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
 import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
 import {MatTooltipModule} from '@angular/material/tooltip';
@@ -212,7 +212,7 @@ import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-in
     TableDocumentComponent,
     CvComponent,
     DialogCvComponent,
-    //TableFattureFornitoriComponent,
+    TableFattureFornitoriComponent,
     DialogCaricadocumentoComponent,
     DialogQuestionComponent,
     DiarioClinicoComponent,
