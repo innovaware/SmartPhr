@@ -16,12 +16,20 @@ import { PazienteService } from "src/app/service/paziente.service";
 export class AreaMedicaComponent implements OnInit {
   pazienti: Paziente[];
   customButtons: DinamicButton[];
+  eventsSubject: Subject<Paziente[]> = new Subject<Paziente[]>();
 
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
     public pazienteService: PazienteService
-  ) {}
+  ) {
+    console.log("Get Patients");
+    this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+      this.pazienti = paz;
+
+      this.eventsSubject.next(this.pazienti);
+    });
+  }
 
   ngOnInit() {
     this.customButtons = [];
@@ -70,5 +78,5 @@ export class AreaMedicaComponent implements OnInit {
     });
   }
 
-  eventsSubject: Subject<Paziente[]> = new Subject<Paziente[]>();
+  
 }

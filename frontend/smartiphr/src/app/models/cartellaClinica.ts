@@ -1,5 +1,11 @@
 import { Diario } from './diario';
+import { schedaAnamnesiFamigliare } from './schedaAnamnesiFamigliare';
+import { schedaAnamnesiPatologica } from './schedaAnamnesiPatologica';
+import { schedaEsameGenerale } from './schedaEsameGenerale';
+import { schedaEsameNeurologia } from './schedaEsameNeurologia';
+import { schedaMezziContenzione } from './schedaMezziContenzione';
 import { schedaPisico } from './schedaPisico';
+import { schedaValutazioneTecniche } from './schedaValutazioneTecniche';
 
 export class CartellaClinica {
 
@@ -7,38 +13,24 @@ export class CartellaClinica {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  _id: number;
-  ipertensione?: boolean;
-  diabete?: boolean;
-  malatCardiovascolari?: boolean;
-  malatCerebrovascolari?: boolean;
-  demenza?: boolean;
-  neoplasie?: boolean;
-  altro?: boolean;
-  testoAltro?: String;
-  antitetanica?: boolean;
-  antiepatiteB?: boolean;
-  antinfluenzale?: boolean;
-  altre?: boolean;
-  testoAltre?: String;
-  attLavorative?: String;
-  scolarita?: String;
-  servizioMilitare?: String;
-  menarca?: String;
-  menopausa?: number;
-  attFisica?: String;
-  alimentazione?: String;
-  alvo?: String;
-  diurisi?: String;
-  alcolici?: String;
-  fumo?: String;
-  sonno?: String;
+  constructor() {
+    this.schedaAnamnesiPatologica = new schedaAnamnesiPatologica();
+    this.schedaAnamnesiFamigliare = new schedaAnamnesiFamigliare();
+    this.schedaEsameGenerale = new schedaEsameGenerale();
+    this.schedaEsameNeurologia = new schedaEsameNeurologia();
+    this.schedaMezziContenzione = new schedaMezziContenzione();
+    this.schedaValutazioneTecniche = new schedaValutazioneTecniche();
 
-  anamnesiRemota?: String;
-  anamnesiProssima?: String;
-  terapiaDomicilio?: String;
-  reazioneAFarmaci?: String;
+  }
 
 
-  user: String;
+
+
+  schedaAnamnesiPatologica?: schedaAnamnesiPatologica;
+  schedaAnamnesiFamigliare?: schedaAnamnesiFamigliare;
+  schedaEsameGenerale?: schedaEsameGenerale;
+  schedaEsameNeurologia?: schedaEsameNeurologia;
+  schedaMezziContenzione?: schedaMezziContenzione;
+  schedaValutazioneTecniche?: schedaValutazioneTecniche;
+
 }

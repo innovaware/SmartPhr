@@ -25,15 +25,15 @@ export class CartellaclinicaService {
     var body = data;
     console.log("body: ", body);
     return this.http
-      .put<CartellaClinica>(this.api + "/api/cartellaClinica/" + data.user, body)
-      .toPromise();
+      .put<CartellaClinica>(this.api + "/api/cartellaClinica", body)
+      .toPromise(); 
   }
 
 
   insert(data: CartellaClinica): Promise<CartellaClinica> {
     var body = data;
     return this.http
-      .post<CartellaClinica>(this.api + "/api/cartellaClinica/" + data.user, body)
+      .post<CartellaClinica>(this.api + "/api/cartellaClinica", body)
       .toPromise();
   }
 

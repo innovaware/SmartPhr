@@ -107,6 +107,7 @@ router.post("/", async (req, res) => {
       provinciaNascita: req.body.provinciaNascita,
 
       schedaInfermeristica: req.body.schedaInfermeristica,
+      schedaClinica: req.body.schedaClinica
     });
 
     const result = await pazienti.save();
@@ -151,6 +152,7 @@ router.put("/:id", async (req, res) => {
           provinciaNascita: req.body.provinciaNascita,
 
           schedaInfermeristica: req.body.schedaInfermeristica,
+          schedaClinica: req.body.schedaClinica
         },
       }
     );

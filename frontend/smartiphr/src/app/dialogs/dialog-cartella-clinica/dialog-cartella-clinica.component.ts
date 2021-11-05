@@ -1,8 +1,15 @@
-import { Component, Inject, OnInit } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnInit } from "@angular/core";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA} from "@angular/material";
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Paziente } from "src/app/models/paziente";
+import { schedaAnamnesiFamigliare } from "src/app/models/schedaAnamnesiFamigliare";
+import { schedaAnamnesiPatologica } from "src/app/models/schedaAnamnesiPatologica";
+import { schedaEsameGenerale } from "src/app/models/schedaEsameGenerale";
+import { schedaEsameNeurologia } from "src/app/models/schedaEsameNeurologia";
+import { schedaMezziContenzione } from "src/app/models/schedaMezziContenzione";
+import { schedaValutazioneTecniche } from "src/app/models/schedaValutazioneTecniche";
 import { CartellaclinicaService } from "src/app/service/cartellaclinica.service";
+import { PazienteService } from "src/app/service/paziente.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
@@ -13,90 +20,84 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
 export class DialogCartellaClinicaComponent implements OnInit {
 
 
+  schedaAnamnesiFamigliare: schedaAnamnesiFamigliare;
+  schedaAnamnesiPatologica: schedaAnamnesiPatologica;
+  schedaEsameNeurologia: schedaEsameNeurologia;
+  schedaEsameGenerale: schedaEsameGenerale;
+  schedaMezziContenzione: schedaMezziContenzione;
+  schedaValutazioneTecniche: schedaValutazioneTecniche;
 
+
+  paziente: Paziente;
+
+  
   constructor(
     public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
-    public cartellaclinicaService: CartellaclinicaService,
+    public pazienteService: PazienteService,
     public dialog: MatDialog,
-    @Inject(MAT_DIALOG_DATA) public cartella : CartellaClinica,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       paziente: Paziente;
       readonly: boolean
     }
   ) {
+    console.log("Dialog Cartella Clinica");
 
-  }
+    this.paziente = Paziente.clone(data.paziente);
 
-  ngOnInit() {
-    this.getDataCartella();
-  }
+    if (this.paziente.schedaClinica == undefined) {
+      this.paziente.schedaClinica = new CartellaClinica();
+    }
 
+    if (this.paziente.schedaClinica.schedaAnamnesiFamigliare == undefined) {
+      this.paziente.schedaClinica.schedaAnamnesiFamigliare = new schedaAnamnesiFamigliare();
+    }
 
+    if (this.paziente.schedaClinica.schedaAnamnesiPatologica == undefined) {
+      this.paziente.schedaClinica.schedaAnamnesiPatologica = new schedaAnamnesiPatologica();
+    }
 
-  async getDataCartella() {
-    console.log(`get DataCartella paziente: ${this.data.paziente._id}`);
-    this.cartellaclinicaService
-      .getById(this.data.paziente._id )
-      .then((f) => {
-    if(Object.keys(f).length > 0)
-        this.cartella = f;
-    else{
+    if (this.paziente.schedaClinica.schedaEsameGenerale == undefined) {
+      this.paziente.schedaClinica.schedaEsameGenerale = new schedaEsameGenerale();
+    }
 
-      var cc = new CartellaClinica();
-      cc.user = this.data.paziente._id;
+    if (this.paziente.schedaClinica.schedaEsameNeurologia == undefined) {
+      this.paziente.schedaClinica.schedaEsameNeurologia = new schedaEsameNeurologia();
+    }
 
-      this.cartellaclinicaService
-      .insert(cc )
-      .then((f) => {
-        this.cartella = f;
-            })
-            .catch((err) => {
-        this.showMessageError("Errore inserimento da zero cartella");
-        console.error(err);
-      });
+    if (this.paziente.schedaClinica.schedaMezziContenzione == undefined) {
+      this.paziente.schedaClinica.schedaMezziContenzione = new schedaMezziContenzione();
+    }
 
-
-
+    if (this.paziente.schedaClinica.schedaValutazioneTecniche == undefined) {
+      this.paziente.schedaClinica.schedaValutazioneTecniche = new schedaValutazioneTecniche();
     }
 
 
-      })
-      .catch((err) => {
-        this.showMessageError("Errore caricamento cartella");
-        console.error(err);
-      });
+
+    this.schedaAnamnesiFamigliare = this.paziente.schedaClinica.schedaAnamnesiFamigliare as schedaAnamnesiFamigliare;
+    this.schedaAnamnesiPatologica = this.paziente.schedaClinica.schedaAnamnesiPatologica as schedaAnamnesiPatologica;
+    this.schedaEsameGenerale = this.paziente.schedaClinica.schedaEsameGenerale as schedaEsameGenerale;
+    this.schedaEsameNeurologia = this.paziente.schedaClinica.schedaEsameNeurologia as schedaEsameNeurologia;
+    this.schedaMezziContenzione = this.paziente.schedaClinica.schedaMezziContenzione as schedaMezziContenzione;
+    this.schedaValutazioneTecniche = this.paziente.schedaClinica.schedaValutazioneTecniche as schedaValutazioneTecniche;
+
+  }
+
+  ngOnInit(){
+
   }
 
 
 
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
+  async salva(){
 
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
-
-  salva(){
-
-      this.cartella.user = this.data.paziente._id;
-    this.cartellaclinicaService
-      .save(this.cartella )
-      .then((f: CartellaClinica) => {
-        this.cartella = f;
-
-      })
-      .catch((err) => {
-        this.showMessageError("Errore modifica cartella");
-        console.error(err);
-      });
+    this.pazienteService.save(this.paziente).then(
+      (value: Paziente) => {
+        console.log(`Patient  saved`, value);
+        this.dialogRef.close(this.paziente);
+      }
+    )
 
   }
 

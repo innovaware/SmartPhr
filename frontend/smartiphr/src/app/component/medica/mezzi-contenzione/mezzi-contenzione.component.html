@@ -7,7 +7,7 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Seleziona una opzione">
+          <mat-radio-group aria-label="Seleziona una opzione"  [(ngModel)]="data.usomezzi">
             <mat-radio-button value="1" [disabled]=disable>Si</mat-radio-button>
             <mat-radio-button value="2" [disabled]=disable>No</mat-radio-button>
           </mat-radio-group>
@@ -31,10 +31,10 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>SPONDINE AL LETTO</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.spondine">SPONDINE AL LETTO</mat-checkbox>
               </div>
               <div class="col">
-                <mat-radio-group aria-label="Seleziona una opzione">
+                <mat-radio-group aria-label="Seleziona una opzione" [(ngModel)]="data.pozizionespondine">
                   <mat-radio-button value="1" [disabled]=disable>SX</mat-radio-button>
                   <mat-radio-button value="2" [disabled]=disable>DX</mat-radio-button>
                 </mat-radio-group>
@@ -45,38 +45,38 @@
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>CONTENZIONE PELVICA</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.pelvica">CONTENZIONE PELVICA</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>PETTORINA</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.pettorina">PETTORINA</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>CINTURA ADDOMINALE</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.cinturaaddominale">CINTURA ADDOMINALE</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>CINTURA A LETTO</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.cinturaletto">CINTURA A LETTO</mat-checkbox>
               </div>
             </div>
             <hr>
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable>CINGHIA FERMABRACCIO</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.fermabraccio">CINGHIA FERMABRACCIO</mat-checkbox>
               </div>
               <div class="col">
-                <mat-radio-group aria-label="Seleziona una opzione">
+                <mat-radio-group aria-label="Seleziona una opzione" [(ngModel)]="data.posizionefermabraccio">
                   <mat-radio-button value="1" [disabled]=disable>SX</mat-radio-button>
                   <mat-radio-button value="2" [disabled]=disable>DX</mat-radio-button>
                 </mat-radio-group>
@@ -86,7 +86,7 @@
 
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">TAVOLINO PER CARROZZINA</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.tavolinocarrozzina">TAVOLINO PER CARROZZINA</mat-checkbox>
               </div>
             </div>
 
@@ -106,7 +106,7 @@
         </mat-card-header>
         <mat-card-content>
 
-          <mat-radio-group aria-label="Seleziona una opzione">
+          <mat-radio-group aria-label="Seleziona una opzione" [(ngModel)]="data.posizionepresenzaconsenso">
             <mat-radio-button value="1" [disabled]=disable>Si</mat-radio-button>
             <mat-radio-button value="2" [disabled]=disable>No</mat-radio-button>
           </mat-radio-group>
@@ -130,7 +130,7 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col">
-                <mat-checkbox class="example-margin">All'ingresso</mat-checkbox>
+                <mat-checkbox class="example-margin" [(ngModel)]="data.datainizioingresso">All'ingresso</mat-checkbox>
               </div>
             </div>
 
@@ -139,7 +139,7 @@
                 <div class="form-group" >
                   <mat-form-field appearance="fill" >
                     <mat-label>Scegli una date</mat-label>
-                    <input matInput [matDatepicker]="dataNascita"  [disabled]=disable>
+                    <input matInput [matDatepicker]="dataNascita"  [(ngModel)]="data.datainizio">
                     <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
                     <mat-datepicker #dataNascita></mat-datepicker>
                   </mat-form-field>
@@ -166,7 +166,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Motivo</mat-label>
-            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
+            <textarea matInput placeholder="Inserisci qui" [(ngModel)]="data.motivo" ></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -186,7 +186,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Tempi</mat-label>
-            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
+            <textarea matInput placeholder="Inserisci qui" [(ngModel)]="data.tempi"></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -206,7 +206,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Durata Prevista</mat-label>
-            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
+            <textarea matInput placeholder="Inserisci qui" [(ngModel)]="data.durata"></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -226,7 +226,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Interruzione</mat-label>
-            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
+            <textarea matInput placeholder="Inserisci qui" [(ngModel)]="data.interruzione"></textarea>
           </mat-form-field>
 
         </mat-card-content>
@@ -246,7 +246,7 @@
 
           <mat-form-field appearance="fill">
             <mat-label>Motivo dell'interruzione</mat-label>
-            <textarea matInput placeholder="Inserisci qui" [disabled]=disable></textarea>
+            <textarea matInput placeholder="Inserisci qui" [(ngModel)]="data.motivointerruzione"></textarea>
           </mat-form-field>
 
         </mat-card-content>

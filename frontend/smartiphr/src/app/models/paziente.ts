@@ -1,3 +1,4 @@
+import { CartellaClinica } from './cartellaClinica';
 import { SchedaInfermeristica } from './SchedaInfermeristica';
 
 export class Paziente {
@@ -28,6 +29,7 @@ export class Paziente {
 
 
   schedaInfermeristica: SchedaInfermeristica;
+  schedaClinica: CartellaClinica;
 
 
   public update(paziente: Paziente): void {

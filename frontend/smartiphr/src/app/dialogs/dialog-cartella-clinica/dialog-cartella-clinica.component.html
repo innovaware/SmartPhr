@@ -32,29 +32,29 @@
 
 
           <mat-tab label="Anamnesi Patologica">
-            <app-anamnesi-patologica [cartella]=cartella [data]=data.paziente></app-anamnesi-patologica>
+            <app-anamnesi-patologica [data]=schedaAnamnesiPatologica ></app-anamnesi-patologica>
           </mat-tab>
 
             <mat-tab label="Anamnesi Famigliare">
-            <app-anamnesi-famigliare [cartella]=cartella [data]=data.paziente></app-anamnesi-famigliare>
+            <app-anamnesi-famigliare [data]=schedaAnamnesiFamigliare ></app-anamnesi-famigliare>
           </mat-tab>
 
        
   
           <mat-tab label="Esame Generale">
-            <app-esame-generale [cartella]=cartella [data]=data.paziente ></app-esame-generale>
+            <app-esame-generale [data]=schedaEsameGenerale ></app-esame-generale>
           </mat-tab>
 
          <mat-tab label="Esame Neurologica">
-            <app-esame-neurologica [cartella]=cartella [data]=data.paziente ></app-esame-neurologica>
+            <app-esame-neurologica [data]=schedaEsameNeurologia  ></app-esame-neurologica>
           </mat-tab>
 
           <mat-tab label="Mezzi di Contenzione">
-            <app-mezzi-contenzione [cartella]=cartella [data]=data.paziente ></app-mezzi-contenzione>
+            <app-mezzi-contenzione [data]=schedaMezziContenzione  ></app-mezzi-contenzione>
           </mat-tab>
 
           <mat-tab label="Valutazione Tecniche">
-            <app-valutazione-tecniche [cartella]=cartella [data]=data.paziente ></app-valutazione-tecniche>
+            <app-valutazione-tecniche [data]=schedaValutazioneTecniche></app-valutazione-tecniche>
           </mat-tab>
 
         <mat-tab label="Visite specialistiche/Esami paraclinici">
