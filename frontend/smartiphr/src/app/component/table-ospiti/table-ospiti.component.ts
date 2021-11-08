@@ -97,7 +97,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
 
     console.log("Show scheda paziente:", paziente);
     var dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: false },    
+      data: { paziente: paziente, readonly: false },
       width: "1024px",
     });
   }
@@ -123,9 +123,9 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
         if (result == true) {
           this.pazienteService
             .delete(paziente)
-            .subscribe((result: Paziente) => {
+            .then(() => {
               console.log("Eliminazione eseguita con successo", result);
-              const index = this.data.indexOf(paziente, 0);
+              const index = this.data.indexOf(paziente);
               if (index > -1) {
                 this.data.splice(index, 1);
               }
