@@ -1,4 +1,4 @@
-<div class="container-fluid"  *ngIf="isAuthenticated()">
+<div class="container-fluid" *ngIf="isAuthenticated()">
   <div class="row">
 
     <!-- MENU -->
@@ -21,6 +21,8 @@
                 <div class="col">
                   <a routerLink="/" routerLinkActive="active" title="Nuovo Messaggio" class="btnAddMess pad"> Nuovo
                     Messaggio</a>
+                  <a routerLink="/" routerLinkActive="active" title="Nuovo Messaggio" class="btnAddMess pad"
+                    (click)="demo()"> Demo </a>
                   <span class="pad welcome-message">Benvenuto in SmartiPHR</span>
                   <a (click)="logout()" routerLinkActive="active" title="Nuovo Messaggio">
                     <fa-icon icon="sign-out-alt"></fa-icon>

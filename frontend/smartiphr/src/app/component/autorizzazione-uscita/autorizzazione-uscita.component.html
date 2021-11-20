@@ -1,0 +1,58 @@
+  <div class="center">
+    <button mat-button class="button-insert" (click)="AddDocument()">Aggiungi Documento</button>
+  </div>
+
+  <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+       *ngIf="this.addingDocument">
+    <div class="row">
+      <div class="col">
+        <input type="file" accept=".pdf" (change)="uploadDocumento($event)" *ngIf="addingDocument && !uploadingDocumento">
+      </div>
+      <div class="col">
+      </div>
+    </div>
+    <div class="row" *ngIf="addingDocument && !uploadingDocumento">
+      <div class="col">
+        <mat-form-field class="full" appearance="fill">
+          <mat-label>Note</mat-label>
+          <input matInput placeholder="Inserisci delle note">
+        </mat-form-field>
+      </div>
+      <div class="col-2">
+        <button mat-button class="button-insert"
+        (click)="saveDocumento(nuovoDocumento)">Salva</button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="addingDocument && uploadingDocumento">
+    <div class="container-flex" style="margin: 20px 0px 20px 0px;" >
+      <div class="row">
+        <div class="col-1">
+          <mat-spinner [diameter]="24"></mat-spinner>
+        </div>
+        <div class="col">
+          <label>Caricamento in corso ...</label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div >
+    <div class="container-flex" style="margin: 20px 0px 20px 0px;" >
+      <div class="row">
+        <div class="col">
+          <label>Documento</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <label>File: {{documento.filename}}</label>
+        </div>
+
+        <div class="col">
+          <label>Data Caricamento {{documento.dateupload | date: 'dd/MM/yyyy'}}</label>
+        </div>
+      </div>
+    </div>
+  </div>
