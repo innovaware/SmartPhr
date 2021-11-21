@@ -100,6 +100,12 @@ span {
   bottom: 0px !important;
   width: 100%;
 }
+
+.paginator-container-top {
+  top: 0px !important;
+  width: 100%;
+}
+
 .center {
   text-align: center;
   margin: 10px 0 10px 0;

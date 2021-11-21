@@ -45,8 +45,12 @@ export class PazienteService {
     return this.http.post<DocumentoAutorizzazioneUscita>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`, body);
   }
 
-  getAutorizzazioneUscita(id: string): Observable<DocumentoAutorizzazioneUscita> {
-    return this.http.get<DocumentoAutorizzazioneUscita>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`);
+  deleteAutorizzazioneUscita(idDoc: string) {
+    return this.http.delete(`${this.api}/api/pazienti/autorizzazioneUscita/${idDoc}`);
+  }
+
+  getAutorizzazioneUscita(id: string): Observable<DocumentoAutorizzazioneUscita[]> {
+    return this.http.get<DocumentoAutorizzazioneUscita[]>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`);
   }
 
 /*   delete(paziente: Paziente): Observable<any> {

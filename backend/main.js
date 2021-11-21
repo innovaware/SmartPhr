@@ -299,7 +299,7 @@ var readHandler = function (req, res, next) {
     .then((data) => {
       res.set({
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=" + `${fileName}.pdf`,
+        "Content-Disposition": `attachment; filename='${fileName}'.pdf`,
         "Content-Length": data.length,
       });
 

@@ -13,7 +13,7 @@ const client = redis.createClient(redisPort, redisHost);
 router.get("/", async (req, res) => {
   try {
     //redisDisabled = false;
-    
+
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
     const pageNumber = parseInt(req.query.pageNumber);
@@ -50,9 +50,7 @@ router.get("/", async (req, res) => {
           };
 
           console.info(`skip:${skip} limit: ${limit}`);
-          const pazienti = await Pazienti.find(query)
-            .skip(skip)
-            .limit(limit);
+          const pazienti = await Pazienti.find(query).skip(skip).limit(limit);
 
           if (pazienti.length > 0) res.status(200).json(pazienti);
           else res.status(404).json({ error: "No patients found" });
@@ -219,7 +217,6 @@ router.delete("/:id", async (req, res) => {
   }
 });
 
-
 router.get("/autorizzazioneUscita/:id", async (req, res) => {
   const { id } = req.params;
   try {
@@ -238,7 +235,12 @@ router.get("/autorizzazioneUscita/:id", async (req, res) => {
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const pazienti = await documentoAutorizzazioneUscita.findOne({ idPaziente: id });
+        const pazienti = await documentoAutorizzazioneUscita.find({
+          $and: [
+            {idPaziente: id},
+            {$or: [{ cancellato: { $exists: false } }, { cancellato: false }]}
+          ]          
+        });
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
         if (pazienti != null) res.status(200).json(pazienti);
@@ -259,20 +261,22 @@ router.post("/autorizzazioneUscita/:id", async (req, res) => {
     dateupload: Date.now(),
     note: req.body.note,
     type: req.body.type,
+    cancellato: false,
+    dataCancellazione: undefined,
   });
 
   console.log("Insert doc: ", doc);
   const result = await doc.save();
-  const searchTerm = `PAZIENTIBY${id}`;
+  const searchTerm = `AUTORIZZAZIONE_USCITA_BY${id}`;
   client.del(searchTerm);
 
   res.status(200);
   res.json(doc);
-
 });
 
 router.delete("/autorizzazioneUscita/:id", async (req, res) => {
   try {
+    console.log("Delete Autorizzazione Uscita");
     const { id } = req.params;
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
@@ -303,8 +307,5 @@ router.delete("/autorizzazioneUscita/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
-
-
 
 module.exports = router;

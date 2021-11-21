@@ -8,4 +8,5 @@ export class DocumentoAutorizzazioneUscita {
   filename: string;
   dateupload?: Date;
   file?: File;
+  note?: string;
 }

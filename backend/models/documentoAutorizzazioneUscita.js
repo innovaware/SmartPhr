@@ -6,6 +6,8 @@ const DocumentoAutorizzazioneUscita = mongoose.Schema({
   dateupload: Date,
   note: String,
   type: String,
+  cancellato: Boolean,
+  dataCancellazione: Date,
 });
 
 module.exports = mongoose.model(
