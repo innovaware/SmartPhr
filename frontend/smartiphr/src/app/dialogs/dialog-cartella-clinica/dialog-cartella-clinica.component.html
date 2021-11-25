@@ -31,6 +31,748 @@
           </mat-tab>
 
 
+               <!-- DOCUMENTAZIONE -->
+  <mat-tab label="Documentazione" [disabled]="paziente?._id === undefined">
+    <div class="container-fluid">
+      <div class="row title">
+        <div class="col-1"></div>
+        <div class="col-3">Nome</div>
+        <div class="col-1">Data</div>
+        <div class="col"></div>
+      </div>
+
+      <hr>
+
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['DOC_IDENTITA']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['DOC_IDENTITA']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['DOC_IDENTITA']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+
+        </div>
+        <div class="col-3">Doc identit&aacute;</div>
+        <div class="col-1">{{document['DOC_IDENTITA']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+
+          <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['DOC_IDENTITA']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['DOC_IDENTITA'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['DOC_IDENTITA'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['CONS_RICOVERO']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['CONS_RICOVERO']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['CONS_RICOVERO']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Consenso al ricovero</div>
+        <div class="col-1">{{document['CONS_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+    
+
+          <div class="container-flex" *ngIf="document['CONS_RICOVERO']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['CONS_RICOVERO']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['CONS_RICOVERO'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['CONS_RICOVERO'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['AUTORI_CONTENZIONE']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['AUTORI_CONTENZIONE']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['AUTORI_CONTENZIONE']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Autorizzazione alla contenzione</div>
+        <div class="col-1">{{document['AUTORI_CONTENZIONE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+
+          <div class="container-flex" *ngIf="document['AUTORI_CONTENZIONE']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_CONTENZIONE']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_CONTENZIONE'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_CONTENZIONE'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['AUTORI_USCITE']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['AUTORI_USCITE']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['AUTORI_USCITE']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Autorizzazione alle uscite</div>
+        <div class="col-1">{{document['AUTORI_USCITE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+          <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_USCITE']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_USCITE'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_USCITE'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['AUTORI_RIPRESE']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['AUTORI_RIPRESE']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['AUTORI_RIPRESE']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Autorizzazione alle riprese audio, video e foto</div>
+        <div class="col-1">{{document['AUTORI_RIPRESE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+          <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_RIPRESE']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_RIPRESE'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_RIPRESE'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['AUTORI_VACCINO']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['AUTORI_VACCINO']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['AUTORI_VACCINO']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Consenso somministrazione vaccino</div>
+        <div class="col-1">{{document['AUTORI_VACCINO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+          <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['AUTORI_VACCINO']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['AUTORI_VACCINO'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['AUTORI_VACCINO'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['LIST_EFFETTIPERSONALI']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['LIST_EFFETTIPERSONALI']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['LIST_EFFETTIPERSONALI']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
+        </div>
+        <div class="col-3">Check list indumenti ed effetti personali</div>
+        <div class="col-1">{{document['LIST_EFFETTIPERSONALI']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+
+          <div class="container-flex" *ngIf="document['LIST_EFFETTIPERSONALI']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['LIST_EFFETTIPERSONALI']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="document['LIST_EFFETTIPERSONALI'].status=false">Modifica</button> -->
+
+                <button mat-icon-button color="warn" aria-label="Carica file"
+                  (click)="document['LIST_EFFETTIPERSONALI'].status=false" class="upload-button">
+                  <fa-icon icon="upload"></fa-icon>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+  </mat-tab>
+
+          <!-- PIANI TERAPEUTICI -->
+          <mat-tab label="Piani terapeutici" [disabled]="data.paziente?._id === undefined">
+
+            <br>
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPianoTerapeutico">
+              <button mat-button class="button-insert" (click)="addPianoTerapeutico()">Aggiungi Documento</button>
+            </div>
+        
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+              *ngIf="addingPianoTerapeutico && !uploadingPianoTerapeutico">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadPianoTerapeutico($event)" accept=".pdf" *ngIf="!uploadingPianoTerapeutico">
+                  <label *ngIf="uploadingPianoTerapeutico">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoPianoTerapeutico.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="savePianoTerapeutico(nuovoPianoTerapeutico)">Salva</button>
+                </div>
+              </div>
+            </div>
+        
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingPianoTerapeutico">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div *ngIf="this.pianiTerapeutici?.length <= 0" class="notPresent">
+              Nessuna documento presente
+            </div>
+        
+            <table mat-table [dataSource]="pianiTerapeuticiDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.pianiTerapeutici?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+        
+                  <button mat-button (click)="showDocument(row)">
+                    <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                  </button>
+        
+                  <button mat-button (click)="deletePianoTerapeutico(row)">
+                    <img src="../../../assets/cestino.png" style="width:26px">
+                  </button>
+        
+        
+                </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorPianiTerapeutici [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+        
+          </mat-tab>
+
+           <!-- FINE PIANI TERAPEUTICI -->
+
+
+
+
+           <!-- REFERTI ESAMI STRUMENTALI -->
+          <mat-tab label="Referti esami strumentali" [disabled]="data.paziente?._id === undefined">
+
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRefertoEsameStrumentale">
+              <button mat-button class="button-insert" (click)="addRefertoEsameStrumentale()">Aggiungi Documento</button>
+            </div>
+        
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+              *ngIf="addingRefertoEsameStrumentale && !uploadingRefertoEsameStrumentale">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadRefertoEsameStrumentale($event)" accept=".pdf" *ngIf="!uploadingRefertoEsameStrumentale">
+                  <label *ngIf="uploadingRefertoEsameStrumentale">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoRefertoEsameStrumentale.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveRefertoEsameStrumentale(nuovoRefertoEsameStrumentale)">Salva</button>
+                </div>
+              </div>
+            </div>
+        
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRefertoEsameStrumentale">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div *ngIf="this.refertiEsamiStrumentali?.length <= 0" class="notPresent">
+              Nessuna documento presente
+            </div>
+        
+            <table mat-table [dataSource]="refertiEsamiStrumentaliDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.refertiEsamiStrumentali?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+        
+                  <button mat-button (click)="showDocument(row)">
+                    <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                  </button>
+        
+                  <button mat-button (click)="deletePianoTerapeutico(row)">
+                    <img src="../../../assets/cestino.png" style="width:26px">
+                  </button>
+        
+        
+                </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorRefertiEsamiStrumentali [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+        
+          </mat-tab>
+
+           <!-- FINE REFERTI ESAMI STRUMENTALI -->
+
+
+             <!-- REFERTI ESAMI EMATOCHIMICI -->
+          <mat-tab label="Referti esami ematochimici" [disabled]="data.paziente?._id === undefined">
+
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRefertoEsameEmatochimico">
+              <button mat-button class="button-insert" (click)="addRefertoEsameEmatochimico()">Aggiungi Documento</button>
+            </div>
+        
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+              *ngIf="addingRefertoEsameEmatochimico && !uploadingRefertoEsameEmatochimico">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadRefertoEsameEmatochimico($event)" accept=".pdf" *ngIf="!uploadingRefertoEsameEmatochimico">
+                  <label *ngIf="uploadingRefertoEsameEmatochimico">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoRefertoEsameEmatochimico.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveRefertoEsameEmatochimico(nuovoRefertoEsameEmatochimico)">Salva</button>
+                </div>
+              </div>
+            </div>
+        
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRefertoEsameEmatochimico">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div *ngIf="this.refertiEsamiEmatochimici?.length <= 0" class="notPresent">
+              Nessuna documento presente
+            </div>
+        
+            <table mat-table [dataSource]="refertiEsamiEmatochimiciDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.refertiEsamiEmatochimici?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+        
+                  <button mat-button (click)="showDocument(row)">
+                    <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                  </button>
+        
+                  <button mat-button (click)="deletePianoTerapeutico(row)">
+                    <img src="../../../assets/cestino.png" style="width:26px">
+                  </button>
+        
+        
+                </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorRefertiEsamiEmatochimici [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+        
+          </mat-tab>
+
+           <!-- FINE REFERTI ESAMI EMATOCHIMICI -->
+
+
+
+            <!-- VERBALI -->
+          <mat-tab label="Verbali pronto soccorso e dimissioni ospedaliere" [disabled]="data.paziente?._id === undefined">
+
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingVerbale">
+              <button mat-button class="button-insert" (click)="addVerbale()">Aggiungi Documento</button>
+            </div>
+        
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+              *ngIf="addingVerbale && !uploadingVerbale">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadVerbale($event)" accept=".pdf" *ngIf="!uploadingVerbale">
+                  <label *ngIf="uploadingVerbale">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoVerbale.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveVerbale(nuovoVerbale)">Salva</button>
+                </div>
+              </div>
+            </div>
+        
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingVerbale">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div *ngIf="this.verbali?.length <= 0" class="notPresent">
+              Nessuna documento presente
+            </div>
+        
+            <table mat-table [dataSource]="verbaliDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.verbali?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+        
+                  <button mat-button (click)="showDocument(row)">
+                    <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                  </button>
+        
+                  <button mat-button (click)="deletePianoTerapeutico(row)">
+                    <img src="../../../assets/cestino.png" style="width:26px">
+                  </button>
+        
+        
+                </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorVerbali [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+        
+          </mat-tab>
+
+           <!-- FINE VERBALI -->
+
+
+
+             <!-- RELAZIONI -->
+          <mat-tab label="Relazioni cliniche e certificati" [disabled]="data.paziente?._id === undefined">
+
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRelazione">
+              <button mat-button class="button-insert" (click)="addRelazione()">Aggiungi Documento</button>
+            </div>
+        
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+              *ngIf="addingRelazione && !uploadingRelazione">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadRelazione($event)" accept=".pdf" *ngIf="!uploadingRelazione">
+                  <label *ngIf="uploadingRelazione">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoRelazione.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveRelazione(nuovoRelazione)">Salva</button>
+                </div>
+              </div>
+            </div>
+        
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRelazione">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+        
+        
+            <div *ngIf="this.relazioni?.length <= 0" class="notPresent">
+              Nessuna documento presente
+            </div>
+        
+            <table mat-table [dataSource]="relazioniDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.relazioni?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+        
+                  <button mat-button (click)="showDocument(row)">
+                    <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                  </button>
+        
+                  <button mat-button (click)="deletePianoTerapeutico(row)">
+                    <img src="../../../assets/cestino.png" style="width:26px">
+                  </button>
+        
+        
+                </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorRelazioni [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+        
+          </mat-tab>
+
+           <!-- FINE RELAZIONI -->
+
+
+
+
+
+
           <mat-tab label="Anamnesi Patologica">
             <app-anamnesi-patologica [data]=schedaAnamnesiPatologica ></app-anamnesi-patologica>
           </mat-tab>

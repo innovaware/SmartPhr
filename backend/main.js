@@ -462,3 +462,9 @@ app.use("/api/diarioClinico", logHandler, authorizationHandler, DiarioClinicoRou
 
 var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
 app.use("/api/visiteSpecialistiche", logHandler, authorizationHandler, VisiteSpecialisticheRouter);
+
+
+
+// DOCUMENTI PAZIENTE API
+var documentiPazienteRouter = require("./routes/documentipazienti");
+app.use("/api/documentipazienti", logHandler, authorizationHandler, documentiPazienteRouter);
