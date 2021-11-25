@@ -97,7 +97,7 @@ const authorizationHandler = async (req, res, next) => {
         console.log("[AUTHORIZATIONHANDLER] User not authorized");
       } else {
         res.locals.auth = user;
-        console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
+        // console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
         return next(null, result_authorization);
       }
     })
@@ -224,7 +224,7 @@ var logHandler = function (req, res, next) {
 };
 
 var roleHandler = async (req, res, next) => {
-  console.log(`[ROLEHANDLER] Check Role for USER`);
+  // console.log(`[ROLEHANDLER] Check Role for USER`);
   // console.log(`[ROLEHANDLER] auth:`, res.locals.auth);
 
   const user = res.locals.auth;
@@ -299,7 +299,7 @@ var readHandler = function (req, res, next) {
     .then((data) => {
       res.set({
         "Content-Type": "application/pdf",
-        "Content-Disposition": "attachment; filename=" + `${fileName}.pdf`,
+        "Content-Disposition": `attachment; filename='${fileName}'.pdf`,
         "Content-Length": data.length,
       });
 

@@ -131,6 +131,7 @@ import { DialogDiarioClinicoComponent } from './dialogs/dialog-diario-clinico/di
 import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component';
 import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
 import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-interventi.component";
+import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita/autorizzazione-uscita.component';
 
 
 
@@ -219,6 +220,7 @@ import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-in
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
+    AutorizzazioneUscitaComponent,
 
   ],
   imports: [

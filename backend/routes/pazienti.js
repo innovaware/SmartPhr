@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const Pazienti = require("../models/pazienti");
 const redis = require("redis");
+const documentoAutorizzazioneUscita = require("../models/documentoAutorizzazioneUscita");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
@@ -11,9 +12,23 @@ const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
-    const searchTerm = `PAZIENTIALL`;
+    //redisDisabled = false;
+
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
+    const pageNumber = parseInt(req.query.pageNumber);
+    const pageSize = parseInt(req.query.pageSize);
+    const sortOrder = req.query.sortOrder;
+
+    const skip = pageNumber > 0 ? (pageNumber - 1) * pageSize : 0;
+    const limit = pageSize;
+
+    const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
+
+    console.info("searchTerm:", searchTerm);
+    console.info("pageNumber:", pageNumber);
+    console.info("pageSize:", pageSize);
+    console.info("sortOrder:", sortOrder);
 
     if (showOnlyCancellati || showAll) {
       console.log("Show all or deleted");
@@ -33,7 +48,9 @@ router.get("/", async (req, res) => {
           const query = {
             $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
           };
-          const pazienti = await Pazienti.find(query);
+
+          console.info(`skip:${skip} limit: ${limit}`);
+          const pazienti = await Pazienti.find(query).skip(skip).limit(limit);
 
           if (pazienti.length > 0) res.status(200).json(pazienti);
           else res.status(404).json({ error: "No patients found" });
@@ -107,7 +124,7 @@ router.post("/", async (req, res) => {
       provinciaNascita: req.body.provinciaNascita,
 
       schedaInfermeristica: req.body.schedaInfermeristica,
-      schedaClinica: req.body.schedaClinica
+      schedaClinica: req.body.schedaClinica,
     });
 
     const result = await pazienti.save();
@@ -152,7 +169,7 @@ router.put("/:id", async (req, res) => {
           provinciaNascita: req.body.provinciaNascita,
 
           schedaInfermeristica: req.body.schedaInfermeristica,
-          schedaClinica: req.body.schedaClinica
+          schedaClinica: req.body.schedaClinica,
         },
       }
     );
@@ -191,7 +208,98 @@ router.delete("/:id", async (req, res) => {
     );
 
     client.del(`PAZIENTIBY${id}`);
-    client.del(`PAZIENTIALL`);
+    client.del(`PAZIENTIALL*`);
+
+    res.status(200);
+    res.json(pazienti);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.get("/autorizzazioneUscita/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    console.log("GET Autorizzazione Uscita");
+
+    const searchTerm = `AUTORIZZAZIONE_USCITA_BY${id}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const pazienti = await documentoAutorizzazioneUscita.find({
+          $and: [
+            {idPaziente: id},
+            {$or: [{ cancellato: { $exists: false } }, { cancellato: false }]}
+          ]          
+        });
+
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+        if (pazienti != null) res.status(200).json(pazienti);
+        else res.status(404).json({ error: "No patient found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.post("/autorizzazioneUscita/:id", async (req, res) => {
+  console.log("Autorizzazione uscita insert");
+  const { id } = req.params;
+  const doc = new documentoAutorizzazioneUscita({
+    idPaziente: id,
+    filename: req.body.filename,
+    dateupload: Date.now(),
+    note: req.body.note,
+    type: req.body.type,
+    cancellato: false,
+    dataCancellazione: undefined,
+  });
+
+  console.log("Insert doc: ", doc);
+  const result = await doc.save();
+  const searchTerm = `AUTORIZZAZIONE_USCITA_BY${id}`;
+  client.del(searchTerm);
+
+  res.status(200);
+  res.json(doc);
+});
+
+router.delete("/autorizzazioneUscita/:id", async (req, res) => {
+  try {
+    console.log("Delete Autorizzazione Uscita");
+    const { id } = req.params;
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (id == null) {
+      res.status(400).json({ error: "id not valid" });
+    }
+
+    const pazienti = await documentoAutorizzazioneUscita.updateOne(
+      { _id: id },
+      {
+        $set: {
+          cancellato: true,
+          dataCancellazione: new Date(),
+        },
+      }
+    );
+
+    client.del(`AUTORIZZAZIONE_USCITA_BY${id}`);
+    client.del(`AUTORIZZAZIONE_USCITA*`);
 
     res.status(200);
     res.json(pazienti);

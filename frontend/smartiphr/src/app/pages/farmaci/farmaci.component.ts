@@ -45,25 +45,18 @@ export class FarmaciComponent implements OnInit {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  async newFarmaco() {
+  async newItem() {
     var dialogRef = undefined;
-    var farmaco: Farmaci = {
-      descrizione: "",
-      codice_interno: "",
-      dose: "",
-      formato: "",
-      nome: "",
-      qty: 1,
-    };
+
     dialogRef = this.dialog.open(DialogFarmacoComponent, {
-      data: farmaco,
+      data: new Farmaci(),
     });
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
 
-        if (result != undefined) {
+        if (result != undefined && result) {
           this.farmaciService
             .insert(result)
             .then((r) => {
@@ -78,20 +71,29 @@ export class FarmaciComponent implements OnInit {
       });
   }
 
-  async show(item: Farmaci) {
+  async editItem(item: Farmaci) {
     var dialogRef = undefined;
     dialogRef = this.dialog.open(DialogFarmacoComponent, {
-      data: item,
+      data: Farmaci.clone(item),
     });
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
-        if (result != undefined) {
+        if (result != undefined && result) {
           this.farmaciService
             .update(result)
             .then((r) => {
               console.log("Update Completed. Result: ", r);
+
+              const index = this.farmaci.indexOf(item, 0);
+              if (index > -1) {
+                this.farmaci.splice(index, 1);
+                console.log("Removed item");
+              }
+
+              this.farmaci.push(result);
+              this.dataSource.data = this.farmaci;
             })
             .catch((err) => {
               console.error("Error update farmaco: ", err);

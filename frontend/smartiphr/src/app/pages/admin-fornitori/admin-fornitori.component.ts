@@ -79,6 +79,12 @@ export class AdminFornitoriComponent implements OnInit {
             );
           });
       }
+      else {
+        this.fornitoreService.getFornitori().then((forn: Fornitore[]) => {
+          this.fornitori = forn;   
+          this.eventsSubject.next(this.fornitori);
+        });
+      }
     });
   }
 

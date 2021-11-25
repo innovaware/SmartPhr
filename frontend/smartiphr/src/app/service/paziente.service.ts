@@ -4,6 +4,7 @@ import { Observable } from 'rxjs';
 import { environment } from "src/environments/environment";
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
+import { DocumentoAutorizzazioneUscita } from '../models/documentoAutorizzazioneUscita';
 import { Paziente } from "../models/paziente";
 
 @Injectable({
@@ -15,7 +16,9 @@ export class PazienteService {
   constructor(private http: HttpClient) {}
 
   async getPazienti(): Promise<Paziente[]> {
-    return this.http.get<Paziente[]>(this.api + "/api/pazienti").toPromise();
+    return this.http.get<Paziente[]>(`${this.api}/api/pazienti`)
+      .toPromise();
+    //return this.http.get<Paziente[]>(`${this.api}/api/pazienti?pageSize=${pageSize}&pageNumber=${pageNumber}`)
   }
 
   async getPaziente(id: string): Promise<Paziente[]> {
@@ -35,6 +38,19 @@ export class PazienteService {
     return this.http
       .post<Paziente>(this.api + "/api/pazienti", body)
       .toPromise();
+  }
+
+  insertAutorizzazioneUscita(id: string, doc: DocumentoAutorizzazioneUscita): Observable<DocumentoAutorizzazioneUscita> {
+    var body = doc;
+    return this.http.post<DocumentoAutorizzazioneUscita>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`, body);
+  }
+
+  deleteAutorizzazioneUscita(idDoc: string) {
+    return this.http.delete(`${this.api}/api/pazienti/autorizzazioneUscita/${idDoc}`);
+  }
+
+  getAutorizzazioneUscita(id: string): Observable<DocumentoAutorizzazioneUscita[]> {
+    return this.http.get<DocumentoAutorizzazioneUscita[]>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`);
   }
 
 /*   delete(paziente: Paziente): Observable<any> {

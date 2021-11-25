@@ -110,38 +110,37 @@ export class DialogFornitoreComponent implements OnInit {
       this.dialogRef.close(this.data.fornitore);
     } else {
       this.uploading = true;
-
-      if (this.newItem) {
-        this.fornitoreService
-          .insert(this.data.fornitore)
-          .then((x) => {
-            console.log("Save fornitore: ", x);
-            this.data.fornitore = x;
-            this.fornitore = x;
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore Inserimento Fornitore (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
-      } else {
-        this.fornitoreService
-          .save(this.data.fornitore)
-          .then((x) => {
-            console.log("Save fornitore: ", x);
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore salvataggio Fornitore (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
-      }
+    }
+    if (this.newItem) {
+      this.fornitoreService
+        .insert(this.data.fornitore)
+        .then((x) => {
+          console.log("Save fornitore: ", x);
+          this.data.fornitore = x;
+          this.fornitore = x;
+          this.uploading = false;
+          this.newItem = false;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Inserimento Fornitore (" + err["status"] + ")"
+          );
+          this.uploading = false;
+        });
+    } else {
+      this.fornitoreService
+        .save(this.data.fornitore)
+        .then((x) => {
+          console.log("Save fornitore: ", x);
+          this.uploading = false;
+          this.newItem = false;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore salvataggio Fornitore (" + err["status"] + ")"
+          );
+          this.uploading = false;
+        });
     }
   }
 

@@ -203,6 +203,19 @@
             <app-diario [data]=schedaDiario [disable]=data.readonly></app-diario>
           </mat-tab>
 
+          <mat-tab label="Parametri vitali">
+            <app-diario [data]=schedaDiario [disable]=data.readonly></app-diario>
+          </mat-tab>
+
+          <mat-tab label="Esiti esami">
+            <app-diario [data]=schedaDiario [disable]=data.readonly></app-diario>
+          </mat-tab>
+
+          <mat-tab label="Autorizzazioni uscita">
+            <app-autorizzazione-uscita [id]=this.paziente._id></app-autorizzazione-uscita>
+          </mat-tab>
+
+
         </mat-tab-group>
 
       </div>
