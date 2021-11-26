@@ -292,7 +292,18 @@ const PazienteSchema = mongoose.Schema({
     durata: String,
     interruzione: String,
     motivointerruzione: String,
+    },
+
+    schedaDecessoOspite: {
+      relazionedecesso: String
+    },
+
+
+    schedaDimissioneOspite: {
+      relazionedimissione: String,
+      terapiainatto: String
     }
+
     
     
   },

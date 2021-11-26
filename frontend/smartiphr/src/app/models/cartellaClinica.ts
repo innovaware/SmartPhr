@@ -6,6 +6,8 @@ import { schedaEsameNeurologia } from './schedaEsameNeurologia';
 import { schedaMezziContenzione } from './schedaMezziContenzione';
 import { schedaPisico } from './schedaPisico';
 import { schedaValutazioneTecniche } from './schedaValutazioneTecniche';
+import { schedaDecessoOspite } from './schedaDecessoOspite';
+import { schedaDimissioneOspite } from './schedaDimissioneOspite';
 
 export class CartellaClinica {
 
@@ -21,6 +23,9 @@ export class CartellaClinica {
     this.schedaMezziContenzione = new schedaMezziContenzione();
     this.schedaValutazioneTecniche = new schedaValutazioneTecniche();
 
+    this.schedaDecessoOspite = new schedaDecessoOspite();
+    this.schedaDimissioneOspite = new schedaDimissioneOspite();
+
   }
 
 
@@ -32,5 +37,8 @@ export class CartellaClinica {
   schedaEsameNeurologia?: schedaEsameNeurologia;
   schedaMezziContenzione?: schedaMezziContenzione;
   schedaValutazioneTecniche?: schedaValutazioneTecniche;
+
+  schedaDecessoOspite?: schedaDecessoOspite;
+  schedaDimissioneOspite?: schedaDimissioneOspite;
 
 }

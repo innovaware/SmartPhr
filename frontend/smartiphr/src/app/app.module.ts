@@ -74,6 +74,7 @@ import { SchedaUlcereDiabeteComponent } from "./component/infermeristica/scheda-
 import { SchedaLesioniCutaneeComponent } from "./component/infermeristica/scheda-lesioni-cutanee/scheda-lesioni-cutanee.component";
 import { SchedaLesioniDecubitoComponent } from "./component/infermeristica/scheda-lesioni-decubito/scheda-lesioni-decubito.component";
 import { SchedaInterventiComponent } from "./component/infermeristica/scheda-interventi/scheda-interventi.component";
+import { DecessoComponent } from "./component/medica/decesso/decesso.component";
 import { DialogEventComponent } from "./dialogs/dialog-event/dialog-event.component";
 
 import {
@@ -132,6 +133,7 @@ import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespec
 import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
 import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-interventi.component";
 import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita/autorizzazione-uscita.component';
+import { DimissioniComponent } from './component/medica/dimissioni/dimissioni.component';
 
 
 
@@ -221,6 +223,8 @@ import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
     AutorizzazioneUscitaComponent,
+    DimissioniComponent,
+    DecessoComponent
 
   ],
   imports: [

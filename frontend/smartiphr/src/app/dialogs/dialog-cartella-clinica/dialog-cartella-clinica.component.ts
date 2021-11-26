@@ -84,6 +84,14 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public addingRelazione: boolean;
 
 
+  @ViewChild("paginatorImpegnative", { static: false }) ImpegnativePaginator: MatPaginator;
+  public nuovoImpegnativa: DocumentoPaziente;
+  public impegnativeDataSource: MatTableDataSource<DocumentoPaziente>;
+  public impegnative : DocumentoPaziente[];
+  public uploadingImpegnativa: boolean;
+  public addingImpegnativa: boolean;
+
+
   
   constructor(
     public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
@@ -144,6 +152,12 @@ export class DialogCartellaClinicaComponent implements OnInit {
   ngOnInit(){
     this.getListFile();
     this.getPianiTerapeutici();
+    this.getRefertiEsamiStrumentali();
+    this.getRefertiEsameEmatochimico();
+    this.getRelazioni();
+    this.getVerbali();
+    this.getImpegnative();
+
   }
 
 
@@ -771,4 +785,125 @@ export class DialogCartellaClinicaComponent implements OnInit {
       
       
         // FINE VERBALI 
+
+
+
+        // VERBALI 
+        async addImpegnativa() {
+          this.addingImpegnativa = true;
+          this.nuovoImpegnativa = {
+            filename: undefined,
+            note: "",
+            type: 'Impegnativa'
+          };
+        }
+      
+        async uploadImpegnativa($event) {
+          let fileList: FileList = $event.target.files;
+          if (fileList.length > 0) {
+            let file: File = fileList[0];
+      
+            console.log("upload Impegnativa: ", $event);
+            this.nuovoImpegnativa.filename = file.name;
+            this.nuovoImpegnativa.file = file;
+      
+          } else {
+            this.showMessageError("File non valido");
+            console.error("File non valido o non presente");
+          }
+        }
+      
+      
+      
+        async deleteImpegnativa(doc: DocumentoPaziente) {
+          console.log("Cancella Impegnativa: ", doc);
+      
+          this.docService
+            .remove(doc)
+            .then((x) => {
+              console.log("Impegnativa cancellata");
+              const index = this.impegnative.indexOf(doc);
+              console.log("Impegnativa cancellata index: ", index);
+              if (index > -1) {
+                this.impegnative.splice(index, 1);
+              }
+      
+              console.log("Impegnativa cancellato: ", this.impegnative);
+              this.impegnativeDataSource.data = this.impegnative;
+            })
+            .catch((err) => {
+              this.showMessageError("Errore nella cancellazione doc impegnativa");
+              console.error(err);
+            });
+        }
+        
+        async saveImpegnativa(doc: DocumentoPaziente) {
+          const typeDocument = "Impegnativa";
+          const path = "Impegnativa";
+          const file: File = doc.file;
+          this.uploadingImpegnativa = true;
+      
+          console.log("Invio Impegnativa: ", doc);
+          this.docService
+          .insert(doc, this.paziente)
+          .then((result: DocumentoPaziente) => {
+            console.log("Insert Impegnativa: ", result);
+            this.impegnative.push(result);
+            this.impegnativeDataSource.data = this.impegnative;
+            this.addingImpegnativa = false;
+            this.uploadingImpegnativa = false;
+      
+            let formData: FormData = new FormData();
+      
+            const nameDocument: string = doc.filename;
+      
+            formData.append("file", file);
+            formData.append("typeDocument", typeDocument);
+            formData.append("path", `${this.paziente._id}/${path}`);
+            formData.append("name", nameDocument);
+            this.uploadService
+              .uploadDocument(formData)
+              .then((x) => {
+                this.uploading = false;
+      
+                console.log("Uploading completed: ", x);
+              })
+              .catch((err) => {
+                this.showMessageError("Errore nel caricamento file");
+                console.error(err);
+                this.uploading = false;
+              });
+          })
+          .catch((err) => {
+            this.showMessageError("Errore Inserimento fattura");
+            console.error(err);
+          });
+        }
+      
+      
+      
+        async getImpegnative() {
+          console.log(`get Impegnative paziente: ${this.paziente._id}`);
+          this.docService
+            .get(this.paziente, 'Verbale')
+            .then((f: DocumentoPaziente[]) => {
+              this.impegnative = f;
+      
+              this.impegnativeDataSource = new MatTableDataSource<DocumentoPaziente>(this.impegnative);
+              this.impegnativeDataSource.paginator = this.ImpegnativePaginator;
+            })
+            .catch((err) => {
+              this.showMessageError("Errore caricamento lista impegnative");
+              console.error(err);
+            });
+        }
+      
+      
+        // FINE IMPEGNATIVE 
+
+
+
+
+
+        
 }
