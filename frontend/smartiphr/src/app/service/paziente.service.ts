@@ -5,6 +5,7 @@ import { environment } from "src/environments/environment";
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { DocumentoAutorizzazioneUscita } from '../models/documentoAutorizzazioneUscita';
+import { DocumentoEsitoStrumentale } from '../models/documentoEsitoStrumentale';
 import { Paziente } from "../models/paziente";
 
 @Injectable({
@@ -53,11 +54,24 @@ export class PazienteService {
     return this.http.get<DocumentoAutorizzazioneUscita[]>(`${this.api}/api/pazienti/autorizzazioneUscita/${id}`);
   }
 
-/*   delete(paziente: Paziente): Observable<any> {
-    return this.http.delete(this.api + "/api/pazienti/" + data._id);
-  } */
-
   delete(paziente: Paziente): Observable<Paziente> {
     return this.http.delete<Paziente>(this.api + "/api/pazienti/" + paziente._id);
   }
+
+  // ESITO STRUMENTALE
+
+  insertEsitoStrumentale(id: string, doc: DocumentoEsitoStrumentale): Observable<DocumentoEsitoStrumentale> {
+    var body = doc;
+    return this.http.post<DocumentoEsitoStrumentale>(`${this.api}/api/pazienti/esitoStrumentale/${id}`, body);
+  }
+
+  getEsitoStrumentale(id: string): Observable<DocumentoEsitoStrumentale[]> {
+    return this.http.get<DocumentoEsitoStrumentale[]>(`${this.api}/api/pazienti/esitoStrumentale/${id}`);
+  }
+
+  deleteEsitoStrumentale(idDoc: string) {
+    return this.http.delete(`${this.api}/api/pazienti/esitoStrumentale/${idDoc}`);
+  }
+
+
 }
