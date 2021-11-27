@@ -111,4 +111,7 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
     )
   }
 
+  changeTab(event) {
+  }
+
 }

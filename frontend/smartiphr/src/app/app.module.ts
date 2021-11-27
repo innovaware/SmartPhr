@@ -135,6 +135,7 @@ import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-in
 import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita/autorizzazione-uscita.component';
 import { DimissioniComponent } from './component/medica/dimissioni/dimissioni.component';
 import { EsitiStrumentaliComponent } from './component/esiti-strumentali/esiti-strumentali.component';
+import { ParametriVitaliComponent } from './component/parametri-vitali/parametri-vitali.component';
 
 
 
@@ -227,6 +228,7 @@ import { EsitiStrumentaliComponent } from './component/esiti-strumentali/esiti-s
     DimissioniComponent,
     DecessoComponent,
     EsitiStrumentaliComponent,
+    ParametriVitaliComponent,
 
   ],
   imports: [

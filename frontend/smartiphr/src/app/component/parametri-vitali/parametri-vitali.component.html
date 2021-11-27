@@ -1,0 +1,91 @@
+<div class="container-flex">
+
+  <div class="row">
+    <div class="col">
+      <label>Novembre 2021</label>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+
+      <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Dati">
+          <table>
+            <thead>
+              <td>GG</td>
+              <td>PA/FC (MA-GIO)</td>
+              <td>TC (MA-GIO)</td>
+              <td>SPO2 (MAR-GIO)</td>
+              <td>DIURESI (SEMPRE)</td>
+              <td>GLIC. (LU-ME-VE)</td>
+              <td>ANNOTAZIONI</td>
+            </thead>
+            <tbody>
+              <tr *ngFor="let item of getDays()">
+                <td>{{item}}</td>
+                <td>
+                  <table style="margin:unset">
+                    <tr>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table style="margin:unset">
+                    <tr>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table style="margin:unset">
+                    <tr>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table style="margin:unset">
+                    <tr>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>
+                  <table style="margin:unset">
+                    <tr>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{getValue()}}</td>
+                    </tr>
+                  </table>
+                </td>
+                <td>Value</td>
+              </tr>
+            </tbody>
+          </table>
+
+        </mat-tab>
+
+        <mat-tab label="Grafici">
+
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </div>
+</div>

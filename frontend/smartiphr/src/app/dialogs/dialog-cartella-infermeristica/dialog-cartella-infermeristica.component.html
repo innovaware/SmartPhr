@@ -24,7 +24,7 @@
     <div class="row">
       <div class="col">
 
-        <mat-tab-group mat-align-tabs="start">
+        <mat-tab-group mat-align-tabs="start" (selectedTabChange)="changeTab($event)">
           <mat-tab label="Generale">
             <div class="container-fluid" style="padding: unset;">
               <div class="row">
@@ -204,7 +204,7 @@
           </mat-tab>
 
           <mat-tab label="Parametri vitali">
-            <app-diario [data]=schedaDiario [disable]=data.readonly></app-diario>
+            <app-parametri-vitali [id]=this.paziente._id></app-parametri-vitali>
           </mat-tab>
 
           <mat-tab label="Esiti esami">
