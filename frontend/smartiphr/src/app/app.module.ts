@@ -136,6 +136,7 @@ import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita
 import { DimissioniComponent } from './component/medica/dimissioni/dimissioni.component';
 import { EsitiStrumentaliComponent } from './component/esiti-strumentali/esiti-strumentali.component';
 import { ParametriVitaliComponent } from './component/parametri-vitali/parametri-vitali.component';
+import { ChartsModule, ThemeService } from 'ng2-charts';
 
 
 
@@ -258,10 +259,12 @@ import { ParametriVitaliComponent } from './component/parametri-vitali/parametri
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
+    ChartsModule
   ],
   providers: [
     AuthGuardService,
     MatDatepickerModule,
+    ThemeService,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: "it-IT" },
   ],

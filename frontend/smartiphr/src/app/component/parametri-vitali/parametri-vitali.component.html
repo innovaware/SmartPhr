@@ -11,6 +11,7 @@
 
       <mat-tab-group mat-align-tabs="start">
         <mat-tab label="Dati">
+
           <table>
             <thead>
               <td>GG</td>
@@ -22,60 +23,60 @@
               <td>ANNOTAZIONI</td>
             </thead>
             <tbody>
-              <tr *ngFor="let item of getDays()">
-                <td>{{item}}</td>
+              <tr *ngFor="let item of this.paramVitali">
+                <td>{{item.gg}}</td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{item.pa[0].y}}</td>
+                      <td class="item">{{item.pa[1].y}}</td>
+                      <td class="item">{{item.pa[2].y}}</td>
+                      <td class="item">{{item.pa[3].y}}</td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{item.tc[0].y}}</td>
+                      <td class="item">{{item.tc[1].y}}</td>
+                      <td class="item">{{item.tc[2].y}}</td>
+                      <td class="item">{{item.tc[3].y}}</td>
+                      <td class="item">{{item.tc[4].y}}</td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{item.spo2[0].y}}</td>
+                      <td class="item">{{item.spo2[1].y}}</td>
+                      <td class="item">{{item.spo2[2].y}}</td>
+                      <td class="item">{{item.spo2[3].y}}</td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{item.diurisi[0].y}}</td>
+                      <td class="item">{{item.diurisi[1].y}}</td>
+                      <td class="item">{{item.diurisi[2].y}}</td>
+                      <td class="item">{{item.diurisi[3].y}}</td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
-                      <td class="item">{{getValue()}}</td>
+                      <td class="item">{{item.glic[0].y}}</td>
+                      <td class="item">{{item.glic[1].y}}</td>
+                      <td class="item">{{item.glic[2].y}}</td>
+                      <td class="item">{{item.glic[3].y}}</td>
                     </tr>
                   </table>
                 </td>
-                <td>Value</td>
+                <td>{{item.annotazioni}}</td>
               </tr>
             </tbody>
           </table>
@@ -83,7 +84,17 @@
         </mat-tab>
 
         <mat-tab label="Grafici">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartData" [options]="chartOptions" chartType="line"> </canvas>
 
+            <canvas baseChart
+            [datasets]="radarChartData"
+            [options]="radarChartOptions"
+            [labels]="radarChartLabels"
+            [chartType]="radarChartType">
+          </canvas>
+
+        </div>
         </mat-tab>
       </mat-tab-group>
     </div>
