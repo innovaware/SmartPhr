@@ -28,51 +28,273 @@
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{item.pa[0].y}}</td>
-                      <td class="item">{{item.pa[1].y}}</td>
-                      <td class="item">{{item.pa[2].y}}</td>
-                      <td class="item">{{item.pa[3].y}}</td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.pa[0])" *ngIf="!item.pa[0].modify">
+                          <div *ngIf="checkVisible(item.pa[0].x)">
+                            <label>{{item.pa[0].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.pa[0].x) && item.pa[0].modify">
+                          <input type=number [(ngModel)]="item.pa[0].y" class="item-text"
+                            (change)="chanceValue(item.pa[0])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.pa[1])" *ngIf="!item.pa[1].modify">
+                          <div *ngIf="checkVisible(item.pa[1].x)">
+                            <label>{{item.pa[1].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.pa[0].x) && item.pa[1].modify">
+                          <input type=number [(ngModel)]="item.pa[1].y" class="item-text"
+                            (change)="chanceValue(item.pa[1])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.pa[2])" *ngIf="!item.pa[2].modify">
+                          <div *ngIf="checkVisible(item.pa[2].x)">
+                            <label>{{item.pa[2].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.pa[2].x) && item.pa[2].modify">
+                          <input type=number [(ngModel)]="item.pa[2].y" class="item-text"
+                            (change)="chanceValue(item.pa[2])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.pa[3])" *ngIf="!item.pa[3].modify">
+                          <div *ngIf="checkVisible(item.pa[3].x)">
+                            <label>{{item.pa[3].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.pa[3].x) && item.pa[3].modify">
+                          <input type=number [(ngModel)]="item.pa[3].y" class="item-text"
+                            (change)="chanceValue(item.pa[3])">
+                        </div>
+                      </td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{item.tc[0].y}}</td>
-                      <td class="item">{{item.tc[1].y}}</td>
-                      <td class="item">{{item.tc[2].y}}</td>
-                      <td class="item">{{item.tc[3].y}}</td>
-                      <td class="item">{{item.tc[4].y}}</td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.tc[0])" *ngIf="!item.tc[0].modify">
+                          <div *ngIf="checkVisible(item.tc[0].x)">
+                            <label>{{item.tc[0].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.tc[0].x) && item.tc[0].modify">
+                          <input type=number [(ngModel)]="item.tc[0].y" class="item-text"
+                            (change)="chanceValue(item.tc[0])">
+                        </div>
+                      </td>
+
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.tc[1])" *ngIf="!item.tc[1].modify">
+                          <div *ngIf="checkVisible(item.tc[1].x)">
+                            <label>{{item.tc[1].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.tc[1].x) && item.tc[1].modify">
+                          <input type=number [(ngModel)]="item.tc[1].y" class="item-text"
+                            (change)="chanceValue(item.tc[1])">
+                        </div>
+                      </td>
+
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.tc[2])" *ngIf="!item.tc[2].modify">
+                          <div *ngIf="checkVisible(item.tc[2].x)">
+                            <label>{{item.tc[2].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.tc[2].x) && item.tc[2].modify">
+                          <input type=number [(ngModel)]="item.tc[2].y" class="item-text"
+                            (change)="chanceValue(item.tc[2])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.tc[3])" *ngIf="!item.tc[3].modify">
+                          <div *ngIf="checkVisible(item.tc[3].x)">
+                            <label>{{item.tc[3].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.tc[3].x) && item.tc[3].modify">
+                          <input type=number [(ngModel)]="item.tc[3].y" class="item-text"
+                            (change)="chanceValue(item.tc[3])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.tc[4])" *ngIf="!item.tc[4].modify">
+                          <div *ngIf="checkVisible(item.tc[4].x)">
+                            <label>{{item.tc[4].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.tc[4].x) && item.tc[4].modify">
+                          <input type=number [(ngModel)]="item.tc[4].y" class="item-text"
+                            (change)="chanceValue(item.tc[4])">
+                        </div>
+                      </td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{item.spo2[0].y}}</td>
-                      <td class="item">{{item.spo2[1].y}}</td>
-                      <td class="item">{{item.spo2[2].y}}</td>
-                      <td class="item">{{item.spo2[3].y}}</td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.spo2[0])" *ngIf="!item.spo2[0].modify">
+                          <div *ngIf="checkVisible(item.spo2[0].x)">
+                            <label>{{item.spo2[0].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.spo2[0].x) && item.spo2[0].modify">
+                          <input type=number [(ngModel)]="item.spo2[0].y" class="item-text"
+                            (change)="chanceValue(item.spo2[0])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.spo2[1])" *ngIf="!item.spo2[1].modify">
+                          <div *ngIf="checkVisible(item.spo2[1].x)">
+                            <label>{{item.spo2[1].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.spo2[1].x) && item.spo2[1].modify">
+                          <input type=number [(ngModel)]="item.spo2[1].y" class="item-text"
+                            (change)="chanceValue(item.spo2[1])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.spo2[2])" *ngIf="!item.spo2[2].modify">
+                          <div *ngIf="checkVisible(item.spo2[2].x)">
+                            <label>{{item.spo2[2].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.spo2[2].x) && item.spo2[2].modify">
+                          <input type=number [(ngModel)]="item.spo2[2].y" class="item-text"
+                            (change)="chanceValue(item.spo2[2])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.spo2[3])" *ngIf="!item.spo2[3].modify">
+                          <div *ngIf="checkVisible(item.spo2[3].x)">
+                            <label>{{item.spo2[3].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.spo2[3].x) && item.spo2[3].modify">
+                          <input type=number [(ngModel)]="item.spo2[3].y" class="item-text"
+                            (change)="chanceValue(item.spo2[3])">
+                        </div>
+                      </td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{item.diurisi[0].y}}</td>
-                      <td class="item">{{item.diurisi[1].y}}</td>
-                      <td class="item">{{item.diurisi[2].y}}</td>
-                      <td class="item">{{item.diurisi[3].y}}</td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.diurisi[0])" *ngIf="!item.diurisi[0].modify">
+                          <div *ngIf="checkVisible(item.diurisi[0].x)">
+                            <label>{{item.diurisi[0].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.diurisi[0].x) && item.diurisi[0].modify">
+                          <input type=number [(ngModel)]="item.diurisi[0].y" class="item-text"
+                            (change)="chanceValue(item.diurisi[0])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.diurisi[1])" *ngIf="!item.diurisi[1].modify">
+                          <div *ngIf="checkVisible(item.diurisi[1].x)">
+                            <label>{{item.diurisi[1].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.diurisi[1].x) && item.diurisi[1].modify">
+                          <input type=number [(ngModel)]="item.diurisi[1].y" class="item-text"
+                            (change)="chanceValue(item.diurisi[1])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.diurisi[2])" *ngIf="!item.diurisi[2].modify">
+                          <div *ngIf="checkVisible(item.diurisi[2].x)">
+                            <label>{{item.diurisi[2].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.diurisi[2].x) && item.diurisi[2].modify">
+                          <input type=number [(ngModel)]="item.diurisi[2].y" class="item-text"
+                            (change)="chanceValue(item.diurisi[2])">
+                        </div>
+                      </td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.diurisi[3])" *ngIf="!item.diurisi[3].modify">
+                          <div *ngIf="checkVisible(item.diurisi[3].x)">
+                            <label>{{item.diurisi[3].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.diurisi[3].x) && item.diurisi[3].modify">
+                          <input type=number [(ngModel)]="item.diurisi[3].y" class="item-text"
+                            (change)="chanceValue(item.diurisi[3])">
+                        </div>
+                      </td>
                     </tr>
                   </table>
                 </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
-                      <td class="item">{{item.glic[0].y}}</td>
-                      <td class="item">{{item.glic[1].y}}</td>
-                      <td class="item">{{item.glic[2].y}}</td>
-                      <td class="item">{{item.glic[3].y}}</td>
+                      <td class="item">
+                        <div (click)="modifyParam(item.glic[0])" *ngIf="!item.glic[0].modify">
+                          <div *ngIf="checkVisible(item.glic[0].x)">
+                            <label>{{item.glic[0].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.glic[0].x) && item.glic[0].modify">
+                          <input type=number [(ngModel)]="item.glic[0].y" class="item-text"
+                            (change)="chanceValue(item.glic[0])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.glic[1])" *ngIf="!item.glic[1].modify">
+                          <div *ngIf="checkVisible(item.glic[1].x)">
+                            <label>{{item.glic[1].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.glic[1].x) && item.glic[1].modify">
+                          <input type=number [(ngModel)]="item.glic[1].y" class="item-text"
+                            (change)="chanceValue(item.glic[1])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.glic[2])" *ngIf="!item.glic[2].modify">
+                          <div *ngIf="checkVisible(item.glic[2].x)">
+                            <label>{{item.glic[2].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.glic[2].x) && item.glic[2].modify">
+                          <input type=number [(ngModel)]="item.glic[2].y" class="item-text"
+                            (change)="chanceValue(item.glic[2])">
+                        </div>
+                      </td>
+
+                      <td class="item">
+                        <div (click)="modifyParam(item.glic[3])" *ngIf="!item.glic[3].modify">
+                          <div *ngIf="checkVisible(item.glic[3].x)">
+                            <label>{{item.glic[3].y}}</label>
+                          </div>
+                        </div>
+                        <div *ngIf="checkVisible(item.glic[3].x) && item.glic[3].modify">
+                          <input type=number [(ngModel)]="item.glic[3].y" class="item-text"
+                            (change)="chanceValue(item.glic[3])">
+                        </div>
+                      </td>
+
                     </tr>
                   </table>
                 </td>
@@ -83,19 +305,44 @@
 
         </mat-tab>
 
+        <mat-tab label="Grafici PA/FC">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartDataPA" [options]="chartOptions" chartType="line"> </canvas>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Grafici TC">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartDataTC" [options]="chartOptions" chartType="line"> </canvas>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Grafici SPO2">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartDataSPO2" [options]="chartOptions" chartType="line"> </canvas>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Grafici DIURESI">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartDataDIURSI" [options]="chartOptions" chartType="line"> </canvas>
+          </div>
+        </mat-tab>
+
+        <mat-tab label="Grafici GLIC">
+          <div class="chart-wrapper">
+            <canvas baseChart [datasets]="lineChartDataGLIC" [options]="chartOptions" chartType="line"> </canvas>
+          </div>
+        </mat-tab>
+
         <mat-tab label="Grafici">
           <div class="chart-wrapper">
-            <canvas baseChart [datasets]="lineChartData" [options]="chartOptions" chartType="line"> </canvas>
-
-            <canvas baseChart
-            [datasets]="radarChartData"
-            [options]="radarChartOptions"
-            [labels]="radarChartLabels"
-            [chartType]="radarChartType">
-          </canvas>
-
-        </div>
+            <canvas baseChart [datasets]="radarChartData" [options]="radarChartOptions" [labels]="radarChartLabels"
+              [chartType]="radarChartType">
+            </canvas>
+          </div>
         </mat-tab>
+
       </mat-tab-group>
     </div>
   </div>

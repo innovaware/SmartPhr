@@ -1,7 +1,6 @@
-import { getLocaleDateTimeFormat } from "@angular/common";
 import { Component, Input, OnInit } from "@angular/core";
 import { ChartDataSets, ChartType, RadialChartOptions } from "chart.js";
-import { Color, Label } from "ng2-charts";
+import { Label } from "ng2-charts";
 
 @Component({
   selector: "app-parametri-vitali",
@@ -18,7 +17,11 @@ export class ParametriVitaliComponent implements OnInit {
     responsive: true,
   };
   public radarChartData: ChartDataSets[] = [];
-  public lineChartData: ChartDataSets[] = [];
+  public lineChartDataPA: ChartDataSets[] = [];
+  public lineChartDataTC: ChartDataSets[] = [];
+  public lineChartDataSPO2: ChartDataSets[] = [];
+  public lineChartDataDIURSI: ChartDataSets[] = [];
+  public lineChartDataGLIC: ChartDataSets[] = [];
 
   public chartOptions = {
     scales: {
@@ -77,37 +80,56 @@ export class ParametriVitaliComponent implements OnInit {
       }
     );
 
-    this.lineChartData = [
+
+  }
+
+  loadCharts() {
+    this.lineChartDataPA = [
       { data: this.getDataFormatted("pa"), label: "PA" },
-      { data: this.getDataFormatted("tc"), label: "TC" },
+      // { data: this.getDataFormatted("tc"), label: "TC" },
+      // { data: this.getDataFormatted("spo2"), label: "SPO2" },
+      // { data: this.getDataFormatted("diurisi"), label: "DIURESI" },
+      // { data: this.getDataFormatted("glic"), label: "GLIC" },
+    ];
+
+    this.lineChartDataTC = [{ data: this.getDataFormatted("tc"), label: "TC" }];
+
+    this.lineChartDataSPO2 = [
       { data: this.getDataFormatted("spo2"), label: "SPO2" },
+    ];
+
+    this.lineChartDataDIURSI = [
       { data: this.getDataFormatted("diurisi"), label: "DIURESI" },
+    ];
+
+    this.lineChartDataGLIC = [
       { data: this.getDataFormatted("glic"), label: "GLIC" },
     ];
 
-    const pa = this.getDataFormattedRadar('pa');
-    const tc = this.getDataFormattedRadar('tc');
-    const spo2 = this.getDataFormattedRadar('spo2');
-    const diurisi = this.getDataFormattedRadar('diurisi');
-    const glic = this.getDataFormattedRadar('glic');
+    const pa = this.getDataFormattedRadar("pa");
+    const tc = this.getDataFormattedRadar("tc");
+    const spo2 = this.getDataFormattedRadar("spo2");
+    const diurisi = this.getDataFormattedRadar("diurisi");
+    const glic = this.getDataFormattedRadar("glic");
 
-    this.radarChartData = [{ data: [pa.y, tc.y, spo2.y, diurisi.y, glic.y], label: "" }];
-
+    this.radarChartData = [
+      { data: [pa.y, tc.y, spo2.y, diurisi.y, glic.y], label: "" },
+    ];
   }
 
   paramVitali: {
     gg: number;
-    pa: { x: Date; y: number }[];
-    tc: { x: Date; y: number }[];
-    spo2: { x: Date; y: number }[];
-    diurisi: { x: Date; y: number }[];
-    glic: { x: Date; y: number }[];
+    pa: { x: Date; y: number; modify: boolean }[];
+    tc: { x: Date; y: number; modify: boolean }[];
+    spo2: { x: Date; y: number; modify: boolean }[];
+    diurisi: { x: Date; y: number; modify: boolean }[];
+    glic: { x: Date; y: number; modify: boolean }[];
     annotazioni: string;
   }[];
 
   ngOnInit() {}
 
-  getValueRandom(giorno: number, hour: number): { x: Date; y: number } {
+  getValueRandom(giorno: number, hour: number): { x: Date; y: number, modify: boolean } {
     const max = 40;
     const min = 35;
     // return Math.floor(Math.random() * (max - min + 1) + min);
@@ -117,6 +139,7 @@ export class ParametriVitaliComponent implements OnInit {
     return {
       x: date,
       y: Math.floor(Math.random() * (max - min + 1) + min),
+      modify: false
     };
   }
 
@@ -156,6 +179,28 @@ export class ParametriVitaliComponent implements OnInit {
       });
   }
 
+  checkVisible(date: Date) {
+    return date < new Date();
+  }
+
+  modifyParam(item: { x: Date; y: number; modify: boolean }) {
 
 
+    this.paramVitali.forEach( parametroVitale => {
+      parametroVitale.pa.forEach( itemParam => itemParam.modify = false);
+      parametroVitale.tc.forEach( itemParam => itemParam.modify = false);
+      parametroVitale.spo2.forEach( itemParam => itemParam.modify = false);
+      parametroVitale.diurisi.forEach( itemParam => itemParam.modify = false);
+      parametroVitale.glic.forEach( itemParam => itemParam.modify = false);
+    } );
+
+    if (this.checkVisible(item.x))
+      item.modify = !item.modify;
+  }
+
+  chanceValue(item: { x: Date; y: number; modify: boolean; }) {
+    item.modify = !item.modify;
+
+    this.loadCharts();
+  }
 }
