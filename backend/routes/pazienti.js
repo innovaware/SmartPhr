@@ -4,6 +4,7 @@ const Pazienti = require("../models/pazienti");
 const redis = require("redis");
 const documentoAutorizzazioneUscita = require("../models/documentoAutorizzazioneUscita");
 const documentoEsitoStrumentale = require("../models/documentoEsitoStrumentale");
+const parametriVitali = require("../models/parametriVitali");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
@@ -238,9 +239,11 @@ router.get("/autorizzazioneUscita/:id", async (req, res) => {
       } else {
         const pazienti = await documentoAutorizzazioneUscita.find({
           $and: [
-            {idPaziente: id},
-            {$or: [{ cancellato: { $exists: false } }, { cancellato: false }]}
-          ]          
+            { idPaziente: id },
+            {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            },
+          ],
         });
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
@@ -309,7 +312,6 @@ router.delete("/autorizzazioneUscita/:id", async (req, res) => {
   }
 });
 
-
 /// ESITO STRUMENTALE
 
 router.get("/esitoStrumentale/:id", async (req, res) => {
@@ -332,9 +334,11 @@ router.get("/esitoStrumentale/:id", async (req, res) => {
       } else {
         const pazienti = await documentoEsitoStrumentale.find({
           $and: [
-            {idPaziente: id},
-            {$or: [{ cancellato: { $exists: false } }, { cancellato: false }]}
-          ]          
+            { idPaziente: id },
+            {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            },
+          ],
         });
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
@@ -403,5 +407,85 @@ router.delete("/esitoStrumentale/:id", async (req, res) => {
   }
 });
 
+// PARAMETRI VITALI
+
+// id = idPaziente
+// TODO find to date
+router.get("/parametriVitali/:id/:dateRif", async (req, res) => {
+  const { id, dateRif } = req.params;
+  try {
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    //console.log("GET Esito Strumentale");
+    console.log("Parametri vitali dateRif: ", dateRif);
+
+    const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const parametri = await parametriVitali.find({
+          $and: [{ idPaziente: id }, { dateRif: dateRif }],
+        });
+
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(parametri));
+        if (parametri != null) res.status(200).json(parametri);
+        else res.status(404).json({ error: "No parametriVitali found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
+  try {
+    const { id, dateRif } = req.params;
+    const data = req.body;
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (dateRif == undefined || dateRif === "undefined") {
+      console.log("Error dateRif is not defined ", dateRif);
+      res.status(404).json({ Error: "dateRif not defined" });
+      return;
+    }
+
+    if (data == undefined || data === "undefined") {
+      console.log("Error data is not defined ", id);
+      res.status(404).json({ Error: "Data not defined" });
+      return;
+    }
+
+    console.log("data: ", data);
+    const parametri = await parametriVitali.updateOne(
+      { $and: [{ idPaziente: id }, { dateRif: dateRif }] },
+      {
+        $set: {
+          dateRif: dateRif,
+          data: data,
+        },
+      },
+      { upsert: true }
+    );
+
+    const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
+    client.del(searchTerm);
+
+    res.status(200);
+    res.json(parametri);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 module.exports = router;

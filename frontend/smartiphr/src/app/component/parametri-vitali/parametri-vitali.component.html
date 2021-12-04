@@ -2,7 +2,7 @@
 
   <div class="row">
     <div class="col">
-      <label>Novembre 2021</label>
+      <app-slider-date (changeDate)="changeDate($event)" ></app-slider-date>
     </div>
   </div>
 
@@ -13,18 +13,74 @@
         <mat-tab label="Dati">
 
           <table>
-            <thead>
-              <td>GG</td>
-              <td>PA/FC (MA-GIO)</td>
-              <td>TC (MA-GIO)</td>
-              <td>SPO2 (MAR-GIO)</td>
-              <td>DIURESI (SEMPRE)</td>
-              <td>GLIC. (LU-ME-VE)</td>
+            <thead style="background: gray; font-weight: bold;">
+              <td></td>
+              <td>PA/FC</td>
+              <td>TC</td>
+              <td>SPO2</td>
+              <td>DIURESI</td>
+              <td>GLIC</td>
               <td>ANNOTAZIONI</td>
             </thead>
+            <thead style="background: #808080a8; font-weight: bold;">
+              <td>g/h</td>
+              <td>
+                <table class="table-header">
+                  <tr>
+                    <td class="item">8</td>
+                    <td class="item">12</td>
+                    <td class="item">16</td>
+                    <td class="item">20</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <table class="table-header">
+                  <tr>
+                    <td class="item">8</td>
+                    <td class="item">11</td>
+                    <td class="item">14</td>
+                    <td class="item">17</td>
+                    <td class="item">20</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <table class="table-header">
+                  <tr>
+                    <td class="item">8</td>
+                    <td class="item">12</td>
+                    <td class="item">16</td>
+                    <td class="item">20</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <table class="table-header">
+                  <tr>
+                    <td class="item">8</td>
+                    <td class="item">12</td>
+                    <td class="item">16</td>
+                    <td class="item">20</td>
+                  </tr>
+                </table>
+              </td>
+              <td>
+                <table class="table-header">
+                  <tr>
+                    <td class="item">8</td>
+                    <td class="item">12</td>
+                    <td class="item">16</td>
+                    <td class="item">20</td>
+                  </tr>
+                </table>
+              </td>
+              <td></td>
+            </thead>
+
             <tbody>
               <tr *ngFor="let item of this.paramVitali">
-                <td>{{item.gg}}</td>
+                <td>{{item.gg}}  </td>
                 <td>
                   <table style="margin:unset">
                     <tr>
@@ -298,7 +354,8 @@
                     </tr>
                   </table>
                 </td>
-                <td>{{item.annotazioni}}</td>
+                <td>
+                  {{item.annotazioni}}</td>
               </tr>
             </tbody>
           </table>

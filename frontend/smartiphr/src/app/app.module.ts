@@ -137,6 +137,7 @@ import { DimissioniComponent } from './component/medica/dimissioni/dimissioni.co
 import { EsitiStrumentaliComponent } from './component/esiti-strumentali/esiti-strumentali.component';
 import { ParametriVitaliComponent } from './component/parametri-vitali/parametri-vitali.component';
 import { ChartsModule, ThemeService } from 'ng2-charts';
+import { SliderDateComponent } from './component/slider-date/slider-date.component';
 
 
 
@@ -230,6 +231,7 @@ import { ChartsModule, ThemeService } from 'ng2-charts';
     DecessoComponent,
     EsitiStrumentaliComponent,
     ParametriVitaliComponent,
+    SliderDateComponent,
 
   ],
   imports: [

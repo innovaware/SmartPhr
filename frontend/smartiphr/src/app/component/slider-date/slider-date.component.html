@@ -1,0 +1,18 @@
+<div class="container-flex">
+  <div class="row">
+    <div class="col align-right">
+      <button mat-icon-button (click)="left()">
+        <fa-icon icon="arrow-alt-circle-left"></fa-icon>
+      </button>
+
+    </div>
+    <div class="col center">
+      <label style="padding-top: 12px;">{{getDate()}}</label>
+    </div>
+    <div class="col align-left">
+      <button mat-icon-button (click)="right()">
+        <fa-icon icon="arrow-alt-circle-right"></fa-icon>
+      </button>
+    </div>
+  </div>
+</div>

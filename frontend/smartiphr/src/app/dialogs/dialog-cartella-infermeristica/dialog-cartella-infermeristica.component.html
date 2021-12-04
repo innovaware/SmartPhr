@@ -204,7 +204,7 @@
           </mat-tab>
 
           <mat-tab label="Parametri vitali">
-            <app-parametri-vitali [id]=this.paziente._id></app-parametri-vitali>
+            <app-parametri-vitali [id]=this.paziente._id [saveEvent]="saveParametriVitali"></app-parametri-vitali>
           </mat-tab>
 
           <mat-tab label="Esiti esami">
