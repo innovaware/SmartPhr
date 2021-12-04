@@ -13,3 +13,9 @@
   text-align: right;
 
 }
+
+.st {
+  border-radius: 6px;
+  background: #03b900a8;
+  margin-top: 4px;
+}

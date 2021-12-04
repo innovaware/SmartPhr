@@ -13,65 +13,65 @@
         <mat-tab label="Dati">
 
           <table>
-            <thead style="background: gray; font-weight: bold;">
+            <thead style="background: #ff000099; font-weight: bold;">
               <td></td>
-              <td>PA/FC</td>
-              <td>TC</td>
-              <td>SPO2</td>
-              <td>DIURESI</td>
-              <td>GLIC</td>
-              <td>ANNOTAZIONI</td>
+              <td class="center title">PA/FC</td>
+              <td class="center title">TC</td>
+              <td class="center title">SPO2</td>
+              <td class="center title">DIURESI</td>
+              <td class="center title">GLIC</td>
+              <td class="center title">ANNOTAZIONI</td>
             </thead>
             <thead style="background: #808080a8; font-weight: bold;">
               <td>g/h</td>
               <td>
                 <table class="table-header">
                   <tr>
-                    <td class="item">8</td>
-                    <td class="item">12</td>
-                    <td class="item">16</td>
-                    <td class="item">20</td>
+                    <td class="item center title without-border">8</td>
+                    <td class="item center title without-border">12</td>
+                    <td class="item center title without-border">16</td>
+                    <td class="item center title without-border">20</td>
                   </tr>
                 </table>
               </td>
               <td>
                 <table class="table-header">
                   <tr>
-                    <td class="item">8</td>
-                    <td class="item">11</td>
-                    <td class="item">14</td>
-                    <td class="item">17</td>
-                    <td class="item">20</td>
+                    <td class="item center title without-border">8</td>
+                    <td class="item center title without-border">11</td>
+                    <td class="item center title without-border">14</td>
+                    <td class="item center title without-border">17</td>
+                    <td class="item center title without-border">20</td>
                   </tr>
                 </table>
               </td>
               <td>
                 <table class="table-header">
                   <tr>
-                    <td class="item">8</td>
-                    <td class="item">12</td>
-                    <td class="item">16</td>
-                    <td class="item">20</td>
+                    <td class="item center title without-border">8</td>
+                    <td class="item center title without-border">12</td>
+                    <td class="item center title without-border">16</td>
+                    <td class="item center title without-border">20</td>
                   </tr>
                 </table>
               </td>
               <td>
                 <table class="table-header">
                   <tr>
-                    <td class="item">8</td>
-                    <td class="item">12</td>
-                    <td class="item">16</td>
-                    <td class="item">20</td>
+                    <td class="item center title without-border">8</td>
+                    <td class="item center title without-border">12</td>
+                    <td class="item center title without-border">16</td>
+                    <td class="item center title without-border">20</td>
                   </tr>
                 </table>
               </td>
               <td>
                 <table class="table-header">
                   <tr>
-                    <td class="item">8</td>
-                    <td class="item">12</td>
-                    <td class="item">16</td>
-                    <td class="item">20</td>
+                    <td class="item center title without-border">8</td>
+                    <td class="item center title without-border">12</td>
+                    <td class="item center title without-border">16</td>
+                    <td class="item center title without-border">20</td>
                   </tr>
                 </table>
               </td>
@@ -80,11 +80,11 @@
 
             <tbody>
               <tr *ngFor="let item of this.paramVitali">
-                <td>{{item.gg}}  </td>
+                <td style="background-color: rgb(250, 217, 198);">{{item.gg}}  </td>
                 <td>
-                  <table style="margin:unset">
+                  <table style="margin:unset; border: unset">
                     <tr>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.pa[0])" *ngIf="!item.pa[0].modify">
                           <div *ngIf="checkVisible(item.pa[0].x)">
                             <label>{{item.pa[0].y}}</label>
@@ -96,7 +96,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.pa[1])" *ngIf="!item.pa[1].modify">
                           <div *ngIf="checkVisible(item.pa[1].x)">
                             <label>{{item.pa[1].y}}</label>
@@ -108,7 +108,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.pa[2])" *ngIf="!item.pa[2].modify">
                           <div *ngIf="checkVisible(item.pa[2].x)">
                             <label>{{item.pa[2].y}}</label>
@@ -120,7 +120,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.pa[3])" *ngIf="!item.pa[3].modify">
                           <div *ngIf="checkVisible(item.pa[3].x)">
                             <label>{{item.pa[3].y}}</label>
@@ -135,10 +135,10 @@
                   </table>
                 </td>
                 <td>
-                  <table style="margin:unset">
+                  <table style="margin:unset; border: unset">
                     <tr>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.tc[0])" *ngIf="!item.tc[0].modify">
                           <div *ngIf="checkVisible(item.tc[0].x)">
                             <label>{{item.tc[0].y}}</label>
@@ -151,7 +151,7 @@
                       </td>
 
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.tc[1])" *ngIf="!item.tc[1].modify">
                           <div *ngIf="checkVisible(item.tc[1].x)">
                             <label>{{item.tc[1].y}}</label>
@@ -164,7 +164,7 @@
                       </td>
 
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.tc[2])" *ngIf="!item.tc[2].modify">
                           <div *ngIf="checkVisible(item.tc[2].x)">
                             <label>{{item.tc[2].y}}</label>
@@ -175,7 +175,7 @@
                             (change)="chanceValue(item.tc[2])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.tc[3])" *ngIf="!item.tc[3].modify">
                           <div *ngIf="checkVisible(item.tc[3].x)">
                             <label>{{item.tc[3].y}}</label>
@@ -186,7 +186,7 @@
                             (change)="chanceValue(item.tc[3])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.tc[4])" *ngIf="!item.tc[4].modify">
                           <div *ngIf="checkVisible(item.tc[4].x)">
                             <label>{{item.tc[4].y}}</label>
@@ -201,9 +201,9 @@
                   </table>
                 </td>
                 <td>
-                  <table style="margin:unset">
+                  <table style="margin:unset; border: unset">
                     <tr>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.spo2[0])" *ngIf="!item.spo2[0].modify">
                           <div *ngIf="checkVisible(item.spo2[0].x)">
                             <label>{{item.spo2[0].y}}</label>
@@ -214,7 +214,7 @@
                             (change)="chanceValue(item.spo2[0])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.spo2[1])" *ngIf="!item.spo2[1].modify">
                           <div *ngIf="checkVisible(item.spo2[1].x)">
                             <label>{{item.spo2[1].y}}</label>
@@ -225,7 +225,7 @@
                             (change)="chanceValue(item.spo2[1])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.spo2[2])" *ngIf="!item.spo2[2].modify">
                           <div *ngIf="checkVisible(item.spo2[2].x)">
                             <label>{{item.spo2[2].y}}</label>
@@ -236,7 +236,7 @@
                             (change)="chanceValue(item.spo2[2])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.spo2[3])" *ngIf="!item.spo2[3].modify">
                           <div *ngIf="checkVisible(item.spo2[3].x)">
                             <label>{{item.spo2[3].y}}</label>
@@ -251,9 +251,9 @@
                   </table>
                 </td>
                 <td>
-                  <table style="margin:unset">
+                  <table style="margin:unset; border: unset">
                     <tr>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.diurisi[0])" *ngIf="!item.diurisi[0].modify">
                           <div *ngIf="checkVisible(item.diurisi[0].x)">
                             <label>{{item.diurisi[0].y}}</label>
@@ -264,7 +264,7 @@
                             (change)="chanceValue(item.diurisi[0])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.diurisi[1])" *ngIf="!item.diurisi[1].modify">
                           <div *ngIf="checkVisible(item.diurisi[1].x)">
                             <label>{{item.diurisi[1].y}}</label>
@@ -275,7 +275,7 @@
                             (change)="chanceValue(item.diurisi[1])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.diurisi[2])" *ngIf="!item.diurisi[2].modify">
                           <div *ngIf="checkVisible(item.diurisi[2].x)">
                             <label>{{item.diurisi[2].y}}</label>
@@ -286,7 +286,7 @@
                             (change)="chanceValue(item.diurisi[2])">
                         </div>
                       </td>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.diurisi[3])" *ngIf="!item.diurisi[3].modify">
                           <div *ngIf="checkVisible(item.diurisi[3].x)">
                             <label>{{item.diurisi[3].y}}</label>
@@ -301,9 +301,9 @@
                   </table>
                 </td>
                 <td>
-                  <table style="margin:unset">
+                  <table style="margin:unset; border: unset">
                     <tr>
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.glic[0])" *ngIf="!item.glic[0].modify">
                           <div *ngIf="checkVisible(item.glic[0].x)">
                             <label>{{item.glic[0].y}}</label>
@@ -315,7 +315,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.glic[1])" *ngIf="!item.glic[1].modify">
                           <div *ngIf="checkVisible(item.glic[1].x)">
                             <label>{{item.glic[1].y}}</label>
@@ -327,7 +327,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.glic[2])" *ngIf="!item.glic[2].modify">
                           <div *ngIf="checkVisible(item.glic[2].x)">
                             <label>{{item.glic[2].y}}</label>
@@ -339,7 +339,7 @@
                         </div>
                       </td>
 
-                      <td class="item">
+                      <td class="item center without-border">
                         <div (click)="modifyParam(item.glic[3])" *ngIf="!item.glic[3].modify">
                           <div *ngIf="checkVisible(item.glic[3].x)">
                             <label>{{item.glic[3].y}}</label>
@@ -355,7 +355,8 @@
                   </table>
                 </td>
                 <td>
-                  {{item.annotazioni}}</td>
+                  <input [(ngModel)]="item.annotazioni" >
+                </td>
               </tr>
             </tbody>
           </table>

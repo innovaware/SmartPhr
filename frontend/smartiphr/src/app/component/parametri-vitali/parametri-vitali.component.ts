@@ -187,7 +187,7 @@ export class ParametriVitaliComponent implements OnInit {
       .map((x) => {
         return {
           giorno: x.gg,
-          values: x[label],
+          values: x[label].filter( item=> item.y >= 0),
           label: label.toUpperCase(),
         };
       })

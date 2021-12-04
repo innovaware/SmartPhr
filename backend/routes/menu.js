@@ -31,5 +31,43 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (data == undefined || data === "undefined") {
+      console.log("Error data is not defined ", id);
+      res.status(404).json({ Error: "Data not defined" });
+      return;
+    }
+
+    const result = await Menu.updateOne(
+      { _id: id },
+      {
+        $set: data,
+      },
+      { upsert: true }
+    );
+
+
+    res.status(200);
+    res.json(result);
+
+    const searchTerm = `MENU*`;
+    client.del(searchTerm);
+
+  } catch (err) {
+    res.status(500);
+    res.json({"Error": err});
+  }
+});
+
 
 module.exports = router;

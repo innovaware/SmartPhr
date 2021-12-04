@@ -92,7 +92,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public addingImpegnativa: boolean;
 
 
-  
+
   constructor(
     public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
     public pazienteService: PazienteService,
@@ -160,7 +160,9 @@ export class DialogCartellaClinicaComponent implements OnInit {
 
   }
 
-
+  async showDocument(documento) {
+    //TODO
+  }
 
   async salva(){
 
@@ -194,19 +196,6 @@ export class DialogCartellaClinicaComponent implements OnInit {
       });
   }
 
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
   // PIANI TERAPEUTICI
   async addPianoTerapeutico() {
     this.addingPianoTerapeutico = true;
@@ -227,7 +216,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
       this.nuovoPianoTerapeutico.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -251,11 +240,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.pianiTerapeuticiDataSource.data = this.pianiTerapeutici;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async savePianoTerapeutico(doc: DocumentoPaziente) {
     const typeDocument = "PianoTerapeutico";
     const path = "PianoTerapeutico";
@@ -288,13 +277,13 @@ export class DialogCartellaClinicaComponent implements OnInit {
           console.log("Uploading completed: ", x);
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
         });
     })
     .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
+      this.messageService.showMessageError("Errore Inserimento fattura");
       console.error(err);
     });
   }
@@ -312,7 +301,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.pianiTerapeuticiDataSource.paginator = this.PianiTerapeuticiPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista PianoTerapeutico");
+        this.messageService.showMessageError("Errore caricamento lista PianoTerapeutico");
         console.error(err);
       });
   }
@@ -325,7 +314,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
 
 
 
-   // REFERTI ESAMI STRUMENTALI 
+   // REFERTI ESAMI STRUMENTALI
    async addRefertoEsameStrumentale() {
     this.addingRefertoEsameStrumentale = true;
     this.nuovoRefertoEsameStrumentale = {
@@ -345,7 +334,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
       this.nuovoRefertoEsameStrumentale.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -369,11 +358,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.refertiEsamiStrumentaliDataSource.data = this.refertiEsamiStrumentali;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async saveRefertoEsameStrumentale(doc: DocumentoPaziente) {
     const typeDocument = "RefertoEsameStrumentale";
     const path = "RefertoEsameStrumentale";
@@ -406,13 +395,13 @@ export class DialogCartellaClinicaComponent implements OnInit {
           console.log("Uploading completed: ", x);
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
         });
     })
     .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
+      this.messageService.showMessageError("Errore Inserimento fattura");
       console.error(err);
     });
   }
@@ -430,19 +419,19 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.refertiEsamiStrumentaliDataSource.paginator = this.RefertiEsamiStrumentaliPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista RefertoEsameStrumentale");
+        this.messageService.showMessageError("Errore caricamento lista RefertoEsameStrumentale");
         console.error(err);
       });
   }
 
 
-  // FINE REFERTI ESAMI STRUMENTALI 
+  // FINE REFERTI ESAMI STRUMENTALI
 
 
 
 
 
-  // REFERTI ESAMI EMAOCHIMIC 
+  // REFERTI ESAMI EMAOCHIMIC
   async addRefertoEsameEmatochimico() {
     this.addingRefertoEsameEmatochimico = true;
     this.nuovoRefertoEsameEmatochimico = {
@@ -462,7 +451,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
       this.nuovoRefertoEsameEmatochimico.file = file;
 
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
@@ -486,11 +475,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.refertiEsamiEmatochimiciDataSource.data = this.refertiEsamiEmatochimici;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async saveRefertoEsameEmatochimico(doc: DocumentoPaziente) {
     const typeDocument = "RefertoEsameEmatochimico";
     const path = "RefertoEsameEmatochimico";
@@ -523,13 +512,13 @@ export class DialogCartellaClinicaComponent implements OnInit {
           console.log("Uploading completed: ", x);
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
         });
     })
     .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
+      this.messageService.showMessageError("Errore Inserimento fattura");
       console.error(err);
     });
   }
@@ -547,17 +536,17 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.refertiEsamiEmatochimiciDataSource.paginator = this.RefertiEsamiEmatochimiciPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista RefertoEsameEmatochimico");
+        this.messageService.showMessageError("Errore caricamento lista RefertoEsameEmatochimico");
         console.error(err);
       });
   }
 
 
-  // FINE REFERTI ESAMI EMATOCHIMICI 
+  // FINE REFERTI ESAMI EMATOCHIMICI
 
 
 
-    // RELAZIONI 
+    // RELAZIONI
     async addRelazione() {
       this.addingRelazione = true;
       this.nuovoRelazione = {
@@ -566,27 +555,27 @@ export class DialogCartellaClinicaComponent implements OnInit {
         type: 'Relazione'
       };
     }
-  
+
     async uploadRelazione($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
-  
+
         console.log("upload Relazione: ", $event);
         this.nuovoRelazione.filename = file.name;
         this.nuovoRelazione.file = file;
-  
+
       } else {
-        this.showMessageError("File non valido");
+        this.messageService.showMessageError("File non valido");
         console.error("File non valido o non presente");
       }
     }
-  
-  
-  
+
+
+
     async deleteRelazione(doc: DocumentoPaziente) {
       console.log("Cancella Relazione: ", doc);
-  
+
       this.docService
         .remove(doc)
         .then((x) => {
@@ -596,22 +585,22 @@ export class DialogCartellaClinicaComponent implements OnInit {
           if (index > -1) {
             this.relazioni.splice(index, 1);
           }
-  
+
           console.log("Relazione cancellato: ", this.relazioni);
           this.relazioniDataSource.data = this.relazioni;
         })
         .catch((err) => {
-          this.showMessageError("Errore nella cancellazione doc identita");
+          this.messageService.showMessageError("Errore nella cancellazione doc identita");
           console.error(err);
         });
     }
-    
+
     async saveRelazione(doc: DocumentoPaziente) {
       const typeDocument = "Relazione";
       const path = "Relazione";
       const file: File = doc.file;
       this.uploadingRelazione = true;
-  
+
       console.log("Invio Relazione: ", doc);
       this.docService
       .insert(doc, this.paziente)
@@ -621,11 +610,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
         this.relazioniDataSource.data = this.relazioni;
         this.addingRelazione = false;
         this.uploadingRelazione = false;
-  
+
         let formData: FormData = new FormData();
-  
+
         const nameDocument: string = doc.filename;
-  
+
         formData.append("file", file);
         formData.append("typeDocument", typeDocument);
         formData.append("path", `${this.paziente._id}/${path}`);
@@ -634,46 +623,46 @@ export class DialogCartellaClinicaComponent implements OnInit {
           .uploadDocument(formData)
           .then((x) => {
             this.uploading = false;
-  
+
             console.log("Uploading completed: ", x);
           })
           .catch((err) => {
-            this.showMessageError("Errore nel caricamento file");
+            this.messageService.showMessageError("Errore nel caricamento file");
             console.error(err);
             this.uploading = false;
           });
       })
       .catch((err) => {
-        this.showMessageError("Errore Inserimento fattura");
+        this.messageService.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
     }
-  
-  
-  
+
+
+
     async getRelazioni() {
       console.log(`get Relazioni paziente: ${this.paziente._id}`);
       this.docService
         .get(this.paziente, 'Relazione')
         .then((f: DocumentoPaziente[]) => {
           this.relazioni = f;
-  
+
           this.relazioniDataSource = new MatTableDataSource<DocumentoPaziente>(this.relazioni);
           this.relazioniDataSource.paginator = this.RelazioniPaginator;
         })
         .catch((err) => {
-          this.showMessageError("Errore caricamento lista Relazione");
+          this.messageService.showMessageError("Errore caricamento lista Relazione");
           console.error(err);
         });
     }
-  
-  
-    // FINE RELAZIONI 
+
+
+    // FINE RELAZIONI
 
 
 
 
-        // VERBALI 
+        // VERBALI
         async addVerbale() {
           this.addingVerbale = true;
           this.nuovoVerbale = {
@@ -682,27 +671,27 @@ export class DialogCartellaClinicaComponent implements OnInit {
             type: 'Verbale'
           };
         }
-      
+
         async uploadVerbale($event) {
           let fileList: FileList = $event.target.files;
           if (fileList.length > 0) {
             let file: File = fileList[0];
-      
+
             console.log("upload Verbale: ", $event);
             this.nuovoVerbale.filename = file.name;
             this.nuovoVerbale.file = file;
-      
+
           } else {
-            this.showMessageError("File non valido");
+            this.messageService.showMessageError("File non valido");
             console.error("File non valido o non presente");
           }
         }
-      
-      
-      
+
+
+
         async deleteVerbale(doc: DocumentoPaziente) {
           console.log("Cancella Verbale: ", doc);
-      
+
           this.docService
             .remove(doc)
             .then((x) => {
@@ -712,22 +701,22 @@ export class DialogCartellaClinicaComponent implements OnInit {
               if (index > -1) {
                 this.verbali.splice(index, 1);
               }
-      
+
               console.log("Verbale cancellato: ", this.verbali);
               this.VerbaliDataSource.data = this.verbali;
             })
             .catch((err) => {
-              this.showMessageError("Errore nella cancellazione doc identita");
+              this.messageService.showMessageError("Errore nella cancellazione doc identita");
               console.error(err);
             });
         }
-        
+
         async saveVerbale(doc: DocumentoPaziente) {
           const typeDocument = "Verbale";
           const path = "Verbale";
           const file: File = doc.file;
           this.uploadingVerbale = true;
-      
+
           console.log("Invio Verbale: ", doc);
           this.docService
           .insert(doc, this.paziente)
@@ -737,11 +726,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
             this.VerbaliDataSource.data = this.verbali;
             this.addingVerbale = false;
             this.uploadingVerbale = false;
-      
+
             let formData: FormData = new FormData();
-      
+
             const nameDocument: string = doc.filename;
-      
+
             formData.append("file", file);
             formData.append("typeDocument", typeDocument);
             formData.append("path", `${this.paziente._id}/${path}`);
@@ -750,45 +739,45 @@ export class DialogCartellaClinicaComponent implements OnInit {
               .uploadDocument(formData)
               .then((x) => {
                 this.uploading = false;
-      
+
                 console.log("Uploading completed: ", x);
               })
               .catch((err) => {
-                this.showMessageError("Errore nel caricamento file");
+                this.messageService.showMessageError("Errore nel caricamento file");
                 console.error(err);
                 this.uploading = false;
               });
           })
           .catch((err) => {
-            this.showMessageError("Errore Inserimento fattura");
+            this.messageService.showMessageError("Errore Inserimento fattura");
             console.error(err);
           });
         }
-      
-      
-      
+
+
+
         async getVerbali() {
           console.log(`get verbali paziente: ${this.paziente._id}`);
           this.docService
             .get(this.paziente, 'Verbale')
             .then((f: DocumentoPaziente[]) => {
               this.verbali = f;
-      
+
               this.VerbaliDataSource = new MatTableDataSource<DocumentoPaziente>(this.verbali);
               this.VerbaliDataSource.paginator = this.VerbaliPaginator;
             })
             .catch((err) => {
-              this.showMessageError("Errore caricamento lista verbali");
+              this.messageService.showMessageError("Errore caricamento lista verbali");
               console.error(err);
             });
         }
-      
-      
-        // FINE VERBALI 
+
+
+        // FINE VERBALI
 
 
 
-        // VERBALI 
+        // VERBALI
         async addImpegnativa() {
           this.addingImpegnativa = true;
           this.nuovoImpegnativa = {
@@ -797,27 +786,27 @@ export class DialogCartellaClinicaComponent implements OnInit {
             type: 'Impegnativa'
           };
         }
-      
+
         async uploadImpegnativa($event) {
           let fileList: FileList = $event.target.files;
           if (fileList.length > 0) {
             let file: File = fileList[0];
-      
+
             console.log("upload Impegnativa: ", $event);
             this.nuovoImpegnativa.filename = file.name;
             this.nuovoImpegnativa.file = file;
-      
+
           } else {
-            this.showMessageError("File non valido");
+            this.messageService.showMessageError("File non valido");
             console.error("File non valido o non presente");
           }
         }
-      
-      
-      
+
+
+
         async deleteImpegnativa(doc: DocumentoPaziente) {
           console.log("Cancella Impegnativa: ", doc);
-      
+
           this.docService
             .remove(doc)
             .then((x) => {
@@ -827,22 +816,22 @@ export class DialogCartellaClinicaComponent implements OnInit {
               if (index > -1) {
                 this.impegnative.splice(index, 1);
               }
-      
+
               console.log("Impegnativa cancellato: ", this.impegnative);
               this.impegnativeDataSource.data = this.impegnative;
             })
             .catch((err) => {
-              this.showMessageError("Errore nella cancellazione doc impegnativa");
+              this.messageService.showMessageError("Errore nella cancellazione doc impegnativa");
               console.error(err);
             });
         }
-        
+
         async saveImpegnativa(doc: DocumentoPaziente) {
           const typeDocument = "Impegnativa";
           const path = "Impegnativa";
           const file: File = doc.file;
           this.uploadingImpegnativa = true;
-      
+
           console.log("Invio Impegnativa: ", doc);
           this.docService
           .insert(doc, this.paziente)
@@ -852,11 +841,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
             this.impegnativeDataSource.data = this.impegnative;
             this.addingImpegnativa = false;
             this.uploadingImpegnativa = false;
-      
+
             let formData: FormData = new FormData();
-      
+
             const nameDocument: string = doc.filename;
-      
+
             formData.append("file", file);
             formData.append("typeDocument", typeDocument);
             formData.append("path", `${this.paziente._id}/${path}`);
@@ -865,45 +854,45 @@ export class DialogCartellaClinicaComponent implements OnInit {
               .uploadDocument(formData)
               .then((x) => {
                 this.uploading = false;
-      
+
                 console.log("Uploading completed: ", x);
               })
               .catch((err) => {
-                this.showMessageError("Errore nel caricamento file");
+                this.messageService.showMessageError("Errore nel caricamento file");
                 console.error(err);
                 this.uploading = false;
               });
           })
           .catch((err) => {
-            this.showMessageError("Errore Inserimento fattura");
+            this.messageService.showMessageError("Errore Inserimento fattura");
             console.error(err);
           });
         }
-      
-      
-      
+
+
+
         async getImpegnative() {
           console.log(`get Impegnative paziente: ${this.paziente._id}`);
           this.docService
             .get(this.paziente, 'Verbale')
             .then((f: DocumentoPaziente[]) => {
               this.impegnative = f;
-      
+
               this.impegnativeDataSource = new MatTableDataSource<DocumentoPaziente>(this.impegnative);
               this.impegnativeDataSource.paginator = this.ImpegnativePaginator;
             })
             .catch((err) => {
-              this.showMessageError("Errore caricamento lista impegnative");
+              this.messageService.showMessageError("Errore caricamento lista impegnative");
               console.error(err);
             });
         }
-      
-      
-        // FINE IMPEGNATIVE 
+
+
+        // FINE IMPEGNATIVE
 
 
 
 
 
-        
+
 }

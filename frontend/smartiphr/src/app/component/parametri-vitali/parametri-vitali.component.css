@@ -11,7 +11,7 @@ table {
 
 
 .item {
-  width: 20px;
+  width: 30px;
   height: 20px;
 }
 
@@ -24,4 +24,20 @@ table {
 .table-header {
   margin: unset;
   border: unset;
+}
+
+
+.center {
+  text-align: center;
+}
+
+.without-border {
+  /* border: unset; */
+  border-bottom: 0px;
+  border-top: 0px;
+  border-left: 0px;
+}
+
+.title {
+  font-weight: bold;
 }
