@@ -35,6 +35,8 @@ import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-a
 import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component';
 import { VisiteSpecialisticheComponent } from './component/medica/visite-specialistiche/visite-specialistiche.component';
 import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
+import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
+import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -83,6 +85,8 @@ const routes: Routes = [
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_esami_strumentali", component: ArchiviEsitoStrumentaleComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_referti_ematochimici", component: ArchiviRefertiEmatochimiciComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
 

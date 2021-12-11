@@ -7,7 +7,9 @@ const DocPazienteSchema = mongoose.Schema({
   note: String,
   type: String,
   descrizione: String,
-  filenameesito: String
+  filenameesito: String,
+  cancellato: Boolean,
+  dataCancellazione: Date,
 });
 
 module.exports = mongoose.model(

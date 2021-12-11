@@ -1,7 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
 import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
-import { DocumentoAutorizzazioneUscita } from "src/app/models/documentoAutorizzazioneUscita";
+import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { DocumentiService } from "src/app/service/documenti.service";
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -19,10 +19,10 @@ export class AutorizzazioneUscitaComponent implements OnInit {
 
   addingDocument: boolean = false;
   uploadingDocumento: boolean = false;
-  nuovoDocumento: DocumentoAutorizzazioneUscita;
-  documenti: DocumentoAutorizzazioneUscita[];
+  nuovoDocumento: DocumentoPaziente;
+  documenti: DocumentoPaziente[];
 
-  public documentiDataSource: MatTableDataSource<DocumentoAutorizzazioneUscita>;
+  public documentiDataSource: MatTableDataSource<DocumentoPaziente>;
   @ViewChild("paginatorDocumenti", { static: false })  documentiPaginator: MatPaginator;
   documentiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
@@ -41,7 +41,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
 
   AddDocument() {
     this.addingDocument = true;
-    this.nuovoDocumento = new DocumentoAutorizzazioneUscita();
+    this.nuovoDocumento = new DocumentoPaziente();
   }
 
   uploadDocumento($event) {
@@ -58,7 +58,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     }
   }
 
-  saveDocumento(doc: DocumentoAutorizzazioneUscita) {
+  saveDocumento(doc: DocumentoPaziente) {
     if (doc.file == undefined) {
       this.messageService.showMessageError("Selezionare un file");
       return;
@@ -72,7 +72,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     this.docService
       .insertAutorizzazioneUscita(this.id, doc)
       .subscribe(
-        (result: DocumentoAutorizzazioneUscita) => {
+        (result: DocumentoPaziente) => {
           console.log("Insert documento: ", result);
 
           let formData: FormData = new FormData();
@@ -112,11 +112,11 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     this.docService
     .getAutorizzazioneUscita(this.id)
     .subscribe(
-      (result: DocumentoAutorizzazioneUscita[]) => {
+      (result: DocumentoPaziente[]) => {
         console.log("Loaded document: ", result);
         this.documenti = result;
 
-        this.documentiDataSource = new MatTableDataSource<DocumentoAutorizzazioneUscita>(this.documenti);
+        this.documentiDataSource = new MatTableDataSource<DocumentoPaziente>(this.documenti);
         this.documentiDataSource.paginator = this.documentiPaginator;
       },
       (err) => {
@@ -126,7 +126,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     );
   }
 
-  async showDocument(documento: DocumentoAutorizzazioneUscita) {
+  async showDocument(documento: DocumentoPaziente) {
     this.uploadService
       .download(documento.filename, this.id, this.typeDocument)
       .then((x) => {
@@ -155,7 +155,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
       });
   }
 
-  deleteDocument(documento: DocumentoAutorizzazioneUscita) {
+  deleteDocument(documento: DocumentoPaziente) {
     console.log("Cancella documento: ", documento);
 
     this.docService

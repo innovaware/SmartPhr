@@ -1,7 +1,7 @@
 import { HttpClient } from "@angular/common/http";
-import { parseTemplate } from '@angular/compiler';
+import { parseTemplate } from "@angular/compiler";
 import { Injectable } from "@angular/core";
-import { Moment } from 'moment';
+import { Moment } from "moment";
 import { Observable } from "rxjs";
 import { flatMap, map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
@@ -9,6 +9,7 @@ import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { DocumentoAutorizzazioneUscita } from "../models/documentoAutorizzazioneUscita";
 import { DocumentoEsitoStrumentale } from "../models/documentoEsitoStrumentale";
+import { DocumentoPaziente } from "../models/documentoPaziente";
 import { ParametriVitali } from "../models/parametriVitali";
 import { Paziente } from "../models/paziente";
 
@@ -48,32 +49,30 @@ export class PazienteService {
 
   insertAutorizzazioneUscita(
     id: string,
-    doc: DocumentoAutorizzazioneUscita
-  ): Observable<DocumentoAutorizzazioneUscita> {
+    doc: DocumentoPaziente
+  ): Observable<DocumentoPaziente> {
     var body = doc;
-    return this.http.post<DocumentoAutorizzazioneUscita>(
-      `${this.api}/api/pazienti/autorizzazioneUscita/${id}`,
+    return this.http.post<DocumentoPaziente>(
+      `${this.api}/api/documentipazienti/autorizzazioneUscita/${id}`,
       body
     );
   }
 
   deleteAutorizzazioneUscita(idDoc: string) {
     return this.http.delete(
-      `${this.api}/api/pazienti/autorizzazioneUscita/${idDoc}`
+      `${this.api}/api/documentipazienti/autorizzazioneUscita/${idDoc}`
     );
   }
 
-  getAutorizzazioneUscita(
-    id: string
-  ): Observable<DocumentoAutorizzazioneUscita[]> {
-    return this.http.get<DocumentoAutorizzazioneUscita[]>(
-      `${this.api}/api/pazienti/autorizzazioneUscita/${id}`
+  getAutorizzazioneUscita(id: string): Observable<DocumentoPaziente[]> {
+    return this.http.get<DocumentoPaziente[]>(
+      `${this.api}/api/documentipazienti/autorizzazioneUscita/${id}`
     );
   }
 
   delete(paziente: Paziente): Observable<Paziente> {
     return this.http.delete<Paziente>(
-      this.api + "/api/pazienti/" + paziente._id
+      this.api + "/api/documentipazienti/" + paziente._id
     );
   }
 
@@ -81,32 +80,45 @@ export class PazienteService {
 
   insertEsitoStrumentale(
     id: string,
-    doc: DocumentoEsitoStrumentale
-  ): Observable<DocumentoEsitoStrumentale> {
+    doc: DocumentoPaziente
+  ): Observable<DocumentoPaziente> {
     var body = doc;
-    return this.http.post<DocumentoEsitoStrumentale>(
-      `${this.api}/api/pazienti/esitoStrumentale/${id}`,
+    return this.http.post<DocumentoPaziente>(
+      `${this.api}/api/documentipazienti/esitoStrumentale/${id}`,
       body
     );
   }
 
-  getEsitoStrumentale(id: string): Observable<DocumentoEsitoStrumentale[]> {
-    return this.http.get<DocumentoEsitoStrumentale[]>(
-      `${this.api}/api/pazienti/esitoStrumentale/${id}`
+  getEsitoStrumentaleAll(): Observable<DocumentoPaziente[]> {
+    return this.http.get<DocumentoPaziente[]>(
+      `${this.api}/api/documentipazienti/esitoStrumentale/all`
+    );
+  }
+
+  getEsitoStrumentale(id: string): Observable<DocumentoPaziente[]> {
+    return this.http.get<DocumentoPaziente[]>(
+      `${this.api}/api/documentipazienti/esitoStrumentale/${id}`
     );
   }
 
   deleteEsitoStrumentale(idDoc: string) {
     return this.http.delete(
-      `${this.api}/api/pazienti/esitoStrumentale/${idDoc}`
+      `${this.api}/api/documentipazienti/esitoStrumentale/${idDoc}`
     );
   }
 
   // PARAMETRI VITALI
 
-  getParametriVitali(id: string, dateRif: Moment): Observable<ParametriVitali[]> {
+  getParametriVitali(
+    id: string,
+    dateRif: Moment
+  ): Observable<ParametriVitali[]> {
     return this.http
-      .get<ParametriVitali[]>(`${this.api}/api/pazienti/parametriVitali/${id}/${dateRif.format('YYYYMM')}`)
+      .get<ParametriVitali[]>(
+        `${this.api}/api/pazienti/parametriVitali/${id}/${dateRif.format(
+          "YYYYMM"
+        )}`
+      )
       .pipe(
         flatMap((x) => x),
         map((x) => x["data"]),
@@ -143,10 +155,40 @@ export class PazienteService {
       );
   }
 
-  updateParametriVitali(id: string, data: ParametriVitali[], dateRif: Moment): Observable<any> {
+  updateParametriVitali(
+    id: string,
+    data: ParametriVitali[],
+    dateRif: Moment
+  ): Observable<any> {
     return this.http.put<any>(
-      `${this.api}/api/pazienti/parametriVitali/${id}/${dateRif.format('YYYYMM')}`,
+      `${this.api}/api/pazienti/parametriVitali/${id}/${dateRif.format(
+        "YYYYMM"
+      )}`,
       data
     );
+  }
+
+  getDocumentByType(typeDocument: string): Observable<DocumentoPaziente[]> {
+    console.log("typedocument: ", typeDocument);
+    switch (typeDocument) {
+      case "EsitoStrumentale":
+        return this.http.get<DocumentoPaziente[]>(
+          `${this.api}/api/documentipazienti/esitoStrumentale/all`
+        );
+      case "AutorizzazioneUscita":
+        return this.http.get<DocumentoPaziente[]>(
+          `${this.api}/api/documentipazienti/autorizzazioneUscita/all`
+        );
+
+      case "RefertoEsameEmatochimico":
+        return this.http.get<DocumentoPaziente[]>(
+          `${this.api}/api/documentipazienti/refertoEmatochimico/all`
+        );
+
+      default:
+        return new Observable((observer) => {
+          observer.next([]);
+        });
+    }
   }
 }

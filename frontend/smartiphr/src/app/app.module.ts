@@ -139,6 +139,9 @@ import { ParametriVitaliComponent } from "./component/parametri-vitali/parametri
 import { ChartsModule, ThemeService } from "ng2-charts";
 import { SliderDateComponent } from "./component/slider-date/slider-date.component";
 import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
+import { ArchiveDocumentsComponent } from './component/archive-documents/archive-documents.component';
+import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
+import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
 
 @NgModule({
   declarations: [
@@ -231,6 +234,9 @@ import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-vi
     ParametriVitaliComponent,
     SliderDateComponent,
     ArchiviVisiteSpecialisticheComponent,
+    ArchiveDocumentsComponent,
+    ArchiviEsitoStrumentaleComponent,
+    ArchiviRefertiEmatochimiciComponent,
   ],
   imports: [
     BrowserModule,

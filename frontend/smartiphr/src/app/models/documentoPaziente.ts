@@ -2,7 +2,11 @@ export class DocumentoPaziente {
     static clone(obj: DocumentoPaziente) {
       return JSON.parse(JSON.stringify(obj));
     }
-  
+
+    /**
+     * Id Paziente
+     */
+    paziente: string;
     _id?: string;
     type: string;
     filename: string;
@@ -12,4 +16,3 @@ export class DocumentoPaziente {
     filenameesito?: string;
     file?: File;
   }
-  

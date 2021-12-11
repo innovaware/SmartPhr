@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DocumentoEsitoStrumentale } from 'src/app/models/documentoEsitoStrumentale';
+import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
 import { UploadService } from 'src/app/service/upload.service';
@@ -17,10 +17,10 @@ export class EsitiStrumentaliComponent implements OnInit {
 
   addingDocument: boolean = false;
   uploadingDocumento: boolean = false;
-  nuovoDocumento: DocumentoEsitoStrumentale;
-  documenti: DocumentoEsitoStrumentale[];
+  nuovoDocumento: DocumentoPaziente;
+  documenti: DocumentoPaziente[];
 
-  public documentiDataSource: MatTableDataSource<DocumentoEsitoStrumentale>;
+  public documentiDataSource: MatTableDataSource<DocumentoPaziente>;
   @ViewChild("paginatorDocumenti", { static: false })  documentiPaginator: MatPaginator;
   documentiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
@@ -39,7 +39,7 @@ export class EsitiStrumentaliComponent implements OnInit {
 
   AddDocument() {
     this.addingDocument = true;
-    this.nuovoDocumento = new DocumentoEsitoStrumentale();
+    this.nuovoDocumento = new DocumentoPaziente();
   }
 
   uploadDocumento($event) {
@@ -56,7 +56,7 @@ export class EsitiStrumentaliComponent implements OnInit {
     }
   }
 
-  saveDocumento(doc: DocumentoEsitoStrumentale) {
+  saveDocumento(doc: DocumentoPaziente) {
     if (doc.file == undefined) {
       this.messageService.showMessageError("Selezionare un file");
       return;
@@ -70,7 +70,7 @@ export class EsitiStrumentaliComponent implements OnInit {
     this.docService
       .insertEsitoStrumentale(this.id, doc)
       .subscribe(
-        (result: DocumentoEsitoStrumentale) => {
+        (result: DocumentoPaziente) => {
           console.log("Insert documento: ", result);
 
           let formData: FormData = new FormData();
@@ -110,11 +110,11 @@ export class EsitiStrumentaliComponent implements OnInit {
     this.docService
     .getEsitoStrumentale(this.id)
     .subscribe(
-      (result: DocumentoEsitoStrumentale[]) => {
+      (result: DocumentoPaziente[]) => {
         console.log("Loaded esiti strumentali: ", result);
         this.documenti = result;
 
-        this.documentiDataSource = new MatTableDataSource<DocumentoEsitoStrumentale>(this.documenti);
+        this.documentiDataSource = new MatTableDataSource<DocumentoPaziente>(this.documenti);
         this.documentiDataSource.paginator = this.documentiPaginator;
       },
       (err) => {
@@ -124,7 +124,7 @@ export class EsitiStrumentaliComponent implements OnInit {
     );
   }
 
-  async showDocument(documento: DocumentoEsitoStrumentale) {
+  async showDocument(documento: DocumentoPaziente) {
     this.uploadService
       .download(documento.filename, this.id, this.typeDocument)
       .then((x) => {
@@ -153,7 +153,7 @@ export class EsitiStrumentaliComponent implements OnInit {
       });
   }
 
-  deleteDocument(documento: DocumentoEsitoStrumentale) {
+  deleteDocument(documento: DocumentoPaziente) {
     console.log("Cancella documento: ", documento);
 
     this.docService
