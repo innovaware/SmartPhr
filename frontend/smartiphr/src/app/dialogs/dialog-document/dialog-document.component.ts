@@ -18,6 +18,7 @@ import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
+import { MessagesService } from 'src/app/service/messages.service';
 
 
 @Component({
@@ -65,6 +66,7 @@ export class DialogDocumentComponent implements OnInit {
 
 
   constructor(
+    public messageService: MessagesService,
     public uploadService: UploadService,
     public dialogRef: MatDialogRef<DipendenteGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -129,25 +131,13 @@ export class DialogDocumentComponent implements OnInit {
 
         })
         .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
+          this.messageService.showMessageError("Errore nel caricamento file");
           console.error(err);
           this.uploading = false;
           this.document[typeDocument].uploading = false;
           this.document[typeDocument].error = true;
         });
     }
-  }
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
   }
 
 

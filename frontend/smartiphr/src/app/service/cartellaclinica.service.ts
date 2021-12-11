@@ -1,24 +1,26 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { environment } from 'src/environments/environment';
+import { environment } from "src/environments/environment";
 import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { Paziente } from "../models/paziente";
-import { Dipendenti } from '../models/dipendenti';
+import { Dipendenti } from "../models/dipendenti";
 import { DiarioClinico } from "../models/diarioClinico";
 import { VisiteSpecialistiche } from "../models/visiteSpecialistiche";
+import { Observable } from 'rxjs';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: "root",
 })
 export class CartellaclinicaService {
-
   api: string = environment.api;
 
   constructor(private http: HttpClient) {}
 
   async getById(id: string): Promise<CartellaClinica> {
-    return this.http.get<CartellaClinica>(`${this.api}/api/cartellaClinica/${id}`).toPromise();
+    return this.http
+      .get<CartellaClinica>(`${this.api}/api/cartellaClinica/${id}`)
+      .toPromise();
   }
 
   save(data: CartellaClinica): Promise<CartellaClinica> {
@@ -26,9 +28,8 @@ export class CartellaclinicaService {
     console.log("body: ", body);
     return this.http
       .put<CartellaClinica>(this.api + "/api/cartellaClinica", body)
-      .toPromise(); 
+      .toPromise();
   }
-
 
   insert(data: CartellaClinica): Promise<CartellaClinica> {
     var body = data;
@@ -37,11 +38,11 @@ export class CartellaclinicaService {
       .toPromise();
   }
 
-
-
   //DIARIO
   async getDiarioByUser(id: string): Promise<DiarioClinico[]> {
-    return this.http.get<DiarioClinico[]>(`${this.api}/api/diarioClinico/${id}`).toPromise();
+    return this.http
+      .get<DiarioClinico[]>(`${this.api}/api/diarioClinico/${id}`)
+      .toPromise();
   }
 
   saveDiario(data: DiarioClinico): Promise<DiarioClinico> {
@@ -52,7 +53,6 @@ export class CartellaclinicaService {
       .toPromise();
   }
 
-
   insertDiario(data: DiarioClinico): Promise<DiarioClinico> {
     var body = data;
     return this.http
@@ -60,21 +60,28 @@ export class CartellaclinicaService {
       .toPromise();
   }
 
+  //VISITE
 
+  getVisiteSpecialistiche(): Observable<VisiteSpecialistiche[]> {
+    return this.http.get<VisiteSpecialistiche[]>(`${this.api}/api/visiteSpecialistiche`)
+  }
 
-  //VISITE  
   async getVisiteByUser(id: string): Promise<VisiteSpecialistiche[]> {
-    return this.http.get<VisiteSpecialistiche[]>(`${this.api}/api/visiteSpecialistiche/${id}`).toPromise();
+    return this.http
+      .get<VisiteSpecialistiche[]>(`${this.api}/api/visiteSpecialistiche/${id}`)
+      .toPromise();
   }
 
   saveVisita(data: VisiteSpecialistiche): Promise<VisiteSpecialistiche> {
     var body = data;
     console.log("body: ", body);
     return this.http
-      .put<VisiteSpecialistiche>(this.api + "/api/visiteSpecialistiche/" + data.user, body)
+      .put<VisiteSpecialistiche>(
+        this.api + "/api/visiteSpecialistiche/" + data.user,
+        body
+      )
       .toPromise();
   }
-
 
   insertVisita(data: VisiteSpecialistiche): Promise<VisiteSpecialistiche> {
     var body = data;

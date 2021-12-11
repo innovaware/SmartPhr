@@ -28,11 +28,13 @@ import { BonificiFornitoriComponent } from './pages/bonifici-fornitori/bonifici-
 import { FattureSSRComponent } from './pages/fatture-ssr/fatture-ssr.component';
 import { FattureSSComponent } from './pages/fatture-ss/fatture-ss.component';
 
- 
+
 import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/anticipo-fatture-asp.component';
 import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
 import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
 import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component';
+import { VisiteSpecialisticheComponent } from './component/medica/visite-specialistiche/visite-specialistiche.component';
+import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -61,14 +63,14 @@ const routes: Routes = [
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
   { path: "fatture_fornitori", component: FattureFornitoriComponent, canActivate: [AuthGuard] },
   { path: "bonifici_fornitori", component: BonificiFornitoriComponent, canActivate: [AuthGuard] },
-  
+
   { path: "fatture_ssr", component: FattureSSRComponent, canActivate: [AuthGuard] },
   { path: "fatture_ss", component: FattureSSComponent, canActivate: [AuthGuard] },
-   
+
   { path: "anticipi_fatture_asp", component: AnticipoFattureASPComponent, canActivate: [AuthGuard] },
   { path: "note_credito_asp", component: NoteCreditoASPComponent, canActivate: [AuthGuard] },
   { path: "prospetto_mensile_asp", component: ProspettoCMASPComponent, canActivate: [AuthGuard] },
-  { path: "punto_fatture_asp", component: PuntoFattureASPComponent, canActivate: [AuthGuard] }, 
+  { path: "punto_fatture_asp", component: PuntoFattureASPComponent, canActivate: [AuthGuard] },
 
   { path: "gest_asp", component: AspComponent, canActivate: [AuthGuard]  },
   { path: "gest_cv", component: CvComponent, canActivate: [AuthGuard]  },
@@ -78,6 +80,9 @@ const routes: Routes = [
 
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
+
+  // ARCHIVI
+  { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
 

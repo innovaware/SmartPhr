@@ -7,6 +7,7 @@ import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { DiarioClinico } from 'src/app/models/diarioClinico';
 import { Paziente } from 'src/app/models/paziente';
 import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: 'app-diario-clinico',
@@ -26,6 +27,7 @@ export class DiarioClinicoComponent implements OnInit {
   public diarioClinicoDataSource: MatTableDataSource<DiarioClinico>;
 
   constructor(public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
+    public messageService: MessagesService,
     public cartellaclinicaService: CartellaclinicaService,
     public dialog: MatDialog,) { }
 
@@ -43,25 +45,11 @@ export class DiarioClinicoComponent implements OnInit {
         this.dataDiario = f;
         this.diarioClinicoDataSource = new MatTableDataSource<DiarioClinico>(this.dataDiario);
         this.diarioClinicoDataSource.paginator = this.diarioClinicoPaginator;
-  
+
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento diario");
+        this.messageService.showMessageError("Errore caricamento diario");
         console.error(err);
-      });
-  }
-
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
       });
   }
 

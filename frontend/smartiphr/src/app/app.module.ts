@@ -110,37 +110,35 @@ import { UploadComponent } from "./components/upload/upload.component";
 import { BasicAuthInterceptor } from "./_helpers/basic-auth.interceptor";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
 
-import { LoginComponent } from './pages/login/login.component';
-import { AuthGuardService } from './guard/auth-guard.service';
-import { TableDipendentiComponent } from './component/table-dipendenti/table-dipendenti.component';
-import { FerieComponent } from './component/ferie/ferie.component';
-import { PermessiComponent } from './component/permessi/permessi.component';
-import { TurnimensiliComponent } from './component/turnimensili/turnimensili.component';
-import { CambiturnoComponent } from './component/cambiturno/cambiturno.component';
-import { PresenzeComponent } from './component/presenze/presenze.component';
-import { FornitoreGeneraleComponent } from './component/fornitore-generale/fornitore-generale.component';
-import { DipendenteGeneraleComponent } from './component/dipendente-generale/dipendente-generale.component';
-import { DialogDocumentComponent } from './dialogs/dialog-document/dialog-document.component';
-import { TableDocumentComponent } from './component/table-document/table-document.component';
-import { CvComponent } from './pages/cv/cv.component';
-import { DialogCvComponent } from './dialogs/dialog-cv/dialog-cv.component';
-import { TableFattureFornitoriComponent } from './component/table-fatture-fornitori/table-fatture-fornitori.component';
-import { DialogCaricadocumentoComponent } from './dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
-import { DialogQuestionComponent } from './dialogs/dialog-question/dialog-question.component';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import { DialogDiarioClinicoComponent } from './dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
-import { DialogVisitespecialisticheComponent } from './dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component';
+import { LoginComponent } from "./pages/login/login.component";
+import { AuthGuardService } from "./guard/auth-guard.service";
+import { TableDipendentiComponent } from "./component/table-dipendenti/table-dipendenti.component";
+import { FerieComponent } from "./component/ferie/ferie.component";
+import { PermessiComponent } from "./component/permessi/permessi.component";
+import { TurnimensiliComponent } from "./component/turnimensili/turnimensili.component";
+import { CambiturnoComponent } from "./component/cambiturno/cambiturno.component";
+import { PresenzeComponent } from "./component/presenze/presenze.component";
+import { FornitoreGeneraleComponent } from "./component/fornitore-generale/fornitore-generale.component";
+import { DipendenteGeneraleComponent } from "./component/dipendente-generale/dipendente-generale.component";
+import { DialogDocumentComponent } from "./dialogs/dialog-document/dialog-document.component";
+import { TableDocumentComponent } from "./component/table-document/table-document.component";
+import { CvComponent } from "./pages/cv/cv.component";
+import { DialogCvComponent } from "./dialogs/dialog-cv/dialog-cv.component";
+import { TableFattureFornitoriComponent } from "./component/table-fatture-fornitori/table-fatture-fornitori.component";
+import { DialogCaricadocumentoComponent } from "./dialogs/dialog-caricadocumento/dialog-caricadocumento.component";
+import { DialogQuestionComponent } from "./dialogs/dialog-question/dialog-question.component";
+import { MatTooltipModule } from "@angular/material/tooltip";
+import { DialogDiarioClinicoComponent } from "./dialogs/dialog-diario-clinico/dialog-diario-clinico.component";
+import { DialogVisitespecialisticheComponent } from "./dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component";
 import { DiarioClinicoComponent } from "./component/medica/diario-clinico/diario-clinico.component";
 import { DialogInterventiComponent } from "./dialogs/dialog-interventi/dialog-interventi.component";
-import { AutorizzazioneUscitaComponent } from './component/autorizzazione-uscita/autorizzazione-uscita.component';
-import { DimissioniComponent } from './component/medica/dimissioni/dimissioni.component';
-import { EsitiStrumentaliComponent } from './component/esiti-strumentali/esiti-strumentali.component';
-import { ParametriVitaliComponent } from './component/parametri-vitali/parametri-vitali.component';
-import { ChartsModule, ThemeService } from 'ng2-charts';
-import { SliderDateComponent } from './component/slider-date/slider-date.component';
-
-
-
+import { AutorizzazioneUscitaComponent } from "./component/autorizzazione-uscita/autorizzazione-uscita.component";
+import { DimissioniComponent } from "./component/medica/dimissioni/dimissioni.component";
+import { EsitiStrumentaliComponent } from "./component/esiti-strumentali/esiti-strumentali.component";
+import { ParametriVitaliComponent } from "./component/parametri-vitali/parametri-vitali.component";
+import { ChartsModule, ThemeService } from "ng2-charts";
+import { SliderDateComponent } from "./component/slider-date/slider-date.component";
+import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
 
 @NgModule({
   declarations: [
@@ -232,7 +230,7 @@ import { SliderDateComponent } from './component/slider-date/slider-date.compone
     EsitiStrumentaliComponent,
     ParametriVitaliComponent,
     SliderDateComponent,
-
+    ArchiviVisiteSpecialisticheComponent,
   ],
   imports: [
     BrowserModule,
@@ -261,7 +259,7 @@ import { SliderDateComponent } from './component/slider-date/slider-date.compone
     NgxMatDatetimePickerModule,
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
-    ChartsModule
+    ChartsModule,
   ],
   providers: [
     AuthGuardService,

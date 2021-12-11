@@ -82,7 +82,7 @@ delete(row){
         this.dataSource.data = this.dipendenti;
     })
     .catch((err) => {
-      this.showMessageError(
+      this.messageService.showMessageError(
         "Errore nella cancellazione Dipendente"
       );
       console.error(err);
@@ -145,7 +145,7 @@ ngOnDestroy() {
       data: { dipendente: dipendente, readonly: true, newItem: true },
     });
 
-    
+
 
     dialogRef.afterClosed().subscribe((result) => {
       console.log("result insert dipendente", result);
@@ -158,24 +158,10 @@ ngOnDestroy() {
             this.dataSource.data = data;
           })
           .catch((err) => {
-            this.showMessageError("Errore Inserimento Dipendente (" + err['status'] + ")");
+            this.messageService.showMessageError("Errore Inserimento Dipendente (" + err['status'] + ")");
           });
       }
     });
-  }
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: 'custom-modalbox',
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-
-      });
   }
 
   async show(dipendente: Dipendenti) {
@@ -187,7 +173,7 @@ ngOnDestroy() {
     });
   }
 
-  
+
   async deleteDipendente(dipendente: Dipendenti) {
     console.log("Cancella dipendente:", dipendente);
 

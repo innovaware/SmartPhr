@@ -89,16 +89,16 @@ export class DialogFornitoreComponent implements OnInit {
   async save(saveAndClose: boolean) {
     // this.data.fornitore = this.fornitore;
     console.log("update fornitore");
-    
+
     this.data.fornitore = this.fornitore;
-    
+
 /*     this.data.fornitore.cognome = this.fornitore.cognome;
     this.data.fornitore.nome = this.fornitore.nome;
     this.data.fornitore.codiceFiscale = this.fornitore.codiceFiscale;
     this.data.fornitore.comuneResidenza = this.fornitore.comuneResidenza;
     this.data.fornitore.indirizzoNascita = this.fornitore.indirizzoNascita;
     this.data.fornitore.indirizzoResidenza = this.fornitore.indirizzoResidenza;
-    
+
 
 
     this.data.fornitore.dataNascita = this.fornitore.dataNascita;
@@ -492,19 +492,6 @@ export class DialogFornitoreComponent implements OnInit {
         });
     }
   }
-
-/*   async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  } */
-
 
   async getDocumentiFornitore() {
     console.log(`Get Documenti fornitore: ${this.fornitore._id}`);

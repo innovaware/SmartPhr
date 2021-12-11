@@ -6,6 +6,7 @@ import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-erro
 import { Evento } from "src/app/models/evento";
 import { UserInfo } from 'src/app/models/userInfo';
 import { EventiService } from "src/app/service/eventi.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: "app-calendar",
@@ -26,7 +27,10 @@ export class CalendarComponent implements OnInit {
   calendar = [];
   public user: UserInfo;
 
-  constructor(public dialog: MatDialog, public eventiService: EventiService) {
+  constructor(
+    public dialog: MatDialog,
+    public messageService: MessagesService,
+    public eventiService: EventiService) {
     this.isCalendarMonthEnabled = true;
 
     //TODO da recuperare le info del utente
@@ -131,7 +135,7 @@ export class CalendarComponent implements OnInit {
             this.calendar[index_week].events[index].push(evento);
           }).catch(err=> {
             console.error("Error to insert Events");
-            this.showMessageError("Errore: Inserimento Evento fallito (" + err['status'] + ")");
+            this.messageService.showMessageError("Errore: Inserimento Evento fallito (" + err['status'] + ")");
           });
         }
       });
@@ -179,17 +183,4 @@ export class CalendarComponent implements OnInit {
     this.isCalendarWeekEnabled = true;
   }
 
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: 'custom-modalbox',
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-
-      });
-  }
 }

@@ -25,9 +25,9 @@ export class PazienteService {
     //return this.http.get<Paziente[]>(`${this.api}/api/pazienti?pageSize=${pageSize}&pageNumber=${pageNumber}`)
   }
 
-  async getPaziente(id: string): Promise<Paziente[]> {
+  async getPaziente(id: string): Promise<Paziente> {
     return this.http
-      .get<Paziente[]>(`${this.api}/api/pazienti/${id}`)
+      .get<Paziente>(`${this.api}/api/pazienti/${id}`)
       .toPromise();
   }
 

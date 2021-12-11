@@ -6,6 +6,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Permessi } from "src/app/models/permessi";
+import { MessagesService } from 'src/app/service/messages.service';
 import {PermessiService } from "src/app/service/permessi.service";
 
 
@@ -49,6 +50,7 @@ export class PermessiComponent implements OnInit {
   public permessi: Permessi[];
 
   constructor(
+    public messageService: MessagesService,
     public dialog: MatDialog,
     public permessiService: PermessiService
   ) {}
@@ -92,23 +94,6 @@ ngOnInit() {
     this.showItemEmiter.emit({ permessi: permessi, button: item });
   }
 
-
-
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
   async updatePermesso(permesso: Permessi) {
 
     this.permessiService
@@ -121,7 +106,7 @@ ngOnInit() {
       this.dataSource.data = this.permessi;
     })
     .catch((err) => {
-      this.showMessageError("Errore modifica stato Permessi");
+      this.messageService.showMessageError("Errore modifica stato Permessi");
       console.error(err);
     });
   }

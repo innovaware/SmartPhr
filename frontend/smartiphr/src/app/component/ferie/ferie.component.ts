@@ -7,6 +7,7 @@ import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-erro
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Ferie } from "src/app/models/ferie";
 import {FerieService } from "src/app/service/ferie.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
   selector: 'app-ferie',
@@ -17,7 +18,7 @@ export class FerieComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
-  
+
   @Output() showItemEmiter = new EventEmitter<{
     ferie: Ferie;
     button: string;
@@ -45,6 +46,7 @@ export class FerieComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    public messageService: MessagesService,
     public ferieService: FerieService
   ) {}
 
@@ -67,7 +69,7 @@ loadTable(){
     this.dataSource = new MatTableDataSource<Ferie>(this.ferie);
     this.dataSource.paginator = this.paginator;
   });
-  } 
+  }
 }
 
 
@@ -91,26 +93,12 @@ ngOnInit() {
 
   }
 
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
   async updateFerie(ferie: Ferie) {
-   
+
     this.ferieService
     .updateFerie(ferie)
     .then((result: Ferie) => {
-      
+
       const index = this.ferie.indexOf(ferie);
       ferie.closed = true;
       this.ferie[index] = ferie;
@@ -119,7 +107,7 @@ ngOnInit() {
 
     })
     .catch((err) => {
-      this.showMessageError("Errore modifica stato ferie");
+      this.messageService.showMessageError("Errore modifica stato ferie");
       console.error(err);
     });
   }
@@ -136,7 +124,7 @@ ngOnInit() {
     let result = window.confirm(message);
     if(result){
         this.updateFerie(row);
-       
+
     }
 
   }

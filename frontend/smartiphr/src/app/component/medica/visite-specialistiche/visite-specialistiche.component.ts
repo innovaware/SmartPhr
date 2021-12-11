@@ -1,90 +1,103 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DialogCartellaClinicaComponent } from 'src/app/dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component';
-import { DialogDiarioClinicoComponent } from 'src/app/dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
-import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
-import { DialogVisitespecialisticheComponent } from 'src/app/dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component';
-import { CartellaClinica } from 'src/app/models/cartellaClinica';
-import { DiarioClinico } from 'src/app/models/diarioClinico';
-import { Paziente } from 'src/app/models/paziente';
-import { VisiteSpecialistiche } from 'src/app/models/visiteSpecialistiche';
-import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  MatDialog,
+  MatDialogRef,
+  MatPaginator,
+  MatTableDataSource,
+} from "@angular/material";
+import { DialogVisitespecialisticheComponent } from "src/app/dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component";
+import { Paziente } from "src/app/models/paziente";
+import { VisiteSpecialistiche } from "src/app/models/visiteSpecialistiche";
+import { CartellaclinicaService } from "src/app/service/cartellaclinica.service";
+import { MessagesService } from "src/app/service/messages.service";
 
 @Component({
-  selector: 'app-visite-specialistiche',
-  templateUrl: './visite-specialistiche.component.html',
-  styleUrls: ['./visite-specialistiche.component.css']
+  selector: "app-visite-specialistiche",
+  templateUrl: "./visite-specialistiche.component.html",
+  styleUrls: ["./visite-specialistiche.component.css"],
 })
 export class VisiteSpecialisticheComponent implements OnInit {
   @Input() data: Paziente;
-  public visiteSpecialistiche : any[] = [];
+  public visiteSpecialistiche: any[] = [];
 
-  displayedColumns: string[] = ['dataReq', 'contenuto' ,'dataEsec', 'action'];
+  displayedColumns: string[] = ["dataReq", "contenuto", "dataEsec", "action"];
 
-
-  @ViewChild("paginatorVisiteSpecialistiche", { static: false }) visiteSpecialistichePaginator: MatPaginator;
+  @ViewChild("paginatorVisiteSpecialistiche", { static: false })
+  visiteSpecialistichePaginator: MatPaginator;
   public visiteSpecialisticheDataSource: MatTableDataSource<VisiteSpecialistiche>;
 
-  constructor(public dialogRef: MatDialogRef<VisiteSpecialisticheComponent>,
+  constructor(
+    public dialogRef: MatDialogRef<VisiteSpecialisticheComponent>,
     public cartellaclinicaService: CartellaclinicaService,
-    public dialog: MatDialog,) { }
+    public ccService: CartellaclinicaService,
+    public dialog: MatDialog,
+    public messageService: MessagesService
+  ) {}
 
   ngOnInit() {
     this.getList();
   }
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.visiteSpecialisticheDataSource.filter = filterValue
+      .trim()
+      .toLowerCase();
+  }
 
   async getList() {
     console.log(`get visite paziente: ${this.data._id}`);
     this.cartellaclinicaService
-      .getVisiteByUser( String(this.data._id) )
+      .getVisiteByUser(String(this.data._id))
       .then((f) => {
-        console.log(JSON.stringify(f));
+        //console.log(JSON.stringify(f));
 
         this.visiteSpecialistiche = f;
-        this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(this.visiteSpecialistiche);
+        this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(
+          this.visiteSpecialistiche
+        );
         this.visiteSpecialisticheDataSource.paginator = this.visiteSpecialistichePaginator;
-  
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento visite");
+        this.messageService.showMessageError("Errore caricamento visite");
         console.error(err);
       });
   }
 
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
-
   async add() {
-
     console.log("Show Add visita:", this.data);
+    const visitaSpecialistica: VisiteSpecialistiche = {
+      user: this.data._id,
+      dataReq: undefined,
+      contenuto: undefined,
+      dataEsec: undefined,
+    };
+
     var dialogRef = this.dialog.open(DialogVisitespecialisticheComponent, {
-      data: { paziente: this.data, readonly: false },
+      data: { visitaSpecialistica, readonly: false },
       width: "600px",
     });
 
     if (dialogRef != undefined)
-    dialogRef.afterClosed().subscribe((result) => {
-      if(result != null && result != undefined){
-      this.visiteSpecialistiche.push(result);
-      this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(this.visiteSpecialistiche);
-      }
-    });
+      dialogRef.afterClosed().subscribe((result: VisiteSpecialistiche) => {
+        if (result != null && result != undefined) {
+          this.ccService
+            .insertVisita(result)
+            .then((x) => {
+              console.log("Save visitaSpecialistica: ", x);
+              this.visiteSpecialistiche.push(result);
+              this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(
+                this.visiteSpecialistiche
+              );
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore Inserimento visita (" + err["status"] + ")"
+              );
+            });
+
+
+        }
+      });
   }
-
 }
-
-

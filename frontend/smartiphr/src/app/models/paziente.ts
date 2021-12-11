@@ -26,7 +26,7 @@ export class Paziente {
   comuneNascita: string;
   provinciaNascita: string;
   provenienza?: string;
-
+  codiceFiscale: string;
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;

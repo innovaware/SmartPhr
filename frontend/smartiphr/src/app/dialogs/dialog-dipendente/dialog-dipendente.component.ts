@@ -7,7 +7,7 @@ import {
   MAT_DIALOG_DATA,
 } from "@angular/material";
 import { DipendenteGeneraleComponent } from "src/app/component/dipendente-generale/dipendente-generale.component";
-import { Bonifico } from 'src/app/models/bonifico';
+import { Bonifico } from "src/app/models/bonifico";
 import { DocumentoDipendente } from "src/app/models/documentoDipendente";
 import { DocumentoMedicinaLavoro } from "src/app/models/documentoMedicinaLavoro";
 
@@ -20,15 +20,14 @@ import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { DocumentiService } from "src/app/service/documenti.service";
 import { DialogCaricadocumentoComponent } from "../dialog-caricadocumento/dialog-caricadocumento.component";
+import { MessagesService } from "src/app/service/messages.service";
 
 @Component({
-  selector: 'app-dialog-dipendente',
-  templateUrl: './dialog-dipendente.component.html',
-  styleUrls: ['./dialog-dipendente.component.css']
+  selector: "app-dialog-dipendente",
+  templateUrl: "./dialog-dipendente.component.html",
+  styleUrls: ["./dialog-dipendente.component.css"],
 })
 export class DialogDipendenteComponent implements OnInit {
- 
-  
   public dipendente: Dipendenti;
   public newItem: boolean;
   public document: any[] = [];
@@ -43,19 +42,30 @@ export class DialogDipendenteComponent implements OnInit {
   public nuovaNotacredito: NotaCredito;
   public nuovaBonifico: Bonifico;
 
-
-
   DisplayedRichiesteColumns: string[] = ["date", "action"];
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
-  DisplayedColumnsCertMalattia: string[] = ["descrizione", "namefile", "date", "note", "action"];
-  DisplayedColumnsMedicinaLavoro : string[] = ["filenameRichiesta", "dateuploadRichiesta", "noteRichiesta","filenameCertificato", "dateuploadCertificato", "noteCertificato", "action"];
+  DisplayedColumnsCertMalattia: string[] = [
+    "descrizione",
+    "namefile",
+    "date",
+    "note",
+    "action",
+  ];
+  DisplayedColumnsMedicinaLavoro: string[] = [
+    "filenameRichiesta",
+    "dateuploadRichiesta",
+    "noteRichiesta",
+    "filenameCertificato",
+    "dateuploadCertificato",
+    "noteCertificato",
+    "action",
+  ];
 
- 
   public noteCreditoDataSource: MatTableDataSource<NotaCredito>;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
- 
+
   @ViewChild("paginatorNoteCredito", { static: false })
   notacreditoPaginator: MatPaginator;
   @ViewChild("paginatorBonifici", { static: false })
@@ -65,84 +75,79 @@ export class DialogDipendenteComponent implements OnInit {
   public noteCredito: NotaCredito[];
   public bonifici: Bonifico[];
 
-
-  @ViewChild("paginatorDocIdent", { static: false }) docIdentitaPaginator: MatPaginator;
+  @ViewChild("paginatorDocIdent", { static: false })
+  docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
-  public docsIdentita : DocumentoDipendente[];
+  public docsIdentita: DocumentoDipendente[];
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-
-
-  @ViewChild("paginatorContratto", { static: false }) contrattoPaginator: MatPaginator;
+  @ViewChild("paginatorContratto", { static: false })
+  contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
-  public contratti : DocumentoDipendente[];
+  public contratti: DocumentoDipendente[];
   public uploadingContratto: boolean;
   public addingContratto: boolean;
 
-
-
-  @ViewChild("paginatorPrivacy", { static: false }) privacyPaginator: MatPaginator;
+  @ViewChild("paginatorPrivacy", { static: false })
+  privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;
-  public docsprivacy : DocumentoDipendente[];
+  public docsprivacy: DocumentoDipendente[];
   public uploadingPrivacy: boolean;
   public addingPrivacy: boolean;
 
-
-  @ViewChild("paginatorDiploma", { static: false }) diplomaPaginator: MatPaginator;
+  @ViewChild("paginatorDiploma", { static: false })
+  diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
-  public diplomi : DocumentoDipendente[];
+  public diplomi: DocumentoDipendente[];
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-
-  @ViewChild("paginatorAttestatiECM", { static: false }) attestatiPaginator: MatPaginator;
+  @ViewChild("paginatorAttestatiECM", { static: false })
+  attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
-  public attestati : DocumentoDipendente[];
+  public attestati: DocumentoDipendente[];
   public uploadingAttestatoECM: boolean;
   public addingAttestatoECM: boolean;
-
-
 
   @ViewChild("paginatorCedolini", { static: false })
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
-  public cedolini : DocumentoDipendente[];
+  public cedolini: DocumentoDipendente[];
 
   @ViewChild("paginatorRichieste", { static: false })
   richiestePaginator: MatPaginator;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;
-  public richieste : DocumentoDipendente[];
-
-
+  public richieste: DocumentoDipendente[];
 
   @ViewChild("paginatordocsMedicina", { static: false })
   docsMedicinaPaginator: MatPaginator;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
-  public docsMedicina : DocumentoMedicinaLavoro[];
-
+  public docsMedicina: DocumentoMedicinaLavoro[];
 
   @ViewChild("paginatorCertificatoMalattia", { static: false })
   certificatiMalattiaPaginator: MatPaginator;
   public nuovoCertificatoMalattia: DocumentoDipendente;
   public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;
-  public certificatiMalattia : DocumentoDipendente[];
+  public certificatiMalattia: DocumentoDipendente[];
   public uploadingCertificatoMalattia: boolean;
   public addingCertificatoMalattia: boolean;
 
-
-
-
   constructor(
+    public messageService: MessagesService,
     public uploadService: UploadService,
     public dialogRef: MatDialogRef<DipendenteGeneraleComponent>,
     @Inject(MAT_DIALOG_DATA)
-    public data: { dipendente: Dipendenti; readonly: boolean; newItem: boolean },
+    public data: {
+      dipendente: Dipendenti;
+      readonly: boolean;
+      newItem: boolean;
+    },
     public docService: DocumentiService,
     /*public notacreditoService: NotaCreditoService,
     public bonficoService: BonificoService,*/
@@ -153,12 +158,8 @@ export class DialogDipendenteComponent implements OnInit {
     this.dipendente = this.data.dipendente;
     this.newItem = this.data.newItem || false;
 
-
-
-    
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
-
 
     //this.dipendente = JSON.parse(JSON.stringify(this.data.dipendente));
     console.log("Dialog dipendente generale", this.data);
@@ -182,59 +183,54 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.contratto = this.dipendente.contratto;
     this.data.dipendente.telefono = this.dipendente.telefono;
     this.data.dipendente.email = this.dipendente.email;
-   
 
-    if(this.dipendente.cognome == "" || this.dipendente.nome == "" || this.dipendente.cf == ""  ){
-      alert('Alcuni campi obbligatori sono mancanti!');
+    if (
+      this.dipendente.cognome == "" ||
+      this.dipendente.nome == "" ||
+      this.dipendente.cf == ""
+    ) {
+      alert("Alcuni campi obbligatori sono mancanti!");
       return;
-    }else{
-
-    if (saveAndClose) {
-      this.dialogRef.close(this.data.dipendente);
     } else {
-      this.uploading = true;
-
-      if (this.newItem) {
-        this.dipendenteService
-          .insert(this.data.dipendente)
-          .then((x) => {
-            console.log("Save dipendente: ", x);
-            this.data.dipendente = x;
-            this.dipendente = x;
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.showMessageError(
-              "Errore Inserimento dipendente (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
+      if (saveAndClose) {
+        this.dialogRef.close(this.data.dipendente);
       } else {
-        this.dipendenteService
-          .save(this.data.dipendente)
-          .then((x) => {
-            console.log("Save dipendente: ", x);
-            this.uploading = false;
-            this.newItem = false;
-          })
-          .catch((err) => {
-            this.showMessageError(
-              "Errore salvataggio dipendente (" + err["status"] + ")"
-            );
-            this.uploading = false;
-          });
+        this.uploading = true;
+
+        if (this.newItem) {
+          this.dipendenteService
+            .insert(this.data.dipendente)
+            .then((x) => {
+              console.log("Save dipendente: ", x);
+              this.data.dipendente = x;
+              this.dipendente = x;
+              this.uploading = false;
+              this.newItem = false;
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore Inserimento dipendente (" + err["status"] + ")"
+              );
+              this.uploading = false;
+            });
+        } else {
+          this.dipendenteService
+            .save(this.data.dipendente)
+            .then((x) => {
+              console.log("Save dipendente: ", x);
+              this.uploading = false;
+              this.newItem = false;
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore salvataggio dipendente (" + err["status"] + ")"
+              );
+              this.uploading = false;
+            });
+        }
       }
     }
   }
-  }
-
-
-
-
-  
-
-
 
   ngOnInit() {
     if (this.dipendente._id != undefined) {
@@ -246,29 +242,8 @@ export class DialogDipendenteComponent implements OnInit {
       this.getCedolini();
       this.getDocMedicinaLav();
       this.getCertificatoMalattia();
-     
     }
   }
-
-
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
-
-
-
 
   async showDocument(doc: DocumentoDipendente) {
     this.uploadService
@@ -295,13 +270,10 @@ export class DialogDipendenteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
-
-
-  
 
   // DOCUMENTI IDENTITA
   async addDocIdentita() {
@@ -309,7 +281,7 @@ export class DialogDipendenteComponent implements OnInit {
     this.nuovoDocumentoIdentita = {
       filename: undefined,
       note: "",
-      type: 'DocumentoIdentita'
+      type: "DocumentoIdentita",
     };
   }
 
@@ -321,14 +293,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload documento: ", $event);
       this.nuovoDocumentoIdentita.filename = file.name;
       this.nuovoDocumentoIdentita.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deleteDocIdentita(doc: DocumentoDipendente) {
     console.log("Cancella doc identita: ", doc);
@@ -343,15 +312,18 @@ export class DialogDipendenteComponent implements OnInit {
           this.docsIdentita.splice(index, 1);
         }
 
-        console.log("doc identita cancellata this.fatture: ", this.docsIdentita);
+        console.log(
+          "doc identita cancellata this.fatture: ",
+          this.docsIdentita
+        );
         this.docIdentitaDataSource.data = this.docsIdentita;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async saveDocIdentita(doc: DocumentoDipendente) {
     const typeDocument = "DocumentoIdentita";
     const path = "DocumentoIdentita";
@@ -360,65 +332,60 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio doc identita: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert doc identita: ", result);
-      this.docsIdentita.push(result);
-      this.docIdentitaDataSource.data = this.docsIdentita;
-      this.addingDocIdentita = false;
-      this.uploadingDocIdentita = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert doc identita: ", result);
+        this.docsIdentita.push(result);
+        this.docIdentitaDataSource.data = this.docsIdentita;
+        this.addingDocIdentita = false;
+        this.uploadingDocIdentita = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
-      console.error(err);
-    });
-  }
-
-
-
-  async getDocIdentita() {
-    console.log(`get DocIdentita dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, 'DocumentoIdentita')
-      .then((f: DocumentoDipendente[]) => {
-        this.docsIdentita = f;
-
-        this.docIdentitaDataSource = new MatTableDataSource<DocumentoDipendente>(this.docsIdentita);
-        this.docIdentitaDataSource.paginator = this.docIdentitaPaginator;
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista fatture");
+        this.messageService.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
   }
 
+  async getDocIdentita() {
+    console.log(`get DocIdentita dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, "DocumentoIdentita")
+      .then((f: DocumentoDipendente[]) => {
+        this.docsIdentita = f;
+
+        this.docIdentitaDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.docsIdentita
+        );
+        this.docIdentitaDataSource.paginator = this.docIdentitaPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista fatture");
+        console.error(err);
+      });
+  }
 
   // FINE DOCUMENTI IDENTITA
-
-
-
-
 
   // CERTIFICATI MALATTIA
   async addCertificatoMalattia() {
@@ -426,8 +393,8 @@ export class DialogDipendenteComponent implements OnInit {
     this.nuovoCertificatoMalattia = {
       filename: undefined,
       note: "",
-      type: 'CertificatoMalattia',
-      filenameesito: ''
+      type: "CertificatoMalattia",
+      filenameesito: "",
     };
   }
 
@@ -439,14 +406,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload documento: ", $event);
       this.nuovoCertificatoMalattia.filename = file.name;
       this.nuovoCertificatoMalattia.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deleteCertificatoMalattia(doc: DocumentoDipendente) {
     console.log("Cancella Certificato Malattia: ", doc);
@@ -461,15 +425,18 @@ export class DialogDipendenteComponent implements OnInit {
           this.certificatiMalattia.splice(index, 1);
         }
 
-        console.log("Certificato Malattia cancellata this.fatture: ", this.certificatiMalattia);
+        console.log(
+          "Certificato Malattia cancellata this.fatture: ",
+          this.certificatiMalattia
+        );
         this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async saveCertificatoMalattia(doc: DocumentoDipendente) {
     const typeDocument = "CertificatoMalattia";
     const path = "CertificatoMalattia";
@@ -478,39 +445,39 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio CertificatoMalattia: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert CertificatoMalattia: ", result);
-      this.certificatiMalattia.push(result);
-      this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
-      this.addingCertificatoMalattia = false;
-      this.uploadingCertificatoMalattia = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert CertificatoMalattia: ", result);
+        this.certificatiMalattia.push(result);
+        this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
+        this.addingCertificatoMalattia = false;
+        this.uploadingCertificatoMalattia = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento CertificatoMalattia");
-      console.error(err);
-    });
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento CertificatoMalattia");
+        console.error(err);
+      });
   }
 
   async showEsitoVMCF(doc: DocumentoDipendente) {
@@ -538,7 +505,7 @@ export class DialogDipendenteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
@@ -546,28 +513,26 @@ export class DialogDipendenteComponent implements OnInit {
   async getCertificatoMalattia() {
     console.log(`get CertificatoMalattia dipendente: ${this.dipendente._id}`);
     this.docService
-      .get(this.dipendente, 'CertificatoMalattia')
+      .get(this.dipendente, "CertificatoMalattia")
       .then((f: DocumentoDipendente[]) => {
         this.certificatiMalattia = f;
 
-        this.certificatiMalattiaDataSource = new MatTableDataSource<DocumentoDipendente>(this.certificatiMalattia);
+        this.certificatiMalattiaDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.certificatiMalattia
+        );
         this.certificatiMalattiaDataSource.paginator = this.certificatiMalattiaPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista CERTIFICATI MALATTIA");
+        this.messageService.showMessageError("Errore caricamento lista CERTIFICATI MALATTIA");
         console.error(err);
       });
   }
 
-
-
-
-  uploadVMCF(doc: DocumentoDipendente){
+  uploadVMCF(doc: DocumentoDipendente) {
     const dialogDocCMCF = this.dialog.open(DialogCaricadocumentoComponent, {
-      data: { dipendente: this.dipendente, doc: doc  },
+      data: { dipendente: this.dipendente, doc: doc },
     });
-  
-  
+
     dialogDocCMCF.afterClosed().subscribe((result) => {
       console.log("result upload VMCF", result);
       if (result !== false) {
@@ -575,29 +540,25 @@ export class DialogDipendenteComponent implements OnInit {
           .update(result)
           .then((x) => {
             const index = this.certificatiMalattia.indexOf(doc);
-  
+
             this.certificatiMalattia[index] = doc;
-      
+
             this.certificatiMalattiaDataSource.data = this.certificatiMalattia;
             //dialogDocCMCF.close(result);
-  
           })
           .catch((err) => {
-            if(err['status'] != undefined && err['status'] != 500)
-            this.showMessageError("Errore upload VMCF (" + err['status'] + ")");
+            if (err["status"] != undefined && err["status"] != 500)
+              this.messageService.showMessageError(
+                "Errore upload VMCF (" + err["status"] + ")"
+              );
           });
       }
     });
-  
-  
   }
-    
 
   // FINE CERTIFICATI MALATTIA
 
-
   // DOCUMENTI MEDICNA LAVORO
-
 
   async getDocMedicinaLav() {
     console.log(`get DocMedicinaLav dipendente: ${this.dipendente._id}`);
@@ -606,20 +567,24 @@ export class DialogDipendenteComponent implements OnInit {
       .then((f: DocumentoMedicinaLavoro[]) => {
         this.docsMedicina = f;
 
-        this.docsMedicinaDataSource = new MatTableDataSource<DocumentoMedicinaLavoro>(this.docsMedicina);
+        this.docsMedicinaDataSource = new MatTableDataSource<DocumentoMedicinaLavoro>(
+          this.docsMedicina
+        );
         this.docsMedicinaDataSource.paginator = this.docsMedicinaPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista DocMedicinaLav");
+        this.messageService.showMessageError("Errore caricamento lista DocMedicinaLav");
         console.error(err);
       });
   }
-
-
 
   async showDocumentRichiesta(doc: DocumentoMedicinaLavoro) {
     this.uploadService
-      .downloadDocMedicinaLavoro(doc.filenameRichiesta, 'medicinaLavoro', this.dipendente)
+      .downloadDocMedicinaLavoro(
+        doc.filenameRichiesta,
+        "medicinaLavoro",
+        this.dipendente
+      )
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -642,16 +607,18 @@ export class DialogDipendenteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
 
-
-
   async showDocumentCertificato(doc: DocumentoMedicinaLavoro) {
     this.uploadService
-      .downloadDocDipendente(doc.filenameCertificato, 'medicinaLavoro', this.dipendente)
+      .downloadDocDipendente(
+        doc.filenameCertificato,
+        "medicinaLavoro",
+        this.dipendente
+      )
       .then((x) => {
         console.log("download: ", x);
         x.subscribe((data) => {
@@ -674,14 +641,12 @@ export class DialogDipendenteComponent implements OnInit {
         });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento file");
+        this.messageService.showMessageError("Errore caricamento file");
         console.error(err);
       });
   }
 
   // FINE DOCUMENTI IDENTITA
-
-
 
   // CONTRATTI
   async addContratto() {
@@ -689,7 +654,7 @@ export class DialogDipendenteComponent implements OnInit {
     this.nuovoContratto = {
       filename: undefined,
       note: "",
-      type: 'Contratto'
+      type: "Contratto",
     };
   }
 
@@ -701,14 +666,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload contratto: ", $event);
       this.nuovoContratto.filename = file.name;
       this.nuovoContratto.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deleteContratto(doc: DocumentoDipendente) {
     console.log("Cancella Contratto: ", doc);
@@ -727,11 +689,11 @@ export class DialogDipendenteComponent implements OnInit {
         this.contrattiDataSource.data = this.contratti;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione doc identita");
+        this.messageService.showMessageError("Errore nella cancellazione doc identita");
         console.error(err);
       });
   }
-  
+
   async saveContratto(doc: DocumentoDipendente) {
     const typeDocument = "Contratto";
     const path = "Contratto";
@@ -740,64 +702,60 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio Contratto: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert Contratto: ", result);
-      this.contratti.push(result);
-      this.contrattiDataSource.data = this.contratti;
-      this.addingContratto = false;
-      this.uploadingContratto = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert Contratto: ", result);
+        this.contratti.push(result);
+        this.contrattiDataSource.data = this.contratti;
+        this.addingContratto = false;
+        this.uploadingContratto = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
-      console.error(err);
-    });
-  }
-
-
-
-  async getContratti() {
-    console.log(`get Contratto dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, 'Contratto')
-      .then((f: DocumentoDipendente[]) => {
-        this.contratti = f;
-
-        this.contrattiDataSource = new MatTableDataSource<DocumentoDipendente>(this.contratti);
-        this.contrattiDataSource.paginator = this.contrattoPaginator;
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista Contratto");
+        this.messageService.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
   }
 
+  async getContratti() {
+    console.log(`get Contratto dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, "Contratto")
+      .then((f: DocumentoDipendente[]) => {
+        this.contratti = f;
+
+        this.contrattiDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.contratti
+        );
+        this.contrattiDataSource.paginator = this.contrattoPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista Contratto");
+        console.error(err);
+      });
+  }
 
   // FINE CONTRATTI
-
-
-
 
   // PRIVACY
   async addPrivacy() {
@@ -805,7 +763,7 @@ export class DialogDipendenteComponent implements OnInit {
     this.nuovoPrivacy = {
       filename: undefined,
       note: "",
-      type: 'Privacy'
+      type: "Privacy",
     };
   }
 
@@ -817,14 +775,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload Privacy: ", $event);
       this.nuovoPrivacy.filename = file.name;
       this.nuovoPrivacy.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deletePrivacy(doc: DocumentoDipendente) {
     console.log("Cancella Privacy: ", doc);
@@ -843,11 +798,11 @@ export class DialogDipendenteComponent implements OnInit {
         this.docsprivacyDataSource.data = this.docsprivacy;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione Privacy");
+        this.messageService.showMessageError("Errore nella cancellazione Privacy");
         console.error(err);
       });
   }
-  
+
   async savePrivacy(doc: DocumentoDipendente) {
     const typeDocument = "Privacy";
     const path = "Privacy";
@@ -856,75 +811,68 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio Privacy: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert Privacy: ", result);
-      this.docsprivacy.push(result);
-      this.docsprivacyDataSource.data = this.docsprivacy;
-      this.addingPrivacy = false;
-      this.uploadingPrivacy = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert Privacy: ", result);
+        this.docsprivacy.push(result);
+        this.docsprivacyDataSource.data = this.docsprivacy;
+        this.addingPrivacy = false;
+        this.uploadingPrivacy = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
-      console.error(err);
-    });
-  }
-
-
-
-  async getDocsPrivacy() {
-    console.log(`get Privacy dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, 'Privacy')
-      .then((f: DocumentoDipendente[]) => {
-        this.docsprivacy = f;
-
-        this.docsprivacyDataSource = new MatTableDataSource<DocumentoDipendente>(this.docsprivacy);
-        this.docsprivacyDataSource.paginator = this.contrattoPaginator;
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista Privacy");
+        this.messageService.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
   }
 
+  async getDocsPrivacy() {
+    console.log(`get Privacy dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, "Privacy")
+      .then((f: DocumentoDipendente[]) => {
+        this.docsprivacy = f;
+
+        this.docsprivacyDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.docsprivacy
+        );
+        this.docsprivacyDataSource.paginator = this.contrattoPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista Privacy");
+        console.error(err);
+      });
+  }
 
   // FINE PRIVACY
 
-
-
-
-
-
-
-   // DIPLOMA 
-   async addDiploma() {
+  // DIPLOMA
+  async addDiploma() {
     this.addingDiploma = true;
     this.nuovoDiploma = {
       filename: undefined,
       note: "",
-      type: 'Diploma'
+      type: "Diploma",
     };
   }
 
@@ -936,14 +884,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload Diploma: ", $event);
       this.nuovoDiploma.filename = file.name;
       this.nuovoDiploma.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deleteDiploma(doc: DocumentoDipendente) {
     console.log("Cancella Diploma: ", doc);
@@ -962,11 +907,11 @@ export class DialogDipendenteComponent implements OnInit {
         this.diplomiDataSource.data = this.diplomi;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione Diploma");
+        this.messageService.showMessageError("Errore nella cancellazione Diploma");
         console.error(err);
       });
   }
-  
+
   async saveDiploma(doc: DocumentoDipendente) {
     const typeDocument = "Diploma";
     const path = "Diploma";
@@ -975,73 +920,68 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio Diploma: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert Diploma: ", result);
-      this.diplomi.push(result);
-      this.diplomiDataSource.data = this.diplomi;
-      this.addingDiploma = false;
-      this.uploadingDiploma = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert Diploma: ", result);
+        this.diplomi.push(result);
+        this.diplomiDataSource.data = this.diplomi;
+        this.addingDiploma = false;
+        this.uploadingDiploma = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento fattura");
-      console.error(err);
-    });
-  }
-
-
-
-  async getDiplomi() {
-    console.log(`get Diplomi dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, 'Diploma')
-      .then((f: DocumentoDipendente[]) => {
-        this.diplomi = f;
-
-        this.diplomiDataSource = new MatTableDataSource<DocumentoDipendente>(this.diplomi);
-        this.diplomiDataSource.paginator = this.diplomaPaginator;
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista Diplomi");
+        this.messageService.showMessageError("Errore Inserimento fattura");
         console.error(err);
       });
   }
 
+  async getDiplomi() {
+    console.log(`get Diplomi dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, "Diploma")
+      .then((f: DocumentoDipendente[]) => {
+        this.diplomi = f;
+
+        this.diplomiDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.diplomi
+        );
+        this.diplomiDataSource.paginator = this.diplomaPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista Diplomi");
+        console.error(err);
+      });
+  }
 
   // FINE DIPLOMA
 
-
-
-
-
-  // DIPLOMA 
+  // DIPLOMA
   async addAttestatoECM() {
     this.addingAttestatoECM = true;
     this.nuovoAttestatoECM = {
       filename: undefined,
       note: "",
-      type: 'AttestatoECM'
+      type: "AttestatoECM",
     };
   }
 
@@ -1053,14 +993,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.log("upload AttestatoECM: ", $event);
       this.nuovoAttestatoECM.filename = file.name;
       this.nuovoAttestatoECM.file = file;
-
     } else {
-      this.showMessageError("File non valido");
+      this.messageService.showMessageError("File non valido");
       console.error("File non valido o non presente");
     }
   }
-
-
 
   async deleteAttestatoECM(doc: DocumentoDipendente) {
     console.log("Cancella AttestatoECM: ", doc);
@@ -1079,11 +1016,11 @@ export class DialogDipendenteComponent implements OnInit {
         this.attestatiECMDataSource.data = this.attestati;
       })
       .catch((err) => {
-        this.showMessageError("Errore nella cancellazione AttestatoECM");
+        this.messageService.showMessageError("Errore nella cancellazione AttestatoECM");
         console.error(err);
       });
   }
-  
+
   async saveAttestatoECM(doc: DocumentoDipendente) {
     const typeDocument = "AttestatoECM";
     const path = "AttestatoECM";
@@ -1092,84 +1029,80 @@ export class DialogDipendenteComponent implements OnInit {
 
     console.log("Invio AttestatoECM: ", doc);
     this.docService
-    .insert(doc, this.dipendente)
-    .then((result: DocumentoDipendente) => {
-      console.log("Insert AttestatoECM: ", result);
-      this.attestati.push(result);
-      this.attestatiECMDataSource.data = this.attestati;
-      this.addingAttestatoECM = false;
-      this.uploadingAttestatoECM = false;
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert AttestatoECM: ", result);
+        this.attestati.push(result);
+        this.attestatiECMDataSource.data = this.attestati;
+        this.addingAttestatoECM = false;
+        this.uploadingAttestatoECM = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = doc.filename;
+        const nameDocument: string = doc.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.dipendente._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.showMessageError("Errore Inserimento Documento");
-      console.error(err);
-    });
-  }
-
-
-
-  async getAttestatiECM() {
-    console.log(`get AttestatiECM dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, 'Diploma')
-      .then((f: DocumentoDipendente[]) => {
-        this.attestati = f;
-
-        this.attestatiECMDataSource = new MatTableDataSource<DocumentoDipendente>(this.attestati);
-        this.attestatiECMDataSource.paginator = this.attestatiPaginator;
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista attestatiECM");
+        this.messageService.showMessageError("Errore Inserimento Documento");
         console.error(err);
       });
   }
 
+  async getAttestatiECM() {
+    console.log(`get AttestatiECM dipendente: ${this.dipendente._id}`);
+    this.docService
+      .get(this.dipendente, "Diploma")
+      .then((f: DocumentoDipendente[]) => {
+        this.attestati = f;
+
+        this.attestatiECMDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.attestati
+        );
+        this.attestatiECMDataSource.paginator = this.attestatiPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista attestatiECM");
+        console.error(err);
+      });
+  }
 
   // FINE ATTESTATI ECM
-
-
-
 
   // CEDOLINI
 
   async getCedolini() {
     console.log(`get Cedolini dipendente: ${this.dipendente._id}`);
     this.docService
-      .get(this.dipendente, 'Cedolini')
+      .get(this.dipendente, "Cedolini")
       .then((f: DocumentoDipendente[]) => {
         this.cedolini = f;
 
-        this.cedoliniDataSource = new MatTableDataSource<DocumentoDipendente>(this.cedolini);
+        this.cedoliniDataSource = new MatTableDataSource<DocumentoDipendente>(
+          this.cedolini
+        );
         this.cedoliniDataSource.paginator = this.cedoliniPaginator;
       })
       .catch((err) => {
-        this.showMessageError("Errore caricamento lista cedolini");
+        this.messageService.showMessageError("Errore caricamento lista cedolini");
         console.error(err);
       });
   }
 
-
   // FINE CEDOLINI
-
 }

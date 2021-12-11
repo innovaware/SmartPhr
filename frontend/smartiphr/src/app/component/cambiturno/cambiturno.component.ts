@@ -7,6 +7,7 @@ import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-erro
 import { Cambiturno } from "src/app/models/cambiturni";
 import { Dipendenti } from "src/app/models/dipendenti";
 import {CambiturniService } from "src/app/service/cambiturni.service";
+import { MessagesService } from 'src/app/service/messages.service';
 
 
 @Component({
@@ -49,6 +50,7 @@ export class CambiturnoComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
+    public messageService: MessagesService,
     public cambiturniService: CambiturniService
   ) {
     this.cambiturniService.getCambiturno().then((result) => {
@@ -99,26 +101,6 @@ loadTable(){
 
 
 
-
-
-
-
-
-
-
-  async showMessageError(messageError: string) {
-    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
-      panelClass: "custom-modalbox",
-      data: messageError,
-    });
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
-      });
-  }
-
-
   async updateCambioturno(cambio: Cambiturno) {
 
     this.cambiturniService
@@ -130,7 +112,7 @@ loadTable(){
       this.dataSource.data = this.cambiturno;
     })
     .catch((err) => {
-      this.showMessageError("Errore modifica stato Cambiturno");
+      this.messageService.showMessageError("Errore modifica stato Cambiturno");
       console.error(err);
     });
   }
