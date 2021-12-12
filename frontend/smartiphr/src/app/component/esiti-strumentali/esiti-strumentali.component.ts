@@ -13,7 +13,7 @@ import { UploadService } from 'src/app/service/upload.service';
 export class EsitiStrumentaliComponent implements OnInit {
   @Input() id: string;
 
-  typeDocument: string = "DocumentoEsitoStrumentale";
+  typeDocument: string = "EsitoStrumentale";
 
   addingDocument: boolean = false;
   uploadingDocumento: boolean = false;
@@ -62,7 +62,7 @@ export class EsitiStrumentaliComponent implements OnInit {
       return;
     }
 
-    const path = "DocumentoEsitoStrumentale";
+    const path = "EsitoStrumentale";
     const file: File = doc.file;
     this.uploadingDocumento = true;
 

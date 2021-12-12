@@ -6,6 +6,7 @@ const DocPazienteSchema = mongoose.Schema({
   dateupload: Date,
   note: String,
   type: String,
+  typeDocument: String,
   descrizione: String,
   filenameesito: String,
   cancellato: Boolean,

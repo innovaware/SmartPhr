@@ -6,6 +6,7 @@ import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from "src/app/models/paziente";
 import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
+import { UploadService } from 'src/app/service/upload.service';
 
 @Component({
   selector: 'app-archive-documents',
@@ -14,7 +15,7 @@ import { PazienteService } from "src/app/service/paziente.service";
 })
 export class ArchiveDocumentsComponent implements OnInit {
   @Input() typeDocument: string;
-  displayedColumns: string[] = ["filename", "dateupload", "user", "action"];
+  displayedColumns: string[] = ["filename", "dateupload", "firstname",  "lastname", "codicefiscale", "typeDocument", "action"];
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   documentiPazientePaginator: MatPaginator;
@@ -31,6 +32,7 @@ export class ArchiveDocumentsComponent implements OnInit {
     public dialog: MatDialog,
     public messageService: MessagesService,
     public patientService: PazienteService,
+    public uploadService: UploadService
   ) {}
 
   applyFilter(event: Event) {
@@ -109,10 +111,40 @@ export class ArchiveDocumentsComponent implements OnInit {
     return filterFunction;
   }
 
-  show(visita: {
+  show(doc: {
     documentoPaziente: DocumentoPaziente;
     paziente: Paziente;
   }) {
+    this.uploadService
+      .download(doc.documentoPaziente.filename, doc.paziente._id, this.typeDocument)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
 
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        },
+        err=> {
+          this.messageService.showMessageError("Errore file non trovato");
+          console.error(err);
+        }
+        );
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
   }
 }

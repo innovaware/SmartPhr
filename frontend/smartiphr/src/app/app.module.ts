@@ -142,7 +142,6 @@ import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-vi
 import { ArchiveDocumentsComponent } from './component/archive-documents/archive-documents.component';
 import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
 import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
-
 @NgModule({
   declarations: [
     AppComponent,

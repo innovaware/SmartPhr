@@ -2,8 +2,6 @@ const express = require("express");
 const router = express.Router();
 const Pazienti = require("../models/pazienti");
 const redis = require("redis");
-const documentoAutorizzazioneUscita = require("../models/documentoAutorizzazioneUscita");
-const documentoEsitoStrumentale = require("../models/documentoEsitoStrumentale");
 const parametriVitali = require("../models/parametriVitali");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
@@ -11,7 +9,6 @@ const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
-const DocPaziente = require("../models/documentiPazienti");
 
 router.get("/", async (req, res) => {
   try {
@@ -125,6 +122,7 @@ router.post("/", async (req, res) => {
       indirizzoNascita: req.body.indirizzoNascita,
       comuneNascita: req.body.comuneNascita,
       provinciaNascita: req.body.provinciaNascita,
+      codiceFiscale: req.body.codiceFiscale,
 
       schedaInfermeristica: req.body.schedaInfermeristica,
       schedaClinica: req.body.schedaClinica,
@@ -148,6 +146,7 @@ router.put("/:id", async (req, res) => {
       return;
     }
 
+
     const pazienti = await Pazienti.updateOne(
       { _id: id },
       {
@@ -170,6 +169,7 @@ router.put("/:id", async (req, res) => {
           indirizzoNascita: req.body.indirizzoNascita,
           comuneNascita: req.body.comuneNascita,
           provinciaNascita: req.body.provinciaNascita,
+          codiceFiscale: req.body.codiceFiscale,
 
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
@@ -179,6 +179,7 @@ router.put("/:id", async (req, res) => {
 
     const searchTerm = `PAZIENTIBY${id}`;
     client.del(searchTerm);
+    // console.log("PUT Paziente reset redis: ", searchTerm);
 
     res.status(200);
     res.json(pazienti);

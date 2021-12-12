@@ -21,7 +21,8 @@ const PazienteSchema = mongoose.Schema({
   provinciaNascita: String,
   cancellato: Boolean,
   dataCancellazione: Date,
-
+  codiceFiscale: String, 
+  
   schedaInfermeristica: {
     diagnosi: String,
     intolleranzeAlimentari: String,

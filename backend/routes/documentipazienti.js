@@ -324,7 +324,7 @@ router.get("/esitoStrumentale/:id", async (req, res) => {
       return;
     }
 
-    //console.log("GET Esito Strumentale");
+    console.log("GET Esito Strumentale. Id: ", id);
 
     const searchTerm = `ESITO_STRUMENTALE_BY${id}`;
     client.get(searchTerm, async (err, data) => {
@@ -336,7 +336,7 @@ router.get("/esitoStrumentale/:id", async (req, res) => {
 
         const query = {
           $and: [
-            { idPaziente: id },
+            { paziente: id },
             { type: "EsitoStrumentale" },
             {
               $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
@@ -345,11 +345,13 @@ router.get("/esitoStrumentale/:id", async (req, res) => {
         };
 
         const pazienti = await DocPaziente.find(query);
+        console.log("GET Esito Strumentale. data: ", query);
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
         if (pazienti != null) res.status(200).json(pazienti);
         else res.status(404).json({ error: "No patient found" });
       }
+      // console.log("GET Esito Strumentale. data: ", data);
     });
   } catch (err) {
     res.status(500).json({ Error: err });
@@ -365,6 +367,7 @@ router.post("/esitoStrumentale/:id", async (req, res) => {
     dateupload: Date.now(),
     note: req.body.note,
     type: "EsitoStrumentale",
+    typeDocument: req.body.typeDocument,
     cancellato: false,
     dataCancellazione: undefined,
     descrizione: undefined,

@@ -9,6 +9,7 @@ export class DocumentoPaziente {
     paziente: string;
     _id?: string;
     type: string;
+    typeDocument?: string;
     filename: string;
     dateupload?: Date;
     note?: string;

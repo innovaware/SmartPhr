@@ -13,6 +13,17 @@
   </div>
   <div class="row" *ngIf="addingDocument && !uploadingDocumento">
     <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Tipo Esame</mat-label>
+        <select matNativeControl required class="custom-select" [(ngModel)]="nuovoDocumento.typeDocument">
+          <option selected="" value="">Seleziona ...</option>
+          <option value="Strumentale">Strumentale</option>
+        </select>
+      </mat-form-field>
+    </div>
+  </div>
+  <div class="row" *ngIf="addingDocument && !uploadingDocumento">
+    <div class="col">
       <mat-form-field class="full" appearance="fill" >
         <mat-label>Note</mat-label>
         <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumento.note">

@@ -15,7 +15,7 @@ import { UploadService } from "src/app/service/upload.service";
 export class AutorizzazioneUscitaComponent implements OnInit {
   @Input() id: string;
 
-  typeDocument: string = "DocumentoAutorizzazioneUscita";
+  typeDocument: string = "AutorizzazioneUscita";
 
   addingDocument: boolean = false;
   uploadingDocumento: boolean = false;
@@ -64,7 +64,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
       return;
     }
 
-    const path = "DocumentoAutorizzazioneUscita";
+    const path = "AutorizzazioneUscita";
     const file: File = doc.file;
     this.uploadingDocumento = true;
 
