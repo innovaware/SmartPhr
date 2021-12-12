@@ -1,4 +1,7 @@
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { schedaAnamnesiFamigliare } from 'src/app/models/schedaAnamnesiFamigliare';
 
 import { AnamnesiFamigliareComponent } from './anamnesi-famigliare.component';
 
@@ -8,7 +11,9 @@ describe('AnamnesiFamigliareComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ AnamnesiFamigliareComponent ]
+      imports: [FormsModule],
+      declarations: [AnamnesiFamigliareComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));
@@ -16,6 +21,7 @@ describe('AnamnesiFamigliareComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(AnamnesiFamigliareComponent);
     component = fixture.componentInstance;
+    component.data = new schedaAnamnesiFamigliare();
     fixture.detectChanges();
   });
 

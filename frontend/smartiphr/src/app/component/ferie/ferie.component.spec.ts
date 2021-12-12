@@ -1,4 +1,8 @@
+import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { FormsModule } from '@angular/forms';
+import { MatDialogModule, MatTableModule } from '@angular/material';
 
 import { FerieComponent } from './ferie.component';
 
@@ -8,7 +12,14 @@ describe('FerieComponent', () => {
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ FerieComponent ]
+      imports: [
+        FormsModule,
+        MatTableModule,
+        MatDialogModule,
+        HttpClientModule,
+      ],
+      declarations: [ FerieComponent ],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
     })
     .compileComponents();
   }));

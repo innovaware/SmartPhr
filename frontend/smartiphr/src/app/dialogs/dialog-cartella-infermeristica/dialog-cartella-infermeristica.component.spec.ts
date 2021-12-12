@@ -33,6 +33,7 @@ import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
 import { AppRoutingModule } from "src/app/app-routing.module";
 import { CalendarComponent } from "src/app/component/calendar/calendar.component";
 import { CambiturnoComponent } from "src/app/component/cambiturno/cambiturno.component";
+import { DiarioPisicoComponent } from 'src/app/component/diario/diario.component';
 import { DipendenteGeneraleComponent } from "src/app/component/dipendente-generale/dipendente-generale.component";
 import { FerieComponent } from "src/app/component/ferie/ferie.component";
 import { FornitoreGeneraleComponent } from "src/app/component/fornitore-generale/fornitore-generale.component";
@@ -55,7 +56,6 @@ import { VisiteSpecialisticheComponent } from "src/app/component/medica/visite-s
 import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
 import { PermessiComponent } from "src/app/component/permessi/permessi.component";
 import { PresenzeComponent } from "src/app/component/presenze/presenze.component";
-import { DiarioPisicoComponent } from "src/app/component/psicologica/diario-pisico/diario-pisico.component";
 import { EsamePisicoComponent } from "src/app/component/psicologica/esame-pisico/esame-pisico.component";
 import { ValutaPisicoComponent } from "src/app/component/psicologica/valuta-pisico/valuta-pisico.component";
 import { TableDipendentiComponent } from "src/app/component/table-dipendenti/table-dipendenti.component";

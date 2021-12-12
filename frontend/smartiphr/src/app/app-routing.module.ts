@@ -37,6 +37,10 @@ import { VisiteSpecialisticheComponent } from './component/medica/visite-special
 import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
 import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
 import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
+import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi-verbali.component';
+import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
+import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
+import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -87,6 +91,10 @@ const routes: Routes = [
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },
   { path: "archivio_esami_strumentali", component: ArchiviEsitoStrumentaleComponent, canActivate: [AuthGuard]  },
   { path: "archivio_referti_ematochimici", component: ArchiviRefertiEmatochimiciComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_verbali", component: ArchiviVerbaliComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_relazioni_certificati", component: ArchiviRelazioniCertificatiComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_impegnative", component: ArchiviImpegnativeComponent, canActivate: [AuthGuard]  },
+  { path: "archivio_pai", component: ArchiviPAIComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
 

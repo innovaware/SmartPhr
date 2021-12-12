@@ -142,6 +142,10 @@ import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-vi
 import { ArchiveDocumentsComponent } from './component/archive-documents/archive-documents.component';
 import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
 import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
+import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi-verbali.component';
+import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
+import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
+import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -236,6 +240,10 @@ import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-ref
     ArchiveDocumentsComponent,
     ArchiviEsitoStrumentaleComponent,
     ArchiviRefertiEmatochimiciComponent,
+    ArchiviVerbaliComponent,
+    ArchiviRelazioniCertificatiComponent,
+    ArchiviImpegnativeComponent,
+    ArchiviPAIComponent,
   ],
   imports: [
     BrowserModule,

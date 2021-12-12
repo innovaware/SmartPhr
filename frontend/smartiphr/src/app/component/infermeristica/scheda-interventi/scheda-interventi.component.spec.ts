@@ -1,25 +1,48 @@
-import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { CUSTOM_ELEMENTS_SCHEMA } from "@angular/core";
+import { async, ComponentFixture, TestBed } from "@angular/core/testing";
+import { FormsModule } from "@angular/forms";
+import {
+  MatDialogModule,
+  MatTableModule,
+} from "@angular/material";
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
-import { SchedaInterventiComponent } from './scheda-interventi.component';
+import { SchedaInterventiComponent } from "./scheda-interventi.component";
 
-describe('SchedaInterventiComponent', () => {
+describe("SchedaInterventiComponent", () => {
   let component: SchedaInterventiComponent;
   let fixture: ComponentFixture<SchedaInterventiComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ SchedaInterventiComponent ]
-    })
-    .compileComponents();
+      imports: [
+        FormsModule,
+        MatTableModule,
+        MatDialogModule,
+        BrowserAnimationsModule,
+      ],
+      declarations: [SchedaInterventiComponent],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+    }).compileComponents();
   }));
 
   beforeEach(() => {
     fixture = TestBed.createComponent(SchedaInterventiComponent);
     component = fixture.componentInstance;
+    component.data = [{
+      data: new Date(),
+      diagnosi: "Diagnosi",
+      obiettivi: "Obiettivi",
+      intervento: "Intervento",
+      firma: "firma",
+    }];
     fixture.detectChanges();
+
+
+
   });
 
-  it('should create', () => {
+  it("should create", () => {
     expect(component).toBeTruthy();
   });
 });
