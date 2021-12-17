@@ -204,11 +204,11 @@
           </mat-tab>
 
           <mat-tab label="Parametri vitali">
-            <app-parametri-vitali [id]=this.paziente._id [saveEvent]="saveParametriVitali"></app-parametri-vitali>
+            <app-parametri-vitali [id]=this.paziente._id [saveEvent]="saveParametriVitali" [inLettura]=false></app-parametri-vitali>
           </mat-tab>
 
           <mat-tab label="Esiti esami">
-            <app-esiti-strumentali [id]=this.paziente._id></app-esiti-strumentali>
+            <app-esiti-strumentali [id]=this.paziente._id [inLettura]=false></app-esiti-strumentali>
           </mat-tab>
 
           <mat-tab label="Autorizzazioni uscita">

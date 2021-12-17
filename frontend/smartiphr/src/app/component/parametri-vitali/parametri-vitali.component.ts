@@ -14,6 +14,7 @@ import { PazienteService } from "src/app/service/paziente.service";
 export class ParametriVitaliComponent implements OnInit {
   @Input() id: string; //Id paziente
   @Input() saveEvent: Subject<string>;
+  @Input() inLettura: boolean;
 
   public radarChartType: ChartType = "radar";
   public radarChartLabels: Label[] = ["PA", "TC", "SPO2", "DIURESI", "GLIC"];

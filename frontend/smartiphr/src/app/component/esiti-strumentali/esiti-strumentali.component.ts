@@ -12,6 +12,7 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class EsitiStrumentaliComponent implements OnInit {
   @Input() id: string;
+  @Input() inLettura: boolean;
 
   typeDocument: string = "EsitoStrumentale";
 
