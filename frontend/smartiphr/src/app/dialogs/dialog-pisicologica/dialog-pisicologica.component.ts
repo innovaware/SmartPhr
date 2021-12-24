@@ -14,11 +14,23 @@ export class DialogPisicologicaComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogPisicologicaComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: Paziente
+
+    @Inject(MAT_DIALOG_DATA)
+    public data: { paziente: Paziente; readonly: boolean; newItem: boolean }
   ) {
+    console.log("Dialog psicologica. Data: ", data);
 
-
+    if (data.paziente.schedaPisico == undefined) {
+      this.schedaPisico = new schedaPisico();
+    } else {
+      this.schedaPisico = schedaPisico.clone(data.paziente.schedaPisico);
+    }
   }
 
   ngOnInit() {}
+
+  save() {
+    this.dialogRef.close(this.schedaPisico);
+   // this.data.paziente.schedaPisico.update(this.schedaPisico);
+  }
 }

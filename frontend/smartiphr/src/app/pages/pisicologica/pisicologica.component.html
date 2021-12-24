@@ -10,11 +10,16 @@
     <div class="col">
       <!-- <app-table-ospiti (showItemEmiter)="show($event)" [buttons]='["Mostra"]'></app-table-ospiti> -->
 
+
       <app-table-ospiti
-      [showPatient]="show"
-      [enableShow]=true
-      [enableDeleting]=false
-      [showInsert]=false></app-table-ospiti>
+          [eventPazienti]="eventsSubject.asObservable()"
+          [showPatient]="showFunction"
+          [deletePatient]=false
+          [enableShow]=true
+          [enableDeleting]=false
+          [showInsert]=false>
+      </app-table-ospiti>
+
     </div>
   </div>
 </div>

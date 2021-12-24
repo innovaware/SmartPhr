@@ -173,6 +173,9 @@ router.put("/:id", async (req, res) => {
 
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
+          schedaPisico: req.body.schedaPisico,
+
+          //dimissione: req.body.dimissione
         },
       }
     );
@@ -302,5 +305,79 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
+
+// SCHEDA PSICOLOGICA
+router.get("/schedaPsicologica/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    const searchTerm = `PAZIENTIBY${id}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data.schedaPisico));
+      } else {
+        const pazienti = await Pazienti.findOne({
+          $and: [
+            {
+              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            },
+            { _id: id },
+          ],
+        });
+
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+        if (pazienti != null) res.status(200).json(pazienti.schedaPisico);
+        else res.status(404).json({ error: "No patient found" });
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.put("/schedaPsicologica/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = req.body;
+    if (id == undefined || id === "undefined") {
+      console.log("Error id is not defined ", id);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    if (data == undefined || data === "undefined") {
+      console.log("Error data is not defined ", id);
+      res.status(404).json({ Error: "Data not defined" });
+      return;
+    }
+
+    console.log("data: ", data);
+    const parametri = await Pazienti.updateOne(
+      { _id: id },
+      {
+        $set: {
+          schedaPisico: data
+        },
+      }
+    );
+
+    const searchTerm = `PAZIENTIBY${id}`;
+    client.del(searchTerm);
+
+    res.status(200);
+    res.json(parametri);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
 
 module.exports = router;

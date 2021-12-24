@@ -22,7 +22,7 @@ export interface DiarioPisicologico {
   styleUrls: ["./diario.component.css"],
 })
 export class DiarioPisicoComponent implements OnInit, AfterViewInit {
-  @Input() data: SchedaDiario;
+  @Input() diario: Diario[];
   @Input() disable: boolean;
 
   displayedColumns: string[] = ["data", "valore", "firma", "action"];
@@ -33,7 +33,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit() {
-    this.dataSource = new MatTableDataSource<Diario>(this.data.diario);
+    this.dataSource = new MatTableDataSource<Diario>(this.diario);
     this.dataSource.paginator = this.paginator;
   }
 
@@ -54,8 +54,8 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       .subscribe((result) => {
         if (result != undefined && result) {
           console.log("result:", result);
-          this.data.diario.push(result);
-          this.dataSource.data = this.data.diario;
+          this.diario.push(result);
+          this.dataSource.data = this.diario;
         }
       });
   }
@@ -70,7 +70,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       .subscribe((result) => {
         console.log("result:", result);
         if (result != undefined && result) {
-          const data = this.data.diario;
+          const data = this.diario;
 
           const index = data.indexOf(diario, 0);
           if (index > -1) {
@@ -79,7 +79,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
           }
 
           data.push(result);
-          this.dataSource.data = this.data.diario;
+          this.dataSource.data = this.diario;
         }
       });
   }
