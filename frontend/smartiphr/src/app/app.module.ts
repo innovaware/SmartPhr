@@ -146,6 +146,7 @@ import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi
 import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
 import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
 import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
+import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/dialog-riabilitazione.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -244,6 +245,7 @@ import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.com
     ArchiviRelazioniCertificatiComponent,
     ArchiviImpegnativeComponent,
     ArchiviPAIComponent,
+    DialogRiabilitazioneComponent,
   ],
   imports: [
     BrowserModule,
@@ -302,6 +304,7 @@ import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.com
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
+    DialogRiabilitazioneComponent,
   ],
 })
 export class AppModule {
