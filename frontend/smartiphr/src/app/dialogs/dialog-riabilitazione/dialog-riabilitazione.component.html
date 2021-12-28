@@ -1,0 +1,52 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>CARTELLA RIABILITATIVA</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+
+        <mat-tab-group mat-align-tabs="start">
+          <mat-tab label="Generale">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col">
+                  <app-paziente-generale [disable]=true [data]=data.paziente></app-paziente-generale>
+                </div>
+              </div>
+
+            </div>
+          </mat-tab>
+          <mat-tab label="tab1">
+          </mat-tab>
+          <mat-tab label="tab2">
+          </mat-tab>
+          <mat-tab label="tab3">
+          </mat-tab>
+        </mat-tab-group>
+
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
+    <button mat-button class="button-insert" (click)="save()">Salva</button>
+  </div>
+</div>

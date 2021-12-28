@@ -12,6 +12,7 @@ import { DocumentoEsitoStrumentale } from "../models/documentoEsitoStrumentale";
 import { DocumentoPaziente } from "../models/documentoPaziente";
 import { ParametriVitali } from "../models/parametriVitali";
 import { Paziente } from "../models/paziente";
+import { schedaPisico } from '../models/schedaPisico';
 
 @Injectable({
   providedIn: "root",
@@ -190,5 +191,18 @@ export class PazienteService {
           observer.next([]);
         });
     }
+  }
+
+
+  // SCHEDA PSICOLOGICA
+
+  updateSchedaPisicologica(
+    id: string,
+    data: schedaPisico,
+  ): Observable<any> {
+    return this.http.put<any>(
+      `${this.api}/api/pazienti/schedaPsicologica/${id}`,
+      data
+    );
   }
 }

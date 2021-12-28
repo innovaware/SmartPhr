@@ -1,5 +1,5 @@
 <div class="center">
-  <button [ngIf]="!inLettura" mat-button class="button-insert" (click)="AddDocument()">Aggiungi Documento</button>
+  <button *ngIf="!inLettura" mat-button class="button-insert" (click)="AddDocument()">Aggiungi Documento</button>
 </div>
 
 <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"

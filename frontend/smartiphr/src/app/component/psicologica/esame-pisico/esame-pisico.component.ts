@@ -9,19 +9,12 @@ import { schedaPisico } from 'src/app/models/schedaPisico';
   styleUrls: ['./esame-pisico.component.css']
 })
 export class EsamePisicoComponent implements OnInit {
-  @Input() paziente: Paziente;
-  schedaPisico: schedaPisico;
+  @Input() schedaPisico: schedaPisico;
 
   constructor() { }
 
   ngOnInit() {
-
-/*     this.schedaPisico = this.paziente.cartellaClinica.sort(
-      (a: CartellaClinica, b: CartellaClinica) => {
-        return a.data.getTime() - b.data.getTime();
-      }
-    )[0].schedaPisico; */
-
+    // console.log("Esame Psicologico Dialog", this.schedaPisico);
   }
 
 

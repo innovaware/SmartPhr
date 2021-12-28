@@ -72,12 +72,14 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
       this.dataSource = new MatTableDataSource<Paziente>(p);
       this.dataSource.paginator = this.paginator;
 
-      
+
     });
   }
 
   ngOnDestroy() {
-    this.eventsSubscription.unsubscribe();
+    if (this.eventsSubscription != undefined) {
+      this.eventsSubscription.unsubscribe();
+    }
   }
 
   ngAfterViewInit() {}
@@ -97,7 +99,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
 
     console.log("Show scheda paziente:", paziente);
     var dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: false },    
+      data: { paziente: paziente, readonly: false },
       width: "1024px",
     });
   }

@@ -21,8 +21,17 @@ const PazienteSchema = mongoose.Schema({
   provinciaNascita: String,
   cancellato: Boolean,
   dataCancellazione: Date,
-  codiceFiscale: String, 
-  
+  codiceFiscale: String,
+
+
+  // dimissione: {
+  //   typeDimissione: String,
+  //   data: Date,
+  // },
+
+
+  // SCHEDA INFERMERISTICA
+
   schedaInfermeristica: {
     diagnosi: String,
     intolleranzeAlimentari: String,
@@ -164,11 +173,9 @@ const PazienteSchema = mongoose.Schema({
     ],
   },
 
-
-  // CARTELLA CLINICA 
+  // CARTELLA CLINICA
 
   schedaClinica: {
-    
     schedaAnamnesiFamigliare: {
       ipertensione: Boolean,
       diabete: Boolean,
@@ -204,7 +211,6 @@ const PazienteSchema = mongoose.Schema({
       reazioneAFarmaci: String,
     },
 
-
     schedaEsameGenerale: {
       tipocostituzionale: String,
       condizionigenerali: String,
@@ -220,11 +226,10 @@ const PazienteSchema = mongoose.Schema({
       pressionearteriosa: String,
       polsiarteriosi: String,
       apparatorespiratorio: String,
-      addome: String,   
+      addome: String,
       fegato: String,
       milza: String,
     },
-
 
     schedaEsameNeurologia: {
       facies: String,
@@ -266,50 +271,57 @@ const PazienteSchema = mongoose.Schema({
       segnimeningei: String,
       sfinteri: String,
       annotazioniriflessi: String,
-  
     },
     schedaValutazioneTecniche: {
       valsociale: String,
-    valeducativa: String,
-    valpsicologica: String,
-    valmotoria: String,
+      valeducativa: String,
+      valpsicologica: String,
+      valmotoria: String,
     },
     schedaMezziContenzione: {
       usomezzi: String,
-    spondine: Boolean,
-    pozizionespondine: String,
-    pelvica: Boolean,
-    pettorina: Boolean,
-    cinturaaddominale: Boolean,
-    cinturaletto: Boolean,
-    fermabraccio: Boolean,
-    posizionefermabraccio: String,
-    tavolinocarrozzina: Boolean,
-    posizionepresenzaconsenso: String,
-    datainizioingresso: Boolean,
-    datainizio: String,
-    motivo: String,
-    tempi: String,
-    durata: String,
-    interruzione: String,
-    motivointerruzione: String,
+      spondine: Boolean,
+      pozizionespondine: String,
+      pelvica: Boolean,
+      pettorina: Boolean,
+      cinturaaddominale: Boolean,
+      cinturaletto: Boolean,
+      fermabraccio: Boolean,
+      posizionefermabraccio: String,
+      tavolinocarrozzina: Boolean,
+      posizionepresenzaconsenso: String,
+      datainizioingresso: Boolean,
+      datainizio: String,
+      motivo: String,
+      tempi: String,
+      durata: String,
+      interruzione: String,
+      motivointerruzione: String,
     },
 
     schedaDecessoOspite: {
-      relazionedecesso: String
+      relazionedecesso: String,
     },
-
 
     schedaDimissioneOspite: {
       relazionedimissione: String,
-      terapiainatto: String
-    }
-
-    
-    
+      terapiainatto: String,
+    },
   },
 
+  // SCHEDA PSICOLOGICA
 
+  schedaPisico: {
+    esame: {
+      statoEmotivo: [String],
+      personalita: [String],
+      linguaggio: [String],
+      memoria: [String],
+      orientamento: [String],
+      abilitaPercettivo: [String],
+      abilitaEsecutive: [String],
+      ideazione: [String],
+      umore: [String],
 
 
 
@@ -398,6 +410,13 @@ const PazienteSchema = mongoose.Schema({
 
 
 
+      partecipazioni: String,
+      ansia: String,
+      testEsecutivi: String,
+    },
+    valutazione: String,
+    diario: [{ data: Date, valore: String, firma: String }],
+  },
 });
 
 module.exports = mongoose.model("Pazienti", PazienteSchema, "pazienti");

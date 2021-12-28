@@ -2,10 +2,38 @@ import { CartellaClinica } from './cartellaClinica';
 import { cartellaAssSociale } from './cartellaAssSociale';
 import { SchedaInfermeristica } from './SchedaInfermeristica';
 import { CartellaEducativa } from './cartellaEducativa';
+import { schedaPisico } from './schedaPisico';
 
 export class Paziente {
   static clone(obj: Paziente) {
     return JSON.parse(JSON.stringify(obj));
+  }
+
+  static refresh(src: Paziente, dst: Paziente) {
+    dst.cognome = src.cognome;
+    dst.nome = src.nome;
+    dst.sesso = src.sesso;
+    dst.luogoNascita = src.luogoNascita;
+    dst.dataNascita = src.dataNascita;
+    dst.indirizzoResidenza = src.indirizzoResidenza;
+    dst.comuneResidenza = src.comuneResidenza;
+    dst.provinciaResidenza = src.provinciaResidenza;
+    dst.statoCivile = src.statoCivile;
+    dst.figli = src.figli;
+    dst.scolarita = src.scolarita;
+    dst.situazioneLavorativa = src.situazioneLavorativa;
+    dst.personeRiferimento = src.personeRiferimento;
+    dst.telefono = src.telefono;
+    dst.dataIngresso = src.dataIngresso;
+    dst.provinciaNascita = src.provinciaNascita;
+    dst.indirizzoNascita = src.indirizzoNascita;
+    dst.provenienza = src.provenienza;
+    dst.comuneNascita = src.comuneNascita;
+
+    dst.schedaInfermeristica = src.schedaInfermeristica;
+    dst.schedaClinica = src.schedaClinica;
+    dst.schedaPisico = src.schedaPisico;
+    dst.dimissione = src.dimissione;
   }
 
   _id?: string;
@@ -32,10 +60,15 @@ export class Paziente {
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;
+  schedaPisico?: schedaPisico;
 
   schedaAssSociale: cartellaAssSociale;
   schedaEducativa: CartellaEducativa;
 
+  dimissione?: {
+    typeDimissione: string,
+    data: Date,
+  }
 
   public update(paziente: Paziente): void {
     this.cognome = paziente.cognome;

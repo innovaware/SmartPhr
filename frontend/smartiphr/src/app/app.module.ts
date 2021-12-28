@@ -157,6 +157,7 @@ import { ValutazioneEducativaComponent } from './component/cartella-educativa/va
 
 import { SchedaADLComponent } from './component/cartella-educativa/scheda-adl/scheda-adl.component';
 import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/scheda-iadl.component';
+import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/dialog-riabilitazione.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -264,7 +265,8 @@ import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/
     DiarioEducativoComponent,
     ValutazioneEducativaComponent,
     SchedaADLComponent,
-    SchedaIADLComponent
+    SchedaIADLComponent,
+    DialogRiabilitazioneComponent,
   ],
   imports: [
     BrowserModule,
@@ -324,6 +326,7 @@ import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
+    DialogRiabilitazioneComponent,
   ],
 })
 export class AppModule {
