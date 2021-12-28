@@ -41,6 +41,8 @@ import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi
 import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
 import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
 import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
+import { cartellaAssSociale } from "./models/cartellaAssSociale";
+import { AreaSocialeComponent } from "./pages/area-sociale/area-sociale.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -51,6 +53,9 @@ const routes: Routes = [
   { path: "fisioterapia", component: AreaFisioterapiaComponent, canActivate: [AuthGuard]  },
   { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard]  },
   { path: "infermieristica", component: AreaInfermieristicaComponent, canActivate: [AuthGuard]  },
+
+    // CARTELLA ASS.SOCIALE
+    { path: "assistente-sociale", component: AreaSocialeComponent, canActivate: [AuthGuard]  },
 
 
 // PERSONALE
@@ -86,6 +91,9 @@ const routes: Routes = [
 
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
+
+
+
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

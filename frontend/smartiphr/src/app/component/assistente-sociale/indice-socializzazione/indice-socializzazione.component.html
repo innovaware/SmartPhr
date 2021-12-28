@@ -1,0 +1,163 @@
+<div class="container-fluid tabcontent">
+    <div class="row">
+      <div class="col">
+        <mat-card>
+          <mat-card-header>
+            <mat-card-title>INDICE DI SOCIALIZZAZIONE</mat-card-title>
+          </mat-card-header>
+          <mat-card-content>
+
+
+            <table>
+                <tr>
+                  <td colspan="5">Attribuire per ognuna delle seguenti voci il punteggio che si ritiene più idoneo:</td>
+                </tr>
+                <tr>
+                  <td>4 = ottimo</td>
+                  <td>3 = buono</td>
+                  <td>2 = sufficiente</td>
+                  <td>1 = scarso</td>
+                  <td>0 = nullo</td>
+                </tr>
+                
+              </table>
+
+
+              <br>
+              
+
+
+            <table>
+                <tr>
+                  <td>Adattamento sociale alla vita di relazione nella casa</td>
+                  <td>
+                      <select matNativeControl class="custom-select" [(ngModel)]="data.adattamentoSociale">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+                <tr>
+                    <td>Relazioni di amicizia</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.relAmicizia">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td>Integrazione nel gruppo</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.integrazioneGruppo">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+
+                  <tr>
+                    <td>Grado di disponibilità alla collaborazione</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.gradoDisp">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+
+
+                  <tr>
+                    <td>Rapporti con la famiglia</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.rapportoFamiglia">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+
+                  <tr>
+                    <td>Attività sociali all’esterno</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.attivitaSociale">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+
+
+                  <tr>
+                    <td>Attività in R.S.A.</td>
+                    <td>
+                        <select matNativeControl required class="custom-select" [(ngModel)]="data.attivitaRSA">
+                          <option selected="" value="">Seleziona ...</option>
+                          <option value="4">4</option>
+                          <option value="3">3</option>
+                          <option value="2">2</option>
+                          <option value="1">1</option>
+                          <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+
+        
+
+
+                  <tr>
+                    <td>Totale punteggio</td>
+                    <td>
+                        {{ data.totale }}                       
+                    </td>
+                  </tr>
+
+
+                  <tr>
+                    <td>Data Valutazione:</td>
+                    <td>
+                        {{ data.data }}                       
+                    </td>
+                  </tr>
+              </table>
+
+              
+          </mat-card-content>
+        </mat-card>
+      </div>
+    </div>
+  </div>
+

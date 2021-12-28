@@ -146,6 +146,17 @@ import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi
 import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
 import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
 import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
+import { DialogCartellaAssistenteSocialeComponent } from './dialogs/dialog-cartella-assistente-sociale/dialog-cartella-assistente-sociale.component';
+import { AreaSocialeComponent } from './pages/area-sociale/area-sociale.component';
+import { ValutazioneSocialeComponent } from './component/assistente-sociale/valutazione-sociale/valutazione-sociale.component';
+import { IndiceSocializzazioneComponent } from './component/assistente-sociale/indice-socializzazione/indice-socializzazione.component';
+import { DiarioSocialeComponent } from './component/assistente-sociale/diario-sociale/diario-sociale.component';
+import { DialogCartellaEducativaComponent } from './dialogs/dialog-cartella-educativa/dialog-cartella-educativa.component';
+import { DiarioEducativoComponent } from './component/cartella-educativa/diario-educativo/diario-educativo.component';
+import { ValutazioneEducativaComponent } from './component/cartella-educativa/valutazione-educativa/valutazione-educativa.component';
+
+import { SchedaADLComponent } from './component/cartella-educativa/scheda-adl/scheda-adl.component';
+import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/scheda-iadl.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -244,6 +255,16 @@ import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.com
     ArchiviRelazioniCertificatiComponent,
     ArchiviImpegnativeComponent,
     ArchiviPAIComponent,
+    DialogCartellaAssistenteSocialeComponent,
+    AreaSocialeComponent,
+    ValutazioneSocialeComponent,
+    IndiceSocializzazioneComponent,
+    DiarioSocialeComponent,
+    DialogCartellaEducativaComponent,
+    DiarioEducativoComponent,
+    ValutazioneEducativaComponent,
+    SchedaADLComponent,
+    SchedaIADLComponent
   ],
   imports: [
     BrowserModule,
@@ -288,6 +309,7 @@ import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.com
     DialogStanzaComponent,
     DialogCartellaClinicaComponent,
     DialogCartellaInfermeristicaComponent,
+    DialogCartellaAssistenteSocialeComponent,
     DialogEventComponent,
     DialogFarmacoComponent,
     DialogDipendenteComponent,

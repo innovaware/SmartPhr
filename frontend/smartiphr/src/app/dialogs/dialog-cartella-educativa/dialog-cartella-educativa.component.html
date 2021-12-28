@@ -1,0 +1,82 @@
+<div mat-dialog-title>
+    <div class="container-fluid" >
+      <div class="row">
+        <div class="col">
+          <h3>CARTELLA ASSISTENTE SOCIALE</h3>
+        </div>
+  
+        <div class="col">
+          <button class="close-button" [mat-dialog-close]="true">×
+          </button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-dialog-content>
+    <div class="container-fluid" >
+      <div class="row">
+        <div class="col">
+  
+          <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Generale">
+              <!-- <app-paziente-generale [disable]=true [(data)]=cartella></app-paziente-generale> -->
+              <app-paziente-generale [data]=data.paziente [disable]=true ></app-paziente-generale>
+            </mat-tab>
+  
+               
+  
+        <!--SOCIALIZZAZIONE -->
+             <mat-tab label="Socializzazione">
+              <app-valutazione-sociale [data]=data.paziente></app-valutazione-sociale>
+            </mat-tab>
+        <!-- SOCIALIZZAZIONE -->
+  
+        <!-- ADL  -->
+            <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
+             <app-scheda-adl [data]=data.paziente></app-scheda-adl>
+            </mat-tab>
+        <!-- ADL -->
+
+
+         <!-- IADL  -->
+         <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
+            <app-scheda-iadl [data]=data.paziente></app-scheda-iadl>
+           </mat-tab>
+       <!-- IADL -->
+  
+
+         <!-- VALUTAZIONE EDUCATIVA -->
+         <mat-tab label="Valutazione Educativa">
+            <app-valutazione-educativa [data]=data.paziente></app-valutazione-educativa>
+          </mat-tab>
+      <!-- VALUTAZIONE EDUCATIVA -->
+
+
+        <!-- DIARIO EDUCATIVO -->
+           <mat-tab label="Diario Educativo">
+              <app-diario-educativo [data]=data.paziente >></app-diario-educativo>
+            </mat-tab>
+         <!-- DIARIO EDUCATIVO -->
+
+          </mat-tab-group>
+  
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  
+  
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    <button mat-button (click)="salva()" class="button-insert">Salva</button>
+  </div>
+  </div>
+  

@@ -313,6 +313,88 @@ const PazienteSchema = mongoose.Schema({
 
 
 
+  // CARTELLA ASS SOCIALE 
+
+  schedaAssSociale: {
+    
+    valutazioneSociale: {
+      valutazione: String,
+    },
+
+    indiceSocializzazione: {
+      adattamentoSociale: String,
+      relAmicizia: String,
+      integrazioneGruppo: String,
+      gradoDisp: String,
+      rapportoFamiglia: String,
+      attivitaSociale: String,
+      attivitaRSA: String,
+      data: Date,
+      totale: Number
+    },  
+  },
+
+
+
+  // CARTELLA EDUCATIVA 
+
+  schedaEducativa: {
+    
+    valutazioneEducativa: {
+      valutazione: String,
+    },
+
+    schedaSocializzazione: {
+      compagnia: String,
+      interesse: String,
+      iniziativa: String,
+
+      hobbyScrittura: Boolean,
+      hobbyBallo: Boolean,
+      hobbyBricolage: Boolean,
+      hobbyLettura: Boolean,
+      hobbyPittura: Boolean,
+      hobbyDisegno: Boolean,
+      hobbyAttMotoria: Boolean,
+      hobbyGiochi: Boolean,
+      hobbyTV: Boolean,
+      hobbyCucina: Boolean,
+
+      hobbyAltro: String
+    },  
+
+
+    ADL: {
+      A: String,
+      B: String,
+      C: String,
+      D: String,
+      E: String,
+      F: String,
+      totale: Number
+    },  
+
+    IADL: {
+      A: String,
+      B: String,
+      C: String,
+      D: String,
+      E: String,
+      F: String,
+      G: String,
+      H: String,
+      totale: Number
+    },  
+
+
+
+
+  },
+
+
+
+
+
 
 
 

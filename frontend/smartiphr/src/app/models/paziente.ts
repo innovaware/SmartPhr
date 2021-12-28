@@ -1,5 +1,7 @@
 import { CartellaClinica } from './cartellaClinica';
+import { cartellaAssSociale } from './cartellaAssSociale';
 import { SchedaInfermeristica } from './SchedaInfermeristica';
+import { CartellaEducativa } from './cartellaEducativa';
 
 export class Paziente {
   static clone(obj: Paziente) {
@@ -30,6 +32,9 @@ export class Paziente {
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;
+
+  schedaAssSociale: cartellaAssSociale;
+  schedaEducativa: CartellaEducativa;
 
 
   public update(paziente: Paziente): void {
