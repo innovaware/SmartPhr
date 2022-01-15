@@ -1,0 +1,142 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-content>
+
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                ANAMNESI RIABILITATIVA
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable
+                  [(ngModel)]="data.anamnesiRiabilitativa"></textarea>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                TEST COMPILATI
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <table class="fill">
+                  <tr>
+                    <th></th>
+                    <th>Arrivo</th>
+                    <th>Follow up</th>
+                    <th>Follow up</th>
+                    <th>Follow up</th>
+                    <th>Follow up</th>
+                    <th>Follow up</th>
+                    <th>Follow up</th>
+                  </tr>
+
+                  <tr>
+                    <td>DATA DI SOMMINISTRAZIONE</td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.arrivo"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp1"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp2"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp3"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp4"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp5"></td>
+                    <td><input type="text" [(ngModel)]="data.test.dataSomministrazione.followUp6"></td>
+                  </tr>
+
+                  <tr>
+                    <td>FIM</td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.arrivo"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp1"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp2"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp3"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp4"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp5"></td>
+                    <td><input type="text" [(ngModel)]="data.test.FIM.followUp6"></td>
+                  </tr>
+
+                  <tr>
+                    <td>SCALA DI TINETTI</td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.arrivo"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp1"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp2"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp3"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp4"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp5"></td>
+                    <td><input type="text" [(ngModel)]="data.test.scalaTINETTI.followUp6"></td>
+                  </tr>
+
+                  <tr>
+                    <td>INDICE DI BARTHEL</td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.arrivo"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp1"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp2"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp3"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp4"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp5"></td>
+                    <td><input type="text" [(ngModel)]="data.test.indiceBARTHEL.followUp6"></td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                CUT OFF PER RISCHIO CADUTE SECONDO SCALA TINETTI &le; 18.
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
+                Altro
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable [(ngModel)]="data.test.altro"></textarea>
+              </div>
+            </div>
+
+            <hr>
+            <div class="row">
+              <div class="col">
+                <table class="fill">
+                  <tr>
+                    <th>DATA LESIONE/EVENTO</th>
+                    <th>TIPOLOGIA E SEDE LESIONE</th>
+                    <th>PARTE DEL CORPO AFFETTA</th>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+            <hr>
+            <div class="row">
+              <div class="col">
+                DIAGNOSI DI FUNZIONAMENTO
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable
+                  [(ngModel)]="data.diagnosiFunzionamento"></textarea>
+              </div>
+            </div>
+
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

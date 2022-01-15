@@ -23,12 +23,10 @@ const PazienteSchema = mongoose.Schema({
   dataCancellazione: Date,
   codiceFiscale: String,
 
-
   // dimissione: {
   //   typeDimissione: String,
   //   data: Date,
   // },
-
 
   // SCHEDA INFERMERISTICA
 
@@ -323,93 +321,74 @@ const PazienteSchema = mongoose.Schema({
       ideazione: [String],
       umore: [String],
 
+      // CARTELLA ASS SOCIALE
 
+      schedaAssSociale: {
+        valutazioneSociale: {
+          valutazione: String,
+        },
 
-  // CARTELLA ASS SOCIALE 
+        indiceSocializzazione: {
+          adattamentoSociale: String,
+          relAmicizia: String,
+          integrazioneGruppo: String,
+          gradoDisp: String,
+          rapportoFamiglia: String,
+          attivitaSociale: String,
+          attivitaRSA: String,
+          data: Date,
+          totale: Number,
+        },
+      },
 
-  schedaAssSociale: {
-    
-    valutazioneSociale: {
-      valutazione: String,
-    },
+      // CARTELLA EDUCATIVA
 
-    indiceSocializzazione: {
-      adattamentoSociale: String,
-      relAmicizia: String,
-      integrazioneGruppo: String,
-      gradoDisp: String,
-      rapportoFamiglia: String,
-      attivitaSociale: String,
-      attivitaRSA: String,
-      data: Date,
-      totale: Number
-    },  
-  },
+      schedaEducativa: {
+        valutazioneEducativa: {
+          valutazione: String,
+        },
 
+        schedaSocializzazione: {
+          compagnia: String,
+          interesse: String,
+          iniziativa: String,
 
+          hobbyScrittura: Boolean,
+          hobbyBallo: Boolean,
+          hobbyBricolage: Boolean,
+          hobbyLettura: Boolean,
+          hobbyPittura: Boolean,
+          hobbyDisegno: Boolean,
+          hobbyAttMotoria: Boolean,
+          hobbyGiochi: Boolean,
+          hobbyTV: Boolean,
+          hobbyCucina: Boolean,
 
-  // CARTELLA EDUCATIVA 
+          hobbyAltro: String,
+        },
 
-  schedaEducativa: {
-    
-    valutazioneEducativa: {
-      valutazione: String,
-    },
+        ADL: {
+          A: String,
+          B: String,
+          C: String,
+          D: String,
+          E: String,
+          F: String,
+          totale: Number,
+        },
 
-    schedaSocializzazione: {
-      compagnia: String,
-      interesse: String,
-      iniziativa: String,
-
-      hobbyScrittura: Boolean,
-      hobbyBallo: Boolean,
-      hobbyBricolage: Boolean,
-      hobbyLettura: Boolean,
-      hobbyPittura: Boolean,
-      hobbyDisegno: Boolean,
-      hobbyAttMotoria: Boolean,
-      hobbyGiochi: Boolean,
-      hobbyTV: Boolean,
-      hobbyCucina: Boolean,
-
-      hobbyAltro: String
-    },  
-
-
-    ADL: {
-      A: String,
-      B: String,
-      C: String,
-      D: String,
-      E: String,
-      F: String,
-      totale: Number
-    },  
-
-    IADL: {
-      A: String,
-      B: String,
-      C: String,
-      D: String,
-      E: String,
-      F: String,
-      G: String,
-      H: String,
-      totale: Number
-    },  
-
-
-
-
-  },
-
-
-
-
-
-
-
-
+        IADL: {
+          A: String,
+          B: String,
+          C: String,
+          D: String,
+          E: String,
+          F: String,
+          G: String,
+          H: String,
+          totale: Number,
+        },
+      },
       partecipazioni: String,
       ansia: String,
       testEsecutivi: String,
@@ -417,6 +396,15 @@ const PazienteSchema = mongoose.Schema({
     valutazione: String,
     diario: [{ data: Date, valore: String, firma: String }],
   },
+
+  // VALUTAZIONE MOTORIA
+  valutazioneMotoria: {
+    valutazione: String,
+    dimissione: String,
+    dimissioneDate: Date,
+  },
+
+  
 });
 
 module.exports = mongoose.model("Pazienti", PazienteSchema, "pazienti");

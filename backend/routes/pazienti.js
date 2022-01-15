@@ -126,6 +126,8 @@ router.post("/", async (req, res) => {
 
       schedaInfermeristica: req.body.schedaInfermeristica,
       schedaClinica: req.body.schedaClinica,
+
+      valutazioneMotoria: req.body.valutazioneMotoria,
     });
 
     const result = await pazienti.save();
@@ -145,7 +147,6 @@ router.put("/:id", async (req, res) => {
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
-
 
     const pazienti = await Pazienti.updateOne(
       { _id: id },
@@ -174,6 +175,8 @@ router.put("/:id", async (req, res) => {
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
           schedaPisico: req.body.schedaPisico,
+
+          valutazioneMotoria: req.body.valutazioneMotoria,
 
           //dimissione: req.body.dimissione
         },
@@ -223,7 +226,6 @@ router.delete("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 // PARAMETRI VITALI
 
@@ -306,7 +308,6 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
   }
 });
 
-
 // SCHEDA PSICOLOGICA
 router.get("/schedaPsicologica/:id", async (req, res) => {
   const { id } = req.params;
@@ -364,7 +365,7 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-          schedaPisico: data
+          schedaPisico: data,
         },
       }
     );
@@ -378,6 +379,5 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 module.exports = router;

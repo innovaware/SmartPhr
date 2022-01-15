@@ -158,6 +158,8 @@ import { ValutazioneEducativaComponent } from './component/cartella-educativa/va
 import { SchedaADLComponent } from './component/cartella-educativa/scheda-adl/scheda-adl.component';
 import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/scheda-iadl.component';
 import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/dialog-riabilitazione.component';
+import { ValutazioneMotoriaComponent } from './component/valutazione-motoria/valutazione-motoria.component';
+import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-riabilitativa.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -267,6 +269,8 @@ import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/d
     SchedaADLComponent,
     SchedaIADLComponent,
     DialogRiabilitazioneComponent,
+    ValutazioneMotoriaComponent,
+    AreaRiabilitativaComponent,
   ],
   imports: [
     BrowserModule,

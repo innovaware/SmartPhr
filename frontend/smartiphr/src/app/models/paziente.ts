@@ -3,6 +3,8 @@ import { cartellaAssSociale } from './cartellaAssSociale';
 import { SchedaInfermeristica } from './SchedaInfermeristica';
 import { CartellaEducativa } from './cartellaEducativa';
 import { schedaPisico } from './schedaPisico';
+import { ValutazioneMotoria } from './ValutazioneMotoria';
+import { AreaRiabilitativa } from './AreaRiabilitativa';
 
 export class Paziente {
   static clone(obj: Paziente) {
@@ -34,6 +36,8 @@ export class Paziente {
     dst.schedaClinica = src.schedaClinica;
     dst.schedaPisico = src.schedaPisico;
     dst.dimissione = src.dimissione;
+
+
   }
 
   _id?: string;
@@ -64,6 +68,9 @@ export class Paziente {
 
   schedaAssSociale: cartellaAssSociale;
   schedaEducativa: CartellaEducativa;
+
+  valutazioneMotoria: ValutazioneMotoria;
+  areaRiabilitativa: AreaRiabilitativa;
 
   dimissione?: {
     typeDimissione: string,
