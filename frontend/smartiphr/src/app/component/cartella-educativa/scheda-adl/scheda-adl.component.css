@@ -60,6 +60,9 @@
     width: 100%;
   }
   
+  td{
+    padding-top: 25px;
+  }
   
   .mat-column-action {
     /* width: 32px; */

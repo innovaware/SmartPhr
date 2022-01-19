@@ -309,19 +309,8 @@ const PazienteSchema = mongoose.Schema({
     },
   },
 
-  // SCHEDA PSICOLOGICA
-
-  schedaPisico: {
-    esame: {
-      statoEmotivo: [String],
-      personalita: [String],
-      linguaggio: [String],
-      memoria: [String],
-      orientamento: [String],
-      abilitaPercettivo: [String],
-      abilitaEsecutive: [String],
-      ideazione: [String],
-      umore: [String],
+  
+      
 
 
 
@@ -406,7 +395,19 @@ const PazienteSchema = mongoose.Schema({
 
 
 
+// SCHEDA PSICOLOGICA
 
+schedaPisico: {
+  esame: {
+    statoEmotivo: [String],
+    personalita: [String],
+    linguaggio: [String],
+    memoria: [String],
+    orientamento: [String],
+    abilitaPercettivo: [String],
+    abilitaEsecutive: [String],
+    ideazione: [String],
+    umore: [String],
 
 
 

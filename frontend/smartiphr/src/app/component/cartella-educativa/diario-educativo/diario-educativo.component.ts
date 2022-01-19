@@ -1,13 +1,14 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DialogCartellaClinicaComponent } from 'src/app/dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component';
-import { DialogDiarioClinicoComponent } from 'src/app/dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
+import { DialogCartellaAssistenteSocialeComponent } from 'src/app/dialogs//dialog-cartella-assistente-sociale/dialog-cartella-assistente-sociale.component';
+import { DialogCartellaEducativaComponent } from 'src/app/dialogs/dialog-cartella-educativa/dialog-cartella-educativa.component';
+import { DialogDiarioEducativoComponent } from 'src/app/dialogs/dialog-diario-educativo/dialog-diario-educativo.component';
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
-import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { DiarioEducativo } from 'src/app/models/diarioEducativo';
 import { Paziente } from 'src/app/models/paziente';
-import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { CartellaEducativaService } from 'src/app/service/cartella-educativa.service';
 import { MessagesService } from 'src/app/service/messages.service';
+
 
 @Component({
   selector: 'app-diario-educativo',
@@ -26,9 +27,9 @@ export class DiarioEducativoComponent implements OnInit {
   public diarioEducativoDataSource: MatTableDataSource<DiarioEducativo>;
 
 
-  constructor(public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
+  constructor(public dialogRef: MatDialogRef<DialogCartellaEducativaComponent>,
     public messageService: MessagesService,
-    public cartellaclinicaService: CartellaclinicaService,
+    public cartellaService: CartellaEducativaService,
     public dialog: MatDialog,) { }
 
   ngOnInit() {
@@ -39,7 +40,7 @@ export class DiarioEducativoComponent implements OnInit {
 
   async getDataDiario() {
     console.log(`get DataCartella paziente: ${this.data._id}`);
-    this.cartellaclinicaService
+    this.cartellaService
       .getDiarioByUser( String(this.data._id) )
       .then((f) => {
 
@@ -59,7 +60,7 @@ export class DiarioEducativoComponent implements OnInit {
   async addDiario() {
 
     console.log("Show Add Diario:", this.data);
-    var dialogRef = this.dialog.open(DialogDiarioClinicoComponent, {
+    var dialogRef = this.dialog.open(DialogDiarioEducativoComponent, {
       data: { paziente: this.data, readonly: false },
       width: "600px",
     });

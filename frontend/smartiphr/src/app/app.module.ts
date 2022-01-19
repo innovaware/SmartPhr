@@ -158,6 +158,9 @@ import { ValutazioneEducativaComponent } from './component/cartella-educativa/va
 import { SchedaADLComponent } from './component/cartella-educativa/scheda-adl/scheda-adl.component';
 import { SchedaIADLComponent } from './component/cartella-educativa/scheda-iadl/scheda-iadl.component';
 import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/dialog-riabilitazione.component';
+import { DialogDiarioAsssocialeComponent } from './dialogs/dialog-diario-asssociale/dialog-diario-asssociale.component';
+import { DialogDiarioEducativoComponent } from './dialogs/dialog-diario-educativo/dialog-diario-educativo.component';
+import { SocializzazioneEducativaComponent } from "./component/cartella-educativa/socializzazione-educativa/socializzazione-educativa.component";
 @NgModule({
   declarations: [
     AppComponent,
@@ -265,8 +268,11 @@ import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/d
     DiarioEducativoComponent,
     ValutazioneEducativaComponent,
     SchedaADLComponent,
+    SocializzazioneEducativaComponent,
     SchedaIADLComponent,
     DialogRiabilitazioneComponent,
+    DialogDiarioAsssocialeComponent,
+    DialogDiarioEducativoComponent,
   ],
   imports: [
     BrowserModule,
@@ -312,6 +318,7 @@ import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/d
     DialogCartellaClinicaComponent,
     DialogCartellaInfermeristicaComponent,
     DialogCartellaAssistenteSocialeComponent,
+    DialogCartellaEducativaComponent,
     DialogEventComponent,
     DialogFarmacoComponent,
     DialogDipendenteComponent,

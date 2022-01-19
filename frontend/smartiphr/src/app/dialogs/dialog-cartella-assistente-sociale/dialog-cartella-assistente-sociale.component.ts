@@ -64,9 +64,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
       this.paziente.schedaAssSociale.valutazioneSociale = new valutazioneSociale();
     }
 
-    if (this.paziente.schedaAssSociale.diarioAssSociale == undefined) {
-      this.paziente.schedaAssSociale.diarioAssSociale = new DiarioAssSociale();
-    }
+
 
     if (this.paziente.schedaAssSociale.indiceSocializzazione == undefined) {
       this.paziente.schedaAssSociale.indiceSocializzazione = new IndiceSocializzazione();
@@ -76,8 +74,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
     this.valutazioneSociale = this.paziente.schedaAssSociale
       .valutazioneSociale as valutazioneSociale;
 
-    this.diarioAssSociale = this.paziente.schedaAssSociale
-      .diarioAssSociale as DiarioAssSociale;
+
 
     this.indiceSocializzazione = this.paziente.schedaAssSociale
       .indiceSocializzazione as IndiceSocializzazione;
@@ -88,4 +85,25 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
   ngOnInit() {
   }
 
+
+
+  async salva() {
+    this.paziente.schedaAssSociale.indiceSocializzazione.totale = Number(this.paziente.schedaAssSociale.indiceSocializzazione.adattamentoSociale) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.relAmicizia) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.integrazioneGruppo) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.gradoDisp) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.rapportoFamiglia) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.attivitaSociale) + 
+                                                                  Number(this.paziente.schedaAssSociale.indiceSocializzazione.attivitaRSA);
+
+    this.paziente.schedaAssSociale.indiceSocializzazione.data = new Date();
+
+    alert(JSON.stringify(this.paziente.schedaAssSociale));
+    this.pazienteService.save(this.paziente).then((value: Paziente) => {
+      console.log(`Patient  saved`, value);
+      this.dialogRef.close(this.paziente);
+    });
+  }
+
+  
 }

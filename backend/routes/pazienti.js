@@ -126,6 +126,9 @@ router.post("/", async (req, res) => {
 
       schedaInfermeristica: req.body.schedaInfermeristica,
       schedaClinica: req.body.schedaClinica,
+
+      schedaAssSociale: req.body.schedaAssSociale,
+      schedaEducativa: req.body.schedaEducativa,
     });
 
     const result = await pazienti.save();
@@ -174,6 +177,9 @@ router.put("/:id", async (req, res) => {
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
           schedaPisico: req.body.schedaPisico,
+
+          schedaAssSociale: req.body.schedaAssSociale,
+          schedaEducativa: req.body.schedaEducativa,
 
           //dimissione: req.body.dimissione
         },

@@ -34,27 +34,27 @@
   
         <!--SOCIALIZZAZIONE -->
              <mat-tab label="Socializzazione">
-              <app-valutazione-sociale [data]=data.paziente></app-valutazione-sociale>
+              <app-socializzazione-educativa [data]=socializzazione></app-socializzazione-educativa>
             </mat-tab>
         <!-- SOCIALIZZAZIONE -->
   
         <!-- ADL  -->
             <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
-             <app-scheda-adl [data]=data.paziente></app-scheda-adl>
+             <app-scheda-adl [data]=ADL></app-scheda-adl>
             </mat-tab>
         <!-- ADL -->
 
 
          <!-- IADL  -->
          <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
-            <app-scheda-iadl [data]=data.paziente></app-scheda-iadl>
+            <app-scheda-iadl [data]=IADL></app-scheda-iadl>
            </mat-tab>
        <!-- IADL -->
   
 
          <!-- VALUTAZIONE EDUCATIVA -->
          <mat-tab label="Valutazione Educativa">
-            <app-valutazione-educativa [data]=data.paziente></app-valutazione-educativa>
+            <app-valutazione-educativa [data]=valutazioneEducativa></app-valutazione-educativa>
           </mat-tab>
       <!-- VALUTAZIONE EDUCATIVA -->
 

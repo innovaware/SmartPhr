@@ -11,7 +11,7 @@ export class IndiceSocializzazione {
       this.rapportoFamiglia = "";
       this.attivitaSociale = "";
       this.attivitaRSA = "";
-      this.data = new Date();
+
     }
     
     adattamentoSociale: String;

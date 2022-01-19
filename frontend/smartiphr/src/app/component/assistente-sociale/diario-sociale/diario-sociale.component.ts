@@ -1,13 +1,13 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
-import { DialogCartellaClinicaComponent } from 'src/app/dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component';
-import { DialogDiarioClinicoComponent } from 'src/app/dialogs/dialog-diario-clinico/dialog-diario-clinico.component';
+import { DialogCartellaAssistenteSocialeComponent } from 'src/app/dialogs//dialog-cartella-assistente-sociale/dialog-cartella-assistente-sociale.component';
+import { DialogDiarioAsssocialeComponent } from 'src/app/dialogs/dialog-diario-asssociale/dialog-diario-asssociale.component';
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
-import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { DiarioAssSociale } from 'src/app/models/diarioAssSociale';
 import { Paziente } from 'src/app/models/paziente';
-import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { CartellaAssSocialeService } from 'src/app/service/cartella-ass-sociale.service';
 import { MessagesService } from 'src/app/service/messages.service';
+
 
 @Component({
   selector: 'app-diario-sociale',
@@ -23,12 +23,12 @@ export class DiarioSocialeComponent implements OnInit {
   DisplayedColumns: string[] = ["data", "contenuto", "firma", "action"];
 
 
-  @ViewChild("paginatorDC", { static: false }) diarioClinicoPaginator: MatPaginator;
-  public diarioClinicoDataSource: MatTableDataSource<DiarioAssSociale>;
+  @ViewChild("paginatorDC", { static: false }) diarioAssSocialePaginator: MatPaginator;
+  public diarioAssSocialeDataSource: MatTableDataSource<DiarioAssSociale>;
 
-  constructor(public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,
+  constructor(public dialogRef: MatDialogRef<DialogCartellaAssistenteSocialeComponent>,
     public messageService: MessagesService,
-    public cartellaclinicaService: CartellaclinicaService,
+    public cartellaService: CartellaAssSocialeService,
     public dialog: MatDialog,) { }
 
   ngOnInit() {
@@ -39,13 +39,13 @@ export class DiarioSocialeComponent implements OnInit {
 
   async getDataDiario() {
     console.log(`get DataCartella paziente: ${this.data._id}`);
-    this.cartellaclinicaService
+    this.cartellaService
       .getDiarioByUser( String(this.data._id) )
       .then((f) => {
 
         this.dataDiario = f;
-        this.diarioClinicoDataSource = new MatTableDataSource<DiarioAssSociale>(this.dataDiario);
-        this.diarioClinicoDataSource.paginator = this.diarioClinicoPaginator;
+        this.diarioAssSocialeDataSource = new MatTableDataSource<DiarioAssSociale>(this.dataDiario);
+        this.diarioAssSocialeDataSource.paginator = this.diarioAssSocialePaginator;
 
       })
       .catch((err) => {
@@ -59,7 +59,7 @@ export class DiarioSocialeComponent implements OnInit {
   async addDiario() {
 
     console.log("Show Add Diario:", this.data);
-    var dialogRef = this.dialog.open(DialogDiarioClinicoComponent, {
+    var dialogRef = this.dialog.open(DialogDiarioAsssocialeComponent, {
       data: { paziente: this.data, readonly: false },
       width: "600px",
     });
@@ -69,7 +69,7 @@ export class DiarioSocialeComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         if(result != null && result != undefined){
         this.dataDiario.push(result);
-        this.diarioClinicoDataSource = new MatTableDataSource<DiarioAssSociale>(this.dataDiario);
+        this.diarioAssSocialeDataSource = new MatTableDataSource<DiarioAssSociale>(this.dataDiario);
         }
       });
   }
