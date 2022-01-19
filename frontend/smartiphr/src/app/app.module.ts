@@ -161,6 +161,8 @@ import { DialogRiabilitazioneComponent } from './dialogs/dialog-riabilitazione/d
 import { DialogDiarioAsssocialeComponent } from './dialogs/dialog-diario-asssociale/dialog-diario-asssociale.component';
 import { DialogDiarioEducativoComponent } from './dialogs/dialog-diario-educativo/dialog-diario-educativo.component';
 import { SocializzazioneEducativaComponent } from "./component/cartella-educativa/socializzazione-educativa/socializzazione-educativa.component";
+import { ValutazioneMotoriaComponent } from './component/valutazione-motoria/valutazione-motoria.component';
+import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-riabilitativa.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -273,6 +275,8 @@ import { SocializzazioneEducativaComponent } from "./component/cartella-educativ
     DialogRiabilitazioneComponent,
     DialogDiarioAsssocialeComponent,
     DialogDiarioEducativoComponent,
+    ValutazioneMotoriaComponent,
+    AreaRiabilitativaComponent,
   ],
   imports: [
     BrowserModule,

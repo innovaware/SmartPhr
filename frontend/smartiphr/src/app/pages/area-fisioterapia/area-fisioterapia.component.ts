@@ -42,6 +42,8 @@ export class AreaFisioterapiaComponent implements  OnInit {
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogRiabilitazioneComponent, {
           data: { paziente: paziente, readonly: true },
+          width: "1024px",
+          height: "800px"
         }),
 
     });

@@ -23,12 +23,10 @@ const PazienteSchema = mongoose.Schema({
   dataCancellazione: Date,
   codiceFiscale: String,
 
-
   // dimissione: {
   //   typeDimissione: String,
   //   data: Date,
   // },
-
 
   // SCHEDA INFERMERISTICA
 
@@ -312,7 +310,27 @@ const PazienteSchema = mongoose.Schema({
   
       
 
+      // CARTELLA ASS SOCIALE
 
+      schedaAssSociale: {
+        valutazioneSociale: {
+          valutazione: String,
+        },
+
+        indiceSocializzazione: {
+          adattamentoSociale: String,
+          relAmicizia: String,
+          integrazioneGruppo: String,
+          gradoDisp: String,
+          rapportoFamiglia: String,
+          attivitaSociale: String,
+          attivitaRSA: String,
+          data: Date,
+          totale: Number,
+        },
+      },
+
+<<<<<<< HEAD
 
   // CARTELLA ASS SOCIALE 
 
@@ -411,6 +429,56 @@ schedaPisico: {
 
 
 
+=======
+      // CARTELLA EDUCATIVA
+
+      schedaEducativa: {
+        valutazioneEducativa: {
+          valutazione: String,
+        },
+
+        schedaSocializzazione: {
+          compagnia: String,
+          interesse: String,
+          iniziativa: String,
+
+          hobbyScrittura: Boolean,
+          hobbyBallo: Boolean,
+          hobbyBricolage: Boolean,
+          hobbyLettura: Boolean,
+          hobbyPittura: Boolean,
+          hobbyDisegno: Boolean,
+          hobbyAttMotoria: Boolean,
+          hobbyGiochi: Boolean,
+          hobbyTV: Boolean,
+          hobbyCucina: Boolean,
+
+          hobbyAltro: String,
+        },
+
+        ADL: {
+          A: String,
+          B: String,
+          C: String,
+          D: String,
+          E: String,
+          F: String,
+          totale: Number,
+        },
+
+        IADL: {
+          A: String,
+          B: String,
+          C: String,
+          D: String,
+          E: String,
+          F: String,
+          G: String,
+          H: String,
+          totale: Number,
+        },
+      },
+>>>>>>> a56dde9c16fa31cef2c484dace30ad088b0c9a51
       partecipazioni: String,
       ansia: String,
       testEsecutivi: String,
@@ -418,6 +486,15 @@ schedaPisico: {
     valutazione: String,
     diario: [{ data: Date, valore: String, firma: String }],
   },
+
+  // VALUTAZIONE MOTORIA
+  valutazioneMotoria: {
+    valutazione: String,
+    dimissione: String,
+    dimissioneDate: Date,
+  },
+
+  
 });
 
 module.exports = mongoose.model("Pazienti", PazienteSchema, "pazienti");

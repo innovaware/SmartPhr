@@ -1,0 +1,51 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-content>
+
+          <div class="container-fluid">
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable [(ngModel)]="data.valutazione"></textarea>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                Dimissioni
+              </div>
+
+              <div class="col">
+                Data
+              </div>
+            </div>
+
+
+            <div class="row">
+              <div class="col">
+                <input type="text" [disabled]=disable [(ngModel)]="data.dimissione">
+              </div>
+
+              <div class="col">
+                <div class="form-group" >
+                  <mat-form-field appearance="fill" >
+                    <mat-label>Scegli una date</mat-label>
+                    <input matInput [matDatepicker]="dataNascita" [(ngModel)]="data.dimissioneDate" [disabled]=disable >
+                    <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
+                    <mat-datepicker #dataNascita></mat-datepicker>
+                  </mat-form-field>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
