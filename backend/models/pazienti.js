@@ -330,7 +330,6 @@ const PazienteSchema = mongoose.Schema({
         },
       },
 
-<<<<<<< HEAD
 
   // CARTELLA ASS SOCIALE 
 
@@ -429,7 +428,6 @@ schedaPisico: {
 
 
 
-=======
       // CARTELLA EDUCATIVA
 
       schedaEducativa: {
@@ -478,7 +476,6 @@ schedaPisico: {
           totale: Number,
         },
       },
->>>>>>> a56dde9c16fa31cef2c484dace30ad088b0c9a51
       partecipazioni: String,
       ansia: String,
       testEsecutivi: String,
