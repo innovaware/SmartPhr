@@ -1,0 +1,74 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>LESIONE</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <label>Data*</label>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <mat-form-field appearance="fill">
+          <mat-label>Scegli una date</mat-label>
+          <input matInput [matDatepicker]="data" [(ngModel)]="lesione.data">
+          <mat-datepicker-toggle matSuffix [for]="data"></mat-datepicker-toggle>
+          <mat-datepicker #data></mat-datepicker>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <label>Parte del Corpo*</label>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+
+        <mat-form-field appearance="fill">
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="lesione.parteCorpo"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+    <div class="row" >
+      <div class="col">
+        <label>Tipologia*</label>
+      </div>
+    </div>
+    <div class="row" >
+      <div class="col">
+
+        <mat-form-field appearance="fill">
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="lesione.tipologia"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+
+
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
+    <button mat-button class="button-insert" (click)="save()">Salva</button>
+  </div>
+</div>

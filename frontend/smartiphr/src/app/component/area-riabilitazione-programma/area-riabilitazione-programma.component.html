@@ -1,0 +1,54 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-content>
+
+          <div class="container-fluid">
+            <div class="row">
+              <div class="col">
+                PROGRAMMA RIABILITATIVO
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable
+                  [(ngModel)]="data.note"></textarea>
+              </div>
+            </div>
+
+            <hr>
+
+            <div class="row">
+              <div class="col">
+                AUSILI IN DOTAZIONE
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable
+                  [(ngModel)]="data.ausiliDotazione"></textarea>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                PROVENIENZA AUSILI
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <textarea class="fill" type="text" [disabled]=disable
+                  [(ngModel)]="data.ausiliProvenienza"></textarea>
+              </div>
+            </div>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>

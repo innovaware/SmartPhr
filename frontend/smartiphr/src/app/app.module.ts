@@ -163,6 +163,10 @@ import { DialogDiarioEducativoComponent } from './dialogs/dialog-diario-educativ
 import { SocializzazioneEducativaComponent } from "./component/cartella-educativa/socializzazione-educativa/socializzazione-educativa.component";
 import { ValutazioneMotoriaComponent } from './component/valutazione-motoria/valutazione-motoria.component';
 import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-riabilitativa.component';
+import { DialogRiabilitazioneLesioneComponent } from './dialogs/dialog-riabilitazione-lesione/dialog-riabilitazione-lesione.component';
+import { AreaRiabilitazioneProgrammaComponent } from './component/area-riabilitazione-programma/area-riabilitazione-programma.component';
+import { AreaRiabilitazioneDiarioComponent } from './component/area-riabilitazione-diario/area-riabilitazione-diario.component';
+import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -277,6 +281,10 @@ import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-
     DialogDiarioEducativoComponent,
     ValutazioneMotoriaComponent,
     AreaRiabilitativaComponent,
+    DialogRiabilitazioneLesioneComponent,
+    AreaRiabilitazioneProgrammaComponent,
+    AreaRiabilitazioneDiarioComponent,
+    DialogRiabilitazioneDiarioComponent,
   ],
   imports: [
     BrowserModule,
@@ -338,6 +346,8 @@ import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,
     DialogRiabilitazioneComponent,
+    DialogRiabilitazioneLesioneComponent,
+    DialogRiabilitazioneDiarioComponent,
   ],
 })
 export class AppModule {

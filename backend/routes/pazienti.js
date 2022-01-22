@@ -130,6 +130,9 @@ router.post("/", async (req, res) => {
       schedaAssSociale: req.body.schedaAssSociale,
       schedaEducativa: req.body.schedaEducativa,
       valutazioneMotoria: req.body.valutazioneMotoria,
+      areaRiabilitativa: req.body.areaRiabilitativa,
+      areaRiabilitativaProgramma: req.body.areaRiabilitativaProgramma,
+      areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
     });
 
     const result = await pazienti.save();
@@ -181,8 +184,9 @@ router.put("/:id", async (req, res) => {
           schedaAssSociale: req.body.schedaAssSociale,
           schedaEducativa: req.body.schedaEducativa,
           valutazioneMotoria: req.body.valutazioneMotoria,
-
-          //dimissione: req.body.dimissione
+          areaRiabilitativa: req.body.areaRiabilitativa,
+          areaRiabilitativaProgramma: req.body.areaRiabilitativaProgramma,
+          areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
         },
       }
     );

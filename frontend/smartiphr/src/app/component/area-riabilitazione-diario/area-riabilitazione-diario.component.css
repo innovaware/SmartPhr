@@ -21,3 +21,12 @@
 .paddingRowTable {
   padding-bottom: 6px;
 }
+
+.mat-column-control {
+  width: 16%;
+  text-align: center;
+}
+
+.mat-column-data {
+  width: 15%;
+}

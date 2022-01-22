@@ -307,34 +307,9 @@ const PazienteSchema = mongoose.Schema({
     },
   },
 
-  
-      
-
-      // CARTELLA ASS SOCIALE
-
-      schedaAssSociale: {
-        valutazioneSociale: {
-          valutazione: String,
-        },
-
-        indiceSocializzazione: {
-          adattamentoSociale: String,
-          relAmicizia: String,
-          integrazioneGruppo: String,
-          gradoDisp: String,
-          rapportoFamiglia: String,
-          attivitaSociale: String,
-          attivitaRSA: String,
-          data: Date,
-          totale: Number,
-        },
-      },
-
-
-  // CARTELLA ASS SOCIALE 
+  // CARTELLA ASS SOCIALE
 
   schedaAssSociale: {
-    
     valutazioneSociale: {
       valutazione: String,
     },
@@ -348,16 +323,33 @@ const PazienteSchema = mongoose.Schema({
       attivitaSociale: String,
       attivitaRSA: String,
       data: Date,
-      totale: Number
-    },  
+      totale: Number,
+    },
   },
 
+  // CARTELLA ASS SOCIALE
 
+  schedaAssSociale: {
+    valutazioneSociale: {
+      valutazione: String,
+    },
 
-  // CARTELLA EDUCATIVA 
+    indiceSocializzazione: {
+      adattamentoSociale: String,
+      relAmicizia: String,
+      integrazioneGruppo: String,
+      gradoDisp: String,
+      rapportoFamiglia: String,
+      attivitaSociale: String,
+      attivitaRSA: String,
+      data: Date,
+      totale: Number,
+    },
+  },
+
+  // CARTELLA EDUCATIVA
 
   schedaEducativa: {
-    
     valutazioneEducativa: {
       valutazione: String,
     },
@@ -378,9 +370,8 @@ const PazienteSchema = mongoose.Schema({
       hobbyTV: Boolean,
       hobbyCucina: Boolean,
 
-      hobbyAltro: String
-    },  
-
+      hobbyAltro: String,
+    },
 
     ADL: {
       A: String,
@@ -389,8 +380,8 @@ const PazienteSchema = mongoose.Schema({
       D: String,
       E: String,
       F: String,
-      totale: Number
-    },  
+      totale: Number,
+    },
 
     IADL: {
       A: String,
@@ -401,32 +392,23 @@ const PazienteSchema = mongoose.Schema({
       F: String,
       G: String,
       H: String,
-      totale: Number
-    },  
-
-
-
-
+      totale: Number,
+    },
   },
 
+  // SCHEDA PSICOLOGICA
 
-
-
-// SCHEDA PSICOLOGICA
-
-schedaPisico: {
-  esame: {
-    statoEmotivo: [String],
-    personalita: [String],
-    linguaggio: [String],
-    memoria: [String],
-    orientamento: [String],
-    abilitaPercettivo: [String],
-    abilitaEsecutive: [String],
-    ideazione: [String],
-    umore: [String],
-
-
+  schedaPisico: {
+    esame: {
+      statoEmotivo: [String],
+      personalita: [String],
+      linguaggio: [String],
+      memoria: [String],
+      orientamento: [String],
+      abilitaPercettivo: [String],
+      abilitaEsecutive: [String],
+      ideazione: [String],
+      umore: [String],
 
       // CARTELLA EDUCATIVA
 
@@ -491,7 +473,71 @@ schedaPisico: {
     dimissioneDate: Date,
   },
 
-  
+  // AREA RIABILITATIVA
+
+  areaRiabilitativa: {
+    anamnesiRiabilitativa: String,
+    test: {
+      altro: String,
+      dataSomministrazione: {
+        arrivo: String,
+        followUp1: String,
+        followUp2: String,
+        followUp3: String,
+        followUp4: String,
+        followUp5: String,
+        followUp6: String,
+      },
+      FIM: {
+        arrivo: String,
+        followUp1: String,
+        followUp2: String,
+        followUp3: String,
+        followUp4: String,
+        followUp5: String,
+        followUp6: String,
+      },
+      scalaTINETTI: {
+        arrivo: String,
+        followUp1: String,
+        followUp2: String,
+        followUp3: String,
+        followUp4: String,
+        followUp5: String,
+        followUp6: String,
+      },
+      indiceBARTHEL: {
+        arrivo: String,
+        followUp1: String,
+        followUp2: String,
+        followUp3: String,
+        followUp4: String,
+        followUp5: String,
+        followUp6: String,
+      },
+    },
+    diagnosiFunzionamento: String,
+    lesioni: [
+      {
+        data: Date,
+        tipologia: String,
+        parteCorpo: String,
+      },
+    ],
+  },
+
+  areaRiabilitativaProgramma: {
+    note: String,
+    ausiliDotazione: String,
+    ausiliProvenienza: String,
+  },
+
+  areaRiabilitativaDiario: [{
+    data: Date,
+    controllo: Number,
+    note: String,
+    firma: String,
+  }],
 });
 
 module.exports = mongoose.model("Pazienti", PazienteSchema, "pazienti");

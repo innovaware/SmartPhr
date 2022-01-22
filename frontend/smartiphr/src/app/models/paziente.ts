@@ -5,6 +5,8 @@ import { CartellaEducativa } from './cartellaEducativa';
 import { schedaPisico } from './schedaPisico';
 import { ValutazioneMotoria } from './ValutazioneMotoria';
 import { AreaRiabilitativa } from './AreaRiabilitativa';
+import { AreaRiabilitativaProgramma } from './AreaRiabilitativaProgramma';
+import { AreaRiabilitativaDiario } from './AreaRiabilitativaDiario';
 
 export class Paziente {
   static clone(obj: Paziente) {
@@ -71,6 +73,8 @@ export class Paziente {
 
   valutazioneMotoria: ValutazioneMotoria;
   areaRiabilitativa: AreaRiabilitativa;
+  areaRiabilitativaProgramma: AreaRiabilitativaProgramma;
+  areaRiabilitativaDiario: AreaRiabilitativaDiario[];
 
   dimissione?: {
     typeDimissione: string,
