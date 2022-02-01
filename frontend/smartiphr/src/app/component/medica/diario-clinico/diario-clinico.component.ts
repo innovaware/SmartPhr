@@ -73,6 +73,11 @@ export class DiarioClinicoComponent implements OnInit {
       });
   }
 
-
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.diarioClinicoDataSource.filter = filterValue
+      .trim()
+      .toLowerCase();
+  }
 
 }

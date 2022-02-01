@@ -76,4 +76,12 @@ export class DiarioEducativoComponent implements OnInit {
   }
 
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.diarioEducativoDataSource.filter = filterValue
+      .trim()
+      .toLowerCase();
+  }
+
+
 }

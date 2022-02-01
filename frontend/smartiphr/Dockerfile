@@ -5,6 +5,8 @@ COPY . .
 
 RUN npm install
 RUN npm install -g @angular/cli
+
+ENV NODE_OPTIONS=--openssl-legacy-provider
 RUN ng build --prod
 
 FROM nginx:latest

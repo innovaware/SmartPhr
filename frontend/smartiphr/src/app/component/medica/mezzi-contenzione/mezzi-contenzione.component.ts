@@ -9,6 +9,7 @@ import { schedaMezziContenzione } from 'src/app/models/schedaMezziContenzione';
 export class MezziContenzioneComponent implements OnInit {
 
   @Input() data: schedaMezziContenzione;
+  @Input() disable: boolean;
 
   constructor() {}
 

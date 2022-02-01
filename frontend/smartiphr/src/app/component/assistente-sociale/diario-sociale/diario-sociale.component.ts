@@ -75,6 +75,12 @@ export class DiarioSocialeComponent implements OnInit {
   }
 
 
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.diarioAssSocialeDataSource.filter = filterValue
+      .trim()
+      .toLowerCase();
+  }
 
-  
+
 }

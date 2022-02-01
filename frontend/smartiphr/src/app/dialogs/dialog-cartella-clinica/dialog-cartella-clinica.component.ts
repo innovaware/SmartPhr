@@ -12,6 +12,7 @@ import {
   MatTableDataSource,
   MAT_DIALOG_DATA,
 } from "@angular/material";
+import { Subject } from 'rxjs';
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Documento } from "src/app/models/documento";
 import { DocumentoPaziente } from "src/app/models/documentoPaziente";
@@ -45,6 +46,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public newItem: boolean;
   public document: any[] = [];
   public uploading: boolean;
+
+  //TODO Da Sistemare questa variabile
+  public saveParametriVitali: Subject<string>;
+  public verbaliDataSource: MatTableDataSource<DocumentoPaziente>;
+
 
   paziente: Paziente;
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
