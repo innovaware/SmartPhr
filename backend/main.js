@@ -16,6 +16,8 @@ var mongoose = require("mongoose");
 var app = express();
 var PORT = process.env.PORT || 3000;
 
+var VERSION = process.env.VERSION;
+
 console.log("args:", process.argv);
 
 const redis = require("redis");
@@ -311,6 +313,15 @@ var readHandler = function (req, res, next) {
       res.json({ result: err });
     });
 };
+
+app.use("/api/info", logHandler, function(req, res, next) {
+  let data = {
+    "status": "Running",
+    "version": VERSION,
+    "currentUTCDate": new Date().toUTCString()
+  };
+  res.status(200).send(data);
+});
 
 // Pazienti API
 var pazientiRouter = require("./routes/pazienti");
