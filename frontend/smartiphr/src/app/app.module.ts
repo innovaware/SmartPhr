@@ -348,6 +348,8 @@ import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitaz
     DialogRiabilitazioneComponent,
     DialogRiabilitazioneLesioneComponent,
     DialogRiabilitazioneDiarioComponent,
+    DialogDiarioEducativoComponent,
+    DialogDiarioAsssocialeComponent
   ],
 })
 export class AppModule {

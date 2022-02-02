@@ -84,4 +84,30 @@ export class DiarioEducativoComponent implements OnInit {
   }
 
 
+
+  editItem(diario: DiarioEducativo) {
+    console.log("Edit item (DiarioEducativo)");
+    this.dialog
+      .open(DialogDiarioEducativoComponent, {
+        data: DiarioEducativo.clone(diario),
+        width: "600px",
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        console.log("result:", result);
+        if (result != undefined ) {
+          const data = this.dataDiario;
+
+          const index = data.indexOf(diario, 0);
+          if (index > -1) {
+            data.splice(index, 1);
+            console.log("Removed item");
+          }
+
+          data.push(result);
+          this.diarioEducativoDataSource.data = this.dataDiario;
+        }
+      });
+  }
+
 }

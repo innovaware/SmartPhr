@@ -16,7 +16,7 @@ import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Paziente } from "src/app/models/paziente";
 import { valutazioneSociale } from "src/app/models/valutazioneSociale";
 import { IndiceSocializzazione } from "src/app/models/indiceSocializzazione";
-import { DiarioAssSociale } from "src/app/models/diarioAssSociale";
+
 
 import { CartellaclinicaService } from "src/app/service/cartellaclinica.service";
 import { DocumentipazientiService } from "src/app/service/documentipazienti.service";
@@ -35,7 +35,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
 
   valutazioneSociale: valutazioneSociale;
   indiceSocializzazione: IndiceSocializzazione;
-  diarioAssSociale: DiarioAssSociale;
+
 
   paziente: Paziente;
 
@@ -98,7 +98,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
 
     this.paziente.schedaAssSociale.indiceSocializzazione.data = new Date();
 
-    alert(JSON.stringify(this.paziente.schedaAssSociale));
+
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
       console.log(`Patient  saved`, value);
       this.dialogRef.close(this.paziente);

@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, Input, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DiarioClinico } from 'src/app/models/diarioClinico';
+import { DiarioAssSociale } from 'src/app/models/diarioAssSociale';
 import { Paziente } from 'src/app/models/paziente';
-import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { CartellaAssSocialeService } from 'src/app/service/cartella-ass-sociale.service';
 import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
@@ -12,13 +12,15 @@ import { MessagesService } from 'src/app/service/messages.service';
 })
 export class DialogDiarioAsssocialeComponent implements OnInit {
 
-  public dataDiario:any;
-  public contenuto:any;
+  @Input() disable : boolean;
+  @Input() isNew: boolean;
 
+  constructor(public casService: CartellaAssSocialeService,
+    public dialogRef: MatDialogRef<DialogDiarioAsssocialeComponent>, public messageService: MessagesService,
+    @Inject(MAT_DIALOG_DATA)
+    public data: { paziente: Paziente; readonly: boolean; newItem: boolean }, @Inject(MAT_DIALOG_DATA) public item: DiarioAssSociale) {
 
-  constructor( @Inject(MAT_DIALOG_DATA)
-  public data: { paziente: Paziente; readonly: boolean; newItem: boolean },    public ccService: CartellaclinicaService,
-  public messageService: MessagesService,private dialogRef: MatDialogRef<DialogDiarioAsssocialeComponent>,) { }
+    }
 
 
   ngOnInit() {
@@ -26,24 +28,49 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
 
 
   async salva() {
-    console.log("add diario: " + JSON.stringify(this.data.paziente));
-    var diario = new DiarioClinico();
-    diario.user = this.data.paziente._id;
-    diario.data = this.dataDiario;
-    diario.contenuto = this.contenuto;
+    if(this.item.data == undefined || this.item.contenuto == undefined || this.item.contenuto == "")
+      this.messageService.showMessageError("Alcuni campi obbligatori sono mancanti!");
+    
+    else{
+      //ADD
+      if(this.data.paziente != undefined){
+
+        var diario = new DiarioAssSociale();
+        diario.user = this.data.paziente._id;
+        diario.data = this.item.data;
+        diario.contenuto = this.item.contenuto;
+
+        console.log("salva diario sociale: " + JSON.stringify(diario));
+        this.casService
+              .insertDiario(diario)
+              .then((x) => {
+                console.log("Save diario: ", x);
+                this.dialogRef.close(x);
+              })
+              .catch((err) => {
+                this.messageService.showMessageError(
+                  "Errore Inserimento diario (" + err["status"] + ")"
+                );
+              });
 
 
-    this.ccService
-          .insertDiario(diario)
-          .then((x) => {
-            console.log("Save diario: ", x);
-            this.dialogRef.close(x);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore Inserimento diario (" + err["status"] + ")"
-            );
-          });
-     
+      }else{
+        console.log("modifica diario sociale: " + JSON.stringify(this.item));
+
+        this.casService
+        .saveDiario(this.item)
+        .then((x) => {
+          console.log("UPDATE diario: ", this.item);
+          this.dialogRef.close(this.item);
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Inserimento diario (" + err["status"] + ")"
+          );
+        });
+      }
     }
+  }
+
+
 }

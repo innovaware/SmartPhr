@@ -479,3 +479,11 @@ app.use("/api/visiteSpecialistiche", logHandler, authorizationHandler, VisiteSpe
 // DOCUMENTI PAZIENTE API
 var documentiPazienteRouter = require("./routes/documentipazienti");
 app.use("/api/documentipazienti", logHandler, authorizationHandler, documentiPazienteRouter);
+
+
+// GESTIONE DIARIO EDUCATIVO E ASSSOCIALE
+var DiarioEducativoRouter = require("./routes/diarioEducativo");
+app.use("/api/diarioEducativo", logHandler, authorizationHandler, DiarioEducativoRouter);
+
+var DiarioAssSocialeRouter = require("./routes/diarioAssSociale");
+app.use("/api/diarioAssSociale", logHandler, authorizationHandler, DiarioAssSocialeRouter);

@@ -1,8 +1,8 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { DiarioClinico } from 'src/app/models/diarioClinico';
+import { DiarioEducativo } from 'src/app/models/diarioEducativo';
 import { Paziente } from 'src/app/models/paziente';
-import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
+import { CartellaEducativaService } from 'src/app/service/cartella-educativa.service';
 import { MessagesService } from 'src/app/service/messages.service';
 
 @Component({
@@ -17,7 +17,7 @@ export class DialogDiarioEducativoComponent implements OnInit {
 
 
   constructor( @Inject(MAT_DIALOG_DATA)
-  public data: { paziente: Paziente; readonly: boolean; newItem: boolean },    public ccService: CartellaclinicaService,
+  public data: { paziente: Paziente; readonly: boolean; newItem: boolean }, @Inject(MAT_DIALOG_DATA) public item: DiarioEducativo,   public ceService: CartellaEducativaService,
   public messageService: MessagesService,private dialogRef: MatDialogRef<DialogDiarioEducativoComponent>,) { }
 
   ngOnInit() {
@@ -25,24 +25,53 @@ export class DialogDiarioEducativoComponent implements OnInit {
 
 
   async salva() {
-    console.log("add diario: " + JSON.stringify(this.data.paziente));
-    var diario = new DiarioClinico();
-    diario.user = this.data.paziente._id;
-    diario.data = this.dataDiario;
-    diario.contenuto = this.contenuto;
+    if(this.item.data == undefined || this.item.contenuto == undefined || this.item.contenuto == "")
+      this.messageService.showMessageError("Alcuni campi obbligatori sono mancanti!");
+    
+    else{
+      //ADD
+      if(this.data.paziente != undefined){
+
+        var diario = new DiarioEducativo();
+        diario.user = this.data.paziente._id;
+        diario.data = this.item.data;
+        diario.contenuto = this.item.contenuto;
+
+        console.log("salva diario educativo: " + JSON.stringify(diario));
+        this.ceService
+              .insertDiario(diario)
+              .then((x) => {
+                console.log("Save diario: ", x);
+                this.dialogRef.close(x);
+              })
+              .catch((err) => {
+                this.messageService.showMessageError(
+                  "Errore Inserimento diario (" + err["status"] + ")"
+                );
+              });
 
 
-    this.ccService
-          .insertDiario(diario)
-          .then((x) => {
-            console.log("Save diario: ", x);
-            this.dialogRef.close(x);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError(
-              "Errore Inserimento diario (" + err["status"] + ")"
-            );
-          });
-     
+      }else{
+        console.log("modifica diario educativo: " + JSON.stringify(this.item));
+
+        this.ceService
+        .saveDiario(this.item)
+        .then((x) => {
+          console.log("UPDATE diario: ", this.item);
+          this.dialogRef.close(this.item);
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Inserimento diario (" + err["status"] + ")"
+          );
+        });
+
+
+      }
+
+
+        }
     }
+  
+    
 }

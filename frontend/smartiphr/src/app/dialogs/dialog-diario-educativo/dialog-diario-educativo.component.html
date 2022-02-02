@@ -2,13 +2,9 @@
     <div class="container-fluid" >
       <div class="row">
         <div class="col">
-          <h3>DIARIO CLINICO</h3>
+          <h3>DIARIO</h3>
         </div>
-  
-        <div class="col">
-          <button class="close-button" [mat-dialog-close]="true" style="float:right">×
-          </button>
-        </div>
+
       </div>
   
       <div class="row">
@@ -24,8 +20,8 @@
         <div class="row">
             <div class="form-group" >
                 <mat-form-field appearance="fill" >
-                  <mat-label>DATA</mat-label>
-                  <input matInput [matDatepicker]="picker" [(ngModel)]="dataDiario" >
+                  <mat-label>DATA*</mat-label>
+                  <input matInput [matDatepicker]="picker" [(ngModel)]="item.data" >
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
                 </mat-form-field>
@@ -38,17 +34,18 @@
           <div class="col">
             <mat-card>
               <mat-card-header>
-                <mat-card-title>CONTENUTO</mat-card-title>
+                <mat-card-title>CONTENUTO*</mat-card-title>
               </mat-card-header>
               <mat-card-content>
-                <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="contenuto"></textarea>
+                <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="item.contenuto"></textarea>
               </mat-card-content>
             </mat-card>
           </div>
         </div>
       </div>
-      
-
+      <br>
+      <label>Tutti i campi indicati con * sono obbligatori!</label>
+      <br>
   </mat-dialog-content>
   
   

@@ -40,6 +40,10 @@ export class Paziente {
     dst.dimissione = src.dimissione;
 
 
+    dst.schedaAssSociale = src.schedaAssSociale;
+    dst.schedaEducativa = src.schedaEducativa;
+
+
   }
 
   _id?: string;

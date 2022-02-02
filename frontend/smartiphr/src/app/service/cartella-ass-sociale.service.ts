@@ -24,7 +24,7 @@ export class CartellaAssSocialeService {
     var body = data;
     console.log("body: ", body);
     return this.http
-      .put<DiarioAssSociale>(this.api + "/api/diarioAssSociale/" + data.user, body)
+      .put<DiarioAssSociale>(this.api + "/api/diarioAssSociale/" + data._id, body)
       .toPromise();
   }
 

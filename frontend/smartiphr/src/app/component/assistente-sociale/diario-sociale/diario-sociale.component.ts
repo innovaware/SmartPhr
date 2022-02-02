@@ -38,7 +38,7 @@ export class DiarioSocialeComponent implements OnInit {
 
 
   async getDataDiario() {
-    console.log(`get DataCartella paziente: ${this.data._id}`);
+    console.log(`get DataCartella SOCIALE paziente: ${this.data._id}`);
     this.cartellaService
       .getDiarioByUser( String(this.data._id) )
       .then((f) => {
@@ -82,5 +82,30 @@ export class DiarioSocialeComponent implements OnInit {
       .toLowerCase();
   }
 
+
+  editItem(diario: DiarioAssSociale) {
+    console.log("Edit item (DiarioAssSociale)");
+    this.dialog
+      .open(DialogDiarioAsssocialeComponent, {
+        data: DiarioAssSociale.clone(diario),
+        width: "600px",
+      })
+      .afterClosed()
+      .subscribe((result) => {
+        console.log("result:", result);
+        if (result != undefined ) {
+          const data = this.dataDiario;
+
+          const index = data.indexOf(diario, 0);
+          if (index > -1) {
+            data.splice(index, 1);
+            console.log("Removed item");
+          }
+
+          data.push(result);
+          this.diarioAssSocialeDataSource.data = this.dataDiario;
+        }
+      });
+  }
 
 }

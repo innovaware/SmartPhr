@@ -9,7 +9,7 @@ import {
   MAT_DIALOG_DATA,
 } from "@angular/material";
 import { Paziente } from "src/app/models/paziente";
-import { DiarioEducativo } from "src/app/models/diarioEducativo";
+
 
 import { DocumentipazientiService } from "src/app/service/documentipazienti.service";
 import { MessagesService } from "src/app/service/messages.service";
@@ -19,6 +19,7 @@ import { CartellaEducativa } from "src/app/models/cartellaEducativa";
 import { valutazioneEducativa } from "src/app/models/valutazioneEducativa";
 import { ADL } from "src/app/models/ADL";
 import { IADL } from "src/app/models/IADL";
+import { DiarioEducativo } from "src/app/models/diarioEducativo";
 import { SchedaSocializzazione } from 'src/app/models/schedaSocializzazione';
 
 @Component({
@@ -33,7 +34,8 @@ export class DialogCartellaEducativaComponent implements OnInit {
   valutazioneEducativa: valutazioneEducativa;
   ADL : ADL;
   IADL : IADL;
-  diarioEducativo: DiarioEducativo;
+  diarioEducativo : DiarioEducativo[];
+
 
 
   paziente: Paziente;
@@ -76,6 +78,7 @@ export class DialogCartellaEducativaComponent implements OnInit {
     }
 
 
+
     this.valutazioneEducativa = this.paziente.schedaEducativa
       .valutazioneEducativa as valutazioneEducativa;
 
@@ -87,6 +90,8 @@ export class DialogCartellaEducativaComponent implements OnInit {
     this.ADL = this.paziente.schedaEducativa.ADL as ADL;
 
     this.IADL = this.paziente.schedaEducativa.IADL as IADL;
+
+ 
 
   }
 
@@ -113,7 +118,7 @@ export class DialogCartellaEducativaComponent implements OnInit {
                                                 Number(this.paziente.schedaEducativa.IADL.G.split("-") [1]) +
                                                 Number(this.paziente.schedaEducativa.IADL.H.split("-") [1]);
 
-    alert(JSON.stringify(this.paziente.schedaEducativa));
+
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
       console.log(`Patient  saved`, value);
       this.dialogRef.close(this.paziente);

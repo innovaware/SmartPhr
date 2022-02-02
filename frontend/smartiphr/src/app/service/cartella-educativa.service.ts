@@ -21,7 +21,7 @@ export class CartellaEducativaService {
       var body = data;
       console.log("body: ", body);
       return this.http
-        .put<DiarioEducativo>(this.api + "/api/diarioEducativo/" + data.user, body)
+        .put<DiarioEducativo>(this.api + "/api/diarioEducativo/" + data._id, body)
         .toPromise();
     }
   
