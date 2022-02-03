@@ -29,6 +29,8 @@ export class DialogDiarioEducativoComponent implements OnInit {
       this.messageService.showMessageError("Alcuni campi obbligatori sono mancanti!");
     
     else{
+       var usLog= localStorage.getItem("currentUser");
+       //alert(JSON.stringify(usLog));
       //ADD
       if(this.data.paziente != undefined){
 

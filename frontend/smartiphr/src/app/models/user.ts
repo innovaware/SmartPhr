@@ -7,6 +7,7 @@ export class User {
   _id?: string;
   group: string;
   username: string;
+  name?: string;
   password: string;
   active: boolean;
 }
