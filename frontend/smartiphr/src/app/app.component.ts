@@ -52,6 +52,13 @@ export class AppComponent {
     }
   }
 
+  newMessage() {
+    //TODO Invio un messaggio
+    console.log("Nuovo messaggio");
+
+  }
+
+
   isAuthenticated() {
     return this.authenticationService.isAuthenticated();
   }

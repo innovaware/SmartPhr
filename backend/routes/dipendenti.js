@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json 
+        // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
@@ -26,7 +26,7 @@ router.get("/", async (req, res) => {
         // Aggiorno la cache con i dati recuperati da mongodb
         client.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
 
-        // Ritorna il json 
+        // Ritorna il json
         res.status(200).json(dipendenti);
       }
     });
@@ -62,6 +62,9 @@ router.get("/:id", async (req, res) => {
 // INSERT dipendente su DB
 router.post("/", async (req, res) => {
   try {
+    clientMailerService = res.locals.clientMailerService;
+    topic = res.locals.topicMailerservice;
+
     const dipendente = new Dipendenti({
       cognome: req.body.cognome,
       nome: req.body.nome,
@@ -86,6 +89,20 @@ router.post("/", async (req, res) => {
 
     const searchTerm = `DIPENDENTIALL`;
     client.del(searchTerm);
+
+    clientMailerService.publish(
+      topic,
+      JSON.stringify({
+        message: dipendente,
+        operation: 'insert'
+      }),
+      { qos: 0, retain: false },
+      (error) => {
+        if (error) {
+          console.error(error);
+        }
+      }
+    );
 
     res.status(200);
     res.json(result);
@@ -127,26 +144,49 @@ router.put("/:id", async (req, res) => {
     const searchTerm = `DIPENDENTIBY${id}`;
     client.del(searchTerm);
 
+    clientMailerService.publish(
+      topic,
+      JSON.stringify({
+        message: dipendente,
+        operation: 'update' 
+      }),
+      { qos: 0, retain: false },
+      (error) => {
+        if (error) {
+          console.error(error);
+        }
+      }
+    );
+
     res.status(200).json(dipendenti);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
 });
 
-
-
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    console.log('id:' + id);
     const dipendente = await Dipendenti.remove({ _id: id });
 
     let searchTerm = `DipendenteBY${id}`;
     client.del(searchTerm);
     searchTerm = `Dipendente${id}`;
     client.del(searchTerm);
-
+  
+    clientMailerService.publish(
+      topic,
+      JSON.stringify({
+        message: dipendente,
+        operation: 'remove' 
+      }),
+      { qos: 0, retain: false },
+      (error) => {
+        if (error) {
+          console.error(error);
+        }
+      }
+    );
 
     res.status(200);
     res.json(dipendente);

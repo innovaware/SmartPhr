@@ -29,6 +29,23 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 console.log(`Redis Host ${redisHost}:${redisPort}`);
 const client_redis = redis.createClient(redisPort, redisHost);
 
+// GESTIONE MAILER SERVICE
+const mqtt = require("mqtt");
+const hostMailerService = process.env.MAILERSERVICEHOST || "localhost"; 
+const portMailerService = process.env.MAILERSERVICEPORT || "1883";
+const clientIdMailerService = `mqtt_${Math.random().toString(16).slice(3)}`;
+const connectUrlMailerService = `mqtt://${hostMailerService}:${portMailerService}`;
+
+
+const clientMailerService = mqtt.connect(connectUrlMailerService, {
+  clientIdMailerService,
+  clean: true,
+  connectTimeout: 4000,
+  username: process.env.MAILERSERVICEUSERNAME || "test",
+  password: process.env.MAILERSERVICEPASSWORD || "test",
+  reconnectPeriod: 1000,
+});
+
 app.use(cors());
 // app.use(
 //   basicAuth({
@@ -236,7 +253,7 @@ var roleHandler = async (req, res, next) => {
     next();
   } else {
     console.error(`[ROLEHANDLER] NOT Access:`, user);
-    
+
     res.statusCode = 401;
     res.setHeader("Content-Type", "text/plain");
     res.end("Not Authorizated");
@@ -314,11 +331,11 @@ var readHandler = function (req, res, next) {
     });
 };
 
-app.use("/api/info", logHandler, function(req, res, next) {
+app.use("/api/info", logHandler, function (req, res, next) {
   let data = {
-    "status": "Running",
-    "version": VERSION,
-    "currentUTCDate": new Date().toUTCString()
+    status: "Running",
+    version: VERSION,
+    currentUTCDate: new Date().toUTCString(),
   };
   res.status(200).send(data);
 });
@@ -332,21 +349,44 @@ app.use(
   roleHandler,
   pazientiRouter
 );
+
 // Dipendenti API
 var dipendentiRouter = require("./routes/dipendenti");
-app.use("/api/dipendenti", logHandler, authorizationHandler, dipendentiRouter);
+app.use(
+  "/api/dipendenti",
+  logHandler,
+  authorizationHandler,
+  async (req, res, next) => {
+    res.locals.clientMailerService = clientMailerService;
+
+    const topicMailerservice = "topic/dipendente";
+    res.locals.topicMailerservice = topicMailerservice;
+
+    next();
+  },
+  dipendentiRouter
+);
+
 // Consulenti API
 var consulentiRouter = require("./routes/consulenti");
 app.use("/api/consulenti", logHandler, authorizationHandler, consulentiRouter);
 // Fornitori API
 var fornitoriRouter = require("./routes/fornitori");
-app.use("/api/fornitori", logHandler, authorizationHandler, roleHandler, fornitoriRouter);
+app.use(
+  "/api/fornitori",
+  logHandler,
+  authorizationHandler,
+  roleHandler,
+  fornitoriRouter
+);
 // ASP API
 var aspRouter = require("./routes/asp");
 app.use("/api/asp", logHandler, authorizationHandler, aspRouter);
+
 // Farmaci API
 var farmaciRouter = require("./routes/farmaci");
 app.use("/api/farmaci", logHandler, authorizationHandler, farmaciRouter);
+
 // Eventi API
 var eventiRouter = require("./routes/eventi");
 app.use("/api/eventi", logHandler, authorizationHandler, eventiRouter);
@@ -369,7 +409,12 @@ app.use("/api/fatture", logHandler, authorizationHandler, fattureRouter);
 
 // NotaCredito API
 var notaCreditoRouter = require("./routes/notacredito");
-app.use("/api/notacredito", logHandler, authorizationHandler, notaCreditoRouter);
+app.use(
+  "/api/notacredito",
+  logHandler,
+  authorizationHandler,
+  notaCreditoRouter
+);
 
 // Bonifici API
 var bonificiRouter = require("./routes/bonifici");
@@ -379,11 +424,9 @@ app.use("/api/bonifici", logHandler, authorizationHandler, bonificiRouter);
 var menuRouter = require("./routes/menu");
 app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
 
-
 // Contratto API
 var contrattoRouter = require("./routes/contratto");
 app.use("/api/contratto", logHandler, authorizationHandler, contrattoRouter);
-
 
 /*** GESTIONE PERSONALE ***/
 
@@ -391,11 +434,9 @@ app.use("/api/contratto", logHandler, authorizationHandler, contrattoRouter);
 var ferieRouter = require("./routes/ferie");
 app.use("/api/ferie", logHandler, authorizationHandler, ferieRouter);
 
-
 // Permessi API
 var permessiRouter = require("./routes/permessi");
 app.use("/api/permessi", logHandler, authorizationHandler, permessiRouter);
-
 
 // Cambi turno API
 var cambiTurnoRouter = require("./routes/cambiturno");
@@ -407,36 +448,49 @@ app.use("/api/presenze", logHandler, authorizationHandler, presenzeRouter);
 
 // Turni mensili API
 var turniMensiliRouter = require("./routes/turnimensili");
-app.use("/api/turnimensili", logHandler, authorizationHandler, turniMensiliRouter);
-
+app.use(
+  "/api/turnimensili",
+  logHandler,
+  authorizationHandler,
+  turniMensiliRouter
+);
 
 // Turni mensili API
 var documentiDipendentiRouter = require("./routes/documentidipendenti");
-app.use("/api/documentidipendenti", logHandler, authorizationHandler, documentiDipendentiRouter);
+app.use(
+  "/api/documentidipendenti",
+  logHandler,
+  authorizationHandler,
 
+  documentiDipendentiRouter
+);
 
 // MedicinaLavoro API
 var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
-app.use("/api/documentimedicinalavoro", logHandler, authorizationHandler, documentiMedicinaLavoroRouter);
-
+app.use(
+  "/api/documentimedicinalavoro",
+  logHandler,
+  authorizationHandler,
+  documentiMedicinaLavoroRouter
+);
 
 // CartellaClinica API
 var CartellaClinicaRouter = require("./routes/cartellaClinica");
-app.use("/api/cartellaClinica", logHandler, authorizationHandler, CartellaClinicaRouter);
-
-
-/*** FINE GESTIONE PERSONALE ***/
-
-app.listen(PORT, function () {
-  return console.log("Innova Backend App listening on port " + PORT + "!");
-});
-
-
-/** GESTIONE FORNITORE */
+app.use(
+  "/api/cartellaClinica",
+  logHandler,
+  authorizationHandler,
+  CartellaClinicaRouter
+);
 
 // Bonifici API
 var documentiFornitoreRouter = require("./routes/documentifornitore");
-app.use("/api/documentifornitore", logHandler, authorizationHandler, documentiFornitoreRouter);
+app.use(
+  "/api/documentifornitore",
+  logHandler,
+  authorizationHandler,
+  documentiFornitoreRouter
+);
 
 var curriculumRouter = require("./routes/curriculum");
 app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
@@ -444,46 +498,98 @@ app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
 /** GESTIONE FATTURE FORNITORI */
 
 var fattureFornitoriRouter = require("./routes/fattureFornitori");
-app.use("/api/fatturefornitori", logHandler, authorizationHandler, fattureFornitoriRouter);
+app.use(
+  "/api/fatturefornitori",
+  logHandler,
+  authorizationHandler,
+  fattureFornitoriRouter
+);
 
 /** GESTIONE BONIFICI FORNITORI */
 
 var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
-app.use("/api/bonificifornitori", logHandler, authorizationHandler, bonificiFornitoriRouter);
+app.use(
+  "/api/bonificifornitori",
+  logHandler,
+  authorizationHandler,
+  bonificiFornitoriRouter
+);
 
 /** GESTIONE ANTICIPO FATTURE ASP */
 
 var anticipoFattureRouter = require("./routes/anticipoFatture");
-app.use("/api/anticipofatture", logHandler, authorizationHandler, anticipoFattureRouter);
+app.use(
+  "/api/anticipofatture",
+  logHandler,
+  authorizationHandler,
+  anticipoFattureRouter
+);
 
 /** GESTIONE PROSPETTO FATTURE ASP */
 
 var prospettoCMRouter = require("./routes/prospettoCM");
-app.use("/api/prospettocm", logHandler, authorizationHandler, prospettoCMRouter);
+app.use(
+  "/api/prospettocm",
+  logHandler,
+  authorizationHandler,
+  prospettoCMRouter
+);
 
 /** GESTIONE PUNTO FATTURE ASP */
 
 var puntoFattureRouter = require("./routes/puntoFatture");
-app.use("/api/puntofatture", logHandler, authorizationHandler, puntoFattureRouter);
-
+app.use(
+  "/api/puntofatture",
+  logHandler,
+  authorizationHandler,
+  puntoFattureRouter
+);
 
 // GESTIONE VISITE E DIARIO CLINICO
 var DiarioClinicoRouter = require("./routes/diarioClinico");
-app.use("/api/diarioClinico", logHandler, authorizationHandler, DiarioClinicoRouter);
+app.use(
+  "/api/diarioClinico",
+  logHandler,
+  authorizationHandler,
+  DiarioClinicoRouter
+);
 
 var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
-app.use("/api/visiteSpecialistiche", logHandler, authorizationHandler, VisiteSpecialisticheRouter);
-
-
+app.use(
+  "/api/visiteSpecialistiche",
+  logHandler,
+  authorizationHandler,
+  VisiteSpecialisticheRouter
+);
 
 // DOCUMENTI PAZIENTE API
 var documentiPazienteRouter = require("./routes/documentipazienti");
-app.use("/api/documentipazienti", logHandler, authorizationHandler, documentiPazienteRouter);
-
+app.use(
+  "/api/documentipazienti",
+  logHandler,
+  authorizationHandler,
+  documentiPazienteRouter
+);
 
 // GESTIONE DIARIO EDUCATIVO E ASSSOCIALE
 var DiarioEducativoRouter = require("./routes/diarioEducativo");
-app.use("/api/diarioEducativo", logHandler, authorizationHandler, DiarioEducativoRouter);
+app.use(
+  "/api/diarioEducativo",
+  logHandler,
+  authorizationHandler,
+  DiarioEducativoRouter
+);
 
 var DiarioAssSocialeRouter = require("./routes/diarioAssSociale");
-app.use("/api/diarioAssSociale", logHandler, authorizationHandler, DiarioAssSocialeRouter);
+app.use(
+  "/api/diarioAssSociale",
+  logHandler,
+  authorizationHandler,
+  DiarioAssSocialeRouter
+);
+
+/*** FINE  ***/
+
+app.listen(PORT, function () {
+  return console.log("Innova Backend App listening on port " + PORT + "!");
+});
