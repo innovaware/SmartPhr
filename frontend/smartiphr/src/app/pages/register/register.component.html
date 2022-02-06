@@ -1,0 +1,108 @@
+<mat-card>
+
+  <mat-card-content>
+
+    <div class="container nomargin nopadding">
+      <div class="row">
+        <div class="col nomargin nopadding">
+
+          <div class="container-flex nopadding"
+               style="
+                  margin-left: 10px;
+                  background: rgba(0, 0, 0, 0.05);
+                  border-right-style: solid;
+                  border-width: thin;
+                ">
+
+            <div class="row">
+              <div class="col">
+                <img src="../../../assets/larinascitasrlRegister.png" style="width: inherit;">
+              </div>
+            </div>
+
+            <div class="row blankLine">
+              <div class="col"></div>
+            </div>
+
+            <div class="row">
+              <div class="col" style="padding: 0 30px">
+                <app-register-information-dipendente [data]=data>
+                </app-register-information-dipendente>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <div class="col center">
+          <div class="container-flex">
+            <div class="row">
+              <div class="col">
+                <h4>Registrazione</h4>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+
+                <div>
+                  <div class="container-flex" style="margin:0 15px">
+                    <div class="row">
+                      <div class="col-4 middle right">Username<span class="mandatory">*</span>:</div>
+                      <div class="col">
+                        <mat-form-field class="fit">
+                          <input type="text" matInput placeholder="Username" [(ngModel)]="username">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+
+                      <div class="col-4 middle right">Password<span class="mandatory">*</span>:</div>
+                      <div class="col">
+                        <mat-form-field class="fit">
+                          <input type="password" matInput placeholder="Password" [(ngModel)]="password">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                    <div class="row">
+                      <div class="col-4 middle right">Ripeti password<span class="mandatory">*</span>:</div>
+                      <div class="col">
+                        <mat-form-field class="fit">
+                          <input type="password" matInput placeholder="Password" [(ngModel)]="passwordCheck">
+                        </mat-form-field>
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col">
+                <div class="button">
+                  <button mat-button (click)="register()">Registra</button>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="row blankLine"></div>
+            <div class="row">
+              <div class="col left">
+                <hr>
+                <span>* Compila tutti i campi </span>
+              </div>
+            </div>
+
+          </div>
+
+
+        </div>
+      </div>
+    </div>
+  </mat-card-content>
+</mat-card>

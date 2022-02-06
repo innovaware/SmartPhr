@@ -13,9 +13,28 @@ body {
   color: #676a6c;
 }
 
+.blankLine {
+  height: 21px;
+}
 
 .center {
   text-align: center;
+}
+
+.left {
+  text-align: left;
+}
+
+.right {
+  text-align: right;
+}
+
+.middle {
+  align-self: center;
+}
+
+.fit {
+  width: fit-content;
 }
 
 .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent {

@@ -1,0 +1,7 @@
+.col-fit {
+  width: fit-content;
+}
+
+mat-label {
+  font-weight: bold;
+}

@@ -331,6 +331,7 @@ var readHandler = function (req, res, next) {
     });
 };
 
+//TODO Questa api è usata ??????
 app.use("/api/info", logHandler, function (req, res, next) {
   let data = {
     status: "Running",
@@ -339,6 +340,10 @@ app.use("/api/info", logHandler, function (req, res, next) {
   };
   res.status(200).send(data);
 });
+
+// User api
+var userRouter = require("./routes/user");
+app.use("/users", logHandler, userRouter );
 
 // Pazienti API
 var pazientiRouter = require("./routes/pazienti");
@@ -370,6 +375,7 @@ app.use(
 // Consulenti API
 var consulentiRouter = require("./routes/consulenti");
 app.use("/api/consulenti", logHandler, authorizationHandler, consulentiRouter);
+
 // Fornitori API
 var fornitoriRouter = require("./routes/fornitori");
 app.use(
@@ -391,6 +397,7 @@ app.use("/api/farmaci", logHandler, authorizationHandler, farmaciRouter);
 var eventiRouter = require("./routes/eventi");
 app.use("/api/eventi", logHandler, authorizationHandler, eventiRouter);
 
+// Upload and Download
 var uploadRouter = require("./routes/upload");
 app.use(
   "/api/upload",
@@ -400,7 +407,6 @@ app.use(
   writeHandler
 );
 app.use("/api/files", logHandler, authorizationHandler, uploadRouter);
-
 app.get("/api/download", logHandler, authorizationHandler, readHandler);
 
 // Fatture API
@@ -427,8 +433,6 @@ app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
 // Contratto API
 var contrattoRouter = require("./routes/contratto");
 app.use("/api/contratto", logHandler, authorizationHandler, contrattoRouter);
-
-/*** GESTIONE PERSONALE ***/
 
 // Ferie API
 var ferieRouter = require("./routes/ferie");

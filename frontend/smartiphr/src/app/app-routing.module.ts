@@ -33,7 +33,6 @@ import { AnticipoFattureASPComponent } from './pages/anticipo-fatture-asp/antici
 import { NoteCreditoASPComponent } from './pages/note-credito-asp/note-credito-asp.component';
 import { ProspettoCMASPComponent } from './pages/prospetto-cm-asp/prospetto-cm-asp.component';
 import { PuntoFattureASPComponent } from './pages/punto-fatture-asp/punto-fatture-asp.component';
-import { VisiteSpecialisticheComponent } from './component/medica/visite-specialistiche/visite-specialistiche.component';
 import { ArchiviVisiteSpecialisticheComponent } from './pages/archivi/archivi-visite-specialistiche/archivi-visite-specialistiche.component';
 import { ArchiviEsitoStrumentaleComponent } from './pages/archivi/archivi-esito-strumentale/archivi-esito-strumentale.component';
 import { ArchiviRefertiEmatochimiciComponent } from './pages/archivi/archivi-referti-ematochimici/archivi-referti-ematochimici.component';
@@ -41,11 +40,12 @@ import { ArchiviVerbaliComponent } from './pages/archivi/archivi-verbali/archivi
 import { ArchiviRelazioniCertificatiComponent } from './pages/archivi/archivi-relazioni-certificati/archivi-relazioni-certificati.component';
 import { ArchiviImpegnativeComponent } from './pages/archivi/archivi-impegnative/archivi-impegnative.component';
 import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.component';
-import { cartellaAssSociale } from "./models/cartellaAssSociale";
 import { AreaSocialeComponent } from "./pages/area-sociale/area-sociale.component";
+import { RegisterComponent } from './pages/register/register.component';
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
+  { path: "register", component: RegisterComponent},
 
   { path: "ospiti", component: OspitiComponent, canActivate: [AuthGuard]  },
   { path: "educativa", component: AreaEducativaComponent, canActivate: [AuthGuard]  },
@@ -54,11 +54,10 @@ const routes: Routes = [
   { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard]  },
   { path: "infermieristica", component: AreaInfermieristicaComponent, canActivate: [AuthGuard]  },
 
-    // CARTELLA ASS.SOCIALE
-    { path: "assistente-sociale", component: AreaSocialeComponent, canActivate: [AuthGuard]  },
+  // CARTELLA ASS.SOCIALE
+  { path: "assistente-sociale", component: AreaSocialeComponent, canActivate: [AuthGuard]  },
 
-
-// PERSONALE
+  // PERSONALE
   { path: "gest_dipendenti", component: GestUtentiComponent, canActivate: [AuthGuard]  },
   { path: "gest_ferie", component: FerieComponent, canActivate: [AuthGuard]  },
   { path: "gest_permessi", component: PermessiComponent, canActivate: [AuthGuard]  },
@@ -66,9 +65,7 @@ const routes: Routes = [
   { path: "gest_presenze", component: PresenzeComponent, canActivate: [AuthGuard]  },
   { path: "gest_turnimensili", component: TurnimensiliComponent, canActivate: [AuthGuard]  },
 
-
-
-// AMMINISTRAZIONE
+  // AMMINISTRAZIONE
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_consulenti", component: ConsulentiComponent, canActivate: [AuthGuard] },
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
@@ -92,9 +89,6 @@ const routes: Routes = [
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
 
-
-
-
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },
   { path: "archivio_esami_strumentali", component: ArchiviEsitoStrumentaleComponent, canActivate: [AuthGuard]  },
@@ -105,7 +99,6 @@ const routes: Routes = [
   { path: "archivio_pai", component: ArchiviPAIComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
-
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
 ];
 
