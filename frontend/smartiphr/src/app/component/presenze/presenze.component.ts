@@ -30,7 +30,8 @@ export class PresenzeComponent implements OnInit {
     "nome",
     "data",
     "mansione",
-    "turno",
+    "inizioturno",
+    "fineturno",
     "cf",
     "action",
   ];

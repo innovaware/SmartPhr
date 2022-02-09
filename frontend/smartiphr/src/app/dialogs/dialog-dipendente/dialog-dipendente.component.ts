@@ -21,6 +21,8 @@ import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-mess
 import { DocumentiService } from "src/app/service/documenti.service";
 import { DialogCaricadocumentoComponent } from "../dialog-caricadocumento/dialog-caricadocumento.component";
 import { MessagesService } from "src/app/service/messages.service";
+import { UsersService } from "src/app/service/users.service";
+import { User } from "src/app/models/user";
 
 @Component({
   selector: "app-dialog-dipendente",
@@ -152,6 +154,7 @@ export class DialogDipendenteComponent implements OnInit {
     /*public notacreditoService: NotaCreditoService,
     public bonficoService: BonificoService,*/
     public dipendenteService: DipendentiService,
+    public usersService: UsersService,
     public dialog: MatDialog
   ) {
     this.uploading = false;
@@ -201,11 +204,35 @@ export class DialogDipendenteComponent implements OnInit {
           this.dipendenteService
             .insert(this.data.dipendente)
             .then((x) => {
+          //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
+
+          var newUser : User = { 
+            role:this.data.dipendente.mansione,
+            active : false
+         }; 
+
+         console.log("Save newUser: " + JSON.stringify(newUser));
+              this.usersService
+              .insert(newUser)
+              .then((y) => {
+                console.log("Save User: ", y);
+              })
+              .catch((err) => {
+                this.messageService.showMessageError(
+                  "Errore Inserimento dipendente (" + err["status"] + ")"
+                );
+                this.uploading = false;
+              });
+
+
+
               console.log("Save dipendente: ", x);
               this.data.dipendente = x;
               this.dipendente = x;
               this.uploading = false;
               this.newItem = false;
+
+
             })
             .catch((err) => {
               this.messageService.showMessageError(

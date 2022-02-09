@@ -128,7 +128,38 @@
             </label>
           </td>
           <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.mansione" [disabled]=disable (change)="change()">
+            <select matNativeControl  [(ngModel)]="data.mansione">
+              <option selected="" value="">Seleziona ...</option>
+              <option value="LR">Legale rappresentante </option>
+              <option value="AA">Addetta Accoglienza </option>
+              <option value="AU">Amministratore Unico </option>
+              <option value="DA">Direttore Amministrativo</option>
+              <option value="DS">Direzione Sanitaria </option>
+              <option value="RA">Responsabile Amministrativo  </option>
+              <option value="RGD">Responsabile Gestione Dispensa </option>
+              <option value="RUA">Responsabile Ufficio Acquisti  </option>
+              <option value="UCG">Ufficio Controllo Gestione </option>
+              <option value="UPA">Ufficio Protocollo/Archivio </option>
+              <option value="RSPP">Responsabile Sicurezza e Protezione  </option>
+              <option value="DPO">Responsabile Data Protection Officer</option>
+              <option value="RGQ">Responsabile Gestione Qualità  </option>
+              <option value="HACCP">Responsabile HACCP </option>
+              <option value="CUC">Cucina  </option>
+              <option value="RUA">Responsabile Ufficio Acquisti   </option>
+              <option value="MAG">Responsabile Magazzino   </option>
+              <option value="AU">Ausiliario   </option>
+              <option value="URP">Ufficio Relazioni Pubblico  </option>
+              <option value="RP">Responsabile Privacy   </option>
+              <option value="MED">Medico di Modulo   </option>
+              <option value="NEU">Neurologo   </option>
+              <option value="INF">Infermiere   </option>
+              <option value="TDR">Fisioterapista   </option>
+              <option value="EDU">Educatore   </option>
+              <option value="ASS">Assistente Sociale   </option>
+              <option value="PSI">Psicologo   </option>
+              <option value="OSS">Operatore Socio Sanitario  </option>
+
+          </select>
           </td>
   
         </tr>
@@ -161,9 +192,7 @@
           </td>
   
         </tr>
-  
 
-  
   
       </tbody>
     </table>

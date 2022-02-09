@@ -64,9 +64,15 @@
             </ng-container>
     
             <!-- Weight Column -->
-            <ng-container matColumnDef="turno">
-              <th mat-header-cell *matHeaderCellDef> Turno </th>
-              <td mat-cell *matCellDef="let element"> {{element.turno }} </td>
+            <ng-container matColumnDef="inizioturno">
+              <th mat-header-cell *matHeaderCellDef> Inizio Turno </th>
+              <td mat-cell *matCellDef="let element"> {{ element.turno.split("-")[0] }} </td>
+            </ng-container>
+
+             <!-- Weight Column -->
+             <ng-container matColumnDef="fineturno">
+              <th mat-header-cell *matHeaderCellDef> Fine Turno </th>
+              <td mat-cell *matCellDef="let element"> {{ element.turno.split("-")[1] }} </td>
             </ng-container>
     
            

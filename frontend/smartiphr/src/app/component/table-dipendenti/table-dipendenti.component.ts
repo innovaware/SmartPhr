@@ -10,6 +10,8 @@ import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-
 import { Dipendenti } from "src/app/models/dipendenti";
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { MessagesService } from 'src/app/service/messages.service';
+import { User } from "src/app/models/user";
+import { UsersService } from "src/app/service/users.service";
 
 @Component({
   selector: 'app-table-dipendenti',
@@ -53,7 +55,8 @@ export class TableDipendentiComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public dipendentiService: DipendentiService
+    public dipendentiService: DipendentiService,
+    public usersService: UsersService,
   ) {
     this.dipendentiService.get().then((result) => {
       this.dipendenti = result;
@@ -153,6 +156,27 @@ ngOnDestroy() {
         this.dipendentiService
           .insert(result)
           .then((x) => {
+
+             //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
+
+          var newUser : User = { 
+            role:result.mansione,
+            active : false
+         }; 
+
+         console.log("Save newUser: " + JSON.stringify(newUser));
+              this.usersService
+              .insert(newUser)
+              .then((y) => {
+                console.log("Save User: ", y);
+              })
+              .catch((err) => {
+                this.messageService.showMessageError(
+                  "Errore Inserimento dipendente (" + err["status"] + ")"
+                );
+              });
+
+              
             let data = this.dataSource.data;
             data.push(result);
             this.dataSource.data = data;

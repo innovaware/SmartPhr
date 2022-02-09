@@ -5,9 +5,10 @@ export class User {
   }
 
   _id?: string;
-  group: string;
-  username: string;
+  group?: string;
+  username?: string;
   name?: string;
-  password: string;
+  role?: string;
+  password?: string;
   active: boolean;
 }

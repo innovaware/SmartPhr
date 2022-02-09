@@ -481,6 +481,10 @@ var documentiPazienteRouter = require("./routes/documentipazienti");
 app.use("/api/documentipazienti", logHandler, authorizationHandler, documentiPazienteRouter);
 
 
+// GESTIONE UTENTI API
+var usersRouter = require("./routes/users");
+app.use("/api/users", logHandler, authorizationHandler, usersRouter);
+
 // GESTIONE DIARIO EDUCATIVO E ASSSOCIALE
 var DiarioEducativoRouter = require("./routes/diarioEducativo");
 app.use("/api/diarioEducativo", logHandler, authorizationHandler, DiarioEducativoRouter);
