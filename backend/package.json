@@ -4,6 +4,7 @@
   "description": "Innova Backend",
   "main": "index.js",
   "dependencies": {
+    "bcrypt": "^5.0.1",
     "bson": "^4.5.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
@@ -13,6 +14,7 @@
     "mongodb": "^4.1.2",
     "mongoose": "^5.13.7",
     "mpath": "^0.8.4",
+    "mqtt": "^4.3.4",
     "nextcloud-node-client": "^1.8.1",
     "node-nextcloud": "^1.1.2",
     "nodemon": "^2.0.13",

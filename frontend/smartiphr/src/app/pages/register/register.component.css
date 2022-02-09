@@ -1,0 +1,33 @@
+mat-card-title,
+mat-card-content {
+  display: flex;
+}
+
+mat-card {
+  top: calc(100vh / 2 - (403.609px / 2));
+  margin: 0 10px 0 10px;
+  padding: 0;
+}
+
+.nomargin,
+.nopadding {
+  margin: 0;
+  padding: 0;
+}
+
+mat-label {
+  font-weight: bold;
+}
+
+.mandatory {
+  color: red;
+}
+
+.fit {
+  width: 100%;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+}

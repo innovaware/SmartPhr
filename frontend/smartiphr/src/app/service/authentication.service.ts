@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../models/user";
+import { id } from "date-fns/locale";
 
 @Injectable({
   providedIn: "root",
@@ -12,19 +13,21 @@ export class AuthenticationService {
   currentUser: User;
 
   constructor(private http: HttpClient) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
   }
 
   public get currentUserValue(): User {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"))
+    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
     return this.currentUser;
   }
 
   isAuthenticated(): boolean {
     const currentUser: User = this.currentUserValue; //JSON.parse(localStorage.getItem("currentUser"));
-    return currentUser != undefined &&
+    return (
+      currentUser != undefined &&
       currentUser.username != undefined &&
-      currentUser.password != undefined;
+      currentUser.password != undefined
+    );
   }
 
   login(username: string, password: string) {
@@ -38,7 +41,7 @@ export class AuthenticationService {
           // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
           user.authdata = window.btoa(username + ":" + password);
           localStorage.setItem("currentUser", JSON.stringify(user));
-          this.currentUser = user
+          this.currentUser = user;
           return user;
         })
       );
@@ -48,5 +51,22 @@ export class AuthenticationService {
     // remove user from local storage to log user out
     localStorage.removeItem("currentUser");
     this.currentUser = undefined;
+  }
+
+  register(
+    userId: string,
+    username: string,
+    password: string,
+    active: boolean
+  ) {
+    return this.http.put<any>(`${environment.api}/users/${userId}`, {
+      username: username,
+      password: password,
+      active: active,
+    });
+  }
+
+  getInfo(userId: string) {
+    return this.http.get<any>(`${environment.api}/users/info/${userId}`);
   }
 }

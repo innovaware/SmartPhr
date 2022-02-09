@@ -115,6 +115,10 @@ router.post("/", async (req, res) => {
     });
 
     const result = await eventi.save();
+
+    const searchTerm = `EVENTIBY${id}`;
+    client.del(searchTerm);
+
     res.status(200);
     res.json(result);
   } catch (err) {
