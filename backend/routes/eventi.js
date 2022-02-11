@@ -105,6 +105,64 @@ router.get("/search/:data", async (req, res) => {
   }
 });
 
+router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
+  const { dataStart, dataEnd } = req.params;
+  const { user } = req.query;
+
+  try {
+    const searchTerm = `EVENTISEARCH${dataStart}${dataEnd}${user}`;
+
+    if (dataStart == undefined || dataEnd == undefined) {
+      res.status(400);
+      res.json({ Error: "dataStart or dataEnd not defined" });
+      return;
+    }
+
+    if (user == undefined) {
+      res.status(400);
+      res.json({ Error: "user not defined" });
+      return;
+    }
+
+    const yearStart = dataStart.substring(0, 4);
+    const monthStart = dataStart.substring(4, 6);
+    const dayStart = dataStart.substring(6, 8);
+
+    const yearEnd = dataEnd.substring(0, 4);
+    const monthEnd = dataEnd.substring(4, 6);
+    const dayEnd = dataEnd.substring(6, 8);
+
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        //console.log(`Event Buffered - ${searchTerm}`);
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const query = {
+          $and: [
+            {
+              data: {
+                $gte: new Date(yearStart, monthStart - 1, dayStart, "00", "00", "00"),
+                $lt: new Date(yearEnd, monthEnd - 1, dayEnd, "23", "59", "59"),
+              },
+              utente: user,
+            },
+          ],
+        };
+
+        const eventi = await Eventi.find(query);
+
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+        res.status(200).json(eventi);
+      }
+    });
+  } catch (err) {
+    res.status(500);
+    res.json({ Error: err });
+  }
+});
+
 router.post("/", async (req, res) => {
   try {
     const eventi = new Eventi({
@@ -116,7 +174,7 @@ router.post("/", async (req, res) => {
 
     const result = await eventi.save();
 
-    const searchTerm = `EVENTIBY${id}`;
+    const searchTerm = `EVENTIALL`;
     client.del(searchTerm);
 
     res.status(200);
