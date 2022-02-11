@@ -1,0 +1,16 @@
+{
+  "name": "email-service",
+  "version": "1.0.0",
+  "description": "Innova Backend",
+  "main": "index.js",
+  "dependencies": {
+    "minimist": "^1.2.3",
+    "mqtt": "^4.3.4",
+    "nodemailer": "^6.7.2"
+  },
+  "scripts": {
+    "start": "node index.js"
+  },
+  "author": "",
+  "license": "ISC"
+}
