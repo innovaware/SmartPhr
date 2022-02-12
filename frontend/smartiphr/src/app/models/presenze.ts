@@ -10,5 +10,6 @@ export class Presenze {
     data?: Date;
     mansione?: string;
     turno?: string;
+    user?: string;
   }
 

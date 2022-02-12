@@ -5,6 +5,7 @@ import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../models/user";
 import { id } from "date-fns/locale";
+import { Dipendenti } from '../models/dipendenti';
 
 @Injectable({
   providedIn: "root",
@@ -90,7 +91,7 @@ export class AuthenticationService {
     password: string,
     active: boolean
   ) {
-    return this.http.put<any>(`${environment.api}/users/${userId}`, {
+    return this.http.put<any>(`${environment.api}/api/users/${userId}`, {
       username: username,
       password: password,
       active: active,
@@ -98,6 +99,6 @@ export class AuthenticationService {
   }
 
   getInfo(userId: string) {
-    return this.http.get<any>(`${environment.api}/users/info/${userId}`);
+    return this.http.get<Dipendenti[]>(`${environment.api}/api/users/info/${userId}`);
   }
 }

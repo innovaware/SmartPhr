@@ -1,13 +1,11 @@
 const mongoose = require("mongoose");
 
 const TurniMensiliSchema = mongoose.Schema({
-  cognome: String,
-  nome: String,
-  cf: String,
-  mansione: String,
-  data: Date,
-  turno: String,
-  user: String
+  dataRifInizio: Date,
+  dataRifFine: Date,
+  turnoInizio: Number,
+  turnoFine: Number,
+  user: mongoose.Types.ObjectId, 
 });
 
 module.exports = mongoose.model("TurniMensili", TurniMensiliSchema, "turnimensili");

@@ -47,29 +47,6 @@ const clientMailerService = mqtt.connect(connectUrlMailerService, {
 });
 
 app.use(cors());
-// app.use(
-//   basicAuth({
-//     authorizer: (username, password, next) => {
-//       // const userMatches = basicAuth.safeCompare(username, "customuser");
-//       // const passwordMatches = basicAuth.safeCompare(password, "customuser");
-//       var userMatches = false;
-//       var passwordMatches = false;
-//       var result_authorization = false;
-
-//       getUser(username, password)
-//         .then((user) => {
-//           userMatches = user.username != undefined && user.active == true;
-//           passwordMatches = user.password != undefined;
-//           result_authorization = userMatches & passwordMatches;
-//           return next(null, result_authorization);
-//         })
-//         .catch((err) => {
-//           return next(null, result_authorization);
-//         });
-//     },
-//     authorizeAsync: true,
-//   })
-// );
 
 const getAuth = (req) => {
   var authheader = req.headers.authorization;
@@ -87,10 +64,11 @@ const getAuth = (req) => {
 };
 
 const authorizationHandler = async (req, res, next) => {
-  const user_auth = getAuth(req);
+  //console.log("AuthorizationHandler: ", req);
+  const userAuth = getAuth(req);
 
-
-  if (user_auth == null) {
+  //console.log("user auth: ", userAuth);
+  if (userAuth == null) {
     //var err = new Error("You are not authenticated!");
     res.setHeader("WWW-Authenticate", "Basic");
     //err.status = 401;
@@ -99,19 +77,21 @@ const authorizationHandler = async (req, res, next) => {
     return next(null, "You are not authenticated!");
   }
 
-  var username = user_auth.user;
-  var password = user_auth.password;
+  var username = userAuth.user;
+  var password = userAuth.password;
 
   var userMatches = false;
   var passwordMatches = false;
-  var result_authorization = false;
+  var resultAuthorization = false;
   getUser(username, password)
     .then((user) => {
+      //console.log("GetUser completed: ", user);
       userMatches = user.username != undefined && user.active == true;
       passwordMatches = user.password != undefined;
-      result_authorization = userMatches & passwordMatches;
+      resultAuthorization = userMatches & passwordMatches;
 
-      if (!result_authorization) {
+      //console.log("User authorizated: ", resultAuthorization);
+      if (!resultAuthorization) {
         res.statusCode = 401;
         res.setHeader("WWW-Authenticate", "Basic");
         res.end("Not Authorizated");
@@ -119,12 +99,12 @@ const authorizationHandler = async (req, res, next) => {
         console.log("[AUTHORIZATIONHANDLER] User not authorized");
       } else {
         res.locals.auth = user;
-        // console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
-        return next(null, result_authorization);
+        //console.log("Setted local parameter user");
+        //console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
+        return next(null, resultAuthorization);
       }
     })
     .catch((err) => {
-
       console.log("No matching: Err ", err);
       // return next(null, result_authorization);
       res.statusCode = 401;
@@ -149,7 +129,7 @@ function getUser(username, password) {
         //console.log("user:", user_find);
         resolve(user_find);
       } else {
-        console.log(`[GETUSER] Get from MONGODB searchTerm:${searchTerm}`);
+        //console.log(`[GETUSER] Get from MONGODB searchTerm:${searchTerm}`);
 
         const users_find = await user.find({
           $and: [{ username: username }, { password: password }],
@@ -209,30 +189,8 @@ var MONGO_DB = "smartphr";
 //'mongodb://innova:innova2019@192.168.1.10:27017/smartphr?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false';
 var mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
-// console.log("Prometheus Client init")
-// const Prometheus = require('prom-client');
-// const register = new Prometheus.Registry()
-// // Add a default label which is added to all metrics
-// register.setDefaultLabels({
-//   app: 'backend-app-metrics'
-// })
-
-// // Enable the collection of default metrics
-// Prometheus.collectDefaultMetrics({ register })
-
-// // Metrics endpoint
-// app.get('/metrics', async (req, res) => {
-
-//   console.log("req:", req.header);
-//   res.set('Content-Type', Prometheus.register.contentType)
-//   res.send(await Prometheus.register.metrics())
-//   //res.end(Prometheus.register.metrics())
-// })
 
 var logHandler = function (req, res, next) {
   //console.log(req.url);

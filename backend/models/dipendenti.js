@@ -16,7 +16,7 @@ const DipendentiSchema = mongoose.Schema({
   tipoContratto: String,
   telefono: String,
   email: String,
-  idUser: String,
+  idUser: mongoose.Types.ObjectId,
   accettatoRegolamento : Boolean
 });
 

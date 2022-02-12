@@ -2,18 +2,22 @@ const express = require("express");
 const router = express.Router();
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
+const Presenze = require("../models/presenze");
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
+const mongoose = require('mongoose');
 const client = redis.createClient(redisPort, redisHost);
 
 router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    const dipendenti = await Dipendenti.find({ idUser: id });
+
+    var query = { idUser: mongoose.Types.ObjectId(id) }
+    console.log("Info: ", query);
+    const dipendenti = await Dipendenti.find(query);
     res.status(200).json(dipendenti);
   } catch (err) {
     res.status(500).json({ Error: err });
@@ -73,26 +77,32 @@ router.post("/authenticate", async (req, res) => {
 
   //TODO calcolo del turno
   try {
+    const user = res.locals.auth;
+
     const presenze = new Presenze({
-        data: req.body.data,
-        turno: req.body.turno,
+        data: new Date(), 
+        turno: '',
+        user: mongoose.Types.ObjectId(user._id)
     });
 
-    // Salva i dati sul mongodb
-    const result = await presenze.save();
+    //TODO recuperare turno mensile
+
+    // Aggiungere un record sulla collection presenze
+    // TODO 
+    //const result = await presenze.save();
 
     const searchTerm = `PRESENZEALL`;
     client.del(searchTerm);
 
     res.status(200);
-    res.json(result);
+    res.json(user);
   } catch (err) {
+    console.error(err);
     res.status(500);
     res.json({ Error: err });
+
   }
 
-  res.status(200);
-  res.json(res.locals.auth);
 });
 
 // http://[HOST]:[PORT]/api/user (POST)

@@ -17,7 +17,6 @@ export class PresenzeService {
   getPresenze(): Observable<Presenze[]> {
     return this.http.get<any[]>(this.api + "/api/presenze").pipe(
       map((results: any) => {
-        console.log(results);
         const pres: any[] = results.filter((x: any) => {
           return x.presenze.length > 0;
         });
@@ -33,7 +32,8 @@ export class PresenzeService {
               cf: x.codiceFiscale,
               data: p.data,
               turno: p.turno,
-              mansione: p.mansione,
+              mansione: x.mansione,
+              user: p.user,
             };
             presenze.push(presenza);
           });
@@ -48,7 +48,6 @@ export class PresenzeService {
       .get<any[]>(this.api + "/api/presenze/dipendente/" + id)
       .pipe(
         map((results: any) => {
-          console.log(results);
           const pres: any[] = results.filter((x: any) => {
             return x.presenze.length > 0;
           });
@@ -63,8 +62,8 @@ export class PresenzeService {
                 cognome: x.cognome,
                 cf: x.codiceFiscale,
                 data: p.data,
+                mansione: x.mansione,
                 turno: p.turno,
-                mansione: p.mansione,
               };
               presenze.push(presenza);
             });
