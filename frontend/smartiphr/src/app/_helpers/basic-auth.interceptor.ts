@@ -31,8 +31,10 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     //   active: true,
     // };
 
+    console.log("Guard");
+
     if (this.authenticationService.isAuthenticated()) {
-      const currentUser: User = this.authenticationService.currentUserValue;
+      const currentUser: User = this.authenticationService.currentUser;
       if (currentUser) {
         const auth = btoa(`${currentUser.username}:${currentUser.password}`);
         request = request.clone({

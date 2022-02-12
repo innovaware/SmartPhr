@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Paziente } from "./models/paziente";
+import { User } from './models/user';
 import { AuthenticationService } from "./service/authentication.service";
 import { PazienteService } from "./service/paziente.service";
 
@@ -12,6 +13,7 @@ import { PazienteService } from "./service/paziente.service";
 })
 export class AppComponent {
   title = "smartiphr";
+  isAuthenticated: boolean;
 
   viewDate: Date = new Date();
   events = [];
@@ -19,37 +21,20 @@ export class AppComponent {
   constructor(
     private authenticationService: AuthenticationService,
     private route: Router,
+  ) {
+    this.authenticationService.isAuthenticateHandler.subscribe(
+      (user: User) => {
+        this.isAuthenticated = user !== undefined;
+      },
+      err => console.error(err)
+    );
 
-    private pazienteService: PazienteService,
-    private http: HttpClient
-  ) {}
+    this.authenticationService.refresh();
+  }
 
   async logout() {
     this.authenticationService.logout();
     this.route.navigate(["login"]);
-  }
-
-  demo() {
-    console.log("demo");
-    for (let index = 0; index < 100; index++) {
-      this.http.get(`https://randomuser.me/api`).subscribe((r) => {
-        let patient: Paziente = new Paziente();
-        let data = r["results"][0];
-        patient.cognome = data.name.last;
-        patient.nome = data.name.first;
-        patient.sesso = data.name.gender == "female" ? "F" : "M";
-        patient.indirizzoResidenza = data.location.street.name;
-        patient.comuneResidenza = data.location.city;
-        patient.provinciaResidenza = data.location.state;
-        patient.dataNascita = data.dob.date;
-        patient.telefono = data.phone;
-        console.log(patient);
-
-        this.pazienteService.insert(patient).then((x) => {
-          console.log("Insert");
-        });
-      });
-    }
   }
 
   newMessage() {
@@ -58,8 +43,4 @@ export class AppComponent {
 
   }
 
-
-  isAuthenticated() {
-    return this.authenticationService.isAuthenticated();
-  }
 }

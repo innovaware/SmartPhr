@@ -1,37 +1,54 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
-import { User } from 'src/app/models/user';
-import { AuthenticationService } from 'src/app/service/authentication.service';
+import { Component, OnInit } from "@angular/core";
+import { Router } from "@angular/router";
+import { windowTime } from 'rxjs/operators';
+import { User } from "src/app/models/user";
+import { AuthenticationService } from "src/app/service/authentication.service";
+import { MessagesService } from "src/app/service/messages.service";
 
 @Component({
-  selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  selector: "app-login",
+  templateUrl: "./login.component.html",
+  styleUrls: ["./login.component.css"],
 })
 export class LoginComponent implements OnInit {
+  messageError: string;
+  username: string;
+  password: string;
 
   constructor(
-    private route:Router,
+    private route: Router,
     public auth: AuthenticationService
   ) {
-    console.log("SONO LOGIN");
-   }
-
-  ngOnInit() {
-
+    this.messageError = "";
   }
 
+  ngOnInit() {}
+
   async access() {
-    const currentUser: User = {
-      group: "",
-      username: "dan",
-      password: "dan",
-      active: true,
-    };
+    this.messageError = "";
+    if (this.username === undefined || this.username === "") {
+      //this.messageService.showMessageError("Username non valida");
+      this.messageError = "Username non valida";
+      return;
+    }
 
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
+    if (this.password === undefined || this.password === "") {
+      //this.messageService.showMessageError("Password non valida");
+      this.messageError = "Username non valida";
+      return;
+    }
 
+    this.auth.login(this.username, this.password).subscribe(
+      (user: User) => {
+        this.route.navigate(["/"]).then(x=> {
+          window.location.reload();
+        });
+      },
+      (err) => {
+        console.error("Error login");
+        this.messageError = "Errore in fase di login";
+      }
+    );
 
-    this.route.navigate([""]);
   }
 }

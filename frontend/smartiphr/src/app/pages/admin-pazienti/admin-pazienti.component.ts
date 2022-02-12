@@ -22,6 +22,9 @@ export class AdminPazientiComponent implements OnInit {
     public pazienteService: PazienteService
   ) {
     this.pazienti = [];
+
+    console.log("Pazienti Constructor");
+
   }
 
   ngOnInit() {}

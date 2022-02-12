@@ -69,6 +69,32 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+router.post("/authenticate", async (req, res) => {
+
+  //TODO calcolo del turno
+  try {
+    const presenze = new Presenze({
+        data: req.body.data,
+        turno: req.body.turno,
+    });
+
+    // Salva i dati sul mongodb
+    const result = await presenze.save();
+
+    const searchTerm = `PRESENZEALL`;
+    client.del(searchTerm);
+
+    res.status(200);
+    res.json(result);
+  } catch (err) {
+    res.status(500);
+    res.json({ Error: err });
+  }
+
+  res.status(200);
+  res.json(res.locals.auth);
+});
+
 // http://[HOST]:[PORT]/api/user (POST)
 // INSERT
 router.post("/", async (req, res) => {

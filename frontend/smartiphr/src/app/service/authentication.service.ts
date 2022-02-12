@@ -1,6 +1,6 @@
 import { Injectable } from "@angular/core";
-import { HttpClient } from "@angular/common/http";
-import { BehaviorSubject, Observable } from "rxjs";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../models/user";
@@ -10,47 +10,78 @@ import { id } from "date-fns/locale";
   providedIn: "root",
 })
 export class AuthenticationService {
+  static KEY_CURRENTUSER = "currentUser";
   currentUser: User;
+  isAuthenticateHandler: Subject<User>;
 
   constructor(private http: HttpClient) {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    this.load();
+    this.isAuthenticateHandler = new Subject<User>();
   }
 
-  public get currentUserValue(): User {
-    this.currentUser = JSON.parse(localStorage.getItem("currentUser"));
-    return this.currentUser;
+  getCurrentUserAsync(): Observable<User> {
+    return new Observable<User>((observer) => {
+      this.load();
+      observer.next(this.currentUser);
+    });
+  }
+
+  load() {
+    this.currentUser = JSON.parse(localStorage.getItem(AuthenticationService.KEY_CURRENTUSER));
+  }
+
+  refresh() {
+    if (this.currentUser === undefined) {
+      localStorage.removeItem(AuthenticationService.KEY_CURRENTUSER);
+    } else {
+      localStorage.setItem(AuthenticationService.KEY_CURRENTUSER, JSON.stringify(this.currentUser));
+    }
+
+    this.isAuthenticateHandler.next(this.currentUser);
   }
 
   isAuthenticated(): boolean {
-    const currentUser: User = this.currentUserValue; //JSON.parse(localStorage.getItem("currentUser"));
+    this.load();
     return (
-      currentUser != undefined &&
-      currentUser.username != undefined &&
-      currentUser.password != undefined
+      this.currentUser != undefined &&
+      this.currentUser.username != undefined &&
+      this.currentUser.password != undefined
     );
   }
 
-  login(username: string, password: string) {
+  login(username: string, password: string): Observable<User> {
+    const auth = btoa(`${username}:${password}`);
+    const body = {};
+
+    const headers_object = new HttpHeaders();
+    headers_object.append("Content-Type", "application/json");
+    headers_object.append("Authorization", `Basic ${auth}`);
+
+    const headers = new HttpHeaders()
+      .set("content-type", "application/json")
+      .set("Authorization", "Basic " + auth)
+      .set("Access-Control-Allow-Origin", "*");
+
+    const httpOptions = {
+      headers: headers,
+    };
+
     return this.http
-      .post<any>(`${environment.api}/users/authenticate`, {
-        username,
-        password,
-      })
+      .post<any>(`${environment.api}/api/users/authenticate`, body, httpOptions)
       .pipe(
-        map((user) => {
-          // store user details and basic auth credentials in local storage to keep user logged in between page refreshes
-          user.authdata = window.btoa(username + ":" + password);
-          localStorage.setItem("currentUser", JSON.stringify(user));
+        map((user: User) => {
           this.currentUser = user;
-          return user;
+          this.refresh();
+          return this.currentUser;
         })
       );
   }
 
   logout() {
-    // remove user from local storage to log user out
-    localStorage.removeItem("currentUser");
+    console.log("logout");
+
     this.currentUser = undefined;
+    this.refresh();
   }
 
   register(

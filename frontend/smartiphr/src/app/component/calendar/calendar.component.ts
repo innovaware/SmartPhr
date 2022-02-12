@@ -7,6 +7,8 @@ import { Evento } from "src/app/models/evento";
 import { UserInfo } from "src/app/models/userInfo";
 import { EventiService } from "src/app/service/eventi.service";
 import { MessagesService } from "src/app/service/messages.service";
+import { AuthenticationService } from "src/app/service/authentication.service";
+import { User } from 'src/app/models/user';
 
 @Component({
   selector: "app-calendar",
@@ -30,7 +32,8 @@ export class CalendarComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public eventiService: EventiService
+    public eventiService: EventiService,
+    private authenticationService: AuthenticationService,
   ) {
     this.isCalendarMonthEnabled = true;
 
@@ -86,25 +89,18 @@ export class CalendarComponent implements OnInit {
                   item.events[index].push(e);
                 });
             });
-
-            // item.days.map((d, index) =>
-            //   this.eventiService
-            //     .getEventiByDay(d, this.user)
-            //     .then((e) => {
-            //       if (item.events[index] == undefined) item.events[index] = [];
-            //       e.forEach((evt) => item.events[index].push(evt));
-            //     })
-            //     .catch((err) => {
-            //       console.error("Error to get Events");
-            //     })
-            // );
           }
         },
         (err) => console.error(err)
       );
   }
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.authenticationService.getCurrentUserAsync()
+        .subscribe((user: User )=> {
+            //this.user = user;
+        });
+  }
 
   getEvent(calendar: any, index: number) {
     if (calendar !== undefined) {
@@ -120,7 +116,7 @@ export class CalendarComponent implements OnInit {
   }
 
   showEvent(evento: Evento) {
-    console.log("evento:", evento);
+    //console.log("evento:", evento);
   }
 
   createEvent(item: moment.Moment, calendar_week: any, index: number) {
@@ -145,7 +141,7 @@ export class CalendarComponent implements OnInit {
     });
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed", result);
+        //console.log("The dialog was closed", result);
 
         if (result instanceof Object) {
           let index_week = this.calendar.findIndex(

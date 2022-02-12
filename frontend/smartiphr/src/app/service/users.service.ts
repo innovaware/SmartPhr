@@ -8,23 +8,23 @@ import { User } from '../models/user';
 })
 export class UsersService {
 
-  api: string = environment.api;
+  api: string = `${environment.api}/api/user`;
 
   constructor(private http: HttpClient) {}
 
   async get(): Promise<User[]> {
-    return this.http.get<User[]>(this.api + "/api/users").toPromise();
+    return this.http.get<User[]>(`${this.api}`).toPromise();
   }
 
   async getById(id: string): Promise<User[]> {
-    return this.http.get<User[]>(`${this.api}/api/users/${id}`).toPromise();
+    return this.http.get<User[]>(`${this.api}/${id}`).toPromise();
   }
 
   save(data: User): Promise<User> {
     var body = data;
     console.log("body: ", body);
     return this.http
-      .put<User>(this.api + "/api/users/" + data._id, body)
+      .put<User>(`${this.api}/${data._id}`, body)
       .toPromise();
   }
 
@@ -32,11 +32,11 @@ export class UsersService {
     var body = data;
     console.log("INSERT body: ", body);
     return this.http
-      .post<User>(this.api + "/api/users", body)
+      .post<User>(`${this.api}`, body)
       .toPromise();
   }
 
   async remove(user: User) {
-    return this.http.delete(`${this.api}/api/users/${user._id}`).toPromise();
+    return this.http.delete(`${this.api}/${user._id}`).toPromise();
   }
 }

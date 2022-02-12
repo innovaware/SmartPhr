@@ -26,16 +26,16 @@
 
   </mat-card-subtitle>
   <mat-card-content>
-    <form>
+    <div>
       <p>
         <mat-form-field>
-          <input type="text" matInput placeholder="Username">
+          <input type="text" matInput placeholder="Username" [(ngModel)]="username">
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field>
-          <input type="password" matInput placeholder="Password">
+          <input type="password" matInput placeholder="Password" [(ngModel)]="password">
         </mat-form-field>
       </p>
 
@@ -51,6 +51,9 @@
         © 2020-2021
       </div>
 
-    </form>
+      <div *ngIf="messageError !== ''" style="color:red">
+        {{messageError}}
+      </div>
+    </div>
   </mat-card-content>
 </mat-card>

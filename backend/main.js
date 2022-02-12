@@ -23,7 +23,7 @@ console.log("args:", process.argv);
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+const redisDisabled = true // process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 console.log(`Redis Host ${redisHost}:${redisPort}`);
@@ -89,11 +89,14 @@ const getAuth = (req) => {
 const authorizationHandler = async (req, res, next) => {
   const user_auth = getAuth(req);
 
+
   if (user_auth == null) {
-    var err = new Error("You are not authenticated!");
+    //var err = new Error("You are not authenticated!");
     res.setHeader("WWW-Authenticate", "Basic");
-    err.status = 401;
-    return next(err);
+    //err.status = 401;
+    res.statusCode = 401;
+    res.end('Not Authorizated');
+    return next(null, "You are not authenticated!");
   }
 
   var username = user_auth.user;
@@ -121,6 +124,8 @@ const authorizationHandler = async (req, res, next) => {
       }
     })
     .catch((err) => {
+
+      console.log("No matching: Err ", err);
       // return next(null, result_authorization);
       res.statusCode = 401;
       res.setHeader("Content-Type", "text/plain");
@@ -145,20 +150,12 @@ function getUser(username, password) {
         resolve(user_find);
       } else {
         console.log(`[GETUSER] Get from MONGODB searchTerm:${searchTerm}`);
-        // var user_insert = new user({
-        //   group: "123",
-        //   username: username,
-        //   password: password,
-        //   active: true,
-        //   role: "Admin",
-        // });
-        // const result = await user_insert.save();
 
         const users_find = await user.find({
           $and: [{ username: username }, { password: password }],
         });
 
-        // console.log(`Mongo ${searchTerm} length: ${user_find.length}`);
+        //console.log(`Mongo ${searchTerm} length: ${user_find.length}`);
         if (users_find.length > 0) {
           let user_find = users_find[0];
 
@@ -343,7 +340,8 @@ app.use("/api/info", logHandler, function (req, res, next) {
 
 // User api
 var userRouter = require("./routes/user");
-app.use("/users", logHandler, userRouter );
+//app.use("/users", logHandler, userRouter );
+app.use("/api/users", logHandler, authorizationHandler, userRouter);
 
 // Pazienti API
 var pazientiRouter = require("./routes/pazienti");
@@ -576,8 +574,8 @@ app.use(
 );
 
 // GESTIONE UTENTI API
-var usersRouter = require("./routes/users");
-app.use("/api/users", logHandler, authorizationHandler, usersRouter);
+//var usersRouter = require("./routes/users");
+//app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 
 // GESTIONE DIARIO EDUCATIVO E ASSSOCIALE
 var DiarioEducativoRouter = require("./routes/diarioEducativo");
