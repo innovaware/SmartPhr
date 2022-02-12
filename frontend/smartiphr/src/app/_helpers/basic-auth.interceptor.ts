@@ -11,27 +11,19 @@ import { User } from "../models/user";
 import { Observable } from "rxjs";
 import { tap } from "rxjs/operators";
 import { Router } from "@angular/router";
-import { AuthenticationService } from '../service/authentication.service';
+import { AuthenticationService } from "../service/authentication.service";
 
 @Injectable()
 export class BasicAuthInterceptor implements HttpInterceptor {
   constructor(
     private authenticationService: AuthenticationService,
-    private route:Router
+    private route: Router
   ) {}
 
   intercept(
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
-    // const currentUser: User = {
-    //   group: "",
-    //   username: "dan",
-    //   password: "dan",
-    //   active: true,
-    // };
-
-    console.log("Guard");
 
     if (this.authenticationService.isAuthenticated()) {
       const currentUser: User = this.authenticationService.currentUser;

@@ -1,13 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Presenze = require("../models/presenze");
+const Dipendenti = require("../models/dipendenti");
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+const redisDisabled = true; // process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
+var mongoose = require('mongoose');
 
 router.get("/", async (req, res) => {
   try {
@@ -17,16 +19,26 @@ router.get("/", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json 
+        // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const presenze = await Presenze.find();
+        //const presenze = await Presenze.find();
+        const presenze = await Dipendenti.aggregate([
+          {
+            $lookup: {
+              from: "presenze",
+              localField: "idUser",
+              foreignField: "user",
+              as: "presenze",
+            },
+          },
+        ]);
 
         // Aggiorno la cache con i dati recuperati da mongodb
         client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
 
-        // Ritorna il json 
+        // Ritorna il json
         res.status(200).json(presenze);
       }
     });
@@ -36,33 +48,40 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 //LISTA PRESENZE DIPENDENTE
 // http://[HOST]:[PORT]/api/presenzeDipendente/[ID_DIPENDENTE]
 router.get("/dipendente/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-      const searchTerm = `PRESENZEBY${id}`;
-      client.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-  
-        if (data && !redisDisabled) {
-          res.status(200).send(JSON.parse(data));
-        } else {
+  const { id } = req.params;
+  try {
+    const searchTerm = `PRESENZEBY${id}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
 
-          const presenze = await Presenze.find({ user: id });
-  
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
-          res.status(200).json(presenze);
-        }
-      });
-    } catch (err) {
-      res.status(500).json({ Error: err });
-    }
-  });
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const presenze = await Dipendenti.aggregate([
+          { "$match": { "_id": mongoose.Types.ObjectId(id) } },
+          {
+            $lookup: {
+              from: "presenze",
+              localField: "idUser",
+              foreignField: "user",
+              as: "presenze",
+            },
+          },
+        ]);
 
+        //const presenze = await Presenze.find({ user: id });
 
-
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
+        res.status(200).json(presenze);
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 // http://[HOST]:[PORT]/api/presenze/[ID]
 router.get("/:id", async (req, res) => {
@@ -91,9 +110,8 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const presenze = new Presenze({
-        data: req.body.data,
-        turno: req.body.turno,
-      
+      data: req.body.data,
+      turno: req.body.turno,
     });
 
     // Salva i dati sul mongodb
@@ -120,8 +138,8 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-            data: req.body.data,
-            turno: req.body.turno
+          data: req.body.data,
+          turno: req.body.turno,
         },
       }
     );
@@ -134,6 +152,5 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 module.exports = router;
