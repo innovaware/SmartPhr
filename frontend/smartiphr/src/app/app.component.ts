@@ -33,8 +33,12 @@ export class AppComponent {
   }
 
   async logout() {
-    this.authenticationService.logout();
-    this.route.navigate(["login"]);
+    this.authenticationService.getCurrentUserAsync().subscribe(
+      (user: User) => {
+        this.authenticationService.logout(user.username, user.password);
+        this.route.navigate(["login"]);
+      }
+    )
   }
 
   newMessage() {
