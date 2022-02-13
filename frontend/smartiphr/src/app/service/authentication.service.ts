@@ -78,11 +78,29 @@ export class AuthenticationService {
       );
   }
 
-  logout() {
+  logout(username: string, password: string): Observable<User> {
     console.log("logout");
+    const auth = btoa(`${username}:${password}`);
+    const body = {};
+
+    const headers_object = new HttpHeaders();
+    headers_object.append("Content-Type", "application/json");
+    headers_object.append("Authorization", `Basic ${auth}`);
+
+    const headers = new HttpHeaders()
+      .set("content-type", "application/json")
+      .set("Authorization", "Basic " + auth)
+      .set("Access-Control-Allow-Origin", "*");
+
+    const httpOptions = {
+      headers: headers,
+    };
 
     this.currentUser = undefined;
     this.refresh();
+
+    return this.http
+      .post<any>(`${environment.api}/api/users/logout`, body, httpOptions);
   }
 
   register(

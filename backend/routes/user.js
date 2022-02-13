@@ -3,19 +3,19 @@ const router = express.Router();
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
 const Presenze = require("../models/presenze");
+const Turnimensili = require("../models/turnimensili");
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
 const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-const mongoose = require('mongoose');
+const mongoose = require("mongoose");
 const client = redis.createClient(redisPort, redisHost);
 
 router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
   try {
-
-    var query = { idUser: mongoose.Types.ObjectId(id) }
+    var query = { idUser: mongoose.Types.ObjectId(id) };
     console.log("Info: ", query);
     const dipendenti = await Dipendenti.find(query);
     res.status(200).json(dipendenti);
@@ -74,23 +74,95 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/authenticate", async (req, res) => {
-
-  //TODO calcolo del turno
   try {
     const user = res.locals.auth;
 
-    const presenze = new Presenze({
-        data: new Date(), 
-        turno: '',
-        user: mongoose.Types.ObjectId(user._id)
-    });
+    const presenzeFind = await Dipendenti.aggregate([
+      {
+        $match: {
+          idUser: mongoose.Types.ObjectId(user._id),
+        },
+      },
+      {
+        $lookup: {
+          from: "presenze",
+          localField: "idUser",
+          foreignField: "user",
+          as: "presenze",
+        },
+      },
+      {
+        $unwind: {
+          path: "$codiceFiscale",
+        },
+      },
+    ]);
 
-    //TODO recuperare turno mensile
+    if (presenzeFind.length > 0) {
+      const turno = await Turnimensili.findOne({
+        user: mongoose.Types.ObjectId(user._id),
+        dataRifInizio: { $lte: new Date() },
+        dataRifFine: { $gte: new Date() },
+      });
 
-    // Aggiungere un record sulla collection presenze
-    // TODO 
-    //const result = await presenze.save();
+      if (turno != null) {
+        const dataRif = new Date();
+        const dataRifNowInizio =  new Date(
+          Date.UTC(
+            dataRif.getFullYear(), 
+            dataRif.getMonth(), 
+            dataRif.getDate(), 
+            0, 
+            0, 
+            0)); 
 
+        const dataRifNowFine =  new Date(
+          Date.UTC(
+            dataRif.getFullYear(), 
+            dataRif.getMonth(), 
+            dataRif.getDate(), 
+            0, 
+            0, 
+            0)); 
+
+        
+        //dataRif2.setTimezone('Europe/Rome');
+        
+        turno.dataRifInizio.setHours( turno.turnoInizio );
+        turno.dataRifFine.setHours( turno.turnoFine );
+        dataRifNowInizio.setHours( turno.turnoInizio );
+        dataRifNowFine.setHours( turno.turnoFine );
+        
+        const resultPrenseze = presenzeFind.map(
+          x => {
+            return {
+              presenze: x.presenze
+              .find(a=> 
+                //a.data,
+                a.data >= turno.dataRifInizio && a.data <= turno.dataRifFine &&
+                  a.data >= dataRifNowInizio && a.data <= dataRifNowFine
+                ),
+
+              debug: x.presenze.map(a=> a.data)
+                
+              }
+            })
+            
+            
+        const adding = resultPrenseze.length == 0 || resultPrenseze[0].presenze == undefined;
+        if (adding) {
+          const presenzeAdding = new Presenze({
+            data: new Date(),
+            user: mongoose.Types.ObjectId(user._id),
+          });
+          
+          // Aggiungere un record sulla collection presenze
+          const result = await presenzeAdding.save();
+          console.log("Add item in presenze");
+        }
+      }
+    }
+        
     const searchTerm = `PRESENZEALL`;
     client.del(searchTerm);
 
@@ -100,9 +172,23 @@ router.post("/authenticate", async (req, res) => {
     console.error(err);
     res.status(500);
     res.json({ Error: err });
-
   }
+});
 
+router.post("/logout", async (req, res) => {
+  try {
+    const user = res.locals.auth;
+       console.log("Logout"); 
+    const searchTerm = `PRESENZEALL`;
+    client.del(searchTerm);
+
+    res.status(200);
+    res.json(user);
+  } catch (err) {
+    console.error(err);
+    res.status(500);
+    res.json({ Error: err });
+  }
 });
 
 // http://[HOST]:[PORT]/api/user (POST)

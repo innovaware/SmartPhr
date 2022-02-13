@@ -5,7 +5,7 @@ const Dipendenti = require("../models/dipendenti");
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+const redisDisabled = true; // process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
@@ -26,13 +26,17 @@ router.get("/", async (req, res) => {
         //const presenze = await Presenze.find();
         const presenze = await Dipendenti.aggregate([
           {
-            $lookup: {
-              from: "presenze",
-              localField: "idUser",
-              foreignField: "user",
-              as: "presenze",
-            },
-          },
+            '$lookup': {
+              'from': 'presenze', 
+              'localField': 'idUser', 
+              'foreignField': 'user', 
+              'as': 'presenze'
+            }
+          }, {
+            '$unwind': {
+              'path': '$codiceFiscale'
+            }
+          }
         ]);
 
         // Aggiorno la cache con i dati recuperati da mongodb
@@ -111,7 +115,6 @@ router.post("/", async (req, res) => {
   try {
     const presenze = new Presenze({
       data: req.body.data,
-      turno: req.body.turno,
     });
 
     // Salva i dati sul mongodb
@@ -139,7 +142,6 @@ router.put("/:id", async (req, res) => {
       {
         $set: {
           data: req.body.data,
-          turno: req.body.turno,
         },
       }
     );

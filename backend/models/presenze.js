@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const PresenzeSchema = mongoose.Schema({
   data: Date,
-  turno: String,
   user: mongoose.Types.ObjectId
 });
 

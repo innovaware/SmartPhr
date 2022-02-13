@@ -53,6 +53,8 @@ export class PresenzeService {
 
           const presenze: Presenze[] = [];
 
+          console.log(pres);
+
           pres.forEach((x) => {
             x.presenze.forEach((p) => {
 
