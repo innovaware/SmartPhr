@@ -4,10 +4,13 @@ export class Turnimensili {
   }
 
   _id?: string;
-  nome?: string;
+  dataRifInizio: Date;
+  dataRifFine: Date;
+  turnoInizio: Number;
+  turnoFine: Number;
+  user: string;
+
   cognome?: string;
+  nome?: string;
   cf?: string;
-  data?: Date;
-  mansione?: string;
-  turno?: string;
 }

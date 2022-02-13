@@ -4,7 +4,6 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { Presenze } from "../models/presenze";
-import { filter } from "rxjs/operators";
 
 @Injectable({
   providedIn: "root",

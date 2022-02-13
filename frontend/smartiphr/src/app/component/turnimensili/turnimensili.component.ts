@@ -16,7 +16,7 @@ export class TurnimensiliComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
-  
+
   @Output() showItemEmiter = new EventEmitter<{
     turnimensili: Turnimensili;
     button: string;
@@ -30,10 +30,9 @@ export class TurnimensiliComponent implements OnInit {
     "cognome",
     "nome",
     "cf",
-    "turno"
+    "turno",
+    "dataRif"
   ];
-
-
 
   dataSource: MatTableDataSource<Turnimensili>;
 
@@ -50,7 +49,7 @@ export class TurnimensiliComponent implements OnInit {
 ngOnInit() {
   if(this.data){
 
-    this.turnimensiliService.getTurnimensiliByDipendente(this.data._id).then((result) => {
+    this.turnimensiliService.getTurnimensiliByDipendente(this.data._id).subscribe((result) => {
       this.turnimensili = result;
 
       this.dataSource = new MatTableDataSource<Turnimensili>(this.turnimensili);
@@ -58,13 +57,13 @@ ngOnInit() {
     });
   }
   else{
-  this.turnimensiliService.getTurnimensili().then((result) => {
+  this.turnimensiliService.getTurnimensili().subscribe((result) => {
     this.turnimensili = result;
 
     this.dataSource = new MatTableDataSource<Turnimensili>(this.turnimensili);
     this.dataSource.paginator = this.paginator;
   });
-  } 
+  }
 }
 
   ngAfterViewInit() {}

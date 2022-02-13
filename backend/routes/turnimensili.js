@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Turnimensili = require("../models/turnimensili");
+const Dipendenti = require("../models/dipendenti");
 const redis = require("redis");
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
@@ -8,6 +9,7 @@ const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 const client = redis.createClient(redisPort, redisHost);
+const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
   try {
@@ -17,16 +19,27 @@ router.get("/", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json 
+        // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const turnimensili = await Turnimensili.find();
+        const turnimensili = await Dipendenti.aggregate([
+          {
+            $lookup: {
+              from: "turnimensili",
+              localField: "idUser",
+              foreignField: "user",
+              as: "turni",
+            },
+          },
+        ]);
+
+        //const turnimensili = await Turnimensili.find();
 
         // Aggiorno la cache con i dati recuperati da mongodb
         client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
 
-        // Ritorna il json 
+        // Ritorna il json
         res.status(200).json(turnimensili);
       }
     });
@@ -36,33 +49,39 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 //LISTA TURNIMENSILI DIPENDENTE
 // http://[HOST]:[PORT]/api/turnimensiliDipendente/[ID_DIPENDENTE]
 router.get("/dipendente/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-      const searchTerm = `TURNIMENSILIBY${id}`;
-      client.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-  
-        if (data && !redisDisabled) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          
-          const turnimensili = await Turnimensili.find({ user: id });
-  
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
-          res.status(200).json(turnimensili);
-        }
-      });
-    } catch (err) {
-      res.status(500).json({ Error: err });
-    }
-  });
+  const { id } = req.params;
+  try {
+    const searchTerm = `TURNIMENSILIBY${id}`;
+    client.get(searchTerm, async (err, data) => {
+      if (err) throw err;
 
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        //const turnimensili = await Turnimensili.find({ user: id });
+        const turnimensili = await Dipendenti.aggregate([
+          { $match: { _id: mongoose.Types.ObjectId(id) } },
+          {
+            $lookup: {
+              from: "turnimensili",
+              localField: "idUser",
+              foreignField: "user",
+              as: "turni",
+            },
+          },
+        ]);
 
-
+        client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
+        res.status(200).json(turnimensili);
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 // http://[HOST]:[PORT]/api/turnimensili/[ID]
 router.get("/:id", async (req, res) => {
@@ -91,9 +110,11 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const turnimensili = new Turnimensili({
-        data: req.body.data,
-        turno: req.body.turno,
-      
+      dataRifInizio: new Date(req.body.dataRifInizio),
+      dataRifFine: new Date(req.body.dataRifFine),
+      turnoInizio: Number.parseInt(req.body.turnoInizio),
+      turnoFine: Number.parseInt(req.body.turnoFine),
+      user: mongoose.Types.ObjectId(req.body.user),
     });
 
     // Salva i dati sul mongodb
@@ -120,8 +141,11 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-            data: req.body.data,
-            turno: req.body.turno
+          dataRifInizio: new Date(req.body.dataRifInizio),
+          dataRifFine: new Date(req.body.dataRifFine),
+          turnoInizio: Number.parseInt(req.body.turnoInizio),
+          turnoFine: Number.parseInt(req.body.turnoFine),
+          user: mongoose.Types.ObjectId(req.body.user),
         },
       }
     );
@@ -134,6 +158,5 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 module.exports = router;
