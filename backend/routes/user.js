@@ -1,16 +1,18 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
+
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
 const Presenze = require("../models/presenze");
 const Turnimensili = require("../models/turnimensili");
+
 const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+//const redisPort = process.env.REDISPORT || 6379;
+//const redisHost = process.env.REDISHOST || "redis";
+//const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-const mongoose = require("mongoose");
-const client = redis.createClient(redisPort, redisHost);
+//const client = redis.createClient(redisPort, redisHost);
 
 router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
@@ -25,26 +27,38 @@ router.get("/info/:id", async (req, res) => {
 });
 
 router.get("/", async (req, res) => {
+  const getData = () => {
+    const users = User.find();
+    return users;
+  }
+
   try {
-    const searchTerm = `USERALL`;
-    // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json
-        res.status(200).send(JSON.parse(data));
-      } else {
-        // Recupero informazioni dal mongodb
-        const users = await User.find();
-
-        // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(users));
-
-        // Ritorna il json
-        res.status(200).json(users);
-      }
-    });
+    redisClient = res.locals.clientRedis;
+    if (redisClient == undefined) {
+      const users = await getData();
+      res.status(200).json(users);      
+      return;
+    }
+    else {
+      const searchTerm = `USERALL`;
+      // Ricerca su Redis Cache
+      client.get(searchTerm, async (err, data) => {
+        if (err) throw err;
+        
+        if (data && !redisDisabled) {
+          // Dato trovato in cache - ritorna il json
+          res.status(200).send(JSON.parse(data));
+        } else {
+          // Recupero informazioni dal mongodb
+          const users = await getData(); 
+          // Aggiorno la cache con i dati recuperati da mongodb
+          client.setex(searchTerm, redisTimeCache, JSON.stringify(users));
+          
+          // Ritorna il json
+          res.status(200).json(users);
+        }
+      });
+    }
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
