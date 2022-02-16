@@ -49,44 +49,53 @@ const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${M
 
 
 
-console.log("*********************************************************************************");
-console.log("******************************** SMARTPHR Server ********************************");
-console.log("*********************************************************************************");
-console.log(`* Version: ${VERSION}                                                            `);
-console.log("*                                                                                ");
-console.log(`* Api Service:                                                                   `);
-console.log(`* Api Options:                                                                   `);
-console.log(`*     Port   : ${PORT}                                                           `);
-console.log("*                                                                                ");
-console.log(`* Redis Host: ${redisHost}:${redisPort}                                          `);
-console.log(`* Redis Options:                                                                 `); 
-console.log(`*       Disabled  : ${redisDisabled? 'true' : 'false' }                          `); 
-console.log(`*       Time Cache: ${redisTimeCache}                                            `);
-console.log("*                                                                                ");
-console.log(`* Mailer Service: ${hostMailerService}:${portMailerService}                      `);
-console.log(`* Mailer Options:                                                                `);
-console.log(`*        Client Id: ${clientIdMailerService}:                                    `);
-console.log(`*        Queue url: ${connectUrlMailerService}                                   `);
-console.log(`*        Username: ${mailerUsername}                                             `);
-console.log(`*        Password: ${mailerPassword}                                             `);
-console.log(`*        Connection Timeout: ${mailerConnectionTimeout}                          `);
-console.log(`*        ReConnection Period: ${mailerReConnectionPeriod}                        `);
-console.log("*                                                                                ");
-console.log(`* NextCloud Service: ${NEXTCLOUD_HOST}                                           `);
-console.log(`* NextCloud Options:                                                             `);
-console.log(`*           Username: ${NEXTCLOUD_USER}                                          `);
-console.log("*                                                                                ");
-console.log(`* Mongo Service: ${MONGO_HOSTNAME}:${MONGO_PORT}                                 `);
-console.log(`* Mongo Options:                                                                 `);
-console.log(`*       Username: ${MONGO_USERNAME}                                              `);
-console.log(`*       Password: ${MONGO_PASSWORD}                                              `);
-console.log(`*       Database: ${MONGO_DB}                                                    `);
-console.log(`*       Connection String: ${mongoConnectionString}                              `);
-console.log("                                                                                 ");
-console.log("*********************************************************************************");
 
 var clientRedis = undefined;
 var clientMailerService = undefined;
+
+var routesList = [];
+
+const PrintInfoService = () => {
+  console.log("*********************************************************************************");
+  console.log("******************************** SMARTPHR Server ********************************");
+  console.log("*********************************************************************************");
+  console.log(`* Version: ${VERSION}                                                            `);
+  console.log("*                                                                                ");
+  console.log(`* Api Service:                                                                   `);
+  console.log(`* Api Options:                                                                   `);
+  console.log(`*     Port   : ${PORT}                                                           `);
+  console.log("*                                                                                ");
+  console.log(`* Redis Host: ${redisHost}:${redisPort}                                          `);
+  console.log(`* Redis Options:                                                                 `); 
+  console.log(`*       Disabled  : ${redisDisabled? 'true' : 'false' }                          `); 
+  console.log(`*       Time Cache: ${redisTimeCache}                                            `);
+  console.log("*                                                                                ");
+  console.log(`* Mailer Service: ${hostMailerService}:${portMailerService}                      `);
+  console.log(`* Mailer Options:                                                                `);
+  console.log(`*        Client Id: ${clientIdMailerService}:                                    `);
+  console.log(`*        Queue url: ${connectUrlMailerService}                                   `);
+  console.log(`*        Username: ${mailerUsername}                                             `);
+  console.log(`*        Password: ${mailerPassword}                                             `);
+  console.log(`*        Connection Timeout: ${mailerConnectionTimeout}                          `);
+  console.log(`*        ReConnection Period: ${mailerReConnectionPeriod}                        `);
+  console.log("*                                                                                ");
+  console.log(`* NextCloud Service: ${NEXTCLOUD_HOST}                                           `);
+  console.log(`* NextCloud Options:                                                             `);
+  console.log(`*           Username: ${NEXTCLOUD_USER}                                          `);
+  console.log("*                                                                                ");
+  console.log(`* Mongo Service: ${MONGO_HOSTNAME}:${MONGO_PORT}                                 `);
+  console.log(`* Mongo Options:                                                                 `);
+  console.log(`*       Username: ${MONGO_USERNAME}                                              `);
+  console.log(`*       Password: ${MONGO_PASSWORD}                                              `);
+  console.log(`*       Database: ${MONGO_DB}                                                    `);
+  console.log(`*       Connection String: ${mongoConnectionString}                              `);
+  console.log("*                                                                                ");
+  console.log("* Routes:                                                                        ");
+  routesList.forEach(r => { 
+    console.log(`*\t${r.key.padEnd(10)}\t-- ${r.path}`);
+  });
+  console.log("*********************************************************************************");
+}
 
 const InitMongoService = () => {
   console.log("Wait to connect Mongo Service...");
@@ -124,6 +133,9 @@ const InitRedisService = () => {
       redisDisabled = true;
     }
   }
+  
+  app.set('redis', clientRedis); 
+  app.set('redisDisabled', redisDisabled); 
 }
 
 const InitMailerService = () => {
@@ -145,10 +157,14 @@ const InitMailerService = () => {
     console.log("Deactivate Redis Service");
     clientMailerServiceDisabled = true;
   }
+  app.set('mailer', clientMailerService);
+  app.set('mailerTopic', "topic/dipendente");
+  app.set('mailerDisabled', clientMailerServiceDisabled);
 }
 
 const InitApiFunctions = () => {
-  app.use("/api/info", logHandler, function (req, res, next) {
+  var apiInfo = { key: 'info', path:'/api/info' }
+  app.use(apiInfo.path, logHandler, function (req, res, next) {
     let data = {
       status: "Running",
       version: VERSION,
@@ -156,54 +172,39 @@ const InitApiFunctions = () => {
     };
     res.status(200).send(data);
   });
+  routesList.push(apiInfo);
+
   
   // User api
   var userRouter = require("./routes/user");
-  app.use("/api/users",(req, res, next)=> {
-    res.locals.clientRedis = clientRedis;
-    next();
-  }, logHandler, authorizationHandler, userRouter);
+  var apiUser = { key: 'user', path:'/api/users' }
+  app.use(apiUser.path, logHandler, authorizationHandler, userRouter);
+  routesList.push(apiUser);
 
   // Pazienti API
-  // var pazientiRouter = require("./routes/pazienti");
-  // app.use(
-  //   "/api/pazienti",
-  //   logHandler,
-  //   authorizationHandler,
-  //   roleHandler,
-  //   pazientiRouter
-  // );
+  var pazientiRouter = require("./routes/pazienti");
+  var apiPazienti = { key: 'pazienti', path:'/api/pazienti' }
+  app.use( apiPazienti.path, logHandler, authorizationHandler, roleHandler, pazientiRouter );
+  routesList.push(apiPazienti);
 
-  // // Dipendenti API
-  // var dipendentiRouter = require("./routes/dipendenti");
-  // app.use(
-  //   "/api/dipendenti",
-  //   logHandler,
-  //   authorizationHandler,
-  //   async (req, res, next) => {
-  //     res.locals.clientMailerService = clientMailerService;
+  // Dipendenti API
+  var dipendentiRouter = require("./routes/dipendenti");
+  var apiDipendente = { key: 'dipendenti', path: '/api/dipendenti' }
+  app.use(apiDipendente.path, logHandler, authorizationHandler, dipendentiRouter );
+  routesList.push(apiDipendente);
 
-  //     const topicMailerservice = "topic/dipendente";
-  //     res.locals.topicMailerservice = topicMailerservice;
+  // Consulenti API
+  var consulentiRouter = require("./routes/consulenti");
+  var apiConsulenti = { key: 'consulenti', path: '/api/consulenti' }
+  app.use(apiConsulenti.path, logHandler, authorizationHandler, consulentiRouter);
+  routesList.push(apiConsulenti);
 
-  //     next();
-  //   },
-  //   dipendentiRouter
-  // );
+  // Fornitori API
+  var fornitoriRouter = require("./routes/fornitori");
+  var apiFornitori = { key: 'fornitori', path: '/api/fornitori' }
+  app.use(apiFornitori.path, logHandler, authorizationHandler, roleHandler, fornitoriRouter );
+  routesList.push(apiConsulenti);
 
-  // // Consulenti API
-  // var consulentiRouter = require("./routes/consulenti");
-  // app.use("/api/consulenti", logHandler, authorizationHandler, consulentiRouter);
-
-  // // Fornitori API
-  // var fornitoriRouter = require("./routes/fornitori");
-  // app.use(
-  //   "/api/fornitori",
-  //   logHandler,
-  //   authorizationHandler,
-  //   roleHandler,
-  //   fornitoriRouter
-  // );
   // // ASP API
   // var aspRouter = require("./routes/asp");
   // app.use("/api/asp", logHandler, authorizationHandler, aspRouter);
@@ -670,5 +671,7 @@ InitMailerService();
 InitMongoService();
 
 InitApiFunctions();
+
+PrintInfoService();
 StartApiService();
 return

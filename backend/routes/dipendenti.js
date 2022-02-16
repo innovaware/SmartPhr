@@ -4,28 +4,41 @@ const express = require("express");
 const redis = require("redis");
 
 const router = express.Router();
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+//const redisPort = process.env.REDISPORT || 6379;
+//const redisHost = process.env.REDISHOST || "redis";
+//const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-const client = redis.createClient(redisPort, redisHost);
+//const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.find();
+    };
+ 
+    if (redisClient == undefined || redisDisabled) {
+      const dipendenti = await getData();
+      res.status(200).json(dipendenti);
+      return
+    }
+
     const searchTerm = `DIPENDENTIALL`;
     // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const dipendenti = await Dipendenti.find();
+        const dipendenti = await getData();
 
         // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
 
         // Ritorna il json
         res.status(200).json(dipendenti);
@@ -41,16 +54,29 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.findById(id);
+    };
+ 
+    if (redisClient == undefined || redisDisabled) {
+      const dipendenti = await getData();
+      res.status(200).json(dipendenti);
+      return
+    }
+
     const searchTerm = `DIPENDENTIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const dipendenti = await Dipendenti.findById(id);
+        const dipendenti = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
         res.status(200).json(dipendenti);
       }
     });
@@ -63,8 +89,12 @@ router.get("/:id", async (req, res) => {
 // INSERT dipendente su DB
 router.post("/", async (req, res) => {
   try {
-    clientMailerService = res.locals.clientMailerService;
-    topic = res.locals.topicMailerservice;
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    clientMailerService = req.app.get("mailer");
+    clientMailerTopic = req.app.get("mailerTopic");
+    clientMailerDiabled = req.app.get("mailerDisabled");
 
     if (req.body.email === undefined) {
       res.status(400).json({ Error: 'Email not defined'})
@@ -86,8 +116,6 @@ router.post("/", async (req, res) => {
     });
 
     const userResult = await user.save();
-    const searchTermUser = `USERALL`;
-    client.del(searchTermUser);
 
     const dipendente = new Dipendenti({
       cognome: req.body.cognome,
@@ -111,23 +139,26 @@ router.post("/", async (req, res) => {
     // Salva i dati sul mongodb
     const result = await dipendente.save();
 
-    const searchTerm = `DIPENDENTIALL`;
-    client.del(searchTerm);
+    if (redisClient != undefined && redisDisabled) {
+      const searchTermUser = `USERALL`;
+      redisClient.del(searchTermUser);
+      const searchTerm = `DIPENDENTIALL`;
+      redisClient.del(searchTerm);
+    }
 
-
-    clientMailerService.publish(
-      topic,
-      JSON.stringify({
-        message: dipendente,
-        operation: "insert",
-      }),
-      { qos: 0, retain: false },
-      (error) => {
-        if (error) {
-          console.error(error);
-        }
-      }
-    );
+    if (clientMailerService != undefined && !clientMailerDiabled) {
+      clientMailerService.publish( clientMailerTopic, 
+        JSON.stringify({
+          message: dipendente,
+          operation: "insert",
+        }),
+        { qos: 0, retain: false },
+        (error) => {
+          if (error) {
+            console.error(error);
+          }
+      });
+    }
 
     res.status(200);
     res.json(result);
@@ -165,23 +196,32 @@ router.put("/:id", async (req, res) => {
         },
       }
     );
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    clientMailerService = req.app.get("mailer");
+    clientMailerTopic = req.app.get("mailerTopic");
+    clientMailerDiabled = req.app.get("mailerDisabled");
 
-    const searchTerm = `DIPENDENTIBY${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `DIPENDENTIBY${id}`;
+      redisClient.del(searchTerm);
+    }
 
-    clientMailerService.publish(
-      topic,
-      JSON.stringify({
-        message: dipendente,
-        operation: "update",
-      }),
-      { qos: 0, retain: false },
-      (error) => {
-        if (error) {
-          console.error(error);
-        }
-      }
-    );
+    if (clientMailerService != undefined && !clientMailerDiabled) {
+      clientMailerService.publish(
+        clientMailerTopic,
+        JSON.stringify({
+          message: dipendente,
+          operation: "update",
+        }),
+        { qos: 0, retain: false },
+        (error) => {
+          if (error) {
+            console.error(error);
+          }
+        });
+    }
 
     res.status(200).json(dipendenti);
   } catch (err) {
@@ -194,24 +234,34 @@ router.delete("/:id", async (req, res) => {
     const { id } = req.params;
     const dipendente = await Dipendenti.remove({ _id: id });
 
-    let searchTerm = `DIPENDENTEBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `DIPENDENTE${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    clientMailerService = req.app.get("mailer");
+    clientMailerTopic = req.app.get("mailerTopic");
+    clientMailerDiabled = req.app.get("mailerDisabled");
 
-    clientMailerService.publish(
-      topic,
-      JSON.stringify({
-        message: dipendente,
-        operation: "remove",
-      }),
-      { qos: 0, retain: false },
-      (error) => {
-        if (error) {
-          console.error(error);
-        }
-      }
-    );
+    if (redisClient != undefined && !redisDisabled) {
+      let searchTerm = `DIPENDENTEBY${id}`;
+      redisClient.del(searchTerm);
+      searchTerm = `DIPENDENTE${id}`;
+      redisClient.del(searchTerm);
+    }
+
+    if (clientMailerService != undefined && !clientMailerDiabled) {
+
+      clientMailerService.publish(
+        clientMailerTopic,
+        JSON.stringify({
+          message: dipendente,
+          operation: "remove",
+        }),
+        { qos: 0, retain: false },
+        (error) => {
+          if (error) {
+            console.error(error);
+          }
+        });
+    }
 
     res.status(200);
     res.json(dipendente);
