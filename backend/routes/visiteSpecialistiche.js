@@ -1,30 +1,35 @@
 const express = require("express");
-
 const router = express.Router();
 const VisiteSpecialistiche = require("../models/visiteSpecialistiche");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return VisiteSpecialistiche.find({
+        user: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `VISITEBY${id}`;
-    client.get(searchTerm, async (err, asps) => {
+    redisClient.get(searchTerm, async (err, asps) => {
       if (err) throw err;
 
       if (asps) {
         res.status(200).send(JSON.parse(asps));
       } else {
-        const visita = await VisiteSpecialistiche.find({
-          user: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(visita));
+        const visita = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(visita));
         res.status(200).json(visita);
       }
     });
@@ -46,9 +51,12 @@ router.post("/", async (req, res) => {
     res.status(200);
     res.json(result);
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `VISITA*`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`VISITA*`);
+    }
 
   } catch (err) {
     res.status(500);
@@ -70,8 +78,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `VISITABY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`VISITABY${id}`);
+    }
 
     res.status(200);
     res.json(visita);
@@ -83,15 +95,28 @@ router.put("/:id", async (req, res) => {
 router.get("/", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return VisiteSpecialistiche.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `VISITE${id}`;
-    client.get(searchTerm, async (err, asps) => {
+    redisClient.get(searchTerm, async (err, asps) => {
       if (err) throw err;
 
       if (asps) {
         res.status(200).send(JSON.parse(asps));
       } else {
-        const visita = await VisiteSpecialistiche.find({});
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(visita));
+        const visita = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(visita));
         res.status(200).json(visita);
       }
     });

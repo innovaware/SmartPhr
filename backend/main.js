@@ -53,6 +53,7 @@ const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${M
 
 var clientRedis = undefined;
 var clientMailerService = undefined;
+var clientNextCloud = undefined;
 
 var routesList = [];
 
@@ -356,44 +357,42 @@ const InitApiFunctions = () => {
   app.use( apiDiarioClinico.path, logHandler, authorizationHandler, DiarioClinicoRouter );
   routesList.push(apiDiarioClinico);
 
-  // var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
-  // app.use(
-  //   "/api/visiteSpecialistiche",
-  //   logHandler,
-  //   authorizationHandler,
-  //   VisiteSpecialisticheRouter
-  // );
+  var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
+  var apiVisiteSpecialistiche = { key: 'visiteSpecialistiche', path: '/api/visiteSpecialistiche' }
+  app.use( apiVisiteSpecialistiche.path, logHandler, authorizationHandler, VisiteSpecialisticheRouter );
+  routesList.push(apiVisiteSpecialistiche);
 
-  // var documentiPazienteRouter = require("./routes/documentipazienti");
-  // app.use(
-  //   "/api/documentipazienti",
-  //   logHandler,
-  //   authorizationHandler,
-  //   documentiPazienteRouter
-  // );
+  var documentiPazienteRouter = require("./routes/documentipazienti");
+  var apiDocumentiPaziente = { key: 'documentipazienti', path: '/api/documentipazienti' }
+  app.use( apiDocumentiPaziente.path, logHandler, authorizationHandler, documentiPazienteRouter );
+  routesList.push(apiDocumentiPaziente);
 
-  // //var usersRouter = require("./routes/users");
-  // //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
-
-  // var DiarioEducativoRouter = require("./routes/diarioEducativo");
-  // app.use(
-  //   "/api/diarioEducativo",
-  //   logHandler,
-  //   authorizationHandler,
-  //   DiarioEducativoRouter
-  // );
-
-  // var DiarioAssSocialeRouter = require("./routes/diarioAssSociale");
-  // app.use(
-  //   "/api/diarioAssSociale",
-  //   logHandler,
-  //   authorizationHandler,
-  //   DiarioAssSocialeRouter
-  // );
-
+  var DiarioEducativoRouter = require("./routes/diarioEducativo");
+  var apiDiarioEducativo = { key: 'diarioEducativo', path: '/api/diarioEducativo' }
+  app.use( apiDiarioEducativo.path, logHandler, authorizationHandler, DiarioEducativoRouter );
+  routesList.push(apiDiarioEducativo);
+  
+  var DiarioAssSocialeRouter = require("./routes/diarioAssSociale");
+  var apiDiarioAssSociale = { key: 'diarioAssSociale', path: '/api/diarioAssSociale' }
+  app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, DiarioAssSocialeRouter );
+  routesList.push(apiDiarioAssSociale);
+      
+  //var usersRouter = require("./routes/users");
+  //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 }
 
-
+const InitNextCloud = () => {
+  // uses explicite credentials
+  console.log("Init NextCloud");
+  var server = new nextcloud_node_client_1.Server({
+    basicAuth: { password: NEXTCLOUD_PASW, username: NEXTCLOUD_USER },
+    url: NEXTCLOUD_HOST,
+  });
+  clientNextCloud = new nextcloud_node_client_1["default"](server);
+  clientNextCloud.getSystemInfo().then(function (x) {
+    console.log("System Information NextCloud:", x.server.webserver);
+  });
+}
 
 const StartApiService = () => {
   console.log("Starting Api Service...");
@@ -576,25 +575,14 @@ var roleHandler = async (req, res, next) => {
   }
 };
 
-// uses explicite credentials
-var server = new nextcloud_node_client_1.Server({
-  basicAuth: { password: NEXTCLOUD_PASW, username: NEXTCLOUD_USER },
-  url: NEXTCLOUD_HOST,
-});
-var client = new nextcloud_node_client_1["default"](server);
-client.getSystemInfo().then(function (x) {
-  //console.log("System Information:", x);
-});
+
 
 // Scrittura file su nextCloud
 var writeHandler = function (req, res, next) {
   let result = res.locals.result;
-  console.log("result", result);
-  // let root = `${result.path[0]}`;
   let root = `${result.path}`;
 
-  console.log("root", root);
-  client
+  clientNextCloud 
     .createFolder(root)
     .then((folder) => {
       folder.createFile(result.name, result.file.data).then((file) => {
@@ -616,9 +604,7 @@ var writeHandler = function (req, res, next) {
 var readHandler = function (req, res, next) {
   let fileName = decodeURIComponent(req.query.fileName);
 
-  console.log("req.query: ", req.query);
-  console.log("Filename: ", fileName);
-  client
+  clientNextCloud 
     .getContent(fileName)
     .then((data) => {
       res.set({
@@ -628,7 +614,6 @@ var readHandler = function (req, res, next) {
       });
 
       res.end(data);
-      // res.end(Buffer.from(data, "base64"));
     })
     .catch((err) => {
       res.status(500);
@@ -636,11 +621,8 @@ var readHandler = function (req, res, next) {
     });
 };
 
-
-
-/*** FINE  ***/
-
 InitApiService();
+InitNextCloud();
 InitRedisService();
 InitMailerService();
 InitMongoService();
@@ -649,4 +631,3 @@ InitApiFunctions();
 
 PrintInfoService();
 StartApiService();
-return
