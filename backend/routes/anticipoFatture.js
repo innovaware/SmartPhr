@@ -1,71 +1,98 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const AnticipoFatture = require("../models/anticipoFatture");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client = redis.createClient(redisPort, redisHost);
-
 router.get("/", async (req, res) => {
-    try {
-      const searchTerm = `ANTICIPOFATTUREALL`;
-    const showOnlyCancellati = req.query.show == "deleted";
-      const showAll = req.query.show == "all";
-  
-      if (showOnlyCancellati || showAll) {
-        console.log("Show all or deleted");
-        let query = {};
-        if (showOnlyCancellati) {
-          query = { cancellato: true };
-        }
-        const anticipoFatture = await AnticipoFatture.find(query);
-        res.status(200).json(anticipoFatture);
-      } else { 
-        client.get(searchTerm, async (err, data) => {
-          if (err) throw err;
-  
-          if (data && !redisDisabled) {
-            res.status(200).send(JSON.parse(data));
-          } else {
-            const query = {
-                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-              };
-            const anticipoFatture = await AnticipoFatture.find(query);
-  
-            res.status(200).json(anticipoFatture);
-            client.setex(searchTerm, redisTimeCache, JSON.stringify(anticipoFatture));
-            // res.status(200).json(curriculum);
-          }
-        });
-       }
-    } catch (err) {
-      console.error("Error: ", err);
-      res.status(500).json({ Error: err });
+  try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = (query) => {
+      return AnticipoFatture.find(query);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const query = {
+        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+      };
+      const eventi = await getData(query);
+      res.status(200).json(eventi);
+      return;
     }
-  });
+
+    const searchTerm = `ANTICIPOFATTUREALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+    const showAll = req.query.show == "all";
+
+    if (showOnlyCancellati || showAll) {
+      console.log("Show all or deleted");
+      let query = {};
+      if (showOnlyCancellati) {
+        query = { cancellato: true };
+      }
+      const anticipoFatture = await getData(query);
+      res.status(200).json(anticipoFatture);
+    } else {
+      redisClient.get(searchTerm, async (err, data) => {
+        if (err) throw err;
+
+        if (data) {
+          res.status(200).send(JSON.parse(data));
+        } else {
+          const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          };
+          const anticipoFatture = await getData(query);
+
+          res.status(200).json(anticipoFatture);
+          redisClient.setex(
+            searchTerm,
+            redisTimeCache,
+            JSON.stringify(anticipoFatture)
+          );
+          // res.status(200).json(curriculum);
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return AnticipoFatture.find({
+        identifyUser: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
 
     const searchTerm = `anticipoFatture${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const anticipoFatture = await AnticipoFatture.find({
-          identifyUser: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(anticipoFatture));
+        const anticipoFatture = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(anticipoFatture)
+        );
         res.status(200).json(anticipoFatture);
       }
     });
@@ -82,16 +109,33 @@ router.get("/:id", async (req, res) => {
   const { id } = req.params;
   console.error("AnticipoFatture get/:id: ", id);
   try {
+    const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return AnticipoFatture.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `anticipoFattureBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const anticipoFatture = await AnticipoFatture.findById(id);
-        console.error("AnticipoFatture.findById(id): ", JSON.stringify(anticipoFatture));
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(anticipoFatture));
+        const anticipoFatture = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(anticipoFatture)
+        );
         res.status(200).json(anticipoFatture);
       }
     });
@@ -110,13 +154,14 @@ router.post("/:id", async (req, res) => {
       note: req.body.note,
     });
 
-    console.log("Insert anticipo: ", anticipoFatture);
-
     const result = await anticipoFatture.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `anticipoFatture${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`anticipoFatture${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -140,8 +185,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `anticipoFattureBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`anticipoFattureBY${id}`);
+    }
 
     res.status(200);
     res.json(anticipoFatture);
@@ -150,20 +199,18 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    const item = await AnticipoFatture.findById(id);
-    const identifyUser = item.identifyUser;
     const anticipoFatture = await AnticipoFatture.remove({ _id: id });
 
-    let searchTerm = `anticipoFattureBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `ANTICIPOFATTUREALL`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`anticipoFattureBY${id}`);
+      redisClient.del(`ANTICIPOFATTUREALL`);
+    }
 
     res.status(200);
     res.json(anticipoFatture);

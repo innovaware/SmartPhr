@@ -12,6 +12,7 @@ const user = require("./models/user");
 const redis = require("redis");
 const mongoose = require("mongoose");
 const mqtt = require("mqtt");
+const { route } = require("./routes/dipendenti");
 
 // var MongoClient = require('mongodb').MongoClient;
 // mongo = undefined;
@@ -92,7 +93,7 @@ const PrintInfoService = () => {
   console.log("*                                                                                ");
   console.log("* Routes:                                                                        ");
   routesList.forEach(r => { 
-    console.log(`*\t${r.key.padEnd(10)}\t-- ${r.path}`);
+    console.log(`*\t${r.key.padEnd(30)}\t-- ${r.path}`);
   });
   console.log("*********************************************************************************");
 }
@@ -203,180 +204,157 @@ const InitApiFunctions = () => {
   var fornitoriRouter = require("./routes/fornitori");
   var apiFornitori = { key: 'fornitori', path: '/api/fornitori' }
   app.use(apiFornitori.path, logHandler, authorizationHandler, roleHandler, fornitoriRouter );
-  routesList.push(apiConsulenti);
+  routesList.push(apiFornitori);
 
-  // // ASP API
-  // var aspRouter = require("./routes/asp");
-  // app.use("/api/asp", logHandler, authorizationHandler, aspRouter);
+  // ASP API
+  var aspRouter = require("./routes/asp");
+  var apiAsp = { key: 'asp', path: '/api/asp' }
+  app.use(apiAsp.path, logHandler, authorizationHandler, aspRouter);
+  routesList.push(apiAsp);
 
-  // // Farmaci API
-  // var farmaciRouter = require("./routes/farmaci");
-  // app.use("/api/farmaci", logHandler, authorizationHandler, farmaciRouter);
+  // Farmaci API
+  var farmaciRouter = require("./routes/farmaci");
+  var apiFarmaci = { key: 'farmaci', path: '/api/farmaci' }
+  app.use(apiFarmaci.path, logHandler, authorizationHandler, farmaciRouter);
+  routesList.push(apiFarmaci);
 
-  // // Eventi API
-  // var eventiRouter = require("./routes/eventi");
-  // app.use("/api/eventi", logHandler, authorizationHandler, eventiRouter);
+  // Eventi API
+  var eventiRouter = require("./routes/eventi");
+  var apiEventi = { key: 'eventi', path: '/api/eventi' }
+  app.use(apiEventi.path, logHandler, authorizationHandler, eventiRouter);
+  routesList.push(apiEventi);
 
-  // // Upload and Download
-  // var uploadRouter = require("./routes/upload");
-  // app.use(
-  //   "/api/upload",
-  //   logHandler,
-  //   authorizationHandler,
-  //   uploadRouter,
-  //   writeHandler
-  // );
-  // app.use("/api/files", logHandler, authorizationHandler, uploadRouter);
-  // app.get("/api/download", logHandler, authorizationHandler, readHandler);
+  // Upload and Download
+  var uploadRouter = require("./routes/upload");
+  var apiUpload = { key: 'upload', path: '/api/upload'}
+  var apiFile = { key: 'file', path: '/api/files'}
+  app.use( apiUpload.path, logHandler, authorizationHandler, uploadRouter, writeHandler );
+  app.use(apiFile.path, logHandler, authorizationHandler, uploadRouter);
+  routesList.push(apiUpload);
+  routesList.push(apiFile);
 
-  // // Fatture API
-  // var fattureRouter = require("./routes/fatture");
-  // app.use("/api/fatture", logHandler, authorizationHandler, fattureRouter);
+  var apiDownload = { key: 'download', path: '/api/download'}
+  app.get(apiDownload, logHandler, authorizationHandler, readHandler);
+  routesList.push(apiDownload);
 
-  // // NotaCredito API
-  // var notaCreditoRouter = require("./routes/notacredito");
-  // app.use(
-  //   "/api/notacredito",
-  //   logHandler,
-  //   authorizationHandler,
-  //   notaCreditoRouter
-  // );
+  // Fatture API
+  var fattureRouter = require("./routes/fatture");
+  var apiFatture = { key: 'fatture', path: '/api/fatture'}
+  app.use(apiFatture.path, logHandler, authorizationHandler, fattureRouter);
+  routesList.push(apiFatture);
 
-  // // Bonifici API
-  // var bonificiRouter = require("./routes/bonifici");
-  // app.use("/api/bonifici", logHandler, authorizationHandler, bonificiRouter);
+  // NotaCredito API
+  var notaCreditoRouter = require("./routes/notacredito");
+  var apiNotacredito = { key: 'notacredito', path: '/api/notacredito'}
+  app.use( apiNotacredito.path, logHandler, authorizationHandler, notaCreditoRouter );
+  routesList.push(apiNotacredito);
 
-  // // Menu API
-  // var menuRouter = require("./routes/menu");
-  // app.use("/api/menu", logHandler, authorizationHandler, menuRouter);
+  // Bonifici API
+  var bonificiRouter = require("./routes/bonifici");
+  var apiBonifici= { key: 'bonifici', path: '/api/bonifici'}
+  app.use(apiBonifici.path, logHandler, authorizationHandler, bonificiRouter);
+  routesList.push(apiBonifici);
 
-  // // Contratto API
-  // var contrattoRouter = require("./routes/contratto");
-  // app.use("/api/contratto", logHandler, authorizationHandler, contrattoRouter);
+  // Menu API
+  var menuRouter = require("./routes/menu");
+  var apiMenu = { key: 'menu', path: '/api/menu'}
+  app.use(apiMenu.path, logHandler, authorizationHandler, menuRouter);
+  routesList.push(apiMenu);
 
-  // // Ferie API
-  // var ferieRouter = require("./routes/ferie");
-  // app.use("/api/ferie", logHandler, authorizationHandler, ferieRouter);
+  // Contratto API
+  var contrattoRouter = require("./routes/contratto");
+  var apiContratto = { key: 'contratto', path: '/api/contratto'}
+  app.use(apiContratto.path, logHandler, authorizationHandler, contrattoRouter);
+  routesList.push(apiContratto);
 
-  // // Permessi API
-  // var permessiRouter = require("./routes/permessi");
-  // app.use("/api/permessi", logHandler, authorizationHandler, permessiRouter);
+  // Ferie API
+  var ferieRouter = require("./routes/ferie");
+  var apiFerie = { key: 'ferie', path: '/api/ferie'}
+  app.use(apiFerie, logHandler, authorizationHandler, ferieRouter);
+  routesList.push(apiFerie);
 
-  // // Cambi turno API
-  // var cambiTurnoRouter = require("./routes/cambiturno");
-  // app.use("/api/cambiturno", logHandler, authorizationHandler, cambiTurnoRouter);
+  // Permessi API
+  var permessiRouter = require("./routes/permessi");
+  var apiPermessi = { key: 'permessi', path: '/api/permessi'}
+  app.use(apiPermessi.path, logHandler, authorizationHandler, permessiRouter);
+  routesList.push(apiPermessi);
 
-  // // Presenze API
-  // var presenzeRouter = require("./routes/presenze");
-  // app.use("/api/presenze", logHandler, authorizationHandler, presenzeRouter);
+  // Cambi turno API
+  var cambiTurnoRouter = require("./routes/cambiturno");
+  var apiCambiTurno = { key: 'cambiturno', path: '/api/cambiturno'}
+  app.use(apiCambiTurno.path, logHandler, authorizationHandler, cambiTurnoRouter);
+  routesList.push(apiCambiTurno);
 
-  // // Turni mensili API
-  // var turniMensiliRouter = require("./routes/turnimensili");
-  // app.use(
-  //   "/api/turnimensili",
-  //   logHandler,
-  //   authorizationHandler,
-  //   turniMensiliRouter
-  // );
+  // Presenze API
+  var presenzeRouter = require("./routes/presenze");
+  var apiPresenze = { key: 'presenze', path: '/api/presenze'}
+  app.use(apiPresenze, logHandler, authorizationHandler, presenzeRouter);
+  routesList.push(apiPresenze);
 
-  // // Turni mensili API
-  // var documentiDipendentiRouter = require("./routes/documentidipendenti");
-  // app.use(
-  //   "/api/documentidipendenti",
-  //   logHandler,
-  //   authorizationHandler,
+  // Turni mensili API
+  var turniMensiliRouter = require("./routes/turnimensili");
+  var apiTurniMensili = { key: 'turnimensili', path: '/api/turnimensili' }
+  app.use( apiTurniMensili.path, logHandler, authorizationHandler, turniMensiliRouter );
+  routesList.push(apiTurniMensili);
 
-  //   documentiDipendentiRouter
-  // );
+  // Turni mensili API
+  var documentiDipendentiRouter = require("./routes/documentidipendenti");
+  var apiDocumentiDipendenti = { key: 'documentidipendenti', path: '/api/documentidipendenti' }
+  app.use( apiDocumentiDipendenti.path, logHandler, authorizationHandler, documentiDipendentiRouter );
+  routesList.push(apiDocumentiDipendenti);
 
-  // // MedicinaLavoro API
-  // var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
-  // app.use(
-  //   "/api/documentimedicinalavoro",
-  //   logHandler,
-  //   authorizationHandler,
-  //   documentiMedicinaLavoroRouter
-  // );
+  // MedicinaLavoro API
+  var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
+  var apiDocumentiMedicinaLavoro = { key: 'documentimedicinalavoro', path: '/api/documentimedicinalavoro' }
+  app.use( apiDocumentiMedicinaLavoro.path, logHandler, authorizationHandler, documentiMedicinaLavoroRouter );
+  routesList.push(apiDocumentiMedicinaLavoro);
 
-  // // CartellaClinica API
-  // var CartellaClinicaRouter = require("./routes/cartellaClinica");
-  // app.use(
-  //   "/api/cartellaClinica",
-  //   logHandler,
-  //   authorizationHandler,
-  //   CartellaClinicaRouter
-  // );
+  // CartellaClinica API
+  var cartellaClinicaRouter = require("./routes/cartellaClinica");
+  var apiCartellaClinica = { key: 'cartellaClinica', path: '/api/cartellaClinica' }
+  app.use( apiCartellaClinica.path, logHandler, authorizationHandler, cartellaClinicaRouter );
+  routesList.push(apiCartellaClinica);
 
-  // // Bonifici API
-  // var documentiFornitoreRouter = require("./routes/documentifornitore");
-  // app.use(
-  //   "/api/documentifornitore",
-  //   logHandler,
-  //   authorizationHandler,
-  //   documentiFornitoreRouter
-  // );
+  // Bonifici API
+  var documentiFornitoreRouter = require("./routes/documentifornitore");
+  var apiDocumentiFornitore = { key: 'documentifornitore', path: '/api/documentifornitore' }
+  app.use( apiDocumentiFornitore.path, logHandler, authorizationHandler, documentiFornitoreRouter );
+  routesList.push(apiDocumentiFornitore);
 
-  // var curriculumRouter = require("./routes/curriculum");
-  // app.use("/api/curriculum", logHandler, authorizationHandler, curriculumRouter);
+  var curriculumRouter = require("./routes/curriculum");
+  var apiCurriculum = { key: 'curriculum', path: '/api/curriculum' }
+  app.use(apiCurriculum.path, logHandler, authorizationHandler, curriculumRouter);
+  routesList.push(apiCurriculum);
 
-  // /** GESTIONE FATTURE FORNITORI */
+  var fattureFornitoriRouter = require("./routes/fattureFornitori");
+  var apiFattureFornitore = { key: 'fatturefornitore', path: '/api/fatturefornitori' }
+  app.use( apiFattureFornitore.path, logHandler, authorizationHandler, fattureFornitoriRouter );
+  routesList.push(apiFattureFornitore);
 
-  // var fattureFornitoriRouter = require("./routes/fattureFornitori");
-  // app.use(
-  //   "/api/fatturefornitori",
-  //   logHandler,
-  //   authorizationHandler,
-  //   fattureFornitoriRouter
-  // );
+  var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
+  var apiBonificiFornitori = { key: 'bonificifornitori', path: '/api/bonificifornitori' }
+  app.use( apiBonificiFornitori.path, logHandler, authorizationHandler, bonificiFornitoriRouter  );
+  routesList.push(apiBonificiFornitori);
 
-  // /** GESTIONE BONIFICI FORNITORI */
+  var anticipoFattureRouter = require("./routes/anticipoFatture");
+  var apiAnticipoFatture = { key: 'anticipofatture', path: '/api/anticipofatture' }
+  app.use( apiAnticipoFatture.path, logHandler, authorizationHandler, anticipoFattureRouter );
+  routesList.push(apiAnticipoFatture);
 
-  // var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
-  // app.use(
-  //   "/api/bonificifornitori",
-  //   logHandler,
-  //   authorizationHandler,
-  //   bonificiFornitoriRouter
-  // );
+  var prospettoCMRouter = require("./routes/prospettoCM");
+  var apiProspettoCMR = { key: 'prospettocm', path: '/api/prospettocm' }
+  app.use( apiProspettoCMR.path, logHandler, authorizationHandler, prospettoCMRouter );
+  routesList.push(apiProspettoCMR);
 
-  // /** GESTIONE ANTICIPO FATTURE ASP */
+  var puntoFattureRouter = require("./routes/puntoFatture");
+  var apiPuntoFatture = { key: 'puntofatture', path: '/api/puntofatture' }
+  app.use( apiPuntoFatture.path, logHandler, authorizationHandler, puntoFattureRouter );
+  routesList.push(apiPuntoFatture);
 
-  // var anticipoFattureRouter = require("./routes/anticipoFatture");
-  // app.use(
-  //   "/api/anticipofatture",
-  //   logHandler,
-  //   authorizationHandler,
-  //   anticipoFattureRouter
-  // );
-
-  // /** GESTIONE PROSPETTO FATTURE ASP */
-
-  // var prospettoCMRouter = require("./routes/prospettoCM");
-  // app.use(
-  //   "/api/prospettocm",
-  //   logHandler,
-  //   authorizationHandler,
-  //   prospettoCMRouter
-  // );
-
-  // /** GESTIONE PUNTO FATTURE ASP */
-
-  // var puntoFattureRouter = require("./routes/puntoFatture");
-  // app.use(
-  //   "/api/puntofatture",
-  //   logHandler,
-  //   authorizationHandler,
-  //   puntoFattureRouter
-  // );
-
-  // // GESTIONE VISITE E DIARIO CLINICO
-  // var DiarioClinicoRouter = require("./routes/diarioClinico");
-  // app.use(
-  //   "/api/diarioClinico",
-  //   logHandler,
-  //   authorizationHandler,
-  //   DiarioClinicoRouter
-  // );
+  var DiarioClinicoRouter = require("./routes/diarioClinico");
+  var apiDiarioClinico = { key: 'diarioclinico', path: '/api/diarioClinico' }
+  app.use( apiDiarioClinico.path, logHandler, authorizationHandler, DiarioClinicoRouter );
+  routesList.push(apiDiarioClinico);
 
   // var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
   // app.use(
@@ -386,7 +364,6 @@ const InitApiFunctions = () => {
   //   VisiteSpecialisticheRouter
   // );
 
-  // // DOCUMENTI PAZIENTE API
   // var documentiPazienteRouter = require("./routes/documentipazienti");
   // app.use(
   //   "/api/documentipazienti",
@@ -395,11 +372,9 @@ const InitApiFunctions = () => {
   //   documentiPazienteRouter
   // );
 
-  // // GESTIONE UTENTI API
   // //var usersRouter = require("./routes/users");
   // //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 
-  // // GESTIONE DIARIO EDUCATIVO E ASSSOCIALE
   // var DiarioEducativoRouter = require("./routes/diarioEducativo");
   // app.use(
   //   "/api/diarioEducativo",

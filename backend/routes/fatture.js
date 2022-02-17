@@ -1,33 +1,35 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const Fatture = require("../models/fatture");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Fatture.find({
+        identifyUser: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
 
     const searchTerm = `fatture${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const fatture = await Fatture.find({
-          identifyUser: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
+        const fatture = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
         res.status(200).json(fatture);
       }
     });
@@ -76,9 +78,13 @@ router.post("/:id", async (req, res) => {
 
     const result = await fatture.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `fatture${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `fatture${id}`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(result);
@@ -102,8 +108,13 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `fattureBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `fattureBY${id}`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(fatture);
@@ -111,7 +122,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 router.delete("/:id", async (req, res) => {
   try {
@@ -121,11 +131,13 @@ router.delete("/:id", async (req, res) => {
     const identifyUser = item.identifyUser;
     const fatture = await Fatture.remove({ _id: id });
 
-    let searchTerm = `fattureBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `fatture${identifyUser}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`fattureBY${id}`);
+      redisClient.del(`fatture${identifyUser}`);
+    }
 
     res.status(200);
     res.json(fatture);

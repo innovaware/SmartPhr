@@ -1,71 +1,98 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const PuntoFatture = require("../models/puntoFatture");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client = redis.createClient(redisPort, redisHost);
-
 router.get("/", async (req, res) => {
-    try {
-      const searchTerm = `PUNTOFATTUREALL`;
-    const showOnlyCancellati = req.query.show == "deleted";
-      const showAll = req.query.show == "all";
-  
-      if (showOnlyCancellati || showAll) {
-        console.log("Show all or deleted");
-        let query = {};
-        if (showOnlyCancellati) {
-          query = { cancellato: true };
-        }
-        const puntoFatture = await PuntoFatture.find(query);
-        res.status(200).json(puntoFatture);
-      } else { 
-        client.get(searchTerm, async (err, data) => {
-          if (err) throw err;
-  
-          if (data && !redisDisabled) {
-            res.status(200).send(JSON.parse(data));
-          } else {
-            const query = {
-                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-              };
-            const puntoFatture = await PuntoFatture.find(query);
-  
-            res.status(200).json(puntoFatture);
-            client.setex(searchTerm, redisTimeCache, JSON.stringify(puntoFatture));
-            // res.status(200).json(curriculum);
-          }
-        });
-       }
-    } catch (err) {
-      console.error("Error: ", err);
-      res.status(500).json({ Error: err });
+  try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = (query) => {
+      return PuntoFatture.find(query);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const query = {
+        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+      };
+      const eventi = await getData(query);
+      res.status(200).json(eventi);
+      return;
     }
-  });
+
+    const searchTerm = `PUNTOFATTUREALL`;
+    const showOnlyCancellati = req.query.show == "deleted";
+    const showAll = req.query.show == "all";
+
+    if (showOnlyCancellati || showAll) {
+      console.log("Show all or deleted");
+      let query = {};
+      if (showOnlyCancellati) {
+        query = { cancellato: true };
+      }
+      const puntoFatture = await getData(query);
+      res.status(200).json(puntoFatture);
+    } else {
+      redisClient.get(searchTerm, async (err, data) => {
+        if (err) throw err;
+
+        if (data) {
+          res.status(200).send(JSON.parse(data));
+        } else {
+          const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          };
+          const puntoFatture = await getData(query);
+
+          res.status(200).json(puntoFatture);
+          redisClient.setex(
+            searchTerm,
+            redisTimeCache,
+            JSON.stringify(puntoFatture)
+          );
+          // res.status(200).json(curriculum);
+        }
+      });
+    }
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    const searchTerm = `puntoFatture${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return PuntoFatture.find({
+        identifyUser: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
+    const searchTerm = `PUNTOFATTURE${id}`;
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const puntoFatture = await PuntoFatture.find({
-          identifyUser: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(puntoFatture));
+        const puntoFatture = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(puntoFatture)
+        );
         res.status(200).json(puntoFatture);
       }
     });
@@ -80,18 +107,33 @@ router.get("/:id", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.error("PuntoFatture get/:id: ", id);
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return PuntoFatture.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `PUNTOFATTUREBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const puntoFatture = await PuntoFatture.findById(id);
-        console.error("PuntoFatture.findById(id): ", JSON.stringify(puntoFatture));
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(puntoFatture));
+        const puntoFatture = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(puntoFatture)
+        );
         res.status(200).json(puntoFatture);
       }
     });
@@ -110,13 +152,14 @@ router.post("/:id", async (req, res) => {
       note: req.body.note,
     });
 
-    console.log("Insert punto: ", puntoFatture);
-
     const result = await puntoFatture.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `puntoFatture${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PUNTOFATTURE${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -140,8 +183,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `puntoFattureBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PUNTOFATTUREBY${id}`);
+    }
 
     res.status(200);
     res.json(puntoFatture);
@@ -149,7 +196,6 @@ router.put("/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
-
 
 router.delete("/:id", async (req, res) => {
   try {
@@ -159,11 +205,12 @@ router.delete("/:id", async (req, res) => {
     const identifyUser = item.identifyUser;
     const puntoFatture = await PuntoFatture.remove({ _id: id });
 
-    let searchTerm = `PUNTOFATTUREBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `PUNTOFATTUREALL`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PUNTOFATTURE*`);
+    }
 
     res.status(200);
     res.json(puntoFatture);

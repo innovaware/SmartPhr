@@ -1,37 +1,39 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const Contratto = require("../models/contratto");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/consulente/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Contratto.find({
+        idConsulente: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `CONTRATTOCONSULENTE${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const contratto = await Contratto.find({
-          idConsulente: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(contratto));
+        const contratto = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(contratto));
         res.status(200).json(contratto);
       }
     });
-
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
@@ -40,22 +42,35 @@ router.get("/consulente/:id", async (req, res) => {
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Contratto.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `CONTRATTOALL`;
     // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json 
+      if (data) {
+        // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const contratti = await Contratto.find();
+        const contratti = await getData();
 
         // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(contratti));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(contratti));
 
-        // Ritorna il json 
+        // Ritorna il json
         res.status(200).json(contratti);
       }
     });
@@ -65,19 +80,31 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Contratto.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `CONTRATTOBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const contratto = await Contratto.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(contratto));
+        const contratto = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(contratto));
         res.status(200).json(contratto);
       }
     });
@@ -99,10 +126,12 @@ router.post("/consulente/:id", async (req, res) => {
     console.log("Insert contratto: ", contratto);
 
     const result = await contratto.save();
-
-
-    const searchTerm = `CONTRATTOCONSULENTE${id}`;
-    client.del(searchTerm);
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CONTRATTOCONSULENTE${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -126,15 +155,17 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `CONTRATTOBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CONTRATTOBY${id}`);
+    }
 
     res.status(200).json(contratto);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
 });
-
 
 router.delete("/:id", async (req, res) => {
   try {
@@ -144,11 +175,12 @@ router.delete("/:id", async (req, res) => {
     const idConsulente = item.idConsulente;
     const contratto = await Contratto.remove({ _id: id });
 
-    let searchTerm = `CONTRATTOBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `CONTRATTOCONSULENTE${idConsulente}`;
-    client.del(searchTerm);
-
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CONTRATTOBY${id}`);
+      redisClient.del(`CONTRATTOCONSULENTE${idConsulente}`);
+    }
 
     res.status(200).json(contratto);
   } catch (err) {

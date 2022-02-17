@@ -1,26 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const Farmaci = require("../models/farmaci");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || 'redis';
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Farmaci.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const farmaci = await getData();
+      res.status(200).json(farmaci);
+      return;
+    }
+
     const searchTerm = `FARMACIALL`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await Farmaci.find();
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
+        const farmaci = await getData() 
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
         res.status(200).json(farmaci);
       }
     });
@@ -34,16 +41,29 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Farmaci.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const farmaci = await getData();
+      res.status(200).json(farmaci);
+      return;
+    }
+
     const searchTerm = `FARMACIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await Farmaci.findById(id);
+        const farmaci = await getData(); 
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
         res.status(200).json(farmaci);
       }
     });
@@ -64,6 +84,15 @@ router.post("/", async (req, res) => {
     });
 
     const result = await farmaci.save();
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `FARMACIALL`;
+      redisClient.del(searchTerm);
+    }
+
     res.status(200);
     res.json(result);
 
@@ -89,8 +118,14 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `FARMACIBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `FARMACIBY${id}`;
+      redisClient.del(searchTerm);
+    }
+
     res.status(200);
     res.json(farmaci);
 

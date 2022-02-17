@@ -1,33 +1,40 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const DocumentiFornitore = require("../models/documentifornitore");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 async function getDocumentiFornitoreByIdFornitore(req, res) {
   try {
     const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return DocumentiFornitore.find({
+        fornitore: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
 
     const searchTerm = `documentiFornitore${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         //console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const documentiFornitore = await DocumentiFornitore.find({
-          fornitore: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(documentiFornitore));
+        const documentiFornitore = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(documentiFornitore)
+        );
         console.log("Add caching: ", searchTerm);
 
         res.status(200).json(documentiFornitore);
@@ -45,15 +52,28 @@ async function getDocumentiFornitoreByIdFornitore(req, res) {
 async function getDocumentoFornitoreById(req, res) {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return DocumentiFornitore.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `documentiFornitoreBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const documentiFornitore = await DocumentiFornitore.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(documentiFornitore));
+        const documentiFornitore = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(documentiFornitore));
         console.log("Add caching: ", searchTerm);
 
         res.status(200).json(documentiFornitore);
@@ -65,7 +85,7 @@ async function getDocumentoFornitoreById(req, res) {
 }
 
 async function insertDocumentoFornitoreByFornitoreId(req, res) {
-    console.log("Insert documento 2 ");
+  console.log("Insert documento 2 ");
   try {
     const { id } = req.params;
     const documentiFornitore = new DocumentiFornitore({
@@ -78,9 +98,12 @@ async function insertDocumentoFornitoreByFornitoreId(req, res) {
     console.log("Insert documentiFornitore: ", documentiFornitore);
 
     const result = await documentiFornitore.save();
+    redisclient = req.app.get("redis");
+    redisdisabled = req.app.get("redisdisabled");
 
-    const searchTerm = `documentiFornitore${id}`;
-    client.del(searchTerm);
+    if (redisclient != undefined && !redisdisabled) {
+      redisclient.del(`documentiFornitore${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -104,9 +127,12 @@ async function modifyDocumentoFornitoreByFornitoreId(req, res) {
       }
     );
 
-    const searchTerm = `documentiFornitoreBY${id}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
+    redisclient = req.app.get("redis");
+    redisdisabled = req.app.get("redisdisabled");
+
+    if (redisclient != undefined && !redisdisabled) {
+      redisclient.del(`documentifornitoreby${id}`);
+    }
 
     res.status(200);
     res.json(documentiFornitore);
@@ -124,14 +150,12 @@ async function deleteDocumentoFornitore(req, res) {
 
     const documentiFornitore = await DocumentiFornitore.remove({ _id: id });
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    let searchTerm = `documentiFornitoreBY${id}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
-
-    searchTerm = `documentiFornitore${idPaziente}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`documentiFornitore*`);
+    }
 
     res.status(200);
     res.json(bonifici);

@@ -1,46 +1,54 @@
 const express = require("express");
+var mongoose = require("mongoose");
 const router = express.Router();
 const Presenze = require("../models/presenze");
 const Dipendenti = require("../models/dipendenti");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = true; // process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
-var mongoose = require('mongoose');
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.aggregate([
+        {
+          $lookup: {
+            from: "presenze",
+            localField: "idUser",
+            foreignField: "user",
+            as: "presenze",
+          },
+        },
+        {
+          $unwind: {
+            path: "$codiceFiscale",
+          },
+        },
+      ]);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `PRESENZEALL`;
     // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
         //const presenze = await Presenze.find();
-        const presenze = await Dipendenti.aggregate([
-          {
-            '$lookup': {
-              'from': 'presenze', 
-              'localField': 'idUser', 
-              'foreignField': 'user', 
-              'as': 'presenze'
-            }
-          }, {
-            '$unwind': {
-              'path': '$codiceFiscale'
-            }
-          }
-        ]);
+        const presenze = await getData();
 
         // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
 
         // Ritorna il json
         res.status(200).json(presenze);
@@ -57,28 +65,39 @@ router.get("/", async (req, res) => {
 router.get("/dipendente/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(id) } },
+        {
+          $lookup: {
+            from: "presenze",
+            localField: "idUser",
+            foreignField: "user",
+            as: "presenze",
+          },
+        },
+      ]);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `PRESENZEBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const presenze = await Dipendenti.aggregate([
-          { "$match": { "_id": mongoose.Types.ObjectId(id) } },
-          {
-            $lookup: {
-              from: "presenze",
-              localField: "idUser",
-              foreignField: "user",
-              as: "presenze",
-            },
-          },
-        ]);
+        const presenze = await getData();
 
-        //const presenze = await Presenze.find({ user: id });
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
         res.status(200).json(presenze);
       }
     });
@@ -91,16 +110,28 @@ router.get("/dipendente/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Presenze.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
     const searchTerm = `PRESENZEBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const presenze = await Presenze.findById(id);
+        const presenze = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
         res.status(200).json(presenze);
       }
     });
@@ -120,8 +151,12 @@ router.post("/", async (req, res) => {
     // Salva i dati sul mongodb
     const result = await presenze.save();
 
-    const searchTerm = `PRESENZEALL`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PRESENZEALL`);
+    }
 
     res.status(200);
     res.json(result);
@@ -146,8 +181,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `PRESENZEBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PRESENZEBY${id}`);
+    }
 
     res.status(200).json(presenze);
   } catch (err) {

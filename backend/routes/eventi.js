@@ -1,26 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const Eventi = require("../models/eventi");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Eventi.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `EVENTIALL`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const eventi = await Eventi.find();
+        const eventi = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
       }
     });
@@ -33,16 +40,29 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Eventi.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `EVENTIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const eventi = await Eventi.findById(id);
+        const eventi = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
       }
     });
@@ -75,25 +95,39 @@ router.get("/search/:data", async (req, res) => {
     const month = data.substring(4, 6);
     const day = data.substring(6, 8);
 
-    client.get(searchTerm, async (err, data) => {
+    const query = {
+      $and: [
+        {
+          data: {
+            $gte: new Date(year, month - 1, day, "00", "00", "00"),
+            $lt: new Date(year, month - 1, day, "23", "59", "59"),
+          },
+          utente: user,
+        },
+      ],
+    };
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Eventi.findById(query);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         //console.log(`Event Buffered - ${searchTerm}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const query = {
-          $and: [
-            {
-              data: {
-                $gte: new Date(year, month - 1, day, "00", "00", "00"),
-                $lt: new Date(year, month - 1, day, "23", "59", "59"),
-              },
-              utente: user,
-            },
-          ],
-        };
-        const eventi = await Eventi.find(query);
+        const eventi = await getData();
 
         client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
@@ -132,28 +166,48 @@ router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
     const monthEnd = dataEnd.substring(4, 6);
     const dayEnd = dataEnd.substring(6, 8);
 
-    client.get(searchTerm, async (err, data) => {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const query = {
+      $and: [
+        {
+          data: {
+            $gte: new Date(
+              yearStart,
+              monthStart - 1,
+              dayStart,
+              "00",
+              "00",
+              "00"
+            ),
+            $lt: new Date(yearEnd, monthEnd - 1, dayEnd, "23", "59", "59"),
+          },
+          utente: user,
+        },
+      ],
+    };
+
+    const getData = () => {
+      return Eventi.findById(query);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         //console.log(`Event Buffered - ${searchTerm}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const query = {
-          $and: [
-            {
-              data: {
-                $gte: new Date(yearStart, monthStart - 1, dayStart, "00", "00", "00"),
-                $lt: new Date(yearEnd, monthEnd - 1, dayEnd, "23", "59", "59"),
-              },
-              utente: user,
-            },
-          ],
-        };
+        const eventi = await getData();
 
-        const eventi = await Eventi.find(query);
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
       }
     });
@@ -174,8 +228,13 @@ router.post("/", async (req, res) => {
 
     const result = await eventi.save();
 
-    const searchTerm = `EVENTIALL`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `EVENTIALL`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(result);
@@ -200,8 +259,14 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `EVENTIBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `EVENTIBY${id}`;
+      redisClient.del(searchTerm);
+    }
+
     res.status(200);
     res.json(eventi);
   } catch (err) {

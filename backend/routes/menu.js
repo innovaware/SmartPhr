@@ -1,27 +1,33 @@
 const express = require("express");
 const router = express.Router();
 const Menu = require("../models/menu");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST ||  'redis';
-
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Menu.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `MENUALL`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const menu = await Menu.find();
+        const menu = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(menu));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(menu));
         res.status(200).json(menu);
       }
     });
@@ -56,18 +62,17 @@ router.put("/:id", async (req, res) => {
       { upsert: true }
     );
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`MENU*`);
+    }
 
     res.status(200);
     res.json(result);
-
-    const searchTerm = `MENU*`;
-    client.del(searchTerm);
-
   } catch (err) {
     res.status(500);
-    res.json({"Error": err});
+    res.json({ Error: err });
   }
 });
-
-
 module.exports = router;

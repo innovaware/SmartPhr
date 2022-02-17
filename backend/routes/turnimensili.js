@@ -1,43 +1,49 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const router = express.Router();
 const Turnimensili = require("../models/turnimensili");
 const Dipendenti = require("../models/dipendenti");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
-const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.aggregate([
+        {
+          $lookup: {
+            from: "turnimensili",
+            localField: "idUser",
+            foreignField: "user",
+            as: "turni",
+          },
+        },
+      ]);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `TURNIMENSILIALL`;
     // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const turnimensili = await Dipendenti.aggregate([
-          {
-            $lookup: {
-              from: "turnimensili",
-              localField: "idUser",
-              foreignField: "user",
-              as: "turni",
-            },
-          },
-        ]);
-
+        const turnimensili = await getData();
         //const turnimensili = await Turnimensili.find();
 
         // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
 
         // Ritorna il json
         res.status(200).json(turnimensili);
@@ -54,27 +60,39 @@ router.get("/", async (req, res) => {
 router.get("/dipendente/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.aggregate([
+        { $match: { _id: mongoose.Types.ObjectId(id) } },
+        {
+          $lookup: {
+            from: "turnimensili",
+            localField: "idUser",
+            foreignField: "user",
+            as: "turni",
+          },
+        },
+      ]);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `TURNIMENSILIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
         //const turnimensili = await Turnimensili.find({ user: id });
-        const turnimensili = await Dipendenti.aggregate([
-          { $match: { _id: mongoose.Types.ObjectId(id) } },
-          {
-            $lookup: {
-              from: "turnimensili",
-              localField: "idUser",
-              foreignField: "user",
-              as: "turni",
-            },
-          },
-        ]);
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
+        const turnimensili = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
         res.status(200).json(turnimensili);
       }
     });
@@ -87,16 +105,29 @@ router.get("/dipendente/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Turnimensili.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `TURNIMENSILIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const turnimensili = await Turnimensili.findById(id);
+        const turnimensili = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(turnimensili));
         res.status(200).json(turnimensili);
       }
     });
@@ -120,8 +151,12 @@ router.post("/", async (req, res) => {
     // Salva i dati sul mongodb
     const result = await turnimensili.save();
 
-    const searchTerm = `TURNIMENSILIALL`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`TURNIMENSILIALL`);
+    }
 
     res.status(200);
     res.json(result);
@@ -150,8 +185,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `TURNIMENSILIBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`TURNIMENSILIBY${id}`);
+    }
 
     res.status(200).json(turnimensili);
   } catch (err) {
