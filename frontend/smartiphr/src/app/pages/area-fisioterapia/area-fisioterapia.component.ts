@@ -35,7 +35,7 @@ export class AreaFisioterapiaComponent implements OnInit {
     console.log("Init Area Infermeristica");
 
     this.customButtons.push({
-      images: "../../../assets/rehabilitation.png",
+      images: "../../../assets/rehabilitation.svg",
       label: "",
       tooltip: "Cartella Riabilitativa",
       cmd: (paziente: Paziente) =>

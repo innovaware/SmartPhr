@@ -4,6 +4,7 @@ import { Router } from "@angular/router";
 import { Paziente } from "./models/paziente";
 import { User } from "./models/user";
 import { AuthenticationService } from "./service/authentication.service";
+import { DebugService } from "./service/debug.service";
 import { PazienteService } from "./service/paziente.service";
 
 @Component({
@@ -20,7 +21,7 @@ export class AppComponent {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private route: Router
+    private route: Router,
   ) {
     this.authenticationService.isAuthenticateHandler.subscribe(
       (user: User) => {
@@ -30,6 +31,7 @@ export class AppComponent {
     );
 
     this.authenticationService.refresh();
+
   }
 
   async logout() {

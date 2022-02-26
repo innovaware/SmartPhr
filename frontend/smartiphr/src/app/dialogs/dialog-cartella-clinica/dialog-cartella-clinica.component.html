@@ -89,7 +89,7 @@
         <div class="col-3">Consenso al ricovero</div>
         <div class="col-1">{{document['CONS_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
-    
+
 
           <div class="container-flex" *ngIf="document['CONS_RICOVERO']?.status">
             <div class="row">
@@ -276,7 +276,7 @@
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPianoTerapeutico">
               <button mat-button class="button-insert" (click)="addPianoTerapeutico()">Aggiungi Documento</button>
             </div>
-        
+
             <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
               *ngIf="addingPianoTerapeutico && !uploadingPianoTerapeutico">
               <div class="row">
@@ -299,7 +299,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div>
               <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingPianoTerapeutico">
                 <div class="row">
@@ -312,12 +312,12 @@
                 </div>
               </div>
             </div>
-        
-        
+
+
             <div *ngIf="this.pianiTerapeutici?.length <= 0" class="notPresent">
               Nessuna documento presente
             </div>
-        
+
             <table mat-table [dataSource]="pianiTerapeuticiDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.pianiTerapeutici?.length > 0">
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>
@@ -325,45 +325,45 @@
                 <td mat-cell *matCellDef="let row" style="text-align: right;">
                   <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
                   <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-        
+
                   <button mat-button (click)="showDocument(row)">
                     <img src="../../../assets/pdf.jpg" style="width: 26px;">
                   </button>
-        
+
                   <button mat-button (click)="deletePianoTerapeutico(row)">
-                    <img src="../../../assets/cestino.png" style="width:26px">
+                    <img src="../../../assets/cestino.svg" style="width:26px">
                   </button>
-        
-        
+
+
                 </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="namefile">
                 <th mat-header-cell *matHeaderCellDef> Nome file </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
                 <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
                 <td mat-cell *matCellDef="let element"> {{element.note}} </td>
               </ng-container>
-        
+
               <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
             </table>
-        
+
             <div class="paginator-container">
-        
+
               <mat-paginator #paginatorPianiTerapeutici [pageSizeOptions]="[5]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
-        
+
           </mat-tab>
 
            <!-- FINE PIANI TERAPEUTICI -->
@@ -388,7 +388,7 @@
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRefertoEsameEmatochimico">
               <button mat-button class="button-insert" (click)="addRefertoEsameEmatochimico()">Aggiungi Documento</button>
             </div>
-        
+
             <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
               *ngIf="addingRefertoEsameEmatochimico && !uploadingRefertoEsameEmatochimico">
               <div class="row">
@@ -411,7 +411,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div>
               <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRefertoEsameEmatochimico">
                 <div class="row">
@@ -424,12 +424,12 @@
                 </div>
               </div>
             </div>
-        
-        
+
+
             <div *ngIf="this.refertiEsamiEmatochimici?.length <= 0" class="notPresent">
               Nessuna documento presente
             </div>
-        
+
             <table mat-table [dataSource]="refertiEsamiEmatochimiciDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.refertiEsamiEmatochimici?.length > 0">
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>
@@ -437,45 +437,45 @@
                 <td mat-cell *matCellDef="let row" style="text-align: right;">
                   <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
                   <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-        
+
                   <button mat-button (click)="showDocument(row)">
                     <img src="../../../assets/pdf.jpg" style="width: 26px;">
                   </button>
-        
+
                   <button mat-button (click)="deletePianoTerapeutico(row)">
-                    <img src="../../../assets/cestino.png" style="width:26px">
+                    <img src="../../../assets/cestino.svg" style="width:26px">
                   </button>
-        
-        
+
+
                 </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="namefile">
                 <th mat-header-cell *matHeaderCellDef> Nome file </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
                 <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
                 <td mat-cell *matCellDef="let element"> {{element.note}} </td>
               </ng-container>
-        
+
               <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
             </table>
-        
+
             <div class="paginator-container">
-        
+
               <mat-paginator #paginatorRefertiEsamiEmatochimici [pageSizeOptions]="[5]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
-        
+
           </mat-tab>
 
            <!-- FINE REFERTI ESAMI EMATOCHIMICI -->
@@ -488,7 +488,7 @@
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingVerbale">
               <button mat-button class="button-insert" (click)="addVerbale()">Aggiungi Documento</button>
             </div>
-        
+
             <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
               *ngIf="addingVerbale && !uploadingVerbale">
               <div class="row">
@@ -511,7 +511,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div>
               <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingVerbale">
                 <div class="row">
@@ -524,12 +524,12 @@
                 </div>
               </div>
             </div>
-        
-        
+
+
             <div *ngIf="this.verbali?.length <= 0" class="notPresent">
               Nessuna documento presente
             </div>
-        
+
             <table mat-table [dataSource]="verbaliDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.verbali?.length > 0">
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>
@@ -537,45 +537,45 @@
                 <td mat-cell *matCellDef="let row" style="text-align: right;">
                   <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
                   <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-        
+
                   <button mat-button (click)="showDocument(row)">
                     <img src="../../../assets/pdf.jpg" style="width: 26px;">
                   </button>
-        
+
                   <button mat-button (click)="deletePianoTerapeutico(row)">
-                    <img src="../../../assets/cestino.png" style="width:26px">
+                    <img src="../../../assets/cestino.svg" style="width:26px">
                   </button>
-        
-        
+
+
                 </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="namefile">
                 <th mat-header-cell *matHeaderCellDef> Nome file </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
                 <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
                 <td mat-cell *matCellDef="let element"> {{element.note}} </td>
               </ng-container>
-        
+
               <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
             </table>
-        
+
             <div class="paginator-container">
-        
+
               <mat-paginator #paginatorVerbali [pageSizeOptions]="[5]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
-        
+
           </mat-tab>
 
            <!-- FINE VERBALI -->
@@ -588,7 +588,7 @@
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRelazione">
               <button mat-button class="button-insert" (click)="addRelazione()">Aggiungi Documento</button>
             </div>
-        
+
             <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
               *ngIf="addingRelazione && !uploadingRelazione">
               <div class="row">
@@ -611,7 +611,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div>
               <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRelazione">
                 <div class="row">
@@ -624,12 +624,12 @@
                 </div>
               </div>
             </div>
-        
-        
+
+
             <div *ngIf="this.relazioni?.length <= 0" class="notPresent">
               Nessuna documento presente
             </div>
-        
+
             <table mat-table [dataSource]="relazioniDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.relazioni?.length > 0">
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>
@@ -637,45 +637,45 @@
                 <td mat-cell *matCellDef="let row" style="text-align: right;">
                   <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
                   <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-        
+
                   <button mat-button (click)="showDocument(row)">
                     <img src="../../../assets/pdf.jpg" style="width: 26px;">
                   </button>
-        
+
                   <button mat-button (click)="deletePianoTerapeutico(row)">
-                    <img src="../../../assets/cestino.png" style="width:26px">
+                    <img src="../../../assets/cestino.svg" style="width:26px">
                   </button>
-        
-        
+
+
                 </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="namefile">
                 <th mat-header-cell *matHeaderCellDef> Nome file </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
                 <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
                 <td mat-cell *matCellDef="let element"> {{element.note}} </td>
               </ng-container>
-        
+
               <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
             </table>
-        
+
             <div class="paginator-container">
-        
+
               <mat-paginator #paginatorRelazioni [pageSizeOptions]="[5]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
-        
+
           </mat-tab>
 
            <!-- FINE RELAZIONI -->
@@ -688,7 +688,7 @@
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingImpegnativa">
               <button mat-button class="button-insert" (click)="addImpegnativa()">Aggiungi Documento</button>
             </div>
-        
+
             <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
               *ngIf="addingImpegnativa && !uploadingImpegnativa">
               <div class="row">
@@ -711,7 +711,7 @@
                 </div>
               </div>
             </div>
-        
+
             <div>
               <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingImpegnativa">
                 <div class="row">
@@ -724,12 +724,12 @@
                 </div>
               </div>
             </div>
-        
-        
+
+
             <div *ngIf="this.impegnative?.length <= 0" class="notPresent">
               Nessuna documento presente
             </div>
-        
+
             <table mat-table [dataSource]="impegnativeDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.impegnative?.length > 0">
               <ng-container matColumnDef="action">
                 <th mat-header-cell *matHeaderCellDef>
@@ -737,45 +737,45 @@
                 <td mat-cell *matCellDef="let row" style="text-align: right;">
                   <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
                   <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-        
+
                   <button mat-button (click)="showDocument(row)">
                     <img src="../../../assets/pdf.jpg" style="width: 26px;">
                   </button>
-        
+
                   <button mat-button (click)="deleteImpegnativa(row)">
-                    <img src="../../../assets/cestino.png" style="width:26px">
+                    <img src="../../../assets/cestino.svg" style="width:26px">
                   </button>
-        
-        
+
+
                 </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="namefile">
                 <th mat-header-cell *matHeaderCellDef> Nome file </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="date">
                 <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
                 <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
+
               <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
                 <td mat-cell *matCellDef="let element"> {{element.note}} </td>
               </ng-container>
-        
+
               <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
               <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
             </table>
-        
+
             <div class="paginator-container">
-        
+
               <mat-paginator #paginatorImpegnative [pageSizeOptions]="[5]" showFirstLastButtons
                 aria-label="Select page of periodic elements">
               </mat-paginator>
             </div>
-        
+
           </mat-tab>
 
            <!-- FINE IMPEGNATIVE -->
@@ -792,8 +792,8 @@
             <app-anamnesi-famigliare [data]=schedaAnamnesiFamigliare ></app-anamnesi-famigliare>
           </mat-tab>
 
-       
-  
+
+
           <mat-tab label="Esame Generale">
             <app-esame-generale [data]=schedaEsameGenerale ></app-esame-generale>
           </mat-tab>

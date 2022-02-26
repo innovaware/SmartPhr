@@ -37,7 +37,7 @@ export class AreaInfermieristicaComponent implements OnInit {
     console.log("Init Area Infermeristica");
 
     this.customButtons.push({
-      images: "../../../assets/medico.png",
+      images: "../../../assets/medico.svg",
       label: "",
       tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
@@ -48,7 +48,7 @@ export class AreaInfermieristicaComponent implements OnInit {
     });
 
     this.customButtons.push({
-      images: "../../../assets/areaInfermeristica.png",
+      images: "../../../assets/areaInfermeristica.svg",
       label: "",
       tooltip: "Cartella Infermeristica",
       cmd: (paziente: Paziente) =>

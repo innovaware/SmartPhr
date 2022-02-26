@@ -1,5 +1,5 @@
-<div class="containter pad"> 
-  
+<div class="containter pad">
+
     <div class="row">
       <div class="col">
         <mat-form-field appearance="standard">
@@ -8,7 +8,7 @@
         </mat-form-field>
       </div>
     </div>
-  
+
     <div class="row">
       <div class="col">
 
@@ -25,7 +25,7 @@
           </button>
 
           <button mat-button (click)="deleteFattura(row)">
-            <img src="../../../assets/cestino.png" style="width:26px">
+            <img src="../../../assets/cestino.svg" style="width:26px">
           </button>
 
 
@@ -50,12 +50,11 @@
       <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
     </table>
-  
-  
+
+
     <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
     aria-label="Select page of periodic elements">
   </mat-paginator>
       </div>
     </div>
   </div>
-  

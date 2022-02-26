@@ -170,6 +170,7 @@ import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitaz
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterInformationDipendenteComponent } from './component/register-information-dipendente/register-information-dipendente.component';
 import { DebugComponent } from './component/debug/debug.component';
+import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -291,6 +292,7 @@ import { DebugComponent } from './component/debug/debug.component';
     RegisterComponent,
     RegisterInformationDipendenteComponent,
     DebugComponent,
+    PrettyprintPipe,
   ],
   imports: [
     BrowserModule,

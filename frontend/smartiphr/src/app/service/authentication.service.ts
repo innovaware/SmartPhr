@@ -6,6 +6,7 @@ import { environment } from "src/environments/environment";
 import { User } from "../models/user";
 import { id } from "date-fns/locale";
 import { Dipendenti } from "../models/dipendenti";
+import { DebugService } from "./debug.service";
 
 @Injectable({
   providedIn: "root",
@@ -15,9 +16,14 @@ export class AuthenticationService {
   currentUser: User;
   isAuthenticateHandler: Subject<User>;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    private http: HttpClient,
+    private debugService: DebugService
+  ) {
     this.load();
     this.isAuthenticateHandler = new Subject<User>();
+
+    //this.debugService.appendVariable('AuthenticationUser', this.isAuthenticateHandler);
   }
 
   getCurrentUserAsync(): Observable<User> {

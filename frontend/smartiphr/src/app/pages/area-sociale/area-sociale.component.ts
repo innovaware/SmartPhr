@@ -39,7 +39,7 @@ export class AreaSocialeComponent implements OnInit {
     console.log("Init Area Sociale");
 
     this.customButtons.push({
-      images: "../../../assets/medico.png",
+      images: "../../../assets/medico.svg",
       label: "",
       tooltip: "Cartella Assistente Sociale",
       cmd: (paziente: Paziente) =>
