@@ -169,6 +169,7 @@ import { AreaRiabilitazioneDiarioComponent } from './component/area-riabilitazio
 import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterInformationDipendenteComponent } from './component/register-information-dipendente/register-information-dipendente.component';
+import { DebugComponent } from './component/debug/debug.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -289,6 +290,7 @@ import { RegisterInformationDipendenteComponent } from './component/register-inf
     DialogRiabilitazioneDiarioComponent,
     RegisterComponent,
     RegisterInformationDipendenteComponent,
+    DebugComponent,
   ],
   imports: [
     BrowserModule,

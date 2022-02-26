@@ -46,7 +46,14 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         (error) => {
           if (error instanceof HttpErrorResponse) {
             if (error.status === 401) {
-              this.authenticationService.logout();
+              this.authenticationService.getCurrentUserAsync().subscribe(
+                (currentUser: User) => {
+                  if (currentUser) {
+                    this.authenticationService.logoutCurrentUser(currentUser);
+                  }
+
+                }
+              )
               this.route.navigate(["/"]);
             }
           }

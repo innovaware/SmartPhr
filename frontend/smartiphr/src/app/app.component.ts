@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
 import { Paziente } from "./models/paziente";
-import { User } from './models/user';
+import { User } from "./models/user";
 import { AuthenticationService } from "./service/authentication.service";
 import { PazienteService } from "./service/paziente.service";
 
@@ -20,31 +20,33 @@ export class AppComponent {
 
   constructor(
     private authenticationService: AuthenticationService,
-    private route: Router,
+    private route: Router
   ) {
     this.authenticationService.isAuthenticateHandler.subscribe(
       (user: User) => {
         this.isAuthenticated = user !== undefined;
       },
-      err => console.error(err)
+      (err) => console.error(err)
     );
 
     this.authenticationService.refresh();
   }
 
   async logout() {
-    this.authenticationService.getCurrentUserAsync().subscribe(
-      (user: User) => {
-        this.authenticationService.logout(user.username, user.password);
-        this.route.navigate(["login"]);
-      }
-    )
+    if (this.authenticationService.isAuthenticated()) {
+      this.authenticationService
+        .getCurrentUserAsync()
+        .subscribe((user: User) => {
+          this.authenticationService.logout(user.username, user.password);
+          this.route.navigate(["login"]);
+        });
+    } else {
+      this.route.navigate(["/"]);
+    }
   }
 
   newMessage() {
     //TODO Invio un messaggio
     console.log("Nuovo messaggio");
-
   }
-
 }

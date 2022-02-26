@@ -5,7 +5,7 @@ import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../models/user";
 import { id } from "date-fns/locale";
-import { Dipendenti } from '../models/dipendenti';
+import { Dipendenti } from "../models/dipendenti";
 
 @Injectable({
   providedIn: "root",
@@ -28,14 +28,19 @@ export class AuthenticationService {
   }
 
   load() {
-    this.currentUser = JSON.parse(localStorage.getItem(AuthenticationService.KEY_CURRENTUSER));
+    this.currentUser = JSON.parse(
+      localStorage.getItem(AuthenticationService.KEY_CURRENTUSER)
+    );
   }
 
   refresh() {
     if (this.currentUser === undefined) {
       localStorage.removeItem(AuthenticationService.KEY_CURRENTUSER);
     } else {
-      localStorage.setItem(AuthenticationService.KEY_CURRENTUSER, JSON.stringify(this.currentUser));
+      localStorage.setItem(
+        AuthenticationService.KEY_CURRENTUSER,
+        JSON.stringify(this.currentUser)
+      );
     }
 
     this.isAuthenticateHandler.next(this.currentUser);
@@ -78,6 +83,10 @@ export class AuthenticationService {
       );
   }
 
+  logoutCurrentUser(currentUser: User) {
+    return this.logout(currentUser.username, currentUser.password);
+  }
+
   logout(username: string, password: string): Observable<User> {
     console.log("logout");
     const auth = btoa(`${username}:${password}`);
@@ -99,8 +108,11 @@ export class AuthenticationService {
     this.currentUser = undefined;
     this.refresh();
 
-    return this.http
-      .post<any>(`${environment.api}/api/users/logout`, body, httpOptions);
+    return this.http.post<any>(
+      `${environment.api}/api/users/logout`,
+      body,
+      httpOptions
+    );
   }
 
   register(
@@ -117,6 +129,8 @@ export class AuthenticationService {
   }
 
   getInfo(userId: string) {
-    return this.http.get<Dipendenti[]>(`${environment.api}/api/users/info/${userId}`);
+    return this.http.get<Dipendenti[]>(
+      `${environment.api}/api/users/info/${userId}`
+    );
   }
 }

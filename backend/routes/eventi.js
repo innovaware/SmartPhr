@@ -189,7 +189,7 @@ router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
     };
 
     const getData = () => {
-      return Eventi.findById(query);
+      return Eventi.find(query);
     };
 
     if (redisClient == undefined || redisDisabled) {

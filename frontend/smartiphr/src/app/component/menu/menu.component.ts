@@ -23,15 +23,20 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuService.getMenu().subscribe((items: Menu[]) => {
-      this.menu = items.sort((a: Menu, b: Menu) => a.order - b.order);
-      console.log("Menu", this.menu);
-    });
+    if (this.authenticationService.isAuthenticated()) {
+      this.menuService.getMenu().subscribe((items: Menu[]) => {
+        this.menu = items.sort((a: Menu, b: Menu) => a.order - b.order);
+        console.log("Menu", this.menu);
+      }, err=> {
+        console.error("Error", err);
+      });
+    }
 
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
-      const userId = user._id;
-      console.log("userId", userId);
-      this.authenticationService
+      if (user !== undefined && user !== null) {
+        const userId = user._id;
+        console.log("userId", userId);
+        this.authenticationService
         .getInfo(userId)
         .subscribe((dipendente: Dipendenti[]) => {
           console.log("dipendente", dipendente);
@@ -39,6 +44,9 @@ export class MenuComponent implements OnInit {
             this.mansione = dipendente[0].mansione;
           }
         });
+      } else {
+        console.log("User not logged");
+      }
     });
   }
 

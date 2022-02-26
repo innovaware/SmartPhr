@@ -5,13 +5,17 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/dipendente/:id", async (req, res) => {
   try {
+    let id = req.params.id;
+    let type = req.params.type;
+
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
+    const query = { dipendente: id };
+    console.log("Query", JSON.stringify(query));
+
     const getData = () => {
-      return DocMedicinaLavoro.find({
-        dipendente: id,
-      });
+      return DocMedicinaLavoro.find(query);
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -19,11 +23,6 @@ router.get("/dipendente/:id", async (req, res) => {
       res.status(200).json(eventi);
       return;
     }
-
-    console.log("id: ", req.params.id);
-    console.log("types: ", req.params.type);
-    let id = req.params.id;
-    let type = req.params.type;
 
     const searchTerm = `documentiMedicinaLavoro${id}`;
     redisClient.get(searchTerm, async (err, data) => {

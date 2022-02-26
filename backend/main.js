@@ -235,7 +235,7 @@ const InitApiFunctions = () => {
   routesList.push(apiFile);
 
   var apiDownload = { key: 'download', path: '/api/download'}
-  app.get(apiDownload, logHandler, authorizationHandler, readHandler);
+  app.get(apiDownload.path, logHandler, authorizationHandler, readHandler);
   routesList.push(apiDownload);
 
   // Fatture API
@@ -271,7 +271,7 @@ const InitApiFunctions = () => {
   // Ferie API
   var ferieRouter = require("./routes/ferie");
   var apiFerie = { key: 'ferie', path: '/api/ferie'}
-  app.use(apiFerie, logHandler, authorizationHandler, ferieRouter);
+  app.use(apiFerie.path, logHandler, authorizationHandler, ferieRouter);
   routesList.push(apiFerie);
 
   // Permessi API
@@ -289,7 +289,7 @@ const InitApiFunctions = () => {
   // Presenze API
   var presenzeRouter = require("./routes/presenze");
   var apiPresenze = { key: 'presenze', path: '/api/presenze'}
-  app.use(apiPresenze, logHandler, authorizationHandler, presenzeRouter);
+  app.use(apiPresenze.path, logHandler, authorizationHandler, presenzeRouter);
   routesList.push(apiPresenze);
 
   // Turni mensili API

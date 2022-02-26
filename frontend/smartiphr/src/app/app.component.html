@@ -1,4 +1,5 @@
-<!-- auth: F{{isAuthenticated}}F -->
+<app-debug></app-debug>
+
 <div class="container-fluid" *ngIf="isAuthenticated">
   <div class="row">
 
@@ -42,6 +43,5 @@
 <div *ngIf="!isAuthenticated">
   <router-outlet class="content-page"></router-outlet>
 </div>
-
 
 <!-- <router-outlet class="content-page"></router-outlet> -->
