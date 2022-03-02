@@ -24,6 +24,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
     request: HttpRequest<any>,
     next: HttpHandler
   ): Observable<HttpEvent<any>> {
+
     if (this.authenticationService.isAuthenticated()) {
       const currentUser: User = this.authenticationService.currentUser;
       if (currentUser) {
@@ -45,19 +46,30 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         (error) => {
           if (error instanceof HttpErrorResponse) {
             if (error.status === 401) {
-              this.authenticationService
-                .getCurrentUserAsync()
-                .subscribe((user: User) => {
-                  this.authenticationService.logout(
-                    user.username,
-                    user.password
-                  );
-                  this.route.navigate(["/"]);
-                });
+              this.authenticationService.getCurrentUserAsync().subscribe(
+                (currentUser: User) => {
+                  if (currentUser) {
+                    this.authenticationService.logoutCurrentUser(currentUser);
+                  }
+
+                }
+              )
+              this.route.navigate(["/"]);
             }
           }
         }
       )
     );
+
+    // return next.handle(request).do((event: HttpEvent<any>) => {
+    //   if (event instanceof HttpResponse) {
+    //   }
+    // }, (err: any) => {
+    //   if (err instanceof HttpErrorResponse) {
+    //     if (err.status === 401) {
+    //         this.router.navigate(['login']);
+    //     }
+    //   }
+    // });
   }
 }
