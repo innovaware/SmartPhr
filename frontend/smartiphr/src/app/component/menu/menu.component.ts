@@ -24,7 +24,7 @@ export class MenuComponent implements OnInit {
 
   ngOnInit() {
     this.menuService.getMenu().subscribe((items: Menu[]) => {
-      this.menu = items.sort((a: Menu, b: Menu) => a.order - b.order);
+      this.menu = items.sort((a: Menu, b: Menu) => { return a.order - b.order; });
       console.log("Menu", this.menu);
     });
 

@@ -11,4 +11,5 @@ export class Permessi {
   dataRichiesta?: Date;
   accettata?: boolean;
   closed?: boolean;
+  user?: string;
 }

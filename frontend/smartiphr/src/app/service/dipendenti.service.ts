@@ -19,8 +19,8 @@ export class DipendentiService {
     return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti").toPromise();
   }
 
-  async getById(id: string): Promise<Dipendenti[]> {
-    return this.http.get<Dipendenti[]>(`${this.api}/api/dipendenti/${id}`).toPromise();
+  async getById(id: string): Promise<Dipendenti> {
+    return this.http.get<Dipendenti>(`${this.api}/api/dipendenti/${id}`).toPromise();
   }
 
   save(data: Dipendenti): Promise<Dipendenti> {

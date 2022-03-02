@@ -6,6 +6,7 @@ import { MatTableDataSource } from "@angular/material/table";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Permessi } from "src/app/models/permessi";
+import { DipendentiService } from "src/app/service/dipendenti.service";
 import { MessagesService } from 'src/app/service/messages.service';
 import {PermessiService } from "src/app/service/permessi.service";
 
@@ -20,6 +21,9 @@ export class PermessiComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
+  @Input() isExternal: boolean;
+
+
 
   @Output() showItemEmiter = new EventEmitter<{
     permessi: Permessi;
@@ -41,40 +45,87 @@ export class PermessiComponent implements OnInit {
 
 
 
+  displayedColumnsExternal: string[] = [
+    "cognome",
+    "nome",
+    "dataInizio",
+    "dataFine",
+    "dataRichiesta",
+    "cf",
+    "action"
+  ];
 
 
-
-  dataSource: MatTableDataSource<Permessi>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  public nuovoPermesso: Permessi;
+  dataSource: MatTableDataSource<Permessi>;
   public permessi: Permessi[];
+  public uploadingPermesso: boolean;
+  public addingPermesso: boolean;
+
+
+
+
+ 
+
+
+  dipendente: Dipendenti = {} as Dipendenti;
+
 
   constructor(
     public messageService: MessagesService,
     public dialog: MatDialog,
-    public permessiService: PermessiService
+    public permessiService: PermessiService,
+    public dipendenteService: DipendentiService
   ) {}
 
 
 loadTable(){
-  if(this.data){
+  if(this.isExternal != true){
+    if(this.data){
 
-    this.permessiService.getPermessiByDipendente(this.data._id).then((result) => {
+      this.permessiService.getPermessiByDipendente(this.data._id).then((result) => {
+        this.permessi = result;
+
+        this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
+        this.dataSource.paginator = this.paginator;
+      });
+    }
+    else{
+    this.permessiService.getPermessi().then((result) => {
       this.permessi = result;
 
       this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
       this.dataSource.paginator = this.paginator;
     });
+    }
   }
   else{
-  this.permessiService.getPermessi().then((result) => {
-    this.permessi = result;
-
-    this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
-    this.dataSource.paginator = this.paginator;
-  });
+    this.loadUser();
   }
 }
+
+
+loadUser(){
+  this.dipendenteService
+  .getById('620027d56c8df442a73341fa')
+  .then((x) => {
+        this.dipendente = x;
+        this.permessiService.getPermessiByDipendente(this.dipendente._id).then((result) => {
+          this.permessi = result;
+
+          this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
+          this.dataSource.paginator = this.paginator;
+        });
+  })
+  .catch((err) => {
+    this.messageService.showMessageError(
+      "Errore Caricamento dipendente (" + err["status"] + ")"
+    );
+  });
+}
+
 
 
 ngOnInit() {
@@ -127,6 +178,70 @@ ngOnInit() {
 
   }
 
+
+
+      // PERMESSI EXTERNAL
+      async addPermesso() {
+
+        let dataCurrent=new Date();
+  
+  
+        this.addingPermesso = true;
+        this.nuovoPermesso = {
+          dataInizio: undefined,
+          dataFine: undefined,
+          nome: this.dipendente.nome,
+          cognome: this.dipendente.cognome,
+          cf: this.dipendente.cf,
+          user: this.dipendente._id,
+          dataRichiesta:dataCurrent
+        };
+      }
+    
+  
+    
+      async delete(permesso: Permessi) {
+        console.log("Cancella permesso: ", permesso);
+    
+        /*this.ferieService
+          .remove(doc)
+          .then((x) => {
+            console.log("Privacy cancellata");
+            const index = this.docsprivacy.indexOf(doc);
+            console.log("Privacy cancellata index: ", index);
+            if (index > -1) {
+              this.docsprivacy.splice(index, 1);
+            }
+    
+            console.log("Privacy cancellata : ", this.docsprivacy);
+            this.docsprivacyDataSource.data = this.docsprivacy;
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nella cancellazione Privacy");
+            console.error(err);
+          });*/
+      }
+    
+      async savePermesso(permesso: Permessi) {
+        this.uploadingPermesso = true;
+    
+        console.log("Invio Richiesta permesso: ", permesso);
+        this.permessiService
+            .insertPermesso(permesso)
+            .then((result: Permessi) => {
+            console.log("Insert permesso: ", result);
+            this.permessi.push(result);
+            this.dataSource.data = this.permessi;
+            this.addingPermesso = false;
+            this.uploadingPermesso = false;
+    
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore Inserimento permesso");
+            console.error(err);
+          });
+      }
+    
 
 
 }

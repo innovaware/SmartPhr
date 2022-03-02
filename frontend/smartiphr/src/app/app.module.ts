@@ -169,6 +169,10 @@ import { AreaRiabilitazioneDiarioComponent } from './component/area-riabilitazio
 import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterInformationDipendenteComponent } from './component/register-information-dipendente/register-information-dipendente.component';
+import { GeneralePersonaleComponent } from './pages/generale-personale/generale-personale.component';
+import { EsamiPrivacyPersonaleComponent } from './pages/esami-privacy-personale/esami-privacy-personale.component';
+import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
+import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/ferie-altro-personale.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -189,6 +193,7 @@ import { RegisterInformationDipendenteComponent } from './component/register-inf
     AreaMedicaComponent,
     AreaInfermieristicaComponent,
     GestUtentiComponent,
+    GeneralePersonaleComponent,
     GestStanzeComponent,
     DialogStanzaComponent,
     CalendarComponent,
@@ -289,6 +294,10 @@ import { RegisterInformationDipendenteComponent } from './component/register-inf
     DialogRiabilitazioneDiarioComponent,
     RegisterComponent,
     RegisterInformationDipendenteComponent,
+    GeneralePersonaleComponent,
+    EsamiPrivacyPersonaleComponent,
+    LavoroPersonaleComponent,
+    FerieAltroPersonaleComponent,
   ],
   imports: [
     BrowserModule,

@@ -16,6 +16,7 @@ import { PresenzeService } from "src/app/service/presenze.service";
 export class PresenzeComponent implements OnInit {
   @Input() data: Dipendenti;
   @Input() disable: boolean;
+  @Input() isExternal: boolean;
 
   @Output() showItemEmiter = new EventEmitter<{
     presenze: Presenze;

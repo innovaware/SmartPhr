@@ -43,6 +43,12 @@ import { ArchiviPAIComponent } from './pages/archivi/archivi-pai/archivi-pai.com
 import { AreaSocialeComponent } from "./pages/area-sociale/area-sociale.component";
 import { RegisterComponent } from './pages/register/register.component';
 
+import { EsamiPrivacyPersonaleComponent } from "./pages/esami-privacy-personale/esami-privacy-personale.component";
+import { FerieAltroPersonaleComponent } from "./pages/ferie-altro-personale/ferie-altro-personale.component";
+import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
+import { GeneralePersonaleComponent } from "./pages/generale-personale/generale-personale.component";
+
+
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent},
@@ -64,6 +70,16 @@ const routes: Routes = [
   { path: "gest_cambiturno", component: CambiturnoComponent, canActivate: [AuthGuard]  },
   { path: "gest_presenze", component: PresenzeComponent, canActivate: [AuthGuard]  },
   { path: "gest_turnimensili", component: TurnimensiliComponent, canActivate: [AuthGuard]  },
+
+
+
+  // AREA PERSONALE
+  { path: "generale", component: GeneralePersonaleComponent, canActivate: [AuthGuard]  },
+  { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
+  { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard]  },
+  { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
+
+
 
   // AMMINISTRAZIONE
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },

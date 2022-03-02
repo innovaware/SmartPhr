@@ -30,7 +30,7 @@ console.log(`Redis Host ${redisHost}:${redisPort}`);
 const client_redis = redis.createClient(redisPort, redisHost);
 
 // GESTIONE MAILER SERVICE
-const mqtt = require("mqtt");
+/*const mqtt = require("mqtt");
 const hostMailerService = process.env.MAILERSERVICEHOST || "localhost"; 
 const portMailerService = process.env.MAILERSERVICEPORT || "1883";
 const clientIdMailerService = `mqtt_${Math.random().toString(16).slice(3)}`;
@@ -44,7 +44,7 @@ const clientMailerService = mqtt.connect(connectUrlMailerService, {
   username: process.env.MAILERSERVICEUSERNAME || "test",
   password: process.env.MAILERSERVICEPASSWORD || "test",
   reconnectPeriod: 1000,
-});
+});*/
 
 app.use(cors());
 
@@ -318,7 +318,7 @@ app.use(
   logHandler,
   authorizationHandler,
   async (req, res, next) => {
-    res.locals.clientMailerService = clientMailerService;
+   // res.locals.clientMailerService = clientMailerService;
 
     const topicMailerservice = "topic/dipendente";
     res.locals.topicMailerservice = topicMailerservice;

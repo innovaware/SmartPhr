@@ -46,7 +46,7 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         (error) => {
           if (error instanceof HttpErrorResponse) {
             if (error.status === 401) {
-              this.authenticationService.logout();
+              //this.authenticationService.logout();
               this.route.navigate(["/"]);
             }
           }

@@ -7,6 +7,7 @@ import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-erro
 import { Cambiturno } from "src/app/models/cambiturni";
 import { Dipendenti } from "src/app/models/dipendenti";
 import {CambiturniService } from "src/app/service/cambiturni.service";
+import { DipendentiService } from "src/app/service/dipendenti.service";
 import { MessagesService } from 'src/app/service/messages.service';
 
 
@@ -19,6 +20,7 @@ export class CambiturnoComponent implements OnInit {
 
   @Input() data: Dipendenti;
   @Input() disable: boolean;
+  @Input() isExternal: boolean;
 
   @Output() showItemEmiter = new EventEmitter<{
     cambiturno: Cambiturno;
@@ -48,10 +50,14 @@ export class CambiturnoComponent implements OnInit {
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   public cambiturno: Cambiturno[];
 
+
+  dipendente: Dipendenti = {} as Dipendenti;
+
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public cambiturniService: CambiturniService
+    public cambiturniService: CambiturniService,
+    public dipendenteService: DipendentiService
   ) {
     this.cambiturniService.getCambiturno().then((result) => {
       this.cambiturno = result;
@@ -63,24 +69,52 @@ export class CambiturnoComponent implements OnInit {
 }
 
 loadTable(){
-  if(this.data){
+  if(this.isExternal != true){
+    if(this.data){
 
-    this.cambiturniService.getCambiturnoByDipendente(this.data._id).then((result) => {
+      this.cambiturniService.getCambiturnoByDipendente(this.data._id).then((result) => {
+        this.cambiturno = result;
+
+        this.dataSource = new MatTableDataSource<Cambiturno>(this.cambiturno);
+        this.dataSource.paginator = this.paginator;
+      });
+    }
+    else{
+    this.cambiturniService.getCambiturno().then((result) => {
       this.cambiturno = result;
 
       this.dataSource = new MatTableDataSource<Cambiturno>(this.cambiturno);
       this.dataSource.paginator = this.paginator;
     });
+    }
   }
   else{
-  this.cambiturniService.getCambiturno().then((result) => {
-    this.cambiturno = result;
-
-    this.dataSource = new MatTableDataSource<Cambiturno>(this.cambiturno);
-    this.dataSource.paginator = this.paginator;
-  });
+    this.loadUser();
   }
 }
+
+
+loadUser(){
+  this.dipendenteService
+  .getById('620027d56c8df442a73341fa')
+  .then((x) => {
+        this.dipendente = x;
+        this.cambiturniService.getCambiturnoByDipendente(this.dipendente._id).then((result) => {
+          this.cambiturno = result;
+  
+          this.dataSource = new MatTableDataSource<Cambiturno>(this.cambiturno);
+          this.dataSource.paginator = this.paginator;
+        });
+  })
+  .catch((err) => {
+    this.messageService.showMessageError(
+      "Errore Caricamento dipendente (" + err["status"] + ")"
+    );
+  });
+}
+
+
+
 
   ngOnInit() {
     this.loadTable();

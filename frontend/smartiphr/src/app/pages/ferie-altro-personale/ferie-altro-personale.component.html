@@ -1,0 +1,56 @@
+<div class="containter pad">
+    <div class="row">
+      <div class="col ">
+        <h1 class="title">Ferie,Permessi,Presenze e Turni</h1>
+      </div>
+    </div>
+    <mat-tab-group mat-align-tabs="start">
+  
+  
+ <!-- FERIE -->
+ <mat-tab label="Ferie">
+    <app-ferie  [data]=dipendente  [isExternal]=isExternal>
+    </app-ferie>
+  </mat-tab>
+  
+ <!-- PERMESSI -->
+ <mat-tab label="Permessi">
+    <app-permessi  [data]=dipendente [isExternal]=isExternal>
+    </app-permessi>
+  </mat-tab>
+
+
+  <!-- CAMBI TURNO -->
+  <mat-tab label="Cambi turno">
+    <app-cambiturno  [data]=dipendente [isExternal]=isExternal>
+    </app-cambiturno>
+  </mat-tab>
+
+
+  <!-- PRESENZE -->
+  <mat-tab label="Presenze" >
+    <app-presenze  [data]=dipendente [isExternal]=isExternal>
+    </app-presenze>
+  </mat-tab>
+
+
+
+
+  <!-- TURNI -->
+  <mat-tab label="Turni mensili">
+    <app-turnimensili  [data]=dipendente [isExternal]=isExternal>
+    </app-turnimensili>
+  </mat-tab>
+  
+  
+  
+  </mat-tab-group>
+  
+  
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+    </div>
+  </div>
+  
+  
+  </div>
