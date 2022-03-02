@@ -1,37 +1,43 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const DocMedicinaLavoro = require("../models/documentiMedicinaLavoro");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/dipendente/:id", async (req, res) => {
   try {
-
-    console.log("id: ", req.params.id);
-    console.log("types: ", req.params.type);
-    let id  = req.params.id;
+    let id = req.params.id;
     let type = req.params.type;
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const query = { dipendente: id };
+    console.log("Query", JSON.stringify(query));
+
+    const getData = () => {
+      return DocMedicinaLavoro.find(query);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `documentiMedicinaLavoro${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const documenti = await DocMedicinaLavoro.find({
-          dipendente: id
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(documenti));
+        const documenti = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(documenti)
+        );
         res.status(200).json(documenti);
       }
     });
@@ -47,15 +53,28 @@ router.get("/dipendente/:id", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return DocMedicinaLavoro.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `documentiMedicinaLavoro${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const doc = await DocMedicinaLavoro.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(doc));
+        const doc = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(doc));
         res.status(200).json(doc);
       }
     });
@@ -72,18 +91,23 @@ router.post("/:id", async (req, res) => {
       filenameRichiesta: req.body.filenameRichiesta,
       dateuploadRichiesta: Date.now(),
       noteRichiesta: req.body.noteRichiesta,
-      filenameCertificato: req.body.filenameCertificato != null ? req.body.filenameCertificato : "",
-      dateuploadCertificato:  req.body.filenameCertificato != null ? Date.now() : "",
-      noteCertificato: req.body.noteCertificato
+      filenameCertificato:
+        req.body.filenameCertificato != null
+          ? req.body.filenameCertificato
+          : "",
+      dateuploadCertificato:
+        req.body.filenameCertificato != null ? Date.now() : "",
+      noteCertificato: req.body.noteCertificato,
     });
-
-    console.log("Insert doc: ", doc);
 
     const result = await doc.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `documentiMedicinaLavoro${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`documentiMedicinaLavoro${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -107,8 +131,12 @@ router.put("/documento/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `documentiMedicinaLavoro${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`documentiMedicinaLavoro${id}`);
+    }
 
     res.status(200);
     res.json(doc);
@@ -117,23 +145,24 @@ router.put("/documento/:id", async (req, res) => {
   }
 });
 
-
 router.delete("/documento/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log('id:' + id);
+    console.log("id:" + id);
 
     const item = await DocMedicinaLavoro.findById(id);
-    console.log('item:' + item);
+    console.log("item:" + item);
     const idDipendente = item.dipendente;
     const doc = await DocMedicinaLavoro.remove({ _id: id });
 
-    let searchTerm = `documentiMedicinaLavoro${id}`;
-    client.del(searchTerm);
-    searchTerm = `documentiMedicinaLavoro${idDipendente}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`documentiMedicinaLavoro${id}`);
+      redisClient.del(`documentiMedicinaLavoro${idDipendente}`);
+    }
 
     res.status(200);
     res.json(doc);

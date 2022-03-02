@@ -1,20 +1,17 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const Curriculum = require("../models/curriculum");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
-    const searchTerm = `CURRICULUMALL`;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = (query) => {
+      return Curriculum.find(query);
+    };
+
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
 
@@ -24,22 +21,34 @@ router.get("/", async (req, res) => {
       if (showOnlyCancellati) {
         query = { cancellato: true };
       }
-      const curriculum = await Curriculum.find(query);
+      const curriculum = await getData(query);
       res.status(200).json(curriculum);
     } else {
-      client.get(searchTerm, async (err, data) => {
+      const query = {
+        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+      };
+
+      const searchTerm = `CURRICULUMALL`;
+      if (redisClient == undefined || redisDisabled) {
+        const eventi = await getData(query);
+        res.status(200).json(eventi);
+        return;
+      }
+
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
-        if (data && !redisDisabled) {
+        if (data) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const query = {
-            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          };
-          const curriculum = await Curriculum.find(query);
+          const curriculum = await getData(query);
 
           res.status(200).json(curriculum);
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(curriculum));
+          redisClient.setex(
+            searchTerm,
+            redisTimeCache,
+            JSON.stringify(curriculum)
+          );
           // res.status(200).json(curriculum);
         }
       });
@@ -59,23 +68,39 @@ router.get("/:id", async (req, res) => {
       return;
     }
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Curriculum.find({
+        $and: [
+          {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          },
+          { _id: id },
+        ],
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `CURRICULUMBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const curriculum = await Curriculum.findById({
-          $and: [
-            {
-              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-            },
-            { _id: id },
-          ],
-        });
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(curriculum));
+        const curriculum = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(curriculum)
+        );
         if (curriculum != null) res.status(200).json(curriculum);
         else res.status(404).json({ error: "No patient found" });
       }
@@ -98,6 +123,14 @@ router.post("/", async (req, res) => {
     });
 
     const result = await curriculum.save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CURRICULUM*`);
+    }
+
     res.status(200);
     res.json(result);
   } catch (err) {
@@ -130,8 +163,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `CURRICULUMBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CURRICULUMBY${id}`);
+    }
 
     res.status(200).json(curriculum);
   } catch (err) {
@@ -139,11 +176,10 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-  
+
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
@@ -157,8 +193,12 @@ router.delete("/:id", async (req, res) => {
     const item = await Curriculum.findById(id);
     const curriculum = await Curriculum.remove({ _id: id });
 
-    client.del(`CURRICULUMBY${id}`);
-    client.del(`CURRICULUMALL`);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CURRICULUM*`);
+    }
 
     res.status(200).json(curriculum);
   } catch (err) {

@@ -1,17 +1,24 @@
 const express = require("express");
 const router = express.Router();
 const Consulenti = require("../models/consulenti");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client = redis.createClient(redisPort, redisHost);
+//const redis = require("redis");
+//const redisPort = process.env.REDISPORT || 6379;
+//const redisHost = process.env.REDISHOST || "redis";
+//const redisDisabled = process.env.REDISDISABLE === "true" || false;
+const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+//const client = redis.createClient(redisPort, redisHost);
+
 
 router.get("/", async (req, res) => {
   try {
-    const searchTerm = `CONSULENTIALL`;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
+    const getData = (query) => {
+      return Consulenti.find(query);
+    };
+
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
 
@@ -21,25 +28,36 @@ router.get("/", async (req, res) => {
       if (showOnlyCancellati) {
         query = { cancellato: true };
       }
-      const consulenti = await Consulenti.find(query);
+      const consulenti = await getData(query);
       res.status(200).json(consulenti);
     } else {
-      client.get(searchTerm, async (err, data) => {
+      
+      if (redisClient == undefined || redisDisabled) {
+        const consulenti = await getData({
+          $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+        })
+        
+        if (consulenti.length > 0) res.status(200).json(consulenti);
+        else res.status(404).json({ error: "No patients found" });
+
+        return;
+      }
+
+      const searchTerm = `CONSULENTIALL`;
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
-        if (data && !redisDisabled) {
+        if (data) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const query = {
+          const consulenti = await getData({
             $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          };
-          const consulenti = await Consulenti.find(query);
+          });
 
           if (consulenti.length > 0) res.status(200).json(consulenti);
           else res.status(404).json({ error: "No patients found" });
 
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
-          // res.status(200).json(consulenti);
+          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
         }
       });
     }
@@ -52,20 +70,17 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
-
-    const searchTerm = `CONSULENTIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const consulenti = await Consulenti.findById({
+    
+    const getData = () => {
+      return Consulenti.find({
           $and: [
             {
               $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
@@ -73,8 +88,26 @@ router.get("/:id", async (req, res) => {
             { _id: id },
           ],
         });
+    };
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
+    if (redisClient == undefined || redisDisabled) {
+      const consulenti = await getData();
+
+      if (consulenti != null) res.status(200).json(consulenti);
+      else res.status(404).json({ error: "No patient found" });
+      return;
+    }
+
+    const searchTerm = `CONSULENTIBY${id}`;
+    redisClient.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const consulenti = await getData();
+
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
         if (consulenti != null) res.status(200).json(consulenti);
         else res.status(404).json({ error: "No patient found" });
       }
@@ -104,6 +137,14 @@ router.post("/", async (req, res) => {
     });
 
     const result = await dipendente.save();
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+   
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CONSULENTIALL`);
+    }
+
     res.status(200);
     res.json(result);
   } catch (err) {
@@ -121,6 +162,7 @@ router.put("/:id", async (req, res) => {
       return;
     }
 
+    
     const consulenti = await Consulenti.updateOne(
       { _id: id },
       {
@@ -142,10 +184,15 @@ router.put("/:id", async (req, res) => {
         },
       }
     );
-
-    const searchTerm = `CONSULENTIBY${id}`;
-    client.del(searchTerm);
-
+      
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `CONSULENTIBY${id}`;
+      redisClient.del(searchTerm);
+    }
+      
     res.status(200);
     res.json(consulenti);
   } catch (err) {
@@ -177,8 +224,13 @@ router.delete("/:id", async (req, res) => {
       }
     );
 
-    client.del(`CONSULENTIBY${id}`);
-    client.del(`CONSULENTIALL`);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`CONSULENTIBY${id}`);
+      redisClient.del(`CONSULENTIALL`);
+    }
 
     res.status(200);
     res.json(consulente);

@@ -1,32 +1,39 @@
 const express = require("express");
 const router = express.Router();
 const Ferie = require("../models/ferie");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Ferie.find();
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
     const searchTerm = `FERIEALL`;
     // Ricerca su Redis Cache
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        // Dato trovato in cache - ritorna il json 
+      if (data) {
+        // Dato trovato in cache - ritorna il json
         res.status(200).send(JSON.parse(data));
       } else {
         // Recupero informazioni dal mongodb
-        const ferie = await Ferie.find();
+        const ferie = await getData();
 
         // Aggiorno la cache con i dati recuperati da mongodb
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
 
-        // Ritorna il json 
+        // Ritorna il json
         res.status(200).json(ferie);
       }
     });
@@ -36,47 +43,69 @@ router.get("/", async (req, res) => {
   }
 });
 
-
 //LISTA FERIE DIPENDENTE
 // http://[HOST]:[PORT]/api/ferieDipendente/[ID_DIPENDENTE]
 router.get("/dipendente/:id", async (req, res) => {
-    const { id } = req.params;
-    try {
-      const searchTerm = `FERIEBY${id}`;
-      client.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-  
-        if (data && !redisDisabled) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          const ferie = await Ferie.find({ user: id });
-  
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
-          res.status(200).json(ferie);
-        }
-      });
-    } catch (err) {
-      res.status(500).json({ Error: err });
+  const { id } = req.params;
+  try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Ferie.find({ user: id });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
     }
-  });
 
+    const searchTerm = `FERIEBY${id}`;
+    redisClient.get(searchTerm, async (err, data) => {
+      if (err) throw err;
 
+      if (data) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const ferie = await getData();
 
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
+        res.status(200).json(ferie);
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 // http://[HOST]:[PORT]/api/ferie/[ID]
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+  
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Ferie.findById(id);
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
     const searchTerm = `FERIEBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const ferie = await Ferie.findById(id);
+        const ferie = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(ferie));
         res.status(200).json(ferie);
       }
     });
@@ -90,22 +119,27 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const ferie = new Ferie({
-        dataInizio: req.body.dataInizio,
-        dataFine: req.body.dataFine,
-        dataRichiesta: req.body.dataRichiesta,
-        accettata: false,
-        user: req.body.user,
-        cognome: req.body.cognome,
-        nome: req.body.nome,
-        cf: req.body.cf,
-        closed: false
+      dataInizio: req.body.dataInizio,
+      dataFine: req.body.dataFine,
+      dataRichiesta: req.body.dataRichiesta,
+      accettata: false,
+      user: req.body.user,
+      cognome: req.body.cognome,
+      nome: req.body.nome,
+      cf: req.body.cf,
+      closed: false,
     });
 
     // Salva i dati sul mongodb
     const result = await ferie.save();
 
-    const searchTerm = `FERIEALL`;
-    client.del(searchTerm);
+ 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if(redisClient != undefined && !redisDisabled) {
+      redisClient.del(`FERIEALL`);
+    }
 
     res.status(200);
     res.json(result);
@@ -125,27 +159,30 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-            dataInizio: req.body.dataInizio,
-            dataFine: req.body.dataFine,
-            dataRichiesta: req.body.dataRichiesta,
-            accettata: req.body.accettata,
-            user: req.body.user,
-            cognome: req.body.cognome,
-            nome: req.body.nome,
-            cf: req.body.cf,
-            closed: true
+          dataInizio: req.body.dataInizio,
+          dataFine: req.body.dataFine,
+          dataRichiesta: req.body.dataRichiesta,
+          accettata: req.body.accettata,
+          user: req.body.user,
+          cognome: req.body.cognome,
+          nome: req.body.nome,
+          cf: req.body.cf,
+          closed: true,
         },
       }
     );
+ 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `FERIEBY${id}`;
-    client.del(searchTerm);
+    if(redisClient != undefined && !redisDisabled) {
+      redisClient.del(`FERIEBY${id}`);
+    }
 
     res.status(200).json(ferie);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
 });
-
 
 module.exports = router;

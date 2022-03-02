@@ -1,26 +1,38 @@
 const express = require("express");
 const router = express.Router();
 const Fornitori = require("../models/fornitori");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || 'redis';
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+//const redis = require("redis");
+//const redisPort = process.env.REDISPORT || 6379;
+//const redisHost = process.env.REDISHOST || 'redis';
+//const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
+//const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
+    const getData = () => {
+      return Fornitori.find()
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const fornitori = await getData()
+      res.status(200).json(fornitori);
+      return;
+    }
+
     const searchTerm = `FORNITORIALL`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const fornitori = await Fornitori.find();
+        const fornitori = await getData()
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
         res.status(200).json(fornitori);
       }
     });
@@ -33,8 +45,17 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+    
+    const getData = (query) => {
+      return Consulenti.find(query);
+    };
+
+
+
     const searchTerm = `FORNITORIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
@@ -42,7 +63,7 @@ router.get("/:id", async (req, res) => {
       } else {
         const fornitori = await Fornitori.findById(id);
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
         res.status(200).json(fornitori);
       }
     });
@@ -73,6 +94,15 @@ router.post("/", async (req, res) => {
     console.log(req.body);
 
     const result = await fornitore.save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `FORNITORIALL`;
+      redisClient.delete(searchTerm);
+    }
+
     res.status(200);
     res.json(result);
 
@@ -106,9 +136,14 @@ router.put("/:id", async (req, res) => {
         },
       }
     );
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `FORNITORIBY${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `FORNITORIBY${id}`;
+      redisClient.del(searchTerm);
+    }
+
     res.status(200);
     res.json(fornitori);
 
@@ -125,10 +160,15 @@ router.delete("/:id", async (req, res) => {
     const identifyUser = item.identifyUser;
     const fornitori = await Fornitori.remove({ _id: id });
 
-    let searchTerm = `fornitoriBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `fornitori${identifyUser}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      let searchTerm = `fornitoriBY${id}`;
+      redisClient.del(searchTerm);
+      searchTerm = `fornitori${identifyUser}`;
+      redisClient.del(searchTerm);
+    }
 
 
     res.status(200);

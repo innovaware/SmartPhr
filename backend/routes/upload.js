@@ -1,31 +1,40 @@
 const express = require("express");
-const SmartDocument = require("../models/SmartDocument");
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const client = redis.createClient(redisPort, redisHost);
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
 const router = express.Router();
+const SmartDocument = require("../models/SmartDocument");
+const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
-  console.log(`GET FILES from paziente: ${id}`);
-  
+
+  redisClient = req.app.get("redis");
+  redisDisabled = req.app.get("redisDisabled");
+
+  const getData = () => {
+    return SmartDocument.find({ user: id });
+  };
+
+  if (redisClient == undefined || redisDisabled) {
+    const documents = await getData();
+    res.status(200).json(documents);
+    return;
+  }
+
   try {
     const searchTerm = `FILEBYUSER${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       // console.log(`Data from redis: ${data}`);
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const documents = await SmartDocument.find({ user: id });
-        console.log(`From MONGO document from user: ${id} ${documents.length}`);
+        const documents = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(documents));
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(documents)
+        );
         res.status(200).json(documents);
       }
     });
@@ -46,7 +55,7 @@ router.post("/", async (req, res, next) => {
 
       let file = req.files.file;
       let typeDocument = req.body.typeDocument;
-      let path = req.body.path;//.split("/");
+      let path = req.body.path; //.split("/");
       let name = req.body.name;
 
       result = {
@@ -67,13 +76,16 @@ router.post("/", async (req, res, next) => {
         dateupload: new Date(),
       });
 
-      console.log(`From MONGO save document: ${document}`);
+      redisClient = req.app.get("redis");
+      redisDisabled = req.app.get("redisDisabled");
+
       document
         .save()
         .then((x) => {
-          console.log(x);
-          const searchTerm = `FILEBYUSER${path}`;
-          client.del(searchTerm);
+          if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `FILEBYUSER${path}`;
+            redisClient.del(searchTerm);
+          }
         })
         .catch((err) => {
           console.error(err);

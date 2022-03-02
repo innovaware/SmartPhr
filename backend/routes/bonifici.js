@@ -1,68 +1,45 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const Bonifici = require("../models/bonifici");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
 
 async function get(req, res) {
   try {
     const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Bonifici.find({
+        identifyUser: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const bonifici = await getData();
+      res.status(200).json(bonifici);
+      return;
+    }
 
     const searchTerm = `bonifici${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         //console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
-        const bonifici = await Bonifici.find({
-          identifyUser: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
-        console.log("Add caching: ", searchTerm);
+        const bonifici = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
 
         res.status(200).json(bonifici);
       }
     });
-
-    // const bonifici = await bonifici.find();
-    // res.status(200).json(bonifici);
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
   }
 }
-
-/* async function getBonificoById(req, res) {
-  const { id } = req.params;
-  try {
-    const searchTerm = `bonificiBY${id}`;
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const bonifici = await Bonifici.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
-        console.log("Add caching: ", searchTerm);
-
-        res.status(200).json(bonifici);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
-} */
 
 async function insertBonifico(req, res) {
   try {
@@ -74,12 +51,14 @@ async function insertBonifico(req, res) {
       note: req.body.note,
     });
 
-    console.log("Insert bonifici: ", bonifici);
-
     const result = await bonifici.save();
 
-    const searchTerm = `bonifici${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`bonifici${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -102,10 +81,12 @@ async function modifyBonifico(req, res) {
         },
       }
     );
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `bonificiBY${id}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`bonificiBY${id}`);
+    }
 
     res.status(200);
     res.json(bonifici);
@@ -123,14 +104,13 @@ async function deleteBonifico(req, res) {
 
     const bonifici = await Bonifici.remove({ _id: id });
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    let searchTerm = `bonificiBY${id}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
-
-    searchTerm = `bonifici${identifyUser}`;
-    client.del(searchTerm);
-    console.log("Delete caching: ", searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`bonificiBY${id}`);
+      redisClient.del(`bonifici${identifyUser}`);
+    }
 
     res.status(200);
     res.json(bonifici);
@@ -140,7 +120,6 @@ async function deleteBonifico(req, res) {
 }
 
 router.get("/:id", get);
-//router.get("/:id", getBonificoById);
 router.post("/:id", insertBonifico);
 router.put("/:id", modifyBonifico);
 router.delete("/:id", deleteBonifico);

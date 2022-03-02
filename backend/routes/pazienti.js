@@ -3,17 +3,19 @@ const router = express.Router();
 const Pazienti = require("../models/pazienti");
 const redis = require("redis");
 const parametriVitali = require("../models/parametriVitali");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
+// const redisPort = process.env.REDISPORT || 6379;
+// const redisHost = process.env.REDISHOST || "redis";
+// const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-const client = redis.createClient(redisPort, redisHost);
+// const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
   try {
-    //redisDisabled = false;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    //redisDisabled = false;
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
     const pageNumber = parseInt(req.query.pageNumber);
@@ -23,12 +25,13 @@ router.get("/", async (req, res) => {
     const skip = pageNumber > 0 ? (pageNumber - 1) * pageSize : 0;
     const limit = pageSize;
 
-    const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
-
-    console.info("searchTerm:", searchTerm);
-    console.info("pageNumber:", pageNumber);
-    console.info("pageSize:", pageSize);
-    console.info("sortOrder:", sortOrder);
+    const getData = (query) => {
+      return Pazienti.find(query);
+    };
+    
+    const query = {
+      $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+    };
 
     if (showOnlyCancellati || showAll) {
       console.log("Show all or deleted");
@@ -36,27 +39,36 @@ router.get("/", async (req, res) => {
       if (showOnlyCancellati) {
         query = { cancellato: true };
       }
-      const pazienti = await Pazienti.find(query);
+
+      const pazienti = await getData(query);
       res.status(200).json(pazienti);
+
     } else {
-      client.get(searchTerm, async (err, data) => {
+      if (redisClient == undefined || redisDisabled) {
+
+        console.info(`skip:${skip} limit: ${limit}`);
+        const pazienti = await getData(query).skip(skip).limit(limit);
+
+        if (pazienti.length > 0) res.status(200).json(pazienti);
+        else res.status(404).json({ error: "No patients found" });
+
+        return;
+      }
+
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
-        if (data && !redisDisabled) {
+        if (data) {
           res.status(200).send(JSON.parse(data));
         } else {
-          const query = {
-            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          };
 
           console.info(`skip:${skip} limit: ${limit}`);
-          const pazienti = await Pazienti.find(query).skip(skip).limit(limit);
+          const pazienti = getData(query).skip(skip).limit(limit);
 
           if (pazienti.length > 0) res.status(200).json(pazienti);
           else res.status(404).json({ error: "No patients found" });
 
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-          //res.status(200).json(pazienti);
+          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
         }
       });
     }
@@ -68,30 +80,47 @@ router.get("/", async (req, res) => {
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
+
+  const getData = (query) => {
+    return Pazienti.find(query);
+  };
+
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
 
+    query = {
+      $and: [
+        {
+          $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+        },
+        { _id: id },
+      ],
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const pazienti = await getData(query);
+
+      if (pazienti != null) res.status(200).json(pazienti);
+      else res.status(404).json({ error: "No patient found" });
+    }
+
     const searchTerm = `PAZIENTIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const pazienti = await Pazienti.findOne({
-          $and: [
-            {
-              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-            },
-            { _id: id },
-          ],
-        });
+        const pazienti = await getData(query);
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
         if (pazienti != null) res.status(200).json(pazienti);
         else res.status(404).json({ error: "No patient found" });
       }
@@ -134,6 +163,14 @@ router.post("/", async (req, res) => {
       areaRiabilitativaProgramma: req.body.areaRiabilitativaProgramma,
       areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
     });
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
+      redisClient.del(searchTerm);
+    }
 
     const result = await pazienti.save();
     res.status(200);
@@ -191,9 +228,13 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `PAZIENTIBY${id}`;
-    client.del(searchTerm);
-    // console.log("PUT Paziente reset redis: ", searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `PAZIENTIBY${id}`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(pazienti);
@@ -225,8 +266,13 @@ router.delete("/:id", async (req, res) => {
       }
     );
 
-    client.del(`PAZIENTIBY${id}`);
-    client.del(`PAZIENTIALL*`);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`PAZIENTIBY${id}`);
+      redisClient.del(`PAZIENTIALL*`);
+    }
 
     res.status(200);
     res.json(pazienti);
@@ -242,27 +288,39 @@ router.delete("/:id", async (req, res) => {
 router.get("/parametriVitali/:id/:dateRif", async (req, res) => {
   const { id, dateRif } = req.params;
   try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return parametriVitali.find({
+        $and: [{ idPaziente: id }, { dateRif: dateRif }],
+      });
+    };
+
     if (id == undefined || id === "undefined") {
       console.log("Error id is not defined ", id);
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
 
-    //console.log("GET Esito Strumentale");
-    console.log("Parametri vitali dateRif: ", dateRif);
+    if (redisClient == undefined || redisDisabled) {
+      const parametri = await getData();
+
+      if (parametri != null) res.status(200).json(parametri);
+      else res.status(404).json({ error: "No parametriVitali found" });
+      return;
+    }
 
     const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const parametri = await parametriVitali.find({
-          $and: [{ idPaziente: id }, { dateRif: dateRif }],
-        });
+        const parametri = await getData();
 
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(parametri));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(parametri));
         if (parametri != null) res.status(200).json(parametri);
         else res.status(404).json({ error: "No parametriVitali found" });
       }
@@ -294,7 +352,6 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
       return;
     }
 
-    console.log("data: ", data);
     const parametri = await parametriVitali.updateOne(
       { $and: [{ idPaziente: id }, { dateRif: dateRif }] },
       {
@@ -306,8 +363,13 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
       { upsert: true }
     );
 
-    const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(parametri);
@@ -326,23 +388,36 @@ router.get("/schedaPsicologica/:id", async (req, res) => {
       return;
     }
 
+    const getData = () => {
+      return Pazienti.findOne({
+        $and: [
+          {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          },
+          { _id: id },
+        ],
+      });
+    };
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient == undefined || redisDisabled) {
+      const pazienti = await getData();
+      if (pazienti != null) res.status(200).json(pazienti.schedaPisico);
+      else res.status(404).json({ error: "No patient found" });
+      return;
+    }
+
     const searchTerm = `PAZIENTIBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
         res.status(200).send(JSON.parse(data.schedaPisico));
       } else {
-        const pazienti = await Pazienti.findOne({
-          $and: [
-            {
-              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-            },
-            { _id: id },
-          ],
-        });
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+        const pazienti = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
         if (pazienti != null) res.status(200).json(pazienti.schedaPisico);
         else res.status(404).json({ error: "No patient found" });
       }
@@ -368,7 +443,6 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
       return;
     }
 
-    console.log("data: ", data);
     const parametri = await Pazienti.updateOne(
       { _id: id },
       {
@@ -378,8 +452,13 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `PAZIENTIBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `PAZIENTIBY${id}`;
+      redisClient.del(searchTerm);
+    }
 
     res.status(200);
     res.json(parametri);

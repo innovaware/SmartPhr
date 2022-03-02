@@ -1,102 +1,43 @@
 const express = require("express");
-//const jwt_decode = require("jwt-decode");
-
 const router = express.Router();
 const NotaCredito = require("../models/notacredito");
-
-const redis = require("redis");
-const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
-const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-
-const client = redis.createClient(redisPort, redisHost);
-
-
-/* router.get("/", async (req, res) => {
-  try {
-    const searchTerm = `NOTACREDITOALL`;
-  const showOnlyCancellati = req.query.show == "deleted";
-    const showAll = req.query.show == "all";
-
-    if (showOnlyCancellati || showAll) {
-      console.log("Show all or deleted");
-      let query = {};
-      if (showOnlyCancellati) {
-        query = { cancellato: true };
-      }
-      const nota = await NotaCredito.find(query);
-      res.status(200).json(nota);
-    } else { 
-      client.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-
-        if (data && !redisDisabled) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          const query = {
-              $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-            };
-          const nota = await NotaCredito.find(query);
-
-          res.status(200).json(nota);
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(nota));
-          // res.status(200).json(curriculum);
-        }
-      });
-     }
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
-}); */
-
 
 router.get("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return NotaCredito.find({
+        identifyUser: id,
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
 
     const searchTerm = `notacredito${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
-      if (data && !redisDisabled) {
-        console.log(`${searchTerm}: ${data}`);
+      if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const notacredito = await NotaCredito.find({
-          identifyUser: id,
-        });
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
+        const notacredito = await getData();
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
         res.status(200).json(notacredito);
       }
     });
-
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
   }
 });
-
-/* router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const searchTerm = `notacreditoBY${id}`;
-    client.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const notacredito = await NotaCredito.findById(id);
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(notacredito));
-        res.status(200).json(notacredito);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
-}); */
 
 router.post("/:id", async (req, res) => {
   try {
@@ -112,9 +53,12 @@ router.post("/:id", async (req, res) => {
 
     const result = await notacredito.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-    const searchTerm = `notacredito${id}`;
-    client.del(searchTerm);
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`notacreditoBY${id}`);
+    }
 
     res.status(200);
     res.json(result);
@@ -138,8 +82,12 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    const searchTerm = `notacreditoBY${id}`;
-    client.del(searchTerm);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`notacreditoBY${id}`);
+    }
 
     res.status(200);
     res.json(notacredito);
@@ -148,21 +96,22 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    
+
     const item = await NotaCredito.findById(id);
     const identifyUser = item.identifyUser;
-    
+
     const notacredito = await NotaCredito.remove({ _id: id });
-    
-    let searchTerm = `notacreditoBY${id}`;
-    client.del(searchTerm);
-    searchTerm = `notacredito${identifyUser}`;
-    client.del(searchTerm);
-    //client.del(`NOTACREDITOALL`);
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`notacreditoBY${id}`);
+      redisClient.del(`notacredito${identifyUser}`);
+    }
 
     res.status(200);
     res.json(notacredito);
