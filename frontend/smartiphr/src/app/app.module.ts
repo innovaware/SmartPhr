@@ -173,6 +173,8 @@ import { GeneralePersonaleComponent } from './pages/generale-personale/generale-
 import { EsamiPrivacyPersonaleComponent } from './pages/esami-privacy-personale/esami-privacy-personale.component';
 import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
 import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/ferie-altro-personale.component';
+import { DebugComponent } from './component/debug/debug.component';
+import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 @NgModule({
   declarations: [
     AppComponent,
@@ -298,6 +300,8 @@ import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/feri
     EsamiPrivacyPersonaleComponent,
     LavoroPersonaleComponent,
     FerieAltroPersonaleComponent,
+    DebugComponent,
+    PrettyprintPipe,
   ],
   imports: [
     BrowserModule,

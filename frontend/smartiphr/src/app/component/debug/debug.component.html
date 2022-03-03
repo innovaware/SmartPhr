@@ -1,0 +1,31 @@
+<div class="container debug" id="dialog-debug" (mousedown)="mousedown($event)" (mousemove)="mousemove($event)"
+  (mouseup)="mouseup($event)">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-title>
+          DEBUG
+        </mat-card-title>
+
+        <mat-card-content>
+          <div *ngFor="let item of getVariables() | keyvalue">
+            <mat-expansion-panel hideToggle>
+              <mat-expansion-panel-header>
+                <mat-panel-title>
+                  <img src="../../../assets/cestino.svg" (click)="deleteVariable(item.key)">
+                  {{item.key}}
+                </mat-panel-title>
+                <mat-panel-description>
+                  {{item.description}}
+                </mat-panel-description>
+              </mat-expansion-panel-header>
+              <pre [innerHTML]="getValue(item.key) | prettyprint" style="color: #1c481b"></pre>
+            </mat-expansion-panel>
+
+          </div>
+        </mat-card-content>
+      </mat-card>
+
+    </div>
+  </div>
+</div>
