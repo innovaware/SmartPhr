@@ -85,6 +85,45 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+// http://[HOST]:[PORT]/api/dipendenti/byuser/[ID_USER]
+router.get("/byuser/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return Dipendenti.find(
+              { idUser: id }
+      );
+    };
+ 
+    if (redisClient == undefined || redisDisabled) {
+      const dipendenti = await getData();
+      res.status(200).json(dipendenti);
+      return
+    }
+
+    const searchTerm = `DIPENDENTIBY${id}`;
+    redisClient.get(searchTerm, async (err, data) => {
+      if (err) throw err;
+
+      if (data && !redisDisabled) {
+        res.status(200).send(JSON.parse(data));
+      } else {
+        const dipendenti = await getData();
+
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
+        res.status(200).json(dipendenti);
+      }
+    });
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+
 // http://[HOST]:[PORT]/api/dipendenti (POST)
 // INSERT dipendente su DB
 router.post("/", async (req, res) => {

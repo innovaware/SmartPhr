@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoDipendente } from 'src/app/models/documentoDipendente';
+import { AuthenticationService } from 'src/app/service/authentication.service';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentiService } from 'src/app/service/documenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
@@ -51,7 +52,8 @@ export class GeneralePersonaleComponent implements OnInit {
 
   
   constructor(public messageService: MessagesService, public docService: DocumentiService,
-    public uploadService: UploadService,public dipendenteService: DipendentiService,  ) {
+    public uploadService: UploadService,public dipendenteService: DipendentiService,
+    public authenticationService:AuthenticationService  ) {
       this.loadUser();
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
@@ -63,21 +65,27 @@ export class GeneralePersonaleComponent implements OnInit {
 
 
   loadUser(){
-    console.log('get dipendente');
-    this.dipendenteService
-    .getById('620027d56c8df442a73341fa')
-    .then((x) => {
-      console.log('dipendente: ' + JSON.stringify(x));
-          this.dipendente = x;
-          this.getDocIdentita();
-          this.getDiplomi();
-          this.getAttestatiECM();
-    })
-    .catch((err) => {
-      this.messageService.showMessageError(
-        "Errore Caricamento dipendente (" + err["status"] + ")"
-      );
-    });
+    this.authenticationService.getCurrentUserAsync().subscribe(
+      (user)=>{
+   
+        console.log('get dipendente');
+        this.dipendenteService
+        .getByIdUser(user._id)
+        .then((x) => {
+          console.log('dipendente: ' + JSON.stringify(x));
+              this.dipendente = x[0];
+              this.getDocIdentita();
+              this.getDiplomi();
+              this.getAttestatiECM();
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+   
+       }); 
+   
   }
 
   async showDocument(doc: DocumentoDipendente) {

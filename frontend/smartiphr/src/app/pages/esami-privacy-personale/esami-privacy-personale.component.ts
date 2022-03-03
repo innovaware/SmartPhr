@@ -4,6 +4,7 @@ import { DialogCaricadocumentoComponent } from 'src/app/dialogs/dialog-caricadoc
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoDipendente } from 'src/app/models/documentoDipendente';
 import { DocumentoMedicinaLavoro } from 'src/app/models/documentoMedicinaLavoro';
+import { AuthenticationService } from 'src/app/service/authentication.service';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentiService } from 'src/app/service/documenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
@@ -72,6 +73,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
     public messageService: MessagesService,
     public uploadService: UploadService,
     public docService: DocumentiService,
+    public authenticationService:AuthenticationService,
     public dialog: MatDialog) {
       this.loadUser();
      }
@@ -81,20 +83,24 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
 
 
   loadUser(){
-    this.dipendenteService
-    .getById('620027d56c8df442a73341fa')
-    .then((x) => {
-      console.log('dipendente: ' + JSON.stringify(x));
-      this.dipendente = x;
-          this.getCertificatoMalattia();
-          this.getDocsPrivacy();
-          this.getDocMedicinaLav();
-    })
-    .catch((err) => {
-      this.messageService.showMessageError(
-        "Errore Caricamento dipendente (" + err["status"] + ")"
-      );
-    });
+    this.authenticationService.getCurrentUserAsync().subscribe(
+      (user)=>{
+        console.log('get dipendente');
+        this.dipendenteService
+        .getByIdUser(user._id)
+        .then((x) => {
+          console.log('dipendente: ' + JSON.stringify(x));
+          this.dipendente = x[0];
+              this.getCertificatoMalattia();
+              this.getDocsPrivacy();
+              this.getDocMedicinaLav();
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+      }); 
   }
 
 

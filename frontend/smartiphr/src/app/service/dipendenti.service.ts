@@ -23,6 +23,10 @@ export class DipendentiService {
     return this.http.get<Dipendenti>(`${this.api}/api/dipendenti/${id}`).toPromise();
   }
 
+  async getByIdUser(id: string): Promise<Dipendenti> {
+    return this.http.get<Dipendenti>(`${this.api}/api/dipendenti/byuser/${id}`).toPromise();
+  }
+
   save(data: Dipendenti): Promise<Dipendenti> {
     var body = data;
     console.log("body: ", body);
