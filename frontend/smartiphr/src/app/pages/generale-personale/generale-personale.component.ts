@@ -2,11 +2,13 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator, MatTableDataSource } from '@angular/material';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoDipendente } from 'src/app/models/documentoDipendente';
+import { User } from 'src/app/models/user';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentiService } from 'src/app/service/documenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { UploadService } from 'src/app/service/upload.service';
+import { UsersService } from 'src/app/service/users.service';
 
 @Component({
   selector: 'app-generale-personale',
@@ -15,7 +17,11 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class GeneralePersonaleComponent implements OnInit {
   public uploading: boolean;
+  public uploadingCred:boolean;
+  public errorCred:boolean;
+
   dipendente: Dipendenti = {} as Dipendenti;
+  utente: User = {} as User;
 
   public notenuovoDocumentoIdentita = "";
 
@@ -50,13 +56,18 @@ export class GeneralePersonaleComponent implements OnInit {
   public addingAttestatoECM: boolean;
 
 
+  confirmpassword:String;
   
   constructor(public messageService: MessagesService, public docService: DocumentiService,
     public uploadService: UploadService,public dipendenteService: DipendentiService,
-    public authenticationService:AuthenticationService  ) {
+    public authenticationService:AuthenticationService, public usersService :UsersService  ) {
       this.loadUser();
+      
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
+    this.uploading = false;
+    this.uploadingCred = false;
+    this.errorCred = false;
    }
 
     ngOnInit() {
@@ -74,6 +85,8 @@ export class GeneralePersonaleComponent implements OnInit {
         .then((x) => {
           console.log('dipendente: ' + JSON.stringify(x));
               this.dipendente = x[0];
+              console.log('loadUserCred: ' + this.dipendente.idUser);
+              this.loadUserCred(this.dipendente.idUser);
               this.getDocIdentita();
               this.getDiplomi();
               this.getAttestatiECM();
@@ -85,7 +98,68 @@ export class GeneralePersonaleComponent implements OnInit {
         });
    
        }); 
-   
+  }
+
+
+
+  loadUserCred(user_id){
+        console.log('get cred user');
+        this.usersService
+        .getById(user_id)
+        .then((x) => {
+          console.log('utente: ' + JSON.stringify(x));
+              this.utente = x;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+
+  }
+
+
+  saveDipendente(){
+    
+    this.dipendenteService
+            .save(this.dipendente)
+            .then((x) => {
+              console.log("Save dipendente: ", x);
+              this.uploading = true;
+              setInterval(() => {
+                this.uploading = false;
+              },3000)
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore salvataggio dipendente (" + err["status"] + ")"
+              );
+              this.uploading = false;
+            });
+  }
+
+
+  saveCred(){
+    if(this.confirmpassword == this.utente.password){
+    this.usersService
+            .save(this.utente)
+            .then((x) => {
+              this.errorCred = false;
+              console.log("Save utente: ", x);
+              this.uploadingCred = true;
+              setInterval(() => {
+                this.uploadingCred = false;
+              },3000)
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore salvataggio utente (" + err["status"] + ")"
+              );
+              this.uploadingCred = false;
+            });
+          }
+          else
+          this.errorCred = true;
   }
 
   async showDocument(doc: DocumentoDipendente) {

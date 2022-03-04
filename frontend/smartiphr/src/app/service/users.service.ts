@@ -8,7 +8,7 @@ import { User } from '../models/user';
 })
 export class UsersService {
 
-  api: string = `${environment.api}/api/user`;
+  api: string = `${environment.api}/api/users`;
 
   constructor(private http: HttpClient) {}
 
@@ -16,8 +16,8 @@ export class UsersService {
     return this.http.get<User[]>(`${this.api}`).toPromise();
   }
 
-  async getById(id: string): Promise<User[]> {
-    return this.http.get<User[]>(`${this.api}/${id}`).toPromise();
+  async getById(id: string): Promise<User> {
+    return this.http.get<User>(`${this.api}/${id}`).toPromise();
   }
 
   save(data: User): Promise<User> {

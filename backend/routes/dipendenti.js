@@ -172,7 +172,8 @@ router.post("/", async (req, res) => {
       tipoContratto: req.body.tipoContratto,
       telefono: req.body.telefono,
       email: req.body.email,
-      idUser: userResult._id,
+      user: userResult._id,
+      accettatoRegolamento: req.accettatoRegolamento
     });
 
     // Salva i dati sul mongodb
@@ -212,6 +213,8 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    console.log('accettatoRegolamento: ' + req.body.accettatoRegolamento);
     // Aggiorna il documento su mongodb
     const dipendenti = await Dipendenti.updateOne(
       { _id: id },
@@ -232,6 +235,7 @@ router.put("/:id", async (req, res) => {
           tipoContratto: req.body.tipoContratto,
           telefono: req.body.telefono,
           email: req.body.email,
+          accettatoRegolamento: req.body.accettatoRegolamento
         },
       }
     );
@@ -251,7 +255,7 @@ router.put("/:id", async (req, res) => {
       clientMailerService.publish(
         clientMailerTopic,
         JSON.stringify({
-          message: dipendente,
+          message: dipendenti,
           operation: "update",
         }),
         { qos: 0, retain: false },

@@ -19,7 +19,8 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
 
 
   public uploading: boolean;
-  dipendente: Dipendenti;
+  dipendente: Dipendenti = {} as Dipendenti;
+  public uploadingRegolamento: boolean;
 
   @ViewChild("paginatorCertificatoMalattia", { static: false })
   certificatiMalattiaPaginator: MatPaginator;
@@ -76,6 +77,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
     public authenticationService:AuthenticationService,
     public dialog: MatDialog) {
       this.loadUser();
+      this.uploadingRegolamento = false;
      }
 
   ngOnInit() {
@@ -102,6 +104,26 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
         });
       }); 
   }
+
+  saveDipendente(){
+    
+    this.dipendenteService
+            .save(this.dipendente)
+            .then((x) => {
+              console.log("Save dipendente: ", x);
+              this.uploadingRegolamento = true;
+              setInterval(() => {
+                this.uploadingRegolamento = false;
+              },3000)
+            })
+            .catch((err) => {
+              this.messageService.showMessageError(
+                "Errore salvataggio dipendente (" + err["status"] + ")"
+              );
+              this.uploadingRegolamento = false;
+            });
+  }
+
 
 
   async showDocument(doc: DocumentoDipendente) {

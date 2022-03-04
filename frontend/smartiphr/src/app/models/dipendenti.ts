@@ -24,6 +24,7 @@ export class Dipendenti {
   accettatoRegolamento : boolean;
 
   group: string;
-  user: string;
+  user?: string;
+  idUser?:string;
 
 }
