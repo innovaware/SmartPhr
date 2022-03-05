@@ -47,6 +47,7 @@ import { EsamiPrivacyPersonaleComponent } from "./pages/esami-privacy-personale/
 import { FerieAltroPersonaleComponent } from "./pages/ferie-altro-personale/ferie-altro-personale.component";
 import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
 import { GeneralePersonaleComponent } from "./pages/generale-personale/generale-personale.component";
+import { AuthorizationComponent } from "./pages/authorization/authorization.component";
 
 
 const routes: Routes = [
@@ -82,6 +83,7 @@ const routes: Routes = [
 
 
   // AMMINISTRAZIONE
+  { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_consulenti", component: ConsulentiComponent, canActivate: [AuthGuard] },
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },

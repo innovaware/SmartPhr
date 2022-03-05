@@ -16,9 +16,14 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
+
   try {
     var query = { idUser: mongoose.Types.ObjectId(id) };
+    console.log("Get info User: ", query);
     const dipendenti = await Dipendenti.find(query);
+
+    console.log("Get info User: ", dipendenti);
+
     res.status(200).json(dipendenti);
   } catch (err) {
     res.status(500).json({ Error: err });
@@ -101,6 +106,7 @@ router.get("/:id", async (req, res) => {
 
 router.post("/authenticate", async (req, res) => {
   try {
+    
     const user = res.locals.auth;
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours()+1);
@@ -167,7 +173,7 @@ router.post("/authenticate", async (req, res) => {
 
         turno.dataRifInizio.setHours(turno.turnoInizio+1);
         turno.dataRifFine.setHours(turno.turnoFine+1);
-        dataRifNowInizio.setHours(turno.turnoInizio+1);
+        dataRifNowInizio.setHours(turno.fturnoInizio+1);
         dataRifNowFine.setHours(turno.turnoFine+1);
 
         const resultPresenze = presenzeFind.map((x) => {
@@ -277,8 +283,7 @@ router.post("/", async (req, res) => {
       group: req.body.group,
       username: req.body.username,
       password: req.body.password,
-      active: false,
-      role: "",
+      active: false
     });
     
     // Salva i dati sul mongodb
@@ -312,23 +317,36 @@ router.put("/:id", async (req, res) => {
       });
       return;
     }
+
+    mailer = req.app.get('mailer');
+    mailerTopic = req.app.get('mailerTopic');
+    mailerDisabled = req.app.get('mailerDisabled');
+
+
+    const userUpdate = {
+      group: req.body.group,
+      username: req.body.username,
+      password: req.body.password,
+      active: req.body.active
+    }
+
+    if (mailer != undefined && !mailerDisabled && mailerTopic != undefined) {
+      console.log("Emit to topic:", mailerTopic);
+
+      var query = { idUser: mongoose.Types.ObjectId(id) };
+      console.log("Get info User: ", query);
+      const dipendenti = await Dipendenti.find(query);
+      mailer.publish(mailerTopic, JSON.stringify(dipendenti));
+    }
     
     // Aggiorna il documento su mongodb
     const user = await User.updateOne(
       { _id: id },
-      {
-        $set: {
-          group: req.body.group,
-          username: req.body.username,
-          password: req.body.password,
-          active: req.body.active,
-          role: "",
-        },
-      });
+      { $set: userUpdate });
       
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
-    
+
     if (redisClient != undefined && !redisDisabled) {
       const searchTerm = `USERBY${id}`;
       redisClient.del(searchTerm);
