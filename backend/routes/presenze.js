@@ -3,6 +3,7 @@ var mongoose = require("mongoose");
 const router = express.Router();
 const Presenze = require("../models/presenze");
 const Dipendenti = require("../models/dipendenti");
+const Turnimensili = require("../models/turnimensili");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
@@ -68,8 +69,9 @@ router.get("/dipendente/:id", async (req, res) => {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
+
     const getData = () => {
-      return Dipendenti.aggregate([
+      const presenze = Dipendenti.aggregate([
         { $match: { _id: mongoose.Types.ObjectId(id) } },
         {
           $lookup: {
@@ -80,6 +82,9 @@ router.get("/dipendente/:id", async (req, res) => {
           },
         },
       ]);
+      //const turnimensili = Turnimensili.find();
+
+      return presenze;
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -141,12 +146,12 @@ router.get("/:id", async (req, res) => {
 });
 
 // http://[HOST]:[PORT]/api/presenze (POST)
-// INSERT permessi su DB
 router.post("/", async (req, res) => {
   try {
     const presenze = new Presenze({
       data: req.body.data,
     });
+
 
     // Salva i dati sul mongodb
     const result = await presenze.save();

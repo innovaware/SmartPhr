@@ -23,7 +23,7 @@ router.get("/:id", async (req, res) => {
     }
 
     const searchTerm = `CARTELLACLINICA${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
@@ -31,7 +31,7 @@ router.get("/:id", async (req, res) => {
         res.status(200).send(JSON.parse(data));
       } else {
         const cartellaClinica = await getData();
-        client.setex(
+        redisClient.setex(
           searchTerm,
           redisTimeCache,
           JSON.stringify(cartellaClinica)

@@ -38,7 +38,7 @@ export class AreaEducativaComponent implements OnInit {
     console.log("Init Area Educativa");
 
     this.customButtons.push({
-      images: "../../../assets/medico.png",
+      images: "../../../assets/medico.svg",
       label: "",
       tooltip: "Cartella Educativa",
       cmd: (paziente: Paziente) =>

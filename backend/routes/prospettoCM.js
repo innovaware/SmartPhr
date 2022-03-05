@@ -34,7 +34,7 @@ router.get("/", async (req, res) => {
       const prospettoCM = await getData(query);
       res.status(200).json(prospettoCM);
     } else {
-      client.get(searchTerm, async (err, data) => {
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
         if (data) {
@@ -46,7 +46,7 @@ router.get("/", async (req, res) => {
           const prospettoCM = await getData(query);
 
           res.status(200).json(prospettoCM);
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
+          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
           // res.status(200).json(curriculum);
         }
       });
@@ -76,7 +76,7 @@ router.get("/:id", async (req, res) => {
     }
 
     const searchTerm = `PROSPETTOCM${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
@@ -84,7 +84,7 @@ router.get("/:id", async (req, res) => {
         res.status(200).send(JSON.parse(data));
       } else {
         const prospettoCM = await getData();
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
         res.status(200).json(prospettoCM);
       }
     });
@@ -112,14 +112,14 @@ router.get("/:id", async (req, res) => {
     }
 
     const searchTerm = `PROSPETTOCMBY${id}`;
-    client.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
         const prospettoCM = await getData();
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(prospettoCM));
         res.status(200).json(prospettoCM);
       }
     });

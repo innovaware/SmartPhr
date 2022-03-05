@@ -121,7 +121,7 @@ const InitApiService = () => {
 }
 
 const InitRedisService = () => {
-  if (redisDisabled) {
+  if (!redisDisabled) {
     try {
       console.log("Wait to connect Redis...");
       clientRedis = redis.createClient(redisPort, redisHost);

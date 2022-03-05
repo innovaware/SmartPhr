@@ -25,20 +25,19 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.menuService.getMenu().subscribe((items: Menu[]) => {
       this.menu = items.sort((a: Menu, b: Menu) => { return a.order - b.order; });
-      console.log("Menu", this.menu);
     });
 
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
-      const userId = user._id;
-      console.log("userId", userId);
-      this.authenticationService
+      if (user !== undefined && user !== null) {
+        const userId = user._id;
+        this.authenticationService
         .getInfo(userId)
         .subscribe((dipendente: Dipendenti[]) => {
-          console.log("dipendente", dipendente);
           if (dipendente.length === 1) {
             this.mansione = dipendente[0].mansione;
           }
         });
+      }
     });
   }
 

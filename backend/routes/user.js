@@ -18,7 +18,6 @@ router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
   try {
     var query = { idUser: mongoose.Types.ObjectId(id) };
-    console.log("Info: ", query);
     const dipendenti = await Dipendenti.find(query);
     res.status(200).json(dipendenti);
   } catch (err) {
@@ -43,7 +42,7 @@ router.get("/", async (req, res) => {
     } else {
       const searchTerm = `USERALL`;
       // Ricerca su Redis Cache
-      client.get(searchTerm, async (err, data) => {
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
         if (data) {
@@ -53,7 +52,7 @@ router.get("/", async (req, res) => {
           // Recupero informazioni dal mongodb
           const users = await getData();
           // Aggiorno la cache con i dati recuperati da mongodb
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(users));
+          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(users));
 
           // Ritorna il json
           res.status(200).json(users);
@@ -83,14 +82,14 @@ router.get("/:id", async (req, res) => {
       return;
     } else {
       const searchTerm = `USERBY${id}`;
-      client.get(searchTerm, async (err, data) => {
+      redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
         if (data) {
           res.status(200).send(JSON.parse(data));
         } else {
           const user = await getDataById(id);
-          client.setex(searchTerm, redisTimeCache, JSON.stringify(user));
+          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(user));
           res.status(200).json(user);
         }
       });
@@ -103,6 +102,22 @@ router.get("/:id", async (req, res) => {
 router.post("/authenticate", async (req, res) => {
   try {
     const user = res.locals.auth;
+    const currentDate = new Date();
+    currentDate.setHours(currentDate.getHours()+1);
+
+    const query = {
+      user: mongoose.Types.ObjectId(user._id),
+      dataRifInizio: { $lte: currentDate },
+      dataRifFine: { $gte: currentDate },
+      turnoInizio: { $lte: currentDate.getHours() },
+      turnoFine: { $gte: currentDate.getHours() },
+    };
+    const turno = await Turnimensili.findOne(query);
+
+    if (turno == null) {
+      res.status(401);
+      res.json({ Error: 'Not Authorized' });
+    }
 
     const presenzeFind = await Dipendenti.aggregate([
       {
@@ -126,14 +141,8 @@ router.post("/authenticate", async (req, res) => {
     ]);
 
     if (presenzeFind.length > 0) {
-      const turno = await Turnimensili.findOne({
-        user: mongoose.Types.ObjectId(user._id),
-        dataRifInizio: { $lte: new Date() },
-        dataRifFine: { $gte: new Date() },
-      });
-
       if (turno != null) {
-        const dataRif = new Date();
+        const dataRif = currentDate;
         const dataRifNowInizio = new Date(
           Date.UTC(
             dataRif.getFullYear(),
@@ -156,35 +165,62 @@ router.post("/authenticate", async (req, res) => {
           )
         );
 
-        //dataRif2.setTimezone('Europe/Rome');
+        turno.dataRifInizio.setHours(turno.turnoInizio+1);
+        turno.dataRifFine.setHours(turno.turnoFine+1);
+        dataRifNowInizio.setHours(turno.turnoInizio+1);
+        dataRifNowFine.setHours(turno.turnoFine+1);
 
-        turno.dataRifInizio.setHours(turno.turnoInizio);
-        turno.dataRifFine.setHours(turno.turnoFine);
-        dataRifNowInizio.setHours(turno.turnoInizio);
-        dataRifNowFine.setHours(turno.turnoFine);
+        const resultPresenze = presenzeFind.map((x) => {
+          // return x.presenze.map( x=> {
+          //   return {
 
-        const resultPrenseze = presenzeFind.map((x) => {
+          //     res: 
+          //       x.data >= turno.dataRifInizio &&
+          //       x.data <= turno.dataRifFine &&
+          //       x.data >= dataRifNowInizio &&
+          //       x.data <= dataRifNowFine,
+
+          //     data: x.data,
+          //     dateNow: currentDate,
+
+          //     dataRifInizioRES: x.data >= turno.dataRifInizio,
+          //     dataRifFineRES: x.data <= turno.dataRifFine,
+          //     dataRifNowInizioRES: x.data >= dataRifNowInizio,
+          //     dataRifNowFineRES: x.data <= dataRifNowFine,
+
+
+          //     dataRifInizio: turno.dataRifInizio,
+          //     dataRifFine: turno.dataRifFine ,
+          //     dataRifNowInizio,
+          //     dataRifNowFine
+          //   }
+          // }
+            
+          // );
+
           return {
             presenze: x.presenze.find(
               (a) =>
-                //a.data,
-                a.data >= turno.dataRifInizio &&
-                a.data <= turno.dataRifFine &&
-                a.data >= dataRifNowInizio &&
-                a.data <= dataRifNowFine
-            ),
-
-            debug: x.presenze.map((a) => a.data),
-          };
-        });
+              //a.data,
+              a.data >= turno.dataRifInizio &&
+              a.data <= turno.dataRifFine &&
+              a.data >= dataRifNowInizio &&
+              a.data <= dataRifNowFine
+              ),
+              
+              debug: x.presenze.map((a) => a.data),
+            };
+          });
 
         const adding =
-          resultPrenseze.length == 0 || resultPrenseze[0].presenze == undefined;
+          resultPresenze.length == 0 || 
+          resultPresenze[0].presenze == undefined;
+        
         if (adding) {
-          const presenzeAdding = new Presenze({
-            data: new Date(),
-            user: mongoose.Types.ObjectId(user._id),
-          });
+            const presenzeAdding = new Presenze({
+              data: currentDate,
+              user: mongoose.Types.ObjectId(user._id),
+            });
 
           // Aggiungere un record sulla collection presenze
           const result = await presenzeAdding.save();
@@ -198,7 +234,7 @@ router.post("/authenticate", async (req, res) => {
 
     if (redisClient != undefined && !redisDisabled) {
       const searchTerm = `PRESENZEALL`;
-      client.del(searchTerm);
+      redisClient.del(searchTerm);
     }
 
     res.status(200);
@@ -220,7 +256,7 @@ router.post("/logout", async (req, res) => {
 
     if (redisClient != undefined && !redisDisabled) {
       const searchTerm = `PRESENZEALL`;
-      client.del(searchTerm);
+      redisClient.del(searchTerm);
     }
 
     res.status(200);

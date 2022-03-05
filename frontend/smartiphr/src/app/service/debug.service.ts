@@ -21,6 +21,8 @@ export class DebugService {
 
     object.subscribe((v) => {
       this.variables[key].value = v;
+      console.log("v", v);
+
     });
   }
 

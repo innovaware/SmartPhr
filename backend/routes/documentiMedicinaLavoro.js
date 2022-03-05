@@ -12,7 +12,6 @@ router.get("/dipendente/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const query = { dipendente: id };
-    console.log("Query", JSON.stringify(query));
 
     const getData = () => {
       return DocMedicinaLavoro.find(query);
@@ -29,7 +28,6 @@ router.get("/dipendente/:id", async (req, res) => {
       if (err) throw err;
 
       if (data) {
-        console.log(`${searchTerm}: ${data}`);
         res.status(200).send(JSON.parse(data));
       } else {
         const documenti = await getData();
@@ -149,10 +147,7 @@ router.delete("/documento/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("id:" + id);
-
     const item = await DocMedicinaLavoro.findById(id);
-    console.log("item:" + item);
     const idDipendente = item.dipendente;
     const doc = await DocMedicinaLavoro.remove({ _id: id });
 

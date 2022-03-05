@@ -36,7 +36,7 @@ export class AreaMedicaComponent implements OnInit {
     console.log("Init Area Medica");
 
     this.customButtons.push({
-      images: "../../../assets/medico.png",
+      images: "../../../assets/medico.svg",
       label: "",
       tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
@@ -77,8 +77,8 @@ export class AreaMedicaComponent implements OnInit {
       this.eventsSubject.next(this.pazienti);
     });*/
 
-    
+
   }
 
-  
+
 }
