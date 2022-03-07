@@ -18,21 +18,16 @@ router.get("/", async (req, res) => {
     //redisDisabled = false;
     const showOnlyCancellati = req.query.show == "deleted";
     const showAll = req.query.show == "all";
-    const pageNumber = parseInt(req.query.pageNumber);
-    const pageSize = parseInt(req.query.pageSize);
-    const sortOrder = req.query.sortOrder;
 
-    const skip = pageNumber > 0 ? (pageNumber - 1) * pageSize : 0;
-    const limit = pageSize;
-
-    const getData = (query) => {
-      return Pazienti.find(query);
-    };
-    
     const query = {
       $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
     };
 
+    const getData = (query) => {
+      return Pazienti.find(query);
+    };
+
+  
     if (showOnlyCancellati || showAll) {
       console.log("Show all or deleted");
       let query = {};
@@ -42,12 +37,9 @@ router.get("/", async (req, res) => {
 
       const pazienti = await getData(query);
       res.status(200).json(pazienti);
-
     } else {
       if (redisClient == undefined || redisDisabled) {
-
-        console.info(`skip:${skip} limit: ${limit}`);
-        const pazienti = await getData(query).skip(skip).limit(limit);
+        const pazienti = await getData(query)
 
         if (pazienti.length > 0) res.status(200).json(pazienti);
         else res.status(404).json({ error: "No patients found" });
@@ -55,20 +47,23 @@ router.get("/", async (req, res) => {
         return;
       }
 
+      const searchTerm = `PAZIENTI`;
       redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
         if (data) {
           res.status(200).send(JSON.parse(data));
         } else {
-
-          console.info(`skip:${skip} limit: ${limit}`);
-          const pazienti = getData(query).skip(skip).limit(limit);
+          const pazienti = await getData(query);
 
           if (pazienti.length > 0) res.status(200).json(pazienti);
           else res.status(404).json({ error: "No patients found" });
 
-          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
+          redisClient.setex(
+            searchTerm,
+            redisTimeCache,
+            JSON.stringify(pazienti)
+          );
         }
       });
     }
@@ -320,7 +315,11 @@ router.get("/parametriVitali/:id/:dateRif", async (req, res) => {
       } else {
         const parametri = await getData();
 
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(parametri));
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(parametri)
+        );
         if (parametri != null) res.status(200).json(parametri);
         else res.status(404).json({ error: "No parametriVitali found" });
       }

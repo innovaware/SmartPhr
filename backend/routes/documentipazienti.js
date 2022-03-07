@@ -142,8 +142,6 @@ router.delete("/documento/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("id:" + id);
-
     const item = await DocPaziente.findById(id);
     console.log("item:" + item);
     const idPaziente = item.paziente;

@@ -5,8 +5,6 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/dipendente/:id/:type", async (req, res) => {
   try {
-    console.log("id: ", req.params.id);
-    console.log("types: ", req.params.type);
     let id = req.params.id;
     let type = req.params.type;
 
@@ -139,8 +137,6 @@ router.put("/:id", async (req, res) => {
 router.delete("/documento/:id", async (req, res) => {
   try {
     const { id } = req.params;
-
-    console.log("id:" + id);
 
     const item = await DocDipendente.findById(id);
     console.log("item:" + item);

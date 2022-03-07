@@ -121,7 +121,7 @@ const InitApiService = () => {
 }
 
 const InitRedisService = () => {
-  if (redisDisabled) {
+  if (!redisDisabled) {
     try {
       console.log("Wait to connect Redis...");
       clientRedis = redis.createClient(redisPort, redisHost);
@@ -527,8 +527,11 @@ function getUser(username, password) {
   });
 }
 
+//TODO Da sistemare
 function checkAuthRole(user) {
-  if (user != undefined) return user.role == "Admin";
+  if (user != undefined) 
+    return true;
+  //return user.role == "Admin";
 
   return false;
 }

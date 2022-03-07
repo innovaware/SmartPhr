@@ -175,6 +175,7 @@ import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-person
 import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/ferie-altro-personale.component';
 import { DebugComponent } from './component/debug/debug.component';
 import { PrettyprintPipe } from './pipe/prettyprint.pipe';
+import { AuthorizationComponent } from './pages/authorization/authorization.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -302,6 +303,7 @@ import { PrettyprintPipe } from './pipe/prettyprint.pipe';
     FerieAltroPersonaleComponent,
     DebugComponent,
     PrettyprintPipe,
+    AuthorizationComponent,
   ],
   imports: [
     BrowserModule,

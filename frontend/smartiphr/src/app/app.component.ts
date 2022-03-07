@@ -1,10 +1,8 @@
-import { HttpClient } from "@angular/common/http";
 import { Component } from "@angular/core";
 import { Router } from "@angular/router";
-import { Paziente } from "./models/paziente";
 import { User } from './models/user';
 import { AuthenticationService } from "./service/authentication.service";
-import { PazienteService } from "./service/paziente.service";
+import { DebugService } from "./service/debug.service";
 
 @Component({
   selector: "app-root",
@@ -21,10 +19,11 @@ export class AppComponent {
   constructor(
     private authenticationService: AuthenticationService,
     private route: Router,
+    private debugService: DebugService,
   ) {
     this.authenticationService.isAuthenticateHandler.subscribe(
       (user: User) => {
-        this.isAuthenticated = user !== undefined;
+        this.isAuthenticated = user !== undefined && user !== null;
       },
       err => console.error(err)
     );
