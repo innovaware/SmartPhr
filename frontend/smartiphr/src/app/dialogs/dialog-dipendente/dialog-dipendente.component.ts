@@ -3,6 +3,7 @@ import {
   MatDialog,
   MatDialogRef,
   MatPaginator,
+  MatTabChangeEvent,
   MatTableDataSource,
   MAT_DIALOG_DATA,
 } from "@angular/material";
@@ -23,6 +24,14 @@ import { DialogCaricadocumentoComponent } from "../dialog-caricadocumento/dialog
 import { MessagesService } from "src/app/service/messages.service";
 import { UsersService } from "src/app/service/users.service";
 import { User } from "src/app/models/user";
+import { Ferie } from "src/app/models/ferie";
+import { FerieService } from "src/app/service/ferie.service";
+import { PermessiService } from "src/app/service/permessi.service";
+import { Permessi } from "src/app/models/permessi";
+import { CambiturniService } from "src/app/service/cambiturni.service";
+import { Cambiturno } from "src/app/models/cambiturni";
+import { Presenze } from "src/app/models/presenze";
+import { PresenzeService } from "src/app/service/presenze.service";
 
 @Component({
   selector: "app-dialog-dipendente",
@@ -31,6 +40,14 @@ import { User } from "src/app/models/user";
 })
 export class DialogDipendenteComponent implements OnInit {
   public dipendente: Dipendenti;
+  public fatture: Fatture[];
+  public noteCredito: NotaCredito[];
+  public bonifici: Bonifico[];
+  public ferie: Ferie[];
+  public permessi: Permessi[];
+  public cambioTurni: Cambiturno[];
+  public presenze: Presenze[];
+
   public newItem: boolean;
   public document: any[] = [];
   public uploading: boolean;
@@ -43,6 +60,7 @@ export class DialogDipendenteComponent implements OnInit {
   public nuovaFattura: Fatture;
   public nuovaNotacredito: NotaCredito;
   public nuovaBonifico: Bonifico;
+
 
   DisplayedRichiesteColumns: string[] = ["date", "action"];
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
@@ -73,9 +91,6 @@ export class DialogDipendenteComponent implements OnInit {
   @ViewChild("paginatorBonifici", { static: false })
   bonificiPaginator: MatPaginator;
 
-  public fatture: Fatture[];
-  public noteCredito: NotaCredito[];
-  public bonifici: Bonifico[];
 
   @ViewChild("paginatorDocIdent", { static: false })
   docIdentitaPaginator: MatPaginator;
@@ -140,6 +155,26 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingCertificatoMalattia: boolean;
   public addingCertificatoMalattia: boolean;
 
+
+  tabLabels: {index: number, init: any, key: string, label: string}[] =  [
+    {index: 0,  init: () => {}, key: 'DatiGenerali', label: "Dati anagrafici generale" },
+    {index: 1,  init: () => this.getDocIdentita(), key: 'DocumentiIdentità', label: "Documenti d'identità" },
+    {index: 2,  init: () => this.getDocMedicinaLav(), key: 'MedicinaLavoro', label: 'Medicina del lavoro' },
+    {index: 3,  init: () => this.getContratti(), key: 'ContrattiLavoro', label: 'Contratti di lavoro' },
+    {index: 4,  init: () => this.getDocsPrivacy(), key: 'Privacy', label: 'Privacy' },
+    {index: 5,  init: () => this.getDiplomi(), key: 'DiplomiAttestati', label: 'Diplomi e attestati' },
+    {index: 6,  init: () => this.getAttestatiECM(), key: 'AttestatiECM', label: 'Attestati ECM' },
+    {index: 7,  init: () => this.getCedolini(), key: 'CedoliniCU', label: 'Cedolini e CU' },
+    {index: 8,  init: () => this.getCertificatoMalattia(), key: 'CertificatiMalattia', label: 'Certificati malattia' },
+    {index: 9,  init: () => {}, key: 'RegolamentoInterno', label: 'Regolamento interno' },
+    {index: 10, init: () => this.getRichiesteMaterialiPresidi(), key: 'RichiesteMaterialePresidi', label: 'Richieste materiale o presidi' },
+    {index: 11, init: () => this.getFerie(), key: 'Ferie', label: 'Ferie' },
+    {index: 12, init: () => this.getPermessi(), key: 'Permessi', label: 'Permessi' },
+    {index: 13, init: () => this.getCambioTurni(), key: 'CambiTurno', label: 'Cambi turno' },
+    {index: 14, init: () => this.getPresenze(), key: 'Presenze', label: 'Presenze' },
+    {index: 15, init: () => {}, key: 'TurniMensili', label: 'Turni mensili' },
+  ];
+
   constructor(
     public messageService: MessagesService,
     public uploadService: UploadService,
@@ -155,7 +190,12 @@ export class DialogDipendenteComponent implements OnInit {
     public bonficoService: BonificoService,*/
     public dipendenteService: DipendentiService,
     public usersService: UsersService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private ferieService: FerieService,
+    private permessiService: PermessiService,
+    private cambiturniService: CambiturniService,
+    private presenzeService: PresenzeService,
+
   ) {
     this.uploading = false;
     this.dipendente = this.data.dipendente;
@@ -166,6 +206,13 @@ export class DialogDipendenteComponent implements OnInit {
 
     //this.dipendente = JSON.parse(JSON.stringify(this.data.dipendente));
     console.log("Dialog dipendente generale", this.data);
+  }
+
+  tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
+    const item = this.tabLabels.find(i=> i.index === tabChangeEvent.index);
+    if (item !== undefined) {
+      item.init();
+    }
   }
 
   async save(saveAndClose: boolean) {
@@ -209,7 +256,7 @@ export class DialogDipendenteComponent implements OnInit {
      /*     var newUser : User = { 
             role:this.data.dipendente.mansione,
             active : false
-         }; 
+         };
 
          console.log("Save newUser: " + JSON.stringify(newUser));
               this.usersService
@@ -261,14 +308,15 @@ export class DialogDipendenteComponent implements OnInit {
 
   ngOnInit() {
     if (this.dipendente._id != undefined) {
-      this.getDocIdentita();
-      this.getContratti();
-      this.getDocsPrivacy();
-      this.getDiplomi();
-      this.getAttestatiECM();
-      this.getCedolini();
-      this.getDocMedicinaLav();
-      this.getCertificatoMalattia();
+      //this.getDocIdentita();
+      //this.getDocMedicinaLav();
+      //this.getContratti();
+      //this.getDocsPrivacy();
+      //this.getDiplomi();
+      //this.getAttestatiECM();
+      //this.getCedolini();
+      //this.getCertificatoMalattia();
+
     }
   }
 
@@ -395,11 +443,13 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async getDocIdentita() {
-    console.log(`get DocIdentita dipendente: ${this.dipendente._id}`);
+    // console.log(`get DocIdentita dipendente: ${this.dipendente._id}`);
     this.docService
       .get(this.dipendente, "DocumentoIdentita")
       .then((f: DocumentoDipendente[]) => {
         this.docsIdentita = f;
+
+        console.log(`${this.dipendente._id} - Documenti trovati: ${this.docsIdentita.length}`);
 
         this.docIdentitaDataSource = new MatTableDataSource<DocumentoDipendente>(
           this.docsIdentita
@@ -413,6 +463,40 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   // FINE DOCUMENTI IDENTITA
+
+  // RICHIESTE MATERIALI PRESIDI
+  async getRichiesteMaterialiPresidi() {
+
+  }
+
+  async getFerie() {
+    this.ferieService.getFerieByDipendente(this.dipendente._id).subscribe(
+      (arr: Ferie[]) => this.ferie = arr
+    )
+  }
+
+  async getPermessi() {
+    this.permessiService.getPermessiByDipendente(this.dipendente._id).subscribe(
+      (arr: Permessi[]) => this.permessi = arr
+    )
+  }
+
+  async getCambioTurni() {
+    this.cambiturniService.getCambiturnoByDipendente(this.dipendente._id).subscribe(
+      (arr: Cambiturno[]) => this.cambioTurni = arr
+    )
+  }
+
+  async getPresenze() {
+    this.presenzeService.getPresenzeByDipendente(this.dipendente._id).subscribe(
+      (arr: Presenze[]) => this.presenze = arr
+    )
+  }
+
+
+
+  // FINE RICHIESTE MATERIALI PRESIDI
+
 
   // CERTIFICATI MALATTIA
   async addCertificatoMalattia() {

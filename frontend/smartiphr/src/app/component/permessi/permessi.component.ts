@@ -1,29 +1,24 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { Output, EventEmitter } from "@angular/core";
-import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
-import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Permessi } from "src/app/models/permessi";
 import { DipendentiService } from "src/app/service/dipendenti.service";
-import { MessagesService } from 'src/app/service/messages.service';
-import {PermessiService } from "src/app/service/permessi.service";
-
+import { MessagesService } from "src/app/service/messages.service";
+import { PermessiService } from "src/app/service/permessi.service";
 
 @Component({
-  selector: 'app-permessi',
-  templateUrl: './permessi.component.html',
-  styleUrls: ['./permessi.component.css']
+  selector: "app-permessi",
+  templateUrl: "./permessi.component.html",
+  styleUrls: ["./permessi.component.css"],
 })
-export class PermessiComponent implements OnInit {
+export class PermessiComponent implements OnInit, OnChanges {
+  @Input() data: Permessi[];
+  @Input() dipendente: Dipendenti;
 
-
-  @Input() data: Dipendenti;
   @Input() disable: boolean;
   @Input() isExternal: boolean;
-
-
 
   @Output() showItemEmiter = new EventEmitter<{
     permessi: Permessi;
@@ -43,8 +38,6 @@ export class PermessiComponent implements OnInit {
     "action",
   ];
 
-
-
   displayedColumnsExternal: string[] = [
     "cognome",
     "nome",
@@ -52,10 +45,8 @@ export class PermessiComponent implements OnInit {
     "dataFine",
     "dataRichiesta",
     "cf",
-    "action"
+    "action",
   ];
-
-
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   public nuovoPermesso: Permessi;
@@ -64,77 +55,19 @@ export class PermessiComponent implements OnInit {
   public uploadingPermesso: boolean;
   public addingPermesso: boolean;
 
-
-
-
- 
-
-
-  dipendente: Dipendenti = {} as Dipendenti;
-
-
   constructor(
     public messageService: MessagesService,
-    public dialog: MatDialog,
     public permessiService: PermessiService,
     public dipendenteService: DipendentiService
   ) {}
 
-
-loadTable(){
-  if(this.isExternal != true){
-    if(this.data){
-
-      this.permessiService.getPermessiByDipendente(this.data._id).then((result) => {
-        this.permessi = result;
-
-        this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
-        this.dataSource.paginator = this.paginator;
-      });
-    }
-    else{
-    this.permessiService.getPermessi().then((result) => {
-      this.permessi = result;
-
-      this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
-      this.dataSource.paginator = this.paginator;
-    });
-    }
+  ngOnChanges(changes) {
+    this.dataSource = new MatTableDataSource<Permessi>(this.data);
+    this.dataSource.paginator = this.paginator;
   }
-  else{
-    this.loadUser();
+
+  ngOnInit() {
   }
-}
-
-
-loadUser(){
-  this.dipendenteService
-  .getById('620027d56c8df442a73341fa')
-  .then((x) => {
-        this.dipendente = x;
-        this.permessiService.getPermessiByDipendente(this.dipendente._id).then((result) => {
-          this.permessi = result;
-
-          this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
-          this.dataSource.paginator = this.paginator;
-        });
-  })
-  .catch((err) => {
-    this.messageService.showMessageError(
-      "Errore Caricamento dipendente (" + err["status"] + ")"
-    );
-  });
-}
-
-
-
-ngOnInit() {
-  this.loadTable();
-}
-
-  ngAfterViewInit() {}
-
-
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -146,64 +79,50 @@ ngOnInit() {
   }
 
   async updatePermesso(permesso: Permessi) {
-
     this.permessiService
-    .updatePermesso(permesso)
-    .then((result: Permessi) => {
-      const index = this.permessi.indexOf(permesso);
-      permesso.closed = true;
-      this.permessi[index] = permesso;
+      .updatePermesso(permesso)
+      .then((result: Permessi) => {
+        const index = this.permessi.indexOf(permesso);
+        permesso.closed = true;
+        this.permessi[index] = permesso;
 
-      this.dataSource.data = this.permessi;
-    })
-    .catch((err) => {
-      this.messageService.showMessageError("Errore modifica stato Permessi");
-      console.error(err);
-    });
+        this.dataSource.data = this.permessi;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore modifica stato Permessi");
+        console.error(err);
+      });
   }
 
-
-  sendResp(row){
+  sendResp(row) {
     let fId = row._id;
     let status = row.accettata;
-    let message = 'Sei sicuro di voler respingere questa richiesta?';
-    if(status)
-      message = 'Sei sicuro di voler accettare questa richiesta?';
-
+    let message = "Sei sicuro di voler respingere questa richiesta?";
+    if (status) message = "Sei sicuro di voler accettare questa richiesta?";
 
     let result = window.confirm(message);
-    if(result){
-        this.updatePermesso(row);
+    if (result) {
+      this.updatePermesso(row);
     }
-
   }
 
+  // PERMESSI EXTERNAL
+  async addPermesso() {
+    let dataCurrent = new Date();
 
+    this.addingPermesso = true;
+    this.nuovoPermesso = {
+      dataInizio: undefined,
+      dataFine: undefined,
+      user: this.dipendente._id,
+      dataRichiesta: dataCurrent,
+    };
+  }
 
-      // PERMESSI EXTERNAL
-      async addPermesso() {
+  async delete(permesso: Permessi) {
+    console.log("Cancella permesso: ", permesso);
 
-        let dataCurrent=new Date();
-  
-  
-        this.addingPermesso = true;
-        this.nuovoPermesso = {
-          dataInizio: undefined,
-          dataFine: undefined,
-          nome: this.dipendente.nome,
-          cognome: this.dipendente.cognome,
-          cf: this.dipendente.cf,
-          user: this.dipendente._id,
-          dataRichiesta:dataCurrent
-        };
-      }
-    
-  
-    
-      async delete(permesso: Permessi) {
-        console.log("Cancella permesso: ", permesso);
-    
-        /*this.ferieService
+    /*this.ferieService
           .remove(doc)
           .then((x) => {
             console.log("Privacy cancellata");
@@ -212,7 +131,7 @@ ngOnInit() {
             if (index > -1) {
               this.docsprivacy.splice(index, 1);
             }
-    
+
             console.log("Privacy cancellata : ", this.docsprivacy);
             this.docsprivacyDataSource.data = this.docsprivacy;
           })
@@ -220,28 +139,24 @@ ngOnInit() {
             this.messageService.showMessageError("Errore nella cancellazione Privacy");
             console.error(err);
           });*/
-      }
-    
-      async savePermesso(permesso: Permessi) {
-        this.uploadingPermesso = true;
-    
-        console.log("Invio Richiesta permesso: ", permesso);
-        this.permessiService
-            .insertPermesso(permesso)
-            .then((result: Permessi) => {
-            console.log("Insert permesso: ", result);
-            this.permessi.push(result);
-            this.dataSource.data = this.permessi;
-            this.addingPermesso = false;
-            this.uploadingPermesso = false;
-    
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore Inserimento permesso");
-            console.error(err);
-          });
-      }
-    
+  }
 
+  async savePermesso(permesso: Permessi) {
+    this.uploadingPermesso = true;
 
+    console.log("Invio Richiesta permesso: ", permesso);
+    this.permessiService
+      .insertPermesso(permesso)
+      .then((result: Permessi) => {
+        console.log("Insert permesso: ", result);
+        this.permessi.push(result);
+        this.dataSource.data = this.permessi;
+        this.addingPermesso = false;
+        this.uploadingPermesso = false;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento permesso");
+        console.error(err);
+      });
+  }
 }

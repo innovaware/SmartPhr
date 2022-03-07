@@ -4,9 +4,7 @@ export class Cambiturno {
   }
 
   _id?: string;
-  nome?: string;
-  cognome?: string;
-  cf?: string;
+  user: string;
   dataInizioVT?: Date;
   dataFineVT?: Date;
   dataInizioNT?: Date;

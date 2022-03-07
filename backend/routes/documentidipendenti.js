@@ -19,12 +19,12 @@ router.get("/dipendente/:id/:type", async (req, res) => {
     };
 
     if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
+      const documenti = await getData();
+      res.status(200).json(documenti);
       return;
     }
 
-    const searchTerm = `documentiDipendente${id}`;
+    const searchTerm = `documentiDipendente${id}${type}`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 

@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Ferie } from '../models/ferie';
 
@@ -17,8 +18,8 @@ export class FerieService {
   }
 
 
-  async getFerieByDipendente(id): Promise<Ferie[]> {
-    return this.http.get<Ferie[]>(this.api + "/api/ferie/dipendente/" + id).toPromise();
+  getFerieByDipendente(id): Observable<Ferie[]> {
+    return this.http.get<Ferie[]>(this.api + "/api/ferie/dipendente/" + id);
   }
 
   async insertFerie(ferie: Ferie) {
