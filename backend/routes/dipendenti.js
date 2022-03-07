@@ -159,7 +159,7 @@ router.post("/", async (req, res) => {
     const dipendente = new Dipendenti({
       cognome: req.body.cognome,
       nome: req.body.nome,
-      codiceFiscale: req.body.codiceFiscale,
+      cf: req.body.cf,
       dataNascita: req.body.dataNascita,
       comuneNascita: req.body.comuneNascita,
       provinciaNascita: req.body.provinciaNascita,
@@ -172,7 +172,7 @@ router.post("/", async (req, res) => {
       tipoContratto: req.body.tipoContratto,
       telefono: req.body.telefono,
       email: req.body.email,
-      user: userResult._id,
+      idUser: userResult._id,
       accettatoRegolamento: req.accettatoRegolamento
     });
 
@@ -215,6 +215,7 @@ router.put("/:id", async (req, res) => {
     const { id } = req.params;
 
     console.log('accettatoRegolamento: ' + req.body.accettatoRegolamento);
+    console.log('idUser: ' + req.body.idUser);
     // Aggiorna il documento su mongodb
     const dipendenti = await Dipendenti.updateOne(
       { _id: id },
@@ -222,7 +223,7 @@ router.put("/:id", async (req, res) => {
         $set: {
           cognome: req.body.cognome,
           nome: req.body.nome,
-          codiceFiscale: req.body.codiceFiscale,
+          cf: req.body.codiceFiscale,
           dataNascita: req.body.dataNascita,
           comuneNascita: req.body.comuneNascita,
           provinciaNascita: req.body.provinciaNascita,
@@ -236,6 +237,16 @@ router.put("/:id", async (req, res) => {
           telefono: req.body.telefono,
           email: req.body.email,
           accettatoRegolamento: req.body.accettatoRegolamento
+        },
+      }
+    );
+
+
+    const userUpdated = await User.updateOne(
+      { _id: req.body.idUser },
+      {
+        $set: {
+          role: req.body.mansione
         },
       }
     );

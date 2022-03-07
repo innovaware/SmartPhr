@@ -242,7 +242,7 @@ router.post("/", async (req, res) => {
       username: req.body.username,
       password: req.body.password,
       active: false,
-      role: "",
+      role: req.body.mansione,
     });
     
     // Salva i dati sul mongodb

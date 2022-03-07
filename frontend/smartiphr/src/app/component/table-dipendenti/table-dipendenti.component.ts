@@ -159,7 +159,7 @@ ngOnDestroy() {
 
              //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
 
-          var newUser : User = { 
+         /* var newUser : User = { 
             role:result.mansione,
             active : false
          }; 
@@ -174,7 +174,7 @@ ngOnDestroy() {
                 this.messageService.showMessageError(
                   "Errore Inserimento dipendente (" + err["status"] + ")"
                 );
-              });
+              });*/
 
               
             let data = this.dataSource.data;

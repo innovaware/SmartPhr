@@ -206,7 +206,7 @@ export class DialogDipendenteComponent implements OnInit {
             .then((x) => {
           //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
 
-          var newUser : User = { 
+     /*     var newUser : User = { 
             role:this.data.dipendente.mansione,
             active : false
          }; 
@@ -223,10 +223,10 @@ export class DialogDipendenteComponent implements OnInit {
                 );
                 this.uploading = false;
               });
+*/
 
 
-
-              console.log("Save dipendente: ", x);
+              console.log("Insert dipendente: ", x);
               this.data.dipendente = x;
               this.dipendente = x;
               this.uploading = false;

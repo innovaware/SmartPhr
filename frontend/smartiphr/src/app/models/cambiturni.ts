@@ -12,6 +12,7 @@ export class Cambiturno {
   dataInizioNT?: Date;
   dataFineNT?: Date;
   motivazione?: string;
+  user?: string;
   dataRichiesta?: Date;
   accettata?: boolean;
   closed?: boolean;

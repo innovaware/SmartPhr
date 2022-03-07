@@ -2,6 +2,8 @@ import { Component, Input, OnInit } from '@angular/core';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { Output, EventEmitter } from '@angular/core';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
+import { Mansione } from 'src/app/models/mansione';
+import { MansioniService } from 'src/app/service/mansioni.service';
 
 @Component({
   selector: 'app-dipendente-generale',
@@ -15,10 +17,15 @@ export class DipendenteGeneraleComponent implements OnInit {
   @Output() dataChange = new EventEmitter<Dipendenti>();
   @Output() saveEmiter = new EventEmitter<Dipendenti>();
 
-  constructor() { }
+  mansioni: Mansione[] = [];
+
+  constructor( public mansioniService: MansioniService,) { }
 
   ngOnInit() {
     console.log("Cartella generale dipendente: ", this.data);
+    this.mansioniService.get().then((result) => {
+      this.mansioni = result;
+    });
   }
 
   async save() {

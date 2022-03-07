@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const DipendentiSchema = mongoose.Schema({
   cognome: String,
   nome: String,
-  codiceFiscale: String,
+  cf: String,
   dataNascita: Date,
   comuneNascita: String,
   provinciaNascita: String,

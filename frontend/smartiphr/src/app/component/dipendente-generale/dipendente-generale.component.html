@@ -130,7 +130,8 @@
           <td>
             <select matNativeControl  [(ngModel)]="data.mansione">
               <option selected="" value="">Seleziona ...</option>
-              <option value="LR">Legale rappresentante </option>
+              <option *ngFor="let option of mansioni" [value]="option._id" >{{option.descrizione}}</option>
+              <!--<option value="LR">Legale rappresentante </option>
               <option value="AA">Addetta Accoglienza </option>
               <option value="AU">Amministratore Unico </option>
               <option value="DA">Direttore Amministrativo</option>
@@ -157,7 +158,7 @@
               <option value="EDU">Educatore   </option>
               <option value="ASS">Assistente Sociale   </option>
               <option value="PSI">Psicologo   </option>
-              <option value="OSS">Operatore Socio Sanitario  </option>
+              <option value="OSS">Operatore Socio Sanitario  </option>-->
 
           </select>
           </td>

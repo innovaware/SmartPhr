@@ -54,25 +54,25 @@
             <!-- Position Column -->
             <ng-container matColumnDef="dataInizioVT">
               <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy'}} </td>
+              <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy H:mm'}} </td>
             </ng-container>
 
             <!-- Name Column -->
             <ng-container matColumnDef="dataFineVT">
               <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy' }} </td>
+              <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy H:mm' }} </td>
             </ng-container>
 
              <!-- Position Column -->
              <ng-container matColumnDef="dataInizioNT">
                 <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
-                <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy'}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy H:mm'}} </td>
               </ng-container>
 
               <!-- Name Column -->
               <ng-container matColumnDef="dataFineNT">
                 <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
-                <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy' }} </td>
+                <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy H:mm' }} </td>
               </ng-container>
 
             <!-- Weight Column -->
@@ -116,39 +116,94 @@
     <div *ngIf="isExternal">
       <br>
       <div class="notPresent" style="margin-bottom: 10px;">
-        <!--<div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRichiestaFerie">-->
-         <button mat-button class="button-insert" >Aggiungi Richiesta cambio turno</button>
-         <!--<button mat-button class="button-insert" (click)="addRichiestaFerie()">Aggiungi Richiesta cambio turno</button>-->
+        <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCambiturno">
+        <button mat-button class="button-insert" (click)="addRichiestaCambiturno()">Aggiungi Richiesta cambio turno</button>
        </div>
-       <br><br>
     
     
        
-       <!--<div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-       *ngIf="addingRichiestaFerie && !uploadingRichiestaFerie">
-       <h5>Inserisci le date per effettuare la tua richiesta</h5>
-       <div class="row" style="width: 40%;">
+       <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+       *ngIf="addingCambiturno && !uploadingCambiturno">
+       <h4>Inserisci le date per effettuare la tua richiesta</h4>
+
+       <div class="row">
+        <h5>Inserisci date e orari del vecchio turno</h5>
+        <div class="col-6">
+
+        
           <mat-form-field appearance="fill">
             <mat-label>Data Inizio ferie</mat-label>
-            <input matInput [matDatepicker]="dataInizio" [(ngModel)]="nuovoRichiestaFerie.dataInizio">
-            <mat-datepicker-toggle matSuffix [for]="dataInizio"></mat-datepicker-toggle>
-            <mat-datepicker #dataInizio></mat-datepicker>
+            <input matInput [ngxMatDatetimePicker]="dataInizioVT" [(ngModel)]="nuovoCambio.dataInizioVT">
+            <mat-datepicker-toggle matSuffix [for]="dataInizioVT"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #dataInizioVT [showSpinners]="showSpinners" [showSeconds]="true"
+                    [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
+                    [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+                    [disableMinute]="disableMinute" [hideTime]="hideTime">
+        </ngx-mat-datetime-picker>
+
+
           </mat-form-field>
-    
-    
+        </div>
+        <div class="col-6">
           <mat-form-field appearance="fill">
             <mat-label>Data Fine ferie</mat-label>
-            <input matInput [matDatepicker]="dataFine" [(ngModel)]="nuovoRichiestaFerie.dataFine">
-            <mat-datepicker-toggle matSuffix [for]="dataFine"></mat-datepicker-toggle>
-            <mat-datepicker #dataFine></mat-datepicker>
+            <input matInput [ngxMatDatetimePicker]="dataFineVT" [(ngModel)]="nuovoCambio.dataFineVT">
+            <mat-datepicker-toggle matSuffix [for]="dataFineVT"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #dataFineVT [showSpinners]="showSpinners" [showSeconds]="true"
+            [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
+            [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+            [disableMinute]="disableMinute" [hideTime]="hideTime">
+</ngx-mat-datetime-picker>
           </mat-form-field>
-          <div class="col-2">
-            <button mat-button class="button-insert" (click)="saveRichiestaFerie(nuovoRichiestaFerie)">Salva</button>
-          </div>
+        </div>
+         
        </div>
+
+
+       <div class="row">
+        <h5>Inserisci date e orari del nuovo turno</h5>
+        <div class="col-6">
+
+        
+          <mat-form-field appearance="fill">
+            <mat-label>Data Inizio ferie</mat-label>
+            <input matInput [ngxMatDatetimePicker]="dataInizioNT" [(ngModel)]="nuovoCambio.dataInizioNT">
+            <mat-datepicker-toggle matSuffix [for]="dataInizioNT"></mat-datepicker-toggle>
+           
+            <ngx-mat-datetime-picker #dataInizioNT [showSpinners]="showSpinners" [showSeconds]="true"
+                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
+                [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+                [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+        <div class="col-6">
+          <mat-form-field appearance="fill">
+            <mat-label>Data Fine ferie</mat-label>
+            <input matInput [ngxMatDatetimePicker]="dataFineNT" [(ngModel)]="nuovoCambio.dataFineNT">
+            <mat-datepicker-toggle matSuffix [for]="dataFineNT"></mat-datepicker-toggle>
+            <ngx-mat-datetime-picker #dataFineNT [showSpinners]="showSpinners" [showSeconds]="true"
+                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
+                [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian" 
+                [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
+          </mat-form-field>
+        </div>
+         
+       </div>
+       <mat-label>Inserisci Motivazione</mat-label>
+       <br>
+       <mat-form-field class="example-full-width">
+        <textarea matInput matTextareaAutosize [(ngModel)]="nuovoCambio.motivazione" >
+        </textarea>
+      </mat-form-field>
+
        
+       <div class="col-2">
+        <button mat-button class="button-insert" (click)="saveCambiturno(nuovoCambio)">Salva</button>
+      </div>
        
-     </div>-->
+     </div>
     
     
  
@@ -191,25 +246,25 @@
       <!-- Position Column -->
       <ng-container matColumnDef="dataInizioVT">
         <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
-        <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy'}} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.dataInizioVT | date: 'dd/MM/yyyy  H:mm' }} </td>
       </ng-container>
 
       <!-- Name Column -->
       <ng-container matColumnDef="dataFineVT">
         <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
-        <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy' }} </td>
+        <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy  H:mm' }} </td>
       </ng-container>
 
        <!-- Position Column -->
        <ng-container matColumnDef="dataInizioNT">
           <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
-          <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy'}} </td>
+          <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy  H:mm'}} </td>
         </ng-container>
 
         <!-- Name Column -->
         <ng-container matColumnDef="dataFineNT">
           <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
-          <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy' }} </td>
+          <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy  H:mm' }} </td>
         </ng-container>
 
       <!-- Weight Column -->

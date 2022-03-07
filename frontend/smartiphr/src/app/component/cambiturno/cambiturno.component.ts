@@ -45,10 +45,13 @@ export class CambiturnoComponent implements OnInit {
 
 
 
-  dataSource: MatTableDataSource<Cambiturno>;
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  public nuovoCambio: Cambiturno;
+  dataSource: MatTableDataSource<Cambiturno>;
   public cambiturno: Cambiturno[];
+  public uploadingCambiturno: boolean;
+  public addingCambiturno: boolean;
 
 
   dipendente: Dipendenti = {} as Dipendenti;
@@ -67,6 +70,46 @@ export class CambiturnoComponent implements OnInit {
     });
 
 }
+
+
+
+  async addRichiestaCambiturno() {
+    let dataCurrent=new Date();
+    this.addingCambiturno = true;
+    this.nuovoCambio = {
+      dataInizioVT: undefined,
+      dataFineVT: undefined,
+      dataInizioNT:undefined,
+      dataFineNT:undefined,
+      nome: this.dipendente.nome,
+      cognome: this.dipendente.cognome,
+      cf: this.dipendente.cf,
+      dataRichiesta:dataCurrent,
+      user: this.dipendente._id
+    };
+  }
+
+
+  async saveCambiturno(cambiturno: Cambiturno) {
+    this.uploadingCambiturno = true;
+
+    console.log("Invio Richiesta Cambiturno: ", cambiturno);
+    this.cambiturniService
+        .insertCambioturno(cambiturno)
+        .then((result: Cambiturno) => {
+        console.log("Insert permesso: ", result);
+        this.cambiturno.push(result);
+        this.dataSource.data = this.cambiturno;
+        this.addingCambiturno = false;
+        this.uploadingCambiturno = false;
+
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento Cambiturno");
+        console.error(err);
+      });
+  }
+
 
 loadTable(){
   if(this.isExternal != true){
