@@ -42,12 +42,6 @@ export class CambiturnoComponent implements OnInit, OnChanges {
     "action",
   ];
 
-<<<<<<< HEAD
-
-
-=======
-  dataSource: MatTableDataSource<Cambiturno>;
->>>>>>> 3e06403 (Ottimiz. e fix dipendente page)
 
   @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   public nuovoCambio: Cambiturno;
