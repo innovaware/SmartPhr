@@ -12,7 +12,7 @@ const DipendentiSchema = mongoose.Schema({
   comuneResidenza: String,
   provinciaResidenza: String,
   titoloStudio: String,
-  mansione: String,
+  mansione: mongoose.Types.ObjectId,
   tipoContratto: String,
   telefono: String,
   email: String,

@@ -34,6 +34,7 @@ import { MatPaginatorModule } from "@angular/material/paginator";
 import {
   MatInputModule,
   MatNativeDateModule,
+  MatSelectModule,
   MAT_DATE_LOCALE,
 } from "@angular/material";
 import { MatFormFieldModule } from "@angular/material/form-field";
@@ -333,6 +334,7 @@ import { AuthorizationComponent } from './pages/authorization/authorization.comp
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ChartsModule,
+    MatSelectModule
   ],
   providers: [
     AuthGuardService,
