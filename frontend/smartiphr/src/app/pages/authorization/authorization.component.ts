@@ -31,7 +31,7 @@ export class AuthorizationComponent implements OnInit {
         this.menu = menu.sort((a:Menu, b:Menu) => a.order - b.order);
 
         this.menu.forEach(x => {
-          this.menuXmansione[x._id] = undefined;
+          this.menuXmansione[x._id] = x.roles;
         })
         console.log(this.menuXmansione);
       });
