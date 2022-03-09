@@ -1,132 +1,124 @@
-<div class="containter pad" *ngIf="!isExternal">
-    <div class="row">
-      <div class="col ">
-        <h1 class="title">GESTIONE CAMBI TURNI</h1>
-      </div>
+<!-- <div class="containter pad" *ngIf="!isExternal">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">GESTIONE CAMBI TURNI</h1>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="standard">
+        <mat-label>Cerca</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
+      </mat-form-field>
+    </div>
+  </div>
+
+
+
+  <div class="row">
+    <div class="col">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <button mat-raised-button color="accent" class="action-button" [disabled]=row.closed
+              (click)="sendResp(row)">Invia Risposta</button>
+          </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let element"> {{dipendente.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cognome">
+          <th mat-header-cell *matHeaderCellDef> Cognome </th>
+          <td mat-cell *matCellDef="let element"> {{dipendente.cognome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cf">
+          <th mat-header-cell *matHeaderCellDef> Cod.Fiscale </th>
+          <td mat-cell *matCellDef="let element"> {{dipendente.cf}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataInizioVT">
+          <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy H:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFineVT">
+          <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy H:mm' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataInizioNT">
+          <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy H:mm'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFineNT">
+          <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy H:mm' }} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataRichiesta">
+          <th mat-header-cell *matHeaderCellDef> Giorno richiesta </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+
+        <ng-container matColumnDef="motivazione">
+          <th mat-header-cell *matHeaderCellDef> Motivazione </th>
+          <td mat-cell *matCellDef="let element"> {{element.motivazione }} </td>
+        </ng-container>
+
+
+
+        <ng-container matColumnDef="accettata">
+          <th mat-header-cell *matHeaderCellDef> Approvata </th>
+          <td mat-cell *matCellDef="let element"> <input type="checkbox" slot="end" [(ngModel)]="element.accettata"
+              [disabled]=element.closed /> </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+<div *ngIf="isExternal">
+  <br>
+  <div class="notPresent" style="margin-bottom: 10px;">
+    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCambiturno">
+      <button mat-button class="button-insert" (click)="addRichiestaCambiturno()">Aggiungi Richiesta cambio
+        turno</button>
     </div>
 
 
 
-      <div class="row">
-        <div class="col">
-          <mat-form-field appearance="standard">
-            <mat-label>Cerca</mat-label>
-            <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
-          </mat-form-field>
-        </div>
-      </div>
-
-
+    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+      *ngIf="addingCambiturno && !uploadingCambiturno">
+      <h4>Inserisci le date per effettuare la tua richiesta</h4>
 
       <div class="row">
-        <div class="col">
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef>
-              </th>
-              <td mat-cell *matCellDef="let row">
-                <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row)">Invia Risposta</button>
-              </td>
-            </ng-container>
-
-
-             <!-- Symbol Column -->
-             <ng-container matColumnDef="nome">
-              <th mat-header-cell *matHeaderCellDef> Nome </th>
-              <td mat-cell *matCellDef="let element"> {{dipendente.nome}} </td>
-            </ng-container>
-
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="cognome">
-              <th mat-header-cell *matHeaderCellDef> Cognome </th>
-              <td mat-cell *matCellDef="let element"> {{dipendente.cognome}} </td>
-            </ng-container>
-
-
-
-            <!-- Symbol Column -->
-            <ng-container matColumnDef="cf">
-              <th mat-header-cell *matHeaderCellDef> Cod.Fiscale </th>
-              <td mat-cell *matCellDef="let element"> {{dipendente.cf}} </td>
-            </ng-container>
-
-            <!-- Position Column -->
-            <ng-container matColumnDef="dataInizioVT">
-              <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataInizioVT | date: 'dd/MM/yyyy H:mm'}} </td>
-            </ng-container>
-
-            <!-- Name Column -->
-            <ng-container matColumnDef="dataFineVT">
-              <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy H:mm' }} </td>
-            </ng-container>
-
-             <!-- Position Column -->
-             <ng-container matColumnDef="dataInizioNT">
-                <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
-                <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy H:mm'}} </td>
-              </ng-container>
-
-              <!-- Name Column -->
-              <ng-container matColumnDef="dataFineNT">
-                <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
-                <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy H:mm' }} </td>
-              </ng-container>
-
-            <!-- Weight Column -->
-            <ng-container matColumnDef="dataRichiesta">
-              <th mat-header-cell *matHeaderCellDef> Giorno richiesta </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
-            </ng-container>
-
-
-            <!-- Name Column -->
-            <ng-container matColumnDef="motivazione">
-                <th mat-header-cell *matHeaderCellDef> Motivazione </th>
-                <td mat-cell *matCellDef="let element"> {{element.motivazione }} </td>
-            </ng-container>
-
-
-
-            <ng-container matColumnDef="accettata">
-              <th mat-header-cell *matHeaderCellDef> Approvata </th>
-              <td mat-cell *matCellDef="let element">  <input type="checkbox" slot="end" [(ngModel)]="element.accettata"  [disabled]=element.closed/> </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
-
-
-          <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-          </mat-paginator>
-        </div>
-      </div>
-    </div>
-
-
-
-
-
-
-
-
-    <div *ngIf="isExternal">
-      <br>
-      <div class="notPresent" style="margin-bottom: 10px;">
-        <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCambiturno">
-        <button mat-button class="button-insert" (click)="addRichiestaCambiturno()">Aggiungi Richiesta cambio turno</button>
-       </div>
-
-
-
-       <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-       *ngIf="addingCambiturno && !uploadingCambiturno">
-       <h4>Inserisci le date per effettuare la tua richiesta</h4>
-
-       <div class="row">
         <h5>Inserisci date e orari del vecchio turno</h5>
         <div class="col-6">
 
@@ -136,13 +128,11 @@
             <input matInput [ngxMatDatetimePicker]="dataInizioVT" [(ngModel)]="nuovoCambio.dataInizioVT">
             <mat-datepicker-toggle matSuffix [for]="dataInizioVT"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #dataInizioVT [showSpinners]="showSpinners" [showSeconds]="true"
-                    [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
-                    [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian"
-                    [disableMinute]="disableMinute" [hideTime]="hideTime">
-        </ngx-mat-datetime-picker>
-
-
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0" [touchUi]="touchUi" [color]="color"
+              [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
           </mat-form-field>
+
         </div>
         <div class="col-6">
           <mat-form-field appearance="fill">
@@ -150,17 +140,16 @@
             <input matInput [ngxMatDatetimePicker]="dataFineVT" [(ngModel)]="nuovoCambio.dataFineVT">
             <mat-datepicker-toggle matSuffix [for]="dataFineVT"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #dataFineVT [showSpinners]="showSpinners" [showSeconds]="true"
-            [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
-            [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian"
-            [disableMinute]="disableMinute" [hideTime]="hideTime">
-</ngx-mat-datetime-picker>
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0" [touchUi]="touchUi" [color]="color"
+              [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
+            </ngx-mat-datetime-picker>
           </mat-form-field>
         </div>
 
-       </div>
+      </div>
 
 
-       <div class="row">
+      <div class="row">
         <h5>Inserisci date e orari del nuovo turno</h5>
         <div class="col-6">
 
@@ -171,9 +160,8 @@
             <mat-datepicker-toggle matSuffix [for]="dataInizioNT"></mat-datepicker-toggle>
 
             <ngx-mat-datetime-picker #dataInizioNT [showSpinners]="showSpinners" [showSeconds]="true"
-                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
-                [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian"
-                [disableMinute]="disableMinute" [hideTime]="hideTime">
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0" [touchUi]="touchUi" [color]="color"
+              [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
             </ngx-mat-datetime-picker>
           </mat-form-field>
         </div>
@@ -183,118 +171,105 @@
             <input matInput [ngxMatDatetimePicker]="dataFineNT" [(ngModel)]="nuovoCambio.dataFineNT">
             <mat-datepicker-toggle matSuffix [for]="dataFineNT"></mat-datepicker-toggle>
             <ngx-mat-datetime-picker #dataFineNT [showSpinners]="showSpinners" [showSeconds]="true"
-                [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0"
-                [touchUi]="touchUi" [color]="color" [enableMeridian]="enableMeridian"
-                [disableMinute]="disableMinute" [hideTime]="hideTime">
+              [stepHour]="stepHour" [stepMinute]="stepMinute" [stepSecond]="0" [touchUi]="touchUi" [color]="color"
+              [enableMeridian]="enableMeridian" [disableMinute]="disableMinute" [hideTime]="hideTime">
             </ngx-mat-datetime-picker>
           </mat-form-field>
         </div>
 
-       </div>
-       <mat-label>Inserisci Motivazione</mat-label>
-       <br>
-       <mat-form-field class="example-full-width">
-        <textarea matInput matTextareaAutosize [(ngModel)]="nuovoCambio.motivazione" >
+      </div>
+      <mat-label>Inserisci Motivazione</mat-label>
+      <br>
+      <mat-form-field class="example-full-width">
+        <textarea matInput matTextareaAutosize [(ngModel)]="nuovoCambio.motivazione">
         </textarea>
       </mat-form-field>
 
 
-       <div class="col-2">
+      <div class="col-2">
         <button mat-button class="button-insert" (click)="saveCambiturno(nuovoCambio)">Salva</button>
       </div>
 
-     </div>
+    </div>
 
 
 
-
-
-     <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
       <ng-container matColumnDef="action">
         <th mat-header-cell *matHeaderCellDef>
         </th>
         <td mat-cell *matCellDef="let row">
-          <button mat-button >
-            <!--<button mat-button (click)="delete(row)">-->
+          <button mat-button>
             <img src="../../../assets/cestino.svg" style="width:26px">
           </button>
         </td>
       </ng-container>
 
 
-       <!-- Symbol Column -->
-       <ng-container matColumnDef="nome">
+      <ng-container matColumnDef="nome">
         <th mat-header-cell *matHeaderCellDef> Nome </th>
         <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
       </ng-container>
 
-      <!-- Symbol Column -->
       <ng-container matColumnDef="cognome">
         <th mat-header-cell *matHeaderCellDef> Cognome </th>
         <td mat-cell *matCellDef="let element"> {{element.cognome}} </td>
       </ng-container>
 
 
-
-      <!-- Symbol Column -->
       <ng-container matColumnDef="cf">
         <th mat-header-cell *matHeaderCellDef> Cod.Fiscale </th>
         <td mat-cell *matCellDef="let element"> {{element.cf}} </td>
       </ng-container>
 
-      <!-- Position Column -->
       <ng-container matColumnDef="dataInizioVT">
         <th mat-header-cell *matHeaderCellDef> Inizio vecchio turno </th>
-        <td mat-cell *matCellDef="let element"> {{ element.dataInizioVT | date: 'dd/MM/yyyy  H:mm' }} </td>
+        <td mat-cell *matCellDef="let element"> {{ element.dataInizioVT | date: 'dd/MM/yyyy H:mm' }} </td>
       </ng-container>
 
-      <!-- Name Column -->
       <ng-container matColumnDef="dataFineVT">
         <th mat-header-cell *matHeaderCellDef> Fine vecchio turno </th>
-        <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy  H:mm' }} </td>
+        <td mat-cell *matCellDef="let element"> {{element.dataFineVT | date: 'dd/MM/yyyy H:mm' }} </td>
       </ng-container>
 
-       <!-- Position Column -->
-       <ng-container matColumnDef="dataInizioNT">
-          <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
-          <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy  H:mm'}} </td>
-        </ng-container>
+      <ng-container matColumnDef="dataInizioNT">
+        <th mat-header-cell *matHeaderCellDef> Inizio nuovo turno </th>
+        <td mat-cell *matCellDef="let element"> {{element.dataInizioNT | date: 'dd/MM/yyyy H:mm'}} </td>
+      </ng-container>
 
-        <!-- Name Column -->
-        <ng-container matColumnDef="dataFineNT">
-          <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
-          <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy  H:mm' }} </td>
-        </ng-container>
+      <ng-container matColumnDef="dataFineNT">
+        <th mat-header-cell *matHeaderCellDef> Fine nuovo turno </th>
+        <td mat-cell *matCellDef="let element"> {{element.dataFineNT | date: 'dd/MM/yyyy H:mm' }} </td>
+      </ng-container>
 
-      <!-- Weight Column -->
       <ng-container matColumnDef="dataRichiesta">
         <th mat-header-cell *matHeaderCellDef> Giorno richiesta </th>
         <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
       </ng-container>
 
 
-      <!-- Name Column -->
       <ng-container matColumnDef="motivazione">
-          <th mat-header-cell *matHeaderCellDef> Motivazione </th>
-          <td mat-cell *matCellDef="let element"> {{element.motivazione }} </td>
+        <th mat-header-cell *matHeaderCellDef> Motivazione </th>
+        <td mat-cell *matCellDef="let element"> {{element.motivazione }} </td>
       </ng-container>
 
 
 
       <ng-container matColumnDef="accettata">
         <th mat-header-cell *matHeaderCellDef> Approvata </th>
-        <td mat-cell *matCellDef="let element">  <input type="checkbox" slot="end" [(ngModel)]="element.accettata"  [disabled]=element.closed/> </td>
+        <td mat-cell *matCellDef="let element"> <input type="checkbox" slot="end" [(ngModel)]="element.accettata"
+            [disabled]=element.closed /> </td>
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
       <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
     </table>
 
-       <div class="paginator-container">
+    <div class="paginator-container">
 
-         <mat-paginator #paginatordocsMedicina [pageSizeOptions]="[5]" showFirstLastButtons
-           aria-label="Select page of periodic elements">
-         </mat-paginator>
-       </div>
+      <mat-paginator #paginatordocsMedicina [pageSizeOptions]="[5]" showFirstLastButtons
+        aria-label="Select page of periodic elements">
+      </mat-paginator>
     </div>
+  </div> -->

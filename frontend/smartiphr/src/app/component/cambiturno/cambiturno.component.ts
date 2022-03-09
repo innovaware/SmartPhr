@@ -106,4 +106,8 @@ export class CambiturnoComponent implements OnInit, OnChanges {
       this.updateCambioturno(row);
     }
   }
+
+  addRichiestaCambiturno() {
+
+  }
 }

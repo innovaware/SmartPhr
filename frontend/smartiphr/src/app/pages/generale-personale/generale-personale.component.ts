@@ -57,12 +57,12 @@ export class GeneralePersonaleComponent implements OnInit {
 
 
   confirmpassword:String;
-  
+
   constructor(public messageService: MessagesService, public docService: DocumentiService,
     public uploadService: UploadService,public dipendenteService: DipendentiService,
     public authenticationService:AuthenticationService, public usersService :UsersService  ) {
       this.loadUser();
-      
+
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
     this.uploading = false;
@@ -71,14 +71,14 @@ export class GeneralePersonaleComponent implements OnInit {
    }
 
     ngOnInit() {
-      
+
   }
 
 
   loadUser(){
     this.authenticationService.getCurrentUserAsync().subscribe(
       (user)=>{
-   
+
         console.log('get dipendente');
         this.dipendenteService
         .getByIdUser(user._id)
@@ -96,8 +96,8 @@ export class GeneralePersonaleComponent implements OnInit {
             "Errore Caricamento dipendente (" + err["status"] + ")"
           );
         });
-   
-       }); 
+
+       });
   }
 
 
@@ -119,8 +119,8 @@ export class GeneralePersonaleComponent implements OnInit {
   }
 
 
-  saveDipendente(){
-    
+  saveDipendente(dipendente: Dipendenti){
+
     this.dipendenteService
             .save(this.dipendente)
             .then((x) => {
@@ -315,12 +315,12 @@ export class GeneralePersonaleComponent implements OnInit {
         type: "Diploma",
       };
     }
-  
+
     async uploadDiploma($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
-  
+
         console.log("upload Diploma: ", $event);
         this.nuovoDiploma.filename = file.name;
         this.nuovoDiploma.file = file;
@@ -329,10 +329,10 @@ export class GeneralePersonaleComponent implements OnInit {
         console.error("File non valido o non presente");
       }
     }
-  
+
     async deleteDiploma(doc: DocumentoDipendente) {
       console.log("Cancella Diploma: ", doc);
-  
+
       this.docService
         .remove(doc)
         .then((x) => {
@@ -342,7 +342,7 @@ export class GeneralePersonaleComponent implements OnInit {
           if (index > -1) {
             this.diplomi.splice(index, 1);
           }
-  
+
           console.log("Diploma cancellata : ", this.diplomi);
           this.diplomiDataSource.data = this.diplomi;
         })
@@ -351,13 +351,13 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async saveDiploma(doc: DocumentoDipendente) {
       const typeDocument = "Diploma";
       const path = "Diploma";
       const file: File = doc.file;
       this.uploadingDiploma = true;
-  
+
       console.log("Invio Diploma: ", doc);
       this.docService
         .insert(doc, this.dipendente)
@@ -367,11 +367,11 @@ export class GeneralePersonaleComponent implements OnInit {
           this.diplomiDataSource.data = this.diplomi;
           this.addingDiploma = false;
           this.uploadingDiploma = false;
-  
+
           let formData: FormData = new FormData();
-  
+
           const nameDocument: string = doc.filename;
-  
+
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
           formData.append("path", `${this.dipendente._id}/${path}`);
@@ -380,7 +380,7 @@ export class GeneralePersonaleComponent implements OnInit {
             .uploadDocument(formData)
             .then((x) => {
               this.uploading = false;
-  
+
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
@@ -394,14 +394,14 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async getDiplomi() {
       console.log(`get Diplomi dipendente: ${this.dipendente._id}`);
       this.docService
         .get(this.dipendente, "Diploma")
         .then((f: DocumentoDipendente[]) => {
           this.diplomi = f;
-  
+
           this.diplomiDataSource = new MatTableDataSource<DocumentoDipendente>(
             this.diplomi
           );
@@ -412,9 +412,9 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     // FINE DIPLOMA
-  
+
     // DIPLOMA
     async addAttestatoECM() {
       this.addingAttestatoECM = true;
@@ -424,12 +424,12 @@ export class GeneralePersonaleComponent implements OnInit {
         type: "AttestatoECM",
       };
     }
-  
+
     async uploadAttestatoECM($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
-  
+
         console.log("upload AttestatoECM: ", $event);
         this.nuovoAttestatoECM.filename = file.name;
         this.nuovoAttestatoECM.file = file;
@@ -438,10 +438,10 @@ export class GeneralePersonaleComponent implements OnInit {
         console.error("File non valido o non presente");
       }
     }
-  
+
     async deleteAttestatoECM(doc: DocumentoDipendente) {
       console.log("Cancella AttestatoECM: ", doc);
-  
+
       this.docService
         .remove(doc)
         .then((x) => {
@@ -451,7 +451,7 @@ export class GeneralePersonaleComponent implements OnInit {
           if (index > -1) {
             this.attestati.splice(index, 1);
           }
-  
+
           console.log("AttestatoECM cancellata : ", this.attestati);
           this.attestatiECMDataSource.data = this.attestati;
         })
@@ -460,13 +460,13 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async saveAttestatoECM(doc: DocumentoDipendente) {
       const typeDocument = "AttestatoECM";
       const path = "AttestatoECM";
       const file: File = doc.file;
       this.uploadingAttestatoECM = true;
-  
+
       console.log("Invio AttestatoECM: ", doc);
       this.docService
         .insert(doc, this.dipendente)
@@ -476,11 +476,11 @@ export class GeneralePersonaleComponent implements OnInit {
           this.attestatiECMDataSource.data = this.attestati;
           this.addingAttestatoECM = false;
           this.uploadingAttestatoECM = false;
-  
+
           let formData: FormData = new FormData();
-  
+
           const nameDocument: string = doc.filename;
-  
+
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
           formData.append("path", `${this.dipendente._id}/${path}`);
@@ -489,7 +489,7 @@ export class GeneralePersonaleComponent implements OnInit {
             .uploadDocument(formData)
             .then((x) => {
               this.uploading = false;
-  
+
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
@@ -503,14 +503,14 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async getAttestatiECM() {
       console.log(`get AttestatiECM dipendente: ${this.dipendente._id}`);
       this.docService
         .get(this.dipendente, "Diploma")
         .then((f: DocumentoDipendente[]) => {
           this.attestati = f;
-  
+
           this.attestatiECMDataSource = new MatTableDataSource<DocumentoDipendente>(
             this.attestati
           );
@@ -521,6 +521,6 @@ export class GeneralePersonaleComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     // FINE ATTESTATI ECM
 }
