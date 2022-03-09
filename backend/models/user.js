@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const UserSchema = mongoose.Schema({
@@ -5,7 +6,7 @@ const UserSchema = mongoose.Schema({
   username: String,
   password: String,
   active: Boolean,
-  role: String,
+  role: ObjectId,
 });
 
 module.exports = mongoose.model('User', UserSchema, 'user');

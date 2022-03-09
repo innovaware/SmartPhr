@@ -19,10 +19,7 @@ router.get("/info/:id", async (req, res) => {
 
   try {
     var query = { idUser: mongoose.Types.ObjectId(id) };
-    console.log("Get info User: ", query);
     const dipendenti = await Dipendenti.find(query);
-
-    console.log("Get info User: ", dipendenti);
 
     res.status(200).json(dipendenti);
   } catch (err) {
@@ -332,10 +329,7 @@ router.put("/:id", async (req, res) => {
     }
 
     if (mailer != undefined && !mailerDisabled && mailerTopic != undefined) {
-      console.log("Emit to topic:", mailerTopic);
-
       var query = { idUser: mongoose.Types.ObjectId(id) };
-      console.log("Get info User: ", query);
       const dipendenti = await Dipendenti.find(query);
       mailer.publish(mailerTopic, JSON.stringify(dipendenti));
     }

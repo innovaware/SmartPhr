@@ -23,22 +23,27 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.menuService.getMenu().subscribe((items: Menu[]) => {
-      this.menu = items.sort((a: Menu, b: Menu) => { return a.order - b.order; });
-    });
+
 
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
       if (user !== undefined && user !== null) {
+
+        this.menuService.getMenu().subscribe((items: Menu[]) => {
+          this.menu = items.sort((a: Menu, b: Menu) => {
+            return a.order - b.order;
+          });
+        });
+
         const userId = user._id;
         this.authenticationService
-        .getInfo(userId)
-        .subscribe((dipendente: Dipendenti[]) => {
-          console.log("Dipendente get Info", dipendente);
-          //TODO Ritornare la descrizione della mansione non l'ID
-          if (dipendente.length === 1) {
-            this.mansione = dipendente[0].mansione;
-          }
-        });
+          .getInfo(userId)
+          .subscribe((dipendente: Dipendenti[]) => {
+            console.log("Dipendente get Info", dipendente);
+            //TODO Ritornare la descrizione della mansione non l'ID
+            if (dipendente.length === 1) {
+              this.mansione = dipendente[0].mansione;
+            }
+          });
       }
     });
   }

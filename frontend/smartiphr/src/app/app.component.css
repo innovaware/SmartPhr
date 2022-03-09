@@ -65,3 +65,7 @@ a.btnAddMess {
   padding-top:10px;
 
 }
+
+.fill-menu {
+  background-color: var(--background);
+}
