@@ -411,6 +411,7 @@ const StartApiService = () => {
 
 const getAuth = (req) => {
   var authheader = req.headers.authorization;
+  console.log("authheader: ", authheader);
   if (!authheader) {
     return null;
   }
@@ -435,7 +436,10 @@ const authorizationHandler = async (req, res, next) => {
     //err.status = 401;
     res.statusCode = 401;
     res.end("Not Authorizated");
-    return next(null, "You are not authenticated!");
+    //return next(null, "You are not authenticated!");
+
+    console.log("User not authorizated");
+    return;
   }
 
   var username = userAuth.user;

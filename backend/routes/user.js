@@ -117,9 +117,12 @@ router.post("/authenticate", async (req, res) => {
     };
     const turno = await Turnimensili.findOne(query);
 
+    //console.log("Authorization query", query, turno);
+
     if (turno == null) {
       res.status(401);
-      res.json({ Error: 'Not Authorized' });
+      res.json({ Error: 'Not Authorized - Fuori turno' });
+      return;
     }
 
     const presenzeFind = await Dipendenti.aggregate([

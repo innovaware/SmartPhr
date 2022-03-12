@@ -19,7 +19,9 @@ export class AuthorizationComponent implements OnInit {
   constructor(
     private mansioniService: MansioniService,
     private menuService: MenuService,
-  ) { }
+  ) {
+    this.mansioni = [];
+  }
 
   ngOnInit() {
     this.mansioniService.get().then(
@@ -33,7 +35,7 @@ export class AuthorizationComponent implements OnInit {
         this.menu.forEach(x => {
           this.menuXmansione[x._id] = x.roles;
         })
-        console.log(this.menuXmansione);
+        //console.log(this.menuXmansione);
       });
 
   }
@@ -43,7 +45,7 @@ export class AuthorizationComponent implements OnInit {
       if (this.menuXmansione[x._id] !== undefined) {
         x.roles = this.menuXmansione[x._id];
         this.menuService.update(x).subscribe(res=> {
-          console.log("update res:", res);
+          //console.log("update res:", res);
 
         })
       }
