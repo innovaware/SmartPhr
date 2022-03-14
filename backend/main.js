@@ -25,7 +25,7 @@ var VERSION = process.env.VERSION;
 
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
-var redisDisabled = process.env.REDISDISABLE === "true" || false;
+var redisDisabled = process.env.REDISDISABLE === "true" || true;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 // GESTIONE MAILER SERVICE
@@ -385,6 +385,11 @@ const InitApiFunctions = () => {
   app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, roleHandler, DiarioAssSocialeRouter );
   routesList.push(apiDiarioAssSociale);
       
+  var CameraRouter = require("./routes/camera");
+  var apiCamera = { key: 'camere', path: '/api/camera' }
+  app.use( apiCamera.path, logHandler, authorizationHandler, roleHandler, CameraRouter );
+  routesList.push(apiCamera);
+      
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 }
@@ -411,7 +416,7 @@ const StartApiService = () => {
 
 const getAuth = (req) => {
   var authheader = req.headers.authorization;
-  console.log("authheader: ", authheader);
+  //console.log("authheader: ", authheader);
   if (!authheader) {
     return null;
   }
