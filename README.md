@@ -7,6 +7,7 @@ Backend Release
 
 Frontend Release 
 
+Test
 
 
 [Web App](http://smart-iphr.innovaware.it:8080)
