@@ -14,17 +14,20 @@
       [insertFunction]="getInsertFunction()"
       [showFunction]="showFunction"
       [enableDeleting]=true
-      [showInsert]=true></app-table-ospiti> -->
+      [showInsert]=true></app-table-ospiti>
 
+
+      [deletePatient]="deletePaziente"
+-->
 
       <app-table-ospiti
-      [eventPazienti]="eventsSubject.asObservable()"
-      [insertFunction]="getInsertFunction()"
-      [showPatient]="showFunction"
-      [deletePatient]="deletePaziente"
-      [enableShow]=true
-      [enableDeleting]=true
-      [showInsert]=true>
+        [eventPazienti]="eventsSubject.asObservable()"
+        [insertFunction]="getInsertFunction()"
+        [showPatient]="showFunction"
+        (deletePatientEmiter)="deletePaziente($event)"
+        [enableShow]=true
+        [enableDeleting]=true
+        [showInsert]=true>
     </app-table-ospiti>
     </div>
   </div>

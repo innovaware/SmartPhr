@@ -411,7 +411,6 @@ const StartApiService = () => {
 
 const getAuth = (req) => {
   var authheader = req.headers.authorization;
-  console.log("authheader: ", authheader);
   if (!authheader) {
     return null;
   }

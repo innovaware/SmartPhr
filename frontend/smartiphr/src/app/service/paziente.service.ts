@@ -48,6 +48,12 @@ export class PazienteService {
       .toPromise();
   }
 
+  delete(paziente: Paziente): Observable<Paziente> {
+    return this.http.delete<Paziente>(
+      this.api + "/api/pazienti/" + paziente._id
+    );
+  }
+
   insertAutorizzazioneUscita(
     id: string,
     doc: DocumentoPaziente
@@ -71,11 +77,7 @@ export class PazienteService {
     );
   }
 
-  delete(paziente: Paziente): Observable<Paziente> {
-    return this.http.delete<Paziente>(
-      this.api + "/api/documentipazienti/" + paziente._id
-    );
-  }
+
 
   // ESITO STRUMENTALE
 
