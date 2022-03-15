@@ -48,7 +48,7 @@ export class AreaInfermieristicaComponent implements OnInit {
     });
 
     this.customButtons.push({
-      images: "../../../assets/areaInfermeristica.png",
+      images: "../../../assets/areaInfermeristica.svg",
       label: "",
       tooltip: "Cartella Infermeristica",
       cmd: (paziente: Paziente) =>

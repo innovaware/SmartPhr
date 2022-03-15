@@ -1,0 +1,71 @@
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+::ng-deep .ol-zoom {
+  visibility: collapse;
+}
+
+::ng-deep .ol-rotate {
+  visibility: collapse;
+}
+
+.mat-form-field {
+  width: 100%;
+}
+
+.map-container {
+  /* position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: 30px; */
+
+  height: 100vh;
+}
+
+.map-frame {
+  border: 2px solid black;
+  height: 100%;
+}
+
+.map {
+  width: 100%;
+  height: 400px;
+}
+
+:host {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+header {
+  background-color: var(--header-color);
+  padding: 2em;
+}
+header .title {
+  font-size: 28px;
+}
+main {
+  display: flex;
+  flex-grow: 1;
+}
+.left-bar {
+  width: 20em;
+  background-color: var(--sidebar-color);
+}
+.map-container {
+  flex-grow: 1;
+}
+footer {
+  background-color: var(--header-color);
+  padding: 1em;
+}
