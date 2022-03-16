@@ -2,5 +2,7 @@
 /data
 /datadir
 /test
+.vs
+.github
 
 /services/mqtt/mosquitto

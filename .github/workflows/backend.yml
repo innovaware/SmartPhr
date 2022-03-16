@@ -1,15 +1,13 @@
 name: Backend
 
-# on: workflow_dispatch
 on:
-  # Trigger the workflow on push or pull request,
-  # but only for the main branch
-  push:
-    branches:
-      - master
+#  push:
+#    branches:
+#      - master
   pull_request:
     branches:
       - master
+
 jobs:
 
   build:
