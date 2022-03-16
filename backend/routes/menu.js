@@ -21,7 +21,7 @@ router.get("/", async (req, res) => {
       return;
     }
 
-    const searchTerm = `MENUALL`;
+    const searchTerm = `MENUALL${mansioneRole}`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
