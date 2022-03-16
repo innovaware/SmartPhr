@@ -335,6 +335,16 @@ const InitApiFunctions = () => {
   app.use(apiCurriculum.path, logHandler, authorizationHandler, roleHandler, curriculumRouter);
   routesList.push(apiCurriculum);
 
+  var fattureConsulentiRouter = require("./routes/fattureConsulenti");
+  var apiFattureConsulente = { key: 'fattureconsulente', path: '/api/fattureconsulenti' }
+  app.use( apiFattureConsulente.path, logHandler, authorizationHandler, roleHandler, fattureConsulentiRouter );
+  routesList.push(apiFattureConsulente);
+
+  var bonificiConsulentiRouter = require("./routes/bonificiConsulenti");
+  var apiBonificiConsulenti = { key: 'bonificiconsulenti', path: '/api/bonificiconsulenti' }
+  app.use( apiBonificiConsulenti.path, logHandler, authorizationHandler, roleHandler, bonificiConsulentiRouter  );
+  routesList.push(apiBonificiConsulenti);
+
   var fattureFornitoriRouter = require("./routes/fattureFornitori");
   var apiFattureFornitore = { key: 'fatturefornitore', path: '/api/fatturefornitori' }
   app.use( apiFattureFornitore.path, logHandler, authorizationHandler, roleHandler, fattureFornitoriRouter );
