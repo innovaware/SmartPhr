@@ -85,8 +85,8 @@ import {
 } from "@angular-material-components/datetime-picker";
 
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
-//import { FattureConsulentiComponent } from "./pages/fatture-consulenti/fatture-consulenti.component";
-//import { BonificiConsulentiComponent } from "./pages/bonifici-consulenti/bonifici-consulenti.component";
+import { FattureConsulentiComponent } from "./pages/fatture-consulenti/fatture-consulenti.component";
+import { BonificiConsulentiComponent } from "./pages/bonifici-consulenti/bonifici-consulenti.component";
 import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { FattureFornitoriComponent } from "./pages/fatture-fornitori/fatture-fornitori.component";
 import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-fornitori.component";
