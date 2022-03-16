@@ -50,6 +50,7 @@ import { FerieAltroPersonaleComponent } from "./pages/ferie-altro-personale/feri
 import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
 import { GeneralePersonaleComponent } from "./pages/generale-personale/generale-personale.component";
 import { AuthorizationComponent } from "./pages/authorization/authorization.component";
+import { CamereComponent } from "./pages/camere/camere.component";
 
 
 const routes: Routes = [
@@ -110,6 +111,7 @@ const routes: Routes = [
 
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
+  { path: "gest_camere", component: CamereComponent, canActivate: [AuthGuard]  },
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

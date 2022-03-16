@@ -179,6 +179,7 @@ import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/feri
 import { DebugComponent } from './component/debug/debug.component';
 import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
+import { CamereComponent } from './pages/camere/camere.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -309,6 +310,7 @@ import { AuthorizationComponent } from './pages/authorization/authorization.comp
     DebugComponent,
     PrettyprintPipe,
     AuthorizationComponent,
+    CamereComponent,
   ],
   imports: [
     BrowserModule,

@@ -24,7 +24,6 @@ export class AdminPazientiComponent implements OnInit {
     this.pazienti = [];
 
     console.log("Pazienti Constructor");
-
   }
 
   ngOnInit() {}
@@ -82,40 +81,46 @@ export class AdminPazientiComponent implements OnInit {
   }
 
   deletePaziente(paziente: Paziente) {
-    console.log("Cancella Paziente 1", this.pazienti);
-    this.dialog
-      .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il paziente?" },
-        //width: "600px",
-      })
-      .afterClosed()
-      .subscribe(
-        (result) => {
-          if (result == true) {
-
-            this.pazienteService
-            .delete(paziente)
-            .subscribe((result: Paziente) => {
-                const index = this.pazienti.indexOf(paziente, 0);
-                if (index > -1) {
-                  this.pazienti.splice(index, 1);
-                }
-                console.log("Cancella Paziente eseguita con successo", result);
-                this.eventsSubject.next(this.pazienti);
-              },
-              (err) =>
-                console.error(`Error Cancellazione paziente: ${err.message}`)
-            );
-
-          } else {
-            console.log("Cancellazione Paziente annullata");
-            this.messageService.showMessageError(
-              "Cancellazione Paziente Annullata"
-            );
-          }
-        },
-        (err) => console.error(`Error Cancellazione paziente: ${err}`)
+    console.log("Cancella Paziente 1", paziente);
+    if (paziente != undefined) {
+      this.dialog
+        .open(DialogQuestionComponent, {
+          data: { message: "Cancellare il paziente?" },
+          //width: "600px",
+        })
+        .afterClosed()
+        .subscribe(
+          (result) => {
+            if (result == true) {
+              this.pazienteService.delete(paziente).subscribe(
+                (result: Paziente) => {
+                  const index = this.pazienti.indexOf(paziente, 0);
+                  if (index > -1) {
+                    this.pazienti.splice(index, 1);
+                  }
+                  console.log(
+                    "Cancella Paziente eseguita con successo",
+                    result
+                  );
+                  this.eventsSubject.next(this.pazienti);
+                },
+                (err) =>
+                  console.error(`Error Cancellazione paziente: ${err.message}`)
+              );
+            } else {
+              console.log("Cancellazione Paziente annullata");
+              this.messageService.showMessageError(
+                "Cancellazione Paziente Annullata"
+              );
+            }
+          },
+          (err) => console.error(`Error Cancellazione paziente: ${err}`)
+        );
+    } else {
+      this.messageService.showMessageError(
+        "Cancellazione Paziente Annullata"
       );
+    }
   }
 
   showAdmin(paziente: Paziente) {
@@ -142,7 +147,7 @@ export class AdminPazientiComponent implements OnInit {
       });
   }
 
-/*   show(event: { paziente: Paziente; button: DinamicButton }) {
+  /*   show(event: { paziente: Paziente; button: DinamicButton }) {
     console.log("Show Event");
     event.button.cmd(event.paziente);
   } */

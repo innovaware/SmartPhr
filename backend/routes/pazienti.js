@@ -9,6 +9,7 @@ const parametriVitali = require("../models/parametriVitali");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 // const client = redis.createClient(redisPort, redisHost);
+const searchTerm = `PAZIENTIALL`;
 
 router.get("/", async (req, res) => {
   try {
@@ -47,7 +48,6 @@ router.get("/", async (req, res) => {
         return;
       }
 
-      const searchTerm = `PAZIENTI`;
       redisClient.get(searchTerm, async (err, data) => {
         if (err) throw err;
 
@@ -163,7 +163,6 @@ router.post("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
       redisClient.del(searchTerm);
     }
 
@@ -265,8 +264,7 @@ router.delete("/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`PAZIENTIBY${id}`);
-      redisClient.del(`PAZIENTIALL*`);
+      redisClient.del(searchTerm);
     }
 
     res.status(200);
