@@ -49,7 +49,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
 
   //TODO Da Sistemare questa variabile
   public saveParametriVitali: Subject<string>;
-  public verbaliDataSource: MatTableDataSource<DocumentoPaziente>;
+  //public verbaliDataSource: MatTableDataSource<DocumentoPaziente>;
 
 
   paziente: Paziente;
@@ -172,8 +172,35 @@ export class DialogCartellaClinicaComponent implements OnInit {
     this.getImpegnative();
   }
 
-  async showDocument(documento) {
-    //TODO
+  async showDocument(doc: DocumentoPaziente) {
+    console.log("doc: ", JSON.stringify(doc));
+    this.uploadService
+    .download(doc.filename, doc._id, doc.type)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
   }
 
   async salva() {
@@ -228,20 +255,18 @@ export class DialogCartellaClinicaComponent implements OnInit {
     }
   }
 
-  async deletePianoTerapeutico(doc: DocumentoPaziente) {
-    console.log("Cancella PianoTerapeutico: ", doc);
+  async deletePianoTerapeutico(doc: DocumentoPaziente,i) {
 
+    const index = i;
+    console.log("Cancella PianoTerapeutico index: ", index);
     this.docService
       .remove(doc)
       .then((x) => {
         console.log("PianoTerapeutico cancellata");
-        const index = this.pianiTerapeutici.indexOf(doc);
-        console.log("PianoTerapeutico cancellata index: ", index);
         if (index > -1) {
           this.pianiTerapeutici.splice(index, 1);
         }
 
-        console.log("PianoTerapeutico cancellato: ", this.pianiTerapeutici);
         this.pianiTerapeuticiDataSource.data = this.pianiTerapeutici;
       })
       .catch((err) => {
@@ -763,7 +788,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
       .get(this.paziente, "Verbale")
       .then((f: DocumentoPaziente[]) => {
         this.verbali = f;
-
+console.log('verbali: ' + JSON.stringify(this.verbali));
         this.VerbaliDataSource = new MatTableDataSource<DocumentoPaziente>(
           this.verbali
         );

@@ -37,6 +37,50 @@ router.get("/paziente/:id/:type", async (req, res) => {
           redisTimeCache,
           JSON.stringify(documenti)
         );
+        res.status(200).json(documenti);
+      }
+    });
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+router.get("/pazienteingresso/:id", async (req, res) => {
+  try {
+    let id = req.params.id;
+    let type = req.params.type;
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    const getData = () => {
+      return DocPaziente.find({
+        paziente: id,
+        typeDocument: "ingresso",
+      });
+    };
+
+    if (redisClient == undefined || redisDisabled) {
+      const eventi = await getData();
+      res.status(200).json(eventi);
+      return;
+    }
+
+    const searchTerm = `DOCUMENTIPAZIENTEBY${id}`;
+    redisClient.get(searchTerm, async (err, asps) => {
+      if (err) throw err;
+
+      if (asps) {
+        res.status(200).send(JSON.parse(asps));
+      } else {
+        const documenti = await getData();
+        redisClient.setex(
+          searchTerm,
+          redisTimeCache,
+          JSON.stringify(documenti)
+        );
         res.status(200).json(visita);
       }
     });
@@ -45,6 +89,8 @@ router.get("/paziente/:id/:type", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
+
 
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
@@ -88,6 +134,7 @@ router.post("/:id", async (req, res) => {
       dateupload: Date.now(),
       note: req.body.note,
       type: req.body.type,
+      typeDocument: req.body.typeDocument,
       descrizione: req.body.descrizione,
       filenameesito: req.body.filenameesito,
     });

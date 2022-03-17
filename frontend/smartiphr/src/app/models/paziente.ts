@@ -33,7 +33,7 @@ export class Paziente {
     dst.indirizzoNascita = src.indirizzoNascita;
     dst.provenienza = src.provenienza;
     dst.comuneNascita = src.comuneNascita;
-
+    dst.codiceFiscale= src.codiceFiscale;
     dst.schedaInfermeristica = src.schedaInfermeristica;
     dst.schedaClinica = src.schedaClinica;
     dst.schedaPisico = src.schedaPisico;

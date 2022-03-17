@@ -26,6 +26,18 @@ export class DocumentipazientiService {
   }
 
 
+  async getByIngresso(paziente: Paziente,type : string): Promise<DocumentoPaziente[]> {
+    const headers = {
+      // 'Authorization': 'Bearer ' + this.token,
+      // 'x-refresh': this.refreshToken
+    }
+
+    return this.http
+      .get<DocumentoPaziente[]>(`${this.api}/api/documentipazienti/pazienteingresso/${paziente._id}`, { headers })
+      .toPromise();
+  }
+
+
   async insert(doc: DocumentoPaziente, paziente: Paziente) {
     var body = doc;
     return this.http.post(`${this.api}/api/documentipazienti/${paziente._id}`, body).toPromise();

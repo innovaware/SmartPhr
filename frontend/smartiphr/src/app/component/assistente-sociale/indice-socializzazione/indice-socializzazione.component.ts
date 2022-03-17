@@ -11,9 +11,11 @@ export class IndiceSocializzazioneComponent implements OnInit {
   @Input() data: IndiceSocializzazione;
 
   constructor() {
+    
    }
 
   ngOnInit() {
+    this.data.data = new Date(this.data.data);
   }
 
 }

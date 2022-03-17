@@ -384,6 +384,14 @@ const InitApiFunctions = () => {
   var apiDiarioAssSociale = { key: 'diarioAssSociale', path: '/api/diarioAssSociale' }
   app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, DiarioAssSocialeRouter );
   routesList.push(apiDiarioAssSociale);
+
+
+  //AREA OSS
+  // Ingressi API
+  var IngressiRouter = require("./routes/dataIngresso");
+  var apiIngressi = { key: 'dataIngresso', path: '/api/dataIngresso' }
+  app.use(apiIngressi.path, logHandler, authorizationHandler, IngressiRouter);
+  routesList.push(apiIngressi);
       
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
