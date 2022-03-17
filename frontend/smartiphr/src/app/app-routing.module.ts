@@ -53,6 +53,9 @@ import { AuthorizationComponent } from "./pages/authorization/authorization.comp
 import { CamereComponent } from "./pages/camere/camere.component";
 
 
+
+import { AreaOssComponent } from "./pages/area-oss/area-oss.component";
+
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent},
@@ -82,6 +85,11 @@ const routes: Routes = [
   { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
+
+
+  // AREA OSS
+  { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
+
 
 
 

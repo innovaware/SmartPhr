@@ -101,7 +101,7 @@
             </label>
           </td>
           <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.residenza" [disabled]=disable (change)="change()">
+            <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" [disabled]=disable (change)="change()">
           </td>
   
           <td>
@@ -128,7 +128,7 @@
             </label>
           </td>
           <td>
-            <select matNativeControl  [(ngModel)]="data.mansione">
+            <select class="input-cartelle" matNativeControl  [(ngModel)]="data.mansione">
               <option selected="" value="">Seleziona ...</option>
               <option *ngFor="let option of mansioni" [value]="option._id" >{{option.descrizione}}</option>
               <!--<option value="LR">Legale rappresentante </option>

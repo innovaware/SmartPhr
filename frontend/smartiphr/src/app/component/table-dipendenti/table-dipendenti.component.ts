@@ -70,14 +70,16 @@ export class TableDipendentiComponent implements OnInit {
 
 
 
-delete(row){
+delete(row: Dipendenti,i){
+  const index = i;
+  console.log("Dipendente da cancellare index: ", index);
   if (window.confirm("Sei sicuro di voler eliminare questo dipendente?")) {
     this.dipendentiService
     .remove(row)
     .then((x) => {
       console.log("Dipendente cancellato");
-      const index = this.dipendenti.indexOf(row);
-        console.log("Dipendente cancellata index: ", index);
+      
+      
         if (index > -1) {
           this.dipendenti.splice(index, 1);
         }
@@ -130,7 +132,7 @@ ngOnDestroy() {
       provinciaNascita: "",
       dataNascita: undefined,
       indirizzoResidenza: "",
-      residenza: "",
+      comuneResidenza: "",
       luogoResidenza: "",
       provinciaResidenza: "",
       titoloStudio: "",

@@ -394,6 +394,14 @@ const InitApiFunctions = () => {
   var apiDiarioAssSociale = { key: 'diarioAssSociale', path: '/api/diarioAssSociale' }
   app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, roleHandler, DiarioAssSocialeRouter );
   routesList.push(apiDiarioAssSociale);
+
+
+  //AREA OSS
+  // Ingressi API
+  var IngressiRouter = require("./routes/dataIngresso");
+  var apiIngressi = { key: 'dataIngresso', path: '/api/dataIngresso' }
+  app.use(apiIngressi.path, logHandler, authorizationHandler, IngressiRouter);
+  routesList.push(apiIngressi);
       
   var CameraRouter = require("./routes/camera");
   var apiCamera = { key: 'camere', path: '/api/camera' }

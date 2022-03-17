@@ -179,6 +179,11 @@ import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/feri
 import { DebugComponent } from './component/debug/debug.component';
 import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
+import { AreaOssComponent } from './pages/area-oss/area-oss.component';
+import { DialogPreIngressoComponent } from './dialogs/dialog-pre-ingresso/dialog-pre-ingresso.component';
+import { DialogIngressoComponent } from './dialogs/dialog-ingresso/dialog-ingresso.component';
+import { DialogAttivitaComponent } from './dialogs/dialog-attivita/dialog-attivita.component';
+import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.component';
 import { CamereComponent } from './pages/camere/camere.component';
 @NgModule({
   declarations: [
@@ -310,6 +315,12 @@ import { CamereComponent } from './pages/camere/camere.component';
     DebugComponent,
     PrettyprintPipe,
     AuthorizationComponent,
+    AreaOssComponent,
+    DialogPreIngressoComponent,
+    DialogIngressoComponent,
+    DialogAttivitaComponent,
+    DialogArmadioComponent,
+
     CamereComponent,
   ],
   imports: [
@@ -322,6 +333,8 @@ import { CamereComponent } from './pages/camere/camere.component';
     MatButtonModule,
     MatPaginatorModule,
     MatInputModule,
+    MatSelectModule,
+    MatNativeDateModule,
     MatTooltipModule,
     MatFormFieldModule,
     MatDialogModule,
@@ -376,7 +389,11 @@ import { CamereComponent } from './pages/camere/camere.component';
     DialogRiabilitazioneLesioneComponent,
     DialogRiabilitazioneDiarioComponent,
     DialogDiarioEducativoComponent,
-    DialogDiarioAsssocialeComponent
+    DialogDiarioAsssocialeComponent,
+    DialogPreIngressoComponent,
+    DialogIngressoComponent,
+    DialogAttivitaComponent,
+    DialogArmadioComponent,
   ],
 })
 export class AppModule {

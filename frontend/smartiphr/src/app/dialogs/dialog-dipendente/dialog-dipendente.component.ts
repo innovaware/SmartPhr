@@ -226,7 +226,7 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.indirizzoNascita = this.dipendente.indirizzoNascita;
     this.data.dipendente.provinciaNascita = this.dipendente.provinciaNascita;
     this.data.dipendente.indirizzoResidenza = this.dipendente.indirizzoResidenza;
-    this.data.dipendente.residenza = this.dipendente.residenza;
+    this.data.dipendente.comuneResidenza = this.dipendente.comuneResidenza;
     this.data.dipendente.provinciaResidenza = this.dipendente.provinciaResidenza;
     this.data.dipendente.titoloStudio = this.dipendente.titoloStudio;
     this.data.dipendente.mansione = this.dipendente.mansione;

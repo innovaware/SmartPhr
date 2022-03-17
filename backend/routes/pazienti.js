@@ -163,6 +163,8 @@ router.post("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
+      //const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
+      const searchTerm = `PAZIENTIALL`;
       redisClient.del(searchTerm);
     }
 
