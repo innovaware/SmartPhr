@@ -15,6 +15,7 @@ export class MapService {
     layer: ImageLayer<Static>;
     extent: number[];
     projection: Projection;
+    target: string;
   } {
     const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
@@ -47,6 +48,7 @@ export class MapService {
     layer: ImageLayer<Static>;
     extent: number[];
     projection: Projection;
+    target: string;
   } {
     const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
@@ -62,6 +64,7 @@ export class MapService {
     layer: ImageLayer<Static>;
     extent: number[];
     projection: Projection;
+    target: string;
   } {
     const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
