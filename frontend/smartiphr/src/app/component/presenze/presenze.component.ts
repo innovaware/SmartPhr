@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { Output, EventEmitter } from "@angular/core";
 import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
@@ -13,8 +13,9 @@ import { PresenzeService } from "src/app/service/presenze.service";
   templateUrl: "./presenze.component.html",
   styleUrls: ["./presenze.component.css"],
 })
-export class PresenzeComponent implements OnInit {
-  @Input() data: Dipendenti;
+export class PresenzeComponent implements OnInit, OnChanges {
+  @Input() data: Presenze[];
+  @Input() dipendente: Dipendenti;
   @Input() disable: boolean;
   @Input() isExternal: boolean;
 
@@ -42,31 +43,35 @@ export class PresenzeComponent implements OnInit {
   public presenze: Presenze[];
 
   constructor(
-    public dialog: MatDialog,
     public presenzeService: PresenzeService
   ) {}
 
-  ngOnInit() {
-    if (this.data) {
-      this.presenzeService
-        .getPresenzeByDipendente(this.data._id)
-        .subscribe((result: Presenze[]) => {
-          this.presenze = result;
+  ngOnChanges(changes) {
+    console.log(this.data);
 
-          this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
-          this.dataSource.paginator = this.paginator;
-        });
-    } else {
-      this.presenzeService.getPresenze().subscribe((result) => {
-        this.presenze = result;
-
-        this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
-        this.dataSource.paginator = this.paginator;
-      });
-    }
+    this.dataSource = new MatTableDataSource<Presenze>(this.data);
+    this.dataSource.paginator = this.paginator;
   }
 
-  ngAfterViewInit() {}
+  ngOnInit() {
+    // if (this.data) {
+    //   this.presenzeService
+    //     .getPresenzeByDipendente(this.data._id)
+    //     .subscribe((result: Presenze[]) => {
+    //       this.presenze = result;
+
+    //       this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
+    //       this.dataSource.paginator = this.paginator;
+    //     });
+    // } else {
+    //   this.presenzeService.getPresenze().subscribe((result) => {
+    //     this.presenze = result;
+
+    //     this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
+    //     this.dataSource.paginator = this.paginator;
+    //   });
+    // }
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

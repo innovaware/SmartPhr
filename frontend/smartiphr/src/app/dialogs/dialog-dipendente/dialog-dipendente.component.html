@@ -1,11 +1,11 @@
-<mat-tab-group mat-align-tabs="start">
-  <mat-tab label="Dati anagrafici generale">
+<mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
+  <mat-tab label="{{tabLabels[0].label}}">
     <app-dipendente-generale [disable]=false [data]=dipendente >
     </app-dipendente-generale>
   </mat-tab>
 
    <!-- DOCUMENTI D'IDENTITA -->
-   <mat-tab label="Documenti d'identità" [disabled]="dipendente?._id === undefined">
+  <mat-tab label="{{tabLabels[1].label}}" [disabled]="dipendente?._id === undefined">
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDocIdentita">
       <button mat-button class="button-insert" (click)="addDocIdentita()">Aggiungi Documento</button>
@@ -100,11 +100,8 @@
 
   </mat-tab>
 
-
-
-
    <!-- MEDICINA LAVORO -->
-   <mat-tab label="Medicina del lavoro" [disabled]="dipendente?._id === undefined">
+   <mat-tab label="{{tabLabels[2].label}}" [disabled]="dipendente?._id === undefined">
 
 
     <div *ngIf="this.docsMedicina?.length <= 0" class="notPresent">
@@ -131,7 +128,7 @@
         </td>
       </ng-container>
 
- 
+
       <ng-container matColumnDef="filenameRichiesta">
         <th mat-header-cell *matHeaderCellDef> File Richiesta</th>
         <td mat-cell *matCellDef="let element"> {{element.filenameRichiesta}} </td>
@@ -177,10 +174,8 @@
 
   </mat-tab>
 
-
-
    <!-- CONTRATTI LAVORO -->
-   <mat-tab label="Contratti di lavoro" [disabled]="dipendente?._id === undefined">
+   <mat-tab label="{{tabLabels[3].label}}" [disabled]="dipendente?._id === undefined">
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingContratto">
       <button mat-button class="button-insert" (click)="addContratto()">Aggiungi Documento</button>
@@ -275,11 +270,8 @@
 
   </mat-tab>
 
-
-
-
    <!-- PRIVACY -->
-   <mat-tab label="Privacy" [disabled]="dipendente?._id === undefined">
+   <mat-tab label="{{tabLabels[4].label}}" [disabled]="dipendente?._id === undefined">
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPrivacy">
       <button mat-button class="button-insert" (click)="addPrivacy()">Aggiungi Documento</button>
@@ -374,12 +366,8 @@
 
   </mat-tab>
 
-
-
-
-
    <!-- DIPLOMI E ATTESTATI -->
-   <mat-tab label="Diplomi e attestati" [disabled]="dipendente?._id === undefined">
+   <mat-tab label="{{tabLabels[5].label}}" [disabled]="dipendente?._id === undefined" >
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDiploma">
       <button mat-button class="button-insert" (click)="addDiploma()">Aggiungi Documento</button>
@@ -474,11 +462,8 @@
 
   </mat-tab>
 
-
-
-
   <!-- ATTESTATI ECM -->
-  <mat-tab label="Attestati ECM" [disabled]="dipendente?._id === undefined">
+  <mat-tab label="{{tabLabels[6].label}}" [disabled]="dipendente?._id === undefined">
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingAttestatoECM">
       <button mat-button class="button-insert" (click)="addAttestatoECM()">Aggiungi Documento</button>
@@ -573,11 +558,8 @@
 
   </mat-tab>
 
-
-
-
   <!-- CEDOLINI -->
-  <mat-tab label="Cedolini e CU" [disabled]="dipendente?._id === undefined">
+  <mat-tab label="{{tabLabels[7].label}}" [disabled]="dipendente?._id === undefined">
 
 
     <div *ngIf="this.cedolini?.length <= 0" class="notPresent">
@@ -629,10 +611,8 @@
 
   </mat-tab>
 
-
-
    <!-- MALATTIA -->
-   <mat-tab label="Certificati malattia" [disabled]="dipendente?._id === undefined">
+   <mat-tab label="{{tabLabels[8].label}}" [disabled]="dipendente?._id === undefined">
 
     <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCertificatoMalattia">
       <button mat-button class="button-insert" (click)="addCertificatoMalattia()">Aggiungi Documento</button>
@@ -648,7 +628,7 @@
         <div class="col">
         </div>
       </div>
-      
+
       <br>
       <div class="row">
         <div class="col">
@@ -658,7 +638,7 @@
           </mat-form-field>
         </div>
         <div class="col-2">
-         
+
         </div>
       </div>
 
@@ -703,7 +683,7 @@
 
 
           <button mat-raised-button color="accent" class="action-button" (click)="uploadVMCF(row)">Allega esito VMCF</button>
-          
+
 
 
           <button mat-button (click)="showDocument(row)">
@@ -751,10 +731,8 @@
 
   </mat-tab>
 
-
-
   <!-- REGOLAMENTO -->
-  <mat-tab label="Regolamento interno" [disabled]="dipendente?._id === undefined">
+  <mat-tab label="{{tabLabels[9].label}}" [disabled]="dipendente?._id === undefined">
 
     <br>
     <label>Presa visione Regolamento interno.</label>
@@ -762,11 +740,8 @@
 
   </mat-tab>
 
-
-
-
   <!-- RICHIESTE MATERIALE -->
-  <mat-tab label="Richieste materiale o presidi" [disabled]="dipendente?._id === undefined">
+  <mat-tab label="{{tabLabels[10].label}}" [disabled]="dipendente?._id === undefined">
 
 
     <div *ngIf="this.richieste?.length <= 0" class="notPresent">
@@ -810,43 +785,32 @@
 
   </mat-tab>
 
-
-
- <!-- FERIE -->
-  <mat-tab label="Ferie">
-    <app-ferie [disable]="dipendente?._id === undefined" [data]=dipendente >
+  <!-- FERIE -->
+  <mat-tab label="{{tabLabels[11].label}}">
+    <app-ferie [disable]="dipendente?._id === undefined" [data]=ferie [dipendente]="dipendente">
     </app-ferie>
   </mat-tab>
 
-
-  
-
-
   <!-- PERMESSI -->
-  <mat-tab label="Permessi">
-    <app-permessi [disable]="dipendente?._id === undefined" [data]=dipendente >
+  <mat-tab label="{{tabLabels[12].label}}">
+    <app-permessi [disable]="dipendente?._id === undefined" [data]=permessi [dipendente]="dipendente" >
     </app-permessi>
   </mat-tab>
 
-
   <!-- CAMBI TURNO -->
-  <mat-tab label="Cambi turno">
-    <app-cambiturno [disable]="dipendente?._id === undefined" [data]=dipendente >
+  <mat-tab label="{{tabLabels[13].label}}">
+    <app-cambiturno [disable]="dipendente?._id === undefined" [data]="cambioTurni" [dipendente]=dipendente >
     </app-cambiturno>
   </mat-tab>
 
-
   <!-- PRESENZE -->
-  <mat-tab label="Presenze">
-    <app-presenze [disable]="dipendente?._id === undefined" [data]=dipendente >
+  <mat-tab label="{{tabLabels[14].label}}">
+    <app-presenze [disable]="dipendente?._id === undefined" [data]="presenze" [dipendente]=dipendente  >
     </app-presenze>
   </mat-tab>
 
-
-
-
   <!-- TURNI -->
-  <mat-tab label="Turni mensili">
+  <mat-tab label="{{tabLabels[15].label}}">
     <app-turnimensili [disable]="dipendente?._id === undefined" [data]=dipendente >
     </app-turnimensili>
   </mat-tab>

@@ -3,9 +3,6 @@ export class Ferie {
     return JSON.parse(JSON.stringify(obj));
   }
   _id?: string;
-  nome?: string;
-  cognome?: string;
-  cf?: string;
   dataInizio?: Date;
   dataFine?: Date;
   dataRichiesta?: Date;

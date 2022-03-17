@@ -85,6 +85,8 @@ import {
 } from "@angular-material-components/datetime-picker";
 
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
+import { FattureConsulentiComponent } from "./pages/fatture-consulenti/fatture-consulenti.component";
+import { BonificiConsulentiComponent } from "./pages/bonifici-consulenti/bonifici-consulenti.component";
 import { AdminFornitoriComponent } from "./pages/admin-fornitori/admin-fornitori.component";
 import { FattureFornitoriComponent } from "./pages/fatture-fornitori/fatture-fornitori.component";
 import { BonificiFornitoriComponent } from "./pages/bonifici-fornitori/bonifici-fornitori.component";
@@ -182,6 +184,7 @@ import { DialogPreIngressoComponent } from './dialogs/dialog-pre-ingresso/dialog
 import { DialogIngressoComponent } from './dialogs/dialog-ingresso/dialog-ingresso.component';
 import { DialogAttivitaComponent } from './dialogs/dialog-attivita/dialog-attivita.component';
 import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.component';
+import { CamereComponent } from './pages/camere/camere.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -226,6 +229,8 @@ import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.
     SchedaInterventiComponent,
     DialogEventComponent,
     ConsulentiComponent,
+    FattureConsulentiComponent,
+    BonificiConsulentiComponent,
     AdminFornitoriComponent,
     FattureFornitoriComponent,
     BonificiFornitoriComponent,
@@ -316,6 +321,7 @@ import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.
     DialogAttivitaComponent,
     DialogArmadioComponent,
 
+    CamereComponent,
   ],
   imports: [
     BrowserModule,
@@ -347,6 +353,7 @@ import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ChartsModule,
+    MatSelectModule
   ],
   providers: [
     AuthGuardService,

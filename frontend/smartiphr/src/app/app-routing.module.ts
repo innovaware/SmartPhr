@@ -23,6 +23,8 @@ import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
 import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
 import { CvComponent } from './pages/cv/cv.component';
+import { FattureConsulentiComponent } from './pages/fatture-consulenti/fatture-consulenti.component';
+import { BonificiConsulentiComponent } from './pages/bonifici-consulenti/bonifici-consulenti.component';
 import { FattureFornitoriComponent } from './pages/fatture-fornitori/fatture-fornitori.component';
 import { BonificiFornitoriComponent } from './pages/bonifici-fornitori/bonifici-fornitori.component';
 import { FattureSSRComponent } from './pages/fatture-ssr/fatture-ssr.component';
@@ -48,6 +50,7 @@ import { FerieAltroPersonaleComponent } from "./pages/ferie-altro-personale/feri
 import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
 import { GeneralePersonaleComponent } from "./pages/generale-personale/generale-personale.component";
 import { AuthorizationComponent } from "./pages/authorization/authorization.component";
+import { CamereComponent } from "./pages/camere/camere.component";
 
 
 
@@ -94,6 +97,8 @@ const routes: Routes = [
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_consulenti", component: ConsulentiComponent, canActivate: [AuthGuard] },
+  { path: "fatture_consulenti", component: FattureConsulentiComponent, canActivate: [AuthGuard] },
+  { path: "bonifici_consulenti", component: BonificiConsulentiComponent, canActivate: [AuthGuard] },
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
   { path: "fatture_fornitori", component: FattureFornitoriComponent, canActivate: [AuthGuard] },
   { path: "bonifici_fornitori", component: BonificiFornitoriComponent, canActivate: [AuthGuard] },
@@ -114,6 +119,7 @@ const routes: Routes = [
 
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
+  { path: "gest_camere", component: CamereComponent, canActivate: [AuthGuard]  },
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

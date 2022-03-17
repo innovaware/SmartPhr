@@ -13,6 +13,8 @@ const redis = require("redis");
 const mongoose = require("mongoose");
 const mqtt = require("mqtt");
 const { route } = require("./routes/dipendenti");
+const { ObjectId } = require("bson");
+const Menu = require("./models/menu");
 
 // var MongoClient = require('mongodb').MongoClient;
 // mongo = undefined;
@@ -180,7 +182,7 @@ const InitApiFunctions = () => {
   // User api
   var userRouter = require("./routes/user");
   var apiUser = { key: 'user', path:'/api/users' }
-  app.use(apiUser.path, logHandler, authorizationHandler, userRouter);
+  app.use(apiUser.path, logHandler, authorizationHandler, roleHandler,  userRouter);
   routesList.push(apiUser);
 
   // Pazienti API
@@ -192,13 +194,13 @@ const InitApiFunctions = () => {
   // Dipendenti API
   var dipendentiRouter = require("./routes/dipendenti");
   var apiDipendente = { key: 'dipendenti', path: '/api/dipendenti' }
-  app.use(apiDipendente.path, logHandler, authorizationHandler, dipendentiRouter );
+  app.use(apiDipendente.path, logHandler, authorizationHandler, roleHandler,  dipendentiRouter );
   routesList.push(apiDipendente);
 
   // Consulenti API
   var consulentiRouter = require("./routes/consulenti");
   var apiConsulenti = { key: 'consulenti', path: '/api/consulenti' }
-  app.use(apiConsulenti.path, logHandler, authorizationHandler, consulentiRouter);
+  app.use(apiConsulenti.path, logHandler, authorizationHandler, roleHandler,  consulentiRouter);
   routesList.push(apiConsulenti);
 
   // Fornitori API
@@ -210,179 +212,187 @@ const InitApiFunctions = () => {
   // ASP API
   var aspRouter = require("./routes/asp");
   var apiAsp = { key: 'asp', path: '/api/asp' }
-  app.use(apiAsp.path, logHandler, authorizationHandler, aspRouter);
+  app.use(apiAsp.path, logHandler, authorizationHandler, roleHandler, aspRouter);
   routesList.push(apiAsp);
 
   // Farmaci API
   var farmaciRouter = require("./routes/farmaci");
   var apiFarmaci = { key: 'farmaci', path: '/api/farmaci' }
-  app.use(apiFarmaci.path, logHandler, authorizationHandler, farmaciRouter);
+  app.use(apiFarmaci.path, logHandler, authorizationHandler, roleHandler, farmaciRouter);
   routesList.push(apiFarmaci);
 
   // Eventi API
   var eventiRouter = require("./routes/eventi");
   var apiEventi = { key: 'eventi', path: '/api/eventi' }
-  app.use(apiEventi.path, logHandler, authorizationHandler, eventiRouter);
+  app.use(apiEventi.path, logHandler, authorizationHandler, roleHandler, eventiRouter);
   routesList.push(apiEventi);
-
-
 
    // Mansioni API
    var mansioniRouter = require("./routes/mansioni");
    var apiMansioni = { key: 'mansioni', path: '/api/mansioni' }
-   app.use(apiMansioni.path, logHandler, authorizationHandler, mansioniRouter);
+   app.use(apiMansioni.path, logHandler, authorizationHandler, roleHandler, mansioniRouter);
    routesList.push(apiMansioni);
 
   // Upload and Download
   var uploadRouter = require("./routes/upload");
   var apiUpload = { key: 'upload', path: '/api/upload'}
   var apiFile = { key: 'file', path: '/api/files'}
-  app.use( apiUpload.path, logHandler, authorizationHandler, uploadRouter, writeHandler );
-  app.use(apiFile.path, logHandler, authorizationHandler, uploadRouter);
+  app.use( apiUpload.path, logHandler, authorizationHandler, roleHandler, uploadRouter, writeHandler );
+  app.use(apiFile.path, logHandler, authorizationHandler, roleHandler, uploadRouter);
   routesList.push(apiUpload);
   routesList.push(apiFile);
 
   var apiDownload = { key: 'download', path: '/api/download'}
-  app.get(apiDownload.path, logHandler, authorizationHandler, readHandler);
+  app.get(apiDownload.path, logHandler, authorizationHandler, roleHandler, readHandler);
   routesList.push(apiDownload);
 
   // Fatture API
   var fattureRouter = require("./routes/fatture");
   var apiFatture = { key: 'fatture', path: '/api/fatture'}
-  app.use(apiFatture.path, logHandler, authorizationHandler, fattureRouter);
+  app.use(apiFatture.path, logHandler, authorizationHandler, roleHandler, fattureRouter);
   routesList.push(apiFatture);
 
   // NotaCredito API
   var notaCreditoRouter = require("./routes/notacredito");
   var apiNotacredito = { key: 'notacredito', path: '/api/notacredito'}
-  app.use( apiNotacredito.path, logHandler, authorizationHandler, notaCreditoRouter );
+  app.use( apiNotacredito.path, logHandler, authorizationHandler, roleHandler, notaCreditoRouter );
   routesList.push(apiNotacredito);
 
   // Bonifici API
   var bonificiRouter = require("./routes/bonifici");
   var apiBonifici= { key: 'bonifici', path: '/api/bonifici'}
-  app.use(apiBonifici.path, logHandler, authorizationHandler, bonificiRouter);
+  app.use(apiBonifici.path, logHandler, authorizationHandler, roleHandler, bonificiRouter);
   routesList.push(apiBonifici);
 
   // Menu API
   var menuRouter = require("./routes/menu");
   var apiMenu = { key: 'menu', path: '/api/menu'}
-  app.use(apiMenu.path, logHandler, authorizationHandler, menuRouter);
+  app.use(apiMenu.path, logHandler, authorizationHandler, roleHandler, menuRouter);
   routesList.push(apiMenu);
 
   // Contratto API
   var contrattoRouter = require("./routes/contratto");
   var apiContratto = { key: 'contratto', path: '/api/contratto'}
-  app.use(apiContratto.path, logHandler, authorizationHandler, contrattoRouter);
+  app.use(apiContratto.path, logHandler, authorizationHandler, roleHandler, contrattoRouter);
   routesList.push(apiContratto);
 
   // Ferie API
   var ferieRouter = require("./routes/ferie");
   var apiFerie = { key: 'ferie', path: '/api/ferie'}
-  app.use(apiFerie.path, logHandler, authorizationHandler, ferieRouter);
+  app.use(apiFerie.path, logHandler, authorizationHandler, roleHandler, ferieRouter);
   routesList.push(apiFerie);
 
   // Permessi API
   var permessiRouter = require("./routes/permessi");
   var apiPermessi = { key: 'permessi', path: '/api/permessi'}
-  app.use(apiPermessi.path, logHandler, authorizationHandler, permessiRouter);
+  app.use(apiPermessi.path, logHandler, authorizationHandler, roleHandler, permessiRouter);
   routesList.push(apiPermessi);
 
   // Cambi turno API
   var cambiTurnoRouter = require("./routes/cambiturno");
   var apiCambiTurno = { key: 'cambiturno', path: '/api/cambiturno'}
-  app.use(apiCambiTurno.path, logHandler, authorizationHandler, cambiTurnoRouter);
+  app.use(apiCambiTurno.path, logHandler, authorizationHandler, roleHandler, cambiTurnoRouter);
   routesList.push(apiCambiTurno);
 
   // Presenze API
   var presenzeRouter = require("./routes/presenze");
   var apiPresenze = { key: 'presenze', path: '/api/presenze'}
-  app.use(apiPresenze.path, logHandler, authorizationHandler, presenzeRouter);
+  app.use(apiPresenze.path, logHandler, authorizationHandler, roleHandler, presenzeRouter);
   routesList.push(apiPresenze);
 
   // Turni mensili API
   var turniMensiliRouter = require("./routes/turnimensili");
   var apiTurniMensili = { key: 'turnimensili', path: '/api/turnimensili' }
-  app.use( apiTurniMensili.path, logHandler, authorizationHandler, turniMensiliRouter );
+  app.use( apiTurniMensili.path, logHandler, authorizationHandler, roleHandler, turniMensiliRouter );
   routesList.push(apiTurniMensili);
 
   // Turni mensili API
   var documentiDipendentiRouter = require("./routes/documentidipendenti");
   var apiDocumentiDipendenti = { key: 'documentidipendenti', path: '/api/documentidipendenti' }
-  app.use( apiDocumentiDipendenti.path, logHandler, authorizationHandler, documentiDipendentiRouter );
+  app.use( apiDocumentiDipendenti.path, logHandler, authorizationHandler, roleHandler, documentiDipendentiRouter );
   routesList.push(apiDocumentiDipendenti);
 
   // MedicinaLavoro API
   var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
   var apiDocumentiMedicinaLavoro = { key: 'documentimedicinalavoro', path: '/api/documentimedicinalavoro' }
-  app.use( apiDocumentiMedicinaLavoro.path, logHandler, authorizationHandler, documentiMedicinaLavoroRouter );
+  app.use( apiDocumentiMedicinaLavoro.path, logHandler, authorizationHandler, roleHandler, documentiMedicinaLavoroRouter );
   routesList.push(apiDocumentiMedicinaLavoro);
 
   // CartellaClinica API
   var cartellaClinicaRouter = require("./routes/cartellaClinica");
   var apiCartellaClinica = { key: 'cartellaClinica', path: '/api/cartellaClinica' }
-  app.use( apiCartellaClinica.path, logHandler, authorizationHandler, cartellaClinicaRouter );
+  app.use( apiCartellaClinica.path, logHandler, authorizationHandler, roleHandler, cartellaClinicaRouter );
   routesList.push(apiCartellaClinica);
 
   // Bonifici API
   var documentiFornitoreRouter = require("./routes/documentifornitore");
   var apiDocumentiFornitore = { key: 'documentifornitore', path: '/api/documentifornitore' }
-  app.use( apiDocumentiFornitore.path, logHandler, authorizationHandler, documentiFornitoreRouter );
+  app.use( apiDocumentiFornitore.path, logHandler, authorizationHandler, roleHandler, documentiFornitoreRouter );
   routesList.push(apiDocumentiFornitore);
 
   var curriculumRouter = require("./routes/curriculum");
   var apiCurriculum = { key: 'curriculum', path: '/api/curriculum' }
-  app.use(apiCurriculum.path, logHandler, authorizationHandler, curriculumRouter);
+  app.use(apiCurriculum.path, logHandler, authorizationHandler, roleHandler, curriculumRouter);
   routesList.push(apiCurriculum);
+
+  var fattureConsulentiRouter = require("./routes/fattureConsulenti");
+  var apiFattureConsulente = { key: 'fattureconsulente', path: '/api/fattureconsulenti' }
+  app.use( apiFattureConsulente.path, logHandler, authorizationHandler, roleHandler, fattureConsulentiRouter );
+  routesList.push(apiFattureConsulente);
+
+  var bonificiConsulentiRouter = require("./routes/bonificiConsulenti");
+  var apiBonificiConsulenti = { key: 'bonificiconsulenti', path: '/api/bonificiconsulenti' }
+  app.use( apiBonificiConsulenti.path, logHandler, authorizationHandler, roleHandler, bonificiConsulentiRouter  );
+  routesList.push(apiBonificiConsulenti);
 
   var fattureFornitoriRouter = require("./routes/fattureFornitori");
   var apiFattureFornitore = { key: 'fatturefornitore', path: '/api/fatturefornitori' }
-  app.use( apiFattureFornitore.path, logHandler, authorizationHandler, fattureFornitoriRouter );
+  app.use( apiFattureFornitore.path, logHandler, authorizationHandler, roleHandler, fattureFornitoriRouter );
   routesList.push(apiFattureFornitore);
 
   var bonificiFornitoriRouter = require("./routes/bonificiFornitori");
   var apiBonificiFornitori = { key: 'bonificifornitori', path: '/api/bonificifornitori' }
-  app.use( apiBonificiFornitori.path, logHandler, authorizationHandler, bonificiFornitoriRouter  );
+  app.use( apiBonificiFornitori.path, logHandler, authorizationHandler, roleHandler, bonificiFornitoriRouter  );
   routesList.push(apiBonificiFornitori);
 
   var anticipoFattureRouter = require("./routes/anticipoFatture");
   var apiAnticipoFatture = { key: 'anticipofatture', path: '/api/anticipofatture' }
-  app.use( apiAnticipoFatture.path, logHandler, authorizationHandler, anticipoFattureRouter );
+  app.use( apiAnticipoFatture.path, logHandler, authorizationHandler, roleHandler, anticipoFattureRouter );
   routesList.push(apiAnticipoFatture);
 
   var prospettoCMRouter = require("./routes/prospettoCM");
   var apiProspettoCMR = { key: 'prospettocm', path: '/api/prospettocm' }
-  app.use( apiProspettoCMR.path, logHandler, authorizationHandler, prospettoCMRouter );
+  app.use( apiProspettoCMR.path, logHandler, authorizationHandler, roleHandler, prospettoCMRouter );
   routesList.push(apiProspettoCMR);
 
   var puntoFattureRouter = require("./routes/puntoFatture");
   var apiPuntoFatture = { key: 'puntofatture', path: '/api/puntofatture' }
-  app.use( apiPuntoFatture.path, logHandler, authorizationHandler, puntoFattureRouter );
+  app.use( apiPuntoFatture.path, logHandler, authorizationHandler, roleHandler, puntoFattureRouter );
   routesList.push(apiPuntoFatture);
 
   var DiarioClinicoRouter = require("./routes/diarioClinico");
   var apiDiarioClinico = { key: 'diarioclinico', path: '/api/diarioClinico' }
-  app.use( apiDiarioClinico.path, logHandler, authorizationHandler, DiarioClinicoRouter );
+  app.use( apiDiarioClinico.path, logHandler, authorizationHandler, roleHandler, DiarioClinicoRouter );
   routesList.push(apiDiarioClinico);
 
   var VisiteSpecialisticheRouter = require("./routes/visiteSpecialistiche");
   var apiVisiteSpecialistiche = { key: 'visiteSpecialistiche', path: '/api/visiteSpecialistiche' }
-  app.use( apiVisiteSpecialistiche.path, logHandler, authorizationHandler, VisiteSpecialisticheRouter );
+  app.use( apiVisiteSpecialistiche.path, logHandler, authorizationHandler, roleHandler, VisiteSpecialisticheRouter );
   routesList.push(apiVisiteSpecialistiche);
 
   var documentiPazienteRouter = require("./routes/documentipazienti");
   var apiDocumentiPaziente = { key: 'documentipazienti', path: '/api/documentipazienti' }
-  app.use( apiDocumentiPaziente.path, logHandler, authorizationHandler, documentiPazienteRouter );
+  app.use( apiDocumentiPaziente.path, logHandler, authorizationHandler, roleHandler, documentiPazienteRouter );
   routesList.push(apiDocumentiPaziente);
 
   var DiarioEducativoRouter = require("./routes/diarioEducativo");
   var apiDiarioEducativo = { key: 'diarioEducativo', path: '/api/diarioEducativo' }
-  app.use( apiDiarioEducativo.path, logHandler, authorizationHandler, DiarioEducativoRouter );
+  app.use( apiDiarioEducativo.path, logHandler, authorizationHandler, roleHandler, DiarioEducativoRouter );
   routesList.push(apiDiarioEducativo);
   
   var DiarioAssSocialeRouter = require("./routes/diarioAssSociale");
   var apiDiarioAssSociale = { key: 'diarioAssSociale', path: '/api/diarioAssSociale' }
-  app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, DiarioAssSocialeRouter );
+  app.use( apiDiarioAssSociale.path, logHandler, authorizationHandler, roleHandler, DiarioAssSocialeRouter );
   routesList.push(apiDiarioAssSociale);
 
 
@@ -392,6 +402,11 @@ const InitApiFunctions = () => {
   var apiIngressi = { key: 'dataIngresso', path: '/api/dataIngresso' }
   app.use(apiIngressi.path, logHandler, authorizationHandler, IngressiRouter);
   routesList.push(apiIngressi);
+      
+  var CameraRouter = require("./routes/camera");
+  var apiCamera = { key: 'camere', path: '/api/camera' }
+  app.use( apiCamera.path, logHandler, authorizationHandler, roleHandler, CameraRouter );
+  routesList.push(apiCamera);
       
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
@@ -443,7 +458,10 @@ const authorizationHandler = async (req, res, next) => {
     //err.status = 401;
     res.statusCode = 401;
     res.end("Not Authorizated");
-    return next(null, "You are not authenticated!");
+    //return next(null, "You are not authenticated!");
+
+    console.log("User not authorizated");
+    return;
   }
 
   var username = userAuth.user;
@@ -456,6 +474,7 @@ const authorizationHandler = async (req, res, next) => {
   getUser(username, password)
     .then((user) => {
       //console.log("GetUser completed: ", user);
+
       userMatches = user.username != undefined && user.active == true;
       passwordMatches = user.password != undefined;
       resultAuthorization = userMatches & passwordMatches;
@@ -535,17 +554,22 @@ function getUser(username, password) {
   });
 }
 
-//TODO Da sistemare
-function checkAuthRole(user) {
-  if (user != undefined) 
+const checkAuthRole = async (user) => {
+  const mansioneRole = user.role;
+  const getData = () => {
+    // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
+    return Menu.find({ roles: { $all: [ObjectId(mansioneRole)] } });
+  };
+
+  if (user != undefined)  {
+    const data = await getData();
     return true;
-  //return user.role == "Admin";
+  }
 
   return false;
 }
 
 // enable files upload
-
 
 // const {
 //     MONGO_USERNAME,

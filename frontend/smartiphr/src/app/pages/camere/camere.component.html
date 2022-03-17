@@ -1,0 +1,34 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">AREA CAMERE</h1>
+    </div>
+  </div>
+
+  <hr />
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Seleziona un Piano</mat-label>
+        <mat-select (selectionChange)="onPlanChange($event)" [(ngModel)]="selectedPiano">
+          <mat-option value="1p">Piano Terra</mat-option>
+          <mat-option value="2p">Primo Piano</mat-option>
+          <mat-option value="1c">Chiesa - Terra</mat-option>
+          <mat-option value="2c">Chiesa - Primo</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <div class="left-bar"></div>
+      <div id="ol-map" class="map-container"></div>
+    </div>
+
+    <div class="col">
+
+    </div>
+  </div>
+
+</div>

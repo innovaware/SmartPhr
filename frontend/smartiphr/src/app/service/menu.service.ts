@@ -17,5 +17,9 @@ export class MenuService {
       .get<Menu[]>(`${this.api}/api/menu`);
   }
 
+  update(menu: Menu): Observable<Menu> {
+    return this.http
+      .put<Menu>(`${this.api}/api/menu/${menu._id}`, menu);
+  }
 
 }

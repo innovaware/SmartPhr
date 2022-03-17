@@ -7,6 +7,7 @@ export class SubMenu {
   icon: string;
   active: boolean;
   subMenu: SubMenu[];
-
+  roles: [string]; // Lista delle mansioni
   status: boolean; //If true then subMenu is opened else closed
+  order: number;
 }

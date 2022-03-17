@@ -1,1 +1,37 @@
-<p>authorization works!</p>
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">Menu per Mansione</h1>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row" *ngFor="let itemMenu of menu">
+    <div class="col-3">
+      {{itemMenu.title}}
+
+    </div>
+    <!-- <div class="col">
+      {{menuXmansione[itemMenu._id]}}
+    </div> -->
+
+    <div class="col">
+      <mat-form-field appearance="fill">
+        <mat-label>Seleziona una mansione</mat-label>
+        <mat-select [(ngModel)]="menuXmansione[itemMenu._id]" multiple>
+          <mat-option *ngFor="let itemMansione of mansioni" value="{{itemMansione._id}}">
+            {{itemMansione.codice}} - {{itemMansione.descrizione}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </div>
+  </div>
+
+</div>
+
+
+<div class="bottom-actions right">
+  <button mat-button class="button-insert" (click)="save()">Salva</button>
+</div>

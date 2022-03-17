@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Cambiturno } from '../models/cambiturni';
 
@@ -13,12 +14,14 @@ export class CambiturniService {
   constructor(private http: HttpClient) {}
 
 
-  async getCambiturnoByDipendente(id): Promise<Cambiturno[]> {
-    return this.http.get<Cambiturno[]>(this.api + "/api/cambiturno/dipendente/" + id).toPromise();
+  getCambiturnoByDipendente(id): Observable<Cambiturno[]> {
+    return this.http.get<Cambiturno[]>(this.api + "/api/cambiturno/dipendente/" + id);
   }
 
 
   async getCambiturno(): Promise<Cambiturno[]> {
+    console.log("Cambio turno GET");
+
     return this.http.get<Cambiturno[]>(this.api + "/api/cambiturno").toPromise();
   }
 

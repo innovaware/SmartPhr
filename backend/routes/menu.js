@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const express = require("express");
 const router = express.Router();
 const Menu = require("../models/menu");
@@ -7,9 +8,11 @@ router.get("/", async (req, res) => {
   try {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
+    const mansioneRole = res.locals.auth.role;
 
     const getData = () => {
-      return Menu.find();
+      // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
+      return Menu.find({ roles: { $all: [ObjectId(mansioneRole)] } });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -18,7 +21,7 @@ router.get("/", async (req, res) => {
       return;
     }
 
-    const searchTerm = `MENUALL`;
+    const searchTerm = `MENUALL${mansioneRole}`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 

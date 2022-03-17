@@ -1,5 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
+import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Permessi } from '../models/permessi';
 
@@ -14,8 +15,8 @@ export class PermessiService {
   constructor(private http: HttpClient) {}
 
 
-  async getPermessiByDipendente(id): Promise<Permessi[]> {
-    return this.http.get<Permessi[]>(this.api + "/api/permessi/dipendente/" + id).toPromise();
+  getPermessiByDipendente(id): Observable<Permessi[]> {
+    return this.http.get<Permessi[]>(this.api + "/api/permessi/dipendente/" + id);
   }
 
 

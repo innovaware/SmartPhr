@@ -24,15 +24,14 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     paziente: Paziente;
     button: DinamicButton;
   }>();
-
-
+  @Output() deletePatientEmiter = new EventEmitter<Paziente>();
 
   @Input() buttons: DinamicButton[];
   @Input() CustomButtons: DinamicButton[];
 
   @Input() insertFunction: any;
   @Input() showPatient: any;
-  @Input() deletePatient: any;
+  //@Input() deletePatient: any;
 
   @Input() eventPazienti: Observable<Paziente[]>;
 
@@ -71,8 +70,6 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     this.eventsSubscription = this.eventPazienti.subscribe((p: Paziente[]) => {
       this.dataSource = new MatTableDataSource<Paziente>(p);
       this.dataSource.paginator = this.paginator;
-
-
     });
   }
 
@@ -89,59 +86,12 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     this.dataSource.filter = filterValue.trim().toLowerCase();
   }
 
-  // call(paziente: Paziente, item: DinamicButton) {
-  //   console.log("Table Ospiti emit ");
+  async deletePatient(paziente: Paziente) {
+    console.log("Delete patient:", paziente);
 
-  //   this.showItemEmiter.emit({ paziente: paziente, button: item });
-  // }
-
-  async show(paziente: Paziente) {
-
-    console.log("Show scheda paziente:", paziente);
-    var dialogRef = this.dialog.open(DialogPazienteComponent, {
-      data: { paziente: paziente, readonly: false },
-      width: "1024px",
-    });
-  }
-  // async show(paziente: Paziente) {
-  //   if (this.showFunction != undefined) {
-  //     this.showFunction(paziente);
-  //   }
-  // }
-
-
-
-
-  async deletePaziente(paziente: Paziente) {
-    console.log("Cancella paziente:", paziente);
-
-    this.dialog
-      .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il paziente?" },
-        //width: "600px",
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result == true) {
-          this.pazienteService
-            .delete(paziente)
-            .subscribe((result: Paziente) => {
-              console.log("Eliminazione eseguita con successo", result);
-              const index = this.data.indexOf(paziente, 0);
-              if (index > -1) {
-                this.data.splice(index, 1);
-              }
-              this.dataSource.data = this.data;
-              //this.dataSource.paginator = this.paginator;
-            }),
-            (err) => {
-              console.error("Errore nell'eliminazione", err);
-            };
-        } else {
-          console.log("Cancellazione paziente annullata");
-          this.messageService.showMessageError("Cancellazione paziente Annullata");
-        }
-      });
+    if (this.deletePatientEmiter !== undefined) {
+      this.deletePatientEmiter.emit(paziente);
+    }
   }
 
 }
