@@ -5,5 +5,27 @@ export class Camere {
 
   _id?: string;
   camera: string;
-  piano: Number;
+  piano: string;
+  geometry: string;
+  geometryObject: any;
+
+
+  constructor() {
+    const empty = {
+      type: "FeatureCollection",
+      features: [
+        {
+          type: "Feature",
+          properties: {},
+          geometry: {
+            type: "Polygon",
+            coordinates: [[]],
+          },
+        },
+      ],
+    };
+
+    this.geometry = JSON.stringify(empty);
+    this.geometryObject = empty;
+  }
 }

@@ -340,7 +340,7 @@ import { CamereComponent } from './pages/camere/camere.component';
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ChartsModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   providers: [
     AuthGuardService,
