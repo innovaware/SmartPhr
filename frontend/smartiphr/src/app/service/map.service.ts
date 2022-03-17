@@ -23,22 +23,23 @@ export class MapService {
       extent: extent,
     });
 
-    return this.getLayer(extent, projection, "./assets/primopiano.png");
+    return this.getLayer(extent, projection, "./assets/primopiano.png", "ol-map");
   }
 
   getSecondoPiano(): {
     layer: ImageLayer<Static>;
     extent: number[];
     projection: Projection;
+    target: string;
   } {
-    const extent = [0, 0, 726, 882];
+    const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
       code: "Primo Piano",
       units: "pixels",
       extent: extent,
     });
 
-    return this.getLayer(extent, projection, "./assets/secondopiano.png");
+    return this.getLayer(extent, projection, "./assets/secondopiano.png", "ol-map");
   }
 
 
@@ -47,14 +48,14 @@ export class MapService {
     extent: number[];
     projection: Projection;
   } {
-    const extent = [0, 0, 292, 882];
+    const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
       code: "Chiesa terra",
       units: "pixels",
       extent: extent,
     });
 
-    return this.getLayer(extent, projection, "./assets/chiesaprimopiano.png");
+    return this.getLayer(extent, projection, "./assets/chiesaprimopiano.png", "ol-map");
   }
 
   getSecondoChiesa(): {
@@ -62,24 +63,26 @@ export class MapService {
     extent: number[];
     projection: Projection;
   } {
-    const extent = [0, 0, 355, 848];
+    const extent = [0, 0, 1320, 1582];
     const projection = new Projection({
       code: "Chiesa 1° piano",
       units: "pixels",
       extent: extent,
     });
 
-    return this.getLayer(extent, projection, "./assets/chiesasecondopiano.png");
+    return this.getLayer(extent, projection, "./assets/chiesasecondopiano.png", "ol-map");
   }
 
   getLayer(
     extent: number[],
     projection: Projection,
-    url
+    url,
+    target
   ): {
     layer: ImageLayer<Static>;
     extent: number[];
     projection: Projection;
+    target: string;
   } {
     return {
       layer: new ImageLayer({
@@ -92,6 +95,7 @@ export class MapService {
       }),
       extent: extent,
       projection: projection,
+      target: target,
     };
   }
 }

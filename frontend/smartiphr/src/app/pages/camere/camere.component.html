@@ -10,7 +10,7 @@
     <div class="col">
       <mat-form-field appearance="fill">
         <mat-label>Seleziona un Piano</mat-label>
-        <mat-select >
+        <mat-select (selectionChange)="onPlanChange($event)" [(ngModel)]="selectedPiano">
           <mat-option value="1p">Piano Terra</mat-option>
           <mat-option value="2p">Primo Piano</mat-option>
           <mat-option value="1c">Chiesa - Terra</mat-option>
@@ -25,10 +25,10 @@
       <div class="left-bar"></div>
       <div id="ol-map" class="map-container"></div>
     </div>
+
     <div class="col">
-      <div *ngFor="let item of camere">
-        Camera: {{item.camera}} - Piano: {{item.piano}} - Coord:
-      </div>
+
     </div>
   </div>
+
 </div>
