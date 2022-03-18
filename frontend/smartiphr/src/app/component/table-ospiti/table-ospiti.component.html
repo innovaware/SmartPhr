@@ -10,8 +10,11 @@
     <div class="col">
       <mat-form-field appearance="standard">
         <mat-label>Cerca</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." [(ngModel)]="inputSearchField">
       </mat-form-field>
+    </div>
+    <div class="col-1 right middle" style="width: fit-content;">
+      <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField()">
     </div>
   </div>
 

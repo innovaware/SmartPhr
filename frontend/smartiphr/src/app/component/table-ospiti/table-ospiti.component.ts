@@ -41,6 +41,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   @Input() enableCustomButton: boolean;
 
 
+  inputSearchField: string;
   private eventsSubscription: Subscription;
 
   displayedColumns: string[] = [
@@ -92,6 +93,11 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
     if (this.deletePatientEmiter !== undefined) {
       this.deletePatientEmiter.emit(paziente);
     }
+  }
+
+  cleanSearchField() {
+    this.dataSource.filter = undefined;
+    this.inputSearchField = undefined;
   }
 
 }
