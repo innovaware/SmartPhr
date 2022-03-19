@@ -140,6 +140,10 @@ const InitRedisService = () => {
   
   app.set('redis', clientRedis); 
   app.set('redisDisabled', redisDisabled); 
+
+  const redisClientTest = app.get("redis");
+  const redisDisabledTest = app.get("redisDisabled");
+  console.log(`Test redis connection: ${redisClientTest  === clientRedis} - ${redisDisabledTest  === redisDisabled}`);
 }
 
 const InitMailerService = () => {

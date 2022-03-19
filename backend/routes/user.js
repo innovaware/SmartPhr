@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
   };
 
   try {
-    //redisClient = res.locals.clientRedis;
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 

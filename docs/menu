@@ -1,0 +1,1241 @@
+[{
+  "_id": {
+    "$oid": "6150b2d12a39c327c7fb294c"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "file-archive",
+  "link": "/archio_visitespecialistiche",
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f20"
+      },
+      "title": "Visite Specialistiche",
+      "link": "/archio_visitespecialistiche",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f21"
+      },
+      "title": "Referti esami strumentali",
+      "link": "/archivio_esami_strumentali",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f22"
+      },
+      "title": "Referti esami ematochimici",
+      "link": "/archivio_referti_ematochimici",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f23"
+      },
+      "title": "Verbali",
+      "link": "/archivio_verbali",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f24"
+      },
+      "title": "Relazioni",
+      "link": "/archivio_relazioni_certificati",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f25"
+      },
+      "title": "Impegnative",
+      "link": "/archivio_impegnative",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "61aba850ead759678e081f26"
+      },
+      "title": "PAI",
+      "link": "/archivio_pai",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Archivi",
+  "roles": [],
+  "order": 20
+},{
+  "_id": {
+    "$oid": "620a76f301df09c08ccd980a"
+  },
+  "title": "Area Personale",
+  "link": "/",
+  "icon": "book-medical",
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e7db052456342eb610"
+      },
+      "title": "Generale",
+      "link": "generale",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e7db052456342eb611"
+      },
+      "title": "Esami,Certificati & Privacy",
+      "link": "cert_privacy",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e7db052456342eb612"
+      },
+      "title": "Lavoro",
+      "link": "lavoro",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e7db052456342eb613"
+      },
+      "title": "Ferie, Permessi, Presenze e Turni",
+      "link": "ferie_permessi",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "active": true,
+  "order": 2,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    }
+  ]
+},{
+  "_id": {
+    "$oid": "614c312433c4ef1fac718db6"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "user-circle",
+  "link": "/gest_pazienti",
+  "order": 1,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14ce8"
+      },
+      "title": "Pazienti",
+      "link": "gest_pazienti",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "subMenu": [
+        {
+          "title": "Dipendenti",
+          "link": "/gest_dipendenti",
+          "active": true
+        },
+        {
+          "title": "Ferie",
+          "link": "/gest_ferie",
+          "active": true
+        },
+        {
+          "title": "Permessi",
+          "link": "/gest_permessi",
+          "active": true
+        },
+        {
+          "title": "Cambi turno",
+          "link": "/gest_cambiturno",
+          "active": true
+        },
+        {
+          "title": "Presenze",
+          "link": "/gest_presenze",
+          "active": true
+        },
+        {
+          "title": "Turni mensili",
+          "link": "/gest_turnimensili",
+          "active": true
+        }
+      ],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14ce9"
+      },
+      "title": "Gestione Dipendenti",
+      "link": "gest_dipendenti",
+      "active": true
+    },
+    {
+      "roles": [],
+      "subMenu": [
+        {
+          "title": "Consulenti",
+          "link": "/gest_consulenti",
+          "active": true
+        },
+        {
+          "title": "Fatture",
+          "link": "/fatture_consulenti",
+          "active": true
+        },
+        {
+          "title": "Bonifici",
+          "link": "/bonifici_consulenti",
+          "active": true
+        }
+      ],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14cea"
+      },
+      "title": "Gestione Consulenti",
+      "link": "/gest_consulenti",
+      "active": true
+    },
+    {
+      "roles": [],
+      "subMenu": [
+        {
+          "title": "Fornitori",
+          "link": "/gest_fornitori",
+          "active": true
+        },
+        {
+          "title": "Fatture",
+          "link": "/fatture_fornitori",
+          "active": true
+        },
+        {
+          "title": "Bonifici",
+          "link": "/bonifici_fornitori",
+          "active": true
+        }
+      ],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14ceb"
+      },
+      "title": "Gestioni Fornitori",
+      "link": "/gest_fornitori",
+      "active": true
+    },
+    {
+      "roles": [],
+      "subMenu": [
+        {
+          "title": "Fatture Servizio Sanitario Regionale",
+          "link": "/fatture_ssr",
+          "active": true
+        },
+        {
+          "title": "Fatture Servizio Sociale",
+          "link": "/fatture_ss",
+          "active": true
+        },
+        {
+          "title": "Prospetto contabile mensile",
+          "link": "/prospetto_mensile_asp",
+          "active": true
+        },
+        {
+          "title": "Anticipi fatture",
+          "link": "/anticipi_fatture_asp",
+          "active": true
+        },
+        {
+          "title": "Note di credito",
+          "link": "/note_credito_asp",
+          "active": true
+        },
+        {
+          "title": "Punto sulle fatture",
+          "link": "/punto_fatture_asp",
+          "active": true
+        }
+      ],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14cec"
+      },
+      "title": "Fatture ASP",
+      "link": "/fatture_ssr",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "62265f906aa8a12b44f14ced"
+      },
+      "title": "CV",
+      "link": "gest_cv",
+      "active": true
+    }
+  ],
+  "title": "Area Amministrativa"
+},{
+  "_id": {
+    "$oid": "6150aee92a39c327c7fb293d"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "book-medical",
+  "link": "/medica",
+  "order": 3,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1da201df09c08ccd9820"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5db"
+      },
+      "title": "Cartelle Cliniche",
+      "link": "medica",
+      "icon": "book-medical",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5dc"
+      },
+      "title": "Agenda Clinica",
+      "link": "agenda_clinica",
+      "icon": "book-medical",
+      "active": true
+    }
+  ],
+  "title": "Area Medica"
+},{
+  "_id": {
+    "$oid": "6150b12d2a39c327c7fb293e"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "book-medical",
+  "link": "/infermieristica",
+  "order": 4,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5de"
+      },
+      "title": "Agenda Infermieristica",
+      "link": "agendaInfermeristica",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5df"
+      },
+      "title": "Cartella Infermieristiche",
+      "link": "/infermieristica",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e0"
+      },
+      "title": "Gestione Farmaci",
+      "link": "/gest_farmaci",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e1"
+      },
+      "title": "Gestione Presidi",
+      "link": "/gest_presidi",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e2"
+      },
+      "title": "Gestione Carrello",
+      "link": "/gest_carrello",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Area Infermieristica"
+},{
+  "_id": {
+    "$oid": "6150b16e2a39c327c7fb293f"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "book-medical",
+  "link": "/",
+  "order": 5,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e4"
+      },
+      "title": "Gestione Pazienti",
+      "link": "/gest_pazienti_oss",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e5"
+      },
+      "title": "Gestione Presidi",
+      "link": "/nopage",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e6"
+      },
+      "title": "Gestione Armadi",
+      "link": "/gest_farmaci",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5e7"
+      },
+      "title": "Gestione Carrello",
+      "link": "/nopage",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id:": {
+        "$oid": "622f3df9dfe0745a2bc87ed4"
+      },
+      "title": "Camere",
+      "link": "/gest_camere",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Area OSS"
+},{
+  "_id": {
+    "$oid": "6150b1912a39c327c7fb2940"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "book-medical",
+  "link": "/assistente-sociale",
+  "order": 6,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Assistente Sociale"
+},{
+  "_id": {
+    "$oid": "6150b1cf2a39c327c7fb2941"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "user",
+  "link": "/pisicologica",
+  "order": 7,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "62288b6ddb052456342eb663"
+      },
+      "title": "Cartelle Psicologiche",
+      "link": "/pisicologica",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Area Psicologica"
+},{
+  "_id": {
+    "$oid": "6150b25e2a39c327c7fb2945"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "user",
+  "link": "/",
+  "order": 11,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1daf01df09c08ccd9821"
+    },
+    {
+      "$oid": "620d1dbd01df09c08ccd9822"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "62288b6ddb052456342eb676"
+      },
+      "title": "Gestione Menù",
+      "link": "/nopage",
+      "icon": "",
+      "active": true
+    },
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "62288b6ddb052456342eb677"
+      },
+      "title": "HACCP",
+      "link": "/",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Cucina"
+},{
+  "_id": {
+    "$oid": "6150b1f42a39c327c7fb2942"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "book-medical",
+  "link": "/educativa",
+  "order": 8,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Educativa"
+},{
+  "_id": {
+    "$oid": "6150b2322a39c327c7fb2944"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "user",
+  "link": "/nopage",
+  "order": 10,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1de201df09c08ccd9825"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Ausiliari"
+},{
+  "_id": {
+    "$oid": "6150b20a2a39c327c7fb2943"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "user",
+  "link": "/",
+  "order": 9,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e6db052456342eb5f7"
+      },
+      "title": "Cartelle Fisioterapia/Riabilitazione",
+      "link": "/fisioterapia",
+      "icon": "",
+      "active": true
+    }
+  ],
+  "title": "Area Fisioterapia/Riabilitazione"
+},{
+  "_id": {
+    "$oid": "6150b2722a39c327c7fb2946"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/",
+  "order": 12,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1dd601df09c08ccd9824"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Magazzino"
+},{
+  "_id": {
+    "$oid": "6150b2862a39c327c7fb2947"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/gest_stanze",
+  "order": 13,
+  "roles": [],
+  "subMenu": [],
+  "title": "Area Stanze"
+},{
+  "_id": {
+    "$oid": "6150b2a32a39c327c7fb2948"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "shield-alt",
+  "link": "/",
+  "order": 14,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1d8301df09c08ccd981e"
+    }
+  ],
+  "subMenu": [
+    {
+      "roles": [],
+      "_id": {
+        "$oid": "622889e7db052456342eb5ff"
+      },
+      "title": "Gestione Covid-19",
+      "link": "/nopage",
+      "icon": "shield-virus",
+      "active": true
+    }
+  ],
+  "title": "Area Sicurezza"
+},{
+  "_id": {
+    "$oid": "6150b2b52a39c327c7fb2949"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/nopage",
+  "order": 15,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e0601df09c08ccd9827"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Privacy"
+},{
+  "_id": {
+    "$oid": "6150b2c92a39c327c7fb294b"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/nopage",
+  "order": 17,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1e1401df09c08ccd9828"
+    },
+    {
+      "$oid": "620d1e1e01df09c08ccd9829"
+    },
+    {
+      "$oid": "620d1e2c01df09c08ccd982a"
+    },
+    {
+      "$oid": "620d1e3801df09c08ccd982b"
+    },
+    {
+      "$oid": "620d1e4401df09c08ccd982c"
+    },
+    {
+      "$oid": "620d1e4e01df09c08ccd982d"
+    },
+    {
+      "$oid": "620d1e5b01df09c08ccd982e"
+    },
+    {
+      "$oid": "620d1e6701df09c08ccd982f"
+    }
+  ],
+  "subMenu": [],
+  "title": "PAI"
+},{
+  "_id": {
+    "$oid": "6150b2c02a39c327c7fb294a"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/nopage",
+  "order": 16,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    },
+    {
+      "$oid": "620d1ce501df09c08ccd9815"
+    },
+    {
+      "$oid": "620d1cfa01df09c08ccd9816"
+    },
+    {
+      "$oid": "620d1d0801df09c08ccd9817"
+    },
+    {
+      "$oid": "620d1d1401df09c08ccd9818"
+    },
+    {
+      "$oid": "620d1d2801df09c08ccd9819"
+    },
+    {
+      "$oid": "620d1da201df09c08ccd9820"
+    }
+  ],
+  "subMenu": [],
+  "title": "Area Qualità"
+},{
+  "_id": {
+    "$oid": "6150b2d92a39c327c7fb294d"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/authorization",
+  "order": 19,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    }
+  ],
+  "subMenu": [
+    {
+      "title": "Accessibilità",
+      "link": "/authorization",
+      "active": true
+    }
+  ],
+  "title": "Impostazioni"
+},{
+  "_id": {
+    "$oid": "62360ace397665b82d3e2ee2"
+  },
+  "__v": 0,
+  "active": true,
+  "icon": "",
+  "link": "/gest_camere",
+  "order": 20,
+  "roles": [
+    {
+      "$oid": "620d1cd301df09c08ccd9813"
+    }
+  ],
+  "subMenu": [],
+  "title": "Gestione Camere"
+}]

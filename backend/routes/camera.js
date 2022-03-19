@@ -21,14 +21,14 @@ router.get("/", async (req, res) => {
     }
 
     const searchTerm = "CAMEREALL";
-    clientRedis.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
         const camere = await getData();
-        clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
         res.status(200).json(camere);
       }
     });
@@ -55,14 +55,14 @@ router.get("/:id", async (req, res) => {
     }
 
     const searchTerm = `CAMERABY${id}`;
-    clientRedis.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
         const camere = await getData();
-        clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
         res.status(200).json(camere);
       }
     });

@@ -13,7 +13,7 @@ import { MatSelectChange } from "@angular/material";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
-import { Geometry } from "ol/geom";
+import { Geometry, Polygon } from "ol/geom";
 import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
@@ -133,6 +133,12 @@ export class CamereComponent implements OnInit {
     });
 
     this.cameraLayerDebug.setSource(vectorSource);
+
+    const polygon = vectorSource.getFeatures()[0].getGeometry() as Polygon;
+    const coordinate = polygon.getCoordinates()[0][0];
+
+    this.map.getView().setCenter(coordinate);
+
   }
 
   saveLayerCamera() {
@@ -240,6 +246,20 @@ export class CamereComponent implements OnInit {
     this.selectedCamera.geometryObject = JSON.parse(
       this.selectedCamera.geometry
     );
+
+
+    // var aa = this.selectedCamera.geometryObject.getGeometry().getExtent();
+    // console.log(aa);
+
+    // var oo = ol.extent.getCenter(aa);
+
+    // this.map.getView().setCenter()
+    // view.setCenter(ol.proj.transform([
+    //   +centerPosition.lng,
+    //   +centerPosition.lat
+    // ], 'EPSG:4326', 'EPSG:3857'));
+    // view.setZoom(5);
+
 
     this.updateLayerCamera();
   }

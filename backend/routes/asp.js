@@ -20,14 +20,14 @@ router.get("/", async (req, res) => {
     }
 
     const searchTerm = "ASPALL";
-    clientRedis.get(searchTerm, async (err, data) => {
+    redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
         const asp = await getData();
-        clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(asp));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(asp));
         res.status(200).json(asp);
       }
     });
@@ -54,14 +54,14 @@ router.get("/:id", async (req, res) => {
     }
 
     const searchTerm = `ASPBY${id}`;
-    clientRedis.get(searchTerm, async (err, asps) => {
+    redisClient.get(searchTerm, async (err, asps) => {
       if (err) throw err;
 
       if (asps) {
         res.status(200).send(JSON.parse(asps));
       } else {
         const asp = await getData();
-        clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(asp));
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(asp));
         res.status(200).json(asp);
       }
     });
