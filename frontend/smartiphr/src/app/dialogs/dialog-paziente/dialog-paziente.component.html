@@ -37,7 +37,7 @@
                 <label>{{document['CONTRATTO_RICOVERO']?.name}}</label>
               </div>
               <div class="col">
-                <!-- <button (click)="document['CONTRATTO_RICOVERO'].status=false">Modifica</button> -->
+                <!-- <button (click)="showDocument(document['CONTRATTO_RICOVERO'], 'CONTRATTO_RICOVERO')">Visualizza</button> -->
 
                 <button mat-icon-button color="warn" aria-label="Carica file"
                   (click)="document['CONTRATTO_RICOVERO'].status=false" class="upload-button">
@@ -579,6 +579,6 @@
   <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
     <button mat-button class="button-insert" (click)="save(false)" [disabled]=uploading>Salva</button>
-    <button mat-button class="button-insert" (click)="save(true)" [disabled]=uploading>Salva e Chiudi</button>
+    <!-- <button mat-button class="button-insert" (click)="save(true)" [disabled]=uploading>Salva e Chiudi</button> -->
   </div>
 </div>
