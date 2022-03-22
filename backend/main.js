@@ -406,6 +406,28 @@ const InitApiFunctions = () => {
   var apiIngressi = { key: 'dataIngresso', path: '/api/dataIngresso' }
   app.use(apiIngressi.path, logHandler, authorizationHandler, IngressiRouter);
   routesList.push(apiIngressi);
+
+  // Attivita Generiche API
+  var AttivitaRouter = require("./routes/attivita");
+  var apiAttivita = { key: 'attivita', path: '/api/attivita' }
+  app.use(apiAttivita.path, logHandler, authorizationHandler, AttivitaRouter);
+  routesList.push(apiAttivita);
+
+
+  // Attivita e elementi armadio API
+  var ArmadioRouter = require("./routes/armadio");
+  var apiArmadio = { key: 'armadio', path: '/api/armadio' }
+  app.use(apiArmadio.path, logHandler, authorizationHandler, ArmadioRouter);
+  routesList.push(apiArmadio);
+
+
+    // Attivita e elementi armadio API
+    var controlliOSSRouter = require("./routes/controlliOSS");
+    var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
+    app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
+    routesList.push(apicontrolliOSS);
+
+
       
   var CameraRouter = require("./routes/camera");
   var apiCamera = { key: 'camere', path: '/api/camera' }

@@ -67,6 +67,7 @@ export class AreaOssComponent implements OnInit {
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogIngressoComponent, {
           data: { paziente: paziente, readonly: true },
+          width: "1024px",
         }),
     });
 
@@ -74,8 +75,9 @@ export class AreaOssComponent implements OnInit {
       label: "Attività",
       tooltip: "Attività",
       cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogIngressoComponent, {
+        this.dialog.open(DialogAttivitaComponent, {
           data: { paziente: paziente, readonly: true },
+          width: "1024px",
         }),
     });
 
@@ -85,8 +87,9 @@ export class AreaOssComponent implements OnInit {
       label: "Gestione Armadio",
       tooltip: "Armadio",
       cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogIngressoComponent, {
+        this.dialog.open(DialogArmadioComponent, {
           data: { paziente: paziente, readonly: true },
+          width: "1024px",
         }),
     });
 
