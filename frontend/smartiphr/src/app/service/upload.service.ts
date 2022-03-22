@@ -5,6 +5,7 @@ import { Fatture } from "../models/fatture";
 import { Paziente } from '../models/paziente';
 import { map } from "rxjs/operators";
 import { Dipendenti } from "../models/dipendenti";
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -36,6 +37,10 @@ export class UploadService {
 
   async getFiles(path: string) {
     return this.http.get(`${this.api}/api/files/${path}`).toPromise();
+  }
+
+  removeFile(id: string): Observable<any> {
+    return this.http.delete<any>(`${this.api}/api/files/${id}`)
   }
 
   async download(filename: string, id: string, subPath: string) {
