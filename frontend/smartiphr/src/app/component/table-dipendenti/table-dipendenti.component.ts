@@ -39,6 +39,7 @@ export class TableDipendentiComponent implements OnInit {
   displayedColumns: string[] = [
     "cognome",
     "nome",
+    "cf",
     "dataNascita",
     "indirizzo",
     "localita",
@@ -133,7 +134,7 @@ ngOnDestroy() {
       dataNascita: undefined,
       indirizzoResidenza: "",
       comuneResidenza: "",
-      luogoResidenza: "",
+      //luogoResidenza: "",
       provinciaResidenza: "",
       titoloStudio: "",
       mansione: "",

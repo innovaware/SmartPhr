@@ -10,11 +10,11 @@ export class Dipendenti {
   cf: string;
   indirizzoNascita?: string;
   comuneNascita?: string;
-  comuneResidenza?:string;
   provinciaNascita?: string;
   dataNascita?: Date;
   indirizzoResidenza?: string;
-  luogoResidenza?: string;
+  //luogoResidenza?: string;
+  comuneResidenza?:string;
   provinciaResidenza?: string;
   titoloStudio?: string;
   mansione?: string;

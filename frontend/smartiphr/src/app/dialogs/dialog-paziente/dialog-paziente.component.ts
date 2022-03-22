@@ -90,9 +90,9 @@ export class DialogPazienteComponent implements OnInit {
     this.data.paziente = this.paziente;
 
     if (
-      this.paziente.cognome == "" ||
-      this.paziente.nome == "" ||
-      this.paziente.codiceFiscale == ""
+      this.paziente.cognome == "" || this.paziente.cognome == null || this.paziente.cognome.length == 0 ||
+      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0 ||
+      this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
     ) {
       alert("Alcuni campi obbligatori sono mancanti!");
       return;

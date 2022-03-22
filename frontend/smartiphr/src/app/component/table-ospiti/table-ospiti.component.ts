@@ -47,6 +47,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   displayedColumns: string[] = [
     "cognome",
     "nome",
+    "codiceFiscale",
     "dataNascita",
     "indirizzo",
     "localita",
