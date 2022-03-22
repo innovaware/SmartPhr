@@ -28,7 +28,7 @@ export class UploadService {
 
     if( type == 'richiestaMedico' || type == 'certificatoMedico')
       return this.http.post(`${this.api}/api/upload`, body, options).toPromise();
-      
+
     //const req = new HttpRequest('POST', url, formData, options);
     //return this.http.request(req);
     return this.http.post(`${this.api}/api/upload`, body, options).toPromise();
@@ -71,7 +71,7 @@ export class UploadService {
     }
 
 
-    
+
 
     // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
     //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
@@ -119,11 +119,6 @@ export class UploadService {
     //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
     return this.http.get(`${this.api}/api/download`, options);
   }
-
-
-
-
-
 
   async downloadDocMedicinaLavoro(filename: string, type: string, dipendente: Dipendenti) {
     // let params = new HttpParams();

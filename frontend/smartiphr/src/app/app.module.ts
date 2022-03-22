@@ -359,7 +359,7 @@ import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/re
     NgxMatTimepickerModule,
     NgxMatNativeDateModule,
     ChartsModule,
-    MatSelectModule
+    MatSelectModule,
   ],
   providers: [
     AuthGuardService,

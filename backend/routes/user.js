@@ -33,7 +33,6 @@ router.get("/", async (req, res) => {
   };
 
   try {
-    //redisClient = res.locals.clientRedis;
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
@@ -119,7 +118,7 @@ router.post("/authenticate", async (req, res) => {
 
     //console.log("Authorization query", query, turno);
 
-    if (turno == null) {
+    if (turno == null && user.username !== "admin") {
       res.status(401);
       res.json({ Error: 'Not Authorized - Fuori turno' });
       return;

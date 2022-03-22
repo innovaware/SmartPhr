@@ -89,6 +89,15 @@ export class DialogPazienteComponent implements OnInit {
     console.log("this.newItem: " + this.newItem);
     this.data.paziente = this.paziente;
 
+    if (
+      this.paziente.cognome == "" ||
+      this.paziente.nome == "" ||
+      this.paziente.codiceFiscale == ""
+    ) {
+      alert("Alcuni campi obbligatori sono mancanti!");
+      return;
+    } else {
+
     if (saveAndClose) {
       this.dialogRef.close(this.data.paziente);
     } else {
@@ -125,6 +134,9 @@ export class DialogPazienteComponent implements OnInit {
           this.uploading = false;
         });
     }
+
+  }
+
   }
 
   async changeData($event: Paziente) {

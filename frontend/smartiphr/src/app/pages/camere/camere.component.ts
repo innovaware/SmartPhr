@@ -10,6 +10,13 @@ import { MapService } from "src/app/service/map.service";
 import { CamereService } from "src/app/service/camere.service";
 import { Camere } from "src/app/models/camere";
 import { MatSelectChange } from "@angular/material";
+import VectorSource from "ol/source/Vector";
+import GeoJSON from "ol/format/GeoJSON";
+import VectorLayer from "ol/layer/Vector";
+import { Geometry, Polygon } from "ol/geom";
+import Style from "ol/style/Style";
+import Stroke from "ol/style/Stroke";
+import Fill from "ol/style/Fill";
 
 @Component({
   selector: "app-camere",
@@ -21,6 +28,8 @@ export class CamereComponent implements OnInit {
   selectedPiano: string;
 
   camere: Camere[];
+  selectedCamera: Camere;
+  selectedCameraId: string;
 
   pianoTerra: {
     layer: ImageLayer<Static>;
@@ -50,19 +59,34 @@ export class CamereComponent implements OnInit {
     target: string;
   };
 
+  empty = {
+    type: "FeatureCollection",
+    features: [
+      {
+        type: "Feature",
+        properties: {},
+        geometry: {
+          type: "Polygon",
+          coordinates: [[]],
+        },
+      },
+    ],
+  };
 
   constructor(
     private mapService: MapService,
     private camereService: CamereService
   ) {
+    this.selectedPiano = "1p";
     this.camereService.get().subscribe((c) => {
-      this.camere = c;
+      this.camere = c.filter((x) => x.piano === this.selectedPiano);
     });
   }
 
   ngOnInit(): void {
-    this.selectedPiano = "1p";
     this.map = this.initMap();
+
+    this.loadLayers();
   }
 
   initMap() {
@@ -72,9 +96,7 @@ export class CamereComponent implements OnInit {
     this.pianoChiesaPrimo = this.mapService.getSecondoChiesa();
 
     return new Map({
-      layers: [
-        this.pianoTerra.layer
-      ],
+      layers: [this.pianoTerra.layer],
       target: "ol-map",
       view: new View({
         projection: this.pianoTerra.projection,
@@ -87,9 +109,108 @@ export class CamereComponent implements OnInit {
     });
   }
 
-  setPlan(plan: string) {
+  cameraLayerDebug: VectorLayer<VectorSource<Geometry>>;
 
-    this.map.removeLayer(this.map.getAllLayers()[0]);
+  getCoord(event: any) {
+    var coordinate = this.map.getEventCoordinate(event);
+    const coord = [coordinate[0], coordinate[1]];
+
+    if (this.selectedCamera) {
+      this.selectedCamera.geometryObject.features[0].geometry.coordinates[0].push(
+        coord
+      );
+      this.updateLayerCamera();
+    }
+  }
+
+  getCameraJsonDebug() {
+    return this.selectedCamera.geometryObject.features[0].geometry.coordinates;
+  }
+
+  updateLayerCamera() {
+    const vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(this.selectedCamera.geometryObject),
+    });
+
+    this.cameraLayerDebug.setSource(vectorSource);
+
+    const polygon = vectorSource.getFeatures()[0].getGeometry() as Polygon;
+    const coordinate = polygon.getCoordinates()[0][0];
+
+    this.map.getView().setCenter(coordinate);
+
+  }
+
+  saveLayerCamera() {
+    this.camereService.update(this.selectedCamera).subscribe((res) => {
+      console.log(res);
+    });
+  }
+
+  deselectCamera() {
+    this.selectedCamera = undefined;
+    this.selectedCameraId = undefined;
+    this.cameraLayerDebug.setSource(undefined);
+  }
+
+  addCamera() {
+    this.selectedCamera = new Camere();
+    this.selectedCamera.camera = "Nuova Camera";
+    this.selectedCamera.piano = this.selectedPiano;
+
+    this.camereService.add(this.selectedCamera).subscribe((res) => {
+      this.selectedCamera = res;
+      this.selectedCamera.geometryObject = JSON.parse(
+        this.selectedCamera.geometry
+      );
+      this.camere.push(this.selectedCamera);
+      this.updateLayerCamera();
+    });
+  }
+
+  removeCamera() {
+    this.camereService.remove(this.selectedCamera).subscribe((res) => {
+      const index = this.camere.findIndex(x=> x._id === this.selectedCameraId);
+      if (index > -1) {
+        this.camere.splice(index, 1);
+      }
+
+      this.deselectCamera();
+    });
+  }
+
+  removePoint(index: number) {
+    this.selectedCamera.geometryObject.features[0].geometry.coordinates[0].splice(
+      index,
+      1
+    );
+    this.updateLayerCamera();
+  }
+
+  loadLayers() {
+    const vectorSource = new VectorSource({
+      features: new GeoJSON().readFeatures(this.empty),
+    });
+
+    this.cameraLayerDebug = new VectorLayer({
+      source: vectorSource,
+      style: new Style({
+        stroke: new Stroke({
+          width: 3,
+          color: [0, 0, 255, 1],
+        }),
+        fill: new Fill({
+          color: [0, 0, 255, 0.5],
+        }),
+      }),
+    });
+
+    this.map.addLayer(this.cameraLayerDebug);
+  }
+
+  setPlan(plan: string) {
+    this.map.getAllLayers().forEach((x) => this.map.removeLayer(x));
+
     switch (plan) {
       case "2p":
         this.map.addLayer(this.pianoPrimo.layer);
@@ -106,9 +227,40 @@ export class CamereComponent implements OnInit {
         this.map.addLayer(this.pianoTerra.layer);
         break;
     }
+
+    this.map.addLayer(this.cameraLayerDebug);
   }
 
   onPlanChange(event: MatSelectChange) {
-    const piano = this.setPlan(event.value);
+    this.setPlan(event.value);
+
+    this.camereService.get().subscribe((c) => {
+      this.camere = c.filter((x) => x.piano === event.value);
+    });
+
+    this.deselectCamera();
+  }
+
+  onChangeCamera(event: MatSelectChange) {
+    this.selectedCamera = this.camere.find((x) => x._id === event.value);
+    this.selectedCamera.geometryObject = JSON.parse(
+      this.selectedCamera.geometry
+    );
+
+
+    // var aa = this.selectedCamera.geometryObject.getGeometry().getExtent();
+    // console.log(aa);
+
+    // var oo = ol.extent.getCenter(aa);
+
+    // this.map.getView().setCenter()
+    // view.setCenter(ol.proj.transform([
+    //   +centerPosition.lng,
+    //   +centerPosition.lat
+    // ], 'EPSG:4326', 'EPSG:3857'));
+    // view.setZoom(5);
+
+
+    this.updateLayerCamera();
   }
 }

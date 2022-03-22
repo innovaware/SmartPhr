@@ -10,7 +10,10 @@
     <div class="col">
       <mat-form-field appearance="fill">
         <mat-label>Seleziona un Piano</mat-label>
-        <mat-select (selectionChange)="onPlanChange($event)" [(ngModel)]="selectedPiano">
+        <mat-select
+          (selectionChange)="onPlanChange($event)"
+          [(ngModel)]="selectedPiano"
+        >
           <mat-option value="1p">Piano Terra</mat-option>
           <mat-option value="2p">Primo Piano</mat-option>
           <mat-option value="1c">Chiesa - Terra</mat-option>
@@ -23,12 +26,110 @@
   <div class="row">
     <div class="col">
       <div class="left-bar"></div>
-      <div id="ol-map" class="map-container"></div>
+      <div id="ol-map" class="map-container" (click)="getCoord($event)"></div>
     </div>
 
     <div class="col">
+      <div class="containter pad">
+        <div class="row">
+          <button mat-button (click)="addCamera()">
+            Aggiungi Camera
+          </button>
+        </div>
 
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill">
+              <mat-label>Seleziona Camera</mat-label>
+              <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCameraId">
+                <mat-option
+                  *ngFor="let camera of camere"
+                  value="{{ camera._id }}"
+                  >{{ camera.camera }} - {{ camera._id }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+
+          <div class="col-1" *ngIf="selectedCamera !== undefined">
+            <img src="../../../assets/deselect.png"
+            style="width: 26px" (click)="deselectCamera()"/>
+          </div>
+
+          <div class="col-1" *ngIf="selectedCamera !== undefined">
+            <img src="../../../assets/cestino.svg"
+            style="width: 26px" (click)="removeCamera()"/>
+          </div>
+
+        </div>
+
+        <div *ngIf="this.selectedCamera !== undefined">
+          <div class="row">
+            <mat-form-field>
+              <input
+                matInput
+                [(ngModel)]="this.selectedCamera.camera"
+                placeholder="Nome Camera"
+              />
+            </mat-form-field>
+          </div>
+
+          <div class="row">
+            <mat-form-field>
+              <input
+                matInput
+                [(ngModel)]="this.selectedCamera.piano"
+                placeholder="Numero Piano"
+              />
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div
+          *ngFor="
+            let item of this.selectedCamera?.geometryObject.features[0].geometry
+              .coordinates[0];
+            let i = index
+          "
+        >
+          <div class="row">
+            <div class="col">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="item[0]"
+                  placeholder="X"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <mat-form-field>
+                <input
+                  matInput
+                  type="number"
+                  [(ngModel)]="item[1]"
+                  placeholder="Y"
+                />
+              </mat-form-field>
+            </div>
+
+            <div class="col">
+              <img
+                src="../../../assets/cestino.svg"
+                style="width: 26px"
+                (click)="removePoint(i)"
+              />
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <button mat-button (click)="saveLayerCamera()">
+            Aggiorna Camera
+          </button>
+        </div>
+      </div>
     </div>
   </div>
-
 </div>

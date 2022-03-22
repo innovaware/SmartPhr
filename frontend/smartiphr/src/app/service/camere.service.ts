@@ -16,4 +16,20 @@ export class CamereService {
   get(): Observable<Camere[]> {
       return this.http.get<Camere[]>(`${this.api}/api/camera`);
   }
+
+  update(camera: Camere) {
+    camera.geometry = JSON.stringify(camera.geometryObject);
+    return this.http.put<Camere>(`${this.api}/api/camera/${camera._id}`, camera);
+  }
+
+  add(camera: Camere) {
+    camera.geometry = JSON.stringify(camera.geometryObject);
+    return this.http.post<Camere>(`${this.api}/api/camera`, camera);
+  }
+
+  remove(camera: Camere) {
+    camera.geometry = JSON.stringify(camera.geometryObject);
+    return this.http.delete<Camere>(`${this.api}/api/camera/${camera._id}`);
+  }
+
 }

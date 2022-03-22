@@ -4,14 +4,14 @@
     <tbody>
       <tr>
         <td>
-          <h5>Cognome: </h5>
+          <h5>Cognome*: </h5>
         </td>
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.cognome" (change)="change()" [disabled]=disable>
         </td>
 
         <td>
-          <h5>Nome: </h5>
+          <h5>Nome*: </h5>
         </td>
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.nome" (change)="change()" [disabled]=disable>
@@ -21,12 +21,13 @@
       <tr>
         <td>
           <label>
-            <h5>Luogo di nascita: </h5>
+            <h5>Codice Fiscale*</h5>
           </label>
         </td>
         <td>
-          <input class="input-cartelle" type="text" [(ngModel)]="data.luogoNascita" (change)="change()" [disabled]=disable>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.codiceFiscale" (change)="change()" [disabled]=disable>
         </td>
+
         <td>
           <h5 class="font-normal">Data di nascita:</h5>
         </td>
@@ -47,15 +48,12 @@
       <tr>
         <td>
           <label>
-            <h5>Codice Fiscale</h5>
+            <h5>Luogo di nascita: </h5>
           </label>
         </td>
         <td>
-          <input class="input-cartelle" type="text" [(ngModel)]="data.codiceFiscale" (change)="change()" [disabled]=disable>
+          <input class="input-cartelle" type="text" [(ngModel)]="data.luogoNascita" (change)="change()" [disabled]=disable>
         </td>
-      </tr>
-
-      <tr>
         <td>
           <label>
             <h5>Comune di nascita: </h5>
@@ -64,17 +62,17 @@
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.comuneNascita" (change)="change()" [disabled]=disable>
         </td>
+      </tr>
+
+      <br>
+
+      <tr>
         <td>
           <h5 class="font-normal">Provincia di nascita:</h5>
         </td>
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaNascita" (change)="change()" [disabled]=disable>
         </td>
-      </tr>
-
-      <br>
-
-      <tr>
         <td>
           <label>
             <h5>Indirizzo Residenza: </h5>
@@ -84,15 +82,15 @@
           <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoResidenza" (change)="change()" [disabled]=disable>
         </td>
 
+      </tr>
+
+      <tr>
         <td>
           <h5>Comune di Residenza</h5>
         </td>
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" (change)="change()" [disabled]=disable>
         </td>
-      </tr>
-
-      <tr>
         <td>
           <label>
             <h5>Provincia di Residenza: </h5>
@@ -101,7 +99,10 @@
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaResidenza" (change)="change()" [disabled]=disable>
         </td>
+      </tr>
 
+
+      <tr>
         <td>
           <h5>SESSO</h5>
         </td>
@@ -114,16 +115,15 @@
 
 
         </td>
-      </tr>
-
-
-      <tr>
         <td>
           <h5>Stato Civile: </h5>
         </td>
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.statoCivile" (change)="change()" [disabled]=disable>
         </td>
+      </tr>
+
+      <tr>
         <td>
           <label>
             <h5>Figli: </h5>
@@ -132,7 +132,6 @@
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.figli" (change)="change()" [disabled]=disable>
         </td>
-
       </tr>
 
 
