@@ -55,6 +55,8 @@ import { CamereComponent } from "./pages/camere/camere.component";
 
 
 import { AreaOssComponent } from "./pages/area-oss/area-oss.component";
+import { AttivitaOssComponent } from "./pages/attivita-oss/attivita-oss.component";
+import { RegistroControlliOssComponent } from "./pages/registro-controlli-oss/registro-controlli-oss.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -89,8 +91,8 @@ const routes: Routes = [
 
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
-
-
+  { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
+  { path: "gest_armadi_oss", component: RegistroControlliOssComponent, canActivate: [AuthGuard]  },
 
 
   // AMMINISTRAZIONE

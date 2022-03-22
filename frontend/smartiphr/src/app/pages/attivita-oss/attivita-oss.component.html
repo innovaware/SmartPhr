@@ -1,0 +1,52 @@
+
+<div class="containter pad">
+    <div class="row">
+      <div class="col ">
+        <h1 class="title">AREA OSS - Registro attività</h1>
+  
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="row">
+      <div class="col">
+        <div *ngIf="this.attivita?.length <= 0" class="notPresent">
+            Nessuna attivita svolta nella giornata attuale
+          </div>
+      
+          <table mat-table [dataSource]="attivitaDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.attivita?.length > 0">
+            <ng-container matColumnDef="description">
+              <th mat-header-cell *matHeaderCellDef> Attività </th>
+              <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+            </ng-container>
+      
+            <ng-container matColumnDef="data">
+              <th mat-header-cell *matHeaderCellDef> Data </th>
+              <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
+      
+
+            <ng-container matColumnDef="operator">
+              <th mat-header-cell *matHeaderCellDef> Operatore </th>
+              <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="turno">
+              <th mat-header-cell *matHeaderCellDef> Turno </th>
+              <td mat-cell *matCellDef="let element"> {{element.turno}} </td>
+            </ng-container>
+      
+            <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+          </table>
+      
+          <div class="paginator-container">
+      
+            <mat-paginator #paginatorAttivita [pageSizeOptions]="[5]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+      </div>
+    </div>
+  </div>

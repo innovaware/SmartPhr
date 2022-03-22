@@ -1,1 +1,192 @@
-<p>dialog-armadio works!</p>
+<div mat-dialog-title>
+    <div class="container-fluid" >
+      <div class="row">
+        <div class="col">
+          <h3>Gestione Armadio</h3>
+        </div>
+  
+        <div class="col">
+          <button class="close-button" [mat-dialog-close]="true">×
+          </button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-dialog-content>
+    <div class="container-fluid" >
+      <div class="row">
+        <div class="col">
+  
+          <mat-tab-group mat-align-tabs="start">
+           
+            <mat-tab label="Armadio">
+                <br>
+                <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingElementoArmadio">
+                  <button mat-button class="button-insert" (click)="addElemento()">Aggiungi Elemento</button>
+                </div>
+            
+                <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                  *ngIf="addingElementoArmadio && !uploadingElementoArmadio">
+
+                  <div class="row">
+                    <div class="col">
+                        <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                          <mat-label>Descrizione elemento</mat-label>
+                          <input matInput placeholder="Inserisci Descrizione elemento" [(ngModel)]="nuovoElementoArmadio.elemento">
+                        </mat-form-field>
+                      </div>
+
+                </div>
+
+                <br>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                        <mat-label>Quantità</mat-label>
+                        <input matInput placeholder="Inserisci quantita" [(ngModel)]="nuovoElementoArmadio.quantita">
+                      </mat-form-field>
+                    </div>
+
+                  </div>
+
+
+                  <br>
+                  <div class="row">
+                    <div class="col">
+                      <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                        <mat-label>Note</mat-label>
+                        <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoElementoArmadio.note">
+                      </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                      <button mat-button class="button-insert" (click)="save(nuovoElementoArmadio)">Salva</button>
+                    </div>
+                  </div>
+                </div>
+
+            
+                <div *ngIf="this.elementiArmadio?.length <= 0" class="notPresent">
+                  Nessuna elemento presente
+                </div>
+            
+                <table mat-table [dataSource]="ElementiArmadioDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.elementiArmadio?.length > 0">
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: right;">
+                      <button mat-button (click)="edit(row)">
+                        <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                      </button>
+        
+                    </td>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="description">
+                    <th mat-header-cell *matHeaderCellDef> Descrizione </th>
+                    <td mat-cell *matCellDef="let element"> {{element.elemento}} </td>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef> Quantità </th>
+                    <td mat-cell *matCellDef="let element"> {{element.quantita }} </td>
+                  </ng-container>
+            
+                  <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef> Note </th>
+                    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                  </ng-container>
+            
+                  <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+                  <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+                </table>
+            
+                <div class="paginator-container">
+            
+                  <mat-paginator #paginatorElementoArmadio [pageSizeOptions]="[5]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+            
+              </mat-tab>
+
+
+                  <mat-tab label="Attività Armadio">
+
+                    <div *ngIf="this.attArmadio?.length <= 0" class="notPresent">
+                        <br>
+                      Nessuna attività presente
+                    </div>
+                
+                    <table mat-table [dataSource]="AttArmadioDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.attArmadio?.length > 0">
+                      <ng-container matColumnDef="description">
+                        <th mat-header-cell *matHeaderCellDef> Descrizione </th>
+                        <td mat-cell *matCellDef="let element"> {{element.elemento}} </td>
+                      </ng-container>
+                      
+
+                      <ng-container matColumnDef="operator">
+                        <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                        <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+                      </ng-container>
+
+
+                      <ng-container matColumnDef="date">
+                        <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                        <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+                      </ng-container>
+
+                      <ng-container matColumnDef="quantity">
+                        <th mat-header-cell *matHeaderCellDef> Quantità </th>
+                        <td mat-cell *matCellDef="let element"> {{element.quantita }} </td>
+                      </ng-container>
+                
+
+                      
+                      <ng-container matColumnDef="note">
+                        <th mat-header-cell *matHeaderCellDef> Note </th>
+                        <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                      </ng-container>
+                
+                      <tr mat-header-row *matHeaderRowDef="DisplayedColumnsAtt"></tr>
+                      <tr mat-row *matRowDef="let row; columns: DisplayedColumnsAtt;"></tr>
+                    </table>
+                
+                    <div class="paginator-container">
+                
+                      <mat-paginator #paginatorAttArmadio [pageSizeOptions]="[5]" showFirstLastButtons
+                        aria-label="Select page of periodic elements">
+                      </mat-paginator>
+                    </div>
+                
+                  </mat-tab>
+
+  
+
+                  <mat-tab label="Controllo">
+
+
+                  </mat-tab>
+
+
+  
+          </mat-tab-group>
+  
+        </div>
+      </div>
+    </div>
+  </mat-dialog-content>
+  
+  
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+  </div>
+  </div>
+  

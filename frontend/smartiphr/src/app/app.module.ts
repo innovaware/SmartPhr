@@ -185,6 +185,8 @@ import { DialogIngressoComponent } from './dialogs/dialog-ingresso/dialog-ingres
 import { DialogAttivitaComponent } from './dialogs/dialog-attivita/dialog-attivita.component';
 import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.component';
 import { CamereComponent } from './pages/camere/camere.component';
+import { AttivitaOssComponent } from './pages/attivita-oss/attivita-oss.component';
+import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/registro-controlli-oss.component';
 @NgModule({
   declarations: [
     AppComponent,
@@ -322,6 +324,10 @@ import { CamereComponent } from './pages/camere/camere.component';
     DialogArmadioComponent,
 
     CamereComponent,
+
+    AttivitaOssComponent,
+
+    RegistroControlliOssComponent,
   ],
   imports: [
     BrowserModule,
