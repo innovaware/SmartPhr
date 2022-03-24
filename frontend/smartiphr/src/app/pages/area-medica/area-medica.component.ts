@@ -46,15 +46,17 @@ export class AreaMedicaComponent implements OnInit {
           })
           .afterClosed()
           .subscribe((data: Paziente) => {
-            if (data != undefined || data) {
-              this.pazienti.push(data);
+             if (data != undefined || data) {
+            //   this.pazienti.push(data);
 
-              const index = this.pazienti.indexOf(paziente, 0);
-              if (index > -1) {
-                this.pazienti.splice(index, 1);
-                console.log("Removed item");
-              }
-              this.eventsSubject.next(this.pazienti);
+            //   const index = this.pazienti.indexOf(paziente, 0);
+            //   if (index > -1) {
+            //     this.pazienti.splice(index, 1);
+            //     console.log("Removed item");
+            //   }
+            //   this.eventsSubject.next(this.pazienti);
+            console.log("Area Infermeristica Update Paziente");
+            Paziente.refresh(data, paziente);
             }
           }),
       //css: "mat-raised-button raised-button action-button",
