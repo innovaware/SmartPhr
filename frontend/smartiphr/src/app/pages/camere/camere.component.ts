@@ -156,7 +156,7 @@ export class CamereComponent implements OnInit {
                 geometryObject: JSON.parse(c.geometry)
               };
             }))
-      )
+    );
   }
 
   getCoord(event: any) {
@@ -187,7 +187,7 @@ export class CamereComponent implements OnInit {
     const polygon = vectorSource.getFeatures()[0].getGeometry() as Polygon;
     const coordinate = polygon.getCoordinates()[0][0];
 
-    this.text.setText(`${this.selectedCamera.camera}\nN. ${1}`);
+    this.text.setText(`${this.selectedCamera.camera}\nN. Posti ${this.selectedCamera.numPostiLiberi}/${this.selectedCamera.numMaxPosti}`);
     this.cameraStyle.setText(this.text);
     this.map.getView().setCenter(coordinate);
   }

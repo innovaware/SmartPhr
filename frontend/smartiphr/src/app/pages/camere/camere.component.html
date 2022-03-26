@@ -87,7 +87,7 @@
                 />
               </mat-form-field>
             </div>
-            <div class="col-3">
+            <div class="col-3" *ngIf="editMode">
               <mat-checkbox [(ngModel)]="this.selectedCamera.forPatient" (change)="saveForPatientFlag($event.checked)">
                 Camera
               </mat-checkbox>

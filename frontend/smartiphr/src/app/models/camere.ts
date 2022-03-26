@@ -10,6 +10,8 @@ export class Camere {
   geometryObject: any;
   forPatient: boolean;
   order: number;
+  numPostiLiberi: number;
+  numMaxPosti: number;
 
   constructor() {
     const empty = {
