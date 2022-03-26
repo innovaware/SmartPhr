@@ -13,7 +13,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 })
 export class AttivitaOssComponent implements OnInit {
 
-  @ViewChild("paginatorAttivita", { static: false })
+  @ViewChild("paginatorAttivita")
   AttivitaPaginator: MatPaginator;
   public attivitaDataSource: MatTableDataSource<Attivita>;
   public attivita: Attivita[];

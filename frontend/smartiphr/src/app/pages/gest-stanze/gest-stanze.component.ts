@@ -22,7 +22,7 @@ export class GestStanzeComponent implements OnInit {
   ];
   dataSource: MatTableDataSource<Stanza>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog, public stanzeService: StanzeService) {
     this.stanzeService.getStanze().then((result) => {

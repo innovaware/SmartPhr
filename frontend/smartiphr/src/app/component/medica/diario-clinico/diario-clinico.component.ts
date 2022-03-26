@@ -23,7 +23,7 @@ export class DiarioClinicoComponent implements OnInit {
   DisplayedColumns: string[] = ["data", "contenuto", "terapia", "action"];
 
 
-  @ViewChild("paginatorDC", { static: false }) diarioClinicoPaginator: MatPaginator;
+  @ViewChild("paginatorDC") diarioClinicoPaginator: MatPaginator;
   public diarioClinicoDataSource: MatTableDataSource<DiarioClinico>;
 
   constructor(public dialogRef: MatDialogRef<DialogCartellaClinicaComponent>,

@@ -48,7 +48,7 @@ export class PermessiComponent implements OnInit, OnChanges {
     "action",
   ];
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public nuovoPermesso: Permessi;
   dataSource: MatTableDataSource<Permessi>;
   public permessi: Permessi[];

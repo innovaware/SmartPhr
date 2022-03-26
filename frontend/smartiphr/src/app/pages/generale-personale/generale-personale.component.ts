@@ -27,7 +27,7 @@ export class GeneralePersonaleComponent implements OnInit {
 
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  @ViewChild("paginatorDocIdent", { static: false })
+  @ViewChild("paginatorDocIdent")
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -35,7 +35,7 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorDiploma", { static: false })
+  @ViewChild("paginatorDiploma")
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -43,7 +43,7 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-  @ViewChild("paginatorAttestatiECM", { static: false })
+  @ViewChild("paginatorAttestatiECM")
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -161,8 +161,9 @@ export class GeneralePersonaleComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = (window.navigator as any);
+          if (nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
 

@@ -80,6 +80,7 @@ router.post("/", async (req, res) => {
       piano: req.body.piano,
       geometry: req.body.geometry,
       forPatient: req.body.forPatient,
+      order: req.body.order,
     });
 
     const result = await camera.save();
@@ -110,6 +111,7 @@ router.put("/:id", async (req, res) => {
           piano: req.body.piano,
           geometry: req.body.geometry,
           forPatient: req.body.forPatient,
+          order: req.body.order,
         },
       }
     );
@@ -118,9 +120,10 @@ router.put("/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `CAMERABY${id}`;
+      const searchTerm = "CAMEREALL*";
       redisClient.del(searchTerm);
     }
+    
 
     res.status(200);
     res.json(camera);
@@ -138,6 +141,7 @@ router.post("/", async (req, res) => {
       piano: req.body.piano,
       geometry: req.body.geometry,
       forPatient: req.body.forPatient,
+      order: req.body.order,
     });
 
     // Salva i dati sul mongodb

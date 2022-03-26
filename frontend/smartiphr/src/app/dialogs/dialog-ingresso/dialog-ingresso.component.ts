@@ -15,7 +15,7 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class DialogIngressoComponent implements OnInit {
 
-  @ViewChild("paginatorDocument", { static: false })
+  @ViewChild("paginatorDocument")
   DocumentoPaginator: MatPaginator;
   public nuovoDocumento: DocumentoPaziente;
   public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;

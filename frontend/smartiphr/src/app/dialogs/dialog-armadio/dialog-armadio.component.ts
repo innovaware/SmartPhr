@@ -20,7 +20,7 @@ import { ArmadioService } from 'src/app/service/armadio.service';
 export class DialogArmadioComponent implements OnInit {
 
 
-  @ViewChild("paginatorElementoArmadio", { static: false })
+  @ViewChild("paginatorElementoArmadio")
   ElementoArmadioPaginator: MatPaginator;
   public nuovoElementoArmadio: Armadio;
   public ElementiArmadioDataSource: MatTableDataSource<Armadio>;
@@ -28,7 +28,7 @@ export class DialogArmadioComponent implements OnInit {
   public uploadingElementoArmadio: boolean;
   public addingElementoArmadio: boolean;
 
-  @ViewChild("paginatorAttArmadio", { static: false })
+  @ViewChild("paginatorAttArmadio")
   AttArmadioPaginator: MatPaginator;
   public AttArmadioDataSource: MatTableDataSource<Armadio>;
   public attArmadio: Armadio[] = [];

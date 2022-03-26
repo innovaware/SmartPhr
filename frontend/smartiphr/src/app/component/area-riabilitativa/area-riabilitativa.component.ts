@@ -22,7 +22,7 @@ export class AreaRiabilitativaComponent implements OnInit {
 
   dataSourceAnamnesiRiabilitativa: MatTableDataSource<AreaRiabilitativaLesioni>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public ariaRiabilitativaLesioni: AreaRiabilitativaLesioni[];
 
   constructor(public dialog: MatDialog) {

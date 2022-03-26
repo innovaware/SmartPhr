@@ -19,6 +19,7 @@ import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
 import { Observable, of } from "rxjs";
 import { Piano } from "src/app/models/piano";
+import { map } from "rxjs/operators";
 
 @Component({
   selector: "app-camere",
@@ -87,7 +88,7 @@ export class CamereComponent implements OnInit {
     private mapService: MapService,
     private camereService: CamereService
   ) {
-    this.selectedPiano = "1p";
+    this.selectedPiano = "2p";
     this.editMode = false;
     this.getCamere(this.selectedPiano);
   }
@@ -105,11 +106,11 @@ export class CamereComponent implements OnInit {
     this.pianoChiesaPrimo = this.mapService.getSecondoChiesa();
 
     return new Map({
-      layers: [this.pianoTerra.layer],
+      layers: [this.pianoPrimo.layer],
       target: "ol-map",
       view: new View({
-        projection: this.pianoTerra.projection,
-        center: getCenter(this.pianoTerra.extent),
+        projection: this.pianoPrimo.projection,
+        center: getCenter(this.pianoPrimo.extent),
         zoom: 2,
         maxZoom: 8,
       }),
@@ -121,11 +122,13 @@ export class CamereComponent implements OnInit {
   cameraLayerDebug: VectorLayer<VectorSource<Geometry>>;
 
   getCamere(piano: string) {
-    console.log("Piano", piano);
-
-    this.camereService.get(piano).subscribe((c) => {
-      this.camere = c;
-    });
+    this.camereService.get(piano)
+      .pipe(
+        map( (x: Camere[])=>
+            x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order))
+      ).subscribe((c) => {
+        this.camere = c;
+      });
   }
 
   getCoord(event: any) {

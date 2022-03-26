@@ -9,6 +9,7 @@ export class Camere {
   geometry: string;
   geometryObject: any;
   forPatient: boolean;
+  order: number;
 
   constructor() {
     const empty = {

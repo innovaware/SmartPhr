@@ -5,6 +5,7 @@ const CameraSchema = mongoose.Schema({
   piano: String,
   geometry: String,
   forPatient: Boolean,
+  order: Number,
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");

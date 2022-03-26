@@ -25,7 +25,7 @@ export class ConsulentiComponent implements OnInit {
 
   dataSource: MatTableDataSource<Consulenti>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   data: Consulenti[];
 
   constructor(
