@@ -30,7 +30,7 @@
     </div>
 
     <div class="col">
-      <div class="containter pad">
+      <div class="containter pad" *ngIf="(camere| async)?.length > 0; else loading">
         <div class="row" *ngIf="!editMode">
           <div class="col ">
             <button mat-button (click)="editMode = true" class="full mb-2">
@@ -51,11 +51,11 @@
         <div class="row">
           <div class="col">
             <mat-form-field appearance="fill">
-              <mat-label>Seleziona Camera</mat-label>
-              <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCameraId">
+              <mat-label>Seleziona Camera </mat-label>
+              <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCamera">
                 <mat-option
-                  *ngFor="let camera of camere"
-                  value="{{ camera._id }}"
+                  *ngFor="let camera of camere | async"
+                  [value]="camera"
                   >{{ camera.camera }}
                 </mat-option>
               </mat-select>
@@ -167,6 +167,21 @@
           </div>
         </div>
       </div>
+
+      <ng-template #loading>
+        <div class="containter pad">
+          <div class="row">
+            <div class="col center">
+              <img src="../../../assets/empty.svg" style="width: 32px;">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col center">
+              <mat-label>Nessun camera presente in questo piano</mat-label>
+            </div>
+          </div>
+        </div>
+      </ng-template>
     </div>
   </div>
 </div>
