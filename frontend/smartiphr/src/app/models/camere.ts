@@ -8,7 +8,7 @@ export class Camere {
   piano: string;
   geometry: string;
   geometryObject: any;
-
+  forPatient: boolean;
 
   constructor() {
     const empty = {

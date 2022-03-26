@@ -50,6 +50,10 @@ body {
   width: fit-content;
 }
 
+.full {
+  width: 100%;
+}
+
 .mat-flat-button.mat-accent, .mat-raised-button.mat-accent, .mat-fab.mat-accent, .mat-mini-fab.mat-accent {
   color: #ffffff;
   background-color: #f8ac59;
@@ -81,3 +85,6 @@ select.custom-select {
   -webkit-appearance: none;
   padding: 0.375rem 1.75rem 0.375rem 0.75rem;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

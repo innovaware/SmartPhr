@@ -17,6 +17,8 @@ import { Geometry, Polygon } from "ol/geom";
 import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
+import { Observable, of } from "rxjs";
+import { Piano } from "src/app/models/piano";
 
 @Component({
   selector: "app-camere",
@@ -30,6 +32,14 @@ export class CamereComponent implements OnInit {
   camere: Camere[];
   selectedCamera: Camere;
   selectedCameraId: string;
+  editMode: boolean;
+
+  pianoList: Observable<Piano[]> = of([
+    { code: "1p", description: "Piano Terra"},
+    { code: "2p", description: "Primo Piano"},
+    { code: "1c", description: "Chiesa - Terra"},
+    { code: "2c", description: "Chiesa - Primo"}
+  ]);
 
   pianoTerra: {
     layer: ImageLayer<Static>;
@@ -78,9 +88,8 @@ export class CamereComponent implements OnInit {
     private camereService: CamereService
   ) {
     this.selectedPiano = "1p";
-    this.camereService.get().subscribe((c) => {
-      this.camere = c.filter((x) => x.piano === this.selectedPiano);
-    });
+    this.editMode = false;
+    this.getCamere(this.selectedPiano);
   }
 
   ngOnInit(): void {
@@ -111,15 +120,25 @@ export class CamereComponent implements OnInit {
 
   cameraLayerDebug: VectorLayer<VectorSource<Geometry>>;
 
-  getCoord(event: any) {
-    var coordinate = this.map.getEventCoordinate(event);
-    const coord = [coordinate[0], coordinate[1]];
+  getCamere(piano: string) {
+    console.log("Piano", piano);
 
-    if (this.selectedCamera) {
-      this.selectedCamera.geometryObject.features[0].geometry.coordinates[0].push(
-        coord
-      );
-      this.updateLayerCamera();
+    this.camereService.get(piano).subscribe((c) => {
+      this.camere = c;
+    });
+  }
+
+  getCoord(event: any) {
+    if (this.editMode) {
+      var coordinate = this.map.getEventCoordinate(event);
+      const coord = [coordinate[0], coordinate[1]];
+
+      if (this.selectedCamera) {
+        this.selectedCamera.geometryObject.features[0].geometry.coordinates[0].push(
+          coord
+        );
+        this.updateLayerCamera();
+      }
     }
   }
 
@@ -139,6 +158,13 @@ export class CamereComponent implements OnInit {
 
     this.map.getView().setCenter(coordinate);
 
+  }
+
+  saveForPatientFlag(flag) {
+    this.selectedCamera.forPatient = flag;
+    this.camereService.update(this.selectedCamera).subscribe((res) => {
+      console.log(res);
+    });
   }
 
   saveLayerCamera() {
@@ -234,12 +260,12 @@ export class CamereComponent implements OnInit {
   onPlanChange(event: MatSelectChange) {
     this.setPlan(event.value);
 
-    this.camereService.get().subscribe((c) => {
-      this.camere = c.filter((x) => x.piano === event.value);
-    });
+    this.getCamere(event.value as string)
 
     this.deselectCamera();
   }
+
+
 
   onChangeCamera(event: MatSelectChange) {
     this.selectedCamera = this.camere.find((x) => x._id === event.value);
