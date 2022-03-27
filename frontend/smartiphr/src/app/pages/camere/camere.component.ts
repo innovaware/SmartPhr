@@ -1,4 +1,14 @@
 import { Component, OnInit } from "@angular/core";
+import { MatSelectChange } from "@angular/material";
+
+import { map } from "rxjs/operators";
+import { Observable, of } from "rxjs";
+
+import { MapService } from "src/app/service/map.service";
+import { CamereService } from "src/app/service/camere.service";
+import { Camere } from "src/app/models/camere";
+import { Piano } from "src/app/models/piano";
+
 import ImageLayer from "ol/layer/Image";
 import Projection from "ol/proj/Projection";
 import Static from "ol/source/ImageStatic";
@@ -6,10 +16,6 @@ import { getCenter } from "ol/extent";
 
 import Map from "ol/Map";
 import View from "ol/View";
-import { MapService } from "src/app/service/map.service";
-import { CamereService } from "src/app/service/camere.service";
-import { Camere } from "src/app/models/camere";
-import { MatSelectChange } from "@angular/material";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
@@ -17,9 +23,6 @@ import { Geometry, Polygon } from "ol/geom";
 import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
-import { Observable, of } from "rxjs";
-import { Piano } from "src/app/models/piano";
-import { map } from "rxjs/operators";
 import Text from "ol/style/Text";
 
 @Component({

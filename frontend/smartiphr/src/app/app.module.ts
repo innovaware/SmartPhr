@@ -187,6 +187,8 @@ import { DialogArmadioComponent } from './dialogs/dialog-armadio/dialog-armadio.
 import { CamereComponent } from './pages/camere/camere.component';
 import { AttivitaOssComponent } from './pages/attivita-oss/attivita-oss.component';
 import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/registro-controlli-oss.component';
+import { CamereListComponent } from './pages/camere-list/camere-list.component';
+import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 
 const materialModules = [
   MatTableModule,
@@ -351,11 +353,13 @@ const dialogModule = [
     FerieAltroPersonaleComponent,
     DebugComponent,
     PrettyprintPipe,
+    TranslatePianoPipe,
     AuthorizationComponent,
     AreaOssComponent,
     CamereComponent,
     AttivitaOssComponent,
     RegistroControlliOssComponent,
+    CamereListComponent,
   ],
   imports: [
     ...materialModules,
