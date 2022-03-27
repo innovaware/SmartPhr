@@ -3,6 +3,7 @@ import { MatDialog } from "@angular/material";
 import { Subject } from "rxjs";
 import { DialogCartellaClinicaComponent } from "src/app/dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component";
 import { DialogCartellaInfermeristicaComponent } from "src/app/dialogs/dialog-cartella-infermeristica/dialog-cartella-infermeristica.component";
+import { DialogPazienteComponent } from "src/app/dialogs/dialog-paziente/dialog-paziente.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { MessagesService } from "src/app/service/messages.service";
@@ -82,4 +83,36 @@ export class AreaInfermieristicaComponent implements OnInit {
       this.eventsSubject.next(this.pazienti);
     });
   }
+
+
+  getInsertFunction(): any {
+    return this.insert.bind({ ...this });
+  }
+
+  insert() {
+    console.log("Inserimento Paziente");
+    const paziente: Paziente = new Paziente();
+
+    const dialogRef = this.dialog.open(DialogPazienteComponent, {
+      data: { paziente: paziente, readonly: true, newItem: true },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("result insert paziente", result);
+      if (result !== false && result != undefined) {
+        this.pazienteService
+          .insert(result)
+          .then((x) => {
+            this.pazienti.push(x);
+            this.eventsSubject.next(this.pazienti);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError(
+              "Errore Inserimento Paziente (" + err["status"] + ")"
+            );
+          });
+      }
+    });
+  }
+
 }

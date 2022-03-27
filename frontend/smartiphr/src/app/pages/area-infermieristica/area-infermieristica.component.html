@@ -13,20 +13,14 @@
 
   <div class="row">
     <div class="col">
-      <!-- <app-table-ospiti
-      [eventPazienti]="eventsSubject.asObservable()"
-      [showPatient]="showFunction"
-      [enableShow]=true
-      [enableDeleting]=false
-      [showInsert]=false></app-table-ospiti> -->
-
       <app-table-ospiti
         [eventPazienti]="eventsSubject.asObservable()"
+        [insertFunction]="getInsertFunction()"
         [enableShow]=false
         [enableDeleting]=false
-        [showInsert]=false
         [enableCustomButton]=true
         [CustomButtons] = customButtons
+        [showInsert]=true
         >
       </app-table-ospiti>
 

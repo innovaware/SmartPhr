@@ -182,9 +182,6 @@ export class EsitiStrumentaliComponent implements OnInit {
         err=> {
           console.log("Error ", err);
           this.messageService.showMessageError("Cancellazione documento annullata");
-        }
-        )
-
-
+        })
   }
 }
