@@ -139,8 +139,9 @@ export class AutorizzazioneUscitaComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (window.navigator && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
           // For other browsers:
@@ -156,26 +157,32 @@ export class AutorizzazioneUscitaComponent implements OnInit {
   }
 
   deleteDocument(documento: DocumentoPaziente) {
-    console.log("Cancella documento: ", documento);
-
-    this.docService
-      .deleteAutorizzazioneUscita(documento._id)
-      .subscribe(
-        (x) => {
-          console.log("Documento Cancellato");
-        const index = this.documenti.indexOf(documento);
-        console.log("Documento cancellato index: ", index);
-        if (index > -1) {
-          this.documenti.splice(index, 1);
-        }
-
-        this.documentiDataSource.data = this.documenti;
-      },
-      (err) => {
-        this.messageService.showMessageError(
-          "Errore nella cancellazione Fattura"
-        );
-        console.error(err);
-      });
+    this.messageService.deleteMessageQuestion("Vuoi cancellare il documento ?")
+        .subscribe( success => {
+          if (success == true) {
+            this.docService
+                .deleteAutorizzazioneUscita(documento._id)
+                .subscribe(
+                  x => {
+                    const index = this.documenti.indexOf(documento);
+                    console.log("Documento cancellato index: ", index);
+                    if (index > -1) {
+                      this.documenti.splice(index, 1);
+                    }
+                    this.documentiDataSource.data = this.documenti;
+                  },
+                  (err) => {
+                    this.messageService.showMessageError("Errore nella cancellazione Fattura");
+                    console.error(err);
+                  }
+                );
+          } else {
+            this.messageService.showMessageError("Cancellazione fattura annullata");
+          }
+        },
+        err=> {
+          console.log("Error ", err);
+          this.messageService.showMessageError("Cancellazione fattura annullata");
+        })
   }
 }
