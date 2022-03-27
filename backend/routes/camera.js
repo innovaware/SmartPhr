@@ -81,6 +81,8 @@ router.post("/", async (req, res) => {
       geometry: req.body.geometry,
       forPatient: req.body.forPatient,
       order: req.body.order,
+      numPostiLiberi: req.body.numPostiLiberi,
+      numMaxPosti: req.body.numPostiLiberi,
     });
 
     const result = await camera.save();
@@ -112,6 +114,8 @@ router.put("/:id", async (req, res) => {
           geometry: req.body.geometry,
           forPatient: req.body.forPatient,
           order: req.body.order,
+          numPostiLiberi: req.body.numPostiLiberi,
+          numMaxPosti: req.body.numPostiLiberi,
         },
       }
     );
@@ -142,6 +146,8 @@ router.post("/", async (req, res) => {
       geometry: req.body.geometry,
       forPatient: req.body.forPatient,
       order: req.body.order,
+      numPostiLiberi: req.body.numPostiLiberi,
+      numMaxPosti: req.body.numPostiLiberi,
     });
 
     // Salva i dati sul mongodb
