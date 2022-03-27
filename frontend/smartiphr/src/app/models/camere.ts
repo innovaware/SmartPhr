@@ -3,6 +3,18 @@ export class Camere {
     return JSON.parse(JSON.stringify(obj));
   }
 
+  static copy(src: Camere, dst: Camere) {
+    dst._id =  src._id;
+    dst.camera =  src.camera;
+    dst.piano =  src.piano;
+    dst.geometry =  src.geometry;
+    dst.geometryObject =  src.geometryObject;
+    dst.forPatient =  src.forPatient;
+    dst.order =  src.order;
+    dst.numPostiLiberi =  src.numPostiLiberi;
+    dst.numMaxPosti =  src.numMaxPosti;
+  }
+
   _id?: string;
   camera: string;
   piano: string;

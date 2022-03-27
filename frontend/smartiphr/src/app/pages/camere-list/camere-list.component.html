@@ -17,8 +17,8 @@
           </th>
           <td mat-cell *matCellDef="let row">
             <div class="right">
-              <img src="../../../assets/show.svg" title="Mostra">
-              <img src="../../../assets/edit.svg" title="Modifica">
+              <img src="../../../assets/show.svg" title="Mostra" (click)="viewCamera(row)">
+              <img src="../../../assets/edit.svg" title="Modifica" (click)="editCamera(row)">
               <img src="../../../assets/maps.svg" title="Mostra nella Mappa">
               <!-- <button mat-raised-button color="warn" style="margin-right: 10px" >Visualizza</button> -->
             </div>

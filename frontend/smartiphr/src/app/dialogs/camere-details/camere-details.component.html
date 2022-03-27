@@ -1,0 +1,113 @@
+
+
+<div mat-dialog-title>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col">
+        <h3>Camera</h3>
+      </div>
+    </div>
+  </div>
+</div>
+
+<hr>
+<mat-dialog-content>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col-2" [ngClass]="data.editMode ? 'middle' : ''">
+        <h4><mat-label>Nome:</mat-label></h4>
+      </div>
+      <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
+
+      <mat-form-field *ngIf="data.editMode else labelTextCamera">
+        <input matInput type="text" placeholder="Nome Camera" [(ngModel)]="data.camera.camera">
+      </mat-form-field>
+
+      <ng-template #labelTextCamera>
+        <mat-label>{{data.camera.camera}}</mat-label>
+      </ng-template>
+
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col-2" [ngClass]="data.editMode ? 'middle' : ''">
+        <h4><mat-label>Piano:</mat-label></h4>
+      </div>
+      <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
+        <mat-form-field *ngIf="data.editMode else labelTextPiano">
+          <mat-select
+            [(ngModel)]="data.camera.piano">
+            <mat-option
+              *ngFor="let piano of pianoList | async"
+              value="{{ piano.code }}"
+              >{{ piano.code | translatepiano }}
+            </mat-option>
+          </mat-select>
+          <!-- <input matInput type="number" placeholder="Inserisci il piano" [(ngModel)]="data.camera.piano"> -->
+        </mat-form-field>
+
+        <ng-template #labelTextPiano>
+          <mat-label>{{data.camera.piano | translatepiano}}</mat-label>
+        </ng-template>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col" [ngClass]="data.editMode ? 'middle' : ''">
+        <h4>
+          <mat-label>Numero posti</mat-label>
+          <img src="../../../assets/info.svg" title="Numero di posti occupati"
+               class="info">
+
+        </h4>
+      </div>
+      <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
+        <mat-form-field *ngIf="data.editMode else labelTextNumPostiLiberi">
+          <input matInput type="number" placeholder="Posti liberi"
+                 [(ngModel)]="data.camera.numPostiLiberi"
+                 min="0"
+                 max="{{data.camera.numMaxPosti}}">
+        </mat-form-field>
+
+        <ng-template #labelTextNumPostiLiberi>
+          <mat-label>{{data.camera.numPostiLiberi}}</mat-label>
+        </ng-template>
+      </div>
+    </div>
+
+
+    <div class="row">
+      <div class="col" [ngClass]="data.editMode ? 'middle' : ''">
+        <h4>
+          <mat-label>Numero Totale di letti</mat-label>
+          <img src="../../../assets/info.svg" title="Numero totale di posti disponibili per questa camera"
+               class="info">
+        </h4>
+      </div>
+      <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
+        <mat-form-field *ngIf="data.editMode else labelTextNumMaxPosti">
+          <input matInput type="number" placeholder="Numero massimo di posti"
+            [(ngModel)]="data.camera.numMaxPosti"
+            min="{{data.camera.numPostiLiberi}}">
+        </mat-form-field>
+
+        <ng-template #labelTextNumMaxPosti>
+          <mat-label>{{data.camera.numMaxPosti}}</mat-label>
+        </ng-template>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>
+
+
+<hr>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+  <button mat-button [mat-dialog-close]="true" *ngIf="data.editMode">Salva</button>
+  <button mat-button [mat-dialog-close]="false">Chiudi</button>
+</div>
+</div>

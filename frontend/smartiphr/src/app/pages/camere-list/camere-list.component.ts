@@ -1,6 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
 import { map } from 'rxjs/operators';
+import { CamereDetailsComponent } from 'src/app/dialogs/camere-details/camere-details.component';
 import { Camere } from 'src/app/models/camere';
 import { CamereService } from 'src/app/service/camere.service';
 import { MessagesService } from 'src/app/service/messages.service';
@@ -27,6 +28,7 @@ export class CamereListComponent implements OnInit {
   constructor(
     private camereService: CamereService,
     private messageService: MessagesService,
+    public dialogCamera: MatDialog,
   ) { }
 
   ngOnInit(): void {
@@ -55,6 +57,41 @@ export class CamereListComponent implements OnInit {
       }
     );
 
+  }
+
+  viewCamera(camera: Camere) {
+    this.dialogCamera.open(CamereDetailsComponent, {
+      data: {
+        camera: camera,
+        editMode: false
+      },
+      width: "600px",
+    })
+    .afterClosed();
+  }
+
+  editCamera(camera: Camere) {
+    const cameraEdit: Camere = Camere.clone(camera);
+
+    this.dialogCamera.open(CamereDetailsComponent, {
+      data: {
+        camera: cameraEdit,
+        editMode: true
+      },
+      width: "600px",
+    })
+    .afterClosed()
+    .subscribe( result => {
+      if (result) {
+        Camere.copy(cameraEdit, camera)
+
+        this.camereService.update(cameraEdit)
+            .subscribe( result => {
+              console.log("Aggiornamento camera eseguito con successo");
+              this.messageService.showMessageError("Camera aggiornata con successo");
+            });
+      }
+    })
   }
 
 }

@@ -1,15 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MatSelectModule, MAT_DIALOG_DATA } from '@angular/material';
-import { dataIngresso } from 'src/app/models/dataIngresso';
-import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
+import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { Armadio } from 'src/app/models/armadio';
 import { Paziente } from 'src/app/models/paziente';
 import { DataIngressoService } from 'src/app/service/data-ingresso.service';
-import { DocumentipazientiService } from 'src/app/service/documentipazienti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
 import { UploadService } from 'src/app/service/upload.service';
-import { AttivitaService } from 'src/app/service/attivita.service';
 import { ArmadioService } from 'src/app/service/armadio.service';
 
 @Component({
@@ -49,7 +45,7 @@ export class DialogArmadioComponent implements OnInit {
     public data: {
       paziente: Paziente;
       readonly: boolean;
-    }) { 
+    }) {
       this.paziente = Paziente.clone(data.paziente);
     }
 
@@ -136,5 +132,5 @@ export class DialogArmadioComponent implements OnInit {
   }
 
 
-  
+
 }

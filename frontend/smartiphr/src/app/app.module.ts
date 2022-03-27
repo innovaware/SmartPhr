@@ -189,6 +189,7 @@ import { AttivitaOssComponent } from './pages/attivita-oss/attivita-oss.componen
 import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/registro-controlli-oss.component';
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
+import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
 
 const materialModules = [
   MatTableModule,
@@ -247,7 +248,7 @@ const dialogModule = [
   DialogIngressoComponent,
   DialogAttivitaComponent,
   DialogArmadioComponent,
-
+  CamereDetailsComponent,
 ];
 
 @NgModule({
