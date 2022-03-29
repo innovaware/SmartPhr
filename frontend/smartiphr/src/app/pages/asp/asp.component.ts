@@ -14,7 +14,7 @@ export class AspComponent implements OnInit {
   dataSource: MatTableDataSource<Asp>;
   data: Asp[];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog, public aspService: AspService) {}
 

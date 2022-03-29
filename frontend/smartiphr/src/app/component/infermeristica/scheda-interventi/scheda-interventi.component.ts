@@ -26,7 +26,7 @@ export class SchedaInterventiComponent implements OnInit {
   ];
 
   dataSource: MatTableDataSource<SchedaInterventi>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) {}
 

@@ -56,7 +56,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   ];
   dataSource: MatTableDataSource<Paziente>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   public data: Paziente[];
 
   constructor(

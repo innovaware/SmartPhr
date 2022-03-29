@@ -24,7 +24,7 @@ export class CvComponent implements OnInit {
     "action",
   ];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   dataSource: MatTableDataSource<Curriculum>;
   curriculum: Curriculum[];
 

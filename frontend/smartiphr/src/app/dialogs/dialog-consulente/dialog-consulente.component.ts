@@ -39,14 +39,14 @@ export class DialogConsulenteComponent implements OnInit {
   public fatture: Fatture[];
   fattureDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
   public fattureDataSource: MatTableDataSource<Fatture>;
-  @ViewChild("paginatorFatture")
+  @ViewChild("paginatorFatture", {static: false})
   fatturePaginator: MatPaginator;
 
   public addingBonifici: boolean;
   public nuovaBonifico: Bonifico;
   public uploadingBonifici: boolean;
   public bonifici: Bonifico[];
-  @ViewChild("paginatorBonifici")
+  @ViewChild("paginatorBonifici", {static: false})
   bonificiPaginator: MatPaginator;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 

@@ -39,7 +39,7 @@ export class PresenzeComponent implements OnInit, OnChanges {
 
   dataSource: MatTableDataSource<Presenze>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   public presenze: Presenze[];
 
   constructor(

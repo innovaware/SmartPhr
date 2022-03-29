@@ -50,7 +50,7 @@ export class TableDipendentiComponent implements OnInit {
 
   dataSource: MatTableDataSource<Dipendenti>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   public dipendenti: Dipendenti[];
 
   constructor(

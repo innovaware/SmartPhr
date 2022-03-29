@@ -22,7 +22,7 @@ export class EsitiStrumentaliComponent implements OnInit {
   documenti: DocumentoPaziente[];
 
   public documentiDataSource: MatTableDataSource<DocumentoPaziente>;
-  @ViewChild("paginatorDocumenti")  documentiPaginator: MatPaginator;
+  @ViewChild("paginatorDocumenti", {static: false})  documentiPaginator: MatPaginator;
   documentiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
 

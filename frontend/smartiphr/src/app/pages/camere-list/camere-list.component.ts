@@ -22,7 +22,7 @@ export class CamereListComponent implements OnInit {
     "action",
   ];
   dataSourceCamere: MatTableDataSource<Camere>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
 
   constructor(

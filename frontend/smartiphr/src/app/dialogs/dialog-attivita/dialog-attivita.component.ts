@@ -13,7 +13,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 })
 export class DialogAttivitaComponent implements OnInit {
 
-  @ViewChild("paginatorAttivita")
+  @ViewChild("paginatorAttivita", {static: false})
   AttivitaPaginator: MatPaginator;
   public attivitaDataSource: MatTableDataSource<Attivita>;
   public attivita: Attivita[];

@@ -14,7 +14,7 @@ export class AreaRiabilitazioneDiarioComponent implements OnInit {
 
   dataSourceRiabilitativaDiario: MatTableDataSource<AreaRiabilitativaDiario>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) { }
 

@@ -39,7 +39,7 @@ export class TurnimensiliComponent implements OnInit {
 
   dataSource: MatTableDataSource<Turnimensili>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   public turnimensili: Turnimensili[];
 
   dipendente: Dipendenti = {} as Dipendenti;

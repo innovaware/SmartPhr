@@ -22,7 +22,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
   dipendente: Dipendenti = {} as Dipendenti;
   public uploadingRegolamento: boolean;
 
-  @ViewChild("paginatorCertificatoMalattia")
+  @ViewChild("paginatorCertificatoMalattia", {static: false})
   certificatiMalattiaPaginator: MatPaginator;
   public nuovoCertificatoMalattia: DocumentoDipendente;
   public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -40,7 +40,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
 
 
   
-  @ViewChild("paginatordocsMedicina")
+  @ViewChild("paginatordocsMedicina", {static: false})
   docsMedicinaPaginator: MatPaginator;
   public nuovoDocMedicina: DocumentoMedicinaLavoro;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
@@ -59,7 +59,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
   ];
 
 
-  @ViewChild("paginatorPrivacy")
+  @ViewChild("paginatorPrivacy", {static: false})
   privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;

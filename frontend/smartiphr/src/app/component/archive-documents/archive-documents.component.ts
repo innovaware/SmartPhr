@@ -17,7 +17,7 @@ export class ArchiveDocumentsComponent implements OnInit {
   @Input() typeDocument: string;
   displayedColumns: string[] = ["filename", "dateupload", "firstname",  "lastname", "codicefiscale", "typeDocument", "action"];
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   documentiPazientePaginator: MatPaginator;
   public documentiPazienteDataSource: MatTableDataSource<{
     documentoPaziente: DocumentoPaziente;
