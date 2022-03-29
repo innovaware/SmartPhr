@@ -73,6 +73,12 @@ export class AreaMedicaComponent implements OnInit {
       //css: "mat-raised-button raised-button action-button",
     });
 
+    this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+      this.pazienti = paz;
+
+      this.eventsSubject.next(this.pazienti);
+    });
+
   /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
