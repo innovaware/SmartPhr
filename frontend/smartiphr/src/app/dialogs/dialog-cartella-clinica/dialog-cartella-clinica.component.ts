@@ -55,7 +55,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   paziente: Paziente;
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  @ViewChild("paginatorPianiTerapeutici", { static: false })
+  @ViewChild("paginatorPianiTerapeutici")
   PianiTerapeuticiPaginator: MatPaginator;
   public nuovoPianoTerapeutico: DocumentoPaziente;
   public pianiTerapeuticiDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -63,7 +63,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingPianoTerapeutico: boolean;
   public addingPianoTerapeutico: boolean;
 
-  @ViewChild("paginatorRefertiEsamiStrumentali", { static: false })
+  @ViewChild("paginatorRefertiEsamiStrumentali")
   RefertiEsamiStrumentaliPaginator: MatPaginator;
   public nuovoRefertoEsameStrumentale: DocumentoPaziente;
   public refertiEsamiStrumentaliDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -71,7 +71,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRefertoEsameStrumentale: boolean;
   public addingRefertoEsameStrumentale: boolean;
 
-  @ViewChild("paginatorRefertiEsamiEmatochimici", { static: false })
+  @ViewChild("paginatorRefertiEsamiEmatochimici")
   RefertiEsamiEmatochimiciPaginator: MatPaginator;
   public nuovoRefertoEsameEmatochimico: DocumentoPaziente;
   public refertiEsamiEmatochimiciDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -79,7 +79,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRefertoEsameEmatochimico: boolean;
   public addingRefertoEsameEmatochimico: boolean;
 
-  @ViewChild("paginatorVerbali", { static: false })
+  @ViewChild("paginatorVerbali")
   VerbaliPaginator: MatPaginator;
   public nuovoVerbale: DocumentoPaziente;
   public VerbaliDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -87,7 +87,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingVerbale: boolean;
   public addingVerbale: boolean;
 
-  @ViewChild("paginatorRelazioni", { static: false })
+  @ViewChild("paginatorRelazioni")
   RelazioniPaginator: MatPaginator;
   public nuovoRelazione: DocumentoPaziente;
   public relazioniDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -95,7 +95,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRelazione: boolean;
   public addingRelazione: boolean;
 
-  @ViewChild("paginatorImpegnative", { static: false })
+  @ViewChild("paginatorImpegnative")
   ImpegnativePaginator: MatPaginator;
   public nuovoImpegnativa: DocumentoPaziente;
   public impegnativeDataSource: MatTableDataSource<DocumentoPaziente>;

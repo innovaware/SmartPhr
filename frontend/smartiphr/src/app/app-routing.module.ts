@@ -57,6 +57,7 @@ import { CamereComponent } from "./pages/camere/camere.component";
 import { AreaOssComponent } from "./pages/area-oss/area-oss.component";
 import { AttivitaOssComponent } from "./pages/attivita-oss/attivita-oss.component";
 import { RegistroControlliOssComponent } from "./pages/registro-controlli-oss/registro-controlli-oss.component";
+import { CamereListComponent } from "./pages/camere-list/camere-list.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -80,20 +81,16 @@ const routes: Routes = [
   { path: "gest_presenze", component: PresenzeComponent, canActivate: [AuthGuard]  },
   { path: "gest_turnimensili", component: TurnimensiliComponent, canActivate: [AuthGuard]  },
 
-
-
   // AREA PERSONALE
   { path: "generale", component: GeneralePersonaleComponent, canActivate: [AuthGuard]  },
   { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
 
-
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
   { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
   { path: "gest_armadi_oss", component: RegistroControlliOssComponent, canActivate: [AuthGuard]  },
-
 
   // AMMINISTRAZIONE
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
@@ -121,7 +118,10 @@ const routes: Routes = [
 
   { path: "gest_presidi", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
   { path: "gest_carrello", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
+
+  // CAMERE
   { path: "gest_camere", component: CamereComponent, canActivate: [AuthGuard]  },
+  { path: "gest_camerelist", component: CamereListComponent, canActivate: [AuthGuard]  },
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

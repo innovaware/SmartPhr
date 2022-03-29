@@ -3,27 +3,27 @@
     <div class="row">
       <div class="col ">
         <h1 class="title">AREA OSS - Registro controllo armadi</h1>
-  
+
       </div>
     </div>
-  
+
     <hr>
-  
+
     <div class="row">
       <div class="col">
-       
-      
+
+
           <table mat-table [dataSource]="controlliOSSDataSource" class="mat-elevation-z8" style="width: 100%;" >
             <ng-container matColumnDef="paziente">
               <th mat-header-cell *matHeaderCellDef> Paziente </th>
               <td mat-cell *matCellDef="let element"> {{element.pazienteName}} </td>
             </ng-container>
-      
+
             <ng-container matColumnDef="primavera">
               <th mat-header-cell *matHeaderCellDef> Primavera </th>
               <td mat-cell *matCellDef="let element"> {{element.primavera | date: 'dd/MM/yyyy'}} </td>
             </ng-container>
-      
+
 
             <ng-container matColumnDef="estate">
               <th mat-header-cell *matHeaderCellDef> Estate </th>
@@ -46,18 +46,18 @@
                 <th mat-header-cell *matHeaderCellDef> Gennaio </th>
                 <td mat-cell *matCellDef="let element"> {{element.gennaio | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-        
-  
+
+
               <ng-container matColumnDef="febbraio">
                 <th mat-header-cell *matHeaderCellDef> Febbraio </th>
                 <td mat-cell *matCellDef="let element"> {{element.febbraio | date: 'dd/MM/yyyy'}} </td>
               </ng-container>
-  
+
               <ng-container matColumnDef="marzo">
                 <th mat-header-cell *matHeaderCellDef> Marzo </th>
                 <td mat-cell *matCellDef="let element"> {{element.marzo | date: 'dd/MM/yyyy'}}</td>
               </ng-container>
-  
+
               <ng-container matColumnDef="aprile">
                   <th mat-header-cell *matHeaderCellDef> Aprile </th>
                   <td mat-cell *matCellDef="let element"> {{element.aprile | date: 'dd/MM/yyyy'}}</td>
@@ -69,18 +69,18 @@
                     <th mat-header-cell *matHeaderCellDef> Maggio </th>
                     <td mat-cell *matCellDef="let element"> {{element.maggio | date: 'dd/MM/yyyy'}} </td>
                   </ng-container>
-            
-      
+
+
                   <ng-container matColumnDef="giugno">
                     <th mat-header-cell *matHeaderCellDef> Giugno </th>
                     <td mat-cell *matCellDef="let element"> {{element.giugno | date: 'dd/MM/yyyy'}} </td>
                   </ng-container>
-      
+
                   <ng-container matColumnDef="luglio">
                     <th mat-header-cell *matHeaderCellDef> Luglio </th>
                     <td mat-cell *matCellDef="let element"> {{element.luglio | date: 'dd/MM/yyyy'}}</td>
                   </ng-container>
-      
+
                   <ng-container matColumnDef="agosto">
                       <th mat-header-cell *matHeaderCellDef> Agosto </th>
                       <td mat-cell *matCellDef="let element"> {{element.agosto | date: 'dd/MM/yyyy'}}</td>
@@ -92,29 +92,29 @@
                         <th mat-header-cell *matHeaderCellDef> Settembre </th>
                         <td mat-cell *matCellDef="let element"> {{element.settembre | date: 'dd/MM/yyyy'}} </td>
                       </ng-container>
-                
-          
+
+
                       <ng-container matColumnDef="ottobre">
                         <th mat-header-cell *matHeaderCellDef> Ottobre </th>
                         <td mat-cell *matCellDef="let element"> {{element.ottobre | date: 'dd/MM/yyyy'}} </td>
                       </ng-container>
-          
+
                       <ng-container matColumnDef="novembre">
                         <th mat-header-cell *matHeaderCellDef> Novembre </th>
                         <td mat-cell *matCellDef="let element"> {{element.novembre | date: 'dd/MM/yyyy'}}</td>
                       </ng-container>
-          
+
                       <ng-container matColumnDef="dicembre">
                           <th mat-header-cell *matHeaderCellDef> Dicembre </th>
                           <td mat-cell *matCellDef="let element"> {{element.dicembre | date: 'dd/MM/yyyy'}}</td>
                         </ng-container>
-      
+
             <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
           </table>
-      
+
           <div class="paginator-container">
-      
+
             <mat-paginator #ControlliOSSPaginator [pageSizeOptions]="[5]" showFirstLastButtons
               aria-label="Select page of periodic elements">
             </mat-paginator>

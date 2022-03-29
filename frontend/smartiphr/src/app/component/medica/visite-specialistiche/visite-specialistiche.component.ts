@@ -22,7 +22,7 @@ export class VisiteSpecialisticheComponent implements OnInit {
 
   displayedColumns: string[] = ["dataReq", "contenuto", "dataEsec", "action"];
 
-  @ViewChild("paginatorVisiteSpecialistiche", { static: false })
+  @ViewChild("paginatorVisiteSpecialistiche")
   visiteSpecialistichePaginator: MatPaginator;
   public visiteSpecialisticheDataSource: MatTableDataSource<VisiteSpecialistiche>;
 

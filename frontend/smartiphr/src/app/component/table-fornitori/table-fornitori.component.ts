@@ -40,7 +40,7 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
   ];
   dataSource: MatTableDataSource<Fornitore>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public fornitore: Fornitore[];
 
   constructor(

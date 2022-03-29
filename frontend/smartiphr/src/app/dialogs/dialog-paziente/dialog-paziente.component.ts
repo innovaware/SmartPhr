@@ -48,11 +48,11 @@ export class DialogPazienteComponent implements OnInit {
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture", { static: false })
+  @ViewChild("paginatorFatture")
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorNoteCredito", { static: false })
+  @ViewChild("paginatorNoteCredito")
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici", { static: false })
+  @ViewChild("paginatorBonifici")
   bonificiPaginator: MatPaginator;
 
   public fatture: Fatture[];
@@ -90,9 +90,9 @@ export class DialogPazienteComponent implements OnInit {
     this.data.paziente = this.paziente;
 
     if (
-      this.paziente.cognome == "" ||
-      this.paziente.nome == "" ||
-      this.paziente.codiceFiscale == ""
+      this.paziente.cognome == "" || this.paziente.cognome == null || this.paziente.cognome.length == 0 ||
+      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0 ||
+      this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
     ) {
       alert("Alcuni campi obbligatori sono mancanti!");
       return;
@@ -137,6 +137,45 @@ export class DialogPazienteComponent implements OnInit {
 
   }
 
+  }
+
+  showDocument(document: any) {
+    console.log("ShowDocument: ", document);
+    this.uploadService
+      .download(document.name, this.paziente._id, '')
+      .then((x) => {
+        //console.log("download: ", x);
+        x.subscribe((data) => {
+           console.log("download: ", data);
+           const newBlob = new Blob([data as BlobPart], {
+             type: "application/pdf",
+           });
+
+           // IE doesn't allow using a blob object directly as link href
+           // instead it is necessary to use msSaveOrOpenBlob
+           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+             window.navigator.msSaveOrOpenBlob(newBlob);
+             return;
+           }
+
+           // For other browsers:
+           // Create a link pointing to the ObjectURL containing the blob.
+           const downloadURL = URL.createObjectURL(newBlob);
+           window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+  removeDocument(documentRemoving: any) {
+    console.log("document to remove: ", documentRemoving);
+    this.uploadService.removeFile(documentRemoving.id).subscribe(result=> {
+      console.log("document Removed: ", result);
+      documentRemoving.status=false;
+    });
   }
 
   async changeData($event: Paziente) {
@@ -561,8 +600,8 @@ export class DialogPazienteComponent implements OnInit {
       .getFiles(this.paziente._id)
       .then((documents: Documento[]) => {
         documents.forEach((doc: Documento) => {
-          // console.log("document:", doc);
           this.document[doc.typeDocument] = {
+            id: doc._id,
             status: true,
             name: doc.name,
             dateupload: doc.dateupload
@@ -608,10 +647,11 @@ export class DialogPazienteComponent implements OnInit {
 
       this.uploadService
         .uploadDocument(formData)
-        .then((x) => {
+        .then((x: any) => {
           this.uploading = false;
 
           this.document[typeDocument] = {
+            id: x.result.id,
             status: true,
             name: nameDocument,
             uploading: false,

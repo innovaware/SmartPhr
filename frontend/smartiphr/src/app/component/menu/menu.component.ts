@@ -1,5 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { Dipendenti } from "src/app/models/dipendenti";
+import { Mansione } from "src/app/models/mansione";
 import { Menu } from "src/app/models/menu";
 import { SubMenu } from "src/app/models/subItem";
 import { User } from "src/app/models/user";

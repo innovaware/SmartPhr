@@ -22,7 +22,7 @@ export class FarmaciComponent implements OnInit {
   dataSource: MatTableDataSource<Farmaci>;
   farmaci: Farmaci[];
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(
     public dialog: MatDialog,

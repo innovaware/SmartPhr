@@ -19,7 +19,7 @@ export class AnticipoFattureASPComponent implements OnInit {
 
   displayedColumns: string[] = ["filename", "dataUpload", "note", "action"];
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   dataSource: MatTableDataSource<AnticipoFatture>;
   anticipoFatture: AnticipoFatture[];
 

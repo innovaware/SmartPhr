@@ -15,7 +15,7 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class DialogIngressoComponent implements OnInit {
 
-  @ViewChild("paginatorDocument", { static: false })
+  @ViewChild("paginatorDocument")
   DocumentoPaginator: MatPaginator;
   public nuovoDocumento: DocumentoPaziente;
   public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -38,11 +38,11 @@ export class DialogIngressoComponent implements OnInit {
     public data: {
       paziente: Paziente;
       readonly: boolean;
-    }) { 
+    }) {
       this.paziente = Paziente.clone(data.paziente);
     }
 
- 
+
 
   ngOnInit() {
     this.getDocumenti();
@@ -63,8 +63,9 @@ export class DialogIngressoComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (window.navigator && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
           // For other browsers:
@@ -90,12 +91,12 @@ export class DialogIngressoComponent implements OnInit {
         type: "",
       };
     }
-  
+
     async uploadDocumento($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
-  
+
         console.log("upload Documento: ", $event);
         this.nuovoDocumento.filename = file.name;
         this.nuovoDocumento.file = file;
@@ -104,10 +105,10 @@ export class DialogIngressoComponent implements OnInit {
         console.error("File non valido o non presente");
       }
     }
-  
+
     async deleteDocumento(doc: DocumentoPaziente) {
       console.log("Cancella Documento: ", doc);
-  
+
       this.docService
         .remove(doc)
         .then((x) => {
@@ -117,7 +118,7 @@ export class DialogIngressoComponent implements OnInit {
           if (index > -1) {
             this.documenti.splice(index, 1);
           }
-  
+
           console.log(
             "Documento cancellato: ",
             this.documenti
@@ -131,13 +132,13 @@ export class DialogIngressoComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async saveDocumento(doc: DocumentoPaziente) {
       const typeDocument = doc.typeDocument;
       const path = doc.typeDocument;
       const file: File = doc.file;
       this.uploadingDocumento = true;
-  
+
       console.log("Invio Documento: ", doc);
       doc.type = this.nuovoDocumento.typeDocument;
       doc.typeDocument = "ingresso";
@@ -149,11 +150,11 @@ export class DialogIngressoComponent implements OnInit {
           this.DocumentDataSource.data = this.documenti;
           this.addingDocumento = false;
           this.uploadingDocumento = false;
-  
+
           let formData: FormData = new FormData();
-  
+
           const nameDocument: string = doc.filename;
-  
+
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
           formData.append("path", `${this.paziente._id}/${path}`);
@@ -162,7 +163,7 @@ export class DialogIngressoComponent implements OnInit {
             .uploadDocument(formData)
             .then((x) => {
               this.uploadingDocumento = false;
-  
+
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
@@ -176,14 +177,14 @@ export class DialogIngressoComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async getDocumenti() {
       console.log(`get Documento paziente: ${this.paziente._id}`);
       this.docService
         .getByIngresso(this.paziente, "Documenti")
         .then((f: DocumentoPaziente[]) => {
           this.documenti = f;
-  
+
           this.DocumentDataSource = new MatTableDataSource<DocumentoPaziente>(
             this.documenti
           );

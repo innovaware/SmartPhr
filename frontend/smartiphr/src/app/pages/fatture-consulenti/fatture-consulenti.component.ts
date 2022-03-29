@@ -21,7 +21,7 @@ import { UploadService } from "src/app/service/upload.service";
       "action",
     ];
   
-    @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+    @ViewChild(MatPaginator) paginator: MatPaginator;
     dataSource: MatTableDataSource<FattureConsulenti>;
     fattureConsulenti: FattureConsulenti[];
   

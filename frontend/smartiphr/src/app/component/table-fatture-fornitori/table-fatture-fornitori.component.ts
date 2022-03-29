@@ -33,7 +33,7 @@ export class TableFattureFornitoriComponent implements OnInit {
   public fattureDataSource: MatTableDataSource<Fatture>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture", { static: false })
+  @ViewChild("paginatorFatture")
   fatturePaginator: MatPaginator;
 
   public fatture: Fatture[];

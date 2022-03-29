@@ -39,6 +39,7 @@ export class TableDipendentiComponent implements OnInit {
   displayedColumns: string[] = [
     "cognome",
     "nome",
+    "cf",
     "dataNascita",
     "indirizzo",
     "localita",
@@ -49,7 +50,7 @@ export class TableDipendentiComponent implements OnInit {
 
   dataSource: MatTableDataSource<Dipendenti>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
   public dipendenti: Dipendenti[];
 
   constructor(
@@ -133,7 +134,7 @@ ngOnDestroy() {
       dataNascita: undefined,
       indirizzoResidenza: "",
       comuneResidenza: "",
-      luogoResidenza: "",
+      //luogoResidenza: "",
       provinciaResidenza: "",
       titoloStudio: "",
       mansione: "",

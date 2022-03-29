@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { HttpClient } from "@angular/common/http";
 import { Camere } from '../models/camere';
+import { filter, flatMap, map, mergeMap } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -13,8 +14,8 @@ export class CamereService {
 
   constructor(private http: HttpClient) { }
 
-  get(): Observable<Camere[]> {
-      return this.http.get<Camere[]>(`${this.api}/api/camera`);
+  get(selectedPiano: string): Observable<Camere[]> {
+      return this.http.get<Camere[]>(`${this.api}/api/camera/${selectedPiano}`);
   }
 
   update(camera: Camere) {

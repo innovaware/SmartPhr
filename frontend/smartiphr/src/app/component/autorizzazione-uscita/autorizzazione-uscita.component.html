@@ -57,6 +57,8 @@
     </div>
   </div> -->
 
+<ng-container *ngIf="documenti.length > 0; else loading">
+
   <div class="paginator-container-top">
     <mat-paginator #paginatorDocumenti [pageSizeOptions]="[5]" showFirstLastButtons
       aria-label="Select page of periodic elements">
@@ -99,4 +101,19 @@
     <tr mat-row *matRowDef="let row; columns: documentiDisplayedColumns;"></tr>
   </table>
 
+</ng-container>
 
+<ng-template #loading>
+  <div class="containter pad">
+    <div class="row">
+      <div class="col center">
+        <img src="../../../assets/empty.svg" style="width: 32px;">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col center">
+        <mat-label>Nessun fattura presente</mat-label>
+      </div>
+    </div>
+  </div>
+</ng-template>

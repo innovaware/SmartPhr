@@ -1,0 +1,64 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">AREA CAMERE</h1>
+    </div>
+  </div>
+
+  <hr />
+
+
+  <div class="row">
+    <div class="col">
+      <table mat-table [dataSource]="dataSourceCamere" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div class="right">
+              <img src="../../../assets/show.svg" title="Mostra" (click)="viewCamera(row)">
+              <img src="../../../assets/edit.svg" title="Modifica" (click)="editCamera(row)">
+              <img src="../../../assets/maps.svg" title="Mostra nella Mappa">
+              <!-- <button mat-raised-button color="warn" style="margin-right: 10px" >Visualizza</button> -->
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="camera">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let element"> {{element.camera}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="piano">
+          <th mat-header-cell *matHeaderCellDef> Piano </th>
+          <td mat-cell *matCellDef="let element"> {{element.piano | translatepiano}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numPostiLiberi">
+          <th mat-header-cell *matHeaderCellDef> Liberi </th>
+          <td mat-cell *matCellDef="let element"> {{element.numPostiLiberi}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="numMaxPosti">
+          <th mat-header-cell *matHeaderCellDef> Totale </th>
+          <td mat-cell *matCellDef="let element"> {{element.numMaxPosti}} </td>
+        </ng-container>
+
+
+
+
+
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+
+  </div>
+
+</div>

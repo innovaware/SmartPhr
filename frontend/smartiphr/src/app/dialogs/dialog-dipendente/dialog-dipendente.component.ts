@@ -86,13 +86,13 @@ export class DialogDipendenteComponent implements OnInit {
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
 
-  @ViewChild("paginatorNoteCredito", { static: false })
+  @ViewChild("paginatorNoteCredito")
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici", { static: false })
+  @ViewChild("paginatorBonifici")
   bonificiPaginator: MatPaginator;
 
 
-  @ViewChild("paginatorDocIdent", { static: false })
+  @ViewChild("paginatorDocIdent")
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -100,7 +100,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorContratto", { static: false })
+  @ViewChild("paginatorContratto")
   contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -108,7 +108,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingContratto: boolean;
   public addingContratto: boolean;
 
-  @ViewChild("paginatorPrivacy", { static: false })
+  @ViewChild("paginatorPrivacy")
   privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -116,7 +116,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingPrivacy: boolean;
   public addingPrivacy: boolean;
 
-  @ViewChild("paginatorDiploma", { static: false })
+  @ViewChild("paginatorDiploma")
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -124,7 +124,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-  @ViewChild("paginatorAttestatiECM", { static: false })
+  @ViewChild("paginatorAttestatiECM")
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -132,22 +132,22 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingAttestatoECM: boolean;
   public addingAttestatoECM: boolean;
 
-  @ViewChild("paginatorCedolini", { static: false })
+  @ViewChild("paginatorCedolini")
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
   public cedolini: DocumentoDipendente[];
 
-  @ViewChild("paginatorRichieste", { static: false })
+  @ViewChild("paginatorRichieste")
   richiestePaginator: MatPaginator;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;
   public richieste: DocumentoDipendente[];
 
-  @ViewChild("paginatordocsMedicina", { static: false })
+  @ViewChild("paginatordocsMedicina")
   docsMedicinaPaginator: MatPaginator;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
   public docsMedicina: DocumentoMedicinaLavoro[];
 
-  @ViewChild("paginatorCertificatoMalattia", { static: false })
+  @ViewChild("paginatorCertificatoMalattia")
   certificatiMalattiaPaginator: MatPaginator;
   public nuovoCertificatoMalattia: DocumentoDipendente;
   public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -216,6 +216,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async save(saveAndClose: boolean) {
+
+    console.log("this.dipendente.cf: ", this.dipendente.cf);
+    console.log("this.data.dipendente.cf: ", this.data.dipendente.cf);
+
     // this.data.dipendente = this.dipendente;
     console.log("insert dipendente");
     this.data.dipendente.cognome = this.dipendente.cognome;
@@ -235,9 +239,9 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.email = this.dipendente.email;
 
     if (
-      this.dipendente.cognome == "" ||
-      this.dipendente.nome == "" ||
-      this.dipendente.cf == ""
+      this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome.length == 0 ||
+      this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome.length == 0 ||
+      this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf.length == 0
     ) {
       alert("Alcuni campi obbligatori sono mancanti!");
       return;

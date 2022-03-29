@@ -4,13 +4,15 @@ const Camere = require("../models/camere");
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-router.get("/", async (req, res) => {
+router.get("/:p", async (req, res) => {
+  const { p } = req.params;
   try {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Camere.find();
+      const query = {piano: p}
+      return Camere.find(query);
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -20,7 +22,7 @@ router.get("/", async (req, res) => {
       return;
     }
 
-    const searchTerm = "CAMEREALL";
+    const searchTerm = `CAMEREALL${p}`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
@@ -77,6 +79,10 @@ router.post("/", async (req, res) => {
       camera: req.body.camera,
       piano: req.body.piano,
       geometry: req.body.geometry,
+      forPatient: req.body.forPatient,
+      order: req.body.order,
+      numPostiLiberi: req.body.numPostiLiberi,
+      numMaxPosti: req.body.numPostiLiberi,
     });
 
     const result = await camera.save();
@@ -84,7 +90,7 @@ router.post("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = "CAMEREALL";
+      const searchTerm = "CAMEREALL*";
       redisClient.del(searchTerm);
     }
 
@@ -106,6 +112,10 @@ router.put("/:id", async (req, res) => {
           camera: req.body.camera,
           piano: req.body.piano,
           geometry: req.body.geometry,
+          forPatient: req.body.forPatient,
+          order: req.body.order,
+          numPostiLiberi: req.body.numPostiLiberi,
+          numMaxPosti: req.body.numPostiLiberi,
         },
       }
     );
@@ -114,9 +124,10 @@ router.put("/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `CAMERABY${id}`;
+      const searchTerm = "CAMEREALL*";
       redisClient.del(searchTerm);
     }
+    
 
     res.status(200);
     res.json(camera);
@@ -133,6 +144,10 @@ router.post("/", async (req, res) => {
       camera: req.body.camera,
       piano: req.body.piano,
       geometry: req.body.geometry,
+      forPatient: req.body.forPatient,
+      order: req.body.order,
+      numPostiLiberi: req.body.numPostiLiberi,
+      numMaxPosti: req.body.numPostiLiberi,
     });
 
     // Salva i dati sul mongodb

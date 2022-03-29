@@ -28,7 +28,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ["data", "valore", "firma", "action"];
   dataSource: MatTableDataSource<Diario>;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  @ViewChild(MatPaginator) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) {}
 

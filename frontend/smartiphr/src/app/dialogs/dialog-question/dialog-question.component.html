@@ -1,7 +1,9 @@
-<div mat-dialog-content>
-  <p>{{data.message}}</p>
-</div>
-<div mat-dialog-actions>
-  <button mat-button [mat-dialog-close]="false">No</button>
-  <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Si</button>
+<div class="dialog-bg">
+  <div mat-dialog-content>
+    <p>{{data.message}}</p>
+  </div>
+  <div mat-dialog-actions>
+    <button mat-button [mat-dialog-close]="false">No</button>
+    <button mat-button [mat-dialog-close]="true" cdkFocusInitial>Si</button>
+  </div>
 </div>

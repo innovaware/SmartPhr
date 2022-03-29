@@ -23,7 +23,7 @@ export class DiarioSocialeComponent implements OnInit {
   DisplayedColumns: string[] = ["data", "contenuto", "firma", "action"];
 
 
-  @ViewChild("paginatorDC", { static: false }) diarioAssSocialePaginator: MatPaginator;
+  @ViewChild("paginatorDC") diarioAssSocialePaginator: MatPaginator;
   public diarioAssSocialeDataSource: MatTableDataSource<DiarioAssSociale>;
 
   constructor(public dialogRef: MatDialogRef<DialogCartellaAssistenteSocialeComponent>,
