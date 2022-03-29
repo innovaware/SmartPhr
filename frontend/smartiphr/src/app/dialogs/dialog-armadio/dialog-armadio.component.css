@@ -53,3 +53,12 @@
     text-align: right;
   }
   
+  #table{
+    margin-left: 30%;
+  }
+  #table tr{
+    border: 1px solid gainsboro;
+  }
+  #table tr td{
+    padding: 10px;
+  }

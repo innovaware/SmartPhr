@@ -27,7 +27,7 @@ export class ControlliOSSService {
   }
 
 
-  async getAttivitaByPaziente(id): Promise<ControlliOSS[]> {
+  async getAttivitaByPaziente(id): Promise<ControlliOSS> {
 
     const headers = {
       // 'Authorization': 'Bearer ' + this.token,
@@ -35,13 +35,14 @@ export class ControlliOSSService {
     }
 
     return this.http
-      .get<ControlliOSS[]>(this.api + "/api/armadiocontrolli/paziente/" + id, { headers })
+      .get<ControlliOSS>(this.api + "/api/armadiocontrolli/paziente/" + id, { headers })
       .toPromise();
   }
 
 
   async insert(controllo: ControlliOSS) {
     var body = controllo;
+    console.log("body: ", body);
     return this.http.post(this.api + "/api/armadiocontrolli", body).toPromise();
   }
 

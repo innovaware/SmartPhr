@@ -126,6 +126,9 @@ router.get("/:id", async (req, res) => {
 // INSERT armadiocontrolli su DB
 router.post("/", async (req, res) => {
   try {
+
+    console.log("Insert armadiocontrolli: ", req.body);
+
     const controlliOSS = new ControlliOSS({
         operatorNamePrimavera: req.body.operatorNamePrimavera,
         operatorNameEstate: req.body.operatorNameEstate,

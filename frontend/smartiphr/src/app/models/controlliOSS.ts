@@ -32,7 +32,7 @@ export class ControlliOSS {
     aprile?: Date;
     maggio?: Date;
     giugno?: Date;
-    operatorNameLluglio?: Date;
+    luglio?: Date;
     agosto?: Date;
     settembre?: Date;
     ottobre?: Date;
