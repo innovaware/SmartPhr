@@ -1,7 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MatDialogRef, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { Observable, of } from 'rxjs';
 import { Camere } from 'src/app/models/camere';
+import { Paziente } from 'src/app/models/paziente';
 import { Piano } from 'src/app/models/piano';
 
 @Component({
@@ -18,6 +19,16 @@ export class CamereDetailsComponent implements OnInit {
     { code: "2c", description: "Chiesa - Primo"}
   ]);
 
+
+  displayedColumns: string[] = [
+    "nome",
+    "cognome",
+    "codiceFiscale",
+    "action",
+  ];
+
+  dataSourcePatient: MatTableDataSource<Paziente>;
+
   constructor(
     public dialogRef: MatDialogRef<CamereDetailsComponent>,
     @Inject(MAT_DIALOG_DATA)
@@ -26,7 +37,6 @@ export class CamereDetailsComponent implements OnInit {
       editMode: boolean;
     }
   ) {
-
   }
 
   ngOnInit(): void {

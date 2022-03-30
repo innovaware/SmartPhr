@@ -23,7 +23,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
   documenti: DocumentoPaziente[];
 
   public documentiDataSource: MatTableDataSource<DocumentoPaziente>;
-  @ViewChild("paginatorDocumenti",{static: false})  documentiPaginator: MatPaginator;
+  @ViewChild("paginatorDocumenti", {static: false})  documentiPaginator: MatPaginator;
   documentiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
 

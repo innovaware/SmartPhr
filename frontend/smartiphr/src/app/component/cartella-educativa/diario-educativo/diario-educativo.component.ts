@@ -23,7 +23,7 @@ export class DiarioEducativoComponent implements OnInit {
 
   DisplayedColumns: string[] = ["data", "contenuto", "firma", "action"];
 
-  @ViewChild("paginatorDC",{static: false}) diarioEducativoPaginator: MatPaginator;
+  @ViewChild("paginatorDC", {static: false}) diarioEducativoPaginator: MatPaginator;
   public diarioEducativoDataSource: MatTableDataSource<DiarioEducativo>;
 
 

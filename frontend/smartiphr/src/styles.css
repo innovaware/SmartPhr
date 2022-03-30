@@ -26,6 +26,10 @@ body {
   color: #676a6c;
 }
 
+mat-label {
+  font-size: 1rem;
+}
+
 .blankLine {
   height: 21px;
 }
