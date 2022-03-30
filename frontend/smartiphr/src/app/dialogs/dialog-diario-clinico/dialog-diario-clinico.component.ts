@@ -25,10 +25,18 @@ export class DialogDiarioClinicoComponent implements OnInit {
 
 
   async salva() {
-    console.log("add diario: " + JSON.stringify(this.data.paziente));
+    console.log("contenuto: " + this.contenuto);
+    console.log("terapia: " + this.terapia);
+
+    if(this.contenuto == undefined || this.contenuto == "" || this.terapia == undefined || this.terapia == ""){
+      this.messageService.showMessageError(
+        "Alcuni campi obbligatori non sono stati compilati!"
+      );
+      return;
+    }
     var diario = new DiarioClinico();
     diario.user = this.data.paziente._id;
-    diario.data = this.dataDiario;
+    diario.data = new Date();
     diario.contenuto = this.contenuto;
     diario.terapia = this.terapia;
 

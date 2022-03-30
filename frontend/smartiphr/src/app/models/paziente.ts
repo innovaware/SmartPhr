@@ -39,6 +39,12 @@ export class Paziente {
     dst.schedaPisico = src.schedaPisico;
     dst.dimissione = src.dimissione;
 
+    dst.ricovero = src.ricovero;
+    dst.numstanza = src.numstanza;
+    dst.numletto = src.numletto;
+    dst.diagnosiingresso = src.diagnosiingresso;
+    dst.allergie = src.allergie;
+
 
     dst.schedaAssSociale = src.schedaAssSociale;
     dst.schedaEducativa = src.schedaEducativa;
@@ -67,6 +73,13 @@ export class Paziente {
   provinciaNascita: string;
   provenienza?: string;
   codiceFiscale: string;
+
+
+  ricovero?: string;
+  numstanza?: string;
+  numletto?: string;
+  diagnosiingresso?: string;
+  allergie?: string;
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;

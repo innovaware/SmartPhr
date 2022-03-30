@@ -20,25 +20,13 @@
   </div>
   
   <mat-dialog-content>
-    <div class="container-fluid tabcontent">
-        <div class="row">
-            <div class="form-group" >
-                <mat-form-field appearance="fill" >
-                  <mat-label>DATA</mat-label>
-                  <input matInput [matDatepicker]="picker" [(ngModel)]="dataDiario" >
-                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                  <mat-datepicker #picker></mat-datepicker>
-                </mat-form-field>
-              </div>
-        </div>
-      </div>
-      
+
       <div class="container-fluid tabcontent">
         <div class="row">
           <div class="col">
             <mat-card>
               <mat-card-header>
-                <mat-card-title>CONTENUTO</mat-card-title>
+                <mat-card-title>CONTENUTO*</mat-card-title>
               </mat-card-header>
               <mat-card-content>
                 <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="contenuto"></textarea>
@@ -53,7 +41,7 @@
           <div class="col">
             <mat-card>
               <mat-card-header>
-                <mat-card-title>TERAPIA</mat-card-title>
+                <mat-card-title>TERAPIA*</mat-card-title>
               </mat-card-header>
               <mat-card-content>
                 <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="terapia"></textarea>
@@ -62,6 +50,8 @@
           </div>
         </div>
       </div>
+
+      <strong>I campi indicati con * sono obbligatori!</strong>
   </mat-dialog-content>
   
   

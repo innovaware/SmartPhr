@@ -21,12 +21,13 @@ export class SchedaInterventiComponent implements OnInit {
     "diagnosi",
     "obiettivi",
     "intervento",
+    "valutazione",
     "firma",
     "action",
   ];
 
   dataSource: MatTableDataSource<SchedaInterventi>;
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) {}
 

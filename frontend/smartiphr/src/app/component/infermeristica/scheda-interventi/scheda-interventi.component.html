@@ -54,8 +54,14 @@
 
 
             <!-- Weight Column -->
+            <ng-container matColumnDef="valutazione">
+              <th mat-header-cell *matHeaderCellDef> Valutazione </th>
+              <td mat-cell *matCellDef="let element"> {{element.valutazione }} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
             <ng-container matColumnDef="firma">
-              <th mat-header-cell *matHeaderCellDef> Valutazione/Firma </th>
+              <th mat-header-cell *matHeaderCellDef> Firma </th>
               <td mat-cell *matCellDef="let element"> {{element.firma }} </td>
             </ng-container>
 

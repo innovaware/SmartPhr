@@ -48,11 +48,11 @@ export class DialogFornitoreComponent implements OnInit {
   public documentiFornitoreDataSource: MatTableDataSource<DocumentoFornitore>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture")
+  @ViewChild("paginatorFatture",{static: false})
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorBonifici")
+  @ViewChild("paginatorBonifici",{static: false})
   bonificiPaginator: MatPaginator;
-  @ViewChild("paginatorDocumentiFornitori")
+  @ViewChild("paginatorDocumentiFornitori",{static: false})
   documentiFornitorePaginator: MatPaginator;
 
   public fatture: Fatture[];

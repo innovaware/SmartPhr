@@ -148,6 +148,12 @@ router.post("/", async (req, res) => {
       provinciaNascita: req.body.provinciaNascita,
       codiceFiscale: req.body.codiceFiscale,
 
+      ricovero: req.body.ricovero,
+      numstanza: req.body.numstanza,
+      numletto: req.body.numletto,
+      diagnosiingresso: req.body.diagnosiingresso,
+      allergie: req.body.allergie,
+
       schedaInfermeristica: req.body.schedaInfermeristica,
       schedaClinica: req.body.schedaClinica,
 
@@ -209,6 +215,13 @@ router.put("/:id", async (req, res) => {
           comuneNascita: req.body.comuneNascita,
           provinciaNascita: req.body.provinciaNascita,
           codiceFiscale: req.body.codiceFiscale,
+
+
+          ricovero: req.body.ricovero,
+      numstanza: req.body.numstanza,
+      numletto: req.body.numletto,
+      diagnosiingresso: req.body.diagnosiingresso,
+      allergie: req.body.allergie,
 
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,

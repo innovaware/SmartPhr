@@ -1,7 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from 'src/app/models/paziente';
+import { User } from 'src/app/models/user';
+import { AuthenticationService } from 'src/app/service/authentication.service';
+import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentipazientiService } from 'src/app/service/documentipazienti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -15,7 +19,7 @@ import { UploadService } from 'src/app/service/upload.service';
 export class DialogPreIngressoComponent implements OnInit {
 
 
-  @ViewChild("paginatorDocument")
+  @ViewChild("paginatorDocument",{static: false})
   DocumentoPaginator: MatPaginator;
   public nuovoDocumento: DocumentoPaziente;
   public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -26,12 +30,16 @@ export class DialogPreIngressoComponent implements OnInit {
   paziente: Paziente;
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  
+  dipendente: Dipendenti = {} as Dipendenti;
+  utente: User = {} as User;
+
   constructor(public dialogRef: MatDialogRef<DialogPreIngressoComponent>,
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,
     public uploadService: UploadService,
+    public dipendenteService: DipendentiService,
+    public authenticationService: AuthenticationService,
     public messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -42,8 +50,31 @@ export class DialogPreIngressoComponent implements OnInit {
     }
 
   ngOnInit() {
+    this.loadUser();
     this.getDocumento();
   }
+
+
+
+  
+  loadUser() {
+    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
+      console.log("get dipendente");
+      this.dipendenteService
+        .getByIdUser(user._id)
+        .then((x) => {
+          console.log("dipendente: " + JSON.stringify(x));
+          this.dipendente = x[0];
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+    });
+  }
+
 
 
   async showDocument(documento: DocumentoPaziente) {

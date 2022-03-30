@@ -23,6 +23,12 @@ const PazienteSchema = mongoose.Schema({
   dataCancellazione: Date,
   codiceFiscale: String,
 
+  ricovero: String,
+  numstanza: String,
+  numletto: String,
+  diagnosiingresso: String,
+  allergie: String,
+
   // dimissione: {
   //   typeDimissione: String,
   //   data: Date,

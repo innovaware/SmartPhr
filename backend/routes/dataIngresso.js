@@ -150,6 +150,7 @@ router.post("/", async (req, res) => {
 // Modifica delle ingresso
 router.put("/:id", async (req, res) => {
   try {
+    console.log('dataIngresso put: ' + req.body);
     const { id } = req.params;
     // Aggiorna il documento su mongodb
     const ingresso = await DataIngresso.updateOne(
@@ -172,7 +173,7 @@ router.put("/:id", async (req, res) => {
       redisClient.del(`INGRESSOBY${id}`);
     }
 
-    res.status(200).json(cambiturno);
+    res.status(200).json(ingresso);
   } catch (err) {
     res.status(500).json({ Error: err });
   }

@@ -43,7 +43,7 @@ export class CambiturnoComponent implements OnInit, OnChanges {
   ];
 
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   public nuovoCambio: Cambiturno;
   dataSource: MatTableDataSource<Cambiturno>;
   public cambiturno: Cambiturno[];

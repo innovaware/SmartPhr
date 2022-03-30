@@ -101,7 +101,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
 
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
       console.log(`Patient  saved`, value);
-      this.dialogRef.close(this.paziente);
+      //this.dialogRef.close(this.paziente);
     });
   }
 

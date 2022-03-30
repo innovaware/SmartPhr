@@ -13,7 +13,7 @@ import { MessagesService } from 'src/app/service/messages.service';
 })
 export class RegistroControlliOssComponent implements OnInit {
 
-  @ViewChild("paginatorControlliOSS")
+  @ViewChild("paginatorControlliOSS",{static: false})
   ControlliOSSPaginator: MatPaginator;
   public controlliOSSDataSource: MatTableDataSource<ControlliOSS>;
   public controlliOSS: ControlliOSS[];

@@ -52,11 +52,11 @@ export class FerieComponent implements OnInit, OnChanges {
   public uploadingRichiestaFerie: boolean;
   public addingRichiestaFerie: boolean;
 
-  @ViewChild("paginatordocsMedicina")
+  @ViewChild("paginatordocsMedicina",{static: false})
   docsMedicinaPaginator: MatPaginator;
   dataSource: MatTableDataSource<Ferie>;
 
-  @ViewChild(MatPaginator) paginator: MatPaginator;
+  @ViewChild(MatPaginator,{static: false}) paginator: MatPaginator;
 
   constructor(
     public messageService: MessagesService,
