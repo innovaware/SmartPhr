@@ -9,7 +9,7 @@ router.get("/piano/:p", async (req, res) => {
   try {
     const getData = () => {
       const query = {piano: p}
-      console.log("Query by piano: ", query);
+      // console.log("Query by piano: ", query);
       return Camere.find(query);
     };
 
