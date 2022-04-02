@@ -4,11 +4,12 @@ const Camere = require("../models/camere");
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-router.get("/:p", async (req, res) => {
+router.get("/piano/:p", async (req, res) => {
   const { p } = req.params;
   try {
     const getData = () => {
       const query = {piano: p}
+      console.log("Query by piano: ", query);
       return Camere.find(query);
     };
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild, ɵɵqueryRefresh } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CamereDetailsComponent } from 'src/app/dialogs/camere-details/camere-details.component';
 import { Camere } from 'src/app/models/camere';
@@ -28,6 +29,7 @@ export class CamereListComponent implements OnInit {
   constructor(
     private camereService: CamereService,
     private messageService: MessagesService,
+    private router: Router,
     public dialogCamera: MatDialog,
   ) { }
 
@@ -37,7 +39,7 @@ export class CamereListComponent implements OnInit {
   }
 
   refresh() {
-    this.camereService.get(this.piano)
+    this.camereService.getByPiano(this.piano)
     .pipe(
       map( (x: Camere[])=>
           x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order)),
@@ -100,6 +102,14 @@ export class CamereListComponent implements OnInit {
         this.refresh();
 
     })
+  }
+
+  navCamera(camera: Camere) {
+    this.router.navigate(
+      ['/gest_camere'],
+      { queryParams: { camera: camera._id } }
+    );
+
   }
 
 }

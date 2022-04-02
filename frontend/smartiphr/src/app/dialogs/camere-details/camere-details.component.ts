@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { Router } from '@angular/router';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { filter, map, switchMap } from 'rxjs/operators';
 import { Camere } from 'src/app/models/camere';
@@ -42,6 +43,7 @@ export class CamereDetailsComponent implements OnInit {
     private messageService: MessagesService,
     private patientService: PazienteService,
     private camereService: CamereService,
+    private router: Router,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       camera: Camere;
@@ -156,6 +158,14 @@ export class CamereDetailsComponent implements OnInit {
             ( x.idCamera === undefined || x.idCamera === null )
         ))
       )
+  }
+
+  navCameraMap() {
+    this.dialogRef.close(false);
+    this.router.navigate(
+      ['/gest_camere'],
+      { queryParams: { camera: this.data.camera._id } }
+    );
   }
 
 }
