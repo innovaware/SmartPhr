@@ -31,7 +31,6 @@ export class BonificoService {
 
 /*   async updateBonifico(bonifico: Bonifico) {
     var body = bonifico;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/bonifici/" + bonifico._id, body).toPromise();
   } */
 

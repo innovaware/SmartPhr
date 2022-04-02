@@ -130,7 +130,7 @@ router.get("/camera/:idCamera", async (req, res) => {
   const { idCamera } = req.params;
 
   const getData = (query) => {
-    console.log("Search by camera: ", query);
+    //console.log("Search by camera: ", query);
     return Pazienti.find(query);
   };
 
@@ -281,7 +281,7 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-    console.log("Update paziente: ", pazienti);
+    //console.log("Update paziente: ", pazienti);
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");

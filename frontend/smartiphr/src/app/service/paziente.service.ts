@@ -43,7 +43,6 @@ export class PazienteService {
 
   save(data: Paziente): Promise<Paziente> {
     var body = data;
-    console.log("body: ", body);
     return this.http
       .put<Paziente>(this.api + "/api/pazienti/" + data._id, body)
       .toPromise();

@@ -22,7 +22,6 @@ export class CartellaAssSocialeService {
 
   saveDiario(data: DiarioAssSociale): Promise<DiarioAssSociale> {
     var body = data;
-    console.log("body: ", body);
     return this.http
       .put<DiarioAssSociale>(this.api + "/api/diarioAssSociale/" + data._id, body)
       .toPromise();

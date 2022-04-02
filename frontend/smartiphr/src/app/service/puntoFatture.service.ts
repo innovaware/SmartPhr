@@ -30,7 +30,6 @@ export class PuntoFattureService {
 
   async updatePunto(punto: PuntoFatture) {
     var body = punto;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/puntofatture/" + punto._id, body).toPromise();
   }
 

@@ -22,7 +22,6 @@ export class UsersService {
 
   save(data: User): Promise<User> {
     var body = data;
-    console.log("body: ", body);
     return this.http
       .put<User>(`${this.api}/${data._id}`, body)
       .toPromise();
@@ -30,7 +29,6 @@ export class UsersService {
 
   insert(data: User): Promise<User> {
     var body = data;
-    console.log("INSERT body: ", body);
     return this.http
       .post<User>(`${this.api}`, body)
       .toPromise();

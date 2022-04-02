@@ -72,9 +72,10 @@
       <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
         <mat-form-field *ngIf="data.editMode else labelTextNumPostiLiberi">
           <input matInput type="number" placeholder="Posti liberi"
-                 [(ngModel)]="data.camera.numPostiLiberi"
+                 [(ngModel)]="countPatientInCamera"
+                 [disabled]="true"
                  min="0"
-                 max="{{data.camera.numMaxPosti}}">
+                 max="data.camera.numMaxPosti">
         </mat-form-field>
 
         <ng-template #labelTextNumPostiLiberi>
@@ -97,6 +98,7 @@
         <mat-form-field *ngIf="data.editMode else labelTextNumMaxPosti">
           <input matInput type="number" placeholder="Numero massimo di posti"
             [(ngModel)]="data.camera.numMaxPosti"
+            (keyup)="changeMaxPosti($event)"
             min="{{data.camera.numPostiLiberi}}">
         </mat-form-field>
 
@@ -138,7 +140,7 @@
                   </mat-form-field>
                 </div>
 
-                <div class="col-1 right" *ngIf="data.editMode">
+                <div class="col-1 right" *ngIf="data.editMode && this.countPatientInCamera < this.data.camera.numMaxPosti">
                   <img src="../../../assets/add.svg" matTooltip="Associa paziente"
                        (click)="associaPatient()">
                 </div>
