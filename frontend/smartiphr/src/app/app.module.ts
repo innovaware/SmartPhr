@@ -190,6 +190,7 @@ import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/re
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 
 const materialModules = [
   MatTableModule,
@@ -211,6 +212,7 @@ const materialModules = [
   MatExpansionModule,
   MatButtonToggleModule,
   MatProgressSpinnerModule,
+  MatAutocompleteModule,
 
   FormsModule,
 
