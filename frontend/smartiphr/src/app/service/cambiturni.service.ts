@@ -32,7 +32,6 @@ export class CambiturniService {
 
   async updateCambioturno(cambiturno: Cambiturno) {
     var body = cambiturno;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/cambiturno/" + cambiturno._id, body).toPromise();
   }
 }

@@ -4,36 +4,19 @@ const Camere = require("../models/camere");
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-router.get("/:p", async (req, res) => {
+router.get("/piano/:p", async (req, res) => {
   const { p } = req.params;
   try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
     const getData = () => {
       const query = {piano: p}
+      // console.log("Query by piano: ", query);
       return Camere.find(query);
     };
 
-    if (redisClient == undefined || redisDisabled) {
-      const camere = await getData();
-
-      res.status(200).json(camere);
-      return;
-    }
-
-    const searchTerm = `CAMEREALL${p}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const camere = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
-        res.status(200).json(camere);
-      }
-    });
+    const camere = await getData();
+    res.status(200).json(camere);
+    return;
+  
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
@@ -43,31 +26,13 @@ router.get("/:p", async (req, res) => {
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
     const getData = () => {
       return Camere.findById(id);
     };
 
-    if (redisClient == undefined || redisDisabled) {
-      const camere = await getData();
-      res.status(200).json(camere);
-      return;
-    }
-
-    const searchTerm = `CAMERABY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const camere = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(camere));
-        res.status(200).json(camere);
-      }
-    });
+    const camere = await getData();
+    res.status(200).json(camere);
+  
   } catch (err) {
     res.status(500).json({ Error: err });
   }
@@ -115,11 +80,13 @@ router.put("/:id", async (req, res) => {
           forPatient: req.body.forPatient,
           order: req.body.order,
           numPostiLiberi: req.body.numPostiLiberi,
-          numMaxPosti: req.body.numPostiLiberi,
+          numMaxPosti: req.body.numMaxPosti,
         },
       }
     );
 
+    //console.log("Update Camera req.body:", req.body);
+    // console.log("Update Camera:", camera);
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 

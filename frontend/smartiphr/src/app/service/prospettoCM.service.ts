@@ -30,7 +30,6 @@ export class ProspettoCMService {
 
   async updateProspettoCM(prospetto: ProspettoCM) {
     var body = prospetto;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/prospettocm/" + prospetto._id, body).toPromise();
   }
 

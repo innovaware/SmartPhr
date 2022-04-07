@@ -81,7 +81,6 @@ export class PresenzeService {
 
   async updatePresenza(presenza: Presenze) {
     var body = presenza;
-    console.log("body: ", body);
     return this.http
       .put(this.api + "/api/presenza/" + presenza._id, body)
       .toPromise();

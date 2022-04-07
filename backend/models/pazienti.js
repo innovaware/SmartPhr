@@ -29,6 +29,9 @@ const PazienteSchema = mongoose.Schema({
   diagnosiingresso: String,
   allergie: String,
 
+  // GESTIONE CAMERA
+  idCamera: mongoose.Types.ObjectId,
+
   // dimissione: {
   //   typeDimissione: String,
   //   data: Date,

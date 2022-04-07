@@ -31,7 +31,6 @@ export class DocumentoFornitoreService {
 
   async updateDocumentoFornitore(documentoFornitore: DocumentoFornitore) {
     var body = documentoFornitore;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/documentifornitore/" + documentoFornitore._id, body).toPromise();
   }
 

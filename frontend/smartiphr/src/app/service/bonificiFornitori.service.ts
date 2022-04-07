@@ -30,7 +30,6 @@ export class BonificiFornitoriService {
 
   update(bonifico: BonificiFornitori) {
     var body = bonifico;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/bonificifornitori/" + bonifico._id, body);
   }
 

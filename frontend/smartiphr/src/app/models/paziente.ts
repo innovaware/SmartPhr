@@ -49,7 +49,7 @@ export class Paziente {
     dst.schedaAssSociale = src.schedaAssSociale;
     dst.schedaEducativa = src.schedaEducativa;
 
-
+    dst.idCamera = src.idCamera;
   }
 
   _id?: string;
@@ -74,6 +74,7 @@ export class Paziente {
   provenienza?: string;
   codiceFiscale: string;
 
+  idCamera?: string;
 
   ricovero?: string;
   numstanza?: string;
@@ -118,6 +119,7 @@ export class Paziente {
     this.indirizzoNascita = paziente.indirizzoNascita;
     this.provenienza = paziente.provenienza;
     this.comuneNascita = paziente.comuneNascita;
+    this.idCamera = paziente.idCamera;
   }
 
   constructor() {
@@ -139,6 +141,8 @@ export class Paziente {
     this.indirizzoNascita= "";
     this.comuneNascita= "";
     this.provinciaNascita= "";
+    this.idCamera = undefined;
+
   }
 
 }

@@ -125,6 +125,46 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+// Recupera lista pazienti associati alla camera
+router.get("/camera/:idCamera", async (req, res) => {
+  const { idCamera } = req.params;
+
+  const getData = (query) => {
+    //console.log("Search by camera: ", query);
+    return Pazienti.find(query);
+  };
+
+  try {
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (idCamera == undefined || idCamera === "undefined") {
+      console.log("Error id is not defined ", idCamera);
+      res.status(404).json({ Error: "Id not defined" });
+      return;
+    }
+
+    query = {
+      $and: [
+        {
+          $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+        },
+        { idCamera: idCamera },
+      ],
+    };
+
+    const pazienti = await getData(query);
+
+    if (pazienti != null) res.status(200).json(pazienti);
+    else res.status(404).json({ error: "No patient found" });
+
+
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+
 router.post("/", async (req, res) => {
   try {
     const pazienti = new Pazienti({
@@ -153,6 +193,8 @@ router.post("/", async (req, res) => {
       numletto: req.body.numletto,
       diagnosiingresso: req.body.diagnosiingresso,
       allergie: req.body.allergie,
+
+      idCamera: req.body.idCamera,
 
       schedaInfermeristica: req.body.schedaInfermeristica,
       schedaClinica: req.body.schedaClinica,
@@ -218,10 +260,12 @@ console.log('req.body.schedaClinica: ' + JSON.stringify(req.body.schedaClinica) 
 
 
           ricovero: req.body.ricovero,
-      numstanza: req.body.numstanza,
-      numletto: req.body.numletto,
-      diagnosiingresso: req.body.diagnosiingresso,
-      allergie: req.body.allergie,
+          numstanza: req.body.numstanza,
+          numletto: req.body.numletto,
+          diagnosiingresso: req.body.diagnosiingresso,
+          allergie: req.body.allergie,
+
+          idCamera: req.body.idCamera,
 
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
@@ -236,6 +280,8 @@ console.log('req.body.schedaClinica: ' + JSON.stringify(req.body.schedaClinica) 
         },
       }
     );
+
+    //console.log("Update paziente: ", pazienti);
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
@@ -279,6 +325,7 @@ router.delete("/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `PAZIENTIBY${id}`;
       redisClient.del(searchTerm);
     }
 
