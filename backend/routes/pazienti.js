@@ -191,7 +191,7 @@ router.put("/:id", async (req, res) => {
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
-
+console.log('req.body.schedaClinica: ' + JSON.stringify(req.body.schedaClinica) );
     const pazienti = await Pazienti.updateOne(
       { _id: id },
       {

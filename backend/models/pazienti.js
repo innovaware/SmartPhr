@@ -304,10 +304,12 @@ const PazienteSchema = mongoose.Schema({
     },
 
     schedaDecessoOspite: {
+      statodecesso: Boolean,
       relazionedecesso: String,
     },
 
     schedaDimissioneOspite: {
+      statodimissione: Boolean,
       relazionedimissione: String,
       terapiainatto: String,
     },

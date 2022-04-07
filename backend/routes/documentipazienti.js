@@ -8,19 +8,27 @@ router.get("/paziente/:id/:type", async (req, res) => {
     let id = req.params.id;
     let type = req.params.type;
 
+    console.log('GET DOCS(id):' + id);
+    console.log('GET DOCS(type):' + type);
+
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
       return DocPaziente.find({
-        paziente: id,
-        type: type,
+        $and: [
+          { paziente: id },
+          { type: type },
+          {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+          },
+        ]
       });
     };
 
     if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
+      const documenti = await getData();
+      res.status(200).json(documenti);
       return;
     }
 

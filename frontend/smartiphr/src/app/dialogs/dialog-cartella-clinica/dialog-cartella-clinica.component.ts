@@ -19,6 +19,8 @@ import { DocumentoPaziente } from "src/app/models/documentoPaziente";
 import { Paziente } from "src/app/models/paziente";
 import { schedaAnamnesiFamigliare } from "src/app/models/schedaAnamnesiFamigliare";
 import { schedaAnamnesiPatologica } from "src/app/models/schedaAnamnesiPatologica";
+import { schedaDecessoOspite } from "src/app/models/schedaDecessoOspite";
+import { schedaDimissioneOspite } from "src/app/models/schedaDimissioneOspite";
 import { schedaEsameGenerale } from "src/app/models/schedaEsameGenerale";
 import { schedaEsameNeurologia } from "src/app/models/schedaEsameNeurologia";
 import { schedaMezziContenzione } from "src/app/models/schedaMezziContenzione";
@@ -42,6 +44,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
   schedaEsameGenerale: schedaEsameGenerale;
   schedaMezziContenzione: schedaMezziContenzione;
   schedaValutazioneTecniche: schedaValutazioneTecniche;
+
+
+  schedaDimissioneOspite: schedaDimissioneOspite;
+  schedaDecessoOspite: schedaDecessoOspite;
+
 
   public newItem: boolean;
   public document: any[] = [];
@@ -114,10 +121,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
     public data: {
       paziente: Paziente;
       readonly: boolean;
+      altro: boolean
     }
   ) {
     console.log("Dialog Cartella Clinica");
-
+console.log('altro: ' + this.data.altro);
     this.paziente = Paziente.clone(data.paziente);
 
     if (this.paziente.schedaClinica == undefined) {
@@ -148,6 +156,15 @@ export class DialogCartellaClinicaComponent implements OnInit {
       this.paziente.schedaClinica.schedaValutazioneTecniche = new schedaValutazioneTecniche();
     }
 
+
+    if (this.paziente.schedaClinica.schedaDimissioneOspite == undefined) {
+      this.paziente.schedaClinica.schedaDimissioneOspite = new schedaDimissioneOspite();
+    }
+
+    if (this.paziente.schedaClinica.schedaDecessoOspite == undefined) {
+      this.paziente.schedaClinica.schedaDecessoOspite = new schedaDecessoOspite();
+    }
+
     this.schedaAnamnesiFamigliare = this.paziente.schedaClinica
       .schedaAnamnesiFamigliare as schedaAnamnesiFamigliare;
     this.schedaAnamnesiPatologica = this.paziente.schedaClinica
@@ -160,6 +177,13 @@ export class DialogCartellaClinicaComponent implements OnInit {
       .schedaMezziContenzione as schedaMezziContenzione;
     this.schedaValutazioneTecniche = this.paziente.schedaClinica
       .schedaValutazioneTecniche as schedaValutazioneTecniche;
+
+      this.schedaDecessoOspite = this.paziente.schedaClinica
+      .schedaDecessoOspite as schedaDecessoOspite;
+    this.schedaDimissioneOspite = this.paziente.schedaClinica
+      .schedaDimissioneOspite as schedaDimissioneOspite;
+
+
   }
 
   ngOnInit() {
@@ -170,6 +194,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
     this.getRelazioni();
     this.getVerbali();
     this.getImpegnative();
+
   }
 
   async showDocument(doc: DocumentoPaziente) {
