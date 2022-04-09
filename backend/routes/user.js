@@ -14,6 +14,9 @@ const Turnimensili = require("../models/turnimensili");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 //const client = redis.createClient(redisPort, redisHost);
 
+/**
+ * Ritorna informazioni dell'utente
+ */
 router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
 
@@ -27,6 +30,10 @@ router.get("/info/:id", async (req, res) => {
   }
 });
 
+/**
+ * Ritorna lista utenti
+ * 
+ */
 router.get("/", async (req, res) => {
   const getData = () => {
     return User.find();
@@ -58,20 +65,29 @@ router.get("/", async (req, res) => {
           // Ritorna il json
           res.status(200).json(users);
         }
+
       });
     }
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
+
   }
 });
 
-// http://[HOST]:[PORT]/api/user/[ID_USER]
+/**
+ * Ritorna informazioni dell'utente 
+ */
 router.get("/:id", async (req, res) => {
   const { id } = req.params;
   redisClient = req.app.get("redis");
   redisDisabled = req.app.get("redisDisabled");
   
+  /**
+   * Ritorna informazioni dell'utente utilizzando l'id
+   * @param {*} id 
+   * @returns models/user.js
+   */
   const getDataById = (id) => {
     return User.findById(id);
   };
@@ -80,7 +96,7 @@ router.get("/:id", async (req, res) => {
     if (redisClient == undefined || redisDisabled) {
       const users = await getDataById(id);
       res.status(200).json(users);
-      return;
+
     } else {
       const searchTerm = `USERBY${id}`;
       redisClient.get(searchTerm, async (err, data) => {
@@ -92,6 +108,7 @@ router.get("/:id", async (req, res) => {
           const user = await getDataById(id);
           redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(user));
           res.status(200).json(user);
+
         }
       });
     }
@@ -100,6 +117,9 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+/**
+ * Login utente
+ */
 router.post("/authenticate", async (req, res) => {
   try {
     
@@ -116,11 +136,10 @@ router.post("/authenticate", async (req, res) => {
     };
     const turno = await Turnimensili.findOne(query);
 
-    //console.log("Authorization query", query, turno);
-
     if (turno == null && user.username !== "admin") {
       res.status(401);
       res.json({ Error: 'Not Authorized - Fuori turno' });
+
       return;
     }
 
@@ -176,33 +195,6 @@ router.post("/authenticate", async (req, res) => {
         dataRifNowFine.setHours(turno.turnoFine+1);
 
         const resultPresenze = presenzeFind.map((x) => {
-          // return x.presenze.map( x=> {
-          //   return {
-
-          //     res: 
-          //       x.data >= turno.dataRifInizio &&
-          //       x.data <= turno.dataRifFine &&
-          //       x.data >= dataRifNowInizio &&
-          //       x.data <= dataRifNowFine,
-
-          //     data: x.data,
-          //     dateNow: currentDate,
-
-          //     dataRifInizioRES: x.data >= turno.dataRifInizio,
-          //     dataRifFineRES: x.data <= turno.dataRifFine,
-          //     dataRifNowInizioRES: x.data >= dataRifNowInizio,
-          //     dataRifNowFineRES: x.data <= dataRifNowFine,
-
-
-          //     dataRifInizio: turno.dataRifInizio,
-          //     dataRifFine: turno.dataRifFine ,
-          //     dataRifNowInizio,
-          //     dataRifNowFine
-          //   }
-          // }
-            
-          // );
-
           return {
             presenze: x.presenze.find(
               (a) =>
@@ -241,16 +233,21 @@ router.post("/authenticate", async (req, res) => {
       const searchTerm = `PRESENZEALL`;
       redisClient.del(searchTerm);
     }
-
+    
     res.status(200);
     res.json(user);
+
   } catch (err) {
     console.error(err);
     res.status(500);
     res.json({ Error: err });
+
   }
 });
 
+/**
+ * Logout utente
+ */
 router.post("/logout", async (req, res) => {
   try {
     const user = res.locals.auth;
@@ -270,11 +267,22 @@ router.post("/logout", async (req, res) => {
     console.error(err);
     res.status(500);
     res.json({ Error: err });
+
   }
 });
 
-// http://[HOST]:[PORT]/api/user (POST)
-// INSERT
+
+/**
+ * Inserimento utente
+ * 
+ * Inserimento utente nel database
+ * Utente:
+ *    group
+ *    username
+ *    password
+ *    active
+ *    role
+ */
 router.post("/", async (req, res) => {
   try {
 
@@ -302,26 +310,26 @@ router.post("/", async (req, res) => {
   } catch (err) {
     res.status(500);
     res.json({ Error: err });
+
   }
 });
 
-// http://[HOST]:[PORT]/api/user/[ID_USER]
-// Modifica
+/**
+ * Modifica data dell'utente
+ * @see model/user.js
+ */
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
     
     if (id == undefined || id === "undefined") {
-      res.status(400).json({
-        message: "Error identify not found",
-      });
+      res.status(400).json({message: "Error identify not found"});
       return;
     }
 
     mailer = req.app.get('mailer');
     mailerTopic = req.app.get('mailerTopic');
     mailerDisabled = req.app.get('mailerDisabled');
-
 
     const userUpdate = {
       group: req.body.group,
@@ -348,16 +356,21 @@ router.put("/:id", async (req, res) => {
       const searchTerm = `USERBY${id}`;
       redisClient.del(searchTerm);
     }
-      
+
     res.status(200).json({
       operation: "Update",
       status: "Success",
     });
   } catch (err) {
     res.status(500).json({ Error: err });
+
   }
 });
 
+/**
+ * Elimina l'utente
+ * 
+ */
 router.delete("/:id", async (req, res) => {
   try {
     const { id } = req.params;
@@ -371,12 +384,13 @@ router.delete("/:id", async (req, res) => {
       redisClient.del(searchTerm);
       searchTerm = `USER${id}`;
       redisClient.del(searchTerm);
-    }  
-    
+    }
+
     res.status(200);
     res.json(user);
   } catch (err) {
     res.status(500).json({ Error: err });
+
   }
 });
 

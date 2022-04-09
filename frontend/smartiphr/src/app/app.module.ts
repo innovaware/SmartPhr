@@ -191,6 +191,7 @@ import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CamereMapComponent } from './pages/camere-map/camere-map.component';
 
 const materialModules = [
   MatTableModule,
@@ -363,6 +364,7 @@ const dialogModule = [
     AttivitaOssComponent,
     RegistroControlliOssComponent,
     CamereListComponent,
+    CamereMapComponent,
   ],
   imports: [
     ...materialModules,

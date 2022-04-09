@@ -7,6 +7,12 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 
+// LOGGER
+const morgan = require('morgan');
+
+// Metrics
+const promBundle = require("express-prom-bundle");
+
 const nextcloud_node_client_1 = require("nextcloud-node-client");
 const user = require("./models/user");
 const redis = require("redis");
@@ -18,6 +24,7 @@ const Menu = require("./models/menu");
 
 // var MongoClient = require('mongodb').MongoClient;
 // mongo = undefined;
+
 var app = express();
 var PORT = process.env.PORT || 3000;
 
@@ -50,7 +57,25 @@ const MONGO_PORT = "27017";
 const MONGO_DB = "smartphr";
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
+// LOGGER 
+app.use(morgan(':method :url :status'));
 
+const metricsMiddleware = promBundle({
+  includeMethod: true, 
+  includePath: true, 
+  includeStatusCode: true, 
+  includeUp: true,
+  customLabels: {project_name: 'hello_world', project_type: 'test_metrics_labels'},
+  promClient: {
+    collectDefaultMetrics: {}
+  }
+});
+
+app.use(metricsMiddleware)
+app.get("/",(req,res) => res.json({
+  "GET /": "All Routes", 
+  "GET /metrics": "Metrics data",
+}));
 
 
 var clientRedis = undefined;
@@ -622,7 +647,7 @@ const checkAuthRole = async (user) => {
 
 
 var logHandler = function (req, res, next) {
-  //console.log(req.url);
+  // console.log(req.method);
   next();
 };
 

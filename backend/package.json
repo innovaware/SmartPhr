@@ -10,15 +10,17 @@
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-fileupload": "^1.2.1",
+    "express-prom-bundle": "^6.4.1",
     "jwt-decode": "^3.1.2",
     "mongodb": "^4.1.2",
     "mongoose": "^5.13.7",
+    "morgan": "^1.10.0",
     "mpath": "^0.8.4",
     "mqtt": "^4.3.4",
     "nextcloud-node-client": "^1.8.1",
     "node-nextcloud": "^1.1.2",
     "nodemon": "^2.0.13",
-    "prom-client": "^14.0.0",
+    "prom-client": "^14.0.1",
     "redis": "^3.1.2"
   },
   "devDependencies": {

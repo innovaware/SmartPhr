@@ -34,6 +34,7 @@ router.get("/", async (req, res) => {
         res.status(200).json(menu);
       }
     });
+
   } catch (err) {
     console.error("Error: ", err);
     res.status(500).json({ Error: err });
