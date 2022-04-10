@@ -63,6 +63,7 @@ fa-icon {
 
 .mat-expansion-panel-header-title {
   color: white;
+  margin: unset;
 }
 
 .mat-expansion-panel {
