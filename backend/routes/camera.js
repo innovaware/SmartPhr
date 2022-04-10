@@ -48,6 +48,7 @@ router.post("/", async (req, res) => {
       order: req.body.order,
       numPostiLiberi: req.body.numPostiLiberi,
       numMaxPosti: req.body.numPostiLiberi,
+      sanificata: req.body.sanificata,
     });
 
     const result = await camera.save();
@@ -81,6 +82,7 @@ router.put("/:id", async (req, res) => {
           order: req.body.order,
           numPostiLiberi: req.body.numPostiLiberi,
           numMaxPosti: req.body.numMaxPosti,
+          sanificata: req.body.sanificata,
         },
       }
     );
@@ -115,6 +117,7 @@ router.post("/", async (req, res) => {
       order: req.body.order,
       numPostiLiberi: req.body.numPostiLiberi,
       numMaxPosti: req.body.numPostiLiberi,
+      sanificata: req.body.sanificata,
     });
 
     // Salva i dati sul mongodb

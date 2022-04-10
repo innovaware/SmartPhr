@@ -4,15 +4,16 @@ export class Camere {
   }
 
   static copy(src: Camere, dst: Camere) {
-    dst._id =  src._id;
-    dst.camera =  src.camera;
-    dst.piano =  src.piano;
-    dst.geometry =  src.geometry;
-    dst.geometryObject =  src.geometryObject;
-    dst.forPatient =  src.forPatient;
-    dst.order =  src.order;
-    dst.numPostiLiberi =  src.numPostiLiberi;
-    dst.numMaxPosti =  src.numMaxPosti;
+    dst._id = src._id;
+    dst.camera = src.camera;
+    dst.piano = src.piano;
+    dst.geometry = src.geometry;
+    dst.geometryObject = src.geometryObject;
+    dst.forPatient = src.forPatient;
+    dst.order = src.order;
+    dst.numPostiLiberi = src.numPostiLiberi;
+    dst.numMaxPosti = src.numMaxPosti;
+    dst.sanificata = src.sanificata;
   }
 
   _id?: string;
@@ -24,6 +25,7 @@ export class Camere {
   order: number;
   numPostiLiberi: number;
   numMaxPosti: number;
+  sanificata?: boolean; // True Sanificata; False Non Sanificata
 
   constructor() {
     const empty = {

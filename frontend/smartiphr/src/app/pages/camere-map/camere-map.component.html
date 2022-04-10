@@ -5,10 +5,15 @@
     </div>
 
     <div class="col middle">
-      <div class="row">
+      <div class="row" *ngIf="!isSanificazione">
         <div class="red"></div> Occupati
         <div class="green"></div> Liberi
         <div class="gray"></div> Nessun Paziente
+      </div>
+
+      <div class="row" *ngIf="isSanificazione">
+        <div class="red"></div> Non Sanificata
+        <div class="green"></div> Sanificata
       </div>
 
     </div>

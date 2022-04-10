@@ -8,6 +8,7 @@ const CameraSchema = mongoose.Schema({
   order: Number,
   numPostiLiberi: Number,
   numMaxPosti: Number,
+  sanificata: Boolean,
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");

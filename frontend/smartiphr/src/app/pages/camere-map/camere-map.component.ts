@@ -42,11 +42,30 @@ export class CamereMapComponent implements OnInit {
     target: string;
   };
 
+  func: any;
+  isSanificazione: boolean = false;
 
   constructor(
     private mapService: MapService,
     private camereService: CamereService,
-    ) {}
+    private route: ActivatedRoute,
+    ) {
+      this.route.queryParams.subscribe(params=> {
+        const func = params.function as string;
+        switch(func?.toLowerCase()) {
+          case 'sanificazione':
+            this.func = this._getColorSanificataCameraImpl;
+            this.isSanificazione = true;
+            break;
+          case 'libera':
+          default:
+            this.func = this._getColorLiberaCameraImpl;
+            break;
+        }
+      });
+
+
+    }
 
   ngOnInit(): void {
     this.map = this.initMap();
@@ -71,6 +90,47 @@ export class CamereMapComponent implements OnInit {
               };
             }))
     );
+  }
+
+  _getColorLiberaCameraImpl(camera: Camere, text: Text, cameraStyle: Style) {
+    const colorRGB = () => {
+      if (camera.numPostiLiberi === 0) return [0, 0 ,0, 0.3] as Color;
+
+      return [
+        (camera.numMaxPosti-camera.numPostiLiberi) === 0 ? 255 : 0,
+        (camera.numMaxPosti-camera.numPostiLiberi) !== 0 ? 255 : 0,
+        0,
+        0.3
+      ];
+    };
+
+    text.setText(`${camera.camera}\nN. Posti ${camera.numPostiLiberi}/${camera.numMaxPosti}`);
+    text.getFill().setColor([0, 0, 0, 1] as Color);
+    cameraStyle.setText(text);
+
+
+    cameraStyle.setFill(
+      new Fill({
+        color: colorRGB(), //RGBA
+      }));
+  }
+
+  _getColorSanificataCameraImpl(camera: Camere, text: Text, cameraStyle: Style) {
+    const colorRGB = () => {
+      if (camera.sanificata === true) return [0, 255 ,0, 0.3] as Color;
+
+      return [255, 0 ,0, 0.3] as Color;
+    };
+
+    text.setText(`${camera.camera}`);
+    text.getFill().setColor([0, 0, 0, 1] as Color);
+    cameraStyle.setText(text);
+
+
+    cameraStyle.setFill(
+      new Fill({
+        color: colorRGB(), //RGBA
+      }));
   }
 
   addLayer(camera: Camere) {
@@ -105,25 +165,9 @@ export class CamereMapComponent implements OnInit {
       style: cameraStyle
     });
 
-    const colorRGB = () => {
-      if (camera.numPostiLiberi === 0) return [0, 0 ,0, 0.3] as Color;
-
-      return [
-        (camera.numMaxPosti-camera.numPostiLiberi) === 0 ? 255 : 0,
-        (camera.numMaxPosti-camera.numPostiLiberi) !== 0 ? 255 : 0,
-        0,
-        0.3
-      ];
-    };
-
-    text.setText(`${camera.camera}\nN. Posti ${camera.numPostiLiberi}/${camera.numMaxPosti}`);
-    text.getFill().setColor([0, 0, 0, 1] as Color);
-    cameraStyle.setText(text);
-
-    cameraStyle.setFill(
-      new Fill({
-        color: colorRGB(), //RGBA
-      }));
+    // this._getColorLiberaCameraImpl(camera, text, cameraStyle);
+    // this._getColorSanificataCameraImpl(camera, text, cameraStyle);
+    this.func(camera, text, cameraStyle);
 
     this.map.addLayer(cameraLayerDebug);
   }
