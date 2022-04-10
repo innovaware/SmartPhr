@@ -49,6 +49,8 @@ router.post("/", async (req, res) => {
       numPostiLiberi: req.body.numPostiLiberi,
       numMaxPosti: req.body.numPostiLiberi,
       sanificata: req.body.sanificata,
+      dataSanificazione: req.body.dataSanificazione,
+      firmaSanificazione: req.body.firmaSanificazione,
     });
 
     const result = await camera.save();
@@ -83,6 +85,8 @@ router.put("/:id", async (req, res) => {
           numPostiLiberi: req.body.numPostiLiberi,
           numMaxPosti: req.body.numMaxPosti,
           sanificata: req.body.sanificata,
+          dataSanificazione: req.body.dataSanificazione,
+          firmaSanificazione: req.body.firmaSanificazione,
         },
       }
     );
@@ -118,6 +122,8 @@ router.post("/", async (req, res) => {
       numPostiLiberi: req.body.numPostiLiberi,
       numMaxPosti: req.body.numPostiLiberi,
       sanificata: req.body.sanificata,
+      dataSanificazione: req.body.dataSanificazione,
+      firmaSanificazione: req.body.firmaSanificazione,
     });
 
     // Salva i dati sul mongodb

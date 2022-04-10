@@ -192,6 +192,8 @@ import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CamereMapComponent } from './pages/camere-map/camere-map.component';
+import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
+import { SanificatePipe } from "./pipe/sanificate.pipe";
 
 const materialModules = [
   MatTableModule,
@@ -254,10 +256,16 @@ const dialogModule = [
   CamereDetailsComponent,
 ];
 
+const pipes = [
+  PrettyprintPipe,
+  TranslatePianoPipe,
+  SanificatePipe
+];
 @NgModule({
   declarations: [
     AppComponent,
     ...dialogModule,
+    ...pipes,
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
@@ -356,8 +364,6 @@ const dialogModule = [
     LavoroPersonaleComponent,
     FerieAltroPersonaleComponent,
     DebugComponent,
-    PrettyprintPipe,
-    TranslatePianoPipe,
     AuthorizationComponent,
     AreaOssComponent,
     CamereComponent,
@@ -365,6 +371,7 @@ const dialogModule = [
     RegistroControlliOssComponent,
     CamereListComponent,
     CamereMapComponent,
+    SanificazioneListComponent,
   ],
   imports: [
     ...materialModules,

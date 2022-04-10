@@ -59,6 +59,7 @@ import { AttivitaOssComponent } from "./pages/attivita-oss/attivita-oss.componen
 import { RegistroControlliOssComponent } from "./pages/registro-controlli-oss/registro-controlli-oss.component";
 import { CamereListComponent } from "./pages/camere-list/camere-list.component";
 import { CamereMapComponent } from "./pages/camere-map/camere-map.component";
+import { SanificazioneListComponent } from "./pages/sanificazione-list/sanificazione-list.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -124,6 +125,9 @@ const routes: Routes = [
   { path: "gest_camere", component: CamereComponent, canActivate: [AuthGuard]  },
   { path: "gest_camerelist", component: CamereListComponent, canActivate: [AuthGuard]  },
   { path: "gest_camere_map", component: CamereMapComponent, canActivate: [AuthGuard]  },
+
+  // SANIFICAZIONE
+  { path: "gest_sanificazioneList", component: SanificazioneListComponent, canActivate: [AuthGuard]  },
 
 
   // ARCHIVI

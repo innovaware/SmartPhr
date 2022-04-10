@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const CameraSchema = mongoose.Schema({
@@ -9,6 +10,8 @@ const CameraSchema = mongoose.Schema({
   numPostiLiberi: Number,
   numMaxPosti: Number,
   sanificata: Boolean,
+  dataSanificazione: Date,
+  firmaSanificazione: ObjectId,
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");
