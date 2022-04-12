@@ -194,6 +194,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CamereMapComponent } from './pages/camere-map/camere-map.component';
 import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
 import { SanificatePipe } from "./pipe/sanificate.pipe";
+import { SanificazioneRegistroComponent } from './pages/sanificazione-registro/sanificazione-registro.component';
 
 const materialModules = [
   MatTableModule,
@@ -372,6 +373,7 @@ const pipes = [
     CamereListComponent,
     CamereMapComponent,
     SanificazioneListComponent,
+    SanificazioneRegistroComponent,
   ],
   imports: [
     ...materialModules,

@@ -1,0 +1,31 @@
+
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA OSS - Registro controllo armadi</h1>
+
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+
+
+        <table mat-table [dataSource]="registroSanficazioneDataSource" class="mat-elevation-z8" style="width: 100%;" >
+
+
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+        </table>
+
+        <div class="paginator-container">
+
+          <mat-paginator #ControlliOSSPaginator [pageSizeOptions]="[5]" showFirstLastButtons
+            aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+    </div>
+  </div>
+</div>
