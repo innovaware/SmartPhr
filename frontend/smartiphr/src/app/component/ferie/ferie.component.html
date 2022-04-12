@@ -110,17 +110,17 @@
     <div class="row" style="width: 40%;">
       <mat-form-field appearance="fill">
         <mat-label>Data Inizio ferie</mat-label>
-        <!-- <input matInput [matDatepicker]="dataInizio" [(ngModel)]="nuovoRichiestaFerie.dataInizio">
+        <input matInput [matDatepicker]="dataInizio" [(ngModel)]="nuovoRichiestaFerie.dataInizio">
         <mat-datepicker-toggle matSuffix [for]="dataInizio"></mat-datepicker-toggle>
-        <mat-datepicker #dataInizio></mat-datepicker> -->
+        <mat-datepicker #dataInizio></mat-datepicker>
       </mat-form-field>
 
 
       <mat-form-field appearance="fill">
         <mat-label>Data Fine ferie</mat-label>
-        <!-- <input matInput [matDatepicker]="dataFine" [(ngModel)]="nuovoRichiestaFerie.dataFine">
+        <input matInput [matDatepicker]="dataFine" [(ngModel)]="nuovoRichiestaFerie.dataFine">
         <mat-datepicker-toggle matSuffix [for]="dataFine"></mat-datepicker-toggle>
-        <mat-datepicker #dataFine></mat-datepicker> -->
+        <mat-datepicker #dataFine></mat-datepicker>
       </mat-form-field>
       <div class="col-2">
         <button mat-button class="button-insert" (click)="saveRichiestaFerie(nuovoRichiestaFerie)">Salva</button>

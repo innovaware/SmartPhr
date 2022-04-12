@@ -271,7 +271,6 @@ const pipes = [
     AppComponent,
     ...dialogModule,
     ...pipes,
-
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
@@ -382,6 +381,7 @@ const pipes = [
   ],
   imports: [
     ...materialModules,
+    ...dataPicker,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
