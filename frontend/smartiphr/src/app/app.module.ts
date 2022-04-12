@@ -78,11 +78,11 @@ import { SchedaInterventiComponent } from "./component/infermeristica/scheda-int
 import { DecessoComponent } from "./component/medica/decesso/decesso.component";
 import { DialogEventComponent } from "./dialogs/dialog-event/dialog-event.component";
 
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatTimepickerModule,
-  NgxMatNativeDateModule,
-} from "@angular-material-components/datetime-picker";
+// import {
+//   NgxMatDatetimePickerModule,
+//   NgxMatTimepickerModule,
+//   NgxMatNativeDateModule,
+// } from "@angular-material-components/datetime-picker";
 
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { FattureConsulentiComponent } from "./pages/fatture-consulenti/fatture-consulenti.component";
@@ -211,7 +211,6 @@ const materialModules = [
   MatIconModule,
   MatTabsModule,
   MatRadioModule,
-  MatDatepickerModule,
   MatNativeDateModule,
   MatExpansionModule,
   MatButtonToggleModule,
@@ -220,6 +219,14 @@ const materialModules = [
 
   FormsModule,
 
+];
+
+const dataPicker = [
+//   NgxMatDatetimePickerModule,
+//   NgxMatTimepickerModule,
+//   NgxMatNativeDateModule,
+//   MatDatepickerModule,
+  MatDatepickerModule,
 ];
 
 const dialogModule = [
@@ -267,6 +274,7 @@ const pipes = [
     AppComponent,
     ...dialogModule,
     ...pipes,
+
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
@@ -383,9 +391,6 @@ const pipes = [
     FontAwesomeModule,
 
     HttpClientModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    NgxMatNativeDateModule,
     ChartsModule,
   ],
   providers: [
