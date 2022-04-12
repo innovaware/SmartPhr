@@ -52,7 +52,7 @@ export class CamereMapComponent implements OnInit {
     ) {
       this.route.queryParams.subscribe(params=> {
         const func = params.function as string;
-        switch(func?.toLowerCase()) {
+        switch(func.toLowerCase()) {
           case 'sanificazione':
             this.func = this._getColorSanificataCameraImpl;
             this.isSanificazione = true;
