@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogCaricadocumentoComponent } from 'src/app/dialogs/dialog-caricadocumento/dialog-caricadocumento.component';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoDipendente } from 'src/app/models/documentoDipendente';

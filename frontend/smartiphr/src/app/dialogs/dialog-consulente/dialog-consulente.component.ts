@@ -1,10 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Observable } from "rxjs";
 import { Bonifico } from "src/app/models/bonifico";
 import { Consulenti } from "src/app/models/consulenti";

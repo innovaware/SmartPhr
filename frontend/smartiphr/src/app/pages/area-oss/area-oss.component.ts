@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import { DialogArmadioComponent } from "src/app/dialogs/dialog-armadio/dialog-armadio.component";
 import { DialogAttivitaComponent } from "src/app/dialogs/dialog-attivita/dialog-attivita.component";

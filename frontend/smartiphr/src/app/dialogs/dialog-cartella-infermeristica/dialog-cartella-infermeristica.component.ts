@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import { SchedaUlcereDiabeteComponent } from "src/app/component/infermeristica/scheda-ulcere-diabete/scheda-ulcere-diabete.component";
 import { Paziente } from "src/app/models/paziente";

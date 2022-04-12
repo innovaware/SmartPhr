@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DiarioEducativo } from 'src/app/models/diarioEducativo';
 import { Paziente } from 'src/app/models/paziente';
 import { CartellaEducativaService } from 'src/app/service/cartella-educativa.service';

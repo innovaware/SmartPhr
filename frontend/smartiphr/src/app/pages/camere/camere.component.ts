@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatSelectChange } from "@angular/material";
+import { MatSelectChange } from "@angular/material/select";
 
 import { map, filter } from "rxjs/operators";
 import { Observable, of } from "rxjs";

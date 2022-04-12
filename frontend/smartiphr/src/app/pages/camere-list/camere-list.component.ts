@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ɵɵqueryRefresh } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CamereDetailsComponent } from 'src/app/dialogs/camere-details/camere-details.component';

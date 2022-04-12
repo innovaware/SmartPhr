@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Paziente } from "src/app/models/paziente";
 import { schedaPisico } from "src/app/models/schedaPisico";

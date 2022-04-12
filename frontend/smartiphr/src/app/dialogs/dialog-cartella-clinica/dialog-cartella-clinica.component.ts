@@ -5,13 +5,9 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Subject } from 'rxjs';
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Documento } from "src/app/models/documento";

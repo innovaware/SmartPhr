@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { BonificiConsulenti } from "src/app/models/bonificiConsulenti";
 import { BonificiConsulentiService } from "src/app/service/bonificiConsulenti.service";
 import { MessagesService } from "src/app/service/messages.service";

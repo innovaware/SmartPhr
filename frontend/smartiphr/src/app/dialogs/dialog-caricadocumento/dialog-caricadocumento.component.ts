@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { DocumentoDipendente } from "src/app/models/documentoDipendente";
 import { DocumentiService } from "src/app/service/documenti.service";

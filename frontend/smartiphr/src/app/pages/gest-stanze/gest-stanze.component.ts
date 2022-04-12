@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogStanzaComponent } from "src/app/dialogs/dialog-stanza/dialog-stanza.component";
 import { Stanza } from "src/app/models/stanza";
 import { StanzeService } from "src/app/service/stanze.service";
