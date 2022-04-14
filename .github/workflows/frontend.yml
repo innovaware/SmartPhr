@@ -11,13 +11,13 @@ name: Frontend
 #      - 'certificate/**'
 #    paths:
 #      - '!README.md'
-on:
+#on:
 #  push:
 #    branches:
 #      - master
-  pull_request:
-    branches:
-      - master
+#  pull_request:
+#    branches:
+#      - master
       
 jobs:
 
