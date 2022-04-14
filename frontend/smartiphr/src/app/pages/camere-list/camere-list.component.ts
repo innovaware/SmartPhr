@@ -1,6 +1,5 @@
-import { Component, OnInit, ViewChild, ɵɵqueryRefresh } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
-import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CamereDetailsComponent } from 'src/app/dialogs/camere-details/camere-details.component';
 import { Camere } from 'src/app/models/camere';
@@ -29,17 +28,12 @@ export class CamereListComponent implements OnInit {
   constructor(
     private camereService: CamereService,
     private messageService: MessagesService,
-    private router: Router,
     public dialogCamera: MatDialog,
   ) { }
 
   ngOnInit(): void {
     console.log("INIT DataSource Camere");
-    this.refresh();
-  }
-
-  refresh() {
-    this.camereService.getByPiano(this.piano)
+    this.camereService.get(this.piano)
     .pipe(
       map( (x: Camere[])=>
           x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order)),
@@ -84,32 +78,20 @@ export class CamereListComponent implements OnInit {
         camera: cameraEdit,
         editMode: true
       },
-      //disableClose: true,
       width: "600px",
     })
     .afterClosed()
     .subscribe( result => {
-      //console.log("Closed Camera Dialog: ", result);
-        if (result) {
-          Camere.copy(cameraEdit, camera)
+      if (result) {
+        Camere.copy(cameraEdit, camera)
 
-          this.camereService.update(cameraEdit)
-          .subscribe( result => {
-            console.log("Aggiornamento camera eseguito con successo");
-            //this.messageService.showMessageError("Camera aggiornata con successo");
-          });
-        }
-        this.refresh();
-
+        this.camereService.update(cameraEdit)
+            .subscribe( result => {
+              console.log("Aggiornamento camera eseguito con successo");
+              this.messageService.showMessageError("Camera aggiornata con successo");
+            });
+      }
     })
-  }
-
-  navCamera(camera: Camere) {
-    this.router.navigate(
-      ['/gest_camere'],
-      { queryParams: { camera: camera._id } }
-    );
-
   }
 
 }

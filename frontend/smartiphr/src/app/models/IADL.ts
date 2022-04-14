@@ -14,7 +14,6 @@ export class IADL {
       this.F = "";
       this.G = "";
       this.H = "";
-      this.totale = 0;
       
     }
   

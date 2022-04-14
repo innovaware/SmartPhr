@@ -27,6 +27,7 @@ export class CurriculumService {
 
   update(curriculum: Curriculum) {
     var body = curriculum;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/curriculum/" + curriculum._id, body);
   }
 

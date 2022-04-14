@@ -86,13 +86,13 @@ export class DialogDipendenteComponent implements OnInit {
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
 
-  @ViewChild("paginatorNoteCredito",{static: false})
+  @ViewChild("paginatorNoteCredito", {static: false})
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici",{static: false})
+  @ViewChild("paginatorBonifici", {static: false})
   bonificiPaginator: MatPaginator;
 
 
-  @ViewChild("paginatorDocIdent",{static: false})
+  @ViewChild("paginatorDocIdent", {static: false})
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -100,7 +100,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorContratto",{static: false})
+  @ViewChild("paginatorContratto", {static: false})
   contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -108,7 +108,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingContratto: boolean;
   public addingContratto: boolean;
 
-  @ViewChild("paginatorPrivacy",{static: false})
+  @ViewChild("paginatorPrivacy", {static: false})
   privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -116,7 +116,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingPrivacy: boolean;
   public addingPrivacy: boolean;
 
-  @ViewChild("paginatorDiploma",{static: false})
+  @ViewChild("paginatorDiploma", {static: false})
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -124,7 +124,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-  @ViewChild("paginatorAttestatiECM",{static: false})
+  @ViewChild("paginatorAttestatiECM", {static: false})
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -132,22 +132,22 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingAttestatoECM: boolean;
   public addingAttestatoECM: boolean;
 
-  @ViewChild("paginatorCedolini",{static: false})
+  @ViewChild("paginatorCedolini", {static: false})
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
   public cedolini: DocumentoDipendente[];
 
-  @ViewChild("paginatorRichieste" ,{static: false})
+  @ViewChild("paginatorRichieste", {static: false})
   richiestePaginator: MatPaginator;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;
   public richieste: DocumentoDipendente[];
 
-  @ViewChild("paginatordocsMedicina",{static: false})
+  @ViewChild("paginatordocsMedicina", {static: false})
   docsMedicinaPaginator: MatPaginator;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
   public docsMedicina: DocumentoMedicinaLavoro[];
 
-  @ViewChild("paginatorCertificatoMalattia",{static: false})
+  @ViewChild("paginatorCertificatoMalattia", {static: false})
   certificatiMalattiaPaginator: MatPaginator;
   public nuovoCertificatoMalattia: DocumentoDipendente;
   public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;

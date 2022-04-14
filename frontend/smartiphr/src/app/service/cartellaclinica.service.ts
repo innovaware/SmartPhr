@@ -25,6 +25,7 @@ export class CartellaclinicaService {
 
   save(data: CartellaClinica): Promise<CartellaClinica> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<CartellaClinica>(this.api + "/api/cartellaClinica", body)
       .toPromise();
@@ -46,6 +47,7 @@ export class CartellaclinicaService {
 
   saveDiario(data: DiarioClinico): Promise<DiarioClinico> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<DiarioClinico>(this.api + "/api/diarioClinico/" + data.user, body)
       .toPromise();
@@ -72,6 +74,7 @@ export class CartellaclinicaService {
 
   saveVisita(data: VisiteSpecialistiche): Promise<VisiteSpecialistiche> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<VisiteSpecialistiche>(
         this.api + "/api/visiteSpecialistiche/" + data.user,

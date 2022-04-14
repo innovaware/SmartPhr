@@ -29,6 +29,7 @@ export class FattureService {
 
 /*   async update(fattura: Fatture) {
     var body = fattura;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/fatture/" + fattura._id, body).toPromise();
   } */
 

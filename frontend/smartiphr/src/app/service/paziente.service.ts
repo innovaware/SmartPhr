@@ -27,22 +27,15 @@ export class PazienteService {
     //return this.http.get<Paziente[]>(`${this.api}/api/pazienti?pageSize=${pageSize}&pageNumber=${pageNumber}`)
   }
 
-  getPazientiObservable(): Observable<Paziente[]> {
-    return this.http.get<Paziente[]>(`${this.api}/api/pazienti`);
-  }
-
   async getPaziente(id: string): Promise<Paziente> {
     return this.http
       .get<Paziente>(`${this.api}/api/pazienti/${id}`)
       .toPromise();
   }
 
-  getPazientiByCamera(idCamera: string): Observable<Paziente[]> {
-    return this.http.get<Paziente[]>(`${this.api}/api/pazienti/camera/${idCamera}`);
-  }
-
   save(data: Paziente): Promise<Paziente> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<Paziente>(this.api + "/api/pazienti/" + data._id, body)
       .toPromise();

@@ -23,12 +23,14 @@ export class AnticipoFattureService {
   }
 
   async insertAnticipo(anticipo: AnticipoFatture, id: string) {
+    console.log("Insert anticipo: ", anticipo);
     var body = anticipo;
     return this.http.post(`${this.api}/api/anticipofatture/${id}`, body).toPromise();
   }
 
   async updateAnticipo(anticipo: AnticipoFatture) {
     var body = anticipo;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/anticipofatture/" + anticipo._id, body).toPromise();
   }
 

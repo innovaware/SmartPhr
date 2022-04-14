@@ -29,6 +29,7 @@ export class DipendentiService {
 
   save(data: Dipendenti): Promise<Dipendenti> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<Dipendenti>(this.api + "/api/dipendenti/" + data._id, body)
       .toPromise();

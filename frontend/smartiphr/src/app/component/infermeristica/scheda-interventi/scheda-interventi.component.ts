@@ -21,7 +21,6 @@ export class SchedaInterventiComponent implements OnInit {
     "diagnosi",
     "obiettivi",
     "intervento",
-    "valutazione",
     "firma",
     "action",
   ];

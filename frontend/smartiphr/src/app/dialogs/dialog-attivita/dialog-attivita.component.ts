@@ -1,12 +1,8 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
 import { Attivita } from 'src/app/models/attivita';
-import { Dipendenti } from 'src/app/models/dipendenti';
 import { Paziente } from 'src/app/models/paziente';
-import { User } from 'src/app/models/user';
 import { AttivitaService } from 'src/app/service/attivita.service';
-import { AuthenticationService } from 'src/app/service/authentication.service';
-import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
 
@@ -17,7 +13,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 })
 export class DialogAttivitaComponent implements OnInit {
 
-  @ViewChild("paginatorAttivita",{static: false})
+  @ViewChild("paginatorAttivita", {static: false})
   AttivitaPaginator: MatPaginator;
   public attivitaDataSource: MatTableDataSource<Attivita>;
   public attivita: Attivita[];
@@ -26,15 +22,11 @@ export class DialogAttivitaComponent implements OnInit {
 
   public nuovoAttivita: Attivita = {};
   paziente: Paziente;
-  dipendente: Dipendenti = {} as Dipendenti;
-  utente: User = {} as User;
   DisplayedColumns: string[] = ["description", "data", "operator", "turno"];
   
   constructor(public dialogRef: MatDialogRef<DialogAttivitaComponent>,
     public attivitaService: AttivitaService,
     public dialog: MatDialog,
-    public dipendenteService: DipendentiService,
-    public authenticationService: AuthenticationService,
     public messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -55,8 +47,8 @@ export class DialogAttivitaComponent implements OnInit {
     this.nuovoAttivita = {
       paziente: this.paziente._id,
       pazienteName: this.paziente.nome + ' ' + this.paziente.cognome,
-      operator: this.dipendente != undefined ? this.dipendente._id : "",
-      operatorName: this.dipendente != undefined ? this.dipendente.nome + ' ' + this.dipendente.cognome : "",
+      operator: this.paziente._id,
+      operatorName: this.paziente.nome + ' ' + this.paziente.cognome,
       description: "",
       data: data,
       turno: turno,
@@ -64,27 +56,6 @@ export class DialogAttivitaComponent implements OnInit {
     };
 
     this.getAttivitaOdierne();
-    this.loadUser();
-  }
-
-
-
-  loadUser() {
-    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
-      console.log("get dipendente");
-      this.dipendenteService
-        .getByIdUser(user._id)
-        .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
-          this.dipendente = x[0];
-
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Caricamento dipendente (" + err["status"] + ")"
-          );
-        });
-    });
   }
 
 

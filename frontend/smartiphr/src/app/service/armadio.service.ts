@@ -75,6 +75,7 @@ export class ArmadioService {
 
   async update(armadio: Armadio) {
     var body = armadio;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/armadio/" + armadio._id, body).toPromise();
   }
 }

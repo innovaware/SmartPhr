@@ -190,10 +190,6 @@ import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/re
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { CamereMapComponent } from './pages/camere-map/camere-map.component';
-import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
-import { SanificatePipe } from "./pipe/sanificate.pipe";
 
 const materialModules = [
   MatTableModule,
@@ -215,7 +211,6 @@ const materialModules = [
   MatExpansionModule,
   MatButtonToggleModule,
   MatProgressSpinnerModule,
-  MatAutocompleteModule,
 
   FormsModule,
 
@@ -256,16 +251,10 @@ const dialogModule = [
   CamereDetailsComponent,
 ];
 
-const pipes = [
-  PrettyprintPipe,
-  TranslatePianoPipe,
-  SanificatePipe
-];
 @NgModule({
   declarations: [
     AppComponent,
     ...dialogModule,
-    ...pipes,
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
@@ -364,14 +353,14 @@ const pipes = [
     LavoroPersonaleComponent,
     FerieAltroPersonaleComponent,
     DebugComponent,
+    PrettyprintPipe,
+    TranslatePianoPipe,
     AuthorizationComponent,
     AreaOssComponent,
     CamereComponent,
     AttivitaOssComponent,
     RegistroControlliOssComponent,
     CamereListComponent,
-    CamereMapComponent,
-    SanificazioneListComponent,
   ],
   imports: [
     ...materialModules,

@@ -48,6 +48,7 @@ export class DocumentiService {
 
   async update(doc: DocumentoDipendente) {
     var body = doc;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/documentidipendenti/" + doc._id, body).toPromise();
   }
 

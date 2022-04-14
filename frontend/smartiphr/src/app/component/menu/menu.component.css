@@ -61,11 +61,6 @@ fa-icon {
   margin-right: 6px;
 }
 
-.mat-expansion-panel-header-title {
-  color: white;
-  margin: unset;
-}
-
 .mat-expansion-panel {
   background: transparent;
   color: rgba(0, 0, 0, 0.87);

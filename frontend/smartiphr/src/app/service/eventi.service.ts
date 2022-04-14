@@ -43,6 +43,7 @@ export class EventiService {
 
   async updateEvento(evento: Evento) {
     var body = evento;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/eventi/" + evento._id, body).toPromise();
   }
 }

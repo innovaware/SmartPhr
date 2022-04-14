@@ -38,6 +38,7 @@ export class ContrattoService {
 
   async update(contratto: Contratto) {
     var body = contratto;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/contratto/" + contratto._id, body).toPromise();
   }
 

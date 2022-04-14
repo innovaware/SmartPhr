@@ -29,6 +29,7 @@ export class NotaCreditoService {
 
 /*   async updateNotaCredito(notacredito: NotaCredito) {
     var body = notacredito;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/notacredito/" + notacredito._id, body).toPromise();
   } */
 

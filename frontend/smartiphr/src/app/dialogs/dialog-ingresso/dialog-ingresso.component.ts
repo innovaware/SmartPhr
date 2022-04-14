@@ -1,13 +1,9 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MatSelectModule, MAT_DIALOG_DATA } from '@angular/material';
 import { dataIngresso } from 'src/app/models/dataIngresso';
-import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from 'src/app/models/paziente';
-import { User } from 'src/app/models/user';
-import { AuthenticationService } from 'src/app/service/authentication.service';
 import { DataIngressoService } from 'src/app/service/data-ingresso.service';
-import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentipazientiService } from 'src/app/service/documentipazienti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -19,7 +15,7 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class DialogIngressoComponent implements OnInit {
 
-  @ViewChild("paginatorDocument",{static: false})
+  @ViewChild("paginatorDocument", {static: false})
   DocumentoPaginator: MatPaginator;
   public nuovoDocumento: DocumentoPaziente;
   public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -28,10 +24,7 @@ export class DialogIngressoComponent implements OnInit {
   public addingDocumento: boolean;
 
   paziente: Paziente;
-  ingresso: dataIngresso;
-  dipendente: Dipendenti = {} as Dipendenti;
-  utente: User = {} as User;
-  
+  ingresso: dataIngresso = {};
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
    constructor(public dialogRef: MatDialogRef<DialogIngressoComponent>,
@@ -40,8 +33,6 @@ export class DialogIngressoComponent implements OnInit {
     public docService: DocumentipazientiService,
     public dataIngressoService: DataIngressoService,
     public uploadService: UploadService,
-    public dipendenteService: DipendentiService,
-    public authenticationService: AuthenticationService,
     public messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -49,37 +40,14 @@ export class DialogIngressoComponent implements OnInit {
       readonly: boolean;
     }) {
       this.paziente = Paziente.clone(data.paziente);
-      this.ingresso = {} as dataIngresso;
     }
 
 
 
   ngOnInit() {
-    this.loadUser();
     this.getDocumenti();
     this.getIngresso();
   }
-
-
-
-  loadUser() {
-    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
-      console.log("get dipendente");
-      this.dipendenteService
-        .getByIdUser(user._id)
-        .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
-          this.dipendente = x[0];
-
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Caricamento dipendente (" + err["status"] + ")"
-          );
-        });
-    });
-  }
-
 
 
   async showDocument(documento: DocumentoPaziente) {
@@ -235,16 +203,12 @@ export class DialogIngressoComponent implements OnInit {
 
     async getIngresso(){
       this.dataIngressoService.getIngressoByPaziente(this.paziente._id).then((result) => {
-        console.log("getIngressoByPaziente: ", result[0]);
-        this.ingresso = result[0] == undefined ? {} : result[0];
+        this.ingresso = result;
       });
     }
 
 
     async saveIngresso() {
- 
-      this.ingresso.user = this.dipendente != undefined ? this.dipendente._id : "";
-      this.ingresso.paziente = this.paziente._id;
       console.log("Invio saveIngresso: ", this.ingresso);
       this.dataIngressoService
           .insertIngresso(this.ingresso)

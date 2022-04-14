@@ -41,7 +41,7 @@ export class AreaMedicaComponent implements OnInit {
       tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogCartellaClinicaComponent, {
-            data: { paziente: paziente, readonly: false, altro: false },
+            data: { paziente: paziente, readonly: false },
             width: "1024px",
           })
           .afterClosed()
@@ -73,24 +73,17 @@ export class AreaMedicaComponent implements OnInit {
       //css: "mat-raised-button raised-button action-button",
     });
 
-
-
-    this.customButtons.push({
-      images: "../../../assets/book-medical-solid.svg",
-      label: "",
-      tooltip: "Altro",
-      cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogCartellaClinicaComponent, {
-          data: { paziente: paziente, readonly: true, altro: true },
-        }),
-      //css: "mat-raised-button raised-button action-button",
-    });
-
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
       this.eventsSubject.next(this.pazienti);
     });
+
+  /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+      this.pazienti = paz;
+
+      this.eventsSubject.next(this.pazienti);
+    });*/
 
 
   }

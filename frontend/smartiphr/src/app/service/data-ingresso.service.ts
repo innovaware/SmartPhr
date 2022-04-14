@@ -30,6 +30,7 @@ export class DataIngressoService {
 
   async updateIngresso(ingresso: dataIngresso) {
     var body = ingresso;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/dataIngresso/" + ingresso._id, body).toPromise();
   }
 }

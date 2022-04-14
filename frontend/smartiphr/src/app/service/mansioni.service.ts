@@ -22,6 +22,7 @@ export class MansioniService {
 
   save(data: Mansione): Promise<Mansione> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<Mansione>(`${this.api}/${data._id}`, body)
       .toPromise();
@@ -29,6 +30,7 @@ export class MansioniService {
 
   insert(data: Mansione): Promise<Mansione> {
     var body = data;
+    console.log("INSERT body: ", body);
     return this.http
       .post<Mansione>(`${this.api}`, body)
       .toPromise();

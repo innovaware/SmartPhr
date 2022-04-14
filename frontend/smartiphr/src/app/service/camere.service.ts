@@ -14,12 +14,8 @@ export class CamereService {
 
   constructor(private http: HttpClient) { }
 
-  getByPiano(selectedPiano: string): Observable<Camere[]> {
-    return this.http.get<Camere[]>(`${this.api}/api/camera/piano/${selectedPiano}`);
-  }
-
-  get(idCamera: string): Observable<Camere> {
-    return this.http.get<Camere>(`${this.api}/api/camera/${idCamera}`);
+  get(selectedPiano: string): Observable<Camere[]> {
+      return this.http.get<Camere[]>(`${this.api}/api/camera/${selectedPiano}`);
   }
 
   update(camera: Camere) {

@@ -29,6 +29,7 @@ export class AspService {
 
   async updateAsp(asp: Asp) {
     var body = asp;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/asp/" + asp._id, body).toPromise();
   }
 }

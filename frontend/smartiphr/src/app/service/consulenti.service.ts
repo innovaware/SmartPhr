@@ -24,6 +24,7 @@ export class ConsulentiService {
 
   update(consulente: Consulenti): Observable<Consulenti> {
     var body = consulente;
+    console.log("body: ", body);
     return this.http.put<Consulenti>(this.api + "/api/consulenti/" + consulente._id, body);
   }
 

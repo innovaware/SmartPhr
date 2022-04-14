@@ -42,12 +42,14 @@ export class ControlliOSSService {
 
   async insert(controllo: ControlliOSS) {
     var body = controllo;
+    console.log("body: ", body);
     return this.http.post(this.api + "/api/armadiocontrolli", body).toPromise();
   }
 
 
   async update(controllo: ControlliOSS) {
     var body = controllo;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/armadiocontrolli/" + controllo._id, body).toPromise();
   }
 }

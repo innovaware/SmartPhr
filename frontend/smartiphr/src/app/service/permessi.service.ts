@@ -31,6 +31,7 @@ export class PermessiService {
 
   async updatePermesso(permessi: Permessi) {
     var body = permessi;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/permessi/" + permessi._id, body).toPromise();
   }
 }

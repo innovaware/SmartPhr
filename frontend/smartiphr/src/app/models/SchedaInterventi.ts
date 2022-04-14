@@ -8,7 +8,6 @@ export class SchedaInterventi {
     this.diagnosi = "";
     this.obiettivi = "";
     this.intervento = "";
-    this.valutazione = "";
     this.firma = "";
 
   }
@@ -17,7 +16,6 @@ export class SchedaInterventi {
   diagnosi: string;
   obiettivi: string;
   intervento: string;
-  valutazione: string;
   firma: string
 }
 

@@ -23,7 +23,7 @@ export class LavoroPersonaleComponent implements OnInit {
   DisplayedRichiesteColumns: string[] = ["date", "action"];
 
 
-  @ViewChild("paginatorContratto",{static: false})
+  @ViewChild("paginatorContratto", {static: false})
   contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -32,13 +32,13 @@ export class LavoroPersonaleComponent implements OnInit {
   public addingContratto: boolean;
 
 
-  @ViewChild("paginatorCedolini",{static: false})
+  @ViewChild("paginatorCedolini", {static: false})
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
   public cedolini: DocumentoDipendente[];
 
 
-  @ViewChild("paginatorRichieste",{static: false})
+  @ViewChild("paginatorRichieste", {static: false})
   richiestePaginator: MatPaginator;
   public docRichiesta: DocumentoDipendente;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;

@@ -4,10 +4,14 @@ import { MatDialog } from "@angular/material";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Observable, Subscription } from 'rxjs';
+import { DialogPazienteComponent } from "src/app/dialogs/dialog-paziente/dialog-paziente.component";
+import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { PazienteService } from "src/app/service/paziente.service";
 import { MessagesService } from 'src/app/service/messages.service';
+import { CartellaClinica } from "src/app/models/cartellaClinica";
+import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
 import { CartellaclinicaService } from "src/app/service/cartellaclinica.service";
 
 @Component({

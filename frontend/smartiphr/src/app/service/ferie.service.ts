@@ -29,6 +29,7 @@ export class FerieService {
 
   async updateFerie(ferie: Ferie) {
     var body = ferie;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/ferie/" + ferie._id, body).toPromise();
   }
 }

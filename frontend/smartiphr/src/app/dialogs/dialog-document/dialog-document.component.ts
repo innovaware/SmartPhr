@@ -53,11 +53,11 @@ export class DialogDocumentComponent implements OnInit {
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture",{static: false})
+  @ViewChild("paginatorFatture", {static: false})
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorNoteCredito",{static: false})
+  @ViewChild("paginatorNoteCredito", {static: false})
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici",{static: false})
+  @ViewChild("paginatorBonifici", {static: false})
   bonificiPaginator: MatPaginator;
 
   public fatture: Fatture[];

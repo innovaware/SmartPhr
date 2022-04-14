@@ -127,9 +127,8 @@ export class ArchiveDocumentsComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          const msSaveOrOpenBlob: any = window.navigator;
-          if (msSaveOrOpenBlob && msSaveOrOpenBlob.msSaveOrOpenBlob) {
-            msSaveOrOpenBlob(newBlob);
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
             return;
           }
           // For other browsers:

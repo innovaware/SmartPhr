@@ -30,6 +30,7 @@ export class FattureConsulentiService {
 
   update(fattura: FattureConsulenti) {
     var body = fattura;
+    console.log("body: ", body);
     return this.http.put(this.api + "/api/fattureConsulenti/" + fattura._id, body);
   }
 

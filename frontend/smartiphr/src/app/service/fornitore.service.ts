@@ -23,6 +23,7 @@ export class FornitoreService {
 
   save(data: Fornitore): Promise<Fornitore> {
     var body = data;
+    console.log("body: ", body);
     return this.http
       .put<Fornitore>(this.api + "/api/fornitori/" + data._id, body)
       .toPromise();

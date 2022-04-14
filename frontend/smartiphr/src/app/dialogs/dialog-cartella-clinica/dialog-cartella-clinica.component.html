@@ -2,8 +2,7 @@
   <div class="container-fluid" >
     <div class="row">
       <div class="col">
-        <h3 *ngIf="!data.altro">CARTELLA CLINICA</h3>
-        <h3 *ngIf="data.altro">ALTRO</h3>
+        <h3>CARTELLA CLINICA</h3>
       </div>
 
       <div class="col">
@@ -26,14 +25,14 @@
       <div class="col">
 
         <mat-tab-group mat-align-tabs="start">
-          <mat-tab label="Generale" *ngIf="!data.altro">
+          <mat-tab label="Generale">
             <!-- <app-paziente-generale [disable]=true [(data)]=cartella></app-paziente-generale> -->
             <app-paziente-generale [data]=data.paziente [disable]=true ></app-paziente-generale>
           </mat-tab>
 
 
                <!-- DOCUMENTAZIONE -->
-  <mat-tab label="Documentazione" *ngIf="data.altro" [disabled]="paziente?._id === undefined">
+  <mat-tab label="Documentazione" [disabled]="paziente?._id === undefined">
     <div class="container-fluid">
       <div class="row title">
         <div class="col-1"></div>
@@ -271,7 +270,7 @@
   </mat-tab>
 
           <!-- PIANI TERAPEUTICI -->
-          <mat-tab label="Piani terapeutici" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
+          <mat-tab label="Piani terapeutici" [disabled]="data.paziente?._id === undefined">
 
             <br>
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPianoTerapeutico">
@@ -370,13 +369,13 @@
            <!-- FINE PIANI TERAPEUTICI -->
 
 
-           <mat-tab label="Parametri vitali" *ngIf="data.altro">
+           <mat-tab label="Parametri vitali">
             <app-parametri-vitali [id]=data.paziente._id [saveEvent]="saveParametriVitali" [inLettura]=true></app-parametri-vitali>
           </mat-tab>
 
 
            <!-- REFERTI ESAMI STRUMENTALI -->
-           <mat-tab label="Referti esami strumentali" *ngIf="data.altro">
+           <mat-tab label="Referti esami strumentali">
             <app-esiti-strumentali [id]=data.paziente._id [inLettura]=true></app-esiti-strumentali>
           </mat-tab>
 
@@ -384,7 +383,7 @@
 
 
              <!-- REFERTI ESAMI EMATOCHIMICI -->
-          <mat-tab label="Referti esami ematochimici" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
+          <mat-tab label="Referti esami ematochimici" [disabled]="data.paziente?._id === undefined">
 
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRefertoEsameEmatochimico">
               <button mat-button class="button-insert" (click)="addRefertoEsameEmatochimico()">Aggiungi Documento</button>
@@ -484,7 +483,7 @@
 
 
             <!-- VERBALI -->
-          <mat-tab label="Verbali pronto soccorso e dimissioni ospedaliere" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
+          <mat-tab label="Verbali pronto soccorso e dimissioni ospedaliere" [disabled]="data.paziente?._id === undefined">
 
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingVerbale">
               <button mat-button class="button-insert" (click)="addVerbale()">Aggiungi Documento</button>
@@ -584,7 +583,7 @@
 
 
              <!-- RELAZIONI -->
-          <mat-tab label="Relazioni cliniche e certificati" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
+          <mat-tab label="Relazioni cliniche e certificati" [disabled]="data.paziente?._id === undefined">
 
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRelazione">
               <button mat-button class="button-insert" (click)="addRelazione()">Aggiungi Documento</button>
@@ -684,7 +683,7 @@
 
 
             <!-- IMPEGNATIVE -->
-          <mat-tab label="Impegnative" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
+          <mat-tab label="Impegnative" [disabled]="data.paziente?._id === undefined">
 
             <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingImpegnativa">
               <button mat-button class="button-insert" (click)="addImpegnativa()">Aggiungi Documento</button>
@@ -785,48 +784,48 @@
 
 
 
-          <mat-tab label="Anamnesi Patologica" *ngIf="!data.altro">
+          <mat-tab label="Anamnesi Patologica">
             <app-anamnesi-patologica [data]=schedaAnamnesiPatologica ></app-anamnesi-patologica>
           </mat-tab>
 
-            <mat-tab label="Anamnesi Famigliare" *ngIf="!data.altro">
+            <mat-tab label="Anamnesi Famigliare">
             <app-anamnesi-famigliare [data]=schedaAnamnesiFamigliare ></app-anamnesi-famigliare>
           </mat-tab>
 
 
 
-          <mat-tab label="Esame Generale" *ngIf="!data.altro">
+          <mat-tab label="Esame Generale">
             <app-esame-generale [data]=schedaEsameGenerale ></app-esame-generale>
           </mat-tab>
 
-         <mat-tab label="Esame Neurologica" *ngIf="!data.altro">
+         <mat-tab label="Esame Neurologica">
             <app-esame-neurologica [data]=schedaEsameNeurologia  ></app-esame-neurologica>
           </mat-tab>
 
-          <mat-tab label="Mezzi di Contenzione" *ngIf="!data.altro">
+          <mat-tab label="Mezzi di Contenzione">
             <app-mezzi-contenzione [data]=schedaMezziContenzione  ></app-mezzi-contenzione>
           </mat-tab>
 
-          <mat-tab label="Valutazione Tecniche" *ngIf="!data.altro"> 
+          <mat-tab label="Valutazione Tecniche">
             <app-valutazione-tecniche [data]=schedaValutazioneTecniche></app-valutazione-tecniche>
           </mat-tab>
 
-        <mat-tab label="Visite specialistiche/Esami paraclinici" *ngIf="!data.altro">
+        <mat-tab label="Visite specialistiche/Esami paraclinici">
             <app-visite-specialistiche [data]=data.paziente ></app-visite-specialistiche>
           </mat-tab>
 
-         <mat-tab label="Diario" *ngIf="!data.altro">
+         <mat-tab label="Diario">
             <app-diario-clinico [data]=data.paziente >></app-diario-clinico>
           </mat-tab>
 
 
-          <mat-tab label="Dimissione Ospite" *ngIf="data.altro">
-            <app-dimissioni [data]=schedaDimissioneOspite [paziente]=paziente >></app-dimissioni>
+          <mat-tab label="Dimissione Ospite">
+            <app-dimissioni [data]=data.paziente >></app-dimissioni>
           </mat-tab>
 
 
-          <mat-tab label="Decesso Ospite" *ngIf="data.altro">
-            <app-decesso [data]=schedaDecessoOspite [paziente]=paziente >></app-decesso>
+          <mat-tab label="Decesso Ospite">
+            <app-decesso [data]=data.paziente >></app-decesso>
           </mat-tab>
 
 

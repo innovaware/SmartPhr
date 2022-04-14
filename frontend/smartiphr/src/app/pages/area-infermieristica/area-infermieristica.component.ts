@@ -43,7 +43,7 @@ export class AreaInfermieristicaComponent implements OnInit {
       tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogCartellaClinicaComponent, {
-          data: { paziente: paziente, readonly: true, altro: false},
+          data: { paziente: paziente, readonly: true },
         }),
       // css: "mat-raised-button raised-button action-button",
     });
@@ -76,20 +76,6 @@ export class AreaInfermieristicaComponent implements OnInit {
           }),
       // css: "mat-raised-button raised-button action-button",
     });
-
-
-    
-    this.customButtons.push({
-      images: "../../../assets/book-medical-solid.svg",
-      label: "",
-      tooltip: "Altro",
-      cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogCartellaClinicaComponent, {
-          data: { paziente: paziente, readonly: true, altro: true },
-        }),
-      //css: "mat-raised-button raised-button action-button",
-    });
-
 
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
