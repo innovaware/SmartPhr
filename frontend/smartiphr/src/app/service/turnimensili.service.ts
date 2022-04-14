@@ -82,7 +82,6 @@ export class TurnimensiliService {
 
   async updateTurno(turnimensili: Turnimensili) {
     var body = turnimensili;
-    console.log("body: ", body);
     return this.http
       .put(this.api + "/api/turnimensili/" + turnimensili._id, body)
       .toPromise();

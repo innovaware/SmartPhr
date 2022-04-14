@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Attivita } from 'src/app/models/attivita';
 import { ControlliOSS } from 'src/app/models/controlliOSS';
 import { ControlliOSSService } from 'src/app/service/controlli-oss.service';

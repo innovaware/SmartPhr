@@ -31,12 +31,9 @@ import { MatTableModule } from "@angular/material/table";
 import { MatCheckboxModule } from "@angular/material/checkbox";
 import { MatButtonModule } from "@angular/material/button";
 import { MatPaginatorModule } from "@angular/material/paginator";
-import {
-  MatInputModule,
-  MatNativeDateModule,
-  MatSelectModule,
-  MAT_DATE_LOCALE,
-} from "@angular/material";
+import { MatNativeDateModule, MAT_DATE_LOCALE } from "@angular/material/core";
+import { MatInputModule } from "@angular/material/input";
+import { MatSelectModule } from "@angular/material/select";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatDialogModule } from "@angular/material/dialog";
 import { MatCardModule } from "@angular/material/card";
@@ -78,11 +75,11 @@ import { SchedaInterventiComponent } from "./component/infermeristica/scheda-int
 import { DecessoComponent } from "./component/medica/decesso/decesso.component";
 import { DialogEventComponent } from "./dialogs/dialog-event/dialog-event.component";
 
-import {
-  NgxMatDatetimePickerModule,
-  NgxMatTimepickerModule,
-  NgxMatNativeDateModule,
-} from "@angular-material-components/datetime-picker";
+// import {
+//   NgxMatDatetimePickerModule,
+//   NgxMatTimepickerModule,
+//   NgxMatNativeDateModule,
+// } from "@angular-material-components/datetime-picker";
 
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { FattureConsulentiComponent } from "./pages/fatture-consulenti/fatture-consulenti.component";
@@ -190,6 +187,11 @@ import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/re
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { CamereMapComponent } from './pages/camere-map/camere-map.component';
+import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
+import { SanificatePipe } from "./pipe/sanificate.pipe";
+import { SanificazioneRegistroComponent } from './pages/sanificazione-registro/sanificazione-registro.component';
 
 const materialModules = [
   MatTableModule,
@@ -206,14 +208,22 @@ const materialModules = [
   MatIconModule,
   MatTabsModule,
   MatRadioModule,
-  MatDatepickerModule,
   MatNativeDateModule,
   MatExpansionModule,
   MatButtonToggleModule,
   MatProgressSpinnerModule,
+  MatAutocompleteModule,
 
   FormsModule,
 
+];
+
+const dataPicker = [
+//   NgxMatDatetimePickerModule,
+//   NgxMatTimepickerModule,
+//   NgxMatNativeDateModule,
+//   MatDatepickerModule,
+  MatDatepickerModule,
 ];
 
 const dialogModule = [
@@ -251,10 +261,16 @@ const dialogModule = [
   CamereDetailsComponent,
 ];
 
+const pipes = [
+  PrettyprintPipe,
+  TranslatePianoPipe,
+  SanificatePipe
+];
 @NgModule({
   declarations: [
     AppComponent,
     ...dialogModule,
+    ...pipes,
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
@@ -353,26 +369,25 @@ const dialogModule = [
     LavoroPersonaleComponent,
     FerieAltroPersonaleComponent,
     DebugComponent,
-    PrettyprintPipe,
-    TranslatePianoPipe,
     AuthorizationComponent,
     AreaOssComponent,
     CamereComponent,
     AttivitaOssComponent,
     RegistroControlliOssComponent,
     CamereListComponent,
+    CamereMapComponent,
+    SanificazioneListComponent,
+    SanificazioneRegistroComponent,
   ],
   imports: [
     ...materialModules,
+    ...dataPicker,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
 
     HttpClientModule,
-    NgxMatDatetimePickerModule,
-    NgxMatTimepickerModule,
-    NgxMatNativeDateModule,
     ChartsModule,
   ],
   providers: [

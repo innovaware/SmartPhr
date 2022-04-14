@@ -32,7 +32,7 @@ var VERSION = process.env.VERSION;
 
 const redisPort = process.env.REDISPORT || 6379;
 const redisHost = process.env.REDISHOST || "redis";
-var redisDisabled = process.env.REDISDISABLE === "true" || true;
+var redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 // GESTIONE MAILER SERVICE

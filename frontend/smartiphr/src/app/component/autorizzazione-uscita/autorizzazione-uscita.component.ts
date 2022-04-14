@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-error/dialog-message-error.component";
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { DocumentiService } from "src/app/service/documenti.service";

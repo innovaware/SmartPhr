@@ -58,6 +58,9 @@ import { AreaOssComponent } from "./pages/area-oss/area-oss.component";
 import { AttivitaOssComponent } from "./pages/attivita-oss/attivita-oss.component";
 import { RegistroControlliOssComponent } from "./pages/registro-controlli-oss/registro-controlli-oss.component";
 import { CamereListComponent } from "./pages/camere-list/camere-list.component";
+import { CamereMapComponent } from "./pages/camere-map/camere-map.component";
+import { SanificazioneListComponent } from "./pages/sanificazione-list/sanificazione-list.component";
+import { SanificazioneRegistroComponent } from "./pages/sanificazione-registro/sanificazione-registro.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -122,6 +125,12 @@ const routes: Routes = [
   // CAMERE
   { path: "gest_camere", component: CamereComponent, canActivate: [AuthGuard]  },
   { path: "gest_camerelist", component: CamereListComponent, canActivate: [AuthGuard]  },
+  { path: "gest_camere_map", component: CamereMapComponent, canActivate: [AuthGuard]  },
+
+  // SANIFICAZIONE
+  { path: "gest_sanificazioneList", component: SanificazioneListComponent, canActivate: [AuthGuard]  },
+  { path: "registro_sanificazione", component: SanificazioneRegistroComponent, canActivate: [AuthGuard]  },
+
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

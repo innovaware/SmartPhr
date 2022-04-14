@@ -9,14 +9,14 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.cognome" [disabled]=disable (change)="change()">
           </td>
-  
+
           <td>
             <h5>Nome*: </h5>
           </td>
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.nome" [disabled]=disable (change)="change()">
           </td>
-  
+
 
 
 
@@ -42,16 +42,16 @@
                   <mat-datepicker #dataNascita></mat-datepicker>
                 </mat-form-field>
               </div>
-    
+
             </td>
-    
+
           </tr>
 
 
 
 
 
-  
+
         <tr>
           <td>
             <label>
@@ -69,7 +69,7 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.comuneNascita" [disabled]=disable (change)="change()">
           </td>
-  
+
         </tr>
 
 
@@ -90,10 +90,10 @@
         <td>
           <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoResidenza" [disabled]=disable (change)="change()">
         </td>
-        
-  
+
+
         </tr>
-  
+
         <tr>
           <td>
             <label>
@@ -103,7 +103,7 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" [disabled]=disable (change)="change()">
           </td>
-  
+
           <td>
             <label>
               <h5>Provincia di Residenza: </h5>
@@ -113,8 +113,8 @@
             <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaResidenza" [disabled]=disable (change)="change()">
           </td>
         </tr>
-  
-  
+
+
         <tr>
           <td>
             <h5>Titolo di studio: </h5>
@@ -162,10 +162,10 @@
 
           </select>
           </td>
-  
+
         </tr>
-  
-  
+
+
         <tr>
           <td>
             <h5>Tipologia di contratto: </h5>
@@ -175,9 +175,9 @@
           </td>
 
         </tr>
-  
-  
-  
+
+
+
         <tr>
           <td>
             <h5>Email: </h5>
@@ -191,21 +191,20 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.telefono" [disabled]=disable (change)="change()">
           </td>
-  
+
         </tr>
 
-  
+
       </tbody>
     </table>
 
     <strong>I campi indicati con * sono obbligatori!</strong>
-  
+
   </div>
-  
+
   <!--
   <div mat-dialog-actions *ngIf="!disable">
     <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="true">Chiudi</button>
     <button mat-button class="button-insert" (click)="save()">Salva</button>
   </div> -->
-  

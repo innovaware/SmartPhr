@@ -39,11 +39,17 @@ export class Paziente {
     dst.schedaPisico = src.schedaPisico;
     dst.dimissione = src.dimissione;
 
+    dst.ricovero = src.ricovero;
+    dst.numstanza = src.numstanza;
+    dst.numletto = src.numletto;
+    dst.diagnosiingresso = src.diagnosiingresso;
+    dst.allergie = src.allergie;
+
 
     dst.schedaAssSociale = src.schedaAssSociale;
     dst.schedaEducativa = src.schedaEducativa;
 
-
+    dst.idCamera = src.idCamera;
   }
 
   _id?: string;
@@ -67,6 +73,14 @@ export class Paziente {
   provinciaNascita: string;
   provenienza?: string;
   codiceFiscale: string;
+
+  idCamera?: string;
+
+  ricovero?: string;
+  numstanza?: string;
+  numletto?: string;
+  diagnosiingresso?: string;
+  allergie?: string;
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;
@@ -105,6 +119,7 @@ export class Paziente {
     this.indirizzoNascita = paziente.indirizzoNascita;
     this.provenienza = paziente.provenienza;
     this.comuneNascita = paziente.comuneNascita;
+    this.idCamera = paziente.idCamera;
   }
 
   constructor() {
@@ -126,6 +141,8 @@ export class Paziente {
     this.indirizzoNascita= "";
     this.comuneNascita= "";
     this.provinciaNascita= "";
+    this.idCamera = undefined;
+
   }
 
 }

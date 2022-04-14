@@ -1,7 +1,7 @@
 import { Component, OnInit } from "@angular/core";
-import { MatSelectChange } from "@angular/material";
+import { MatSelectChange } from "@angular/material/select";
 
-import { map } from "rxjs/operators";
+import { map, filter } from "rxjs/operators";
 import { Observable, of } from "rxjs";
 
 import { MapService } from "src/app/service/map.service";
@@ -24,6 +24,8 @@ import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
 import Text from "ol/style/Text";
+import { ActivatedRoute, ParamMap } from "@angular/router";
+import { Color } from "ol/color";
 
 @Component({
   selector: "app-camere",
@@ -112,17 +114,42 @@ export class CamereComponent implements OnInit {
 
   constructor(
     private mapService: MapService,
-    private camereService: CamereService
+    private camereService: CamereService,
+    private route: ActivatedRoute
   ) {
     this.selectedPiano = "2p";
     this.editMode = false;
-    this.getCamere(this.selectedPiano);
   }
 
-  ngOnInit(): void {
+  ngOnInit() {
+    console.log("Init Camere");
     this.map = this.initMap();
-
     this.loadLayers();
+    this.refresh();
+
+    this.route.queryParams.subscribe(params=> {
+      const idCamera = params.camera as string;
+      console.log("camera id:", idCamera);
+
+      if (idCamera !== undefined) {
+        this.camereService.get(idCamera)
+            .subscribe( (camera: Camere) => {
+                  console.log("camera:", camera);
+
+                  if (camera !== undefined) {
+                    camera.geometryObject = JSON.parse(camera.geometry);
+                    this.selectedCamera = camera;
+                    this.selectedPiano = camera.piano;
+                    this.refresh();
+                    this.updateLayerCamera();
+                  }
+            });
+      }
+    });
+  }
+
+  refresh() {
+    this.getCamere(this.selectedPiano);
   }
 
   initMap() {
@@ -148,7 +175,7 @@ export class CamereComponent implements OnInit {
   cameraLayerDebug: VectorLayer<VectorSource<Geometry>>;
 
   getCamere(piano: string) {
-    this.camere = this.camereService.get(piano)
+    this.camere = this.camereService.getByPiano(piano)
       .pipe(
         map( (x: Camere[])=>
             x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order)),
@@ -192,6 +219,29 @@ export class CamereComponent implements OnInit {
 
     this.text.setText(`${this.selectedCamera.camera}\nN. Posti ${this.selectedCamera.numPostiLiberi}/${this.selectedCamera.numMaxPosti}`);
     this.cameraStyle.setText(this.text);
+
+    const colorRGB = () => {
+      if (this.selectedCamera.numPostiLiberi === 0) return [0, 0 ,0, 0.3] as Color;
+
+      //if((this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) === 0) {
+      //
+      //}
+
+      return [
+        (this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) === 0 ? 255 : 0,
+        (this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) !== 0 ? 255 : 0,
+        0,
+        0.3
+      ];
+
+      //return (this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) === 0 ? 255 : 0;
+    };
+
+
+    this.cameraStyle.setFill(
+      new Fill({
+        color: colorRGB(), //RGBA
+      }));
     this.map.getView().setCenter(coordinate);
   }
 

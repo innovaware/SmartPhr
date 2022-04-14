@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogRiabilitazioneDiarioComponent } from 'src/app/dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 import { AreaRiabilitativaDiario } from 'src/app/models/AreaRiabilitativaDiario';
 

@@ -5,7 +5,10 @@ export class schedaDecessoOspite {
     }
     constructor() {
       this.relazionedecesso = "";
+      this.statodecesso = false;
     }
+    
+    statodecesso: Boolean;
     relazionedecesso: String;
 
   }

@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogInterventiComponent } from "src/app/dialogs/dialog-interventi/dialog-interventi.component";
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Diario } from "src/app/models/diario";
@@ -21,6 +23,7 @@ export class SchedaInterventiComponent implements OnInit {
     "diagnosi",
     "obiettivi",
     "intervento",
+    "valutazione",
     "firma",
     "action",
   ];

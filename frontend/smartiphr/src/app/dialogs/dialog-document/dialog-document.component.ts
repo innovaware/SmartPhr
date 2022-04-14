@@ -1,11 +1,7 @@
 import { Component, Inject, Input, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DipendenteGeneraleComponent } from "src/app/component/dipendente-generale/dipendente-generale.component";
 import { Bonifico } from 'src/app/models/bonifico';
 import { Documento } from "src/app/models/documento";

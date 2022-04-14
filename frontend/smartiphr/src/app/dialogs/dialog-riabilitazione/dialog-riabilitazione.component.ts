@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AreaRiabilitativa } from 'src/app/models/AreaRiabilitativa';
 import { AreaRiabilitativaDiario } from 'src/app/models/AreaRiabilitativaDiario';
 import { AreaRiabilitativaProgramma } from 'src/app/models/AreaRiabilitativaProgramma';

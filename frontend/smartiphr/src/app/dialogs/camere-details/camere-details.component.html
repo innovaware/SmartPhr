@@ -6,6 +6,11 @@
       <div class="col">
         <h3>Camera</h3>
       </div>
+
+      <div class="col right">
+        <img src="../../../assets/maps.svg" title="Mostra nella Mappa" (click)="navCameraMap()">
+      </div>
+
     </div>
   </div>
 </div>
@@ -67,9 +72,10 @@
       <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
         <mat-form-field *ngIf="data.editMode else labelTextNumPostiLiberi">
           <input matInput type="number" placeholder="Posti liberi"
-                 [(ngModel)]="data.camera.numPostiLiberi"
+                 [(ngModel)]="countPatientInCamera"
+                 [disabled]="true"
                  min="0"
-                 max="{{data.camera.numMaxPosti}}">
+                 max="data.camera.numMaxPosti">
         </mat-form-field>
 
         <ng-template #labelTextNumPostiLiberi>
@@ -92,6 +98,7 @@
         <mat-form-field *ngIf="data.editMode else labelTextNumMaxPosti">
           <input matInput type="number" placeholder="Numero massimo di posti"
             [(ngModel)]="data.camera.numMaxPosti"
+            (keyup)="changeMaxPosti($event)"
             min="{{data.camera.numPostiLiberi}}">
         </mat-form-field>
 
@@ -107,20 +114,55 @@
       <div class="col">
         <mat-card>
           <mat-card-title>
-            <mat-label>Pazienti</mat-label>
+
+            <div class="container-fluid" >
+              <div class="row">
+                <div class="col-2">
+                  <mat-label>Pazienti</mat-label>
+                </div>
+
+                <div class="col" *ngIf="data.editMode">
+                  <mat-form-field class="example-full-width" appearance="fill">
+                    <input matInput
+                           type="text"
+                           placeholder="Seleziona Paziente"
+                           [matAutocomplete]="auto"
+                           (keyup)="applyFilter($event)"
+                           [(ngModel)]="inputSearchField">
+
+                    <mat-autocomplete autoActiveFirstOption
+                                      #auto="matAutocomplete"
+                                      [displayWith]="displayFn">
+                      <mat-option *ngFor="let option of allPatients | async" [value]="option">
+                        {{option.nome}} {{option.cognome}}
+                      </mat-option>
+                    </mat-autocomplete>
+                  </mat-form-field>
+                </div>
+
+                <div class="col-1 right" *ngIf="data.editMode && this.countPatientInCamera < this.data.camera.numMaxPosti">
+                  <img src="../../../assets/add.svg" matTooltip="Associa paziente"
+                       (click)="associaPatient()">
+                </div>
+
+              </div>
+            </div>
+
           </mat-card-title>
           <mat-card-content>
             <div class="container-fluid">
               <div class="row">
                 <div class="col">
 
-                  <table mat-table [dataSource]="dataSourcePatient" class="mat-elevation-z8">
-                    <ng-container matColumnDef="action">
+                  <table mat-table [dataSource]="patients | async" class="mat-elevation-z8">
+                    <ng-container matColumnDef="action" >
                       <th mat-header-cell *matHeaderCellDef>
                       </th>
-                      <td mat-cell *matCellDef="let row">
-                        <div class="right">
-                          <img src="../../../assets/maps.svg" title="Mostra nella Mappa">
+                      <td mat-cell *matCellDef="let row" >
+                        <div class="right" *ngIf="data.editMode">
+                          <img src="../../../assets/cestino.svg" alt="Cancella"
+                               matTooltip="Disassocia Paziente con Camera"
+                               (click)="disassociaPaziente(row)">
                         </div>
                       </td>
                     </ng-container>

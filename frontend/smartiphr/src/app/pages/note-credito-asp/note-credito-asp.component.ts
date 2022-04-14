@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { NotaCredito } from "src/app/models/notacredito";
 import { NotaCreditoService } from "src/app/service/notacredito.service";

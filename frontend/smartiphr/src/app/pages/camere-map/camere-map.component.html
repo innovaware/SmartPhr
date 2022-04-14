@@ -1,0 +1,31 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">AREA CAMERE</h1>
+    </div>
+
+    <div class="col middle">
+      <div class="row" *ngIf="!isSanificazione">
+        <div class="red"></div> Occupati
+        <div class="green"></div> Liberi
+        <div class="gray"></div> Nessun Paziente
+      </div>
+
+      <div class="row" *ngIf="isSanificazione">
+        <div class="red"></div> Non Sanificata
+        <div class="green"></div> Sanificata
+      </div>
+
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col">
+      <div class="left-bar"></div>
+      <div id="ol-map" class="map-container"></div>
+    </div>
+
+  </div>
+</div>

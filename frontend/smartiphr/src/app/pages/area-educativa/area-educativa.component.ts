@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 
 import { DinamicButton } from "src/app/models/dinamicButton";

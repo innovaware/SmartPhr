@@ -1,8 +1,8 @@
-<li>
+<li style="color: white">
 
-  <a routerLink={{link}} >
+  <a (click)="navigate()" style="cursor: pointer;" >
     <fa-icon *ngIf="icon !== undefined && icon != ''" icon={{icon}}></fa-icon>
-    <span class="nav-label">{{contentTitle}}</span>
+    <span class="nav-label">{{contentTitle}} </span>
   </a>
 
 </li>

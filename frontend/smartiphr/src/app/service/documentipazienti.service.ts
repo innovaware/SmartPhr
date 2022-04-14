@@ -45,7 +45,6 @@ export class DocumentipazientiService {
 
   async update(doc: DocumentoPaziente) {
     var body = doc;
-    console.log("body: ", body);
     return this.http.put(this.api + "/api/documentipazienti/" + doc._id, body).toPromise();
   }
 

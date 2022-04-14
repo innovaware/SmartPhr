@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DiarioClinico } from 'src/app/models/diarioClinico';
 import { Paziente } from 'src/app/models/paziente';
 import { CartellaclinicaService } from 'src/app/service/cartellaclinica.service';
@@ -25,10 +25,18 @@ export class DialogDiarioClinicoComponent implements OnInit {
 
 
   async salva() {
-    console.log("add diario: " + JSON.stringify(this.data.paziente));
+    console.log("contenuto: " + this.contenuto);
+    console.log("terapia: " + this.terapia);
+
+    if(this.contenuto == undefined || this.contenuto == "" || this.terapia == undefined || this.terapia == ""){
+      this.messageService.showMessageError(
+        "Alcuni campi obbligatori non sono stati compilati!"
+      );
+      return;
+    }
     var diario = new DiarioClinico();
     diario.user = this.data.paziente._id;
-    diario.data = this.dataDiario;
+    diario.data = new Date();
     diario.contenuto = this.contenuto;
     diario.terapia = this.terapia;
 

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { FattureFornitori } from "src/app/models/fattureFornitori";
 import { FattureFornitoriService } from "src/app/service/fattureFornitori.service";
 import { MessagesService } from "src/app/service/messages.service";

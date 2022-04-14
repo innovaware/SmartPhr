@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Armadio } from 'src/app/models/armadio';
 import { Paziente } from 'src/app/models/paziente';
 import { DataIngressoService } from 'src/app/service/data-ingresso.service';

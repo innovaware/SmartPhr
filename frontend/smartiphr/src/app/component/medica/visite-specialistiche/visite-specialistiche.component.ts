@@ -1,10 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-} from "@angular/material";
+import { MatDialog, MatDialogRef } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogVisitespecialisticheComponent } from "src/app/dialogs/dialog-visitespecialistiche/dialog-visitespecialistiche.component";
 import { Paziente } from "src/app/models/paziente";
 import { VisiteSpecialistiche } from "src/app/models/visiteSpecialistiche";

@@ -7,9 +7,10 @@ export class schedaDimissioneOspite {
 
       this.relazionedimissione = "";
       this.terapiainatto = "";
+      this.statodimissione = false;
     }
   
-
+    statodimissione :Boolean;
     relazionedimissione: String;
     terapiainatto: String;
   }

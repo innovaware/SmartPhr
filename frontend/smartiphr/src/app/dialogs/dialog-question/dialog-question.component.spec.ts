@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material";
+import { MatDialog, MatDialogModule, MatDialogRef } from "@angular/material/dialog";
 
 import { DialogQuestionComponent } from "./dialog-question.component";
 

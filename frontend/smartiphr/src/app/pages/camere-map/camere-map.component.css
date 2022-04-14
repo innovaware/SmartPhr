@@ -1,0 +1,44 @@
+.map-container {
+  height: 100vh;
+}
+
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+.red {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(196, 0, 0, 1);
+  background: rgba(255, 0, 0, 0.3);
+  border-radius: 7px;
+  padding: unset;
+  margin: 0px 10px;
+}
+
+.green {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(0, 180, 113, 1);
+  background: rgba(0, 255, 0, 0.3);
+  border-radius: 7px;
+  padding: unset;
+  margin: 0px 10px;
+}
+
+.gray {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgba(0, 0, 0, 1);
+  background: rgba(0, 0 ,0, 0.3);
+  border-radius: 7px;
+  padding: unset;
+  margin: 0px 10px;
+}

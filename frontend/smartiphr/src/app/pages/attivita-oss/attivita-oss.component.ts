@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Attivita } from 'src/app/models/attivita';
 import { Paziente } from 'src/app/models/paziente';
 import { AttivitaService } from 'src/app/service/attivita.service';
@@ -13,7 +15,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 })
 export class AttivitaOssComponent implements OnInit {
 
-  @ViewChild("paginatorAttivita", {static: false})
+  @ViewChild("paginatorAttivita",{static: false})
   AttivitaPaginator: MatPaginator;
   public attivitaDataSource: MatTableDataSource<Attivita>;
   public attivita: Attivita[];

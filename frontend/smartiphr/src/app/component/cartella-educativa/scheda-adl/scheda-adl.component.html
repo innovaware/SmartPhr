@@ -12,7 +12,7 @@
                 <tr>
                   <td>A) FARE IL BAGNO (vasca, doccia, spugnature) </td>
                   <td>
-                      <select matNativeControl required class="custom-select" [(ngModel)]="data.A">
+                      <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.A">
                         <option selected="" value="">Seleziona ...</option>
                         <option value="1-1">Fa il bagno da solo (entra ed esce dalla vasca da solo): 1</option>
                         <option value="2-1">Ha bisogno di assistenza soltanto nella pulizia di una parte del corpo (es. dorso): 1</option>
@@ -26,7 +26,7 @@
                         intima, vestiti, uso delle allacciature e delle bretelle se utilizzate)
                         </td>
                     <td>
-                        <select matNativeControl required class="custom-select" [(ngModel)]="data.B">
+                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.B">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Prende i vestiti e si veste completamente senza bisogno di assistenza: 1</option>
                           <option value="2-1">Prende i vestiti e si veste senza bisogno di assistenza eccetto che per allacciare le scarpe: 1</option>
@@ -43,7 +43,7 @@
                         pulirsi, rivestirsi)
                         </td>
                     <td>
-                        <select matNativeControl required class="custom-select" [(ngModel)]="data.C">
+                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.C">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Va in bagno, si pulisce e si riveste senza bisogno di assistenza (può utilizzare
                             mezzi di supporto come bastone, deambulatore o seggiola a rotelle, può usare vaso
@@ -62,7 +62,7 @@
                   <tr>
                     <td>D) SPOSTARSI</td>
                     <td>
-                        <select matNativeControl required class="custom-select" [(ngModel)]="data.D">
+                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.D">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Si sposta dentro e fuori dal letto e in poltrona senza assistenza (eventualmente con
                             canadesi o deambulatore): 1
@@ -79,7 +79,7 @@
                   <tr>
                     <td>E) CONTINENZA DI FECI ED URINE</td>
                     <td>
-                        <select matNativeControl required class="custom-select" [(ngModel)]="data.E">
+                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.E">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Controlla completamente feci e urine: 1</option>
                           <option value="2-0">“Incidenti” occasionali: 0</option>
@@ -95,10 +95,10 @@
                   <tr>
                     <td>F) ALIMENTAZIONE</td>
                     <td>
-                        <select matNativeControl required class="custom-select" [(ngModel)]="data.F">
+                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)" [(ngModel)]="data.F">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Senza assistenza: 1</option>
-                          <option value="2-0">Assistenza solo per tagliare la carne o imburrare il pane: 1</option>
+                          <option value="2-1">Assistenza solo per tagliare la carne o imburrare il pane: 1</option>
                           <option value="3-0">Richiede assistenza per portare il cibo alla bocca o viene nutrito parzialmente o
                             completamente per via parenterale: 0
                             </option>

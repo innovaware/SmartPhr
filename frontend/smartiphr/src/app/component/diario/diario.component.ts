@@ -5,7 +5,9 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogDiarioComponent } from "src/app/dialogs/dialog-diario/dialog-diario.component";
 import { Diario } from "src/app/models/diario";
 import { SchedaDiario } from "src/app/models/SchedaDiario";

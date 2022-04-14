@@ -16,15 +16,14 @@ export class CartellaEducativaService {
         .get<DiarioEducativo[]>(`${this.api}/api/diarioEducativo/${id}`)
         .toPromise();
     }
-  
+
     saveDiario(data: DiarioEducativo): Promise<DiarioEducativo> {
       var body = data;
-      console.log("body: ", body);
       return this.http
         .put<DiarioEducativo>(this.api + "/api/diarioEducativo/" + data._id, body)
         .toPromise();
     }
-  
+
     insertDiario(data: DiarioEducativo): Promise<DiarioEducativo> {
       var body = data;
       return this.http

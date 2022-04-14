@@ -5,13 +5,9 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Subject } from 'rxjs';
 import { CartellaClinica } from "src/app/models/cartellaClinica";
 import { Documento } from "src/app/models/documento";
@@ -19,6 +15,8 @@ import { DocumentoPaziente } from "src/app/models/documentoPaziente";
 import { Paziente } from "src/app/models/paziente";
 import { schedaAnamnesiFamigliare } from "src/app/models/schedaAnamnesiFamigliare";
 import { schedaAnamnesiPatologica } from "src/app/models/schedaAnamnesiPatologica";
+import { schedaDecessoOspite } from "src/app/models/schedaDecessoOspite";
+import { schedaDimissioneOspite } from "src/app/models/schedaDimissioneOspite";
 import { schedaEsameGenerale } from "src/app/models/schedaEsameGenerale";
 import { schedaEsameNeurologia } from "src/app/models/schedaEsameNeurologia";
 import { schedaMezziContenzione } from "src/app/models/schedaMezziContenzione";
@@ -43,6 +41,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
   schedaMezziContenzione: schedaMezziContenzione;
   schedaValutazioneTecniche: schedaValutazioneTecniche;
 
+
+  schedaDimissioneOspite: schedaDimissioneOspite;
+  schedaDecessoOspite: schedaDecessoOspite;
+
+
   public newItem: boolean;
   public document: any[] = [];
   public uploading: boolean;
@@ -55,7 +58,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   paziente: Paziente;
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  @ViewChild("paginatorPianiTerapeutici", {static: false})
+  @ViewChild("paginatorPianiTerapeutici",{static: false})
   PianiTerapeuticiPaginator: MatPaginator;
   public nuovoPianoTerapeutico: DocumentoPaziente;
   public pianiTerapeuticiDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -63,7 +66,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingPianoTerapeutico: boolean;
   public addingPianoTerapeutico: boolean;
 
-  @ViewChild("paginatorRefertiEsamiStrumentali", {static: false})
+  @ViewChild("paginatorRefertiEsamiStrumentali",{static: false})
   RefertiEsamiStrumentaliPaginator: MatPaginator;
   public nuovoRefertoEsameStrumentale: DocumentoPaziente;
   public refertiEsamiStrumentaliDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -71,7 +74,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRefertoEsameStrumentale: boolean;
   public addingRefertoEsameStrumentale: boolean;
 
-  @ViewChild("paginatorRefertiEsamiEmatochimici", {static: false})
+  @ViewChild("paginatorRefertiEsamiEmatochimici",{static: false})
   RefertiEsamiEmatochimiciPaginator: MatPaginator;
   public nuovoRefertoEsameEmatochimico: DocumentoPaziente;
   public refertiEsamiEmatochimiciDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -79,7 +82,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRefertoEsameEmatochimico: boolean;
   public addingRefertoEsameEmatochimico: boolean;
 
-  @ViewChild("paginatorVerbali", {static: false})
+  @ViewChild("paginatorVerbali",{static: false})
   VerbaliPaginator: MatPaginator;
   public nuovoVerbale: DocumentoPaziente;
   public VerbaliDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -87,7 +90,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingVerbale: boolean;
   public addingVerbale: boolean;
 
-  @ViewChild("paginatorRelazioni", {static: false})
+  @ViewChild("paginatorRelazioni",{static: false})
   RelazioniPaginator: MatPaginator;
   public nuovoRelazione: DocumentoPaziente;
   public relazioniDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -95,7 +98,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
   public uploadingRelazione: boolean;
   public addingRelazione: boolean;
 
-  @ViewChild("paginatorImpegnative", {static: false})
+  @ViewChild("paginatorImpegnative",{static: false})
   ImpegnativePaginator: MatPaginator;
   public nuovoImpegnativa: DocumentoPaziente;
   public impegnativeDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -114,10 +117,11 @@ export class DialogCartellaClinicaComponent implements OnInit {
     public data: {
       paziente: Paziente;
       readonly: boolean;
+      altro: boolean
     }
   ) {
     console.log("Dialog Cartella Clinica");
-
+console.log('altro: ' + this.data.altro);
     this.paziente = Paziente.clone(data.paziente);
 
     if (this.paziente.schedaClinica == undefined) {
@@ -148,6 +152,15 @@ export class DialogCartellaClinicaComponent implements OnInit {
       this.paziente.schedaClinica.schedaValutazioneTecniche = new schedaValutazioneTecniche();
     }
 
+
+    if (this.paziente.schedaClinica.schedaDimissioneOspite == undefined) {
+      this.paziente.schedaClinica.schedaDimissioneOspite = new schedaDimissioneOspite();
+    }
+
+    if (this.paziente.schedaClinica.schedaDecessoOspite == undefined) {
+      this.paziente.schedaClinica.schedaDecessoOspite = new schedaDecessoOspite();
+    }
+
     this.schedaAnamnesiFamigliare = this.paziente.schedaClinica
       .schedaAnamnesiFamigliare as schedaAnamnesiFamigliare;
     this.schedaAnamnesiPatologica = this.paziente.schedaClinica
@@ -160,6 +173,13 @@ export class DialogCartellaClinicaComponent implements OnInit {
       .schedaMezziContenzione as schedaMezziContenzione;
     this.schedaValutazioneTecniche = this.paziente.schedaClinica
       .schedaValutazioneTecniche as schedaValutazioneTecniche;
+
+      this.schedaDecessoOspite = this.paziente.schedaClinica
+      .schedaDecessoOspite as schedaDecessoOspite;
+    this.schedaDimissioneOspite = this.paziente.schedaClinica
+      .schedaDimissioneOspite as schedaDimissioneOspite;
+
+
   }
 
   ngOnInit() {
@@ -170,6 +190,7 @@ export class DialogCartellaClinicaComponent implements OnInit {
     this.getRelazioni();
     this.getVerbali();
     this.getImpegnative();
+
   }
 
   async showDocument(doc: DocumentoPaziente) {

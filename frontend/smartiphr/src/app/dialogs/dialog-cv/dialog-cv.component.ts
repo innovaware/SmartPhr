@@ -1,10 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Curriculum } from "src/app/models/curriculum";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { CurriculumService } from "src/app/service/curriculum.service";
