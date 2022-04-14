@@ -24,7 +24,7 @@ import { Dipendenti } from 'src/app/models/dipendenti';
 export class DialogArmadioComponent implements OnInit {
 
 
-  @ViewChild("paginatorElementoArmadio",{static: false})
+  @ViewChild("paginatorElementoArmadio", {static: false})
   ElementoArmadioPaginator: MatPaginator;
   public nuovoElementoArmadio: Armadio;
   public ElementiArmadioDataSource: MatTableDataSource<Armadio>;
@@ -32,7 +32,7 @@ export class DialogArmadioComponent implements OnInit {
   public uploadingElementoArmadio: boolean;
   public addingElementoArmadio: boolean;
 
-  @ViewChild("paginatorAttArmadio",{static: false})
+  @ViewChild("paginatorAttArmadio", {static: false})
   AttArmadioPaginator: MatPaginator;
   public AttArmadioDataSource: MatTableDataSource<Armadio>;
   public attArmadio: Armadio[] = [];

@@ -31,7 +31,7 @@ export class DimissioniComponent implements OnInit {
   public uploadingDocDimissione: boolean;
   public addingDocDimissione: boolean;
 
-  constructor(    
+  constructor(
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,

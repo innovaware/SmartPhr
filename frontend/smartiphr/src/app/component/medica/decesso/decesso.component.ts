@@ -30,8 +30,8 @@ export class DecessoComponent implements OnInit {
   public uploadingDocDecesso: boolean;
   public addingDocDecesso: boolean;
 
-  
-  constructor(    
+
+  constructor(
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,

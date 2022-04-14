@@ -28,7 +28,7 @@ export class GeneralePersonaleComponent implements OnInit {
 
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  @ViewChild("paginatorDocIdent",{static: false})
+  @ViewChild("paginatorDocIdent", {static: false})
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -36,7 +36,7 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorDiploma",{static: false})
+  @ViewChild("paginatorDiploma", {static: false})
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -44,7 +44,7 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-  @ViewChild("paginatorAttestatiECM",{static: false})
+  @ViewChild("paginatorAttestatiECM", {static: false})
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
