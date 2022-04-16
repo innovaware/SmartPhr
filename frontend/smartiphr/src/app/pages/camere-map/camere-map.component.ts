@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { ActivatedRoute, ParamMap } from "@angular/router";
+import { ActivatedRoute } from "@angular/router";
 
 import { Observable } from "rxjs";
 import { Camere } from "src/app/models/camere";
@@ -44,6 +44,8 @@ export class CamereMapComponent implements OnInit {
 
   func: any;
   isSanificazione: boolean = false;
+  isArmadi: boolean = false;
+  isLetti: boolean = false;
 
   constructor(
     private mapService: MapService,
@@ -57,9 +59,14 @@ export class CamereMapComponent implements OnInit {
             this.func = this._getColorSanificataCameraImpl;
             this.isSanificazione = true;
             break;
+          case 'armadi':
+            this.func = this._getColorArmadiCameraImpl;
+            this.isArmadi = true;
+            break;
           case 'libera':
           default:
             this.func = this._getColorLiberaCameraImpl;
+            this.isLetti = true;
             break;
         }
       });
@@ -132,6 +139,26 @@ export class CamereMapComponent implements OnInit {
         color: colorRGB(), //RGBA
       }));
   }
+
+  _getColorArmadiCameraImpl(camera: Camere, text: Text, cameraStyle: Style) {
+    const colorRGB = () => {
+      if (camera.armadioCheck === 2) return [0, 255 ,0, 0.3] as Color;
+      if (camera.armadioCheck === 1) return [0, 128, 0, 0.3] as Color;
+
+      return [255, 0 ,0, 0.3] as Color;
+    };
+
+    text.setText(`${camera.camera}`);
+    text.getFill().setColor([0, 0, 0, 1] as Color);
+    cameraStyle.setText(text);
+
+
+    cameraStyle.setFill(
+      new Fill({
+        color: colorRGB(), //RGBA
+      }));
+  }
+
 
   addLayer(camera: Camere) {
     const vectorSource = new VectorSource({

@@ -19,6 +19,11 @@ export class Camere {
     dst.dataSanificazione = src.dataSanificazione;
     dst.firmaSanificazione = src.firmaSanificazione;
     dst.userSanificazione = src.userSanificazione;
+
+    dst.armadioCheck = src.armadioCheck;
+    dst.dataArmadioCheck = src.dataArmadioCheck;
+    dst.firmaArmadio = src.firmaArmadio;
+    dst.userArmadio = src.userArmadio;
   }
 
   _id?: string;
@@ -30,10 +35,16 @@ export class Camere {
   order: number;
   numPostiLiberi: number;
   numMaxPosti: number;
+
   sanificata?: boolean; // True Sanificata; False Non Sanificata
   dataSanificazione?: Date;
   firmaSanificazione?: string;
   userSanificazione?: User;
+
+  armadioCheck?: number; // 0 non controllato, 1: parziale; 2 Controllato
+  dataArmadioCheck?: Date;
+  firmaArmadio?: string;
+  userArmadio?: User;
 
   constructor() {
     const empty = {

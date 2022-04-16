@@ -1,0 +1,58 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">AREA Armadi</h1>
+    </div>
+  </div>
+
+  <hr />
+
+
+  <div class="row">
+    <div class="col">
+      <table mat-table [dataSource]="dataSourceCamere" class="mat-elevation-z8">
+
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row">
+            <div class="right">
+              <img src="../../../assets/wardrobe.svg"  matTooltip="Verifica contentuto armadio" (click)="verifica(row)">
+            </div>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="camera">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let element"> {{element.camera}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="armadioCheck">
+          <th mat-header-cell *matHeaderCellDef> Stato </th>
+          <td mat-cell *matCellDef="let element" [ngStyle]="{'color':
+          element.armadioCheck === 1 ? 'rgb(147 61 0)' :
+            element.armadioCheck === 2 ? 'rgb(0 96 0)': 'rgb(179 0 0)'}"> {{element.armadioCheck | armadiChecker}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataArmadioCheck">
+          <th mat-header-cell *matHeaderCellDef> Data </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataArmadioCheck | date: 'dd/MM/yyyy':'UTC'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="firmaArmadio">
+          <th mat-header-cell *matHeaderCellDef> Firma </th>
+          <td mat-cell *matCellDef="let element"> {{element.userArmadio?.username}} </td>
+        </ng-container>
+
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
+
+
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
+
+  </div>
+
+</div>

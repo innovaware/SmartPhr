@@ -174,7 +174,6 @@ import { EsamiPrivacyPersonaleComponent } from './pages/esami-privacy-personale/
 import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
 import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/ferie-altro-personale.component';
 import { DebugComponent } from './component/debug/debug.component';
-import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
 import { AreaOssComponent } from './pages/area-oss/area-oss.component';
 import { DialogPreIngressoComponent } from './dialogs/dialog-pre-ingresso/dialog-pre-ingresso.component';
@@ -185,13 +184,17 @@ import { CamereComponent } from './pages/camere/camere.component';
 import { AttivitaOssComponent } from './pages/attivita-oss/attivita-oss.component';
 import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/registro-controlli-oss.component';
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
-import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { CamereMapComponent } from './pages/camere-map/camere-map.component';
 import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
-import { SanificatePipe } from "./pipe/sanificate.pipe";
 import { SanificazioneRegistroComponent } from './pages/sanificazione-registro/sanificazione-registro.component';
+import { ArmadiListComponent } from './pages/armadi-list/armadi-list.component';
+
+import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
+import { SanificatePipe } from "./pipe/sanificate.pipe";
+import { ArmadiCheckerPipe } from "./pipe/armadiChecker";
+import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 
 const materialModules = [
   MatTableModule,
@@ -264,7 +267,8 @@ const dialogModule = [
 const pipes = [
   PrettyprintPipe,
   TranslatePianoPipe,
-  SanificatePipe
+  SanificatePipe,
+  ArmadiCheckerPipe,
 ];
 @NgModule({
   declarations: [
@@ -378,6 +382,7 @@ const pipes = [
     CamereMapComponent,
     SanificazioneListComponent,
     SanificazioneRegistroComponent,
+    ArmadiListComponent,
   ],
   imports: [
     ...materialModules,

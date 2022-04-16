@@ -9,9 +9,15 @@ const CameraSchema = mongoose.Schema({
   order: Number,
   numPostiLiberi: Number,
   numMaxPosti: Number,
+
   sanificata: Boolean,
   dataSanificazione: Date,
   firmaSanificazione: ObjectId,
+
+  armadioCheck: Boolean,
+  dataArmadioCheck: Date,
+  firmaArmadio: ObjectId,
+
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");

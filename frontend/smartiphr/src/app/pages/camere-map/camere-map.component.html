@@ -1,11 +1,13 @@
 <div class="containter pad">
   <div class="row">
     <div class="col">
-      <h1 class="title">AREA CAMERE</h1>
+      <h1 class="title" *ngIf="isLetti">AREA CAMERE - Letti</h1>
+      <h1 class="title" *ngIf="isSanificazione">AREA CAMERE - Sanificazione</h1>
+      <h1 class="title" *ngIf="isArmadi">AREA CAMERE - Armadi</h1>
     </div>
 
     <div class="col middle">
-      <div class="row" *ngIf="!isSanificazione">
+      <div class="row" *ngIf="isLetti">
         <div class="red"></div> Occupati
         <div class="green"></div> Liberi
         <div class="gray"></div> Nessun Paziente
@@ -14,6 +16,12 @@
       <div class="row" *ngIf="isSanificazione">
         <div class="red"></div> Non Sanificata
         <div class="green"></div> Sanificata
+      </div>
+
+      <div class="didascalia" *ngIf="isArmadi">
+        <div style="padding-right:20px"><div class="red"></div> <span>Non Verificato</span></div>
+        <div style="padding-right:20px"><div class="orange"></div> <span>Parzialmente</span></div>
+        <div style="padding-right:20px"><div class="green"></div> <span>Verificato</span></div>
       </div>
 
     </div>

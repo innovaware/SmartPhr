@@ -14,67 +14,9 @@ export class ArmadioService {
   constructor(private http: HttpClient) {}
 
 
-  async getAll(): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/", { headers })
-      .toPromise();
+  getIndumenti(idCamera: string): Observable<Armadio[]> {
+    const headers = {}
+    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/${idCamera}`, { headers });
   }
 
-
-  async getElementiByPaziente(id): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/paziente/" + id, { headers })
-      .toPromise();
-  }
-
-
-
-  async getAllAttivita(): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/attivita", { headers })
-      .toPromise();
-  }
-
-
-  async getAttivitaByPaziente(id): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/attivitapaziente/" + id, { headers })
-      .toPromise();
-  }
-
-
-  async insert(armadio: Armadio) {
-    var body = armadio;
-    return this.http.post(this.api + "/api/armadio", body).toPromise();
-  }
-
-
-  async update(armadio: Armadio) {
-    var body = armadio;
-    return this.http.put(this.api + "/api/armadio/" + armadio._id, body).toPromise();
-  }
 }

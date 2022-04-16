@@ -1,64 +1,71 @@
-.example-card {
-    min-width: 500px;
-    margin: 0px;
-  }
-  
-  
-  h3 {
-    margin-top: 5px;
-    font-weight: 600;
-    font-size: 16px;
-    color: #676a6c;
-  }
-  
-  .close-button{
-    font-size: 1.5rem;
-    font-weight: 700;
-    line-height: 1;
-    color: #000;
-    text-shadow: 0 1px 0 #fff;
-    opacity: .5;
-    background: transparent;
-    border: transparent;
-  
-    float: right;
-    top:-24px;
-    right:-24px;
-  }
-  
-  .close-icon {
-    transition: 1s ease-in-out;
-  }
-  
-  .close-icon:hover {
-    transform: rotate(180deg);
-  }
-  
-  ::ng-deep .icon-outside .close-button{
-    float: right;
-    top:-52px;
-    right:-52px;
-  }
-  
-  ::ng-deep .icon-outside .mat-dialog-container {
-   overflow: unset
-  }
-  
-  button, select {
-    text-transform: none;
-  }
-  
-  .bottom-actions {
-    width: 100%;
-    text-align: right;
-  }
-  
-  #table{
-    margin-left: 30%;
-  }
-  #table tr{
-    border: 1px solid gainsboro;
-  }
-  #table tr td{
-    padding: 10px;
-  }
+h3 {
+  margin-top: 5px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #676a6c;
+}
+
+.close-button {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  background: transparent;
+  border: transparent;
+
+  float: right;
+  top: -24px;
+  right: -24px;
+}
+
+.close-icon {
+  transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+}
+
+::ng-deep .icon-outside .close-button {
+  float: right;
+  top: -52px;
+  right: -52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+  overflow: unset;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+.bottom-actions {
+  width: 100%;
+  text-align: right;
+}
+
+
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+table {
+  width: 100%;
+}
+
+img {
+  width: 24px;
+  height: 24px;
+  margin-right: 15px;
+}

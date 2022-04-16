@@ -56,6 +56,10 @@ router.put("/:id", async (req, res) => {
           sanificata: req.body.sanificata,
           dataSanificazione: req.body.dataSanificazione,
           firmaSanificazione: req.body.firmaSanificazione,
+
+          armadioCheck: req.body.armadioCheck,
+          dataArmadioCheck: req.body.dataArmadioCheck,
+          firmaArmadio: req.body.firmaArmadio,
         },
       }
     );
@@ -91,6 +95,10 @@ router.post("/", async (req, res) => {
       sanificata: req.body.sanificata,
       dataSanificazione: req.body.dataSanificazione,
       firmaSanificazione: req.body.firmaSanificazione,
+
+      armadioCheck: req.body.armadioCheck,
+      dataArmadioCheck: req.body.dataArmadioCheck,
+      firmaArmadio: req.body.firmaArmadio,
     });
 
     // Salva i dati sul mongodb
@@ -127,9 +135,14 @@ router.put("/sanifica/:id", async (req, res) => {
           order: req.body.order,
           numPostiLiberi: req.body.numPostiLiberi,
           numMaxPosti: req.body.numMaxPosti,
+
           sanificata: req.body.sanificata,
           dataSanificazione: req.body.dataSanificazione,
           firmaSanificazione: req.body.firmaSanificazione,
+
+          armadioCheck: req.body.armadioCheck,
+          dataArmadioCheck: req.body.dataArmadioCheck,
+          firmaArmadio: req.body.firmaArmadio
         },
       }
     );
