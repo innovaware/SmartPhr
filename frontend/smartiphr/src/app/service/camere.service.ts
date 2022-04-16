@@ -27,6 +27,11 @@ export class CamereService {
     return this.http.put<Camere>(`${this.api}/api/camera/${camera._id}`, camera);
   }
 
+  sanifica(camera: Camere) {
+    camera.geometry = JSON.stringify(camera.geometryObject);
+    return this.http.put<Camere>(`${this.api}/api/camera/sanifica/${camera._id}`, camera);
+  }
+
   add(camera: Camere) {
     camera.geometry = JSON.stringify(camera.geometryObject);
     return this.http.post<Camere>(`${this.api}/api/camera`, camera);

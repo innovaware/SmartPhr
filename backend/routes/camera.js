@@ -1,5 +1,6 @@
 const express = require("express");
 const Camere = require("../models/camere");
+const registroSanificazione = require("../models/registroSanificazione");
 
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
@@ -35,38 +36,6 @@ router.get("/:id", async (req, res) => {
   
   } catch (err) {
     res.status(500).json({ Error: err });
-  }
-});
-
-router.post("/", async (req, res) => {
-  try {
-    const camera = new Camere({
-      camera: req.body.camera,
-      piano: req.body.piano,
-      geometry: req.body.geometry,
-      forPatient: req.body.forPatient,
-      order: req.body.order,
-      numPostiLiberi: req.body.numPostiLiberi,
-      numMaxPosti: req.body.numPostiLiberi,
-      sanificata: req.body.sanificata,
-      dataSanificazione: req.body.dataSanificazione,
-      firmaSanificazione: req.body.firmaSanificazione,
-    });
-
-    const result = await camera.save();
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = "CAMEREALL*";
-      redisClient.del(searchTerm);
-    }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
   }
 });
 
@@ -109,8 +78,6 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// http://[HOST]:[PORT]/api/cambiturno (POST)
-// INSERT permessi su DB
 router.post("/", async (req, res) => {
   try {
     const camera = new Camere({
@@ -145,6 +112,53 @@ router.post("/", async (req, res) => {
 });
 
 
+router.put("/sanifica/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    console.log("Sanificazione CAMERA", id);
+    const camera = await Camere.updateOne(
+      { _id: id },
+      {
+        $set: {
+          camera: req.body.camera,
+          piano: req.body.piano,
+          geometry: req.body.geometry,
+          forPatient: req.body.forPatient,
+          order: req.body.order,
+          numPostiLiberi: req.body.numPostiLiberi,
+          numMaxPosti: req.body.numMaxPosti,
+          sanificata: req.body.sanificata,
+          dataSanificazione: req.body.dataSanificazione,
+          firmaSanificazione: req.body.firmaSanificazione,
+        },
+      }
+    );
+
+    new registroSanificazione({
+      cameraId: id,
+      stato: req.body.sanificata,
+      data: req.body.dataSanificazione,
+      note: req.body.note,
+      firma: req.body.firmaSanificazione
+    }).save();
+
+    //console.log("Update Camera req.body:", req.body);
+    // console.log("Update Camera:", camera);
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = "CAMEREALL*";
+      redisClient.del(searchTerm);
+    }
+    
+
+    res.status(200);
+    res.json(camera);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 router.delete("/:id", async (req, res) => {
   try {

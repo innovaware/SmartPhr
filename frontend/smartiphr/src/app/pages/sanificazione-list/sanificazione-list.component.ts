@@ -82,7 +82,7 @@ export class SanificazioneListComponent implements OnInit {
             camera.firmaSanificazione = camera.userSanificazione._id;
 
             console.log("Sanifica camera: ", camera);
-            this.camereService.update(camera).subscribe( c=> {
+            this.camereService.sanifica(camera).subscribe( c=> {
               console.log("Camera sanificata");
               this.refresh();
             });

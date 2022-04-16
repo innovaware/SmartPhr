@@ -446,18 +446,21 @@ const InitApiFunctions = () => {
   routesList.push(apiArmadio);
 
 
-    // Attivita e elementi armadio API
-    var controlliOSSRouter = require("./routes/controlliOSS");
-    var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
-    app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
-    routesList.push(apicontrolliOSS);
+  // Attivita e elementi armadio API
+  var controlliOSSRouter = require("./routes/controlliOSS");
+  var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
+  app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
+  routesList.push(apicontrolliOSS);
 
-
-      
   var CameraRouter = require("./routes/camera");
   var apiCamera = { key: 'camere', path: '/api/camera' }
   app.use( apiCamera.path, logHandler, authorizationHandler, roleHandler, CameraRouter );
   routesList.push(apiCamera);
+
+  var SanificazioneRouter = require("./routes/sanificazione");
+  var apiSanificazione = { key: 'sanificazione', path: '/api/sanificazione' }
+  app.use( apiSanificazione.path, logHandler, authorizationHandler, roleHandler, SanificazioneRouter );
+  routesList.push(apiSanificazione);
       
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
