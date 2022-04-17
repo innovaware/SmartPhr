@@ -9,9 +9,25 @@ router.get("/piano/:p", async (req, res) => {
   const { p } = req.params;
   try {
     const getData = () => {
-      const query = {piano: p}
+      //const query = {piano: p}
+
+      const query = [
+        {
+          '$match': {
+            'piano': p
+          }
+        }, {
+          '$lookup': {
+            'from': 'user', 
+            'localField': 'firmaArmadio', 
+            'foreignField': '_id', 
+            'as': 'firmaArmadio'
+          }
+        }
+      ];
       // console.log("Query by piano: ", query);
-      return Camere.find(query);
+      return Camere.aggregate(query);
+      // return Camere.find(query);
     };
 
     const camere = await getData();

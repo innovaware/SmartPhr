@@ -195,6 +195,7 @@ import { TranslatePianoPipe } from "./pipe/translatePiano.pipe";
 import { SanificatePipe } from "./pipe/sanificate.pipe";
 import { ArmadiCheckerPipe } from "./pipe/armadiChecker";
 import { PrettyprintPipe } from './pipe/prettyprint.pipe';
+import { CastingVerificaPipe } from "./pipe/castingVerifica";
 
 const materialModules = [
   MatTableModule,
@@ -269,6 +270,7 @@ const pipes = [
   TranslatePianoPipe,
   SanificatePipe,
   ArmadiCheckerPipe,
+  CastingVerificaPipe,
 ];
 @NgModule({
   declarations: [

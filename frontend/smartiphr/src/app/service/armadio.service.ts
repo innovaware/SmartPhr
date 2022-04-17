@@ -14,9 +14,12 @@ export class ArmadioService {
   constructor(private http: HttpClient) {}
 
 
-  getIndumenti(idCamera: string): Observable<Armadio[]> {
+  getIndumenti(idCamera: string, date: Date): Observable<Armadio[]> {
     const headers = {}
-    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/${idCamera}`, { headers });
+    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/${idCamera}?date=${date.toISOString()}`, { headers });
   }
 
+  update(armadio: Armadio) {
+    return this.http.put(`${this.api}/api/armadio/${armadio._id}`, {armadio: armadio});
+  }
 }

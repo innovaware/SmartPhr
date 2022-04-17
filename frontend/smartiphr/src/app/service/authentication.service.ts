@@ -28,11 +28,16 @@ export class AuthenticationService {
     });
   }
 
+  getCurrentUser() {
+    return this.currentUser;
+  }
+
   load() {
     this.currentUser = JSON.parse(
       localStorage.getItem(AuthenticationService.KEY_CURRENTUSER)
     );
   }
+
 
   refresh() {
     if (this.currentUser === undefined || this.currentUser === null) {

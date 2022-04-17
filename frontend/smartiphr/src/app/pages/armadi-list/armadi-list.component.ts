@@ -44,23 +44,21 @@ export class ArmadiListComponent implements OnInit {
   refresh() {
     this.camereService.getByPiano(this.piano)
     .pipe(
-      map( (x: Camere[])=>
+      map( (x: any[])=>
           x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order)),
-      map( (x: Camere[])=>
+      map( (x: any[])=>
           x.map( c => {
             return {
               ...c,
+              firmaArmadio: c.firmaArmadio.length >0 ? c.firmaArmadio[0]._id : undefined,
+              userArmadio: c.firmaArmadio.length >0 ? c.firmaArmadio[0] : undefined,
               geometryObject: JSON.parse(c.geometry)
             };
           })),
     )
     .subscribe(
       (camere: Camere[]) => {
-        camere.forEach(async (c: Camere)=> {
-          if (c.firmaArmadio !== undefined) {
-            c.userSanificazione = await this.userService.getById(c.firmaArmadio);
-          }
-        });
+        console.log("camere:", camere);
 
         this.dataSourceCamere = new MatTableDataSource<Camere>(camere);
         this.dataSourceCamere.paginator = this.paginator;
@@ -75,11 +73,14 @@ export class ArmadiListComponent implements OnInit {
   }
 
   verifica(camera: Camere) {
-    console.log("Verifica armadio:", camera);
     this.dialog.open(DialogArmadioComponent, {
       data: { camera: camera },
       width: "1024px",
-    })
+      height: "800px"
+    }).afterClosed().subscribe(
+      result => {
+        this.refresh();
+    });
   }
 
 }

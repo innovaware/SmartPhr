@@ -2,6 +2,7 @@ const { ObjectId } = require("bson");
 const express = require("express");
 const router = express.Router();
 const Armadio = require("../models/armadio");
+const Camere = require("../models/camere");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 
@@ -49,42 +50,63 @@ router.get("/", async (req, res) => {
 
 router.get("/camera/:id", async (req, res) => {
   const { id } = req.params;
+  let dateRif = req.query.date;
+
   try {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
-    // new Armadio({
-    //   idCamera: new ObjectId("62337ac07ec5d255b8cb19be"),
-    //   indumento: {
-    //     idPaziente: new ObjectId("6172d8631340fec684deea28"),
-    //     nome: "Calzini",
-    //     quantita: 1,
-    //     note: "",
-    //   },
-    //   lastChecked: {
-    //     idUser: new ObjectId("62262a3e4a682930a8f3ee4e"),
-    //     data: new Date(),
-    //   }
-    // }).save()
-    // console.log("Save Armadio");
+    //new Armadio({
+    //  idCamera: new ObjectId("6233776e7ec5d255b8cb1919"),
+    //  contenuto: [
+    //    {
+    //      idPaziente: new ObjectId("6172d8631340fec684deea28"),
+    //      items: [
+    //        {
+    //          nome: "Calzini",
+    //          quantita: 1,
+    //          note: "Calzini di notte",
+    //        }
+    //      ]
+    //    },
+    //    {
+    //      idPaziente: new ObjectId("61815ef594bb265624eddb78"),
+    //      items: [
+    //        {
+    //          nome: "Pantaloni",
+    //          quantita: 1,
+    //          note: "Pantaloni neri",
+    //        }
+    //      ]
+    //    }
+    //  ],
+    //  lastChecked: {
+    //    idUser: new ObjectId("62262a3e4a682930a8f3ee4e"),
+    //    data: new Date(),
+    //  }
+    //}).save()
+    //console.log("Save Armadio");
 
     const getData = () => {
       const query = [
         {
           '$match': {
-            'idCamera': ObjectId(id)
+            'idCamera': ObjectId(id),
+            'dateStartRif': {$lte: new Date(dateRif.toString())},
+            'dateEndRif': {$gte: new Date(dateRif.toString())}
           }
         }, {
           '$lookup': {
             'from': 'pazienti', 
-            'localField': 'indumento.idPaziente', 
+            'localField': 'contenuto.idPaziente', 
             'foreignField': '_id', 
-            'as': 'indumento.paziente'
+            'as': 'pazienti'
           }
         }
       ];
 
-      console.log("Armadi query:", query);
+      // console.log("Armadi query:", query);
+      // console.log("Armadi dateRif:", dateRif);
       return Armadio.aggregate(query);
     };
 
@@ -151,6 +173,56 @@ router.get("/:id", async (req, res) => {
   }
 });
 
+
+router.put("/:id", async (req, res) => {
+  try {
+    const { id } = req.params;   
+    
+    const armadio = await Armadio.updateOne(
+      { _id: id },
+      {
+        $set: req.body.armadio,
+      }
+    );
+
+    // const idCamera = req.body.armadio.idCamera;
+    var checked = 0;
+    switch(req.body.armadio.rateVerifica) {
+      case 0: 
+        checked = 0;
+        break;
+      case 100: 
+        checked = 2;
+        break;
+      default:
+        checked = 1;
+    } 
+
+    await Camere.updateOne(
+      { _id: req.body.armadio.idCamera },
+      {
+        $set: {
+          armadioCheck: checked,
+          dataArmadioCheck: req.body.armadio.lastChecked.data,
+          firmaArmadio: req.body.armadio.lastChecked.idUser,
+        },
+      }
+    );
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = `ARMADIO${id}`;
+      redisClient.del(searchTerm);
+    }
+
+    res.status(200);
+    res.json(armadio);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 // router.post("/", async (req, res) => {
 //   try {

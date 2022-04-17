@@ -69,3 +69,7 @@ img {
   height: 24px;
   margin-right: 15px;
 }
+
+.mat-dialog-title {
+  margin: unset;
+}

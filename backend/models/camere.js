@@ -14,7 +14,7 @@ const CameraSchema = mongoose.Schema({
   dataSanificazione: Date,
   firmaSanificazione: ObjectId,
 
-  armadioCheck: Boolean,
+  armadioCheck: Number,
   dataArmadioCheck: Date,
   firmaArmadio: ObjectId,
 
