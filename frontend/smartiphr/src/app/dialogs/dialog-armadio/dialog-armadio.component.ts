@@ -1,25 +1,16 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
 import { Armadio, Contenuto, Indumento } from 'src/app/models/armadio';
 import { Paziente } from 'src/app/models/paziente';
-import { DataIngressoService } from 'src/app/service/data-ingresso.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
-import { UploadService } from 'src/app/service/upload.service';
 import { ArmadioService } from 'src/app/service/armadio.service';
-import { ControlliOSS } from 'src/app/models/controlliOSS';
-import { ControlliOSSService } from 'src/app/service/controlli-oss.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
-import { User } from 'src/app/models/user';
-import { DipendentiService } from 'src/app/service/dipendenti.service';
-import { Dipendenti } from 'src/app/models/dipendenti';
 import { Camere } from 'src/app/models/camere';
-import { count, filter, map } from 'rxjs/operators';
+import { map } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
-import { resourceLimits } from 'worker_threads';
 
 
 export interface GroupBy {
