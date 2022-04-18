@@ -11,10 +11,21 @@ router.get("/", async (req, res) => {
     const mansioneRole = res.locals.auth.role;
 
     const getData = () => {
+      const query = { 
+        roles: { 
+          $all: [ObjectId(mansioneRole)] 
+        } 
+      };
+
+      console.log(query);
       // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
-      return Menu.find({ roles: { $all: [ObjectId(mansioneRole)] } });
+      return Menu.find(query);
     };
 
+    const eventi = await getData();
+    res.status(200).json(eventi);
+    return;
+    
     if (redisClient == undefined || redisDisabled) {
       const eventi = await getData();
       res.status(200).json(eventi);

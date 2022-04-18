@@ -14,12 +14,10 @@ import { Dipendenti } from "src/app/models/dipendenti";
 
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { UploadService } from "src/app/service/upload.service";
-import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { DocumentiService } from "src/app/service/documenti.service";
 import { DialogCaricadocumentoComponent } from "../dialog-caricadocumento/dialog-caricadocumento.component";
 import { MessagesService } from "src/app/service/messages.service";
 import { UsersService } from "src/app/service/users.service";
-import { User } from "src/app/models/user";
 import { Ferie } from "src/app/models/ferie";
 import { FerieService } from "src/app/service/ferie.service";
 import { PermessiService } from "src/app/service/permessi.service";
@@ -235,11 +233,25 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.email = this.dipendente.email;
 
     if (
-      this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome.length == 0 ||
-      this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome.length == 0 ||
-      this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf.length == 0
+      this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome === undefined ||
+      this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome === undefined ||
+      this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf === undefined
     ) {
-      alert("Alcuni campi obbligatori sono mancanti!");
+
+      var campi = "";
+      if (this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obblicatori !`);
       return;
     } else {
       if (saveAndClose) {
@@ -253,7 +265,7 @@ export class DialogDipendenteComponent implements OnInit {
             .then((x) => {
           //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
 
-     /*     var newUser : User = { 
+     /*     var newUser : User = {
             role:this.data.dipendente.mansione,
             active : false
          };
@@ -333,8 +345,9 @@ export class DialogDipendenteComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (nav && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
 
@@ -604,8 +617,9 @@ export class DialogDipendenteComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (nav && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
 
@@ -706,8 +720,9 @@ export class DialogDipendenteComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (nav && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
 
@@ -740,8 +755,9 @@ export class DialogDipendenteComponent implements OnInit {
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
+          const nav = window.navigator as any;
+          if (nav && nav.msSaveOrOpenBlob) {
+            nav.msSaveOrOpenBlob(newBlob);
             return;
           }
 

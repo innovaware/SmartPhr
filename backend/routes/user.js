@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const { ObjectId } = require("bson");
 
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
@@ -21,8 +22,27 @@ router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    var query = { idUser: mongoose.Types.ObjectId(id) };
-    const dipendenti = await Dipendenti.find(query);
+    // var query = { 
+    //   idUser: mongoose.Types.ObjectId(id) 
+    // };
+    // const dipendenti = await Dipendenti.find(query);
+
+    const query = [
+      {
+        '$match': {
+          'idUser': new ObjectId(id)
+        }
+      }, {
+        '$lookup': {
+          'from': 'mansioni', 
+          'localField': 'mansione', 
+          'foreignField': '_id', 
+          'as': 'mansione'
+        }
+      }
+    ];
+
+    const dipendenti = await Dipendenti.aggregate(query);
 
     res.status(200).json(dipendenti);
   } catch (err) {

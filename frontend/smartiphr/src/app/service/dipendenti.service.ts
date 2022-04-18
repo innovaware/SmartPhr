@@ -28,14 +28,14 @@ export class DipendentiService {
   }
 
   save(data: Dipendenti): Promise<Dipendenti> {
-    var body = data;
+    var body = {dipendente: data };
     return this.http
       .put<Dipendenti>(this.api + "/api/dipendenti/" + data._id, body)
       .toPromise();
   }
 
   insert(data: Dipendenti): Promise<Dipendenti> {
-    var body = data;
+    var body = {dipendente: data };
     return this.http
       .post<Dipendenti>(this.api + "/api/dipendenti", body)
       .toPromise();
