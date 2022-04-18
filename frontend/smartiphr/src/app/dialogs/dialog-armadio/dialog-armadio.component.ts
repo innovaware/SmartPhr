@@ -8,14 +8,13 @@ import { PazienteService } from 'src/app/service/paziente.service';
 import { ArmadioService } from 'src/app/service/armadio.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { Camere } from 'src/app/models/camere';
-import { map } from 'rxjs/operators';
+import { flatMap, map, mergeMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
 
 
-export interface GroupBy {
-  initial: string;
-  isGroupBy: boolean;
+export interface Content {
+  indumento: Indumento;
   paziente: Paziente;
 }
 
@@ -34,6 +33,8 @@ export class DialogArmadioComponent implements OnInit {
     "nome",
     "quantita",
     "note",
+    "paziente",
+    "action",
   ];
 
   displayedColumnsIndumentiByPatient: string[] = [
@@ -45,7 +46,7 @@ export class DialogArmadioComponent implements OnInit {
   currentArmadio: Armadio;
 
   // dataSourceIndumenti: MatTableDataSource<Armadio | GroupBy>;
-  dataSourceIndumenti: Observable<(Indumento | GroupBy)[]>;
+  dataSourceIndumenti: Observable<Content[]>;
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
   //dataSourceIndumentiByPatient: MatTableDataSource<Armadio>;
@@ -86,11 +87,6 @@ export class DialogArmadioComponent implements OnInit {
   ngOnInit() {
   }
 
-  isGroup(index, item): boolean{
-    return item.isGroupBy;
-  }
-
-
   save(model: Armadio) {
     console.log("Insert ElementoArmadio: ", model);
     // this.armadioService
@@ -107,6 +103,36 @@ export class DialogArmadioComponent implements OnInit {
     //     console.error(err);
     //   });
   }
+
+  carico(item: Content) {
+    item.indumento.quantita = item.indumento.quantita + 1;
+    this.updateIndumenti(item);
+    this.loadIndumentiByPatient(this.selectedPatient);
+  }
+
+  scarico(item: Content) {
+    if (item.indumento.quantita - 1 >= 0) {
+      item.indumento.quantita = item.indumento.quantita - 1;
+      this.updateIndumenti(item);
+      this.loadIndumentiByPatient(this.selectedPatient);
+    }
+  }
+
+  updateIndumenti(item: Content) {
+    this.currentArmadio.contenuto.forEach(contenuto=> {
+      const indumento = contenuto.items.find(i=> item.indumento._id === i._id);
+
+      if (indumento !== undefined) {
+        indumento.quantita = item.indumento.quantita;
+      }
+    })
+
+    this.armadioService.update(this.currentArmadio)
+        .subscribe(result => {
+          //console.log("Update completed: ", result);
+        });
+  }
+
 
   loadPatients() {
     this.dataSourcePatients = this.dataSourceRequest.pipe(
@@ -140,22 +166,25 @@ export class DialogArmadioComponent implements OnInit {
           }
         })
       ),
-      map((armadi: Armadio[])=> {
-          const data: (Indumento | GroupBy)[] = [];
-          if (armadi.length === 0) return data;
+      mergeMap((armadi: Armadio[])=> {
+        return armadi.map((a: Armadio) => a.contenuto);
+      }),
+      map((contenuto: Contenuto[]) => {
 
-          const armadio = armadi[0];
-          armadio.contenuto.forEach(c=>{
-            const group: GroupBy = {
-              initial: c.idPaziente,
-              isGroupBy: true,
+        const data: Content[] = [];
+
+        contenuto.forEach(c=> {
+          c.items.forEach( i=> {
+            data. push({
+              indumento: i,
               paziente: c.paziente
-            };
-            data.push(group);
-            c.items.forEach(i=> data.push(i));
-          });
-          return data;
+            })
+          })
+        })
+
+        return data;
       })
+
     );
   }
 
@@ -199,9 +228,7 @@ export class DialogArmadioComponent implements OnInit {
     });
   }
 
-  changePatient(event: MatSelectChange) {
-    const patient: Paziente = event.value as Paziente;
-
+  loadIndumentiByPatient(patient: Paziente) {
     this.dataSourceIndumentiByPatient = this.dataSourceRequest.pipe(
       map((armadi: Armadio[])=> {
         if (armadi.length === 0) return [];
@@ -213,5 +240,10 @@ export class DialogArmadioComponent implements OnInit {
         const result: Indumento[] = contenuto.flatMap(i=> i.items);
         return result;
       }));
+  }
+
+  changePatient(event: MatSelectChange) {
+    const patient: Paziente = event.value as Paziente;
+    this.loadIndumentiByPatient(patient);
   }
 }

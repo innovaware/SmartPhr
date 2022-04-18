@@ -5,6 +5,7 @@ export interface Indumento {
   nome: string;
   quantita: number;
   note?: string;
+  _id?: string;
 }
 
 export interface Contenuto {

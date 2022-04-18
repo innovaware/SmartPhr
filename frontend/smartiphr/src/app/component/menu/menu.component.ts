@@ -50,8 +50,8 @@ export class MenuComponent implements OnInit {
             })
           )
           .subscribe((dipendente: Dipendenti[]) => {
-            console.log("Dipendente get Info", dipendente);
-            //TODO Ritornare la descrizione della mansione non l'ID
+            //console.log("Dipendente get Info", dipendente);
+
             if (dipendente.length === 1) {
               this.mansione = (dipendente[0].mansione as unknown as Mansione).descrizione;
             }

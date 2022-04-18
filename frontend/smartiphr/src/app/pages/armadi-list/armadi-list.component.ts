@@ -58,7 +58,7 @@ export class ArmadiListComponent implements OnInit {
     )
     .subscribe(
       (camere: Camere[]) => {
-        console.log("camere:", camere);
+        // console.log("camere:", camere);
 
         this.dataSourceCamere = new MatTableDataSource<Camere>(camere);
         this.dataSourceCamere.paginator = this.paginator;

@@ -48,7 +48,6 @@ select {
   text-align: right;
 }
 
-
 .pad {
   padding-left: 6%;
   padding-top: 3%;
@@ -72,4 +71,13 @@ img {
 
 .mat-dialog-title {
   margin: unset;
+}
+
+#btnVerifica
+button:not(:disabled) {
+
+  border: 1px solid #ff0000;
+  border-radius: 4px;
+  margin: 6px 0;
+  background: #ff8d00ad;
 }
