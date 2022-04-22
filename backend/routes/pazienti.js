@@ -167,6 +167,8 @@ router.get("/camera/:idCamera", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
+
+    console.log('schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSociale));
     const pazienti = new Pazienti({
       cognome: req.body.cognome,
       nome: req.body.nome,
@@ -233,7 +235,7 @@ router.put("/:id", async (req, res) => {
       res.status(404).json({ Error: "Id not defined" });
       return;
     }
-console.log('req.body.schedaClinica: ' + JSON.stringify(req.body.schedaClinica) );
+console.log('req.body.schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSociale) );
     const pazienti = await Pazienti.updateOne(
       { _id: id },
       {

@@ -1,6 +1,5 @@
 import { Component, Input, OnInit} from '@angular/core';
-import { schedaValutazioneTecniche } from 'src/app/models/schedaValutazioneTecniche';
-
+import { Paziente } from 'src/app/models/paziente';
 
 @Component({
   selector: 'app-valutazione-tecniche',
@@ -9,7 +8,7 @@ import { schedaValutazioneTecniche } from 'src/app/models/schedaValutazioneTecni
 })
 export class ValutazioneTecnicheComponent implements OnInit {
 
-  @Input() data: schedaValutazioneTecniche;
+  @Input() data: Paziente;
 
   constructor() {}
 

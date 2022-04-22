@@ -22,13 +22,22 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class DialogIngressoComponent implements OnInit {
 
-  @ViewChild("paginatorDocument",{static: false})
-  DocumentoPaginator: MatPaginator;
-  public nuovoDocumento: DocumentoPaziente;
-  public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;
-  public documenti: DocumentoPaziente[] = [];
-  public uploadingDocumento: boolean;
-  public addingDocumento: boolean;
+  @ViewChild("paginatorDocumentIndumentiConsigliati",{static: false})
+  DocumentIndumentiConsigliatiPaginator: MatPaginator;
+  public nuovoDocumentoIndumentiConsigliati: DocumentoPaziente;
+  public DocumentIndumentiConsigliatiDataSource: MatTableDataSource<DocumentoPaziente>;
+  public documentiIndumentiConsigliati: DocumentoPaziente[] = [];
+  public uploadingDocumentoIndumentiConsigliati: boolean;
+  public addingDocumentoIndumentiConsigliati: boolean;
+
+
+  @ViewChild("paginatorDocumentIndumenti",{static: false})
+  DocumentoIndumentiPaginator: MatPaginator;
+  public nuovoDocumentoIndumenti: DocumentoPaziente;
+  public DocumentIndumentiDataSource: MatTableDataSource<DocumentoPaziente>;
+  public documentiIndumenti: DocumentoPaziente[] = [];
+  public uploadingDocumentoIndumenti: boolean;
+  public addingDocumentoIndumenti: boolean;
 
   paziente: Paziente;
   ingresso: dataIngresso;
@@ -59,7 +68,8 @@ export class DialogIngressoComponent implements OnInit {
 
   ngOnInit() {
     this.loadUser();
-    this.getDocumenti();
+    this.getDocumentiIndumenti();
+    this.getDocumentiIndumentiConsigliati();
     this.getIngresso();
   }
 
@@ -116,10 +126,131 @@ export class DialogIngressoComponent implements OnInit {
   }
 
 
-    // DOCUMENTI
-    async addDocumento() {
-      this.addingDocumento = true;
-      this.nuovoDocumento = {
+    // DOCUMENTI INDUMENTI
+    async addDocumentoIndumenti() {
+      this.addingDocumentoIndumenti = true;
+      this.nuovoDocumentoIndumenti = {
+        paziente: this.paziente._id,
+        filename: undefined,
+        note: "",
+        type: "Indumenti",
+      };
+    }
+
+    async uploadDocumentoIndumenti($event) {
+      let fileList: FileList = $event.target.files;
+      if (fileList.length > 0) {
+        let file: File = fileList[0];
+
+        console.log("upload Documento: ", $event);
+        this.nuovoDocumentoIndumenti.filename = file.name;
+        this.nuovoDocumentoIndumenti.file = file;
+      } else {
+        this.messageService.showMessageError("File non valido");
+        console.error("File non valido o non presente");
+      }
+    }
+
+    async deleteDocumentoIndumenti(doc: DocumentoPaziente) {
+      console.log("Cancella Documento: ", doc);
+
+      this.docService
+        .remove(doc)
+        .then((x) => {
+          console.log("Documento cancellata");
+          const index = this.documentiIndumenti.indexOf(doc);
+          console.log("Documento cancellata index: ", index);
+          if (index > -1) {
+            this.documentiIndumenti.splice(index, 1);
+          }
+
+          console.log(
+            "Documento cancellato: ",
+            this.documentiIndumenti
+          );
+          this.DocumentIndumentiDataSource.data = this.documentiIndumenti;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore nella cancellazione doc identita"
+          );
+          console.error(err);
+        });
+    }
+
+    async saveDocumentoIndumenti(doc: DocumentoPaziente) {
+      const typeDocument = doc.typeDocument;
+      const path = doc.typeDocument;
+      const file: File = doc.file;
+      this.uploadingDocumentoIndumenti = true;
+
+     
+      doc.type = "Indumenti";
+      doc.typeDocument = "Indumenti";
+
+      console.log("Invio Documento: ", doc);
+
+      this.docService
+        .insert(doc, this.paziente)
+        .then((result: DocumentoPaziente) => {
+          console.log("Insert Documento: ", result);
+          this.documentiIndumenti.push(result);
+          this.DocumentIndumentiDataSource.data = this.documentiIndumenti;
+          this.addingDocumentoIndumenti = false;
+          this.uploadingDocumentoIndumenti = false;
+
+          let formData: FormData = new FormData();
+
+          const nameDocument: string = doc.filename;
+
+          formData.append("file", file);
+          formData.append("typeDocument", typeDocument);
+          formData.append("path", `${this.paziente._id}/${path}`);
+          formData.append("name", nameDocument);
+          this.uploadService
+            .uploadDocument(formData)
+            .then((x) => {
+              this.uploadingDocumentoIndumenti = false;
+
+              console.log("Uploading completed: ", x);
+            })
+            .catch((err) => {
+              this.messageService.showMessageError("Errore nel caricamento file");
+              console.error(err);
+              this.uploadingDocumentoIndumenti = false;
+            });
+        })
+        .catch((err) => {
+          this.messageService.showMessageError("Errore Inserimento documento");
+          console.error(err);
+        });
+    }
+
+    async getDocumentiIndumenti() {
+      console.log(`get Documento paziente: ${this.paziente._id}`);
+      this.docService
+        .get(this.paziente, "Indumenti")
+        .then((f: DocumentoPaziente[]) => {
+          this.documentiIndumenti = f;
+
+          this.DocumentIndumentiDataSource = new MatTableDataSource<DocumentoPaziente>(
+            this.documentiIndumenti
+          );
+          this.DocumentIndumentiDataSource.paginator = this.DocumentoIndumentiPaginator;
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore caricamento lista Documento"
+          );
+          console.error(err);
+        });
+    }
+
+
+    // DOCUMENTI INDUMENTI CONSIGLIATI
+    async addDocumentoIndumentiConsigliati() {
+      this.addingDocumentoIndumentiConsigliati = true;
+      this.nuovoDocumentoIndumentiConsigliati = {
         paziente: this.paziente._id,
         filename: undefined,
         note: "",
@@ -127,14 +258,14 @@ export class DialogIngressoComponent implements OnInit {
       };
     }
 
-    async uploadDocumento($event) {
+    async uploadDocumentoIndumentiConsigliati($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
 
         console.log("upload Documento: ", $event);
-        this.nuovoDocumento.filename = file.name;
-        this.nuovoDocumento.file = file;
+        this.nuovoDocumentoIndumentiConsigliati.filename = file.name;
+        this.nuovoDocumentoIndumentiConsigliati.file = file;
       } else {
         this.messageService.showMessageError("File non valido");
         console.error("File non valido o non presente");
@@ -148,17 +279,17 @@ export class DialogIngressoComponent implements OnInit {
         .remove(doc)
         .then((x) => {
           console.log("Documento cancellata");
-          const index = this.documenti.indexOf(doc);
+          const index = this.documentiIndumentiConsigliati.indexOf(doc);
           console.log("Documento cancellata index: ", index);
           if (index > -1) {
-            this.documenti.splice(index, 1);
+            this.documentiIndumentiConsigliati.splice(index, 1);
           }
 
           console.log(
             "Documento cancellato: ",
-            this.documenti
+            this.documentiIndumentiConsigliati
           );
-          this.DocumentDataSource.data = this.documenti;
+          this.DocumentIndumentiConsigliatiDataSource.data = this.documentiIndumentiConsigliati;
         })
         .catch((err) => {
           this.messageService.showMessageError(
@@ -172,19 +303,24 @@ export class DialogIngressoComponent implements OnInit {
       const typeDocument = doc.typeDocument;
       const path = doc.typeDocument;
       const file: File = doc.file;
-      this.uploadingDocumento = true;
+      this.uploadingDocumentoIndumentiConsigliati = true;
+
+      doc.type = "IndumentoConsigliati";
+      doc.typeDocument = "IndumentoConsigliati";
 
       console.log("Invio Documento: ", doc);
-      doc.type = this.nuovoDocumento.typeDocument;
-      doc.typeDocument = "ingresso";
+
+      // doc.type = this.nuovoDocumento.typeDocument;
+      // doc.typeDocument = "ingresso";
+
       this.docService
         .insert(doc, this.paziente)
         .then((result: DocumentoPaziente) => {
           console.log("Insert Documento: ", result);
-          this.documenti.push(result);
-          this.DocumentDataSource.data = this.documenti;
-          this.addingDocumento = false;
-          this.uploadingDocumento = false;
+          this.documentiIndumentiConsigliati.push(result);
+          this.DocumentIndumentiConsigliatiDataSource.data = this.documentiIndumentiConsigliati;
+          this.addingDocumentoIndumentiConsigliati = false;
+          this.uploadingDocumentoIndumentiConsigliati = false;
 
           let formData: FormData = new FormData();
 
@@ -197,14 +333,14 @@ export class DialogIngressoComponent implements OnInit {
           this.uploadService
             .uploadDocument(formData)
             .then((x) => {
-              this.uploadingDocumento = false;
+              this.uploadingDocumentoIndumentiConsigliati = false;
 
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
               this.messageService.showMessageError("Errore nel caricamento file");
               console.error(err);
-              this.uploadingDocumento = false;
+              this.uploadingDocumentoIndumentiConsigliati = false;
             });
         })
         .catch((err) => {
@@ -213,17 +349,17 @@ export class DialogIngressoComponent implements OnInit {
         });
     }
 
-    async getDocumenti() {
+    async getDocumentiIndumentiConsigliati() {
       console.log(`get Documento paziente: ${this.paziente._id}`);
       this.docService
-        .getByIngresso(this.paziente, "Documenti")
+        .get(this.paziente, "IndumentoConsigliati")
         .then((f: DocumentoPaziente[]) => {
-          this.documenti = f;
-
-          this.DocumentDataSource = new MatTableDataSource<DocumentoPaziente>(
-            this.documenti
+          this.documentiIndumentiConsigliati = f;
+          console.log('documenti indumenti consigliati: ' + JSON.stringify(f));
+          this.DocumentIndumentiConsigliatiDataSource = new MatTableDataSource<DocumentoPaziente>(
+            this.documentiIndumentiConsigliati
           );
-          this.DocumentDataSource.paginator = this.DocumentoPaginator;
+          this.DocumentIndumentiConsigliatiDataSource.paginator = this.DocumentIndumentiConsigliatiPaginator;
         })
         .catch((err) => {
           this.messageService.showMessageError(

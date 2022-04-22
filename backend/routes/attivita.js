@@ -105,9 +105,18 @@ router.post("/", async (req, res) => {
         pazienteName: req.body.pazienteName,
         data: req.body.data,
         turno: req.body.turno,
-        description: req.body.description,
-        note: "",
-        completato: req.body.completato
+        //description: req.body.description,
+        //completato: req.body.completato,
+        note: req.body.note,
+        letto: req.body.letto,
+        diuresi: req.body.diuresi,
+        evacuazione: req.body.evacuazione,
+        igiene: req.body.igiene,
+        doccia: req.body.doccia,
+        barba: req.body.barba,
+        tagliocapelli: req.body.tagliocapelli,
+        tagliounghie: req.body.tagliounghie,
+        lenzuola: req.body.lenzuola
 
     });
 

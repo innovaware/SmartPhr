@@ -336,26 +336,51 @@ const PazienteSchema = mongoose.Schema({
       data: Date,
       totale: Number,
     },
-  },
 
-  // CARTELLA ASS SOCIALE
+    altroCartellaSociale: {
+      perditaautonomia: Boolean,
+      statosalute: Boolean,
+      rapportifamiliaridifficili: Boolean,
+      solitudine: Boolean,
+      alloggioinidoneo: Boolean,
+      impossibfamigliaassistere: Boolean,
+      trasfdaaltro: Boolean,
+      istituto: String,
+      altro: Boolean,
+      altrotext: String,
 
-  schedaAssSociale: {
-    valutazioneSociale: {
-      valutazione: String,
-    },
+      invaliditacivile: Boolean,
+      assdiaccompagnamento: Number,
+      accintegrata: Number,
+      esenzioneticket: Boolean,
+      ausili: Boolean,
+      ausilialtro: String,
+      interdizione: Boolean,
+      inabilitazione: Boolean,
+      ammsostesgno: Boolean,
 
-    indiceSocializzazione: {
-      adattamentoSociale: String,
-      relAmicizia: String,
-      integrazioneGruppo: String,
-      gradoDisp: String,
-      rapportoFamiglia: String,
-      attivitaSociale: String,
-      attivitaRSA: String,
-      data: Date,
-      totale: Number,
-    },
+      medicomg: String,
+      tel: String,
+      referente: String,
+      via: String,
+      citta: String,
+      telref: String,
+      nucleo: String,
+
+      dispassFam: Number,
+      dispvisite: Boolean,
+      ospiteperperiodi: Boolean,
+      accpervisite: Boolean,
+      abitazione: Number,
+      abitazionealtro: String,
+      dislocazione: Number,
+      barriere: Number,
+      bagno: Boolean,
+      telefono: Boolean,
+      riscaldamento: Boolean,
+      cambiospessoresidenza: Boolean,
+      contattimantenuti: Number,
+    }
   },
 
   // CARTELLA EDUCATIVA

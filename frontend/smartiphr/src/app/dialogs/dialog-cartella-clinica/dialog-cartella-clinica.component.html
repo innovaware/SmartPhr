@@ -32,7 +32,7 @@
           </mat-tab>
 
 
-               <!-- DOCUMENTAZIONE -->
+        <!-- DOCUMENTAZIONE -->
   <mat-tab label="Documentazione" *ngIf="data.altro" [disabled]="paziente?._id === undefined">
     <div class="container-fluid">
       <div class="row title">
@@ -43,7 +43,43 @@
       </div>
 
       <hr>
+      <div class="row fileitem">
+        <div class="col-1" [ngClass]="document['CONTRATTO_RICOVERO']?.status ? 'success': 'notload'">
+          <div *ngIf="!document['CONTRATTO_RICOVERO']?.uploading">
+            <fa-icon icon="check-circle"></fa-icon>
+          </div>
+          <div *ngIf="document['CONTRATTO_RICOVERO']?.uploading">
+            <mat-spinner [diameter]="18"></mat-spinner>
+          </div>
 
+        </div>
+        <div class="col-3">Contratto ricovero</div>
+        <div class="col-1">{{document['CONTRATTO_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+        <div class="col right">
+          <input type="file" (change)="upload('CONTRATTO_RICOVERO', $event)" accept=".pdf"
+            *ngIf="!document['CONTRATTO_RICOVERO']?.status">
+
+          <div class="container-flex" *ngIf="document['CONTRATTO_RICOVERO']?.status">
+            <div class="row">
+              <div class="col">
+                <label>{{document['CONTRATTO_RICOVERO']?.name}}</label>
+              </div>
+              <div class="col">
+                <!-- <button (click)="showDocument(document['CONTRATTO_RICOVERO'], 'CONTRATTO_RICOVERO')">Visualizza</button> -->
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONTRATTO_RICOVERO'])" style="width: 26px;">
+                </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONTRATTO_RICOVERO'])" style="width:26px">
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
 
       <div class="row fileitem">
         <div class="col-1" [ngClass]="document['DOC_IDENTITA']?.status ? 'success': 'notload'">
@@ -58,7 +94,8 @@
         <div class="col-3">Doc identit&aacute;</div>
         <div class="col-1">{{document['DOC_IDENTITA']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
-
+          <input type="file" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf"
+            *ngIf="!document['DOC_IDENTITA']?.status">
 
           <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
             <div class="row">
@@ -67,11 +104,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['DOC_IDENTITA'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['DOC_IDENTITA'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['DOC_IDENTITA'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['DOC_IDENTITA'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -90,7 +131,8 @@
         <div class="col-3">Consenso al ricovero</div>
         <div class="col-1">{{document['CONS_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
-
+          <input type="file" (change)="upload('CONS_RICOVERO', $event)" accept=".pdf"
+            *ngIf="!document['CONS_RICOVERO']?.status">
 
           <div class="container-flex" *ngIf="document['CONS_RICOVERO']?.status">
             <div class="row">
@@ -99,11 +141,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['CONS_RICOVERO'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['CONS_RICOVERO'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONS_RICOVERO'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONS_RICOVERO'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -122,7 +168,8 @@
         <div class="col-3">Autorizzazione alla contenzione</div>
         <div class="col-1">{{document['AUTORI_CONTENZIONE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
-
+          <input type="file" (change)="upload('AUTORI_CONTENZIONE', $event)" accept=".pdf"
+            *ngIf="!document['AUTORI_CONTENZIONE']?.status">
 
           <div class="container-flex" *ngIf="document['AUTORI_CONTENZIONE']?.status">
             <div class="row">
@@ -131,11 +178,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['AUTORI_CONTENZIONE'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['AUTORI_CONTENZIONE'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_CONTENZIONE'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_CONTENZIONE'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -154,6 +205,8 @@
         <div class="col-3">Autorizzazione alle uscite</div>
         <div class="col-1">{{document['AUTORI_USCITE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
+          <input type="file" (change)="upload('AUTORI_USCITE', $event)" accept=".pdf"
+            *ngIf="!document['AUTORI_USCITE']?.status">
 
           <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
             <div class="row">
@@ -162,11 +215,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['AUTORI_USCITE'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['AUTORI_USCITE'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_USCITE'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_USCITE'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -185,6 +242,8 @@
         <div class="col-3">Autorizzazione alle riprese audio, video e foto</div>
         <div class="col-1">{{document['AUTORI_RIPRESE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
+          <input type="file" (change)="upload('AUTORI_RIPRESE', $event)" accept=".pdf"
+            *ngIf="!document['AUTORI_RIPRESE']?.status">
 
           <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
             <div class="row">
@@ -193,11 +252,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['AUTORI_RIPRESE'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['AUTORI_RIPRESE'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_RIPRESE'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_RIPRESE'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -216,6 +279,8 @@
         <div class="col-3">Consenso somministrazione vaccino</div>
         <div class="col-1">{{document['AUTORI_VACCINO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
+          <input type="file" (change)="upload('AUTORI_VACCINO', $event)" accept=".pdf"
+            *ngIf="!document['AUTORI_VACCINO']?.status">
 
           <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
             <div class="row">
@@ -224,11 +289,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['AUTORI_VACCINO'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['AUTORI_VACCINO'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_VACCINO'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_VACCINO'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -247,6 +316,8 @@
         <div class="col-3">Check list indumenti ed effetti personali</div>
         <div class="col-1">{{document['LIST_EFFETTIPERSONALI']?.dateupload | date: 'dd/MM/yyyy' }}</div>
         <div class="col right">
+          <input type="file" (change)="upload('LIST_EFFETTIPERSONALI', $event)" accept=".pdf"
+            *ngIf="!document['LIST_EFFETTIPERSONALI']?.status">
 
           <div class="container-flex" *ngIf="document['LIST_EFFETTIPERSONALI']?.status">
             <div class="row">
@@ -255,11 +326,15 @@
               </div>
               <div class="col">
                 <!-- <button (click)="document['LIST_EFFETTIPERSONALI'].status=false">Modifica</button> -->
-
-                <button mat-icon-button color="warn" aria-label="Carica file"
-                  (click)="document['LIST_EFFETTIPERSONALI'].status=false" class="upload-button">
-                  <fa-icon icon="upload"></fa-icon>
+                <button mat-button >
+                  <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['LIST_EFFETTIPERSONALI'])" style="width: 26px;">
                 </button>
+
+                <button mat-button >
+                  <img src="../../../assets/cestino.svg" (click)="removeDocument(document['LIST_EFFETTIPERSONALI'])" style="width:26px">
+												   
+                </button>
+
               </div>
             </div>
           </div>
@@ -268,7 +343,7 @@
 
     </div>
 
-  </mat-tab>
+  </mat-tab>-->
 
           <!-- PIANI TERAPEUTICI -->
           <mat-tab label="Piani terapeutici" *ngIf="data.altro" [disabled]="data.paziente?._id === undefined">
@@ -808,7 +883,7 @@
           </mat-tab>
 
           <mat-tab label="Valutazione Tecniche" *ngIf="!data.altro"> 
-            <app-valutazione-tecniche [data]=schedaValutazioneTecniche></app-valutazione-tecniche>
+            <app-valutazione-tecniche [data]=data.paziente></app-valutazione-tecniche>
           </mat-tab>
 
         <mat-tab label="Visite specialistiche/Esami paraclinici" *ngIf="!data.altro">

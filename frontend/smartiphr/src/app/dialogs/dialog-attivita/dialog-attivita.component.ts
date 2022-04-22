@@ -3,6 +3,7 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { Attivita } from 'src/app/models/attivita';
+import { AttivitaOSS } from 'src/app/models/attivitaOSS';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { Paziente } from 'src/app/models/paziente';
 import { User } from 'src/app/models/user';
@@ -21,12 +22,12 @@ export class DialogAttivitaComponent implements OnInit {
 
   @ViewChild("paginatorAttivita",{static: false})
   AttivitaPaginator: MatPaginator;
-  public attivitaDataSource: MatTableDataSource<Attivita>;
-  public attivita: Attivita[];
+  public attivitaDataSource: MatTableDataSource<AttivitaOSS>;
+  public attivita: AttivitaOSS[];
 
   public visible = false;
 
-  public nuovoAttivita: Attivita = {};
+  public nuovoAttivita: AttivitaOSS = {};
   paziente: Paziente;
   dipendente: Dipendenti = {} as Dipendenti;
   utente: User = {} as User;
@@ -51,7 +52,7 @@ export class DialogAttivitaComponent implements OnInit {
     let hour = data.getHours();
     var turno = 'Mattina';
     if(hour > 13)
-      turno = 'Poneriggio';
+      turno = 'Pomeriggio';
     if(hour > 21)
       turno = 'Notte';    
     this.nuovoAttivita = {
@@ -59,10 +60,19 @@ export class DialogAttivitaComponent implements OnInit {
       pazienteName: this.paziente.nome + ' ' + this.paziente.cognome,
       operator: this.dipendente != undefined ? this.dipendente._id : "",
       operatorName: this.dipendente != undefined ? this.dipendente.nome + ' ' + this.dipendente.cognome : "",
-      description: "",
+      //description: "",
       data: data,
       turno: turno,
-      completato: false
+      //completato: false
+      letto: false,
+      diuresi: false,
+      evacuazione: false,
+      igiene: false,
+      doccia: false,
+      barba: false,
+      tagliocapelli: false,
+      tagliounghie: false,
+      lenzuola: false
     };
 
     this.getAttivitaOdierne();
@@ -91,11 +101,11 @@ export class DialogAttivitaComponent implements OnInit {
 
 
 
-  async save(nuovoAttivita: Attivita) {
+  async save(nuovoAttivita: AttivitaOSS) {
 
     this.attivitaService
       .insert(nuovoAttivita)
-      .then((result: Attivita) => {
+      .then((result: AttivitaOSS) => {
         console.log("Insert AttivitaOdierne: ", result);
         this.attivita.push(result);
         this.attivitaDataSource.data = this.attivita;
@@ -110,21 +120,21 @@ export class DialogAttivitaComponent implements OnInit {
     console.log(`get AttivitaOdierne paziente: ${this.paziente._id}`);
     this.attivitaService
       .getAttivitaByPaziente(this.paziente._id)
-      .then((f: Attivita[]) => {
+      .then((f: AttivitaOSS[]) => {
         this.attivita = f;
-        var data =  new Date();
-        let hour = data.getHours();
-        var turno = 'Mattina';
-        if(hour > 13)
-          turno = 'Poneriggio';
-        if(hour > 21)
-          turno = 'Notte';    
+        // var data =  new Date();
+        // let hour = data.getHours();
+        // var turno = 'Mattina';
+        // if(hour > 13)
+        //   turno = 'Poneriggio';
+        // if(hour > 21)
+        //   turno = 'Notte';    
 
-        let item = this.attivita.find(i => i.turno === turno);
-        if(item != null )
-          this.visible = true;
+        // let item = this.attivita.find(i => i.turno === turno);
+        // if(item != null )
+        //   this.visible = true;
 
-        this.attivitaDataSource = new MatTableDataSource<Attivita>(
+        this.attivitaDataSource = new MatTableDataSource<AttivitaOSS>(
           this.attivita
         );
         this.attivitaDataSource.paginator = this.AttivitaPaginator;

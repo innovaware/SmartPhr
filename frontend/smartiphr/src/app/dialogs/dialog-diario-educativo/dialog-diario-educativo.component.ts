@@ -25,7 +25,7 @@ export class DialogDiarioEducativoComponent implements OnInit {
 
 
   async salva() {
-    if(this.item.data == undefined || this.item.contenuto == undefined || this.item.contenuto == "")
+    if(this.item.contenuto == undefined || this.item.contenuto == "")
       this.messageService.showMessageError("Alcuni campi obbligatori sono mancanti!");
     
     else{
@@ -36,7 +36,7 @@ export class DialogDiarioEducativoComponent implements OnInit {
 
         var diario = new DiarioEducativo();
         diario.user = this.data.paziente._id;
-        diario.data = this.item.data;
+        diario.data = new Date();
         diario.contenuto = this.item.contenuto;
 
         console.log("salva diario educativo: " + JSON.stringify(diario));

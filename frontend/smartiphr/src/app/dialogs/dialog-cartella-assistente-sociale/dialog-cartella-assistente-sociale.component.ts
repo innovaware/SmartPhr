@@ -21,6 +21,9 @@ import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { cartellaAssSociale } from "src/app/models/cartellaAssSociale";
+import { DocumentoPaziente } from "src/app/models/documentoPaziente";
+import { Documento } from "src/app/models/documento";
+import { AltroCartellaSociale } from "src/app/models/altroCartellaSociale";
 
 @Component({
   selector: 'app-dialog-cartella-assistente-sociale',
@@ -28,9 +31,11 @@ import { cartellaAssSociale } from "src/app/models/cartellaAssSociale";
   styleUrls: ['./dialog-cartella-assistente-sociale.component.css']
 })
 export class DialogCartellaAssistenteSocialeComponent implements OnInit {
-
+  altroCartellaSociale: AltroCartellaSociale;
   valutazioneSociale: valutazioneSociale;
   indiceSocializzazione: IndiceSocializzazione;
+  public document: any[] = [];
+  public uploading: boolean;
 
 
   paziente: Paziente;
@@ -65,6 +70,10 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
     if (this.paziente.schedaAssSociale.indiceSocializzazione == undefined) {
       this.paziente.schedaAssSociale.indiceSocializzazione = new IndiceSocializzazione();
     }
+
+    if (this.paziente.schedaAssSociale.altroCartellaSociale == undefined) {
+      this.paziente.schedaAssSociale.altroCartellaSociale = new AltroCartellaSociale();
+    }
  
 
     this.valutazioneSociale = this.paziente.schedaAssSociale
@@ -74,11 +83,153 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
 
     this.indiceSocializzazione = this.paziente.schedaAssSociale
       .indiceSocializzazione as IndiceSocializzazione;
+
+      this.altroCartellaSociale = this.paziente.schedaAssSociale
+      .altroCartellaSociale as AltroCartellaSociale;
    
   }
 
 
   ngOnInit() {
+    this.getListFile();
+  }
+
+
+  showDocumentGeneric(document: any) {
+    console.log("ShowDocument: ", document);
+    this.uploadService
+      .download(document.name, this.paziente._id, '')
+      .then((x) => {
+        //console.log("download: ", x);
+        x.subscribe((data) => {
+           console.log("download: ", data);
+           const newBlob = new Blob([data as BlobPart], {
+             type: "application/pdf",
+           });
+
+           // IE doesn't allow using a blob object directly as link href
+           // instead it is necessary to use msSaveOrOpenBlob
+           if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+             window.navigator.msSaveOrOpenBlob(newBlob);
+             return;
+           }
+
+           // For other browsers:
+           // Create a link pointing to the ObjectURL containing the blob.
+           const downloadURL = URL.createObjectURL(newBlob);
+           window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+  removeDocument(documentRemoving: any) {
+    console.log("document to remove: ", documentRemoving);
+    this.uploadService.removeFile(documentRemoving.id).subscribe(result=> {
+      console.log("document Removed: ", result);
+      documentRemoving.status=false;
+    });
+  }
+  
+  async upload(typeDocument: string, event) {
+    let fileList: FileList = event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+      let formData: FormData = new FormData();
+
+      const nameDocument: string = file.name;
+
+      formData.append("file", file);
+      formData.append("typeDocument", typeDocument);
+      formData.append("path", `${this.paziente._id}`);
+      formData.append("name", nameDocument);
+
+      this.uploading = true;
+
+      if (this.document[typeDocument] == undefined) {
+        this.document[typeDocument] = {
+          uploading: true,
+          error: false
+        }
+      }
+
+      this.uploadService
+        .uploadDocument(formData)
+        .then((x: any) => {
+          this.uploading = false;
+
+          this.document[typeDocument] = {
+            id: x.result.id,
+            status: true,
+            name: nameDocument,
+            uploading: false,
+            error: false
+          };
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError("Errore nel caricamento file");
+          console.error(err);
+          this.uploading = false;
+          this.document[typeDocument].uploading = false;
+          this.document[typeDocument].error = true;
+        });
+    }
+  }
+
+  async showDocument(doc: DocumentoPaziente) {
+    console.log("doc: ", JSON.stringify(doc));
+    this.uploadService
+    .download(doc.filename, doc._id, doc.type)
+      .then((x) => {
+        console.log("download: ", x);
+        x.subscribe((data) => {
+          console.log("download: ", data);
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
+  }
+
+
+  async getListFile() {
+    console.log(`Get list files paziente: ${this.paziente._id}`);
+    this.uploadService
+      .getFiles(this.paziente._id)
+      .then((documents: Documento[]) => {
+        documents.forEach((doc: Documento) => {
+          // console.log("document:", doc);
+          this.document[doc.typeDocument] = {
+            status: true,
+            name: doc.name,
+            dateupload: doc.dateupload,
+          };
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento lista Files");
+        console.error(err);
+      });
   }
 
 
@@ -93,6 +244,9 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
                                                                   Number(this.paziente.schedaAssSociale.indiceSocializzazione.attivitaRSA);
 
     this.paziente.schedaAssSociale.indiceSocializzazione.data = new Date();
+
+    this.paziente.schedaAssSociale.altroCartellaSociale = this.altroCartellaSociale;
+    console.log(`Patient  da salvare: `, this.paziente);
 
 
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
