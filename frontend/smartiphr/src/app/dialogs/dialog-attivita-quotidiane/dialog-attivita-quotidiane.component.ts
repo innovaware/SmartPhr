@@ -1,5 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
+
+
 import { Attivita } from 'src/app/models/attivita';
 import { AttivitaOSS } from 'src/app/models/attivitaOSS';
 import { Dipendenti } from 'src/app/models/dipendenti';

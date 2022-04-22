@@ -101,7 +101,7 @@ export class DialogAttivitaComponent implements OnInit {
 
 
 
-  async save(nuovoAttivita: AttivitaOSS) {
+  async saveAttivita(nuovoAttivita: AttivitaOSS) {
 
     this.attivitaService
       .insert(nuovoAttivita)
