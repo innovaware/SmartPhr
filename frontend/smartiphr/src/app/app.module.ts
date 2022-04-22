@@ -186,6 +186,8 @@ import { RegistroControlliOssComponent } from './pages/registro-controlli-oss/re
 import { CamereListComponent } from './pages/camere-list/camere-list.component';
 import { CamereDetailsComponent } from './dialogs/camere-details/camere-details.component';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { AltreinfoCartellasocialeComponent } from './component/altreinfo-cartellasociale/altreinfo-cartellasociale.component';
+import { DialogAttivitaQuotidianeComponent } from './dialogs/dialog-attivita-quotidiane/dialog-attivita-quotidiane.component';
 import { CamereMapComponent } from './pages/camere-map/camere-map.component';
 import { SanificazioneListComponent } from './pages/sanificazione-list/sanificazione-list.component';
 import { SanificazioneRegistroComponent } from './pages/sanificazione-registro/sanificazione-registro.component';
@@ -212,6 +214,7 @@ const materialModules = [
   MatIconModule,
   MatTabsModule,
   MatRadioModule,
+  MatDatepickerModule,
   MatNativeDateModule,
   MatExpansionModule,
   MatButtonToggleModule,
@@ -222,13 +225,12 @@ const materialModules = [
 
 ];
 
-const dataPicker = [
+//const dataPicker = [
 //   NgxMatDatetimePickerModule,
 //   NgxMatTimepickerModule,
 //   NgxMatNativeDateModule,
-//   MatDatepickerModule,
-  MatDatepickerModule,
-];
+//   MatDatepickerModule
+//];
 
 const dialogModule = [
   DialogPisicologicaComponent,
@@ -385,10 +387,11 @@ const pipes = [
     SanificazioneListComponent,
     SanificazioneRegistroComponent,
     ArmadiListComponent,
+    AltreinfoCartellasocialeComponent,
+    DialogAttivitaQuotidianeComponent
   ],
   imports: [
     ...materialModules,
-    ...dataPicker,
     BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
