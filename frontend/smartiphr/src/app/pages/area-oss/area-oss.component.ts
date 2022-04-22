@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material/dialog";
+import { MatDialog } from "@angular/material";
 import { Subject } from "rxjs";
 import { DialogArmadioComponent } from "src/app/dialogs/dialog-armadio/dialog-armadio.component";
 import { DialogAttivitaComponent } from "src/app/dialogs/dialog-attivita/dialog-attivita.component";
@@ -35,9 +35,10 @@ export class AreaOssComponent implements OnInit {
   
   ngOnInit() {
     this.customButtons = [];
-    console.log("Init Area Medica");
+    console.log("Init Area OSS");
 
-    this.customButtons.push({
+   /* this.customButtons.push({
+      images: "../../../assets/medico.svg",
       label: "Pre-ingresso",
       tooltip: "Pre-ingresso",
       cmd: (paziente: Paziente) =>
@@ -59,10 +60,11 @@ export class AreaOssComponent implements OnInit {
             }
           }),
       //css: "mat-raised-button raised-button action-button",
-    });
+    });*/
 
     this.customButtons.push({
-      label: "Ingresso",
+      images: "../../../assets/entrance.svg",
+      label: "",
       tooltip: "Ingresso",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogIngressoComponent, {
@@ -72,8 +74,9 @@ export class AreaOssComponent implements OnInit {
     });
 
     this.customButtons.push({
-      label: "Attività",
-      tooltip: "Attività",
+      images: "../../../assets/checklist.svg",
+      label: "",
+      tooltip: "AttivitĂ ",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogAttivitaComponent, {
           data: { paziente: paziente, readonly: true },
@@ -84,7 +87,8 @@ export class AreaOssComponent implements OnInit {
 
 
     this.customButtons.push({
-      label: "Gestione Armadio",
+      images: "../../../assets/wardrobe.svg",
+      label: "",
       tooltip: "Armadio",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogArmadioComponent, {
@@ -92,6 +96,7 @@ export class AreaOssComponent implements OnInit {
           width: "1024px",
         }),
     });
+
 
   /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;

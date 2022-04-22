@@ -3,6 +3,7 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Attivita } from '../models/attivita';
+import { AttivitaOSS } from "../models/attivitaOSS";
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class AttivitaService {
   constructor(private http: HttpClient) {}
 
 
-  async getAttivitaByPaziente(id): Promise<Attivita[]> {
+  async getAttivitaByPaziente(id): Promise<AttivitaOSS[]> {
 
     const headers = {
       // 'Authorization': 'Bearer ' + this.token,
@@ -22,7 +23,7 @@ export class AttivitaService {
     }
 
     return this.http
-      .get<Attivita[]>(this.api + "/api/attivita/paziente/" + id, { headers })
+      .get<AttivitaOSS[]>(this.api + "/api/attivita/paziente/" + id, { headers })
       .toPromise();
   }
 
