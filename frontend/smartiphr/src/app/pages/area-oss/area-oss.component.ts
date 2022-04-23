@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { Subject } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { DialogArmadioComponent } from "src/app/dialogs/dialog-armadio/dialog-armadio.component";
 import { DialogAttivitaComponent } from "src/app/dialogs/dialog-attivita/dialog-attivita.component";
 import { DialogPreIngressoComponent } from "src/app/dialogs/dialog-pre-ingresso/dialog-pre-ingresso.component";
@@ -9,6 +9,8 @@ import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
+import { CamereService } from "src/app/service/camere.service";
+import { Camere } from "src/app/models/camere";
 
 @Component({
   selector: 'app-area-oss',
@@ -19,11 +21,12 @@ export class AreaOssComponent implements OnInit {
   pazienti: Paziente[];
   customButtons: DinamicButton[];
   eventsSubject: Subject<Paziente[]> = new Subject<Paziente[]>();
- 
+
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public pazienteService: PazienteService
+    public pazienteService: PazienteService,
+    private cameraService: CamereService,
   ) {
     console.log("Get Patients");
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
@@ -32,7 +35,7 @@ export class AreaOssComponent implements OnInit {
       this.eventsSubject.next(this.pazienti);
     });
   }
-  
+
   ngOnInit() {
     this.customButtons = [];
     console.log("Init Area OSS");
@@ -91,11 +94,17 @@ export class AreaOssComponent implements OnInit {
       label: "",
       tooltip: "Armadio",
       cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogArmadioComponent, {
-          data: { paziente: paziente, readonly: true },
-          width: "1024px",
-        }),
+
+      this.cameraService.get(paziente.idCamera).subscribe(
+        (camera: Camere) => {
+          this.dialog.open(DialogArmadioComponent, {
+            data: { camera: camera },
+            width: "1024px",
+          })
+        }
+      )
     });
+
 
 
   /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {

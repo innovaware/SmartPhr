@@ -6,6 +6,8 @@ import { filter, map, switchMap } from 'rxjs/operators';
 import { Camere } from 'src/app/models/camere';
 import { Paziente } from 'src/app/models/paziente';
 import { Piano } from 'src/app/models/piano';
+import { ArmadioService } from 'src/app/service/armadio.service';
+import { AuthenticationService } from 'src/app/service/authentication.service';
 import { CamereService } from 'src/app/service/camere.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -43,6 +45,8 @@ export class CamereDetailsComponent implements OnInit {
     private messageService: MessagesService,
     private patientService: PazienteService,
     private camereService: CamereService,
+    private armadioService: ArmadioService,
+    private authenticationService: AuthenticationService,
     private router: Router,
     @Inject(MAT_DIALOG_DATA)
     public data: {
@@ -67,6 +71,35 @@ export class CamereDetailsComponent implements OnInit {
             if (this.data.camera.numPostiLiberi !== this.countPatientInCamera) {
               this.data.camera.numPostiLiberi = this.countPatientInCamera;
             }
+
+            this.armadioService.getIndumenti(this.data.camera._id, new Date())
+                .subscribe(armadio=> {
+                  if (armadio.length === 0) {
+                    console.log("Armadio not defined. Creating new Item");
+                    this.authenticationService.getCurrentUserAsync().subscribe(
+                      (user)=>{
+                        const date = new Date();
+                        const dateStartRif = new Date(date.getFullYear(), date.getMonth(), 1);
+                        const dateEndRif = new Date(date.setMonth(date.getMonth()+8));
+
+                        this.armadioService.add({
+                          idCamera: this.data.camera._id,
+                          contenuto: [],
+                          rateVerifica: 0,
+                          pazienti: [],
+                          lastChecked: {
+                            data: new Date(),
+                            idUser: user._id
+                          },
+                          dateStartRif: dateStartRif,
+                          dateEndRif: dateEndRif,
+                        }, "Creato armadio").subscribe(
+                          result => {
+                            console.log("Armadio creato", result);
+                          });
+                    });
+              }
+            });
 
             this.camereService.update(this.data.camera).subscribe(
               (result => {

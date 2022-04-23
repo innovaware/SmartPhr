@@ -62,6 +62,7 @@ import { CamereMapComponent } from "./pages/camere-map/camere-map.component";
 import { SanificazioneListComponent } from "./pages/sanificazione-list/sanificazione-list.component";
 import { SanificazioneRegistroComponent } from "./pages/sanificazione-registro/sanificazione-registro.component";
 import { ArmadiListComponent } from "./pages/armadi-list/armadi-list.component";
+import { IndumentiListComponent } from "./pages/indumenti-list/indumenti-list.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -94,7 +95,6 @@ const routes: Routes = [
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
   { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
-  { path: "gest_armadi_oss", component: RegistroControlliOssComponent, canActivate: [AuthGuard]  },
 
   // AMMINISTRAZIONE
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
@@ -133,8 +133,12 @@ const routes: Routes = [
   { path: "registro_sanificazione", component: SanificazioneRegistroComponent, canActivate: [AuthGuard]  },
 
   // ARMADI
-//  ArmadiListComponent
   { path: "gest_armadiList", component: ArmadiListComponent, canActivate: [AuthGuard]  },
+  { path: "gest_armadi_controlli", component: RegistroControlliOssComponent, canActivate: [AuthGuard]  },
+
+  // INDUMENTI
+  { path: "gest_indumenti", component: IndumentiListComponent, canActivate: [AuthGuard]  },
+
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },

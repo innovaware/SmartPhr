@@ -23,6 +23,8 @@ export class CamereService {
   }
 
   update(camera: Camere) {
+    console.log("Update camera:", camera);
+
     camera.geometry = JSON.stringify(camera.geometryObject);
     return this.http.put<Camere>(`${this.api}/api/camera/${camera._id}`, camera);
   }

@@ -8,7 +8,7 @@ import { PazienteService } from 'src/app/service/paziente.service';
 import { ArmadioService } from 'src/app/service/armadio.service';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { Camere } from 'src/app/models/camere';
-import { flatMap, map, mergeMap } from 'rxjs/operators';
+import { map, mergeMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
 
@@ -60,19 +60,50 @@ export class DialogArmadioComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<DialogArmadioComponent>,
-    public pazienteService: PazienteService,
+    private pazienteService: PazienteService,
     public dialog: MatDialog,
-    public armadioService: ArmadioService,
-    public messageService: MessagesService,
+    private armadioService: ArmadioService,
+    private messageService: MessagesService,
     private authenticationService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       camera: Camere;
     }) {
       this.camera = data.camera;
+      console.log("Init DataSource Armadio");
+
       this.dataSourceRequest = this.armadioService.getIndumenti(this.camera._id, new Date());
-      this.dataSourceRequest.subscribe(a=> {
-        this.currentArmadio = a[0]
+      this.dataSourceRequest.subscribe(armadio=> {
+        if (armadio.length > 0) {
+          this.currentArmadio = armadio[0]
+        } else {
+          console.log("Armadio not defined. Creating new Item");
+          this.authenticationService.getCurrentUserAsync().subscribe(
+            (user)=>{
+              const date = new Date();
+              const dateStartRif = new Date(date.getFullYear(), date.getMonth(), 1);
+              const dateEndRif = new Date(date.setMonth(date.getMonth()+8));
+
+              this.armadioService.add({
+                idCamera: this.camera._id,
+                contenuto: [],
+                rateVerifica: 0,
+                pazienti: [],
+                lastChecked: {
+                  data: new Date(),
+                  idUser: user._id
+                },
+                dateStartRif: dateStartRif,
+                dateEndRif: dateEndRif,
+              }, "Creato armadio").subscribe(
+                result => {
+                  console.log("Armadio creato", result);
+                });
+          });
+
+        }
+
+
         if (this.currentArmadio !== undefined) {
           this.currentArmadio.rateVerifica = 0;
           this.calculateRateVerifica();
@@ -106,19 +137,19 @@ export class DialogArmadioComponent implements OnInit {
 
   carico(item: Content) {
     item.indumento.quantita = item.indumento.quantita + 1;
-    this.updateIndumenti(item);
+    this.updateIndumenti(item, "Carico indumenti");
     this.loadIndumentiByPatient(this.selectedPatient);
   }
 
   scarico(item: Content) {
     if (item.indumento.quantita - 1 >= 0) {
       item.indumento.quantita = item.indumento.quantita - 1;
-      this.updateIndumenti(item);
+      this.updateIndumenti(item, "Scarico indumenti");
       this.loadIndumentiByPatient(this.selectedPatient);
     }
   }
 
-  updateIndumenti(item: Content) {
+  updateIndumenti(item: Content, note: string) {
     this.currentArmadio.contenuto.forEach(contenuto=> {
       const indumento = contenuto.items.find(i=> item.indumento._id === i._id);
 
@@ -127,7 +158,7 @@ export class DialogArmadioComponent implements OnInit {
       }
     })
 
-    this.armadioService.update(this.currentArmadio)
+    this.armadioService.update(this.currentArmadio, note)
         .subscribe(result => {
           //console.log("Update completed: ", result);
         });
@@ -217,7 +248,7 @@ export class DialogArmadioComponent implements OnInit {
         this.currentArmadio.rateVerifica =  ( this.currentArmadio.contenuto.filter(c=> c.verificato).length / countPatients) * 100;
       }
 
-      this.armadioService.update(this.currentArmadio).subscribe(a => {
+      this.armadioService.update(this.currentArmadio, "Verifica Armadio").subscribe(a => {
         console.log("Update completed: ", a);
 
         this.loadPatients();

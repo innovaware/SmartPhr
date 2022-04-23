@@ -461,6 +461,12 @@ const InitApiFunctions = () => {
   var apiSanificazione = { key: 'sanificazione', path: '/api/sanificazione' }
   app.use( apiSanificazione.path, logHandler, authorizationHandler, roleHandler, SanificazioneRouter );
   routesList.push(apiSanificazione);
+
+  var IndumentiRouter = require("./routes/indumenti")
+  var apiIndumenti = { key: 'indumenti', path: '/api/indumenti' }
+  app.use( apiIndumenti.path, logHandler, authorizationHandler, roleHandler, IndumentiRouter );
+  routesList.push(apiIndumenti);
+
       
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);

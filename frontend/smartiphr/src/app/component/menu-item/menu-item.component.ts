@@ -20,7 +20,7 @@ export class MenuItemComponent implements OnInit {
 
   navigate() {
     const link = decodeURIComponent(this.link);
-    console.log("LINK:", link);
+    // console.log("LINK:", link);
 
     this.router.navigated = false;
     this.router.navigateByUrl(link);

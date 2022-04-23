@@ -3,7 +3,44 @@ const express = require("express");
 const router = express.Router();
 const Armadio = require("../models/armadio");
 const Camere = require("../models/camere");
+const registroArmadi = require("../models/registroArmadi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+
+
+
+router.get("/registro", async (req, res) => {
+  try {
+    const getData = () => {
+      const query = [
+        {
+          '$lookup': {
+            'from': 'user', 
+            'localField': 'firma', 
+            'foreignField': '_id', 
+            'as': 'userInfo'
+          }
+        }, {
+          '$lookup': {
+            'from': 'camera', 
+            'localField': 'cameraId', 
+            'foreignField': '_id', 
+            'as': 'cameraInfo'
+          }
+        }
+      ]
+      // console.log("Query by piano: ", query);
+      return registroArmadi.aggregate(query);
+    };
+
+    const registro = await getData();
+    res.status(200).json(registro);
+    return;
+  
+  } catch (err) {
+    console.error("Error: ", err);
+    res.status(500).json({ Error: err });
+  }
+});
 
 
 router.get("/", async (req, res) => {
@@ -209,6 +246,17 @@ router.put("/:id", async (req, res) => {
       }
     );
 
+    const registro = new registroArmadi({
+      cameraId: req.body.armadio.idCamera,
+      stato: checked,
+      data: req.body.armadio.lastChecked.data,
+      note: req.body.note,
+      firma: req.body.armadio.lastChecked.idUser
+    });
+
+    const result = await registro.save();
+  
+
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
@@ -224,100 +272,38 @@ router.put("/:id", async (req, res) => {
   }
 });
 
-// router.post("/", async (req, res) => {
-//   try {
-//     const elementoArmadio = new ElementiArmadio({
-//         paziente: req.body.paziente,
-//         pazienteName: req.body.pazienteName,
-//         data: req.body.data,
-//         elemento: req.body.elemento,
-//         note: req.body.note,
-//         quantita: req.body.quantita
-//     });
 
-//     // Salva i dati sul mongodb
-//     const result = await elementoArmadio.save();
+router.post("/", async (req, res) => {
+  try {
+    const armadio = new Armadio(req.body.armadio);
 
+    const resultArmadio = await armadio.save();
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
-//     const attivitaArmadio = new AttivitaArmadio({
-//       operator: req.body.operator,
-//       operatorName: req.body.operatorName,
-//       paziente: req.body.paziente,
-//       pazienteName: req.body.pazienteName,
-//       data: req.body.data,
-//       elemento: req.body.elemento,
-//       note: req.body.note,
-//       quantita: req.body.quantita
-//   });
+    const registro = new registroArmadi({
+      cameraId: req.body.armadio.idCamera,
+      stato: false,
+      data: new Date(),
+      note: req.body.note,
+      firma: req.body.armadio.lastChecked.idUser
+    });
 
-//   // Salva i dati sul mongodb
-//   const resultAtt = await attivitaArmadio.save();
+    const resultRegistro = await registro.save();
 
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
 
+    const searchTerm = "ARMADIOALL";
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(searchTerm);
+    }
 
-//     redisClient = req.app.get("redis");
-//     redisDisabled = req.app.get("redisDisabled");
-
-//     if (redisClient != undefined && !redisDisabled) {
-//       redisClient.del(`ELEMENTIARMADIOALL`);
-//     }
-
-//     res.status(200);
-//     res.json(result);
-//   } catch (err) {
-//     res.status(500);
-//     res.json({ Error: err });
-//   }
-// });
-
-// // http://[HOST]:[PORT]/api/cambiturno/[ID]
-// // Modifica delle cambiturno
-// router.put("/:id", async (req, res) => {
-//   try {
-//     const { id } = req.params;
-//     // Aggiorna il documento su mongodb
-//     const cambiturno = await ElementiArmadio.updateOne(
-//       { _id: id },
-//       {
-//         $set: {
-//             paziente: req.body.paziente,
-//             pazienteName: req.body.pazienteName,
-//             data: req.body.data,
-//             elemento: req.body.elemento,
-//             note: req.body.note,
-//             quantita: req.body.quantita
-//         },
-//       }
-//     );
-
-
-//     const attivitaArmadio = new AttivitaArmadio({
-//       operator: req.body.operator,
-//       operatorName: req.body.operatorName,
-//       paziente: req.body.paziente,
-//       pazienteName: req.body.pazienteName,
-//       data: req.body.data,
-//       elemento: req.body.elemento,
-//       note: req.body.note,
-//       quantita: req.body.quantita
-//   });
-
-//   // Salva i dati sul mongodb
-//   const result = await attivitaArmadio.save();
-
-
-
-//     redisClient = req.app.get("redis");
-//     redisDisabled = req.app.get("redisDisabled");
-
-//     if (redisClient != undefined && !redisDisabled) {
-//       redisClient.del(`CAMBITURNOBY${id}`);
-//     }
-
-//     res.status(200).json(cambiturno);
-//   } catch (err) {
-//     res.status(500).json({ Error: err });
-//   }
-// });
+    res.status(200);
+    res.json(armadio);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 
 module.exports = router;

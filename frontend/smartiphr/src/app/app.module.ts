@@ -198,6 +198,8 @@ import { SanificatePipe } from "./pipe/sanificate.pipe";
 import { ArmadiCheckerPipe } from "./pipe/armadiChecker";
 import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { CastingVerificaPipe } from "./pipe/castingVerifica";
+import { IndumentiListComponent } from './pages/indumenti-list/indumenti-list.component';
+import { IndumentiComponent } from './dialogs/indumenti/indumenti.component';
 
 const materialModules = [
   MatTableModule,
@@ -265,6 +267,7 @@ const dialogModule = [
   DialogAttivitaComponent,
   DialogArmadioComponent,
   CamereDetailsComponent,
+  IndumentiComponent,
 ];
 
 const pipes = [
@@ -388,7 +391,8 @@ const pipes = [
     SanificazioneRegistroComponent,
     ArmadiListComponent,
     AltreinfoCartellasocialeComponent,
-    DialogAttivitaQuotidianeComponent
+    DialogAttivitaQuotidianeComponent,
+    IndumentiListComponent,
   ],
   imports: [
     ...materialModules,

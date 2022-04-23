@@ -49,6 +49,7 @@ export class CamereListComponent implements OnInit {
           x.map( c => {
             return {
               ...c,
+              firmaArmadio: c.firmaArmadio[0],
               geometryObject: JSON.parse(c.geometry)
             };
           }))
@@ -80,6 +81,8 @@ export class CamereListComponent implements OnInit {
 
   editCamera(camera: Camere) {
     const cameraEdit: Camere = Camere.clone(camera);
+    console.log("camera edit:", cameraEdit);
+
 
     this.dialogCamera.open(CamereDetailsComponent, {
       data: {

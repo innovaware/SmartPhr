@@ -1,6 +1,13 @@
 import { Paziente } from "./paziente";
 import { User } from "./user";
 
+export interface IndumentoTemplate {
+  nome: string;
+  dateStartRif: Date;
+  dateEndRif: Date;
+  _id?: string;
+}
+
 export interface Indumento {
   nome: string;
   quantita: number;

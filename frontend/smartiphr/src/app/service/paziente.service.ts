@@ -22,6 +22,11 @@ export class PazienteService {
 
   constructor(private http: HttpClient) {}
 
+
+  getPazientiAsync(): Observable<Paziente[]> {
+    return this.http.get<Paziente[]>(`${this.api}/api/pazienti`);
+  }
+
   async getPazienti(): Promise<Paziente[]> {
     return this.http.get<Paziente[]>(`${this.api}/api/pazienti`).toPromise();
     //return this.http.get<Paziente[]>(`${this.api}/api/pazienti?pageSize=${pageSize}&pageNumber=${pageNumber}`)
