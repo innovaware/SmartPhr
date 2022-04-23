@@ -15,7 +15,6 @@ import View from "ol/View";
 import VectorSource from "ol/source/Vector";
 import GeoJSON from "ol/format/GeoJSON";
 import VectorLayer from "ol/layer/Vector";
-import { Geometry, Polygon } from "ol/geom";
 import Style from "ol/style/Style";
 import Stroke from "ol/style/Stroke";
 import Fill from "ol/style/Fill";
@@ -143,7 +142,7 @@ export class CamereMapComponent implements OnInit {
   _getColorArmadiCameraImpl(camera: Camere, text: Text, cameraStyle: Style) {
     const colorRGB = () => {
       if (camera.armadioCheck === 2) return [0, 255 ,0, 0.3] as Color;
-      if (camera.armadioCheck === 1) return [0, 128, 0, 0.3] as Color;
+      if (camera.armadioCheck === 1) return [255, 255, 0, 0.3] as Color;
 
       return [255, 0 ,0, 0.3] as Color;
     };

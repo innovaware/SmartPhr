@@ -46,8 +46,8 @@
 .orange {
   width: 18px;
   height: 18px;
-  border: 1px solid rgb(255, 72, 0);
-  background: rgba(255, 115, 0, 0.3);
+  border: 1px solid rgb(255 197 0);
+  background: rgba(255, 255, 0, 0.3);
   border-radius: 7px;
   padding: unset;
   margin: 0px 10px;

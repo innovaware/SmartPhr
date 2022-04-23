@@ -34,6 +34,13 @@ export class MenuComponent implements OnInit {
           this.menu = items.sort((a: Menu, b: Menu) => {
             return a.order - b.order;
           });
+
+          this.menu.map(m=> {
+            m.subMenu.sort((a: Menu, b: Menu) => {
+              return a.order - b.order;
+            });
+            return m;
+          })
         });
 
         const userId = user._id;
