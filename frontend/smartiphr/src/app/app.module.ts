@@ -200,6 +200,8 @@ import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { CastingVerificaPipe } from "./pipe/castingVerifica";
 import { IndumentiListComponent } from './pages/indumenti-list/indumenti-list.component';
 import { IndumentiComponent } from './dialogs/indumenti/indumenti.component';
+import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
+import { RifacimentoLettiOssComponent } from './pages/rifacimento-letti-oss/rifacimento-letti-oss.component';
 
 const materialModules = [
   MatTableModule,
@@ -393,6 +395,8 @@ const pipes = [
     AltreinfoCartellasocialeComponent,
     DialogAttivitaQuotidianeComponent,
     IndumentiListComponent,
+    ChiaviOssComponent,
+    RifacimentoLettiOssComponent,
   ],
   imports: [
     ...materialModules,

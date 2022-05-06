@@ -64,6 +64,10 @@ import { SanificazioneRegistroComponent } from "./pages/sanificazione-registro/s
 import { ArmadiListComponent } from "./pages/armadi-list/armadi-list.component";
 import { IndumentiListComponent } from "./pages/indumenti-list/indumenti-list.component";
 
+
+import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
+import { RifacimentoLettiOssComponent } from "./pages/rifacimento-letti-oss/rifacimento-letti-oss.component";
+
 const routes: Routes = [
   { path: "login", component: LoginComponent },
   { path: "register", component: RegisterComponent},
@@ -95,6 +99,8 @@ const routes: Routes = [
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
   { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
+  { path: "gest_chiavi", component: ChiaviOssComponent, canActivate: [AuthGuard]  },
+  { path: "rifacimento_letti", component: RifacimentoLettiOssComponent, canActivate: [AuthGuard]  },
 
   // AMMINISTRAZIONE
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },

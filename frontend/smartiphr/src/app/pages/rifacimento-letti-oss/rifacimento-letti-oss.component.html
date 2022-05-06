@@ -1,0 +1,327 @@
+<div>
+    <div class="container-fluid" >
+      <div class="row">
+        <div class="col">
+          <h3>RIFACIMENTO LETTI</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-dialog-content>
+
+          <mat-tab-group>
+
+            <!-- LAVANDERIA EXT -->
+            <mat-tab label="Lavanderia Esterna (lenzuola e traverse)">
+
+    
+                <table mat-table [dataSource]="LavanderiaExtDataSource" class="mat-elevation-z8" style="width: 100%;">
+                  <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: right;">
+                      <button mat-button (click)="saveExt(row)">
+                        SALVA
+                      </button>
+                    </td>
+                  </ng-container>
+    
+                  <ng-container matColumnDef="camera">
+                    <th mat-header-cell *matHeaderCellDef> N.Camera </th>
+                    <td mat-cell *matCellDef="let element">    
+                      {{element.camera}}         
+                    </td>
+                  </ng-container>
+    
+                  <ng-container matColumnDef="lenzuola">
+                    <th mat-header-cell *matHeaderCellDef> N.Lenzuola </th>
+                    <td mat-cell *matCellDef="let element">  <input type="number"  class="inputTab"   [(ngModel)]="element.lenzuola"></td>
+                  </ng-container>
+    
+                  <ng-container matColumnDef="lenzuola_lacerati">
+                    <th mat-header-cell *matHeaderCellDef> N.Lenzuola lacerati </th>
+                    <td mat-cell *matCellDef="let element"> <input type="number"  class="inputTab"   [(ngModel)]="element.lenzuola_lacerati"> </td>
+                  </ng-container>
+
+                  <ng-container matColumnDef="traverse">
+                    <th mat-header-cell *matHeaderCellDef> N.Traverse </th>
+                    <td mat-cell *matCellDef="let element"> <input type="number"  class="inputTab"   [(ngModel)]="element.traverse"></td>
+                  </ng-container>
+    
+                  <ng-container matColumnDef="traverse_lacerati">
+                    <th mat-header-cell *matHeaderCellDef> N.Traverse lacerati </th>
+                    <td mat-cell *matCellDef="let element"> <input type="number"  class="inputTab"   [(ngModel)]="element.traverse_lacerati"> </td>
+                  </ng-container>
+    
+                  <tr mat-header-row *matHeaderRowDef="DisplayedColumnsExt"></tr>
+                  <tr mat-row *matRowDef="let row; columns: DisplayedColumnsExt;"></tr>
+                </table>
+    
+                <div >
+    
+                  <mat-paginator #paginatorLavanderiaExt [pageSizeOptions]="[5]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                  </mat-paginator>
+                </div>
+    
+            </mat-tab>
+
+
+            <!-- LAVANDERIA INT -->
+            <mat-tab label="Lavanderia Interna (cuscini, coprimaterasso, copriletto, coperte e federe) ">
+
+                
+                <table mat-table [dataSource]="LavanderiaIntDataSource" class="mat-elevation-z8" style="width: 100%;">
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: right;">
+                    <button mat-button (click)="saveInt(row)">
+                        SALVA
+                    </button>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="camera">
+                    <th mat-header-cell *matHeaderCellDef> N.Camera </th>
+                    <td mat-cell *matCellDef="let element"> 
+                      {{element.camera}}               
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="cuscini">
+                    <th mat-header-cell *matHeaderCellDef> N.Cuscini </th>
+                    <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.cuscini"></td>
+                </ng-container>
+
+                <ng-container matColumnDef="cuscini_lacerati">
+                    <th mat-header-cell *matHeaderCellDef> N.Cuscini lacerati </th>
+                    <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.cuscini_lacerati"></td>
+                </ng-container>
+
+                <ng-container matColumnDef="coprimaterassi">
+                    <th mat-header-cell *matHeaderCellDef> N.Coprimaterassi </th>
+                    <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.coprimaterassi"> </td>
+                </ng-container>
+
+                <ng-container matColumnDef="coprimaterassi_lacerati">
+                    <th mat-header-cell *matHeaderCellDef> N.Coprimaterassi lacerati </th>
+                    <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.coprimaterassi_lacerati"></td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="copriletti">
+                  <th mat-header-cell *matHeaderCellDef> N.Copriletti </th>
+                  <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.copriletti"> </td>
+              </ng-container>
+
+              <ng-container matColumnDef="copriletti_lacerati">
+                  <th mat-header-cell *matHeaderCellDef> N.Copriletti lacerati </th>
+                  <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.copriletti_lacerati"></td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="coperte">
+                <th mat-header-cell *matHeaderCellDef> N.Coperte </th>
+                <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.coperte"> </td>
+            </ng-container>
+
+            <ng-container matColumnDef="coperte_lacerati">
+                <th mat-header-cell *matHeaderCellDef> N.Coperte lacerate </th>
+                <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.coperte_lacerati"></td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="federe">
+              <th mat-header-cell *matHeaderCellDef> N.Federe </th>
+              <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.federe"> </td>
+          </ng-container>
+
+          <ng-container matColumnDef="federe_lacerati">
+              <th mat-header-cell *matHeaderCellDef> N.Federe lacerate </th>
+              <td mat-cell *matCellDef="let element">     <input type="number"  class="inputTab"   [(ngModel)]="element.federe_lacerati"></td>
+          </ng-container>
+
+
+
+
+
+                <tr mat-header-row *matHeaderRowDef="DisplayedColumnsInt"></tr>
+                <tr mat-row *matRowDef="let row; columns: DisplayedColumnsInt;"></tr>
+                </table>
+
+                <div >
+
+                <mat-paginator #paginatorLavanderiaInt [pageSizeOptions]="[5]" showFirstLastButtons
+                    aria-label="Select page of periodic elements">
+                </mat-paginator>
+                </div>
+
+            </mat-tab>
+
+
+
+
+            <mat-tab label="Registro Attivita Lavanderia Esterna">
+
+
+            <table mat-table [dataSource]="LavanderiaAttivitaExtDataSource" class="mat-elevation-z8" style="width: 100%;" >
+
+              <ng-container matColumnDef="camera">
+                <th mat-header-cell *matHeaderCellDef> N.Camera </th>
+                <td mat-cell *matCellDef="let element"> {{element.camera}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="carico_lenzuola">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico lenzuola </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 5px"> {{element.carico_lenzuola + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_lenzuola_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico lenzuola lacerati </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_lenzuola_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_traverse">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico traverse </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_traverse + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_traverse_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico traverse lacerate </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_traverse_lacerati + " unità"}} </td>
+              </ng-container>
+
+        
+              <ng-container matColumnDef="operator">
+                <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data </th>
+                <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumnsAttivitaExt"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumnsAttivitaExt;"></tr>
+            </table>
+        
+            <div >
+        
+              <mat-paginator #paginatorLavanderiaAttivitaExt [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+            </mat-tab>
+
+
+
+          <mat-tab label="Registro Attivita Lavanderia Interna">
+
+
+            <table mat-table [dataSource]="LavanderiaAttivitaExtDataSource" class="mat-elevation-z8" style="width: 100%;" >
+
+              <ng-container matColumnDef="camera">
+                <th mat-header-cell *matHeaderCellDef> N.Camera </th>
+                <td mat-cell *matCellDef="let element"> {{element.camera}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="carico_cuscini">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico cuscini </th>
+                <td mat-cell *matCellDef="let element" style="padding-left: 5px">  {{" " + element.carico_cuscini + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_cuscini_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico cuscini lacerati </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_cuscini_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_coprimaterassi">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico coprimaterassi </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_coprimaterassi + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_coprimaterassi_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico coprimaterassi lacerate </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_coprimaterassi_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_copriletti">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico copriletti </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_copriletti + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_copriletti_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico copriletti lacerate </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_copriletti_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_coperte">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico coperte </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_coperte + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_coperte_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico coperte lacerate </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_coperte_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_federe">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico federe </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_federe + " unità"}} </td>
+              </ng-container>
+
+
+              <ng-container matColumnDef="carico_federe_lacerati">
+                <th mat-header-cell *matHeaderCellDef> Carico/Scarico federe lacerate </th>
+                <td mat-cell *matCellDef="let element"> {{element.carico_federe_lacerati + " unità"}} </td>
+              </ng-container>
+
+
+
+
+        
+              <ng-container matColumnDef="operator">
+                <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data </th>
+                <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumnsAttivitaInt"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumnsAttivitaInt;"></tr>
+            </table>
+        
+            <div >
+        
+              <mat-paginator #paginatorLavanderiaAttivitaExt [pageSizeOptions]="[5]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </mat-tab>
+
+
+
+
+          </mat-tab-group>
+  
+
+  </mat-dialog-content>

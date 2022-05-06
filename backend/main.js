@@ -452,6 +452,21 @@ const InitApiFunctions = () => {
   app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
   routesList.push(apicontrolliOSS);
 
+  // Gestione Chiavi API
+  var gestChiaviRouter = require("./routes/gestChiavi");
+  var apigestChiavi = { key: 'gestChiavi', path: '/api/gestChiavi' }
+  app.use(apigestChiavi.path, logHandler, authorizationHandler, gestChiaviRouter);
+  routesList.push(apigestChiavi);
+
+
+  // Gestione Rifacimento Letti API
+  var lettoCameraRouter = require("./routes/lettoCamera");
+  var apilettoCamera = { key: 'lettoCamera', path: '/api/lettoCamera' }
+  app.use(apilettoCamera.path, logHandler, authorizationHandler, lettoCameraRouter);
+  routesList.push(apilettoCamera);
+
+
+
   var CameraRouter = require("./routes/camera");
   var apiCamera = { key: 'camere', path: '/api/camera' }
   app.use( apiCamera.path, logHandler, authorizationHandler, roleHandler, CameraRouter );
