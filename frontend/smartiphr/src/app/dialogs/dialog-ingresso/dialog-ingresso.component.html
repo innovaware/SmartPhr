@@ -30,7 +30,7 @@
 
           <mat-tab label="Indumenti Consigliati">
 
-            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDocumentoIndumentiConsigliati && this.documentiIndumentiConsigliati?.length <= 0">
+            <div class="notPresent" style="margin-bottom: 10px;" >
               <button mat-button class="button-insert" (click)="addDocumentoIndumentiConsigliati()">Aggiungi Documento</button>
             </div>
 
@@ -129,7 +129,7 @@
 
           <mat-tab label="Indumenti da integrare">
 
-            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDocumentoIndumenti && this.documentiIndumenti?.length <= 0">
+            <div class="notPresent" style="margin-bottom: 10px;" >
               <button mat-button class="button-insert" (click)="addDocumentoIndumenti()">Aggiungi Documento</button>
             </div>
 
