@@ -67,6 +67,11 @@ import { IndumentiListComponent } from "./pages/indumenti-list/indumenti-list.co
 
 import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
 import { RifacimentoLettiOssComponent } from "./pages/rifacimento-letti-oss/rifacimento-letti-oss.component";
+import { GestFarmaciComponent } from "./pages/gest-farmaci/gest-farmaci.component";
+import { GestPresidiComponent } from "./pages/gest-presidi/gest-presidi.component";
+import { GestFarmacipresidiPazientiComponent } from "./pages/gest-farmacipresidi-pazienti/gest-farmacipresidi-pazienti.component";
+import { ModulisticafarmaciComponent } from "./pages/modulisticafarmaci/modulisticafarmaci.component";
+import { AttivitaFarmaciComponent } from "./pages/attivita-farmaci/attivita-farmaci.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -154,6 +159,15 @@ const routes: Routes = [
   { path: "archivio_relazioni_certificati", component: ArchiviRelazioniCertificatiComponent, canActivate: [AuthGuard]  },
   { path: "archivio_impegnative", component: ArchiviImpegnativeComponent, canActivate: [AuthGuard]  },
   { path: "archivio_pai", component: ArchiviPAIComponent, canActivate: [AuthGuard]  },
+
+
+
+  //GEST FARMACI
+  { path: "gest-farmaci", component: GestFarmaciComponent, canActivate: [AuthGuard]  },
+  { path: "gest-presidi", component: GestPresidiComponent, canActivate: [AuthGuard]  },
+  { path: "gest_farmacipresidi", component: GestFarmacipresidiPazientiComponent, canActivate: [AuthGuard]  },
+  { path: "gest-registro", component: AttivitaFarmaciComponent, canActivate: [AuthGuard]  },
+  { path: "modulistica-farmaci", component: ModulisticafarmaciComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },

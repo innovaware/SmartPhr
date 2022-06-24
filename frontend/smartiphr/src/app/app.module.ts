@@ -202,6 +202,18 @@ import { IndumentiListComponent } from './pages/indumenti-list/indumenti-list.co
 import { IndumentiComponent } from './dialogs/indumenti/indumenti.component';
 import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
 import { RifacimentoLettiOssComponent } from './pages/rifacimento-letti-oss/rifacimento-letti-oss.component';
+import { GestFarmaciComponent } from './pages/gest-farmaci/gest-farmaci.component';
+import { GestPresidiComponent } from './pages/gest-presidi/gest-presidi.component';
+import { GestFarmacipresidiPazientiComponent } from './pages/gest-farmacipresidi-pazienti/gest-farmacipresidi-pazienti.component';
+import { DialogPresidioComponent } from './dialogs/dialog-presidio/dialog-presidio.component';
+import { ModulisticafarmaciComponent } from './pages/modulisticafarmaci/modulisticafarmaci.component';
+import { DialogPresidiPazienteComponent } from './dialogs/dialog-presidi-paziente/dialog-presidi-paziente.component';
+import { DialogFarmaciPazienteComponent } from './dialogs/dialog-farmaci-paziente/dialog-farmaci-paziente.component';
+import { DialogFarmacoPazienteComponent } from './dialogs/dialog-farmaco-paziente/dialog-farmaco-paziente.component';
+import { DialogPresidioPazienteComponent } from './dialogs/dialog-presidio-paziente/dialog-presidio-paziente.component';
+import { DialogModulisticaPazienteComponent } from './dialogs/dialog-modulistica-paziente/dialog-modulistica-paziente.component';
+import { AttivitaFarmaciComponent } from './pages/attivita-farmaci/attivita-farmaci.component';
+import { AttivitaPresidiComponent } from './pages/attivita-presidi/attivita-presidi.component';
 
 const materialModules = [
   MatTableModule,
@@ -244,6 +256,7 @@ const dialogModule = [
   DialogCartellaInfermeristicaComponent,
   DialogEventComponent,
   DialogFarmacoComponent,
+  DialogPresidioComponent,
   DialogDipendenteComponent,
   DialogConsulenteComponent,
   DialogFornitoreComponent,
@@ -397,6 +410,18 @@ const pipes = [
     IndumentiListComponent,
     ChiaviOssComponent,
     RifacimentoLettiOssComponent,
+    GestFarmaciComponent,
+    GestPresidiComponent,
+    GestFarmacipresidiPazientiComponent,
+    DialogPresidioComponent,
+    ModulisticafarmaciComponent,
+    DialogPresidiPazienteComponent,
+    DialogFarmaciPazienteComponent,
+    DialogFarmacoPazienteComponent,
+    DialogPresidioPazienteComponent,
+    DialogModulisticaPazienteComponent,
+    AttivitaFarmaciComponent,
+    AttivitaPresidiComponent,
   ],
   imports: [
     ...materialModules,
@@ -426,6 +451,7 @@ const pipes = [
     DialogCartellaEducativaComponent,
     DialogEventComponent,
     DialogFarmacoComponent,
+    DialogPresidioComponent,
     DialogDipendenteComponent,
     DialogConsulenteComponent,
     DialogFornitoreComponent,

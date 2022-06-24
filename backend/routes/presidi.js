@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const Farmaci = require("../models/farmaci");
+const Presidi = require("../models/presidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 
@@ -10,25 +10,25 @@ router.get("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Farmaci.find();
+      return Presidi.find();
     };
 
     if (redisClient == undefined || redisDisabled) {
-      const farmaci = await getData();
-      res.status(200).json(farmaci);
+      const presidi = await getData();
+      res.status(200).json(presidi);
       return;
     }
 
-    const searchTerm = `FARMACIALL`;
+    const searchTerm = `PRESIDIALL`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await getData() 
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
-        res.status(200).json(farmaci);
+        const presidi = await getData() 
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presidi));
+        res.status(200).json(presidi);
       }
     });
 
@@ -45,26 +45,26 @@ router.get("/:id", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Farmaci.findById(id);
+      return Presidi.findById(id);
     };
 
     if (redisClient == undefined || redisDisabled) {
-      const farmaci = await getData();
-      res.status(200).json(farmaci);
+      const presidi = await getData();
+      res.status(200).json(presidi);
       return;
     }
 
-    const searchTerm = `FARMACIBY${id}`;
+    const searchTerm = `PRESIDIBY${id}`;
     redisClient.get(searchTerm, async (err, data) => {
       if (err) throw err;
 
       if (data) {
         res.status(200).send(JSON.parse(data));
       } else {
-        const farmaci = await getData(); 
+        const presidi = await getData(); 
 
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(farmaci));
-        res.status(200).json(farmaci);
+        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presidi));
+        res.status(200).json(presidi);
       }
     });
   } catch (err) {
@@ -74,27 +74,21 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const farmaci = new Farmaci({
+    const presidi = new Presidi({
       nome: req.body.nome,
       descrizione: req.body.descrizione,
-      formulazione: req.body.formulazione,
-      lotto: req.body.lotto,
-      scadenza: req.body.scadenza,
-      classe: req.body.classe,
-      formato: req.body.formato,
-      dose: req.body.dose,
-      qty: req.body.qty,
       note: req.body.note,
-      codice_interno: req.body.codice_interno
+      taglia: req.body.taglia,
+      qty: req.body.qty
     });
 
-    const result = await farmaci.save();
+    const result = await presidi.save();
     
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
     if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `FARMACIALL`;
+      const searchTerm = `PRESIDIALL`;
       redisClient.del(searchTerm);
     }
 
@@ -109,21 +103,15 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
-    const farmaci = await Farmaci.updateOne(
+    const presidi = await Presidi.updateOne(
       { _id: id },
       {
         $set: {
           nome: req.body.nome,
           descrizione: req.body.descrizione,
-          formulazione: req.body.formulazione,
-          lotto: req.body.lotto,
-          scadenza: req.body.scadenza,
-          classe: req.body.classe,
-          formato: req.body.formato,
-          dose: req.body.dose,
-          qty: req.body.qty,
           note: req.body.note,
-          codice_interno: req.body.codice_interno
+          taglia: req.body.taglia,
+          qty: req.body.qty
         },
       }
     );
@@ -137,7 +125,7 @@ router.put("/:id", async (req, res) => {
     }
 
     res.status(200);
-    res.json(farmaci);
+    res.json(presidi);
 
   } catch (err) {
     res.status(500).json({error: err}) 

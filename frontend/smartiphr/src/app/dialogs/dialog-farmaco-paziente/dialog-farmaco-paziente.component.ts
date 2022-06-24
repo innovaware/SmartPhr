@@ -3,16 +3,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Farmaci } from 'src/app/models/farmaci';
 
 @Component({
-  selector: 'app-dialog-farmaco',
-  templateUrl: './dialog-farmaco.component.html',
-  styleUrls: ['./dialog-farmaco.component.css']
+  selector: 'app-dialog-farmaco-paziente',
+  templateUrl: './dialog-farmaco-paziente.component.html',
+  styleUrls: ['./dialog-farmaco-paziente.component.css']
 })
-export class DialogFarmacoComponent implements OnInit {
+export class DialogFarmacoPazienteComponent implements OnInit {
 
   constructor(
-    public dialogRef: MatDialogRef<DialogFarmacoComponent>,
+    public dialogRef: MatDialogRef<DialogFarmacoPazienteComponent>,
     @Inject(MAT_DIALOG_DATA) public data: { row: Farmaci; title: string;  }) {
-
       console.log("item: ", this.data.row);
     }
 

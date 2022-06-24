@@ -250,6 +250,13 @@ const InitApiFunctions = () => {
   app.use(apiFarmaci.path, logHandler, authorizationHandler, roleHandler, farmaciRouter);
   routesList.push(apiFarmaci);
 
+
+    // Presidi API
+  var presidiRouter = require("./routes/presidi");
+  var apiPresidi = { key: 'presidi', path: '/api/presidi' }
+  app.use(apiPresidi.path, logHandler, authorizationHandler, roleHandler, presidiRouter);
+  routesList.push(apiPresidi);
+
   // Eventi API
   var eventiRouter = require("./routes/eventi");
   var apiEventi = { key: 'eventi', path: '/api/eventi' }
@@ -335,11 +342,21 @@ const InitApiFunctions = () => {
   app.use( apiTurniMensili.path, logHandler, authorizationHandler, roleHandler, turniMensiliRouter );
   routesList.push(apiTurniMensili);
 
-  // Turni mensili API
+  
+  // Doc Farmaci API
+  var documentiFarmaciRouter = require("./routes/documentifarmaci");
+  var apiDocumentiFarmaci = { key: 'documentifarmaci', path: '/api/documentifarmaci' }
+  app.use( apiDocumentiFarmaci.path, logHandler, authorizationHandler, roleHandler, documentiFarmaciRouter );
+  routesList.push(apiDocumentiFarmaci);
+
+
+  // Doc Dipendenti API
   var documentiDipendentiRouter = require("./routes/documentidipendenti");
   var apiDocumentiDipendenti = { key: 'documentidipendenti', path: '/api/documentidipendenti' }
   app.use( apiDocumentiDipendenti.path, logHandler, authorizationHandler, roleHandler, documentiDipendentiRouter );
   routesList.push(apiDocumentiDipendenti);
+
+
 
   // MedicinaLavoro API
   var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
@@ -451,6 +468,13 @@ const InitApiFunctions = () => {
   var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
   app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
   routesList.push(apicontrolliOSS);
+
+
+    // Attivita Generiche API
+    var AttivitaFarmaciRouter = require("./routes/attivitaFarmaciPresidi");
+    var apiAttivitafarmaci = { key: 'attivitafarmaci', path: '/api/attivitafarmaci' }
+    app.use(apiAttivitafarmaci.path, logHandler, authorizationHandler, AttivitaFarmaciRouter);
+    routesList.push(apiAttivitafarmaci);
 
   // Gestione Chiavi API
   var gestChiaviRouter = require("./routes/gestChiavi");
