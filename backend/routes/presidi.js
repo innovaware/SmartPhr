@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Presidi = require("../models/presidi");
+const AttivitaFarmaciPresidi = require("../models/attivitaFarmaciPresidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 
@@ -10,7 +11,9 @@ router.get("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Presidi.find();
+      return Presidi.find({
+        paziente: null,
+      });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -38,14 +41,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/paziente/:id", async (req, res) => {
   const { id } = req.params;
   try {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Presidi.findById(id);
+      return Presidi.find({
+        paziente: id,
+      });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -79,10 +84,52 @@ router.post("/", async (req, res) => {
       descrizione: req.body.descrizione,
       note: req.body.note,
       taglia: req.body.taglia,
-      qty: req.body.qty
+      qty: req.body.qty,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
     });
 
     const result = await presidi.save();
+
+
+    if(req.body._id != "" && req.body._id != null){
+      console.log('req.body._id: ' + req.body._id);
+      const getData = () => {
+        return Presidi.findById(req.body._id);
+      };
+      const presidio = await getData();
+      console.log('farmaco.qty: ' + farmaco.qty);
+      const presidi = await Presidi.updateOne(
+        { _id: req.body._id },
+        {
+          $set: {
+            qty: presidio.qty != null ?  presidio.qty - req.body.qty : null,
+            giacenza : presidio.giacenza != null ? presidio.giacenza - req.body.giacenza : null,
+          },
+        }
+        );
+      }
+
+
+
+    const now = new Date();
+    const attivita = new AttivitaFarmaciPresidi({
+      operator: req.body.operator,
+      operatorName: req.body.operatorName,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
+      elemento: req.body.nome,
+      elemento_id: presidi.id,
+      type: 'Presidi',
+      qty: req.body.qty,
+      data: now.toLocaleString()
+    });
+
+
+    console.log('new attivita:' + JSON.stringify(attivita));
+    const result2 = await attivita.save();
+
+
     
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
@@ -111,10 +158,29 @@ router.put("/:id", async (req, res) => {
           descrizione: req.body.descrizione,
           note: req.body.note,
           taglia: req.body.taglia,
-          qty: req.body.qty
+          qty: req.body.qty,
+         
         },
       }
     );
+
+    const now = new Date();
+    const attivita = new AttivitaFarmaciPresidi({
+      operator: req.body.operator,
+      operatorName: req.body.operatorName,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
+      elemento: req.body.nome,
+      elemento_id: id,
+      type: 'Presidi',
+      qty: req.body.qty,
+      data: now.toLocaleString()
+    });
+
+
+    console.log('new attivita:' + JSON.stringify(attivita));
+
+
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");

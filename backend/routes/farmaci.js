@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Farmaci = require("../models/farmaci");
+const AttivitaFarmaciPresidi = require("../models/attivitaFarmaciPresidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 
@@ -10,7 +11,9 @@ router.get("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Farmaci.find();
+      return Farmaci.find({
+        paziente: null,
+      });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -38,14 +41,16 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/:id", async (req, res) => {
+router.get("/paziente/:id", async (req, res) => {
   const { id } = req.params;
   try {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Farmaci.findById(id);
+      return Farmaci.find({
+        paziente: id,
+      });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -85,10 +90,52 @@ router.post("/", async (req, res) => {
       dose: req.body.dose,
       qty: req.body.qty,
       note: req.body.note,
-      codice_interno: req.body.codice_interno
+      giacenza : req.body.giacenza,
+      codice_interno: req.body.codice_interno,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
     });
+    
 
     const result = await farmaci.save();
+
+  if(req.body._id != "" && req.body._id != null){
+    console.log('req.body._id: ' + req.body._id);
+    const getData = () => {
+      return Farmaci.findById(req.body._id);
+    };
+    const farmaco = await getData();
+    console.log('farmaco.qty: ' + farmaco.qty);
+    const farmaci = await Farmaci.updateOne(
+      { _id: req.body._id },
+      {
+        $set: {
+          qty: farmaco.qty != null ?  farmaco.qty - req.body.qty : null,
+          giacenza : farmaco.giacenza != null ? farmaco.giacenza - req.body.giacenza : null,
+        },
+      }
+      );
+    }
+
+
+    const now = new Date();
+    const attivita = new AttivitaFarmaciPresidi({
+      operator: req.body.operator,
+      operatorName: req.body.operatorName,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
+      elemento: req.body.nome,
+      elemento_id: farmaci.id,
+      type: 'Farmaci',
+      qty: req.body.qty,
+      data: now.toLocaleString()
+    });
+
+
+    console.log('new attivita:' + JSON.stringify(attivita));
+    const result2 = await attivita.save();
+
+
     
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
@@ -123,10 +170,30 @@ router.put("/:id", async (req, res) => {
           dose: req.body.dose,
           qty: req.body.qty,
           note: req.body.note,
+          giacenza : req.body.giacenza,
           codice_interno: req.body.codice_interno
         },
       }
     );
+
+
+  
+    const now = new Date();
+    const attivita = new AttivitaFarmaciPresidi({
+      operator: req.body.operator,
+      operatorName: req.body.operatorName,
+      paziente: req.body.paziente,
+      pazienteName: req.body.pazienteName,
+      elemento: req.body.nome,
+      elemento_id: id,
+      type: 'Farmaci',
+      qty: req.body.qty,
+      data: now.toLocaleString()
+    });
+
+    const result2 = await attivita.save();
+
+
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");

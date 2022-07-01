@@ -3,8 +3,12 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { DialogPresidioComponent } from "src/app/dialogs/dialog-presidio/dialog-presidio.component";
+import { Dipendenti } from "src/app/models/dipendenti";
 import { Presidi } from "src/app/models/presidi";
+import { AuthenticationService } from "src/app/service/authentication.service";
+import { DipendentiService } from "src/app/service/dipendenti.service";
 import { GestPresidiService } from "src/app/service/gest-presidi.service";
+import { MessagesService } from "src/app/service/messages.service";
 @Component({
   selector: 'app-gest-presidi',
   templateUrl: './gest-presidi.component.html',
@@ -24,13 +28,38 @@ export class GestPresidiComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-
+  dipendente: Dipendenti = {} as Dipendenti;
   constructor(
     public dialog: MatDialog,
-    public presidiService: GestPresidiService
+    public presidiService: GestPresidiService,
+    public dipendenteService: DipendentiService,
+    public authenticationService: AuthenticationService,
+    public messageService: MessagesService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.loadUser();
+  }
+
+  loadUser() {
+    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
+      console.log("get dipendente");
+      this.dipendenteService
+        .getByIdUser(user._id)
+        .then((x) => {
+          console.log("dipendente: " + JSON.stringify(x[0]));
+          this.dipendente = x[0];
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+    });
+  }
+
+
 
   ngAfterViewInit() {
     this.presidiService.getPresidi().then((result) => {
@@ -59,6 +88,11 @@ export class GestPresidiComponent implements OnInit {
         console.log("The dialog was closed");
 
         if (result != undefined && result) {
+
+          result.operator = this.dipendente._id;
+          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
+
+
           this.presidiService
             .insert(result)
             .then((r) => {
@@ -83,6 +117,11 @@ export class GestPresidiComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
         if (result != undefined && result) {
+
+          result.operator = this.dipendente._id;
+          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
+
+
           this.presidiService
             .update(result)
             .then((r) => {

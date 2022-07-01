@@ -1,6 +1,7 @@
 export class Farmaci {
 
   constructor() {
+    this._id = "";
     this.nome = "";
     this.descrizione = "";
     this.formulazione = "";
@@ -11,6 +12,11 @@ export class Farmaci {
     this.note = "";
     this.qty = 1;
     this.codice_interno   = "";
+
+    this.operator = "";
+    this.operatorName = "";
+    this.paziente = "";
+    this.pazienteName = "";
   }
 
   static clone(obj: Farmaci) {
@@ -29,4 +35,9 @@ export class Farmaci {
   qty: number;
   giacenza?: number;
   codice_interno: string;
+
+  operator: string;
+  operatorName: string;
+  paziente: string;
+  pazienteName: string;
 }

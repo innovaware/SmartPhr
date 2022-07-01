@@ -9,6 +9,7 @@ const AttivitaFarmaciPresidiSchema = mongoose.Schema({
     elemento: String,
     elemento_id: String,
     type: String,
+    data: String,
     qty: String
 });
 

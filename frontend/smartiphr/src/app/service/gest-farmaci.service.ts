@@ -16,6 +16,10 @@ export class GestFarmaciService {
     return this.http.get<Farmaci[]>(this.api + "/api/farmaci").toPromise();
   }
 
+  async getFarmaciByPaziente(id): Promise<Farmaci[]> {
+    return this.http.get<Farmaci[]>(this.api + "/api/farmaci/paziente/" + id).toPromise();
+  }
+
   async update(item: Farmaci) {
     var body = item;
     return this.http.put<Farmaci>(this.api + "/api/farmaci/" + item._id, body).toPromise();

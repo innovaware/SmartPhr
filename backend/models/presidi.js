@@ -5,7 +5,10 @@ const PresidiSchema = mongoose.Schema({
     descrizione: String,
     note: String,
     taglia: String,
-    qty: Number
+    qty: Number,
+    giacenza: Number,
+    paziente: String,
+    pazienteName: String,
 });
 
 module.exports = mongoose.model('Presidi', PresidiSchema, 'presidi');

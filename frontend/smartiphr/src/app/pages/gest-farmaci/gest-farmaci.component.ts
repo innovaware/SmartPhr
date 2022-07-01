@@ -3,8 +3,12 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { DialogFarmacoComponent } from "src/app/dialogs/dialog-farmaco/dialog-farmaco.component";
+import { Dipendenti } from "src/app/models/dipendenti";
 import { Farmaci } from "src/app/models/farmaci";
+import { AuthenticationService } from "src/app/service/authentication.service";
+import { DipendentiService } from "src/app/service/dipendenti.service";
 import { GestFarmaciService } from "src/app/service/gest-farmaci.service";
+import { MessagesService } from "src/app/service/messages.service";
 
 @Component({
   selector: 'app-gest-farmaci',
@@ -28,13 +32,18 @@ export class GestFarmaciComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
-
+  dipendente: Dipendenti = {} as Dipendenti;
   constructor(
     public dialog: MatDialog,
-    public farmaciService: GestFarmaciService
+    public farmaciService: GestFarmaciService,
+    public dipendenteService: DipendentiService,
+    public authenticationService: AuthenticationService,
+    public messageService: MessagesService,
   ) {}
 
-  ngOnInit() {}
+  ngOnInit(): void {
+    this.loadUser();
+  }
 
   ngAfterViewInit() {
     this.farmaciService.getFarmaci().then((result) => {
@@ -51,6 +60,26 @@ export class GestFarmaciComponent implements OnInit {
   }
 
 
+  loadUser() {
+    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
+      console.log("get dipendente");
+      this.dipendenteService
+        .getByIdUser(user._id)
+        .then((x) => {
+          console.log("dipendente: " + JSON.stringify(x[0]));
+          this.dipendente = x[0];
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+    });
+  }
+
+
+
   async newItem() {
     var dialogRef = undefined;
 
@@ -58,11 +87,15 @@ export class GestFarmaciComponent implements OnInit {
       data: { row: new Farmaci(),  title: 'Nuovo Farmaco' },
     });
 
+    
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
 
         if (result != undefined && result) {
+          result.operator = this.dipendente._id;
+          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
+          
           this.farmaciService
             .insert(result)
             .then((r) => {
@@ -87,6 +120,10 @@ export class GestFarmaciComponent implements OnInit {
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
         if (result != undefined && result) {
+          result.operator = this.dipendente._id;
+          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
+
+
           this.farmaciService
             .update(result)
             .then((r) => {

@@ -4,7 +4,9 @@ import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { DialogFarmacoComponent } from "src/app/dialogs/dialog-farmaco/dialog-farmaco.component";
 import { AttivitaFarmaciPresidi } from "src/app/models/attivitaFarmaciPresidi";
+import { Paziente } from "src/app/models/paziente";
 import { AttivitafarmacipresidiService } from "src/app/service/attivitafarmacipresidi.service";
+import { PazienteService } from "src/app/service/paziente.service";
 
 @Component({
   selector: 'app-attivita-farmaci',
@@ -17,7 +19,8 @@ export class AttivitaFarmaciComponent implements OnInit {
     "nome",
     "qty",
     "data",
-    "operator"
+    "operator",
+    "pazient"
   ];
   dataSource: MatTableDataSource<AttivitaFarmaciPresidi>;
   dataSourcePresidi: MatTableDataSource<AttivitaFarmaciPresidi>;
@@ -27,14 +30,28 @@ export class AttivitaFarmaciComponent implements OnInit {
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   @ViewChild(MatPaginator, {static: false}) paginatorPresidi: MatPaginator;
 
+  pazienti:Paziente[];
+
   constructor(
     public dialog: MatDialog,
-    public service: AttivitafarmacipresidiService
+    public service: AttivitafarmacipresidiService,
+    public pazienteService: PazienteService
   ) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this.pazienteService.getPazienti().then((result) => {
+      this.pazienti = result;
+      console.log(JSON.stringify(this.pazienti));
+    });
+  }
 
   ngAfterViewInit() {
+
+    this.pazienteService.getPazienti().then((result) => {
+      this.pazienti = result;
+    });
+
+
     this.service.getAllAttivitaFarmaci().then((result) => {
       this.attivita = result;
 
@@ -63,6 +80,18 @@ export class AttivitaFarmaciComponent implements OnInit {
   applyFilterPresidi(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourcePresidi.filter = filterValue.trim().toLowerCase();
+  }
+
+
+  onPazienteFarmaciChange(event) {
+    const pazienteID = event.value;
+    this.dataSource.filter = pazienteID.trim().toLowerCase();
+  }
+
+
+  onPazientePresidiChange(event: Event) {
+    const pazienteID = (event.target as HTMLInputElement).value;
+    this.dataSourcePresidi.filter = pazienteID.trim().toLowerCase();
   }
 
 

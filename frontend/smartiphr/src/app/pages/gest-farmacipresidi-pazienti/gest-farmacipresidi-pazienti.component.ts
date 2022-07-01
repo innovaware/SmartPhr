@@ -41,7 +41,7 @@ export class GestFarmacipresidiPazientiComponent implements OnInit {
       tooltip: "Farmaci",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogFarmaciPazienteComponent, {
-            data: { paziente: paziente, readonly: false, altro: false },
+            data: { paziente: paziente},
             width: "1024px",
           })
           .afterClosed()
@@ -68,7 +68,8 @@ export class GestFarmacipresidiPazientiComponent implements OnInit {
       tooltip: "Presidi",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogPresidiPazienteComponent, {
-          data: { paziente: paziente, readonly: true },
+          data: { paziente: paziente },
+          width: "1024px",
         }),
       //css: "mat-raised-button raised-button action-button",
     });

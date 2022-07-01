@@ -13,6 +13,8 @@ const Farmacichema = mongoose.Schema({
     giacenza: Number,
     note:String,
     codice_interno: String,
+    paziente: String,
+    pazienteName: String,
 });
 
 module.exports = mongoose.model('Farmaci', Farmacichema, 'farmaci');
