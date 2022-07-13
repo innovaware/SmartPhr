@@ -2,6 +2,7 @@ export class Farmaci {
 
   constructor() {
     this._id = "";
+    this.rif_id = "";
     this.nome = "";
     this.descrizione = "";
     this.formulazione = "";
@@ -23,6 +24,7 @@ export class Farmaci {
     return JSON.parse(JSON.stringify(obj));
   }
   _id?: string;
+  rif_id:string;
   nome: string;
   descrizione: string;
   formulazione: string;

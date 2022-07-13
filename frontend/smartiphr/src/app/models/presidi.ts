@@ -1,6 +1,8 @@
 export class Presidi {
 
     constructor() {
+      this._id = "";
+      this.rif_id = "";
       this.nome = "";
       this.descrizione = "";
       this.note = "";
@@ -17,6 +19,7 @@ export class Presidi {
       return JSON.parse(JSON.stringify(obj));
     }
       _id?: string;
+      rif_id:string;
       nome: string;
       descrizione: string;
       note: string;

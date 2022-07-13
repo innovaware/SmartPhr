@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const Farmacichema = mongoose.Schema({
     nome:String,
+    rif_id: String,
     descrizione: String,
     formulazione: String,
     lotto: String,

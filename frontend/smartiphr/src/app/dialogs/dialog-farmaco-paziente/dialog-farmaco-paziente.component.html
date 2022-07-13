@@ -1,71 +1,80 @@
 <div mat-dialog-title>
-    <div class="container-fluid">
-      <div class="row">
-        <div class="col">
-          <h4>{{ data.title }}</h4>
-        </div>
-  
-        <div class="col">
-          <button class="close-button" [mat-dialog-close]="true">×
-          </button>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h4>{{ data.title }}</h4>
       </div>
-  
-      <div class="row">
-        <div class="col">
-          <span>Tutti i campi indicati con * sono obbligatori.</span>
-          <hr>
-        </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <span>Tutti i campi indicati con * sono obbligatori.</span>
+        <hr>
       </div>
     </div>
   </div>
-  
-  <mat-dialog-content>
-    <div class="container-fluid">
-      <mat-form-field appearance="fill">
-        <mat-label>Seleziona Farmaco</mat-label>
-        <mat-select [(ngModel)]="data.row._id">
-          <mat-option *ngFor="let farmaco of farmaci"  [value]="farmaco._id">
-            {{farmaco.nome}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-  
+</div>
 
-  
-  
-      <div class="row">
-        <div class="col">
-          <div class="form-group">
-            <label>Quantità*</label>
-            <mat-form-field appearance="fill">
-              <input matInput type="number"   [(ngModel)]="data.row.qty">
-            </mat-form-field>
-          </div>
-        </div>
-  
-        <div class="col">
-          <div class="form-group">
-            <label>Giacenza*</label>
-            <mat-form-field appearance="fill">
-              <input matInput type="text" placeholder="Inserisci Giacenza" [(ngModel)]="data.row.giacenza">
-            </mat-form-field>
-          </div>
+<mat-dialog-content>
+  <div class="container-fluid">
+    
+    <mat-form-field appearance="fill" *ngIf="data.row.nome == ''">
+      <mat-label>Seleziona Farmaco</mat-label>
+      <mat-select [(ngModel)]="data.row._id" [(value)]="selected">
+        <mat-option *ngFor="let farmaco of farmaci"  [value]="farmaco._id">
+          {{farmaco.nome}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+
+
+    <div class="row" *ngIf="data.row.nome != ''">
+      <div class="col">
+        <div class="form-group">
+          <label>Farmaco</label><br>
+          <h2>{{ data.row.nome }}</h2>
+
         </div>
       </div>
-  
+    </div>
 
-  
+
+    <div class="row">
+      <div class="col">
+        <div class="form-group">
+          <label>Quantità*</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.qty">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <label>Giacenza*</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="text" placeholder="Inserisci Giacenza" [(ngModel)]="data.row.giacenza">
+          </mat-form-field>
+        </div>
+      </div>
     </div>
-  
-  
-  </mat-dialog-content>
-  
-  
-  <div mat-dialog-actions>
-    <div class="bottom-actions">
-      <button mat-button [mat-dialog-close]="false">Chiudi</button>
-      <button mat-button class="button-save" (click)="save()">Salva</button>
-    </div>
+
+
+
   </div>
-  
+
+
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="false">Chiudi</button>
+    <button mat-button class="button-save" (click)="save()">Salva</button>
+  </div>
+</div>

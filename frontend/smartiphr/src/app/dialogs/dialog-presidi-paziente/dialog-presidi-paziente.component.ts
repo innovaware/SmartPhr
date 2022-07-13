@@ -110,4 +110,40 @@ export class DialogPresidiPazienteComponent implements OnInit {
     }
 
 
+
+    editQtyItem(presidio: Presidi) {
+      var dialogRef = undefined;
+  
+      dialogRef = this.dialog.open(DialogPresidioPazienteComponent, {
+        data: { row: presidio,  title: 'Modifica quantità Presidio' },
+      });
+      if (dialogRef != undefined)
+        dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed");
+
+        if (result != undefined && result) {
+
+          console.log("result: " + JSON.stringify(result));
+
+          this.presidiService
+            .update(result)
+            .then((x) => {
+              const index = this.presidi.indexOf(presidio);
+  
+              this.presidi[index] = presidio;
+  
+              this.dataSource.data = this.presidi;
+              //dialogDocCMCF.close(result);
+            })
+            .catch((err) => {
+              if (err["status"] != undefined && err["status"] != 500)
+                this.messageService.showMessageError(
+                  "Errore update Presidio (" + err["status"] + ")"
+                );
+            });
+        }
+      });
+    }
+  
+
 }

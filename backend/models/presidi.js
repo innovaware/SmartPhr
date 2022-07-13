@@ -2,6 +2,7 @@ const mongoose = require("mongoose");
 
 const PresidiSchema = mongoose.Schema({
     nome:String,
+    rif_id: String,
     descrizione: String,
     note: String,
     taglia: String,

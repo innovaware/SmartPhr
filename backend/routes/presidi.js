@@ -11,9 +11,7 @@ router.get("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Presidi.find({
-        paziente: null,
-      });
+      return Presidi.find({$or:[{"paziente" : null}, {"paziente": ""}]});
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -81,9 +79,11 @@ router.post("/", async (req, res) => {
   try {
     const presidi = new Presidi({
       nome: req.body.nome,
+      rif_id: req.body.rif_id,
       descrizione: req.body.descrizione,
       note: req.body.note,
       taglia: req.body.taglia,
+      giacenza: req.body.giacenza,
       qty: req.body.qty,
       paziente: req.body.paziente,
       pazienteName: req.body.pazienteName,
@@ -98,7 +98,7 @@ router.post("/", async (req, res) => {
         return Presidi.findById(req.body._id);
       };
       const presidio = await getData();
-      console.log('farmaco.qty: ' + farmaco.qty);
+      //console.log('farmaco.qty: ' + farmaco.qty);
       const presidi = await Presidi.updateOne(
         { _id: req.body._id },
         {
@@ -150,6 +150,22 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+    console.log('PUT id: ' + id);
+
+    const getDataSenzaPaziente = () => {
+      return Presidi.findById(req.body.rif_id);
+    };
+
+    const presSenzaPaziente = await getDataSenzaPaziente();
+
+
+    const getDataConPaziente = () => {
+      return Presidi.findById(id);
+    };
+
+    const presConPaziente = await getDataConPaziente();
+
+
     const presidi = await Presidi.updateOne(
       { _id: id },
       {
@@ -159,7 +175,7 @@ router.put("/:id", async (req, res) => {
           note: req.body.note,
           taglia: req.body.taglia,
           qty: req.body.qty,
-         
+          giacenza: req.body.giacenza,
         },
       }
     );
@@ -179,8 +195,26 @@ router.put("/:id", async (req, res) => {
 
 
     console.log('new attivita:' + JSON.stringify(attivita));
+    const result2 = await attivita.save();
 
 
+    var qtyDaTogliere = presConPaziente.qty - req.body.qty;
+    var giacenzaDaTogliere = presConPaziente.giacenza - req.body.giacenza;
+
+
+    console.log('qtyDaTogliere: ' + qtyDaTogliere);
+    console.log('presSenzaPaziente.qty: ' + presSenzaPaziente.qty);
+    console.log('giacenzaDaTogliere: ' + giacenzaDaTogliere);
+    console.log(' req.body.rif_id: ' +  req.body.rif_id);
+    const pres = await Presidi.updateOne(
+      { _id: req.body.rif_id },
+      {
+        $set: {
+          qty: qtyDaTogliere > 0 ?  presSenzaPaziente.qty + qtyDaTogliere : presSenzaPaziente.qty - qtyDaTogliere,
+          giacenza : giacenzaDaTogliere > 0 ?  presSenzaPaziente.giacenza + giacenzaDaTogliere : presSenzaPaziente.giacenza - giacenzaDaTogliere
+        },
+      }
+      );
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");

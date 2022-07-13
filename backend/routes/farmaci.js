@@ -11,9 +11,7 @@ router.get("/", async (req, res) => {
     redisDisabled = req.app.get("redisDisabled");
 
     const getData = () => {
-      return Farmaci.find({
-        paziente: null,
-      });
+      return Farmaci.find({$or:[{"paziente" : null}, {"paziente": ""}]});
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -81,6 +79,7 @@ router.post("/", async (req, res) => {
   try {
     const farmaci = new Farmaci({
       nome: req.body.nome,
+      rif_id: req.body.rif_id,
       descrizione: req.body.descrizione,
       formulazione: req.body.formulazione,
       lotto: req.body.lotto,
@@ -156,6 +155,20 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
+
+    const getDataSenzaPaziente = () => {
+      return Farmaci.findById(req.body.rif_id);
+    };
+
+    const farmSenzaPaziente = await getDataSenzaPaziente();
+
+
+    const getDataConPaziente = () => {
+      return Farmaci.findById(id);
+    };
+
+    const farmConPaziente = await getDataConPaziente();
+
     const farmaci = await Farmaci.updateOne(
       { _id: id },
       {
@@ -192,6 +205,24 @@ router.put("/:id", async (req, res) => {
     });
 
     const result2 = await attivita.save();
+
+
+    var qtyDaTogliere = farmConPaziente.qty - req.body.qty;
+    var giacenzaDaTogliere = farmConPaziente.giacenza - req.body.giacenza;
+
+    console.log('qtyDaTogliere: ' + qtyDaTogliere);
+    console.log('farmSenzaPaziente.qty: ' + farmSenzaPaziente.qty);
+    console.log('giacenzaDaTogliere: ' + giacenzaDaTogliere);
+    console.log(' req.body.rif_id: ' +  req.body.rif_id);
+    const farmaco = await Farmaci.updateOne(
+      { _id: req.body.rif_id },
+      {
+        $set: {
+          qty: qtyDaTogliere > 0 ?  farmSenzaPaziente.qty + qtyDaTogliere : farmSenzaPaziente.qty - qtyDaTogliere,
+          giacenza : giacenzaDaTogliere > 0 ?  farmSenzaPaziente.giacenza + giacenzaDaTogliere : farmSenzaPaziente.giacenza - giacenzaDaTogliere
+        },
+      }
+      );
 
 
 

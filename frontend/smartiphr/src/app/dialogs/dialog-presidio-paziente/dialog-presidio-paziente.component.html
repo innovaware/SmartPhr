@@ -22,9 +22,10 @@
   
   <mat-dialog-content>
     <div class="container-fluid">
-      <mat-form-field appearance="fill">
+      
+      <mat-form-field appearance="fill" *ngIf="data.row.nome == ''">
         <mat-label>Seleziona Presidio</mat-label>
-        <mat-select [(ngModel)]="data.row._id">
+        <mat-select [(ngModel)]="data.row._id" [(value)]="selected">
           <mat-option *ngFor="let presidio of presidi"  [value]="presidio._id">
             {{presidio.nome}}
           </mat-option>
@@ -32,6 +33,15 @@
       </mat-form-field>
   
 
+      <div class="row" *ngIf="data.row.nome != ''">
+        <div class="col">
+          <div class="form-group">
+            <label>Presidio</label><br>
+            <h2>{{ data.row.nome }}</h2>
+
+          </div>
+        </div>
+      </div>
   
   
       <div class="row">
