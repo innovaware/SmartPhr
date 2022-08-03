@@ -214,6 +214,8 @@ import { DialogPresidioPazienteComponent } from './dialogs/dialog-presidio-pazie
 import { DialogModulisticaPazienteComponent } from './dialogs/dialog-modulistica-paziente/dialog-modulistica-paziente.component';
 import { AttivitaFarmaciComponent } from './pages/attivita-farmaci/attivita-farmaci.component';
 import { AttivitaPresidiComponent } from './pages/attivita-presidi/attivita-presidi.component';
+import { AreaPaiComponent } from './pages/area-pai/area-pai.component';
+import { DialogPaiComponent } from './dialogs/dialog-pai/dialog-pai.component';
 
 const materialModules = [
   MatTableModule,
@@ -422,6 +424,8 @@ const pipes = [
     DialogModulisticaPazienteComponent,
     AttivitaFarmaciComponent,
     AttivitaPresidiComponent,
+    AreaPaiComponent,
+    DialogPaiComponent,
   ],
   imports: [
     ...materialModules,

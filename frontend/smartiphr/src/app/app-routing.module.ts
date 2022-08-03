@@ -72,6 +72,7 @@ import { GestPresidiComponent } from "./pages/gest-presidi/gest-presidi.componen
 import { GestFarmacipresidiPazientiComponent } from "./pages/gest-farmacipresidi-pazienti/gest-farmacipresidi-pazienti.component";
 import { ModulisticafarmaciComponent } from "./pages/modulisticafarmaci/modulisticafarmaci.component";
 import { AttivitaFarmaciComponent } from "./pages/attivita-farmaci/attivita-farmaci.component";
+import { AreaPaiComponent } from "./pages/area-pai/area-pai.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -100,6 +101,9 @@ const routes: Routes = [
   { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard]  },
   { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
+
+  // PAI
+  { path: "pai", component: AreaPaiComponent, canActivate: [AuthGuard]  },
 
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
