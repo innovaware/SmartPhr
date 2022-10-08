@@ -46,6 +46,9 @@ export class Camere {
   firmaArmadio?: string;
   userArmadio?: User;
 
+  //Stato pulizia Camera
+  statoPulizia: number; //0 Sporco; 1 In Corso; 2 Pulito; 3 Straordinario
+
   constructor() {
     const empty = {
       type: "FeatureCollection",
@@ -63,5 +66,7 @@ export class Camere {
 
     this.geometry = JSON.stringify(empty);
     this.geometryObject = empty;
+
+    this.statoPulizia = 0;
   }
 }

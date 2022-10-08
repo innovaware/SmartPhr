@@ -19,6 +19,7 @@ import { MessagesService } from 'src/app/service/messages.service';
 export class RegistroControlliOssComponent implements OnInit {
 
   public registroArmadioDataSource: MatTableDataSource<RegistroArmadio>;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   DisplayedColumns: string[] = [
     "cameraId",
     "stato",
@@ -47,6 +48,7 @@ export class RegistroControlliOssComponent implements OnInit {
       console.log(registro);
 
       this.registroArmadioDataSource = new MatTableDataSource<RegistroArmadio>(registro);
+      this.registroArmadioDataSource.paginator = this.paginator;
     });
   }
 

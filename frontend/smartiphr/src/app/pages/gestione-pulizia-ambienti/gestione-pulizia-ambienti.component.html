@@ -1,0 +1,76 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">AREA AUSILIARI - Pulizia Ambienti</h1>
+    </div>
+
+    <div class="col right">
+
+      <div class="didascalia">
+        <div style="padding-right:20px"><div class="red"></div> <span>Sporco</span></div>
+        <div style="padding-right:20px"><div class="orange"></div> <span>In Corso</span></div>
+        <div style="padding-right:20px"><div class="green"></div> <span>Pulito</span></div>
+        <div style="padding-right:20px"><div class="blue"></div> <span>Straordinarie</span></div>
+      </div>
+    </div>
+  </div>
+
+  <hr />
+
+  <div class="row">
+    <div class="col">
+      <div class="left-bar"></div>
+      <div id="ol-map" class="map-container"></div>
+    </div>
+
+    <div class="col">
+      <div class="containter pad">
+        <div class="row">
+          <div class="col">
+            <h3>Seleziona Ambiente</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" style="width: 100%;">
+              <mat-label>Seleziona Camera </mat-label>
+              <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCamera">
+                <mat-option
+                  *ngFor="let camera of camere | async"
+                  [value]="camera"
+                  >{{ camera.camera }}
+                </mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="this.selectedCamera">
+          <div class="col">
+            <h3>Seleziona Stato di pulizia</h3>
+          </div>
+        </div>
+
+        <div class="row" *ngIf="this.selectedCamera">
+          <mat-form-field appearance="fill" style="width: 100%;">
+            <mat-label>Stato di pulizia </mat-label>
+            <mat-select [(ngModel)]="selectedCamera.statoPulizia"  (selectionChange)="onChangeStatoPulizia($event)">
+              <mat-option [value]="0">Sporco</mat-option>
+              <mat-option [value]="1">In Corso</mat-option>
+              <mat-option [value]="2">Pulito</mat-option>
+              <mat-option [value]="3">Straordinarie</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+
+        <div class="row" *ngIf="this.selectedCamera">
+          <div class="col right">
+            <button mat-button (click)="salvaStatoPulizia()">Salva</button>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>

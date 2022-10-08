@@ -73,6 +73,7 @@ import { GestFarmacipresidiPazientiComponent } from "./pages/gest-farmacipresidi
 import { ModulisticafarmaciComponent } from "./pages/modulisticafarmaci/modulisticafarmaci.component";
 import { AttivitaFarmaciComponent } from "./pages/attivita-farmaci/attivita-farmaci.component";
 import { AreaPaiComponent } from "./pages/area-pai/area-pai.component";
+import { GestionePuliziaAmbientiComponent } from "./pages/gestione-pulizia-ambienti/gestione-pulizia-ambienti.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -172,6 +173,11 @@ const routes: Routes = [
   { path: "gest_farmacipresidi", component: GestFarmacipresidiPazientiComponent, canActivate: [AuthGuard]  },
   { path: "gest-registro", component: AttivitaFarmaciComponent, canActivate: [AuthGuard]  },
   { path: "modulistica-farmaci", component: ModulisticafarmaciComponent, canActivate: [AuthGuard]  },
+
+
+  //AREA AUSILIARI
+  { path: "gest-pulizia-ambienti", component: GestionePuliziaAmbientiComponent, canActivate: [AuthGuard]  },
+
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
