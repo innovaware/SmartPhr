@@ -25,6 +25,23 @@
 
     <div class="col">
       <div class="containter pad">
+         <div class="row">
+          <div class="col">
+            <h3>Seleziona Piano</h3>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="fill" style="width: 100%;">
+              <mat-label>Seleziona Piano</mat-label>
+              <mat-select (selectionChange)="onChangePiano($event)" [(ngModel)]="selectedPiano">
+                <mat-option value="1p">Piano Terra</mat-option>
+                <mat-option value="2p">Secondo Piano</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
+
         <div class="row">
           <div class="col">
             <h3>Seleziona Ambiente</h3>

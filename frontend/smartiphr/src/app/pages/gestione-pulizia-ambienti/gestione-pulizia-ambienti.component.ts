@@ -23,6 +23,7 @@ import { map } from 'rxjs/operators';
 import { MatSelectChange } from '@angular/material/select';
 import { Geometry } from 'ol/geom';
 import { MessagesService } from 'src/app/service/messages.service';
+import { Constants } from 'src/app/Constants';
 
 @Component({
   selector: 'app-gestione-pulizia-ambienti',
@@ -35,6 +36,36 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
   selectedCamera: Camere;
   selectedCameraLayer: VectorLayer<VectorSource<Geometry>>;
 
+  selectedPiano: string;
+  pianoTerra: {
+    layer: ImageLayer<Static>;
+    extent: number[];
+    projection: Projection;
+    target: string;
+  };
+
+  pianoPrimo: {
+    layer: ImageLayer<Static>;
+    extent: number[];
+    projection: Projection;
+    target: string;
+  };
+
+  pianoChiesaTerra: {
+    layer: ImageLayer<Static>;
+    extent: number[];
+    projection: Projection;
+    target: string;
+  };
+
+  pianoChiesaPrimo: {
+    layer: ImageLayer<Static>;
+    extent: number[];
+    projection: Projection;
+    target: string;
+  };
+
+
   piano: {
     layer: ImageLayer<Static>;
     extent: number[];
@@ -46,25 +77,28 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
     private mapService: MapService,
     private camereService: CamereService,
     private messageService: MessagesService,
-  ) { }
+  ) {
+    this.selectedPiano = '1p';
+   }
 
   ngOnInit(): void {
+    this.pianoTerra = this.mapService.getPrimoPiano();
+    this.pianoPrimo = this.mapService.getSecondoPiano();
+    this.pianoChiesaTerra = this.mapService.getPrimoChiesa();
+    this.pianoChiesaPrimo = this.mapService.getSecondoChiesa();
+
+    this.piano = this.pianoTerra;
     this.map = this.initMap();
     //this.addLayer(cam)
-    this.loadCamere('1p')
-    // this.camere.subscribe((cams: Camere[])=> {
-    //   console.log(cams);
-
-    //   cams.forEach(cam => this.addLayer(cam))
-    // });
-
+    this.loadCamere(this.selectedPiano);
   }
 
   loadCamere(piano: string) {
     this.camere = this.camereService.getByPiano(piano)
       .pipe(
-        map( (x: Camere[])=>
-            x.filter(c=> c.forPatient !== true).sort((o1, o2)=> o1.order - o2.order)),
+        //map( (x: Camere[])=>
+        //    x.filter(c=> c.forPatient !== true)),
+        map((x: Camere[])=> x.sort((o1, o2)=> o1.order - o2.order)),
         map( (x: Camere[])=>
             x.map( c => {
               return {
@@ -131,28 +165,31 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
   getColor(camera: Camere) {
       switch(camera.statoPulizia) {
         case 0: // Sporco
-          return [255, 0, 0, 0.3] as Color;
+          return Constants.SporcoRGB;
         case 1: // In Corso
-          return [255, 177, 0, 0.3] as Color;
+          return Constants.InCorsoRGB;
         case 2:// 2 Pulito
-          return [0, 255, 0, 0.3] as Color;
+          return Constants.PulitoRGB;
         case 3:// 3 Straordinario
-          return [0, 102, 255, 0.3] as Color;
+	        return Constants.StraordinarioRGB;
         default:
-          return [0, 0 ,0, 0.3] as Color;
+          // Default Color
+          return Constants.DefaultRGB;
 
       }
   }
 
   initMap() {
-    this.piano = this.mapService.getPrimoPiano();
+    return this.loadPiano(this.piano);
+  }
 
+  loadPiano(piano) {
     return new Map({
-      layers: [this.piano.layer],
+      layers: [piano.layer],
       target: "ol-map",
       view: new View({
-        projection: this.piano.projection,
-        center: getCenter(this.piano.extent),
+        projection: piano.projection,
+        center: getCenter(piano.extent),
         zoom: 2,
         maxZoom: 8,
       }),
@@ -161,6 +198,37 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
     });
   }
 
+  setPlan(plan: string) {
+    this.map.getAllLayers().forEach((x) => this.map.removeLayer(x));
+
+    switch (plan) {
+      case "2p":
+        this.map.addLayer(this.pianoPrimo.layer);
+        break;
+      case "1c":
+        this.map.addLayer(this.pianoChiesaTerra.layer);
+        break;
+      case "2c":
+        this.map.addLayer(this.pianoChiesaPrimo.layer);
+        break;
+      case "1p":
+      default:
+        this.map.addLayer(this.pianoTerra.layer);
+        break;
+    }
+  }
+
+  onChangePiano(event: MatSelectChange) {
+    this.selectedPiano = event.value;
+    console.log('Selezionato Piano:', this.selectedPiano);
+    this.setPlan(this.selectedPiano);
+
+    this.removeLayer(this.selectedCameraLayer);
+    this.selectedCamera = undefined;
+    this.selectedCameraLayer = undefined;
+
+    this.loadCamere(this.selectedPiano);
+  }
 
   onChangeCamera(event: MatSelectChange) {
     this.selectedCamera = event.value;
