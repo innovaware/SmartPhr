@@ -19,7 +19,9 @@ export class GestPresidiComponent implements OnInit {
   displayedColumns: string[] = [
     "nome",
     "descrizione",
+    "qtyTot",
     "qty",
+    "giacenza",
     "taglia",
     "action",
   ];

@@ -7,6 +7,7 @@ const PresidiSchema = mongoose.Schema({
     note: String,
     taglia: String,
     qty: Number,
+    qtyTot: Number,
     giacenza: Number,
     paziente: String,
     pazienteName: String,

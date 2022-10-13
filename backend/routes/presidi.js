@@ -85,6 +85,7 @@ router.post("/", async (req, res) => {
       taglia: req.body.taglia,
       giacenza: req.body.giacenza,
       qty: req.body.qty,
+      qtyTot: req.body.qtyTot,
       paziente: req.body.paziente,
       pazienteName: req.body.pazienteName,
     });
@@ -121,7 +122,7 @@ router.post("/", async (req, res) => {
       elemento: req.body.nome,
       elemento_id: presidi.id,
       type: 'Presidi',
-      qty: req.body.qty,
+      qty: req.body.qtyTot,
       data: now.toLocaleString()
     });
 
@@ -175,6 +176,7 @@ router.put("/:id", async (req, res) => {
           note: req.body.note,
           taglia: req.body.taglia,
           qty: req.body.qty,
+          qtyTot: req.body.qtyTot,
           giacenza: req.body.giacenza,
         },
       }
@@ -189,7 +191,7 @@ router.put("/:id", async (req, res) => {
       elemento: req.body.nome,
       elemento_id: id,
       type: 'Presidi',
-      qty: req.body.qty,
+      qty: req.body.qtyTot,
       data: now.toLocaleString()
     });
 
@@ -198,23 +200,26 @@ router.put("/:id", async (req, res) => {
     const result2 = await attivita.save();
 
 
-    var qtyDaTogliere = presConPaziente.qty - req.body.qty;
+    var qtyDaTogliere = presConPaziente.qtyTot - req.body.qtyTot;
     var giacenzaDaTogliere = presConPaziente.giacenza - req.body.giacenza;
-
+    var presSenzaPaziente_qtyTot = presSenzaPaziente != null ? presSenzaPaziente.qtyTot : 0;
 
     console.log('qtyDaTogliere: ' + qtyDaTogliere);
-    console.log('presSenzaPaziente.qty: ' + presSenzaPaziente.qty);
+    console.log('presSenzaPaziente.qtyTot: ' + presSenzaPaziente_qtyTot);
     console.log('giacenzaDaTogliere: ' + giacenzaDaTogliere);
     console.log(' req.body.rif_id: ' +  req.body.rif_id);
+
+  if(presSenzaPaziente != null){   
     const pres = await Presidi.updateOne(
       { _id: req.body.rif_id },
       {
         $set: {
-          qty: qtyDaTogliere > 0 ?  presSenzaPaziente.qty + qtyDaTogliere : presSenzaPaziente.qty - qtyDaTogliere,
+          qty: qtyDaTogliere > 0 ?  presSenzaPaziente.qtyTot + qtyDaTogliere : presSenzaPaziente.qtyTot - qtyDaTogliere,
           giacenza : giacenzaDaTogliere > 0 ?  presSenzaPaziente.giacenza + giacenzaDaTogliere : presSenzaPaziente.giacenza - giacenzaDaTogliere
         },
       }
       );
+    }
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");

@@ -88,6 +88,7 @@ router.post("/", async (req, res) => {
       formato: req.body.formato,
       dose: req.body.dose,
       qty: req.body.qty,
+      qtyTot: req.body.qtyTot,
       note: req.body.note,
       giacenza : req.body.giacenza,
       codice_interno: req.body.codice_interno,
@@ -156,8 +157,10 @@ router.put("/:id", async (req, res) => {
   try {
     const { id } = req.params;
 
+
+    console.log('PUT FARMACO: ' + JSON.stringify(req.body));
     const getDataSenzaPaziente = () => {
-      return Farmaci.findById(req.body.rif_id);
+      return Farmaci.findById(req.body.rif_id != "" ? req.body.rif_id : 0 );
     };
 
     const farmSenzaPaziente = await getDataSenzaPaziente();
@@ -182,6 +185,7 @@ router.put("/:id", async (req, res) => {
           formato: req.body.formato,
           dose: req.body.dose,
           qty: req.body.qty,
+          qtyTot: req.body.qtyTot,
           note: req.body.note,
           giacenza : req.body.giacenza,
           codice_interno: req.body.codice_interno
@@ -189,7 +193,7 @@ router.put("/:id", async (req, res) => {
       }
     );
 
-
+    console.log('PUT FARMACO2: ' + JSON.stringify(req.body));
   
     const now = new Date();
     const attivita = new AttivitaFarmaciPresidi({
