@@ -18,6 +18,7 @@ const CameraSchema = mongoose.Schema({
   dataArmadioCheck: Date,
   firmaArmadio: ObjectId,
 
+  statoPulizia: Number,
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");

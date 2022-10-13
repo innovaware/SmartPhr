@@ -76,12 +76,14 @@ router.put("/:id", async (req, res) => {
           armadioCheck: req.body.armadioCheck,
           dataArmadioCheck: req.body.dataArmadioCheck,
           firmaArmadio: req.body.firmaArmadio,
+          statoPulizia: req.body.statoPulizia,
         },
       }
     );
 
     //console.log("Update Camera req.body:", req.body);
-    // console.log("Update Camera:", camera);
+    console.log("Update Camera:", camera);
+    
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
@@ -115,6 +117,7 @@ router.post("/", async (req, res) => {
       armadioCheck: req.body.armadioCheck,
       dataArmadioCheck: req.body.dataArmadioCheck,
       firmaArmadio: req.body.firmaArmadio,
+      statoPulizia: req.body.statoPulizia,
     });
 
     // Salva i dati sul mongodb
@@ -158,7 +161,8 @@ router.put("/sanifica/:id", async (req, res) => {
 
           armadioCheck: req.body.armadioCheck,
           dataArmadioCheck: req.body.dataArmadioCheck,
-          firmaArmadio: req.body.firmaArmadio
+          firmaArmadio: req.body.firmaArmadio,
+          statoPulizia: req.body.statoPulizia,
         },
       }
     );

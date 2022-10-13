@@ -24,6 +24,18 @@ export class MessagesService {
       });
   }
 
+  showMessage(message: string) {
+    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
+      panelClass: "custom-modalbox",
+      data: message
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+      });
+  }
+
+
   deleteMessageQuestion(messageQuestion: string): Observable<any> {
     return this.dialog
       .open(DialogQuestionComponent, {

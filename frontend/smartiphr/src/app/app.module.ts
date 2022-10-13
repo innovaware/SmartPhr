@@ -216,6 +216,8 @@ import { AttivitaFarmaciComponent } from './pages/attivita-farmaci/attivita-farm
 import { AttivitaPresidiComponent } from './pages/attivita-presidi/attivita-presidi.component';
 import { AreaPaiComponent } from './pages/area-pai/area-pai.component';
 import { DialogPaiComponent } from './dialogs/dialog-pai/dialog-pai.component';
+import { GestionePuliziaAmbientiComponent } from './pages/gestione-pulizia-ambienti/gestione-pulizia-ambienti.component';
+import { DialogPuliziaAmbientiComponent } from './dialogs/dialog-pulizia-ambienti/dialog-pulizia-ambienti.component';
 
 const materialModules = [
   MatTableModule,
@@ -426,6 +428,8 @@ const pipes = [
     AttivitaPresidiComponent,
     AreaPaiComponent,
     DialogPaiComponent,
+    GestionePuliziaAmbientiComponent,
+    DialogPuliziaAmbientiComponent,
   ],
   imports: [
     ...materialModules,
