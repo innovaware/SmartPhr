@@ -12,6 +12,8 @@ export class Farmaci {
     this.dose = "";
     this.note = "";
     this.qty = 1;
+    this.qtyTot = 1;
+    this.giacenza = 1;
     this.codice_interno   = "";
 
     this.operator = "";
@@ -34,7 +36,8 @@ export class Farmaci {
   formato: string;
   dose: string;
   note: string;
-  qty: number;
+  qty?: number;
+  qtyTot?: number;
   giacenza?: number;
   codice_interno: string;
 

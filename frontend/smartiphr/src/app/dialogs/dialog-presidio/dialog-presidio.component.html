@@ -54,6 +54,21 @@
   
       <div class="row">
         <div class="col">
+          <label>Quantità</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   placeholder="Quantità" [(ngModel)]="data.row.qtyTot" [disabled]=disable>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
           <label>Quantità per confezione*</label>
         </div>
       </div>
@@ -61,10 +76,28 @@
         <div class="col">
   
           <mat-form-field appearance="fill">
-            <textarea matInput placeholder="Quantità per confezione" [(ngModel)]="data.row.qty" [disabled]=disable></textarea>
+            <input matInput type="number"   placeholder="Quantità per confezione" [(ngModel)]="data.row.qty" [disabled]=disable>
           </mat-form-field>
         </div>
       </div>
+
+
+
+      <div class="row">
+        <div class="col">
+          <label>Giacenza*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   placeholder="Giacenza" [(ngModel)]="data.row.giacenza" [disabled]=disable>
+          </mat-form-field>
+        </div>
+      </div>
+
 
 
       <div class="row">

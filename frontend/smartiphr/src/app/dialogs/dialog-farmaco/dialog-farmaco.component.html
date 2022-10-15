@@ -99,6 +99,28 @@
 
     <div class="row">
       <div class="col">
+        <div class="form-group">
+          <label>Quantità</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.qtyTot">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <label>Giacenza</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.giacenza">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
+
+
+
+    <div class="row">
+      <div class="col">
         <div>
           <mat-form-field appearance="fill">
             <mat-label>Data scadenza</mat-label>

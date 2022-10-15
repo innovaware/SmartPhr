@@ -48,7 +48,24 @@
             <td mat-cell *matCellDef="let element"> {{element.descrizione}} </td>
           </ng-container>
 
+ <!-- Weight Column -->
+ <ng-container matColumnDef="qtyTot">
+  <th mat-header-cell *matHeaderCellDef>Quantità  </th>
+  <td mat-cell *matCellDef="let element"> {{element.qtyTot}} </td>
+</ng-container>
 
+<!-- Weight Column -->
+<ng-container matColumnDef="qty">
+  <th mat-header-cell *matHeaderCellDef>Quantità per confezione  </th>
+  <td mat-cell *matCellDef="let element"> {{element.qty}} </td>
+</ng-container>
+
+
+<!-- Weight Column -->
+<ng-container matColumnDef="giacenza">
+  <th mat-header-cell *matHeaderCellDef>Giacenza  </th>
+  <td mat-cell *matCellDef="let element"> {{element.giacenza}} </td>
+</ng-container>
           <!-- Weight Column -->
           <ng-container matColumnDef="formulazione">
             <th mat-header-cell *matHeaderCellDef>Formulazione  </th>
