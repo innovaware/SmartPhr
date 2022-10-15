@@ -21,6 +21,7 @@ const mqtt = require("mqtt");
 const { route } = require("./routes/dipendenti");
 const { ObjectId } = require("bson");
 const Menu = require("./models/menu");
+const puliziaAmbiente = require("./models/puliziaAmbiente");
 
 // var MongoClient = require('mongodb').MongoClient;
 // mongo = undefined;
@@ -506,7 +507,13 @@ const InitApiFunctions = () => {
   app.use( apiIndumenti.path, logHandler, authorizationHandler, roleHandler, IndumentiRouter );
   routesList.push(apiIndumenti);
 
-      
+  var PuliziaAmbienteRouter = require("./routes/puliziaAmbiente")
+  var apiPuliziaAmbienti = { key: 'pulizia', path: '/api/puliziaAmbiente' }
+  app.use( apiPuliziaAmbienti.path, logHandler, authorizationHandler, roleHandler, PuliziaAmbienteRouter );
+  routesList.push(apiPuliziaAmbienti);
+
+
+
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 }

@@ -27,6 +27,9 @@ import { Constants } from 'src/app/Constants';
 import { MatDialog } from '@angular/material/dialog';
 import { DialogPuliziaAmbientiComponent } from 'src/app/dialogs/dialog-pulizia-ambienti/dialog-pulizia-ambienti.component';
 import { User } from 'src/app/models/user';
+import { PuliziaAmbienteService } from 'src/app/service/puliziaAmbiente.service';
+import { PuliziaAmbiente } from 'src/app/models/puliziaAmbienti';
+import { NoteCreditoASPComponent } from '../note-credito-asp/note-credito-asp.component';
 
 @Component({
   selector: 'app-gestione-pulizia-ambienti',
@@ -79,6 +82,7 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
   constructor(
     private mapService: MapService,
     private camereService: CamereService,
+    private puliziaAmbienteService: PuliziaAmbienteService,
     private messageService: MessagesService,
     private dialog: MatDialog
   ) {
@@ -265,26 +269,34 @@ export class GestionePuliziaAmbientiComponent implements OnInit {
           user: User;
         }) => {
         if(result != null && result != undefined){
-          const ambiente = {
-            ...result,
-            camera: this.selectedCamera
+          const ambiente: PuliziaAmbiente = {
+            //...result,
+            idCamera: this.selectedCamera._id,
+            descrizione: result.note,
+            idUser: result.user._id,
+            statoPulizia: this.selectedCamera.statoPulizia,
+            data: result.date
           };
 
           // TODO Inserimento nella tabella pulizia ambiente
-          //this.puliziaAmbienteService.insert(ambiente)
-          this.camereService.update(this.selectedCamera)
-              .subscribe(res=> {
-                console.log("Salvataggio eseguito con successo", res);
-                this.messageService.showMessageError("Stato di Pulizia aggiornato correttamente");
+          this.puliziaAmbienteService.add(ambiente)
+              .subscribe( result => {
+
+                this.camereService.update(this.selectedCamera)
+                .subscribe(res=> {
+                  console.log("Salvataggio eseguito con successo", res);
+                  this.messageService.showMessageError("Stato di Pulizia aggiornato correttamente");
+                },
+                err=> {
+                  console.error("Error: ", err);
+                  this.messageService.showMessageError("Errore nell'aggiornamento");
+                });
               },
-              err=> {
-                console.error("Error: ", err);
-                this.messageService.showMessageError("Errore nell'aggiornamento");
+              err => {
+                console.error("Errore inserimento pulizia ambiente, ", err);
+                this.messageService.showMessageError("Errore nell'aggiornamento pulizia Ambiente");
               });
         }
       });
-
-
   }
-
 }
