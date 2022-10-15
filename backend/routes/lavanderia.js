@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const Lavanderia = require("../models/lavanderia");
+const Pazienti = require("../models/pazienti");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 /**
@@ -10,6 +11,18 @@ router.get("/", async (req, res) => {
   const { id } = req.params;
   try {
     const getData = () => {
+      //return Pazienti.aggregate(
+      //[
+      //  {
+      //    '$lookup': {
+      //      'from': 'lavanderia', 
+      //      'localField': '_id', 
+      //      'foreignField': 'idPaziente', 
+      //      'as': 'lavanderia'
+      //    }
+      //  }
+      //]);
+
       return Lavanderia.find();
     };
 
@@ -21,6 +34,20 @@ router.get("/", async (req, res) => {
   }
 });
 
+router.get("/paziente/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return Lavanderia.find({idPaziente: id});
+    };
+
+    const lavanderia = await getData();
+    res.status(200).json(lavanderia);
+  
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
 /**
  * Ricerca un elemento per identificativo
 */

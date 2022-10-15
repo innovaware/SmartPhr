@@ -512,6 +512,10 @@ const InitApiFunctions = () => {
   app.use( apiPuliziaAmbienti.path, logHandler, authorizationHandler, roleHandler, PuliziaAmbienteRouter );
   routesList.push(apiPuliziaAmbienti);
 
+  var LavanderiaRouter = require("./routes/lavanderia")
+  var apiLavanderia = { key: 'lavanderia', path: '/api/lavanderia' }
+  app.use( apiLavanderia.path, logHandler, authorizationHandler, roleHandler, LavanderiaRouter );
+  routesList.push(apiLavanderia);
 
 
   //var usersRouter = require("./routes/users");
