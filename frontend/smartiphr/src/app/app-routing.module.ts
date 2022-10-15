@@ -74,6 +74,7 @@ import { ModulisticafarmaciComponent } from "./pages/modulisticafarmaci/modulist
 import { AttivitaFarmaciComponent } from "./pages/attivita-farmaci/attivita-farmaci.component";
 import { AreaPaiComponent } from "./pages/area-pai/area-pai.component";
 import { GestionePuliziaAmbientiComponent } from "./pages/gestione-pulizia-ambienti/gestione-pulizia-ambienti.component";
+import { LavanderiaComponent } from "./pages/lavanderia/lavanderia.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -177,7 +178,7 @@ const routes: Routes = [
 
   //AREA AUSILIARI
   { path: "gest-pulizia-ambienti", component: GestionePuliziaAmbientiComponent, canActivate: [AuthGuard]  },
-
+  { path: "gest-lavanderia", component: LavanderiaComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
