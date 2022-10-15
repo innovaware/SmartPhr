@@ -1,11 +1,15 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DialogLavanderiaComponent } from 'src/app/dialogs/dialog-lavanderia/dialog-lavanderia.component';
 import { Lavanderia } from 'src/app/models/lavanderia';
 import { Paziente } from 'src/app/models/paziente';
 import { LavanderiaService } from 'src/app/service/lavanderia.service';
+import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
 
 export class LavanderiaView {
@@ -40,18 +44,11 @@ export class LavanderiaComponent implements OnInit {
   constructor(
     private lavanderiaService: LavanderiaService,
     private pazientiService: PazienteService,
+    private dialog: MatDialog,
+    private messageService: MessagesService
   ) { }
 
   ngOnInit(): void {
-
-    //this.lavanderiaService.add({
-    //  data: new Date(),
-    //  descrizione: "test",
-    //  descrizioneTipologia: "test",
-    //  idPaziente: "6172d8631340fec684deea28",
-    //  tipologia: 0
-    //}).subscribe();
-
     from(this.pazientiService.getPazienti())
       .pipe(
         map((pazienti: Paziente[])=> {
@@ -84,8 +81,6 @@ export class LavanderiaComponent implements OnInit {
       )
       .subscribe(
         (items: LavanderiaView[]) => {
-          console.log("Items", items);
-
           this.lavanderiaService.getAll()
               .subscribe((lavs: Lavanderia[])=> {
                 lavs.forEach(i=> {
@@ -100,32 +95,55 @@ export class LavanderiaComponent implements OnInit {
       )
 
 
-    //this.lavanderiaService.getAll()
-    //    .pipe(
-    //      map((items: Lavanderia[])=> {
-    //        const results: LavanderiaView[] = [];
-
-    //        items.forEach(x=> {
-    //          this.pazientiService.getPaziente(x.idPaziente)
-    //              .then(p=> {
-    //                  results.push({
-    //                    codiceFiscale: p.codiceFiscale,
-    //                    nome: p.nome,
-    //                    cognome: p.cognome,
-    //                    lavanderia: x
-    //                  })
-    //              });
-    //        });
-    //        return results;
-    //      })
-    //    )
-    //    .subscribe(
-    //      (items: LavanderiaView[]) => {
-    //        console.log("Items", items);
-    //        this.dataSourceLavanderia = new MatTableDataSource(items);
-    //        this.dataSourceLavanderia.paginator = this.paginator;
-    //      }
-    //    )
   }
 
+
+  add(element: LavanderiaView, tipologia: Number) {
+    var dialogRef = this.dialog.open(DialogLavanderiaComponent, {
+      width: "600px",
+      data: {
+        paziente: {
+          nome: element.nome,
+          cognome: element.cognome,
+          codiceFiscale: element.codiceFiscale
+        }
+      }
+    });
+
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((
+        result: {
+          note: string;
+          date: Date;
+        }) => {
+        if(result != null && result != undefined){
+          const lavanderia: Lavanderia = {
+            data: result.date,
+            descrizione: result.note,
+            descrizioneTipologia: tipologia === 1 ? "Lavatrice" : "Asciugatrice",
+            idPaziente: element.idPaziente,
+            tipologia: tipologia
+          }
+
+          this.lavanderiaService.add(lavanderia)
+              .subscribe( result => {
+                  console.log("Salvataggio eseguito con successo", result);
+                  this.messageService.showMessageError("Aggiornato correttamente");
+                  element.lavanderia.data = result.data;
+                  element.lavanderia.descrizioneTipologia = result.descrizioneTipologia;
+                  element.lavanderia.descrizione = result.descrizione;
+              },
+              err => {
+                console.error("Errore inserimento", err);
+                this.messageService.showMessageError("Errore Aggiornamento");
+              });
+        }
+      });
+  }
+
+  applyFilter(event: Event) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    this.dataSourceLavanderia.filter = filterValue.trim().toLowerCase();
+  }
 }
