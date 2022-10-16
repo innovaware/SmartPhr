@@ -21,6 +21,5 @@ table {
 
 .mat-column-action {
   width: 200px;
+  text-align: right;
 }
-
-

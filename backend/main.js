@@ -517,6 +517,11 @@ const InitApiFunctions = () => {
   app.use( apiLavanderia.path, logHandler, authorizationHandler, roleHandler, LavanderiaRouter );
   routesList.push(apiLavanderia);
 
+  var CucinaRouter = require("./routes/cucina")
+  var apiCucina = { key: 'cucina', path: '/api/cucina' }
+  app.use( apiCucina.path, logHandler, authorizationHandler, roleHandler, CucinaRouter );
+  routesList.push(apiCucina);
+
 
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
