@@ -146,4 +146,8 @@ export class LavanderiaComponent implements OnInit {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceLavanderia.filter = filterValue.trim().toLowerCase();
   }
+
+  cleanSearchField() {
+    this.dataSourceLavanderia.filter = undefined;
+  }
 }
