@@ -4,20 +4,14 @@ import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { from } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DialogArchivioMenuPersonalizzatoComponent } from 'src/app/dialogs/dialog-archivio-menu-personalizzato/dialog-archivio-menu-personalizzato.component';
 import { DialogMenuPersonalizzatoComponent } from 'src/app/dialogs/dialog-menu-personalizzato/dialog-menu-personalizzato.component';
 import { CucinaMenuPersonalizzato } from 'src/app/models/CucinaMenuPersonalizzato';
+import { MenuPersonalizzatiView } from 'src/app/models/MenuPersonalizzatoView';
 import { Paziente } from 'src/app/models/paziente';
 import { CucinaService } from 'src/app/service/cucina.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
-
-export class MenuPersonalizzatiView {
-  idPaziente: string;
-  cognome: string;
-  nome: string;
-  codiceFiscale: string;
-  menuPersonalizzato: CucinaMenuPersonalizzato;
-}
 
 @Component({
   selector: 'app-menu-personalizzati',
@@ -164,6 +158,16 @@ export class MenuPersonalizzatiComponent implements OnInit {
 
   cleanSearchField() {
     this.dataSourceCucinaPersonalizzato.filter = undefined;
+  }
+
+  archiveMenuPersonalizzato(element: MenuPersonalizzatiView) {
+    // Apertura dialog menu personalizzato
+    this.dialog.open(DialogArchivioMenuPersonalizzatoComponent, {
+      width: `${window.screen.width}px`,
+      data: {
+        idPaziente: element.idPaziente
+      }
+    });
   }
 }
 
