@@ -223,6 +223,7 @@ import { DialogLavanderiaComponent } from './dialogs/dialog-lavanderia/dialog-la
 import { MenuPersonalizzatiComponent } from './pages/menu-personalizzati/menu-personalizzati.component';
 import { DialogMenuPersonalizzatoComponent } from './dialogs/dialog-menu-personalizzato/dialog-menu-personalizzato.component';
 import { DialogArchivioMenuPersonalizzatoComponent } from './dialogs/dialog-archivio-menu-personalizzato/dialog-archivio-menu-personalizzato.component';
+import { MenuGeneraleComponent } from './pages/menu-generale/menu-generale.component';
 
 const materialModules = [
   MatTableModule,
@@ -440,6 +441,7 @@ const pipes = [
     MenuPersonalizzatiComponent,
     DialogMenuPersonalizzatoComponent,
     DialogArchivioMenuPersonalizzatoComponent,
+    MenuGeneraleComponent,
   ],
   imports: [
     ...materialModules,

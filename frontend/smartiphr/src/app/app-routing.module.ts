@@ -76,6 +76,7 @@ import { AreaPaiComponent } from "./pages/area-pai/area-pai.component";
 import { GestionePuliziaAmbientiComponent } from "./pages/gestione-pulizia-ambienti/gestione-pulizia-ambienti.component";
 import { LavanderiaComponent } from "./pages/lavanderia/lavanderia.component";
 import { MenuPersonalizzatiComponent } from "./pages/menu-personalizzati/menu-personalizzati.component";
+import { MenuGeneraleComponent } from "./pages/menu-generale/menu-generale.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -183,7 +184,7 @@ const routes: Routes = [
 
   //CUCINA
   { path: "menu-personalizzati", component: MenuPersonalizzatiComponent, canActivate: [AuthGuard]  },
-  //{ path: "menu-generali", component: MenuPersonalizzatiComponent, canActivate: [AuthGuard]  },
+  { path: "menu-generali", component: MenuGeneraleComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
