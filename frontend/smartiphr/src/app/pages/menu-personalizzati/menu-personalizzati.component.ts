@@ -102,7 +102,8 @@ export class MenuPersonalizzatiComponent implements OnInit {
         paziente: {
           nome: element.nome,
           cognome: element.cognome,
-          codiceFiscale: element.codiceFiscale
+          codiceFiscale: element.codiceFiscale,
+          menuPersonalizzato: element.menuPersonalizzato
         }
       }
     });

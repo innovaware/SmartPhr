@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { CucinaMenuPersonalizzato } from 'src/app/models/CucinaMenuPersonalizzato';
 
 @Component({
   selector: 'app-dialog-menu-personalizzato',
@@ -18,7 +19,8 @@ export class DialogMenuPersonalizzatoComponent implements OnInit {
   paziente: {
         nome: string,
         cognome: string,
-        codiceFiscale: string
+        codiceFiscale: string,
+        menuPersonalizzato: CucinaMenuPersonalizzato
       };
 
   constructor(
@@ -27,15 +29,33 @@ export class DialogMenuPersonalizzatoComponent implements OnInit {
       paziente: {
         nome: string,
         cognome: string,
-        codiceFiscale: string
+        codiceFiscale: string,
+        menuPersonalizzato: CucinaMenuPersonalizzato
       };
     }) {
       console.log("Dialog", data.paziente);
-
       this.paziente = data.paziente;
     }
 
   ngOnInit(): void {
+    this.date = new Date();
+    if (this.paziente.menuPersonalizzato !== undefined) {
+        // Visualizzazione delle variabili colazione; pranzo; cena; note, data
+        console.log("Setting variables");
+
+        this.colazione = this.paziente.menuPersonalizzato.menuColazione;
+        this.pranzo = this.paziente.menuPersonalizzato.menuPranzo;
+        this.cena = this.paziente.menuPersonalizzato.menuCena;
+        this.note = this.paziente.menuPersonalizzato.descrizione;
+        this.date = new Date(this.paziente.menuPersonalizzato.data);
+    }
+  }
+
+  newRecord() {
+    this.colazione = "";
+    this.pranzo =  "";
+    this.cena =  "";
+    this.note = "";
     this.date = new Date();
   }
 
