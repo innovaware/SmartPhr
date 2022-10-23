@@ -224,6 +224,7 @@ import { MenuPersonalizzatiComponent } from './pages/menu-personalizzati/menu-pe
 import { DialogMenuPersonalizzatoComponent } from './dialogs/dialog-menu-personalizzato/dialog-menu-personalizzato.component';
 import { DialogArchivioMenuPersonalizzatoComponent } from './dialogs/dialog-archivio-menu-personalizzato/dialog-archivio-menu-personalizzato.component';
 import { MenuGeneraleComponent } from './pages/menu-generale/menu-generale.component';
+import { DialogMenuGeneraleComponent } from './dialogs/dialog-menu-generale/dialog-menu-generale.component';
 
 const materialModules = [
   MatTableModule,
@@ -442,6 +443,7 @@ const pipes = [
     DialogMenuPersonalizzatoComponent,
     DialogArchivioMenuPersonalizzatoComponent,
     MenuGeneraleComponent,
+    DialogMenuGeneraleComponent,
   ],
   imports: [
     ...materialModules,
