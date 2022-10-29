@@ -1,17 +1,24 @@
 <div class="containter pad">
   <div class="row">
     <div class="col ">
-      <h4 class="title">Menu Generale</h4>
+      <h4 class="title">Menu Generale
+        <label>
+          {{data.type === 0 ? 'Estivo' : 'Invernale'}}
+        </label>
+      </h4>
     </div>
-    <div class="col right">
-      <mat-form-field>
-        <input matInput [matDatepicker]="picker" placeholder="Settimana di riferimento"
-               [matDatepickerFilter]="dateFilter"
-               [(ngModel)]="weekRif">
-        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-        <mat-datepicker #picker></mat-datepicker>
-      </mat-form-field>
 
+    <div class="col right">
+      <div class="container">
+        <div class="row">
+          <div class="col right">
+            <label>Data di Riferimento</label>
+          </div>
+          <div class="col1">
+            {{data.dataStartRif | date: 'dd/MM/yyyy'}} - {{data.dataEndRif | date: 'dd/MM/yyyy'}}
+          </div>
+        </div>
+      </div>
     </div>
   </div>
   <hr>
@@ -33,7 +40,7 @@
       <td *ngFor="let item of arrayWeek">
         <mat-form-field class="full" appearance="fill" >
           <mat-label>Colazione</mat-label>
-          <input matInput placeholder="Inserisci colazione" >
+          <input matInput placeholder="Inserisci colazione" [(ngModel)]="item.colazione">
         </mat-form-field>
       </td>
     </tr>
@@ -45,7 +52,7 @@
       <td *ngFor="let item of arrayWeek">
         <mat-form-field class="full" appearance="fill" >
           <mat-label>Spuntino</mat-label>
-          <input matInput placeholder="Inserisci Spuntino" >
+          <input matInput placeholder="Inserisci Spuntino" [(ngModel)]="item.spuntino">
         </mat-form-field>
       </td>
     </tr>
@@ -57,7 +64,7 @@
       <td *ngFor="let item of arrayWeek">
         <mat-form-field class="full" appearance="fill" >
           <mat-label>Pranzo</mat-label>
-          <input matInput placeholder="Inserisci Pranzo" >
+          <input matInput placeholder="Inserisci Pranzo" [(ngModel)]="item.pranzo">
         </mat-form-field>
       </td>
     </tr>
@@ -69,7 +76,7 @@
       <td *ngFor="let item of arrayWeek">
         <mat-form-field class="full" appearance="fill" >
           <mat-label>Merenda</mat-label>
-          <input matInput placeholder="Inserisci Merenda" >
+          <input matInput placeholder="Inserisci Merenda" [(ngModel)]="item.merenda">
         </mat-form-field>
       </td>
     </tr>
@@ -81,7 +88,7 @@
       <td *ngFor="let item of arrayWeek">
         <mat-form-field class="full" appearance="fill" >
           <mat-label>Cena</mat-label>
-          <input matInput placeholder="Inserisci Cena" >
+          <input matInput placeholder="Inserisci Cena" [(ngModel)]="item.cena">
         </mat-form-field>
       </td>
     </tr>

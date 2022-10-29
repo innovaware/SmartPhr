@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { HttpClient } from "@angular/common/http";
 import { CucinaMenuPersonalizzato } from '../models/CucinaMenuPersonalizzato';
+import { MenuGeneraleView } from '../models/MenuGeneraleView';
 
 @Injectable({
   providedIn: 'root'
@@ -40,4 +41,21 @@ export class CucinaService {
     return this.http.delete<CucinaMenuPersonalizzato>(`${this.api}/api/cucina/${menuPersonalizzato._id}`);
   }
 
+  getMenuGenerale(type: number, week: number, year: number): Observable<MenuGeneraleView[]> {
+    return this.http.get<MenuGeneraleView[]>(`${this.api}/api/cucina/generale?type=${type}&week=${week}&year=${year}`);
+  }
+
+  addMenuGenerale(menuGenerale: MenuGeneraleView) {
+    menuGenerale.year = menuGenerale.dataStartRif.getFullYear();
+    menuGenerale.dataInsert = new Date();
+    console.log("Inserimento menu Generale:", menuGenerale);
+    return this.http.post<MenuGeneraleView>(`${this.api}/api/cucina/generale`, menuGenerale);
+  }
+
+  updateMenuGenerale(menuGenerale: MenuGeneraleView) {
+    menuGenerale.year = menuGenerale.dataStartRif.getFullYear();
+    console.log("Update menu Generale:", menuGenerale);
+    return this.http.put<MenuGeneraleView>(`${this.api}/api/cucina/generale/${menuGenerale._id}`, menuGenerale);
+
+  }
 }

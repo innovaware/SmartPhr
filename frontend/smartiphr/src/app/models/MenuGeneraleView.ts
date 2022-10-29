@@ -5,7 +5,24 @@ export class MenuGeneraleView {
     return JSON.parse(JSON.stringify(obj));
   }
 
-  //menuPersonalizzato: CucinaMenuPersonalizzato;
+
+  _id?: string;
+
+  /**
+   *
+   */
+  constructor() {
+    this.isNew = false;
+  }
+
+  /**
+   * indica se il record da inserire
+   */
+  isNew?: boolean = false;
+
+  year: number;
+
+  day?: number;
 
   /**
    * Data di inserimento del recordo
@@ -22,9 +39,27 @@ export class MenuGeneraleView {
   type: number;
 
   /**
-   * Data di riferimento.
+   * Data di riferimento inizio.
    * Periodo in cui e valido il menu
    */
-  dataRif: Date;
+  dataStartRif: Date;
+
+  /**
+   * Data di riferimento fine
+   */
+  dataEndRif: Date;
+
+  /**
+   * Settimana di riferimento
+   *
+   */
+  week: number;
+
+
+  colazione?: string;
+  spuntino?: string;
+  pranzo?: string;
+  merenda?: string;
+  cena?: string;
 
 }

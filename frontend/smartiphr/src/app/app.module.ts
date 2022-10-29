@@ -225,6 +225,7 @@ import { DialogMenuPersonalizzatoComponent } from './dialogs/dialog-menu-persona
 import { DialogArchivioMenuPersonalizzatoComponent } from './dialogs/dialog-archivio-menu-personalizzato/dialog-archivio-menu-personalizzato.component';
 import { MenuGeneraleComponent } from './pages/menu-generale/menu-generale.component';
 import { DialogMenuGeneraleComponent } from './dialogs/dialog-menu-generale/dialog-menu-generale.component';
+import { DatePipe } from "@angular/common";
 
 const materialModules = [
   MatTableModule,
@@ -459,6 +460,7 @@ const pipes = [
     AuthGuardService,
     MatDatepickerModule,
     ThemeService,
+    DatePipe,
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
     { provide: MAT_DATE_LOCALE, useValue: "it-IT" },
   ],
