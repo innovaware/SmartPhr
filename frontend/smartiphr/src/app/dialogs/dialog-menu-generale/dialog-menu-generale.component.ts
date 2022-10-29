@@ -25,7 +25,10 @@ export class DialogMenuGeneraleComponent implements OnInit {
     this.cucinaService.getMenuGenerale(this.data.type, this.data.week, this.data.dataStartRif.getFullYear() )
         .subscribe( (menuGenerale: MenuGeneraleView[]) => {
             for (let index = 0; index < 7; index++) {
-              let data = menuGenerale.find(x=> x.week === this.data.week && x.year === this.data.dataStartRif.getFullYear() && x.day === index)
+              let data = menuGenerale.find(x=>
+                                           x.week === this.data.week &&
+                                           x.year === this.data.dataStartRif.getFullYear() &&
+                                           x.day === index)
               if (!data) {
                 data = {
                   _id: undefined,

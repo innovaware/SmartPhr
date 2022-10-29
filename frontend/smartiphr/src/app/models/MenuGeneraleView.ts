@@ -1,4 +1,9 @@
-import { CucinaMenuPersonalizzato } from "./CucinaMenuPersonalizzato";
+
+export enum TypeMenu {
+  Estivo=0,
+  Invernale=1
+}
+
 
 export class MenuGeneraleView {
   static clone(obj: MenuGeneraleView) {
