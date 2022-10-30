@@ -227,6 +227,7 @@ import { MenuGeneraleComponent } from './pages/menu-generale/menu-generale.compo
 import { DialogMenuGeneraleComponent } from './dialogs/dialog-menu-generale/dialog-menu-generale.component';
 import { DatePipe } from "@angular/common";
 import { MagazzinoComponent } from './pages/magazzino/magazzino.component';
+import { DialogMagazzinoComponent } from './dialogs/dialog-magazzino/dialog-magazzino.component';
 
 const materialModules = [
   MatTableModule,
@@ -447,6 +448,7 @@ const pipes = [
     MenuGeneraleComponent,
     DialogMenuGeneraleComponent,
     MagazzinoComponent,
+    DialogMagazzinoComponent,
   ],
   imports: [
     ...materialModules,

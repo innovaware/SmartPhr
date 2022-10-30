@@ -522,6 +522,13 @@ const InitApiFunctions = () => {
   app.use( apiCucina.path, logHandler, authorizationHandler, roleHandler, CucinaRouter );
   routesList.push(apiCucina);
 
+  var MagazzinoRouter = require("./routes/magazzino")
+  var apiMagazzino = { key: 'magazzino', path: '/api/magazzino' }
+  app.use( apiMagazzino.path, logHandler, authorizationHandler, roleHandler, MagazzinoRouter );
+  routesList.push(apiMagazzino);
+
+
+
 
   //var usersRouter = require("./routes/users");
   //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
