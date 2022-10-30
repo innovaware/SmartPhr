@@ -77,6 +77,7 @@ import { GestionePuliziaAmbientiComponent } from "./pages/gestione-pulizia-ambie
 import { LavanderiaComponent } from "./pages/lavanderia/lavanderia.component";
 import { MenuPersonalizzatiComponent } from "./pages/menu-personalizzati/menu-personalizzati.component";
 import { MenuGeneraleComponent } from "./pages/menu-generale/menu-generale.component";
+import { MagazzinoComponent } from "./pages/magazzino/magazzino.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -185,6 +186,7 @@ const routes: Routes = [
   //CUCINA
   { path: "menu-personalizzati", component: MenuPersonalizzatiComponent, canActivate: [AuthGuard]  },
   { path: "menu-generali", component: MenuGeneraleComponent, canActivate: [AuthGuard]  },
+  { path: "menu-magazzino", component: MagazzinoComponent, canActivate: [AuthGuard]  },
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },
   { path: "**", component: PagenotfoundComponent, canActivate: [AuthGuard]  },
