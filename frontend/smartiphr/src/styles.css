@@ -97,3 +97,8 @@ select.custom-select {
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+
+.actionIcon {
+  width: 35px;
+}

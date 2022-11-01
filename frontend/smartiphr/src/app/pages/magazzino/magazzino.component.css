@@ -20,8 +20,16 @@ table {
 }
 
 .mat-column-action {
-  width: 200px;
+  width: 180px;
   text-align: right;
 }
 
+.btnAction {
+  min-width: 50px;
+  padding-left: 0px;
+  padding-right: 0px;
+}
 
+.btnAction>span>img {
+  background-color: red;
+}

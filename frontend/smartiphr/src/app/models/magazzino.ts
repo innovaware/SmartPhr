@@ -1,4 +1,9 @@
-import { User } from "./user";
+
+
+export enum TypeProcedureMagazzino {
+  Carico = 0,
+  Scarico = 1
+}
 
 export class Magazzino {
   static clone(obj: Magazzino) {

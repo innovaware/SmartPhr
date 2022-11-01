@@ -1,0 +1,63 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h4 class="title">
+        <label>
+          {{data.type == 0 ? 'Carico Materiale o Presidio' : 'Scarico Materiale o Presidio'}}
+        </label>
+      </h4>
+    </div>
+
+    <div class="col right">
+      <div class="container">
+        <div class="row">
+          <div class="col right">
+            <label>Data di Riferimento</label>
+          </div>
+          <div class="col1">
+            {{data.magazzino.dateInsert | date: 'dd/MM/yyyy'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+
+
+  <div class="row">
+    <div class="col"><h3>Nome</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <label>Nome</label>
+      <label>{{data.magazzino.nome}}</label>
+    </div>
+  </div>
+
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <h3>Quantit&aacute;: <label style="font-size: var(--bs-body-font-size);">{{data.magazzino.quantita}}</label></h3>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Quantit&aacute;</mat-label>
+        <input matInput type="number" min="0" placeholder="Inserisci quantità" [(ngModel)]="quantita">
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <hr>
+  <div class="row">
+    <div class="col">
+    <button mat-button (click)="save()">Salva</button>
+    <button mat-button (click)="cancel()">Cancella</button>
+  </div>
+</div>
+
