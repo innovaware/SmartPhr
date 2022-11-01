@@ -229,6 +229,7 @@ import { DatePipe } from "@angular/common";
 import { MagazzinoComponent } from './pages/magazzino/magazzino.component';
 import { DialogMagazzinoComponent } from './dialogs/dialog-magazzino/dialog-magazzino.component';
 import { DialogCaricoMagazzinoComponent } from './dialogs/dialog-carico-magazzino/dialog-carico-magazzino.component';
+import { CucinaSanificazioneAmbientiComponent } from './pages/cucina-sanificazione-ambienti/cucina-sanificazione-ambienti.component';
 
 const materialModules = [
   MatTableModule,
@@ -451,6 +452,7 @@ const pipes = [
     MagazzinoComponent,
     DialogMagazzinoComponent,
     DialogCaricoMagazzinoComponent,
+    CucinaSanificazioneAmbientiComponent,
   ],
   imports: [
     ...materialModules,

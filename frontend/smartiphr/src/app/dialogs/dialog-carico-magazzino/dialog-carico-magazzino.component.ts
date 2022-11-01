@@ -3,7 +3,6 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Magazzino, TypeProcedureMagazzino } from 'src/app/models/magazzino';
 import { MagazzinoService } from 'src/app/service/magazzino.service';
 import { MessagesService } from 'src/app/service/messages.service';
-import { threadId } from 'worker_threads';
 
 @Component({
   selector: 'app-dialog-carico-magazzino',

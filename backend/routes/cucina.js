@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Cucina = require("../models/cucina");
 const CucinaGenerale = require("../models/cucinaGenerale");
+const CucinaAmbienti = require("../models/cucinaAmbienti");
+const CucinaAmbientiArchivio = require("../models/cucinaAmbientiArchivio");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 /**
@@ -21,6 +23,87 @@ router.get("/", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaAmbiente
+*/
+router.get("/ambiente/", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaAmbienti.find();
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaAmbienteArchivio
+*/
+router.get("/archivio/ambiente/", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaAmbientiArchivio.find();
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaAmbiente
+*/
+router.get("/ambiente/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaAmbienti.findById(id);
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaAmbienteArchivio
+*/
+router.get("/archivio/ambiente/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaAmbientiArchivio.findById(id);
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
 
 /**
  * Ritorna la lista del menu generale
@@ -58,6 +141,7 @@ router.get("/paziente/:id", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
 /**
  * Ricerca un elemento per identificativo
 */
@@ -108,7 +192,83 @@ router.put("/:id", async (req, res) => {
     
 
     res.status(200);
-    res.json(camera);
+    res.json(cucina);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+/**
+ * Update cucina Ambienti
+*/
+router.put("/ambiente/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const data = {
+          nome: req.body.nome,
+          dateSanficazioneOrdinaria: req.body.dateSanficazioneOrdinaria,
+          dateSanficazioneStraordinaria: req.body.dateSanficazioneStraordinaria,
+          idUser: req.body.idUser
+        };
+    const cucina = await CucinaAmbienti.updateOne(
+      { _id: id },
+      {
+        $set: data,
+      }
+    );
+
+    (await new CucinaAmbientiArchivio(data)).save();
+
+    console.log("Update Cucina ambiente:", cucina);
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = "cucinaALL*";
+      redisClient.del(searchTerm);
+    }
+    
+
+    res.status(200);
+    res.json(cucina);
+  } catch (err) {
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Update cucina Ambienti archivio
+*/
+router.put("/archivio/ambiente/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cucina = await CucinaAmbientiArchivio.updateOne(
+      { _id: id },
+      {
+        $set: {
+          nome: req.body.nome,
+          dateSanficazioneOrdinaria: req.body.dateSanficazioneOrdinaria,
+          dateSanficazioneStraordinaria: req.body.dateSanficazioneStraordinaria,
+          idUser: req.body.idUser
+        },
+      }
+    );
+
+    console.log("Update Cucina ambiente archivio:", cucina);
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = "cucinaALL*";
+      redisClient.del(searchTerm);
+    }
+    
+
+    res.status(200);
+    res.json(cucina);
   } catch (err) {
     res.status(500).json({ Error: err });
   }
@@ -189,6 +349,70 @@ router.post("/", async (req, res) => {
     res.json({ Error: err });
   }
 });
+
+/**
+ * Inserimento cucina ambiente
+ */
+router.post("/ambiente/", async (req, res) => {
+  try {
+    const cucina = new CucinaAmbienti({
+      nome: req.body.nome,
+      dateSanficazioneOrdinaria: req.body.dateSanficazioneOrdinaria,
+      dateSanficazioneStraordinaria: req.body.dateSanficazioneStraordinaria,
+      idUser: req.body.idUser
+    });
+
+    // Salva i dati sul mongodb
+    const result = await cucina.save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(result);
+  } catch (err) {
+    res.status(500);
+    res.json({ Error: err });
+  }
+});
+
+
+/**
+ * Inserimento cucina ambiente archivio
+ */
+router.post("/archivio/ambiente/", async (req, res) => {
+  try {
+    const cucina = new CucinaAmbientiArchivio({
+      nome: req.body.nome,
+      dateSanficazioneOrdinaria: req.body.dateSanficazioneOrdinaria,
+      dateSanficazioneStraordinaria: req.body.dateSanficazioneStraordinaria,
+      idUser: req.body.idUser
+    });
+
+    // Salva i dati sul mongodb
+    const result = await cucina.save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(result);
+  } catch (err) {
+    res.status(500);
+    res.json({ Error: err });
+  }
+});
+
+
+
 
 /**
  * Inserimento elemento generale
