@@ -1,19 +1,18 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { dateInputsHaveChanged } from '@angular/material/datepicker/datepicker-input-base';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
 import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { DialogLavanderiaComponent } from 'src/app/dialogs/dialog-lavanderia/dialog-lavanderia.component';
-import { Lavanderia } from 'src/app/models/lavanderia';
-import { Paziente } from 'src/app/models/paziente';
+import { Dipendenti } from 'src/app/models/dipendenti';
+import { Lavanderia, TypeOperationLavanderia } from 'src/app/models/lavanderia';
+import { AuthenticationService } from 'src/app/service/authentication.service';
+import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { LavanderiaService } from 'src/app/service/lavanderia.service';
 import { MessagesService } from 'src/app/service/messages.service';
-import { PazienteService } from 'src/app/service/paziente.service';
 
 export class LavanderiaView {
-  idPaziente: string;
+  idDipendente: string;
   cognome: string;
   nome: string;
   codiceFiscale: string;
@@ -33,7 +32,7 @@ export class LavanderiaComponent implements OnInit {
     "codiceFiscale",
     "data",
     "descrizione",
-    "action",
+    "operazione"
   ];
 
   dataSourceLavanderia: MatTableDataSource<LavanderiaView>;
@@ -43,106 +42,92 @@ export class LavanderiaComponent implements OnInit {
 
   constructor(
     private lavanderiaService: LavanderiaService,
-    private pazientiService: PazienteService,
+    private dipendenteService: DipendentiService,
+    private authenticationService: AuthenticationService,
     private dialog: MatDialog,
     private messageService: MessagesService
   ) { }
 
   ngOnInit(): void {
-    from(this.pazientiService.getPazienti())
-      .pipe(
-        map((pazienti: Paziente[])=> {
-          return pazienti.map(p => {
-            return {
-              idPaziente: p._id,
-              nome: p.nome,
-              codiceFiscale: p.codiceFiscale,
-              cognome: p.cognome,
-              lavanderia: undefined
-            }
-          });
-        }),
-        map( (it: LavanderiaView[])=> {
+    this.loadData();
+  }
 
-          this.lavanderiaService.getAll()
-              .subscribe((items: Lavanderia[])=> {
-                it.forEach(i=> {
-                  return {
-                    ...i,
-                    lavanderia: items
-                                  .sort((a: Lavanderia, b: Lavanderia) => <any>a.data - <any>b.data)
-                                  .find(x=> x.idPaziente === i.idPaziente)
-                  }
-                });
-          })
-
-          return it;
-        })
-      )
-      .subscribe(
-        (items: LavanderiaView[]) => {
-          this.lavanderiaService.getAll()
-              .subscribe((lavs: Lavanderia[])=> {
-                lavs.forEach(i=> {
-                  const itemView = items.find(x=> x.idPaziente === i.idPaziente);
-                  itemView.lavanderia = i;
+  loadData() {
+    this.lavanderiaService.getAll()
+        .subscribe((items: Lavanderia[]) => {
+          const itemsView: LavanderiaView[] = [];
+          items.forEach(element => {
+            const idDipendente = element.idDipendente;
+            from(this.dipendenteService.getById(idDipendente))
+              .subscribe( (dipendente: Dipendenti) => {
+                itemsView.push({
+                  codiceFiscale: dipendente.cf,
+                  cognome: dipendente.cognome,
+                  nome: dipendente.nome,
+                  idDipendente: idDipendente,
+                  lavanderia: element
                 });
 
-                this.dataSourceLavanderia = new MatTableDataSource(items);
+                this.dataSourceLavanderia = new MatTableDataSource(
+                  itemsView.sort(
+                    (a, b) => new Date(a.lavanderia?.data).getTime() - new Date(b.lavanderia?.data).getTime()
+                  )
+                );
                 this.dataSourceLavanderia.paginator = this.paginator;
               });
-        }
-      )
 
 
+          });
+        });
   }
 
 
-  add(element: LavanderiaView, tipologia: Number) {
-    var dialogRef = this.dialog.open(DialogLavanderiaComponent, {
-      width: "600px",
-      data: {
-        paziente: {
-          nome: element.nome,
-          cognome: element.cognome,
-          codiceFiscale: element.codiceFiscale
-        }
-      }
-    });
+  add(tipologia: TypeOperationLavanderia) {
+    this.authenticationService.getCurrentUserAsync()
+        .subscribe( (user) => {
+          from(this.dipendenteService.getByIdUser(user._id))
+              .subscribe( (dipendente: Dipendenti) => {
 
+                var dialogRef = this.dialog.open(DialogLavanderiaComponent, {
+                  width: "600px",
+                  data: {
+                    typeOperation: tipologia
+                  }
+                });
 
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((
-        result: {
-          note: string;
-          date: Date;
-        }) => {
-        if(result != null && result != undefined){
-          const lavanderia: Lavanderia = {
-            data: result.date,
-            descrizione: result.note,
-            descrizioneTipologia: tipologia === 1 ? "Lavatrice" : "Asciugatrice",
-            idPaziente: element.idPaziente,
-            tipologia: tipologia
-          }
+                if (dialogRef != undefined)
+                  dialogRef.afterClosed()
+                           .subscribe(
+                              (result: {
+                                note: string;
+                                date: Date;
+                              }) => {
+                                  if(result != null && result != undefined){
+                                    const lavanderia: Lavanderia = {
+                                      data: result.date,
+                                      descrizione: result.note,
+                                      descrizioneTipologia: tipologia === TypeOperationLavanderia.LAVATRICE ? "Lavatrice" : "Asciugatrice",
+                                      idDipendente: dipendente[0]._id,
+                                      tipologia: tipologia
+                                    }
 
-          this.lavanderiaService.add(lavanderia)
-              .subscribe( result => {
-                  console.log("Salvataggio eseguito con successo", result);
-                  this.messageService.showMessageError("Aggiornato correttamente");
-                  element.lavanderia.data = result.data;
-                  element.lavanderia.descrizioneTipologia = result.descrizioneTipologia;
-                  element.lavanderia.descrizione = result.descrizione;
-              },
-              err => {
-                console.error("Errore inserimento", err);
-                this.messageService.showMessageError("Errore Aggiornamento");
+                                    this.lavanderiaService.add(lavanderia)
+                                    .subscribe( result => {
+                                      console.log("Salvataggio eseguito con successo", result);
+                                      this.messageService.showMessageError("Aggiornato correttamente");
+                                      this.loadData();
+                                    },
+                                    err => {
+                                      console.error("Errore inserimento", err);
+                                      this.messageService.showMessageError("Errore Aggiornamento");
+                                    });
+                                  }
+                              });
               });
-        }
-      });
-  }
+          });
+    }
 
-  applyFilter(event: Event) {
+    applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSourceLavanderia.filter = filterValue.trim().toLowerCase();
   }

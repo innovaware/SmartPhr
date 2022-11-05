@@ -17,8 +17,8 @@ export class LavanderiaService {
     return this.http.get<Lavanderia[]>(`${this.api}/api/lavanderia`);
   }
 
-  getByPaziente(idPaziente: string): Observable<Lavanderia> {
-    return this.http.get<Lavanderia>(`${this.api}/api/lavanderia/paziente/${idPaziente}`);
+  getByDipendente(idDipendente: string): Observable<Lavanderia> {
+    return this.http.get<Lavanderia>(`${this.api}/api/lavanderia/dipendente/${idDipendente}`);
   }
 
 

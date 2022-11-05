@@ -1,9 +1,9 @@
 <div class="row" style="padding-bottom: 10px;">
   <div class="col-2">
-    <label>Paziente</label>
+    <label>Operazione</label>
   </div>
   <div class="col">
-    {{this.paziente.nome}} {{this.paziente.cognome}}
+    {{ data.typeOperation ===1 ? 'Lavatrice' : 'Asciugatrice' }}
   </div>
 
   <div class="col right">

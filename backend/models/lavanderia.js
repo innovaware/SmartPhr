@@ -5,7 +5,7 @@ const LavanderiaSchema = mongoose.Schema({
   /**
    * Identificativo del paziente
    */
-  idPaziente: String, 
+  idDipendente: String, 
 
   /**
    * Data utilizzo

@@ -1,5 +1,7 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Dipendenti } from 'src/app/models/dipendenti';
+import { TypeOperationLavanderia } from 'src/app/models/lavanderia';
 import { Paziente } from 'src/app/models/paziente';
 
 @Component({
@@ -11,24 +13,13 @@ export class DialogLavanderiaComponent implements OnInit {
 
   note: string;
   date: Date;
-  paziente: {
-        nome: string,
-        cognome: string,
-        codiceFiscale: string
-      };
 
   constructor(
     public dialogRef: MatDialogRef<DialogLavanderiaComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
-      paziente: {
-        nome: string,
-        cognome: string,
-        codiceFiscale: string
-      };
+      typeOperation: TypeOperationLavanderia
     }) {
-      console.log("Dialog", data.paziente);
 
-      this.paziente = data.paziente;
     }
 
   ngOnInit(): void {

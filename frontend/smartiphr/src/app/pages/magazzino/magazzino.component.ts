@@ -44,11 +44,22 @@ export class MagazzinoComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.load();
+  }
+
+  load () {
+    this.loadData();
+    this.loadOperazioni();
+  }
+
+  loadData() {
     this.magazzinoService.getAll()
         .subscribe((magazzino: Magazzino[])=> {
           this.updateData(magazzino);
         });
+  }
 
+  loadOperazioni() {
     this.magazzinoService.getOperazioni()
         .subscribe((operazioni: MagazzinoOperazioni[])=> {
           const operazioniView: MagazzinoOperazioniView[] = [];
@@ -88,6 +99,7 @@ export class MagazzinoComponent implements OnInit {
     }).afterClosed().subscribe((result) => {
       if (result) {
         this.updateData(this.magazzino);
+        this.loadOperazioni();
       }
     });
   }
@@ -99,6 +111,7 @@ export class MagazzinoComponent implements OnInit {
     }).afterClosed().subscribe((result) => {
       if (result) {
         this.updateData(this.magazzino);
+        this.loadOperazioni();
       }
     });
 
@@ -111,6 +124,7 @@ export class MagazzinoComponent implements OnInit {
     }).afterClosed().subscribe((result) => {
       if (result) {
         this.updateData(this.magazzino);
+        this.loadOperazioni();
       }
     });
   }
@@ -129,8 +143,7 @@ export class MagazzinoComponent implements OnInit {
       height: `${800}px`
     }).afterClosed().subscribe((result) => {
       if (result) {
-        this.magazzino.push(result);
-        this.updateData(this.magazzino);
+        this.load();
       }
     });
   }

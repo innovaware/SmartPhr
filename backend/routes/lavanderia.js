@@ -17,7 +17,7 @@ router.get("/", async (req, res) => {
       //    '$lookup': {
       //      'from': 'lavanderia', 
       //      'localField': '_id', 
-      //      'foreignField': 'idPaziente', 
+      //      'foreignField': 'idDipendente', 
       //      'as': 'lavanderia'
       //    }
       //  }
@@ -34,11 +34,11 @@ router.get("/", async (req, res) => {
   }
 });
 
-router.get("/paziente/:id", async (req, res) => {
+router.get("/dipendente/:id", async (req, res) => {
   const { id } = req.params;
   try {
     const getData = () => {
-      return Lavanderia.find({idPaziente: id});
+      return Lavanderia.find({idUtente: id});
     };
 
     const lavanderia = await getData();
@@ -76,7 +76,7 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-          idPaziente: req.body.idPaziente,
+          idDipendente: req.body.idDipendente,
           data: req.body.data,
           descrizione: req.body.descrizione,
           tipologia: req.body.tipologia,
@@ -109,7 +109,7 @@ router.put("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const lavanderia = new Lavanderia({
-      idPaziente: req.body.idPaziente,
+      idDipendente: req.body.idDipendente,
       data: req.body.data,
       descrizione: req.body.descrizione,
       tipologia: req.body.tipologia,

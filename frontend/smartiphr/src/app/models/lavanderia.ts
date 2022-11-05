@@ -1,4 +1,7 @@
-import { User } from "./user";
+export enum TypeOperationLavanderia {
+  LAVATRICE=1,
+  ASCIUGATRICE=2
+}
 
 export class Lavanderia {
   static clone(obj: Lavanderia) {
@@ -7,7 +10,7 @@ export class Lavanderia {
 
   static copy(src: Lavanderia, dst: Lavanderia) {
     dst._id = src._id;
-    dst.idPaziente = src.idPaziente;
+    dst.idDipendente = src.idDipendente;
     dst.descrizione = src.descrizione;
     dst.data = src.data;
     dst.tipologia = src.tipologia;
@@ -19,7 +22,7 @@ export class Lavanderia {
   /**
    * Identificativo paziente
    */
-  idPaziente: string;
+  idDipendente: string;
 
   /**
    * Data del utilizzo
