@@ -16,7 +16,7 @@ export class CucinaAmbientiService {
   constructor(private http: HttpClient) { }
 
   getAll(): Observable<CucinaAmbienti[]> {
-    return this.http.get<CucinaAmbienti[]>(`${this.api}/api/cucina/ambiente`);
+    return this.http.get<CucinaAmbienti[]>(`${this.api}/api/cucina/ambiente/getAll`);
   }
 
   get(id: string): Observable<CucinaAmbienti> {

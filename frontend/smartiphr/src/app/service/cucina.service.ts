@@ -44,7 +44,7 @@ export class CucinaService {
   }
 
   getMenuGenerale(type: number, week: number, year: number): Observable<MenuGeneraleView[]> {
-    return this.http.get<MenuGeneraleView[]>(`${this.api}/api/cucina/generale?type=${type}&week=${week}&year=${year}`);
+    return this.http.get<MenuGeneraleView[]>(`${this.api}/api/cucina/generale/getAll?type=${type}&week=${week}&year=${year}`);
   }
 
   addMenuGenerale(menuGenerale: MenuGeneraleView) {

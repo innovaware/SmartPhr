@@ -91,6 +91,9 @@ export class CucinaSanificazioneAmbientiComponent implements OnInit {
               user: await this.userService.getById(item.idUser)
             });
 
+            this.cucinaAmbientiArchivio =
+                this.cucinaAmbientiArchivio.sort((a, b) => new Date(b.dateSanficazioneOrdinaria).getTime() - new Date(a.dateSanficazioneOrdinaria).getTime());
+
             this.dataSourceArchivio = new MatTableDataSource<CucinaAmbientiArchivioView>(this.cucinaAmbientiArchivio);
             this.dataSourceArchivio.paginator = this.paginatorArchivio;
           });

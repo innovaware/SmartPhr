@@ -154,7 +154,7 @@ router.delete("/:id", async (req, res) => {
 /**
  * Ritorna tutti gli elementi della collection cucinaAmbiente
 */
-router.get("/ambiente/", async (req, res) => {
+router.get("/ambiente/getAll", async (req, res) => {
   const { id } = req.params;
   try {
     const getData = () => {
@@ -369,7 +369,7 @@ router.post("/archivio/ambiente/", async (req, res) => {
 /**
  * Ritorna la lista del menu generale
  */
-router.get("/generale", async (req, res) => {
+router.get("/generale/getAll", async (req, res) => {
   const { type, week, year } = req.query;
   try {
     const getData = () => {
