@@ -231,6 +231,7 @@ import { DialogMagazzinoComponent } from './dialogs/dialog-magazzino/dialog-maga
 import { DialogCaricoMagazzinoComponent } from './dialogs/dialog-carico-magazzino/dialog-carico-magazzino.component';
 import { CucinaSanificazioneAmbientiComponent } from './pages/cucina-sanificazione-ambienti/cucina-sanificazione-ambienti.component';
 import { CucinaControlloTamponiComponent } from './pages/cucina-controllo-tamponi/cucina-controllo-tamponi.component';
+import { CucinaAutoControlloComponent } from './pages/cucina-auto-controllo/cucina-auto-controllo.component';
 
 const materialModules = [
   MatTableModule,
@@ -455,6 +456,7 @@ const pipes = [
     DialogCaricoMagazzinoComponent,
     CucinaSanificazioneAmbientiComponent,
     CucinaControlloTamponiComponent,
+    CucinaAutoControlloComponent,
   ],
   imports: [
     ...materialModules,

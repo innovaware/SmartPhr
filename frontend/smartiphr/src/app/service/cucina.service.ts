@@ -6,6 +6,7 @@ import { HttpClient } from "@angular/common/http";
 import { CucinaMenuPersonalizzato } from '../models/CucinaMenuPersonalizzato';
 import { MenuGeneraleView } from '../models/MenuGeneraleView';
 import { DocumentoControlloTamponi } from '../models/DocumentoControlloTamponi';
+import { DocumentoAutoControllo } from '../models/DocumentoAutoControllo';
 
 @Injectable({
   providedIn: 'root'
@@ -74,4 +75,22 @@ export class CucinaService {
     console.log("Eliminazione documento controllo tamponi", documentoControlloTamponi);
     return this.http.delete<DocumentoControlloTamponi>(`${this.api}/api/cucina/documenti/${documentoControlloTamponi._id}`);
   }
+
+
+  /// Documento auto controllo
+
+  getDocumentoAutoControllo(): Observable<DocumentoAutoControllo[]> {
+    return this.http.get<DocumentoControlloTamponi[]>(`${this.api}/api/cucina/autocontrollo/getAll`);
+  }
+
+  addDocumentoAutoControllo(documentoAutoControllo: DocumentoAutoControllo):  Observable<DocumentoControlloTamponi> {
+    console.log("Inserimento Documento Auto controllo", documentoAutoControllo);
+    return this.http.post<DocumentoAutoControllo>(`${this.api}/api/cucina/autocontrollo/`, documentoAutoControllo);
+  }
+
+  deleteDocumentoAutoControllo(documentoAutoControllo: DocumentoAutoControllo) {
+    console.log("Eliminazione documento auto controllo", documentoAutoControllo);
+    return this.http.delete<DocumentoAutoControllo>(`${this.api}/api/cucina/autocontrollo/${documentoAutoControllo._id}`);
+  }
+
 }

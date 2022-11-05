@@ -5,6 +5,7 @@ const CucinaGenerale = require("../models/cucinaGenerale");
 const CucinaAmbienti = require("../models/cucinaAmbienti");
 const CucinaAmbientiArchivio = require("../models/cucinaAmbientiArchivio");
 const CucinaDocumenti= require("../models/cucinaDocumenti");
+const CucinaDocumentiAutoControllo = require("../models/cucinaDocumentiAutoControllo");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 /**
@@ -588,6 +589,140 @@ router.delete("/documenti/:id", async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await CucinaDocumenti.findByIdAndRemove(id);
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(doc);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/// CUCINA DOCUMENTI AUTO CONTROLLO
+
+/**
+ * Ritorna tutti gli elementi della collection 
+*/
+router.get("/autocontrollo/getAll", async (req, res) => {
+  console.log("Get Cucina Documenti auto controllo");
+  try {
+    const getData = () => {
+      return CucinaDocumentiAutoControllo.find();
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaDocumenti 
+*/
+router.get("/autocontrollo/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaDocumentiAutoControllo.findById(id);
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Update cucina Documenti
+*/
+router.put("/autocontrollo/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cucina = await CucinaDocumentiAutoControllo.updateOne(
+      { _id: id },
+      {
+        $set: {
+          filename: req.body.filename,
+          dateupload: req.body.dateupload,
+          type: req.body.type,
+          typeDocument: req.body.typeDocument,
+          note: req.body.note,
+          cancellato: req.body.cancellato,
+          dataCancellazione: req.body.dataCancellazione,
+        },
+      }
+    );
+
+    console.log("Update Cucina Documenti:", cucina);
+    
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = "cucinaALL*";
+      redisClient.del(searchTerm);
+    }
+    
+
+    res.status(200);
+    res.json(cucina);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Inserimento cucina Documenti
+ */
+router.post("/autocontrollo", async (req, res) => {
+  try {
+    const cucina = new CucinaDocumentiAutoControllo({
+      filename: req.body.filename,
+      dateupload: new Date(),
+      type: req.body.type,
+      typeDocument: req.body.typeDocument,
+      note: req.body.note,
+      cancellato: req.body.cancellato,
+      dataCancellazione: req.body.dataCancellazione,
+    });
+
+    // Salva i dati sul mongodb
+    const result = await cucina.save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    res.json({ Error: err });
+  }
+});
+
+router.delete("/autocontrollo/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await CucinaDocumentiAutoControllo.findByIdAndRemove(id);
 
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
