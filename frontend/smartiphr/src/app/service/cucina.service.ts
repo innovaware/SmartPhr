@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { HttpClient } from "@angular/common/http";
 import { CucinaMenuPersonalizzato } from '../models/CucinaMenuPersonalizzato';
 import { MenuGeneraleView } from '../models/MenuGeneraleView';
+import { DocumentoControlloTamponi } from '../models/DocumentoControlloTamponi';
 
 @Injectable({
   providedIn: 'root'
@@ -56,6 +57,21 @@ export class CucinaService {
     menuGenerale.year = menuGenerale.dataStartRif.getFullYear();
     console.log("Update menu Generale:", menuGenerale);
     return this.http.put<MenuGeneraleView>(`${this.api}/api/cucina/generale/${menuGenerale._id}`, menuGenerale);
+  }
 
+  /// Documento controllo tamponi
+
+  getDocumentiControlloTamponi(): Observable<DocumentoControlloTamponi[]> {
+    return this.http.get<DocumentoControlloTamponi[]>(`${this.api}/api/cucina/documenti/getAll`);
+  }
+
+  addDocumentControlloTamponi(documentoControlloTamponi: DocumentoControlloTamponi):  Observable<DocumentoControlloTamponi> {
+    console.log("Inserimento Documento Controllo Tamponi", documentoControlloTamponi);
+    return this.http.post<DocumentoControlloTamponi>(`${this.api}/api/cucina/documenti/`, documentoControlloTamponi);
+  }
+
+  deleteDocumentoControlloTamponi(documentoControlloTamponi: DocumentoControlloTamponi) {
+    console.log("Eliminazione documento controllo tamponi", documentoControlloTamponi);
+    return this.http.delete<DocumentoControlloTamponi>(`${this.api}/api/cucina/documenti/${documentoControlloTamponi._id}`);
   }
 }
