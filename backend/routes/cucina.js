@@ -6,6 +6,8 @@ const CucinaAmbienti = require("../models/cucinaAmbienti");
 const CucinaAmbientiArchivio = require("../models/cucinaAmbientiArchivio");
 const CucinaDocumenti= require("../models/cucinaDocumenti");
 const CucinaDocumentiAutoControllo = require("../models/cucinaDocumentiAutoControllo");
+const CucinaDerranteAlimenti = require("../models/cucinaDerranteAlimenti");
+const CucinaDerranteAlimentiArchivio = require("../models/cucinaDerranteAlimentiArchivio");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 /**
@@ -733,6 +735,225 @@ router.delete("/autocontrollo/:id", async (req, res) => {
 
     res.status(200);
     res.json(doc);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+
+/// CUCINA DERRANTE ALIMENTI 
+
+/**
+ * Ritorna tutti gli elementi della collection 
+*/
+router.get("/derranteAlimenti/getAll", async (req, res) => {
+  console.log("Get Cucina derrante alimenti");
+  try {
+    const getData = () => {
+      return CucinaDerranteAlimenti.find();
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaDocumenti 
+*/
+router.get("/derranteAlimenti/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaDerranteAlimenti.findById(id);
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Update cucina Documenti
+*/
+router.put("/derranteAlimenti/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const cucina = await CucinaDerranteAlimenti.updateOne(
+      { _id: id },
+      {
+        $set: {
+          nome: req.body.nome,
+          dateInsert: req.body.dateInsert,
+          note: req.body.note,
+          quantita: req.body.quantita,
+          unita: req.body.unita,
+          idUser: req.body.idUser,
+          conforme: req.body.conforme, 
+          nonConsumato: req.body.nonConsumato,
+          dateScadenza: req.body.dateScadenza
+        },
+      }
+    );
+    
+    new CucinaDerranteAlimentiArchivio({
+      operazione: "Modifica",
+      dataOperazione: new Date(),
+      idDerranteAlimenti: id,
+      nome: req.body.nome,
+      dateInsert: req.body.dateInsert,
+      note: req.body.note,
+      quantita: req.body.quantita,
+      unita: req.body.unita,
+      idUser: req.body.idUser,
+      conforme: req.body.conforme, 
+      nonConsumato: req.body.nonConsumato,
+      dateScadenza: req.body.dateScadenza
+    }).save();
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      const searchTerm = "cucinaALL*";
+      redisClient.del(searchTerm);
+    }
+    
+
+    res.status(200);
+    res.json(cucina);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Inserimento cucina Documenti
+ */
+router.post("/derranteAlimenti", async (req, res) => {
+  try {
+    const cucina = new CucinaDerranteAlimenti({
+      nome: req.body.nome,
+      dateInsert: req.body.dateInsert,
+      note: req.body.note,
+      quantita: req.body.quantita,
+      unita: req.body.unita,
+      idUser: req.body.idUser,
+      conforme: req.body.conforme, 
+      nonConsumato: req.body.nonConsumato,
+      dateScadenza: req.body.dateScadenza
+
+    });
+
+    // Salva i dati sul mongodb
+    const result = await cucina.save();
+    new CucinaDerranteAlimentiArchivio({
+      operazione: "Inserimento",
+      dataOperazione: new Date(),
+      idDerranteAlimenti: result._id,
+      nome: req.body.nome,
+      dateInsert: req.body.dateInsert,
+      note: req.body.note,
+      quantita: req.body.quantita,
+      unita: req.body.unita,
+      idUser: req.body.idUser,
+      conforme: req.body.conforme, 
+      nonConsumato: req.body.nonConsumato,
+      dateScadenza: req.body.dateScadenza
+    }).save();
+
+
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(result);
+  } catch (err) {
+    console.log(err);
+    res.status(500);
+    res.json({ Error: err });
+  }
+});
+
+router.delete("/derranteAlimenti/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+    const doc = await CucinaDerranteAlimenti.findByIdAndRemove(id);
+    new CucinaDerranteAlimentiArchivio({
+      operazione: "Cancellazione",
+      dataOperazione: new Date(),
+      idDerranteAlimenti: id,
+      nome: req.body.nome,
+      dateInsert: req.body.dateInsert,
+      note: req.body.note,
+      quantita: req.body.quantita,
+      unita: req.body.unita,
+      idUser: req.body.idUser,
+      conforme: req.body.conforme, 
+      nonConsumato: req.body.nonConsumato,
+      dateScadenza: req.body.dateScadenza
+    }).save();
+
+
+    redisClient = req.app.get("redis");
+    redisDisabled = req.app.get("redisDisabled");
+
+    if (redisClient != undefined && !redisDisabled) {
+      redisClient.del(`cucina*`);
+    }
+
+    res.status(200);
+    res.json(doc);
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+router.get("/derranteAlimentiArchivio/getAll", async (req, res) => {
+  console.log("Get Cucina derrante alimenti archivio");
+  try {
+    const getData = () => {
+      return CucinaDerranteAlimentiArchivio.find();
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ Error: err });
+  }
+});
+
+/**
+ * Ritorna tutti gli elementi della collection cucinaDocumenti 
+*/
+router.get("/derranteAlimentiArchivio/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    const getData = () => {
+      return CucinaDerranteAlimentiArchivio.findById(id);
+    };
+
+    const cucina = await getData();
+    res.status(200).json(cucina);
+  
   } catch (err) {
     console.log(err);
     res.status(500).json({ Error: err });

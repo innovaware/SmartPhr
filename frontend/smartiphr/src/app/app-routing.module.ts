@@ -81,6 +81,7 @@ import { MagazzinoComponent } from "./pages/magazzino/magazzino.component";
 import { CucinaSanificazioneAmbientiComponent } from "./pages/cucina-sanificazione-ambienti/cucina-sanificazione-ambienti.component";
 import { CucinaControlloTamponiComponent } from "./pages/cucina-controllo-tamponi/cucina-controllo-tamponi.component";
 import { CucinaAutoControlloComponent } from "./pages/cucina-auto-controllo/cucina-auto-controllo.component";
+import { CucinaDerrateAlimentariComponent } from "./pages/cucina-derrate-alimentari/cucina-derrate-alimentari.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -193,6 +194,7 @@ const routes: Routes = [
   { path: "cucina-sanificazione", component: CucinaSanificazioneAmbientiComponent, canActivate: [AuthGuard]  },
   { path: "cucina-tamponi", component: CucinaControlloTamponiComponent, canActivate: [AuthGuard]  },
   { path: "cucina-autocontrolli", component: CucinaAutoControlloComponent, canActivate: [AuthGuard]  },
+  { path: "cucina-derrate", component: CucinaDerrateAlimentariComponent, canActivate: [AuthGuard]  },
 
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },

@@ -66,7 +66,7 @@ export class DialogCaricoMagazzinoComponent implements OnInit {
   }
 
   cancel() {
-          this.dialogRef.close(undefined);
+    this.dialogRef.close(undefined);
   }
 
 }

@@ -7,6 +7,7 @@ import { CucinaMenuPersonalizzato } from '../models/CucinaMenuPersonalizzato';
 import { MenuGeneraleView } from '../models/MenuGeneraleView';
 import { DocumentoControlloTamponi } from '../models/DocumentoControlloTamponi';
 import { DocumentoAutoControllo } from '../models/DocumentoAutoControllo';
+import { CucinaDerrateAlimenti } from '../models/CucinaDerrateAlimenti';
 
 @Injectable({
   providedIn: 'root'
@@ -93,4 +94,29 @@ export class CucinaService {
     return this.http.delete<DocumentoAutoControllo>(`${this.api}/api/cucina/autocontrollo/${documentoAutoControllo._id}`);
   }
 
+  /// Derrante Alimenti
+
+  getDerranteAlimenti(): Observable<CucinaDerrateAlimenti[]> {
+    return this.http.get<CucinaDerrateAlimenti[]>(`${this.api}/api/cucina/derranteAlimenti/getAll`);
+  }
+
+  getDerranteAlimentiArchivio(): Observable<CucinaDerrateAlimenti[]> {
+    return this.http.get<CucinaDerrateAlimenti[]>(`${this.api}/api/cucina/derranteAlimentiArchivio/getAll`);
+  }
+
+  addDerranteAlimenti(derranteAlimenti: CucinaDerrateAlimenti):  Observable<CucinaDerrateAlimenti> {
+    console.log("Inserimento Derranti alimenti", derranteAlimenti);
+    return this.http.post<CucinaDerrateAlimenti>(`${this.api}/api/cucina/derranteAlimenti/`, derranteAlimenti);
+  }
+
+  updateDerranteAlimenti(derranteAlimenti: CucinaDerrateAlimenti) {
+    console.log("Update derrante Alimenti:", derranteAlimenti);
+    return this.http.put<CucinaDerrateAlimenti>(`${this.api}/api/cucina/derranteAlimenti/${derranteAlimenti._id}`, derranteAlimenti);
+  }
+
+
+  deleteDerranteAlimenti(derranteAlimenti: CucinaDerrateAlimenti) {
+    console.log("Eliminazione Derrante Alimenti", derranteAlimenti);
+    return this.http.delete<CucinaDerrateAlimenti>(`${this.api}/api/cucina/derranteAlimenti/${derranteAlimenti._id}`);
+  }
 }
