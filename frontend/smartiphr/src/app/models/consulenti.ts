@@ -13,6 +13,7 @@ export class Consulenti {
   comuneNascita: string;
   provinciaNascita: string;
   indirizzoNascita: string;
+  sesso: string;
   indirizzoResidenza: string;
   comuneResidenza: string;
   provinciaResidenza: string;
@@ -37,6 +38,7 @@ export class Consulenti {
     this.tipologiaContratto = "";
     this.telefono = "";
     this.email = "";
+    this.sesso = "";
   }
 
 }

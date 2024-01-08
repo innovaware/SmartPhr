@@ -1,340 +1,348 @@
 <mat-dialog-content>
-  <mat-tab-group mat-align-tabs="start">
-    <mat-tab label="Generale">
-      <div class="container-fluid">
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Cognome</mat-label>
-              <input matInput [(ngModel)]="item.consulente.cognome" [disabled]=disable>
-            </mat-form-field>
-          </div>
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Generale">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Cognome</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.cognome" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
 
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Nome</mat-label>
-              <input matInput [(ngModel)]="item.consulente.nome" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Nome</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.nome" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>email</mat-label>
-              <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>codice fiscale</mat-label>
-              <input matInput [(ngModel)]="item.consulente.codiceFiscale" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>email</mat-label>
+                            <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>codice fiscale</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.codiceFiscale" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                       Sesso*: 
+                        <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                                         [(ngModel)]="item.consulente.sesso" [disabled]=disable>
+                            <mat-radio-button class="example-radio-button" value='M'>M</mat-radio-button>
+                            <mat-radio-button class="example-radio-button" value='F'>F</mat-radio-button>
+                        </mat-radio-group>
+                    </div>
+                </div>
 
-        <!-- Cognome, Nome, Codice Fiscale, Data di nascita, Indirizzo di nascita, Comune di nascita, Provincia di nascita -->
-        <div class="row">
-          <div class="col">
-            <mat-form-field appearance="fill">
-              <mat-label>Scegli la data di nascita</mat-label>
-              <input matInput [matDatepicker]="dataNascita" [(ngModel)]="item.consulente.dataNascita"
-                [disabled]=disable>
-              <mat-datepicker-toggle matSuffix [for]="dataNascita"></mat-datepicker-toggle>
-              <mat-datepicker #dataNascita></mat-datepicker>
-            </mat-form-field>
-          </div>
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Indirizzo Nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.indirizzoNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
+                <!-- Cognome, Nome, Codice Fiscale, Data di nascita, Indirizzo di nascita, Comune di nascita, Provincia di nascita -->
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Scegli la data di nascita</mat-label>
+                            <input matInput [matDatepicker]="dataNascita" [(ngModel)]="item.consulente.dataNascita"
+                                   [disabled]=disable>
+                            <mat-datepicker-toggle matSuffix [for]="dataNascita"></mat-datepicker-toggle>
+                            <mat-datepicker #dataNascita></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Indirizzo Nascita</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.indirizzoNascita" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Comune di nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.comuneNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Comune di nascita</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.comuneNascita" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
 
-          <div class="col">
-            <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Provincia di nascita</mat-label>
-              <input matInput [(ngModel)]="item.consulente.provinciaNascita" [disabled]=disable>
-            </mat-form-field>
-          </div>
-        </div>
+                    <div class="col">
+                        <mat-form-field class="example-full-width" appearance="fill">
+                            <mat-label>Provincia di nascita</mat-label>
+                            <input matInput [(ngModel)]="item.consulente.provinciaNascita" [disabled]=disable>
+                        </mat-form-field>
+                    </div>
+                </div>
 
-      </div>
-
-    </mat-tab>
-    <mat-tab label="Contratto"  [disabled]="this.item.consulente?._id === undefined">
-
-      <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingContratto">
-        <button mat-button class="button-insert" (click)="addContratto()">Aggiungi Contratto</button>
-      </div>
-
-      <div class="container-flex" class="notPresent" style="margin-bottom: 10px;" *ngIf="addingContratto">
-        <div class="row">
-          <div class="col">
-            <input type="file" (change)="uploadContratto($event)" accept=".pdf" *ngIf="!uploadingContratto">
-            <div class="row" *ngIf="uploadingContratto">
-              <div class="col-1">
-                <mat-spinner [diameter]="24"></mat-spinner>
-              </div>
-              <div class="col">
-                <label>Caricamento in corso ...</label>
-              </div>
             </div>
 
-          </div>
-          <div class="col">
-          </div>
-        </div>
-        <div class="row" *ngIf="!uploadingContratto">
-          <div class="col">
-            <mat-form-field class="full" appearance="fill">
-              <mat-label>Note</mat-label>
-              <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaContratto.note">
-            </mat-form-field>
-          </div>
-          <div class="col-2">
-            <button mat-button class="button-insert" (click)="saveContratto(nuovaContratto)">Salva</button>
-          </div>
-        </div>
-      </div>
+        </mat-tab>
+        <mat-tab label="Contratto" [disabled]="this.item.consulente?._id === undefined">
 
-
-      <div>
-        <div class="container-flex" style="margin: 20px 0px 20px 0px;"
-          *ngIf="!uploadingFattura && this.contratto != undefined">
-
-
-
-          <mat-card class="example-card">
-            <mat-card-header>
-              <div mat-card-avatar class="example-header-image"></div>
-              <mat-card-title>Contratto del {{this.contratto.dateupload | date: 'dd/MM/yyyy'}}</mat-card-title>
-              <mat-card-subtitle>Note</mat-card-subtitle>
-            </mat-card-header>
-            <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
-            <mat-card-content>
-              <p>
-                {{this.contratto.note}}
-              </p>
-            </mat-card-content>
-            <mat-card-actions>
-              <button mat-button (click)="showContratto(this.contratto)">
-                <img src="../../../assets/pdf.jpg" style="width: 26px;">
-              </button>
-              <button mat-button (click)="deleteContratto(this.contratto)">
-                <img src="../../../assets/cestino.svg" style="width:26px">
-              </button>
-            </mat-card-actions>
-          </mat-card>
-
-
-
-        </div>
-      </div>
-
-
-    </mat-tab>
-
-    <!-- FATTURE -->
-    <mat-tab label="Fatture" [disabled]="this.item.consulente?._id === undefined">
-
-      <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingFattura">
-        <button mat-button class="button-insert" (click)="addFattura()">Aggiungi Fattura</button>
-      </div>
-
-      <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-        *ngIf="addingFattura && !uploadingFattura">
-        <div class="row">
-          <div class="col">
-            <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
-            <label *ngIf="uploadingFattura">Caricamento in corso ...</label>
-          </div>
-          <div class="col">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full" appearance="fill">
-              <mat-label>Note</mat-label>
-              <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaFattura.note">
-            </mat-form-field>
-          </div>
-          <div class="col-2">
-            <button mat-button class="button-insert" (click)="saveFattura(nuovaFattura)">Salva</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingFattura">
-          <div class="row">
-            <div class="col-1">
-              <mat-spinner [diameter]="24"></mat-spinner>
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingContratto">
+                <button mat-button class="button-insert" (click)="addContratto()">Aggiungi Contratto</button>
             </div>
-            <div class="col">
-              <label>Caricamento in corso ...</label>
+
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;" *ngIf="addingContratto">
+                <div class="row">
+                    <div class="col">
+                        <input type="file" (change)="uploadContratto($event)" accept=".pdf" *ngIf="!uploadingContratto">
+                        <div class="row" *ngIf="uploadingContratto">
+                            <div class="col-1">
+                                <mat-spinner [diameter]="24"></mat-spinner>
+                            </div>
+                            <div class="col">
+                                <label>Caricamento in corso ...</label>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row" *ngIf="!uploadingContratto">
+                    <div class="col">
+                        <mat-form-field class="full" appearance="fill">
+                            <mat-label>Note</mat-label>
+                            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaContratto.note">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                        <button mat-button class="button-insert" (click)="saveContratto(nuovaContratto)">Salva</button>
+                    </div>
+                </div>
             </div>
-          </div>
-        </div>
-      </div>
-
-      <div *ngIf="this.fatture?.length <= 0" class="notPresent">
-        Nessuna Fattura presente
-      </div>
-
-      <table mat-table [dataSource]="fattureDataSource" class="mat-elevation-z8" *ngIf="this.fatture?.length > 0">
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
-          <td mat-cell *matCellDef="let row" style="text-align: right;">
-            <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
-            <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-
-            <button mat-button (click)="showFattureDocument(row)">
-              <img src="../../../assets/pdf.jpg" style="width: 26px;">
-            </button>
-
-            <button mat-button (click)="deleteFattura(row)">
-              <img src="../../../assets/cestino.svg" style="width:26px">
-            </button>
 
 
-          </td>
-        </ng-container>
+            <div>
+                <div class="container-flex" style="margin: 20px 0px 20px 0px;"
+                     *ngIf="!uploadingFattura && this.contratto != undefined">
 
-        <ng-container matColumnDef="namefile">
-          <th mat-header-cell *matHeaderCellDef> Nome file </th>
-          <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-          <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
-        </ng-container>
 
-        <ng-container matColumnDef="note">
-          <th mat-header-cell *matHeaderCellDef> Note </th>
-          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-        </ng-container>
+                    <mat-card class="example-card">
+                        <mat-card-header>
+                            <div mat-card-avatar class="example-header-image"></div>
+                            <mat-card-title>Contratto del {{this.contratto.dateupload | date: 'dd/MM/yyyy'}}</mat-card-title>
+                            <mat-card-subtitle>Note</mat-card-subtitle>
+                        </mat-card-header>
+                        <!-- <img mat-card-image src="https://material.angular.io/assets/img/examples/shiba2.jpg" alt="Photo of a Shiba Inu"> -->
+                        <mat-card-content>
+                            <p>
+                                {{this.contratto.note}}
+                            </p>
+                        </mat-card-content>
+                        <mat-card-actions>
+                            <button mat-button (click)="showContratto(this.contratto)">
+                                <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                            </button>
+                            <button mat-button (click)="deleteContratto(this.contratto)">
+                                <img src="../../../assets/cestino.svg" style="width:26px">
+                            </button>
+                        </mat-card-actions>
+                    </mat-card>
 
-        <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
-      </table>
 
-      <div class="paginator-container">
 
-        <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
-          aria-label="Select page of periodic elements">
-        </mat-paginator>
-      </div>
-    </mat-tab>
-
-    <!-- ARCHIVO BONIFICI ASSEGNI CONTANTI -->
-    <mat-tab label="Bonifici" [disabled]="this.item.consulente?._id === undefined">
-      <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingBonifici">
-        <button mat-button class="button-insert" (click)="addBonifico()">Aggiungi</button>
-      </div>
-
-      <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-        *ngIf="addingBonifici && !uploadingBonifici">
-        <div class="row">
-          <div class="col">
-            <input type="file" (change)="uploadBonifico($event)" accept=".pdf" *ngIf="!uploadingBonifici">
-          </div>
-          <div class="col">
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field class="full" appearance="fill">
-              <mat-label>Note</mat-label>
-              <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaBonifico.note">
-            </mat-form-field>
-          </div>
-          <div class="col-2">
-            <button mat-button class="button-insert" (click)="saveBonifico(nuovaBonifico)">Salva</button>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingBonifici">
-          <div class="row">
-            <div class="col-1">
-              <mat-spinner [diameter]="24"></mat-spinner>
+                </div>
             </div>
-            <div class="col">
-              <label>Caricamento in corso ...</label>
+
+
+        </mat-tab>
+
+        <!-- FATTURE -->
+        <mat-tab label="Fatture" [disabled]="this.item.consulente?._id === undefined">
+
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingFattura">
+                <button mat-button class="button-insert" (click)="addFattura()">Aggiungi Fattura</button>
             </div>
-          </div>
-        </div>
-      </div>
 
-      <div *ngIf="this.bonifici?.length <= 0" class="notPresent">
-        Nessun bonifico, assegno o contante presente
-      </div>
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                 *ngIf="addingFattura && !uploadingFattura">
+                <div class="row">
+                    <div class="col">
+                        <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                        <label *ngIf="uploadingFattura">Caricamento in corso ...</label>
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="full" appearance="fill">
+                            <mat-label>Note</mat-label>
+                            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaFattura.note">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                        <button mat-button class="button-insert" (click)="saveFattura(nuovaFattura)">Salva</button>
+                    </div>
+                </div>
+            </div>
 
-      <table mat-table [dataSource]="bonificiDataSource" class="mat-elevation-z8" *ngIf="this.bonifici?.length > 0">
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
-          <td mat-cell *matCellDef="let row" style="text-align: right;">
-            <button mat-button (click)="showBonificoDocument(row)">
-              <img src="../../../assets/pdf.jpg" style="width: 26px;">
-            </button>
+            <div>
+                <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingFattura">
+                    <div class="row">
+                        <div class="col-1">
+                            <mat-spinner [diameter]="24"></mat-spinner>
+                        </div>
+                        <div class="col">
+                            <label>Caricamento in corso ...</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
-            <button mat-button (click)="deleteBonifico(row)">
-              <img src="../../../assets/cestino.svg" style="width: 26px;">
-            </button>
+            <div *ngIf="this.fatture?.length <= 0" class="notPresent">
+                Nessuna Fattura presente
+            </div>
 
+            <table mat-table [dataSource]="fattureDataSource" class="mat-elevation-z8" *ngIf="this.fatture?.length > 0">
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: right;">
+                        <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+                        <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
 
-          </td>
-        </ng-container>
+                        <button mat-button (click)="showFattureDocument(row)">
+                            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                        </button>
 
-        <ng-container matColumnDef="namefile">
-          <th mat-header-cell *matHeaderCellDef> Nome file </th>
-          <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-          <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-          <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="note">
-          <th mat-header-cell *matHeaderCellDef> Note </th>
-          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
-      </table>
-
-      <div class="paginator-container">
-        <mat-paginator #paginatorBonifici [pageSizeOptions]="[5]" showFirstLastButtons
-          aria-label="Select page of periodic elements">
-        </mat-paginator>
-      </div>
-
-    </mat-tab>
+                        <button mat-button (click)="deleteFattura(row)">
+                            <img src="../../../assets/cestino.svg" style="width:26px">
+                        </button>
 
 
-  </mat-tab-group>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="namefile">
+                    <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                    <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef> Note </th>
+                    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
+            </table>
+
+            <div class="paginator-container">
+
+                <mat-paginator #paginatorFatture [pageSizeOptions]="[5]" showFirstLastButtons
+                               aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+        </mat-tab>
+
+        <!-- ARCHIVO BONIFICI ASSEGNI CONTANTI -->
+        <mat-tab label="Bonifici" [disabled]="this.item.consulente?._id === undefined">
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingBonifici">
+                <button mat-button class="button-insert" (click)="addBonifico()">Aggiungi</button>
+            </div>
+
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                 *ngIf="addingBonifici && !uploadingBonifici">
+                <div class="row">
+                    <div class="col">
+                        <input type="file" (change)="uploadBonifico($event)" accept=".pdf" *ngIf="!uploadingBonifici">
+                    </div>
+                    <div class="col">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <mat-form-field class="full" appearance="fill">
+                            <mat-label>Note</mat-label>
+                            <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaBonifico.note">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2">
+                        <button mat-button class="button-insert" (click)="saveBonifico(nuovaBonifico)">Salva</button>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingBonifici">
+                    <div class="row">
+                        <div class="col-1">
+                            <mat-spinner [diameter]="24"></mat-spinner>
+                        </div>
+                        <div class="col">
+                            <label>Caricamento in corso ...</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div *ngIf="this.bonifici?.length <= 0" class="notPresent">
+                Nessun bonifico, assegno o contante presente
+            </div>
+
+            <table mat-table [dataSource]="bonificiDataSource" class="mat-elevation-z8" *ngIf="this.bonifici?.length > 0">
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                    </th>
+                    <td mat-cell *matCellDef="let row" style="text-align: right;">
+                        <button mat-button (click)="showBonificoDocument(row)">
+                            <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                        </button>
+
+                        <button mat-button (click)="deleteBonifico(row)">
+                            <img src="../../../assets/cestino.svg" style="width: 26px;">
+                        </button>
+
+
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="namefile">
+                    <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                    <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="note">
+                    <th mat-header-cell *matHeaderCellDef> Note </th>
+                    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
+            </table>
+
+            <div class="paginator-container">
+                <mat-paginator #paginatorBonifici [pageSizeOptions]="[5]" showFirstLastButtons
+                               aria-label="Select page of periodic elements">
+                </mat-paginator>
+            </div>
+
+        </mat-tab>
+
+
+    </mat-tab-group>
 </mat-dialog-content>
 
 <mat-dialog-actions align="start">
-  <button mat-button [mat-dialog-close]="result">Chiudi</button>
-  <button mat-button class="button-insert" (click)="save()">Salva</button>
-  <button mat-button class="button-insert" (click)="saveAndClose()">Salva e Chiudi</button>
+    <button mat-button [mat-dialog-close]="result">Chiudi</button>
+    <button mat-button class="button-insert" (click)="save()">Salva</button>
+    <button mat-button class="button-insert" (click)="saveAndClose()">Salva e Chiudi</button>
 </mat-dialog-actions>

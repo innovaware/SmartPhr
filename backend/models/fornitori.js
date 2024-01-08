@@ -6,6 +6,7 @@ const FornitoriSchema = mongoose.Schema({
   codiceFiscale: String,
   dataNascita: Date,
   comuneNascita: String,
+  sesso: String,
   provinciaNascita: String,
   indirizzoNascita: String,
   indirizzoResidenza: String,

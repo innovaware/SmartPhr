@@ -32,7 +32,7 @@ var PORT = process.env.PORT || 3000;
 var VERSION = process.env.VERSION;
 
 const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "redis";
+const redisHost = process.env.REDISHOST || "vps-d76f9e1c.vps.ovh.net";//"redis";
 var redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 

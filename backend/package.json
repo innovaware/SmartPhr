@@ -5,13 +5,16 @@
   "main": "index.js",
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "bootstrap": "^5.3.2",
     "bson": "^4.5.2",
+    "codice-fiscale-js": "^2.3.20",
     "cors": "^2.8.5",
     "express": "^4.17.1",
     "express-basic-auth": "^1.2.0",
     "express-fileupload": "^1.2.1",
     "express-prom-bundle": "^6.4.1",
     "jwt-decode": "^3.1.2",
+    "moment": "^2.29.4",
     "mongodb": "^4.1.2",
     "mongoose": "^5.13.7",
     "morgan": "^1.10.0",
@@ -21,6 +24,7 @@
     "node-nextcloud": "^1.1.2",
     "nodemon": "^2.0.13",
     "prom-client": "^14.0.1",
+    "react-bootstrap": "^2.9.1",
     "redis": "^3.1.2"
   },
   "devDependencies": {

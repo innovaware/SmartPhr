@@ -14,6 +14,7 @@ import { MessagesService } from 'src/app/service/messages.service';
 import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
+import CodiceFiscale from "codice-fiscale-js";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
@@ -75,7 +76,7 @@ export class DialogPazienteComponent implements OnInit {
     this.addingNotaCredito = false;
     this.uploadingNotaCredito = false;
     this.uploadingBonifici = false;
-
+    dialogRef.disableClose = true;
 
     //this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
     console.log("Dialog paziente generale", this.data);
@@ -87,13 +88,41 @@ export class DialogPazienteComponent implements OnInit {
 
     if (
       this.paziente.cognome == "" || this.paziente.cognome == null || this.paziente.cognome.length == 0 ||
-      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0 ||
-      this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
+      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0
+      ||
+      this.paziente.dataNascita.toDateString() == "" || this.paziente.dataNascita.toDateString() == null ||
+      this.paziente.luogoNascita == "" || this.paziente.luogoNascita == null || this.paziente.luogoNascita.length == 0
+      ||
+      this.paziente.comuneNascita == "" || this.paziente.comuneNascita == null || this.paziente.comuneNascita.length == 0 ||
+      this.paziente.provinciaNascita == "" || this.paziente.provinciaNascita == null || this.paziente.provinciaNascita.length == 0 ||
+      this.paziente.sesso == "" || this.paziente.sesso == null || this.paziente.sesso.length == 0
+      || this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
     ) {
       alert("Alcuni campi obbligatori sono mancanti!");
       return;
     } else {
+     /* const cf = new CodiceFiscale({
+        name: this.paziente.nome,
+        surname: this.paziente.cognome,
+        gender: this.paziente.sesso == "M" || this.paziente.sesso.toLowerCase() == "maschio" ? "M" : "F",
+        day: this.paziente.dataNascita.getDate(),
+        month: this.paziente.dataNascita.getMonth(),
+        year: this.paziente.dataNascita.getFullYear(),
+        birthplace: this.paziente.comuneNascita,
+        birthplaceProvincia: this.paziente.provinciaNascita
+      });
+      console.log(cf.cf);
+      console.log(this.paziente.sesso);
+      if (cf.isValid() && cf.cf != this.paziente.codiceFiscale) {
+        alert("Codice Fiscale errato!!!");
+        return;
+      }*/
 
+      if (this.data.paziente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10))
+      {
+        alert("Data di nascita Errata!!!");
+        return;
+      }
     if (saveAndClose) {
       this.dialogRef.close(this.data.paziente);
     } else {
@@ -132,7 +161,7 @@ export class DialogPazienteComponent implements OnInit {
     }
 
   }
-
+    if (saveAndClose==true) window.location.reload();
   }
 
   showDocument(document: any) {
@@ -173,6 +202,14 @@ export class DialogPazienteComponent implements OnInit {
       documentRemoving.status=false;
     });
   }
+
+  async Close() {
+   /* if (this.newItem == true)
+    {
+    window.location.reload();
+    }*/
+  }
+
 
   async changeData($event: Paziente) {
     console.log("Change paziente info", $event);
@@ -664,4 +701,5 @@ export class DialogPazienteComponent implements OnInit {
         });
     }
   }
+
 }

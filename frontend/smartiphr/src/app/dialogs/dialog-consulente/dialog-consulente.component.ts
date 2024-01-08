@@ -87,6 +87,40 @@ export class DialogConsulenteComponent implements OnInit {
 
   save() {
     //this.dialogRef.close(this.item);
+    if (
+      this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined ||
+      this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined ||
+      this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined ||
+      this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined
+    ) {
+
+      var campi = "";
+      if (this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    } else {
+
+      if (this.item.consulente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+    }
+
     if (this.item.isNew) {
       this.item.isNew = false;
       this.insert().subscribe(
@@ -105,7 +139,8 @@ export class DialogConsulenteComponent implements OnInit {
         (e) => console.error(e)
       );
     }
-  }
+    }
+
 
   private insert(): Observable<Consulenti> {
     return new Observable<Consulenti>((subscriber) => {
@@ -138,6 +173,43 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   saveAndClose() {
+
+    if (
+      this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined ||
+      this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined ||
+      this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined ||
+      this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined
+    ) {
+
+      var campi = "";
+      if (this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    } else {
+
+      if (this.item.consulente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+    }
+
+
+
     if (this.item.isNew) {
       this.insert().subscribe((consulente: Consulenti) => {
         this.dialogRef.close(consulente);

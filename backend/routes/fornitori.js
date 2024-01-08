@@ -9,173 +9,229 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 //const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    
-    const getData = () => {
-      return Fornitori.find()
-    };
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient == undefined || redisDisabled) {
-      const fornitori = await getData()
-      res.status(200).json(fornitori);
-      return;
+        const getData = (query) => {
+            return Fornitori.find(query);
+        };
+
+        const showOnlyCancellati = req.query.show == "deleted";
+        const showAll = req.query.show == "all";
+
+        if (showOnlyCancellati || showAll) {
+            console.log("Show all or deleted");
+            let query = {};
+            if (showOnlyCancellati) {
+                query = { cancellato: true };
+            }
+            const fornitori = await getData(query);
+            res.status(200).json(fornitori);
+        } else {
+
+            if (redisClient == undefined || redisDisabled) {
+                const fornitori = await getData({
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                })
+
+                if (fornitori.length > 0) res.status(200).json(fornitori);
+                else res.status(404).json({ error: "No patients found" });
+
+                return;
+            }
+
+            const searchTerm = `FORNITORIALL`;
+            redisClient.get(searchTerm, async (err, data) => {
+                if (err) throw err;
+
+                if (data) {
+                    res.status(200).send(JSON.parse(data));
+                } else {
+                    const fornitori = await getData({
+                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                    });
+
+                    if (fornitori.length > 0) res.status(200).json(fornitori);
+                    else res.status(404).json({ error: "No patients found" });
+
+                    redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
+                }
+            });
+        }
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `FORNITORIALL`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const fornitori = await getData()
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
-        res.status(200).json(fornitori);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({"Error": err});
-  }
 });
+
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    
-    const getData = (query) => {
-      return Consulenti.find(query);
-    };
+    const { id } = req.params;
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
 
+        const getData = () => {
+            return Fornitori.find({
+                $and: [
+                    {
+                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                    },
+                    { _id: id },
+                ],
+            });
+        };
 
-    const searchTerm = `FORNITORIBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
+        if (redisClient == undefined || redisDisabled) {
+            const fornitori = await getData();
 
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const fornitori = await Fornitori.findById(id);
+            if (fornitori != null) res.status(200).json(fornitori);
+            else res.status(404).json({ error: "No patient found" });
+            return;
+        }
 
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
-        res.status(200).json(fornitori);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({"Error": err});
-  }
+        const searchTerm = `FORNITORIBY${id}`;
+        redisClient.get(searchTerm, async (err, data) => {
+            if (err) throw err;
+
+            if (data && !redisDisabled) {
+                res.status(200).send(JSON.parse(data));
+            } else {
+                const fornitori = await getData();
+
+                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
+                if (fornitori != null) res.status(200).json(fornitori);
+                else res.status(404).json({ error: "No patient found" });
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
+
 router.post("/", async (req, res) => {
-  try {
-    const fornitore = new Fornitori({
-      cognome: req.body.cognome,
-      nome: req.body.nome,
-      codiceFiscale: req.body.codiceFiscale,
-      dataNascita: req.body.dataNascita,
-      comuneNascita: req.body.comuneNascita,
-      provinciaNascita: req.body.provinciaNascita,
-      indirizzoNascita: req.body.indirizzoNascita,
-      indirizzoResidenza: req.body.indirizzoResidenza,
-      comuneResidenza: req.body.comuneResidenza,
-      provinciaResidenza: req.body.provinciaResidenza,  
-      mansione: req.body.mansione,
-      tipoContratto: req.body.tipoContratto,
-      telefono: req.body.telefono,
-      email: req.body.email,
-    });
+    try {
+        const fornitore = new Fornitori({
+            cognome: req.body.cognome,
+            nome: req.body.nome,
+            codiceFiscale: req.body.codiceFiscale,
+            dataNascita: req.body.dataNascita,
+            comuneNascita: req.body.comuneNascita,
+            provinciaNascita: req.body.provinciaNascita,
+            indirizzoNascita: req.body.indirizzoNascita,
+            sesso: req.body.sesso,
+            indirizzoResidenza: req.body.indirizzoResidenza,
+            comuneResidenza: req.body.comuneResidenza,
+            provinciaResidenza: req.body.provinciaResidenza,
+            mansione: req.body.mansione,
+            tipoContratto: req.body.tipoContratto,
+            telefono: req.body.telefono,
+            email: req.body.email,
+        });
 
-    console.log(req.body);
+        const result = await fornitore.save();
 
-    const result = await fornitore.save();
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`FORNITORIALL`);
+        }
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `FORNITORIALL`;
-      redisClient.delete(searchTerm);
+        res.status(200);
+        res.json(result);
+
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
     }
-
-    res.status(200);
-    res.json(result);
-
-  } catch (err) {
-    res.status(500);
-    res.json({"Error": err});
-  }
 });
 
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const fornitori = await Fornitori.updateOne(
-      { _id: id },
-      {
-        $set: {
-          cognome: req.body.cognome,
-          nome: req.body.nome,
-          codiceFiscale: req.body.codiceFiscale,
-          dataNascita: req.body.dataNascita,
-          comuneNascita: req.body.comuneNascita,
-          provinciaNascita: req.body.provinciaNascita,
-          indirizzoNascita: req.body.indirizzoNascita,
-          indirizzoResidenza: req.body.indirizzoResidenza,
-          comuneResidenza: req.body.comuneResidenza,
-          provinciaResidenza: req.body.provinciaResidenza,  
-          mansione: req.body.mansione,
-          tipoContratto: req.body.tipoContratto,
-          telefono: req.body.telefono,
-          email: req.body.email,
-        },
-      }
-    );
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        const { id } = req.params;
+        const fornitori = await Fornitori.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    cognome: req.body.cognome,
+                    nome: req.body.nome,
+                    codiceFiscale: req.body.codiceFiscale,
+                    dataNascita: req.body.dataNascita,
+                    comuneNascita: req.body.comuneNascita,
+                    provinciaNascita: req.body.provinciaNascita,
+                    indirizzoNascita: req.body.indirizzoNascita,
+                    sesso: req.body.sesso,
+                    indirizzoResidenza: req.body.indirizzoResidenza,
+                    comuneResidenza: req.body.comuneResidenza,
+                    provinciaResidenza: req.body.provinciaResidenza,
+                    mansione: req.body.mansione,
+                    tipoContratto: req.body.tipoContratto,
+                    telefono: req.body.telefono,
+                    email: req.body.email,
+                },
+            }
+        );
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `FORNITORIBY${id}`;
-      redisClient.del(searchTerm);
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `FORNITORIBY${id}`;
+            redisClient.del(searchTerm);
+        }
+
+        res.status(200);
+        res.json(fornitori);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    res.status(200);
-    res.json(fornitori);
-
-  } catch (err) {
-    res.status(500).json({"Error": err});
-  }
 });
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
 
-    const item = await Fornitori.findById(id);
-    const identifyUser = item.identifyUser;
-    const fornitori = await Fornitori.remove({ _id: id });
+        if (id == null) {
+            res.status(400).json({ error: "id not valid" });
+        }
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const fornitore = await Fornitori.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    cancellato: true,
+                    dataCancellazione: new Date(),
+                },
+            }
+        );
 
-    if (redisClient != undefined && !redisDisabled) {
-      let searchTerm = `fornitoriBY${id}`;
-      redisClient.del(searchTerm);
-      searchTerm = `fornitori${identifyUser}`;
-      redisClient.del(searchTerm);
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`fornitoriBY${id}`);
+            redisClient.del(`FORNITORIALL`);
+        }
+
+        res.status(200);
+        res.json(fornitore);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-
-    res.status(200);
-    res.json(fornitori);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 module.exports = router;

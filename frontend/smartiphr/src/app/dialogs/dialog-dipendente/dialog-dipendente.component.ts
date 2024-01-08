@@ -219,6 +219,7 @@ export class DialogDipendenteComponent implements OnInit {
     this.data.dipendente.cognome = this.dipendente.cognome;
     this.data.dipendente.nome = this.dipendente.nome;
     this.data.dipendente.cf = this.dipendente.cf;
+    this.data.dipendente.sesso = this.dipendente.sesso;
     this.data.dipendente.dataNascita = this.dipendente.dataNascita;
     this.data.dipendente.comuneNascita = this.dipendente.comuneNascita;
     this.data.dipendente.indirizzoNascita = this.dipendente.indirizzoNascita;
@@ -235,7 +236,8 @@ export class DialogDipendenteComponent implements OnInit {
     if (
       this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome === undefined ||
       this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome === undefined ||
-      this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf === undefined
+      this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf === undefined ||
+      this.dipendente.sesso == "" || this.dipendente.sesso == null || this.dipendente.sesso === undefined 
     ) {
 
       var campi = "";
@@ -251,12 +253,23 @@ export class DialogDipendenteComponent implements OnInit {
         campi = campi + " Codice Fiscale"
       }
 
-      this.messageService.showMessageError(`I campi ${campi} sono obblicatori !`);
+      if (this.dipendente.sesso == "" || this.dipendente.sesso == null || this.dipendente.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
       return;
     } else {
+
+      if (this.dipendente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+
       if (saveAndClose) {
         this.dialogRef.close(this.data.dipendente);
-      } else {
+      }
+      else {
         this.uploading = true;
 
         if (this.newItem) {
@@ -299,7 +312,8 @@ export class DialogDipendenteComponent implements OnInit {
               );
               this.uploading = false;
             });
-        } else {
+        }
+        else {
           this.dipendenteService
             .save(this.data.dipendente)
             .then((x) => {
@@ -1125,6 +1139,11 @@ export class DialogDipendenteComponent implements OnInit {
       console.error("File non valido o non presente");
     }
   }
+
+  async Close() {
+    //window.location.reload();
+  }
+
 
   async deleteAttestatoECM(doc: DocumentoDipendente) {
     console.log("Cancella AttestatoECM: ", doc);

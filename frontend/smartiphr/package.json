@@ -28,6 +28,7 @@
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
     "bootstrap": "^5.0.0-beta3",
     "chart.js": "^2.9.3",
+    "codice-fiscale-js": "^2.3.20",
     "date-fns": "^2.28.0",
     "jquery": "^3.6.0",
     "moment": "^2.29.2",

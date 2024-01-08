@@ -100,7 +100,7 @@ export class AdminFornitoriComponent implements OnInit {
         (result) => {
           if (result == true) {
 
-    this.fornitoreService.delete(fornitore).then(
+            this.fornitoreService.delete(fornitore).toPromise().then(
       (x) => {
         const index = this.fornitori.indexOf(fornitore);
         if (index > -1) {

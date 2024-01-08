@@ -12,6 +12,7 @@ export class Dipendenti {
   comuneNascita?: string;
   provinciaNascita?: string;
   dataNascita?: Date;
+  sesso?: string;
   indirizzoResidenza?: string;
   //luogoResidenza?: string;
   comuneResidenza?:string;

@@ -102,6 +102,42 @@ export class DialogFornitoreComponent implements OnInit {
     this.data.fornitore.comuneNascita = this.fornitore.comuneNascita;
     this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita */;
 
+    if (
+      this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined ||
+      this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined ||
+      this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined ||
+      this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined
+    ) {
+
+      var campi = "";
+      if (this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    } else {
+
+      if (this.fornitore.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+    }
+
+
+
     if (saveAndClose) {
       this.dialogRef.close(this.data.fornitore);
     } else {

@@ -94,22 +94,25 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
       .afterClosed()
       .subscribe((result) => {
         if (result == true) {
+          console.log(result);
+          console.log(fornitore);
           this.fornitoreService
             .delete(fornitore)
-            .then((x) => {
-              console.log("Fornitore cancellato");
-              const index = this.fornitore.indexOf(fornitore);
-              console.log("Fornitore cancellato index: ", index);
+
+            .subscribe((result: Fornitore) => {
+              console.log("Eliminazione eseguita con successo", fornitore);
+              const index = this.fornitore.indexOf(fornitore, 0);
               if (index > -1) {
                 this.fornitore.splice(index, 1);
               }
-              this.dataSource.data = this.fornitore;
+              this.dataSource = new MatTableDataSource<Fornitore>(this.fornitore);
+              this.dataSource.paginator = this.paginator;
+            }),
+            (err) => {
+              console.error("Errore nell'eliminazione", err);
+            }
               //this.dataSource.paginator = this.paginator;
-            })
-            .catch((err) => {
-              this.messageService.showMessageError("Errore nella cancellazione Fornitore");
-        console.error(err);
-            });
+            
         } else {
           console.log("Cancellazione fornitore annullata");
           this.messageService.showMessageError("Cancellazione fornitore Annullata");

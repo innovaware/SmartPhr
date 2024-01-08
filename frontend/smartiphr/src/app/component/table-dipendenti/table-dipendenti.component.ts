@@ -135,6 +135,7 @@ ngOnDestroy() {
       indirizzoResidenza: "",
       comuneResidenza: "",
       //luogoResidenza: "",
+      sesso:"",
       provinciaResidenza: "",
       titoloStudio: "",
       mansione: "",
