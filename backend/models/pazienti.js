@@ -22,7 +22,8 @@ const PazienteSchema = mongoose.Schema({
   cancellato: Boolean,
   dataCancellazione: Date,
   codiceFiscale: String,
-
+    dataUltimaModifica: Date,
+    dataCreazione: Date,
   ricovero: String,
   numstanza: String,
   numletto: String,
@@ -434,7 +435,7 @@ const PazienteSchema = mongoose.Schema({
 
   // SCHEDA PSICOLOGICA
 
-  schedaPisico: {
+  schedaPsico: {
     esame: {
       statoEmotivo: [String],
       personalita: [String],

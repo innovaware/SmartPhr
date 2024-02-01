@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { DialogPisicologicaComponent } from './dialog-pisicologica.component';
+import { DialogPisicologicaComponent } from './dialog-psicologica.component';
 
 describe('DialogPisicologicaComponent', () => {
   let component: DialogPisicologicaComponent;

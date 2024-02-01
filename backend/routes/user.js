@@ -271,8 +271,8 @@ router.post("/authenticate", async (req, res) => {
 router.post("/logout", async (req, res) => {
   try {
     const user = res.locals.auth;
-    console.log("Logout");
-
+      console.log("Logout");
+      console.log(res.locals.auth);
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 

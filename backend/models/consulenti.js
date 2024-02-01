@@ -17,6 +17,8 @@ const ConsulentiSchema = mongoose.Schema({
     email: String,
     cancellato: Boolean,
     dataCancellazione: Date,
+    dataUltimaModifica: Date,
+    dataCreazione: Date,
     sesso: String,
 });
 

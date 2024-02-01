@@ -8,23 +8,16 @@
 
   <hr>
 
-
-
-
   <div class="row">
     <div class="col">
-<!--       <app-table-dipendenti 
-      (showItemEmiter)="show($event)" 
-      [buttons]='["Mostra"]' 
-      [showInsert]=true>
-    </app-table-dipendenti> -->
-    <app-table-dipendenti 
-    [eventDipendente]="eventsSubject.asObservable()"
-    [showDipendente]="showFunction"
-    [enableShow]=true
-    [enableDeleting]=true
-    [showInsert]=true>
-  </app-table-dipendenti>
+        <app-table-dipendenti [eventDipendente]="eventsSubject.asObservable()"
+                              [showDipendente]="showFunction"
+                              [insertFunction]="getInsertFunction()"
+                              [enableShow]=true
+                              (deletePatientEmiter)="deleteDipendente($event)"
+                              [enableDeleting]=true
+                              [showInsert]=true>
+        </app-table-dipendenti>
     </div>
   </div>
 </div>

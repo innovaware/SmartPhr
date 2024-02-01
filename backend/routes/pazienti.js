@@ -209,21 +209,24 @@ router.post("/", async (req, res) => {
       areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
     });
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+      console.log(req.body);
 
-    if (redisClient != undefined && !redisDisabled) {
-      //const searchTerm = `PAZIENTIALL${skip}${limit}${sortOrder}`;
-      const searchTerm = `PAZIENTIALL`;
-      redisClient.del(searchTerm);
-    }
+      const result = await pazienti.save();
 
-    const result = await pazienti.save();
-    res.status(200);
-    res.json(result);
+      redisClient = req.app.get("redis");
+      redisDisabled = req.app.get("redisDisabled");
+
+      if (redisClient != undefined && !redisDisabled) {
+          const searchTerm = `PAZIENTIALL`;
+          redisClient.del(searchTerm);
+      }
+
+      res.status(200);
+      res.json(result);
+
   } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
+      res.status(500);
+      res.json({ "Error": err });
   }
 });
 
@@ -271,7 +274,7 @@ console.log('req.body.schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSoc
 
           schedaInfermeristica: req.body.schedaInfermeristica,
           schedaClinica: req.body.schedaClinica,
-          schedaPisico: req.body.schedaPisico,
+          schedaPsico: req.body.schedaPsico,
 
           schedaAssSociale: req.body.schedaAssSociale,
           schedaEducativa: req.body.schedaEducativa,
@@ -465,7 +468,7 @@ router.get("/schedaPsicologica/:id", async (req, res) => {
 
     if (redisClient == undefined || redisDisabled) {
       const pazienti = await getData();
-      if (pazienti != null) res.status(200).json(pazienti.schedaPisico);
+      if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
       else res.status(404).json({ error: "No patient found" });
       return;
     }
@@ -475,11 +478,11 @@ router.get("/schedaPsicologica/:id", async (req, res) => {
       if (err) throw err;
 
       if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data.schedaPisico));
+        res.status(200).send(JSON.parse(data.schedaPsico));
       } else {
         const pazienti = await getData();
         redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-        if (pazienti != null) res.status(200).json(pazienti.schedaPisico);
+        if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
         else res.status(404).json({ error: "No patient found" });
       }
     });
@@ -508,7 +511,7 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-          schedaPisico: data,
+          schedaPsico: data,
         },
       }
     );

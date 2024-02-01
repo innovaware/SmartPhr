@@ -21,12 +21,20 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
     fornitore: Fornitore;
     button: DinamicButton;
   }>();
+  @Output() deleteFornitoreEmiter = new EventEmitter<Fornitore>();
   @Input() buttons: DinamicButton[];
+  @Input() CustomButtons: DinamicButton[];
   @Input() insertFunction: any;
   @Input() showInsert: boolean;
+  @Input() showAdmin: any;
   @Input() eventFornitori: Observable<Fornitore[]>;
+  @Input() enableDeleting: boolean;
+  @Input() enableShow: boolean;
+  @Input() enableCustomButton: boolean;
+
 
   private eventsSubscription: Subscription;
+  inputSearchField: string;
 
   displayedColumns: string[] = [
     "cognome",
@@ -75,49 +83,25 @@ export class TableFornitoriComponent implements OnInit, OnDestroy {
     this.showItemEmiter.emit({ fornitore: fornitore, button: item });
   }
 
-  async show(fornitore: Fornitore) {
-    console.log("Show scheda fornitore:", fornitore);
-    var dialogRef = this.dialog.open(DialogFornitoreComponent, {
-      data: { fornitore: fornitore, readonly: false },
-      width: "1024px",
-    });
+  //async show(fornitore: Fornitore) {
+  //  console.log("Show scheda fornitore:", fornitore);
+  //  var dialogRef = this.dialog.open(DialogFornitoreComponent, {
+  //    data: { fornitore: fornitore, readonly: false },
+  //    width: "1024px",
+  //  });
+  //}
+
+  async deleteAdmin(data: Fornitore) {
+    console.log("Cancella fornitore:", data);
+    if (this.deleteFornitoreEmiter !== undefined) {
+      this.deleteFornitoreEmiter.emit(data);
+    }
   }
 
-  async deleteFornitore(fornitore: Fornitore) {
-    console.log("Cancella fornitore:", fornitore);
 
-    this.dialog
-      .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il fornitore?" },
-        //width: "600px",
-      })
-      .afterClosed()
-      .subscribe((result) => {
-        if (result == true) {
-          console.log(result);
-          console.log(fornitore);
-          this.fornitoreService
-            .delete(fornitore)
 
-            .subscribe((result: Fornitore) => {
-              console.log("Eliminazione eseguita con successo", fornitore);
-              const index = this.fornitore.indexOf(fornitore, 0);
-              if (index > -1) {
-                this.fornitore.splice(index, 1);
-              }
-              this.dataSource = new MatTableDataSource<Fornitore>(this.fornitore);
-              this.dataSource.paginator = this.paginator;
-            }),
-            (err) => {
-              console.error("Errore nell'eliminazione", err);
-            }
-              //this.dataSource.paginator = this.paginator;
-            
-        } else {
-          console.log("Cancellazione fornitore annullata");
-          this.messageService.showMessageError("Cancellazione fornitore Annullata");
-        }
-      });
+  cleanSearchField() {
+    this.dataSource.filter = undefined;
+    this.inputSearchField = undefined;
   }
-
 }

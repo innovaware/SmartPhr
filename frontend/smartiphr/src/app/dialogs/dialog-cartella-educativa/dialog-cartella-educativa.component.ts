@@ -98,6 +98,9 @@ export class DialogCartellaEducativaComponent implements OnInit {
 
 
   async salva() {
+    this.paziente = this.data.paziente;
+    console.log(this.paziente);
+    console.log(this.data.paziente);
     this.paziente.schedaEducativa.ADL.totale =  Number(this.paziente.schedaEducativa.ADL.A.split("-") [1]) +
                                                 Number(this.paziente.schedaEducativa.ADL.B.split("-") [1]) +
                                                 Number(this.paziente.schedaEducativa.ADL.C.split("-") [1]) +
@@ -113,7 +116,6 @@ export class DialogCartellaEducativaComponent implements OnInit {
                                                 Number(this.paziente.schedaEducativa.IADL.F.split("-") [1]) +
                                                 Number(this.paziente.schedaEducativa.IADL.G.split("-") [1]) +
                                                 Number(this.paziente.schedaEducativa.IADL.H.split("-") [1]);
-
 
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
       console.log(`Patient  saved`, value);

@@ -17,16 +17,12 @@ export class FornitoreService {
     return this.http.get<Fornitore[]>(this.api + "/api/fornitori").toPromise();
   }
 
-  async getFornitore(id: string): Promise<Fornitore[]> {
-    return this.http.get<Fornitore[]>(`${this.api}/api/fornitori/${id}`).toPromise();
-  }
-
-  save(data: Fornitore): Promise<Fornitore> {
-    var body = data;
+  async getFornitore(id: string): Promise<Fornitore> {
     return this.http
-      .put<Fornitore>(this.api + "/api/fornitori/" + data._id, body)
+      .get<Fornitore>(`${this.api}/api/fornitori/${id}`)
       .toPromise();
   }
+
 
   insert(data: Fornitore): Promise<Fornitore> {
     var body = data;
@@ -35,8 +31,17 @@ export class FornitoreService {
       .toPromise();
   }
 
+
+  save(data: Fornitore): Promise<Fornitore> {
+    var body = data;
+    return this.http
+      .put<Fornitore>(this.api + "/api/fornitori/" + data._id, body)
+      .toPromise();
+  }
+
   delete(data: Fornitore): Observable<Fornitore> {
-    console.log("Saro is Here!!!");
-    return this.http.delete<Fornitore>(this.api + "/api/fornitori/" + data._id);
+    return this.http.delete<Fornitore>(
+      this.api + "/api/fornitori/" + data._id
+    );
   }
 }

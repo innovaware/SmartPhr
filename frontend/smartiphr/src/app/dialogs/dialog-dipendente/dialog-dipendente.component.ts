@@ -80,13 +80,13 @@ export class DialogDipendenteComponent implements OnInit {
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
 
-  @ViewChild("paginatorNoteCredito", {static: false})
+  @ViewChild("paginatorNoteCredito", { static: false })
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici", {static: false})
+  @ViewChild("paginatorBonifici", { static: false })
   bonificiPaginator: MatPaginator;
 
 
-  @ViewChild("paginatorDocIdent", {static: false})
+  @ViewChild("paginatorDocIdent", { static: false })
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -94,7 +94,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorContratto", {static: false})
+  @ViewChild("paginatorContratto", { static: false })
   contrattoPaginator: MatPaginator;
   public nuovoContratto: DocumentoDipendente;
   public contrattiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -102,7 +102,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingContratto: boolean;
   public addingContratto: boolean;
 
-  @ViewChild("paginatorPrivacy", {static: false})
+  @ViewChild("paginatorPrivacy", { static: false })
   privacyPaginator: MatPaginator;
   public nuovoPrivacy: DocumentoDipendente;
   public docsprivacyDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -110,7 +110,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingPrivacy: boolean;
   public addingPrivacy: boolean;
 
-  @ViewChild("paginatorDiploma", {static: false})
+  @ViewChild("paginatorDiploma", { static: false })
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -118,7 +118,7 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
 
-  @ViewChild("paginatorAttestatiECM", {static: false})
+  @ViewChild("paginatorAttestatiECM", { static: false })
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -126,22 +126,22 @@ export class DialogDipendenteComponent implements OnInit {
   public uploadingAttestatoECM: boolean;
   public addingAttestatoECM: boolean;
 
-  @ViewChild("paginatorCedolini", {static: false})
+  @ViewChild("paginatorCedolini", { static: false })
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
   public cedolini: DocumentoDipendente[];
 
-  @ViewChild("paginatorRichieste", {static: false})
+  @ViewChild("paginatorRichieste", { static: false })
   richiestePaginator: MatPaginator;
   public richiesteDataSource: MatTableDataSource<DocumentoDipendente>;
   public richieste: DocumentoDipendente[];
 
-  @ViewChild("paginatordocsMedicina", {static: false})
+  @ViewChild("paginatordocsMedicina", { static: false })
   docsMedicinaPaginator: MatPaginator;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
   public docsMedicina: DocumentoMedicinaLavoro[];
 
-  @ViewChild("paginatorCertificatoMalattia", {static: false})
+  @ViewChild("paginatorCertificatoMalattia", { static: false })
   certificatiMalattiaPaginator: MatPaginator;
   public nuovoCertificatoMalattia: DocumentoDipendente;
   public certificatiMalattiaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -150,23 +150,23 @@ export class DialogDipendenteComponent implements OnInit {
   public addingCertificatoMalattia: boolean;
 
 
-  tabLabels: {index: number, init: any, key: string, label: string}[] =  [
-    {index: 0,  init: () => {}, key: 'DatiGenerali', label: "Dati anagrafici generale" },
-    {index: 1,  init: () => this.getDocIdentita(), key: 'DocumentiIdentità', label: "Documenti d'identità" },
-    {index: 2,  init: () => this.getDocMedicinaLav(), key: 'MedicinaLavoro', label: 'Medicina del lavoro' },
-    {index: 3,  init: () => this.getContratti(), key: 'ContrattiLavoro', label: 'Contratti di lavoro' },
-    {index: 4,  init: () => this.getDocsPrivacy(), key: 'Privacy', label: 'Privacy' },
-    {index: 5,  init: () => this.getDiplomi(), key: 'DiplomiAttestati', label: 'Diplomi e attestati' },
-    {index: 6,  init: () => this.getAttestatiECM(), key: 'AttestatiECM', label: 'Attestati ECM' },
-    {index: 7,  init: () => this.getCedolini(), key: 'CedoliniCU', label: 'Cedolini e CU' },
-    {index: 8,  init: () => this.getCertificatoMalattia(), key: 'CertificatiMalattia', label: 'Certificati malattia' },
-    {index: 9,  init: () => {}, key: 'RegolamentoInterno', label: 'Regolamento interno' },
-    {index: 10, init: () => this.getRichiesteMaterialiPresidi(), key: 'RichiesteMaterialePresidi', label: 'Richieste materiale o presidi' },
-    {index: 11, init: () => this.getFerie(), key: 'Ferie', label: 'Ferie' },
-    {index: 12, init: () => this.getPermessi(), key: 'Permessi', label: 'Permessi' },
-    {index: 13, init: () => this.getCambioTurni(), key: 'CambiTurno', label: 'Cambi turno' },
-    {index: 14, init: () => this.getPresenze(), key: 'Presenze', label: 'Presenze' },
-    {index: 15, init: () => {}, key: 'TurniMensili', label: 'Turni mensili' },
+  tabLabels: { index: number, init: any, key: string, label: string }[] = [
+    { index: 0, init: () => { }, key: 'DatiGenerali', label: "Dati anagrafici generale" },
+    { index: 1, init: () => this.getDocIdentita(), key: 'DocumentiIdentità', label: "Documenti d'identità" },
+    { index: 2, init: () => this.getDocMedicinaLav(), key: 'MedicinaLavoro', label: 'Medicina del lavoro' },
+    { index: 3, init: () => this.getContratti(), key: 'ContrattiLavoro', label: 'Contratti di lavoro' },
+    { index: 4, init: () => this.getDocsPrivacy(), key: 'Privacy', label: 'Privacy' },
+    { index: 5, init: () => this.getDiplomi(), key: 'DiplomiAttestati', label: 'Diplomi e attestati' },
+    { index: 6, init: () => this.getAttestatiECM(), key: 'AttestatiECM', label: 'Attestati ECM' },
+    { index: 7, init: () => this.getCedolini(), key: 'CedoliniCU', label: 'Cedolini e CU' },
+    { index: 8, init: () => this.getCertificatoMalattia(), key: 'CertificatiMalattia', label: 'Certificati malattia' },
+    { index: 9, init: () => { }, key: 'RegolamentoInterno', label: 'Regolamento interno' },
+    { index: 10, init: () => this.getRichiesteMaterialiPresidi(), key: 'RichiesteMaterialePresidi', label: 'Richieste materiale o presidi' },
+    { index: 11, init: () => this.getFerie(), key: 'Ferie', label: 'Ferie' },
+    { index: 12, init: () => this.getPermessi(), key: 'Permessi', label: 'Permessi' },
+    { index: 13, init: () => this.getCambioTurni(), key: 'CambiTurno', label: 'Cambi turno' },
+    { index: 14, init: () => this.getPresenze(), key: 'Presenze', label: 'Presenze' },
+    { index: 15, init: () => { }, key: 'TurniMensili', label: 'Turni mensili' },
   ];
 
   constructor(
@@ -203,10 +203,18 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
-    const item = this.tabLabels.find(i=> i.index === tabChangeEvent.index);
+    const item = this.tabLabels.find(i => i.index === tabChangeEvent.index);
     if (item !== undefined) {
       item.init();
     }
+  }
+
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
   async save(saveAndClose: boolean) {
@@ -237,7 +245,7 @@ export class DialogDipendenteComponent implements OnInit {
       this.dipendente.cognome == "" || this.dipendente.cognome == null || this.dipendente.cognome === undefined ||
       this.dipendente.nome == "" || this.dipendente.nome == null || this.dipendente.nome === undefined ||
       this.dipendente.cf == "" || this.dipendente.cf == null || this.dipendente.cf === undefined ||
-      this.dipendente.sesso == "" || this.dipendente.sesso == null || this.dipendente.sesso === undefined 
+      this.dipendente.sesso == "" || this.dipendente.sesso == null || this.dipendente.sesso === undefined
     ) {
 
       var campi = "";
@@ -261,7 +269,7 @@ export class DialogDipendenteComponent implements OnInit {
       return;
     } else {
 
-      if (this.dipendente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+      if (this.dateDiffInDays(new Date(this.data.dipendente.dataNascita), new Date()) < 10) {
         this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
@@ -273,30 +281,10 @@ export class DialogDipendenteComponent implements OnInit {
         this.uploading = true;
 
         if (this.newItem) {
+          this.dipendente.DataCreazione = new Date();
           this.dipendenteService
             .insert(this.data.dipendente)
             .then((x) => {
-          //CREAZIONE UTENTE SUCCESSIVA ALLA CREAZIONE DIPENDENDETE
-
-     /*     var newUser : User = {
-            role:this.data.dipendente.mansione,
-            active : false
-         };
-
-         console.log("Save newUser: " + JSON.stringify(newUser));
-              this.usersService
-              .insert(newUser)
-              .then((y) => {
-                console.log("Save User: ", y);
-              })
-              .catch((err) => {
-                this.messageService.showMessageError(
-                  "Errore Inserimento dipendente (" + err["status"] + ")"
-                );
-                this.uploading = false;
-              });
-*/
-
 
               console.log("Insert dipendente: ", x);
               this.data.dipendente = x;
@@ -314,6 +302,7 @@ export class DialogDipendenteComponent implements OnInit {
             });
         }
         else {
+          this.data.dipendente.DataUltimaModifica = new Date();
           this.dipendenteService
             .save(this.data.dipendente)
             .then((x) => {

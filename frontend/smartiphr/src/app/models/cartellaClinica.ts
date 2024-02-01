@@ -4,7 +4,7 @@ import { schedaAnamnesiPatologica } from './schedaAnamnesiPatologica';
 import { schedaEsameGenerale } from './schedaEsameGenerale';
 import { schedaEsameNeurologia } from './schedaEsameNeurologia';
 import { schedaMezziContenzione } from './schedaMezziContenzione';
-import { schedaPisico } from './schedaPisico';
+import { schedaPsico } from './schedaPsico';
 import { schedaValutazioneTecniche } from './schedaValutazioneTecniche';
 import { schedaDecessoOspite } from './schedaDecessoOspite';
 import { schedaDimissioneOspite } from './schedaDimissioneOspite';

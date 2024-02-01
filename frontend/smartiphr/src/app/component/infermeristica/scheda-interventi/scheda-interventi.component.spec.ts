@@ -33,6 +33,7 @@ describe("SchedaInterventiComponent", () => {
       obiettivi: "Obiettivi",
       intervento: "Intervento",
       firma: "firma",
+      valutazione: "valutazione"
     }];
     fixture.detectChanges();
 

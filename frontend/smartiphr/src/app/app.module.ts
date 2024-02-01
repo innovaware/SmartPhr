@@ -16,13 +16,13 @@ import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
 
 import { MenuComponent } from "./component/menu/menu.component";
-import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
+import { PsicologicaComponent } from "./pages/psicologica/psicologica.component";
 import { PazienteGeneraleComponent } from "./component/paziente-generale/paziente-generale.component";
 import { EsamePisicoComponent } from "./component/psicologica/esame-pisico/esame-pisico.component";
 import { ValutaPisicoComponent } from "./component/psicologica/valuta-pisico/valuta-pisico.component";
 import { DiarioPisicoComponent } from "./component/diario/diario.component";
 
-import { DialogPisicologicaComponent } from "./dialogs/dialog-pisicologica/dialog-pisicologica.component";
+import { DialogPisicologicaComponent } from "./dialogs/dialog-psicologica/dialog-psicologica.component";
 import { DialogDiarioComponent } from "./dialogs/dialog-diario/dialog-diario.component";
 import { DialogCartellaClinicaComponent } from "./dialogs/dialog-cartella-clinica/dialog-cartella-clinica.component";
 import { DialogCartellaInfermeristicaComponent } from "./dialogs/dialog-cartella-infermeristica/dialog-cartella-infermeristica.component";
@@ -321,7 +321,7 @@ const pipes = [
     DiarioPisicoComponent,
     MenuComponent,
     MenuItemComponent,
-    PisicologicaComponent,
+    PsicologicaComponent,
     PazienteGeneraleComponent,
     EsamePisicoComponent,
     ValutaPisicoComponent,

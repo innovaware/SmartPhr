@@ -39,13 +39,13 @@
             </button>
 
             <div *ngIf="enableCustomButton">
-              <button mat-button *ngFor="let item of CustomButtons" (click)="item.cmd(row)" [ngClass]="item.css"
-                matTooltip={{item.tooltip}} matTooltipPosition="above">
-                <img *ngIf="item.images != undefined" [src]="item.images" style="width:26px">
+                <button mat-button *ngFor="let item of CustomButtons" (click)="showPatient(row)" [ngClass]="item.css"
+                        matTooltip={{item.tooltip}} matTooltipPosition="above">
+                    <img *ngIf="item.images != undefined" [src]="item.images" style="width:26px">
 
-                <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
-                <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
-              </button>
+                    <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
+                    <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
+                </button>
             </div>
           </td>
         </ng-container>

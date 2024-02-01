@@ -3,19 +3,19 @@ import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { Subject } from "rxjs";
-import { DialogPisicologicaComponent } from "src/app/dialogs/dialog-pisicologica/dialog-pisicologica.component";
+import { DialogPisicologicaComponent } from "src/app/dialogs/dialog-psicologica/dialog-psicologica.component";
 import { Diario } from "src/app/models/diario";
 import { Paziente } from "src/app/models/paziente";
-import { schedaPisico } from "src/app/models/schedaPisico";
+import { schedaPsico } from "src/app/models/schedaPsico";
 import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
 
 @Component({
   selector: "app-pisicologica",
-  templateUrl: "./pisicologica.component.html",
-  styleUrls: ["./pisicologica.component.css"],
+  templateUrl: "./psicologica.component.html",
+  styleUrls: ["./psicologica.component.css"],
 })
-export class PisicologicaComponent implements OnInit {
+export class PsicologicaComponent implements OnInit {
   eventsSubject: Subject<Paziente[]> = new Subject<Paziente[]>();
   pazienti: Paziente[];
 
@@ -46,15 +46,15 @@ export class PisicologicaComponent implements OnInit {
       width: "1024px",
     });
 
-    dialogRef.afterClosed().subscribe((result: schedaPisico) => {
+    dialogRef.afterClosed().subscribe((result: schedaPsico) => {
       console.log("result insert paziente", result);
       if (result != undefined) {
         this.pazienteService
-          .updateSchedaPisicologica(paziente._id, result)
+          .updateschedaPsicologica(paziente._id, result)
           .subscribe(
             (succ) => {
               console.log("Scheda Psicologica Aggiornata. Result:", succ);
-              paziente.schedaPisico = result;
+              paziente.schedaPsico = result;
             },
             (err) => {
               this.messageService.showMessageError(

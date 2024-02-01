@@ -77,6 +77,12 @@ export class AdminPazientiComponent implements OnInit {
             );
           });
       }
+      else {
+        this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+          this.pazienti = paz;
+          this.eventsSubject.next(this.pazienti);
+        });
+      }
     });
   }
 

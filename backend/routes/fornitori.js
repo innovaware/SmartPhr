@@ -7,18 +7,25 @@ const Fornitori = require("../models/fornitori");
 //const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 //const client = redis.createClient(redisPort, redisHost);
+const searchTerm = `FORNITORIALL`;
 
 router.get("/", async (req, res) => {
     try {
         redisClient = req.app.get("redis");
         redisDisabled = req.app.get("redisDisabled");
 
+        //redisDisabled = false;
+        const showOnlyCancellati = req.query.show == "deleted";
+        const showAll = req.query.show == "all";
+
+        const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+        };
+
         const getData = (query) => {
             return Fornitori.find(query);
         };
 
-        const showOnlyCancellati = req.query.show == "deleted";
-        const showAll = req.query.show == "all";
 
         if (showOnlyCancellati || showAll) {
             console.log("Show all or deleted");
@@ -26,36 +33,36 @@ router.get("/", async (req, res) => {
             if (showOnlyCancellati) {
                 query = { cancellato: true };
             }
-            const fornitori = await getData(query);
-            res.status(200).json(fornitori);
-        } else {
 
+            const data = await getData(query);
+            res.status(200).json(data);
+        }
+        else {
             if (redisClient == undefined || redisDisabled) {
-                const fornitori = await getData({
-                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                })
+                const data = await getData(query)
 
-                if (fornitori.length > 0) res.status(200).json(fornitori);
-                else res.status(404).json({ error: "No patients found" });
+                if (data.length > 0) res.status(200).json(data);
+                else res.status(404).json({ error: "No supplier found" });
 
                 return;
             }
 
-            const searchTerm = `FORNITORIALL`;
             redisClient.get(searchTerm, async (err, data) => {
                 if (err) throw err;
 
                 if (data) {
                     res.status(200).send(JSON.parse(data));
                 } else {
-                    const fornitori = await getData({
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    });
+                    const data = await getData(query);
 
-                    if (fornitori.length > 0) res.status(200).json(fornitori);
-                    else res.status(404).json({ error: "No patients found" });
+                    if (data.length > 0) res.status(200).json(data);
+                    else res.status(404).json({ error: "No suppliers found" });
 
-                    redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
+                    redisClient.setex(
+                        searchTerm,
+                        redisTimeCache,
+                        JSON.stringify(data)
+                    );
                 }
             });
         }
@@ -65,9 +72,13 @@ router.get("/", async (req, res) => {
     }
 });
 
-
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
+
+    const getData = (query) => {
+        return Pazienti.find(query);
+    };
+
     try {
         redisClient = req.app.get("redis");
         redisDisabled = req.app.get("redisDisabled");
@@ -78,44 +89,40 @@ router.get("/:id", async (req, res) => {
             return;
         }
 
-        const getData = () => {
-            return Fornitori.find({
-                $and: [
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                    { _id: id },
-                ],
-            });
+        query = {
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+                { _id: id },
+            ],
         };
 
         if (redisClient == undefined || redisDisabled) {
-            const fornitori = await getData();
+            const data = await getData(query);
 
-            if (fornitori != null) res.status(200).json(fornitori);
-            else res.status(404).json({ error: "No patient found" });
-            return;
+            if (data != null) res.status(200).json(pazienti);
+            else res.status(404).json({ error: "No supplier found" });
         }
-
+        console.log("\nCiao\n");
         const searchTerm = `FORNITORIBY${id}`;
         redisClient.get(searchTerm, async (err, data) => {
             if (err) throw err;
 
-            if (data && !redisDisabled) {
+            if (data) {
                 res.status(200).send(JSON.parse(data));
             } else {
-                const fornitori = await getData();
+                const fornitoridata = await getData(query);
 
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitori));
-                if (fornitori != null) res.status(200).json(fornitori);
-                else res.status(404).json({ error: "No patient found" });
+                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitoridata));
+                if (fornitoridata != null) res.status(200).json(fornitoridata);
+                else res.status(404).json({ error: "No suppliers found" });
             }
         });
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
-
 
 router.post("/", async (req, res) => {
     try {
@@ -135,7 +142,10 @@ router.post("/", async (req, res) => {
             tipoContratto: req.body.tipoContratto,
             telefono: req.body.telefono,
             email: req.body.email,
+            dataCreazione: new Date()
         });
+
+        console.log(req.body);
 
         const result = await fornitore.save();
 
@@ -143,7 +153,8 @@ router.post("/", async (req, res) => {
         redisDisabled = req.app.get("redisDisabled");
 
         if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`FORNITORIALL`);
+            const searchTerm = `FORNITORIALL`;
+            redisClient.del(searchTerm);
         }
 
         res.status(200);
@@ -151,14 +162,19 @@ router.post("/", async (req, res) => {
 
     } catch (err) {
         res.status(500);
-        res.json({ Error: err });
+        res.json({ "Error": err });
     }
 });
 
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        const fornitori = await Fornitori.updateOne(
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+        const data = await Fornitori.updateOne(
             { _id: id },
             {
                 $set: {
@@ -169,14 +185,15 @@ router.put("/:id", async (req, res) => {
                     comuneNascita: req.body.comuneNascita,
                     provinciaNascita: req.body.provinciaNascita,
                     indirizzoNascita: req.body.indirizzoNascita,
-                    sesso: req.body.sesso,
                     indirizzoResidenza: req.body.indirizzoResidenza,
+                    sesso: req.body.sesso,
                     comuneResidenza: req.body.comuneResidenza,
                     provinciaResidenza: req.body.provinciaResidenza,
                     mansione: req.body.mansione,
                     tipoContratto: req.body.tipoContratto,
                     telefono: req.body.telefono,
                     email: req.body.email,
+                    dataUltimaModifica: new Date()
                 },
             }
         );
@@ -190,7 +207,7 @@ router.put("/:id", async (req, res) => {
         }
 
         res.status(200);
-        res.json(fornitori);
+        res.json(data);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -209,7 +226,7 @@ router.delete("/:id", async (req, res) => {
             res.status(400).json({ error: "id not valid" });
         }
 
-        const fornitore = await Fornitori.updateOne(
+        const data = await Fornitori.updateOne(
             { _id: id },
             {
                 $set: {
@@ -218,17 +235,18 @@ router.delete("/:id", async (req, res) => {
                 },
             }
         );
-
+        console.log("\n" + data.cancellato + "\n");
         redisClient = req.app.get("redis");
         redisDisabled = req.app.get("redisDisabled");
 
         if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`fornitoriBY${id}`);
-            redisClient.del(`FORNITORIALL`);
+            const searchTerm = `FORNITORIBY${id}`;
+            console.log(searchTerm);
+            redisClient.del(searchTerm);
         }
 
         res.status(200);
-        res.json(fornitore);
+        res.json(data);
     } catch (err) {
         res.status(500).json({ Error: err });
     }

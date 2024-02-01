@@ -5,6 +5,7 @@ import { CartellaClinica } from "../models/cartellaClinica";
 import { Diario } from "../models/diario";
 import { Paziente } from "../models/paziente";
 import { Dipendenti } from '../models/dipendenti';
+import { Observable } from "rxjs";
 
 @Injectable({
   providedIn: "root",
@@ -41,8 +42,8 @@ export class DipendentiService {
       .toPromise();
   }
 
-  async remove(contratto: Dipendenti) {
-    return this.http.delete(`${this.api}/api/dipendenti/${contratto._id}`).toPromise();
+  remove(contratto: Dipendenti): Observable<Dipendenti> {
+    return this.http.delete<Dipendenti>(this.api + "/api/dipendenti/" + contratto._id);
   }
 
 

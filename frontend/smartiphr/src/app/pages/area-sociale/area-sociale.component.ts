@@ -32,38 +32,54 @@ export class AreaSocialeComponent implements OnInit {
 
       this.eventsSubject.next(this.pazienti);
     });
+    this.customButtons = [];
+    this.customButtons.push({
+        images: "../../../assets/medico.svg",
+        label: "",
+        tooltip: "Cartella Assistente Sociale",
+        cmd: undefined
+    });
   }
 
   ngOnInit() {
-    this.customButtons = [];
     console.log("Init Area Sociale");
 
-    this.customButtons.push({
-      images: "../../../assets/medico.svg",
-      label: "",
-      tooltip: "Cartella Assistente Sociale",
-      cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogCartellaAssistenteSocialeComponent, {
-            data: { paziente: paziente, readonly: false },
-            width: "1024px",
-          })
-          .afterClosed()
-          .subscribe((data: Paziente) => {
-            if (data != undefined || data) {
-              this.pazienti.push(data);
+    //this.customButtons.push({
+    //  images: "../../../assets/medico.svg",
+    //  label: "",
+    //  tooltip: "Cartella Assistente Sociale",
+    //  cmd: (paziente: Paziente) =>
+    //    this.dialog.open(DialogCartellaAssistenteSocialeComponent, {
+    //        data: { paziente: paziente, readonly: false },
+    //        width: "1024px",
+    //      })
+    //      //.afterClosed()
+    //      //.subscribe((data: Paziente) => {
+    //      //  if (data != undefined || data) {
+    //      //    this.pazienti.push(data);
 
-              const index = this.pazienti.indexOf(paziente, 0);
-              if (index > -1) {
-                this.pazienti.splice(index, 1);
-                console.log("Removed item");
-              }
-              this.eventsSubject.next(this.pazienti);
-            }
-          }),
-      //css: "mat-raised-button raised-button action-button",
+    //      //    const index = this.pazienti.indexOf(paziente, 0);
+    //      //    if (index > -1) {
+    //      //      this.pazienti.splice(index, 1);
+    //      //      console.log("Removed item");
+    //      //    }
+    //      //    this.eventsSubject.next(this.pazienti);
+    //      //  }
+    //      //}),
+    //  //css: "mat-raised-button raised-button action-button",
+    //});
+  }
+
+
+
+  showFunction(paziente: Paziente) {
+    //console.log(paziente);
+
+    console.log("Show scheda sociale paziente:", paziente);
+    var dialogRef = this.dialog.open(DialogCartellaAssistenteSocialeComponent, {
+      data: { paziente: paziente, readonly: false },
+      width: "1024px",
     });
-
-
   }
 
 }

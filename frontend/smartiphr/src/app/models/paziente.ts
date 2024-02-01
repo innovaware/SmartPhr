@@ -2,7 +2,7 @@ import { CartellaClinica } from './cartellaClinica';
 import { cartellaAssSociale } from './cartellaAssSociale';
 import { SchedaInfermeristica } from './SchedaInfermeristica';
 import { CartellaEducativa } from './cartellaEducativa';
-import { schedaPisico } from './schedaPisico';
+import { schedaPsico } from './schedaPsico';
 import { ValutazioneMotoria } from './ValutazioneMotoria';
 import { AreaRiabilitativa } from './AreaRiabilitativa';
 import { AreaRiabilitativaProgramma } from './AreaRiabilitativaProgramma';
@@ -36,7 +36,7 @@ export class Paziente {
     dst.codiceFiscale= src.codiceFiscale;
     dst.schedaInfermeristica = src.schedaInfermeristica;
     dst.schedaClinica = src.schedaClinica;
-    dst.schedaPisico = src.schedaPisico;
+    dst.schedaPsico = src.schedaPsico;
     dst.dimissione = src.dimissione;
 
     dst.ricovero = src.ricovero;
@@ -84,7 +84,7 @@ export class Paziente {
 
   schedaInfermeristica: SchedaInfermeristica;
   schedaClinica: CartellaClinica;
-  schedaPisico?: schedaPisico;
+  schedaPsico?: schedaPsico;
 
   schedaAssSociale: cartellaAssSociale;
   schedaEducativa: CartellaEducativa;

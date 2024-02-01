@@ -21,7 +21,7 @@ import { GestUtentiComponent } from "./pages/gest-utenti/gest-utenti.component";
 import { LoginComponent } from './pages/login/login.component';
 import { OspitiComponent } from "./pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "./pages/pagenotfound/pagenotfound.component";
-import { PisicologicaComponent } from "./pages/pisicologica/pisicologica.component";
+import { PsicologicaComponent } from "./pages/psicologica/psicologica.component";
 import { CvComponent } from './pages/cv/cv.component';
 import { FattureConsulentiComponent } from './pages/fatture-consulenti/fatture-consulenti.component';
 import { BonificiConsulentiComponent } from './pages/bonifici-consulenti/bonifici-consulenti.component';
@@ -89,7 +89,7 @@ const routes: Routes = [
 
   { path: "ospiti", component: OspitiComponent, canActivate: [AuthGuard]  },
   { path: "educativa", component: AreaEducativaComponent, canActivate: [AuthGuard]  },
-  { path: "pisicologica", component: PisicologicaComponent, canActivate: [AuthGuard]  },
+  { path: "pisicologica", component: PsicologicaComponent, canActivate: [AuthGuard]  },
   { path: "fisioterapia", component: AreaFisioterapiaComponent, canActivate: [AuthGuard]  },
   { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard]  },
   { path: "infermieristica", component: AreaInfermieristicaComponent, canActivate: [AuthGuard]  },

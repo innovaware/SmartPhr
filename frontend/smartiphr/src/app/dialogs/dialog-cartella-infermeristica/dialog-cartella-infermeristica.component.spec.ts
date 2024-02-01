@@ -102,7 +102,7 @@ import { DialogFarmacoComponent } from "../dialog-farmaco/dialog-farmaco.compone
 import { DialogFornitoreComponent } from "../dialog-fornitore/dialog-fornitore.component";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { DialogPazienteComponent } from "../dialog-paziente/dialog-paziente.component";
-import { DialogPisicologicaComponent } from "../dialog-pisicologica/dialog-pisicologica.component";
+import { DialogPisicologicaComponent } from "../dialog-psicologica/dialog-psicologica.component";
 import { DialogQuestionComponent } from "../dialog-question/dialog-question.component";
 import { DialogStanzaComponent } from "../dialog-stanza/dialog-stanza.component";
 

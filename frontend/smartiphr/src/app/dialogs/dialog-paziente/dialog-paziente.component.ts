@@ -82,47 +82,52 @@ export class DialogPazienteComponent implements OnInit {
     console.log("Dialog paziente generale", this.data);
   }
 
+
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
   async save(saveAndClose: boolean) {
     console.log("this.newItem: " + this.newItem);
     this.data.paziente = this.paziente;
 
+
     if (
-      this.paziente.cognome == "" || this.paziente.cognome == null || this.paziente.cognome.length == 0 ||
-      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0
-      ||
-      this.paziente.dataNascita.toDateString() == "" || this.paziente.dataNascita.toDateString() == null ||
-      this.paziente.luogoNascita == "" || this.paziente.luogoNascita == null || this.paziente.luogoNascita.length == 0
-      ||
-      this.paziente.comuneNascita == "" || this.paziente.comuneNascita == null || this.paziente.comuneNascita.length == 0 ||
-      this.paziente.provinciaNascita == "" || this.paziente.provinciaNascita == null || this.paziente.provinciaNascita.length == 0 ||
-      this.paziente.sesso == "" || this.paziente.sesso == null || this.paziente.sesso.length == 0
-      || this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
+      this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined ||
+      this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined ||
+      this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined ||
+      this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined
     ) {
-      alert("Alcuni campi obbligatori sono mancanti!");
+
+      var campi = "";
+      if (this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
       return;
     } else {
-     /* const cf = new CodiceFiscale({
-        name: this.paziente.nome,
-        surname: this.paziente.cognome,
-        gender: this.paziente.sesso == "M" || this.paziente.sesso.toLowerCase() == "maschio" ? "M" : "F",
-        day: this.paziente.dataNascita.getDate(),
-        month: this.paziente.dataNascita.getMonth(),
-        year: this.paziente.dataNascita.getFullYear(),
-        birthplace: this.paziente.comuneNascita,
-        birthplaceProvincia: this.paziente.provinciaNascita
-      });
-      console.log(cf.cf);
-      console.log(this.paziente.sesso);
-      if (cf.isValid() && cf.cf != this.paziente.codiceFiscale) {
-        alert("Codice Fiscale errato!!!");
-        return;
-      }*/
 
-      if (this.data.paziente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10))
-      {
-        alert("Data di nascita Errata!!!");
+      if (this.dateDiffInDays(new Date(this.data.paziente.dataNascita), new Date()) < 10) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
+    }
     if (saveAndClose) {
       this.dialogRef.close(this.data.paziente);
     } else {
@@ -159,9 +164,7 @@ export class DialogPazienteComponent implements OnInit {
           this.uploading = false;
         });
     }
-
-  }
-    if (saveAndClose==true) window.location.reload();
+    if (saveAndClose == true) this.dialogRef.close(this.data.paziente);
   }
 
   showDocument(document: any) {

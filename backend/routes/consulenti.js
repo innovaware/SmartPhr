@@ -38,7 +38,7 @@ router.get("/", async (req, res) => {
                 })
 
                 if (consulenti.length > 0) res.status(200).json(consulenti);
-                else res.status(404).json({ error: "No patients found" });
+                else res.status(404).json({ error: "No consultant found" });
 
                 return;
             }
@@ -55,7 +55,7 @@ router.get("/", async (req, res) => {
                     });
 
                     if (consulenti.length > 0) res.status(200).json(consulenti);
-                    else res.status(404).json({ error: "No patients found" });
+                    else res.status(404).json({ error: "No consultant found" });
 
                     redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
                 }
@@ -135,6 +135,7 @@ router.post("/", async (req, res) => {
             tipologiaContratto: req.body.tipologiaContratto,
             telefono: req.body.telefono,
             email: req.body.email,
+            dataCreazione: new Date()
         });
 
         const result = await consulente.save();
@@ -183,6 +184,7 @@ router.put("/:id", async (req, res) => {
                     telefono: req.body.telefono,
                     email: req.body.email,
                     sesso: req.body.sesso,
+                    dataUltimaModifica: new Date()
                 },
             }
         );

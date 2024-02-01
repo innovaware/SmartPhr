@@ -31,7 +31,28 @@ export class AreaInfermieristicaComponent implements OnInit {
 
       this.eventsSubject.next(this.pazienti);
     });
+    this.customButtons = [];
+    console.log("Init Area Infermeristica");
+
+    this.customButtons.push({
+      images: "../../../assets/medico.svg",
+      label: "",
+      tooltip: "Cartella Clinica",
+      cmd: undefined
+      // css: "mat-raised-button raised-button action-button",
+    });
   }
+
+  showFunction(paziente: Paziente) {
+    //console.log(paziente);
+
+    console.log("Show scheda sociale paziente:", paziente);
+    var dialogRef = this.dialog.open(DialogCartellaClinicaComponent, {
+      data: { paziente: paziente, readonly: false },
+      width: "1024px",
+    });
+  }
+
 
   ngOnInit() {
     this.customButtons = [];
@@ -125,6 +146,12 @@ export class AreaInfermieristicaComponent implements OnInit {
               "Errore Inserimento Paziente (" + err["status"] + ")"
             );
           });
+      }
+      else {
+        this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+          this.pazienti = paz;
+          this.eventsSubject.next(this.pazienti);
+        });
       }
     });
   }

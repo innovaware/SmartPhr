@@ -14,12 +14,14 @@ export class LoginComponent implements OnInit {
   messageError: string;
   username: string;
   password: string;
+  LastYear: string;
 
   constructor(
     private route: Router,
     public auth: AuthenticationService
   ) {
     this.messageError = "";
+    this.LastYear = "© 2020-" + (new Date()).getFullYear();
   }
 
   ngOnInit() {}
@@ -37,9 +39,11 @@ export class LoginComponent implements OnInit {
       this.messageError = "Username non valida";
       return;
     }
-
+    console.log("user: ", this.username, "\nPassword: ", this.password,"\n");
     this.auth.login(this.username, this.password).subscribe(
+      
       (user: User) => {
+        console.log("Log Here!!!\n",user);
         this.route.navigate(["/"]).then(x=> {
           window.location.reload();
         });

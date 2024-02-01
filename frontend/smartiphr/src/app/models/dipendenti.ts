@@ -17,6 +17,10 @@ export class Dipendenti {
   //luogoResidenza?: string;
   comuneResidenza?:string;
   provinciaResidenza?: string;
+  cancellato?: Boolean;
+  DataCreazione?: Date;
+  DataEliminazione?: Date;
+  DataUltimaModifica?: Date;
   titoloStudio?: string;
   mansione?: string;
   contratto?: string;

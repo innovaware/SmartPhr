@@ -8,6 +8,7 @@ import { Documento } from "src/app/models/documento";
 import { Fatture } from "src/app/models/fatture";
 import { DocumentoFornitore } from "src/app/models/documentoFornitore";
 import { Fornitore } from "src/app/models/fornitore";
+import { Observable } from "rxjs";
 import { BonificoService } from 'src/app/service/bonifico.service';
 import { FattureService } from "src/app/service/fatture.service";
 import { DocumentoFornitoreService } from 'src/app/service/documentoFornitore.service';
@@ -82,25 +83,22 @@ export class DialogFornitoreComponent implements OnInit {
     console.log("Dialog fornitore generale", this.data);
   }
 
+
+
+// a e b sono oggetti Data
+ dateDiffInDays(a, b) {
+  var _MS_PER_ANNO = 1000 * 60 * 60 * 24*365;
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+   return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+}
+
   async save(saveAndClose: boolean) {
     // this.data.fornitore = this.fornitore;
     console.log("update fornitore");
 
     this.data.fornitore = this.fornitore;
-
-/*     this.data.fornitore.cognome = this.fornitore.cognome;
-    this.data.fornitore.nome = this.fornitore.nome;
-    this.data.fornitore.codiceFiscale = this.fornitore.codiceFiscale;
-    this.data.fornitore.comuneResidenza = this.fornitore.comuneResidenza;
-    this.data.fornitore.indirizzoNascita = this.fornitore.indirizzoNascita;
-    this.data.fornitore.indirizzoResidenza = this.fornitore.indirizzoResidenza;
-
-
-
-    this.data.fornitore.dataNascita = this.fornitore.dataNascita;
-    this.data.fornitore.telefono = this.fornitore.telefono;
-    this.data.fornitore.comuneNascita = this.fornitore.comuneNascita;
-    this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita */;
 
     if (
       this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined ||
@@ -130,13 +128,11 @@ export class DialogFornitoreComponent implements OnInit {
       return;
     } else {
 
-      if (this.fornitore.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+      if (this.dateDiffInDays(new Date(this.fornitore.dataNascita),new Date())<10) {
         this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
     }
-
-
 
     if (saveAndClose) {
       this.dialogRef.close(this.data.fornitore);
@@ -155,7 +151,7 @@ export class DialogFornitoreComponent implements OnInit {
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore Inserimento Fornitore (" + err["status"] + ")"
+            "Errore Inserimento fornitore (" + err["status"] + ")"
           );
           this.uploading = false;
         });
@@ -169,12 +165,14 @@ export class DialogFornitoreComponent implements OnInit {
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore salvataggio Fornitore (" + err["status"] + ")"
+            "Errore salvataggio fornitore (" + err["status"] + ")"
           );
           this.uploading = false;
         });
     }
+  if(saveAndClose == true) this.dialogRef.close(this.data.fornitore);
   }
+  
 
   async changeData($event: Fornitore) {
     console.log("Change fornitore info", $event);

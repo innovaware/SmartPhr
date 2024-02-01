@@ -39,7 +39,7 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   @Input() enableDeleting: boolean;
   @Input() enableShow: boolean;
   @Input() enableCustomButton: boolean;
-
+  @Input() AAS: String; 
 
   inputSearchField: string;
   private eventsSubscription: Subscription;

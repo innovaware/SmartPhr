@@ -5,6 +5,7 @@ import { DialogDipendenteComponent } from "src/app/dialogs/dialog-dipendente/dia
 import { Dipendenti } from "src/app/models/dipendenti";
 import { MessagesService } from "src/app/service/messages.service";
 import { DipendentiService } from "src/app/service/dipendenti.service";
+import { DialogQuestionComponent } from "../../dialogs/dialog-question/dialog-question.component";
 
 @Component({
   selector: "app-gest-utenti",
@@ -106,14 +107,22 @@ export class GestUtentiComponent implements OnInit {
     public dialog: MatDialog,
     public messageService: MessagesService,
     public dipendentiService: DipendentiService
-  ) {}
+  ) {
+    this.dipendenti = [];
+  }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  ngAfterViewInit() {
     this.dipendentiService.get().then((dip: Dipendenti[]) => {
       this.dipendenti = dip;
 
       this.eventsSubject.next(this.dipendenti);
     });
+  }
+
+  getInsertFunction(): any {
+    return this.insert.bind({ ...this })
   }
 
   eventsSubject: Subject<Dipendenti[]> = new Subject<Dipendenti[]>();
@@ -128,7 +137,7 @@ export class GestUtentiComponent implements OnInit {
     });
   }
 
-  show(event: { dipendente: Dipendenti; button: string }) {
+  /*show(event: { dipendente: Dipendenti; button: string }) {
     var dialogRef = undefined;
     console.log("show: ", event);
 
@@ -158,6 +167,82 @@ export class GestUtentiComponent implements OnInit {
             .catch((err) => {});
         }
       });
+  }*/
+
+  insert() {
+    console.log("Inserimento dipendente");
+    const dataDip: Dipendenti = new Dipendenti();
+
+    const dialogRef = this.dialog.open(DialogDipendenteComponent, {
+      data: { dipendenti: dataDip, readonly: true, newItem: true },
+    });
+
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("result insert dipendente", result);
+      if (result !== false && result != undefined) {
+        this.dipendentiService
+          .insert(result)
+          .then((x) => {
+            this.dipendenti.push(x);
+            this.eventsSubject.next(this.dipendenti);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError(
+              "Errore Inserimento dipendente (" + err["status"] + ")"
+            );
+          });
+      }
+      else {
+        this.dipendentiService.get().then((paz: Dipendenti[]) => {
+          this.dipendenti = paz;
+          this.eventsSubject.next(this.dipendenti);
+        });
+      }
+    });
+  }
+
+
+  deleteDipendente(data: Dipendenti) {
+    console.log("Cancella Paziente 1", data);
+    if (data != undefined) {
+      this.dialog
+        .open(DialogQuestionComponent, {
+          data: { message: "Cancellare il dipendente?" },
+          //width: "600px",
+        })
+        .afterClosed()
+        .subscribe(
+          (result) => {
+            if (result == true) {
+              this.dipendentiService.remove(data).subscribe(
+                (result: Dipendenti) => {
+                  const index = this.dipendenti.indexOf(data, 0);
+                  if (index > -1) {
+                    this.dipendenti.splice(index, 1);
+                  }
+                  console.log(
+                    "Cancellazione dipendente eseguita con successo",
+                    result
+                  );
+                  this.eventsSubject.next(this.dipendenti);
+                },
+                (err) =>
+                  console.error(`Error Cancellazione dipendente: ${err.message}`)
+              );
+            } else {
+              console.log("Cancellazione dipendente annullata");
+              this.messageService.showMessageError(
+                "Cancellazione dipendente Annullata"
+              );
+            }
+          },
+          (err) => console.error(`Error Cancellazione dipendente: ${err}`)
+        );
+    } else {
+      this.messageService.showMessageError(
+        "Cancellazione dipendente Annullata"
+      );
+    }
   }
 
 
