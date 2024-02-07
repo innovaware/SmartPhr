@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const Farmacichema = mongoose.Schema({
+const FarmaciSchema = mongoose.Schema({
     nome:String,
     rif_id: String,
     descrizione: String,
@@ -19,4 +19,4 @@ const Farmacichema = mongoose.Schema({
     pazienteName: String,
 });
 
-module.exports = mongoose.model('Farmaci', Farmacichema, 'farmaci');
+module.exports = mongoose.model('Farmaci', FarmaciSchema, 'farmaci');

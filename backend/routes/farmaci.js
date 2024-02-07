@@ -99,7 +99,7 @@ router.post("/", async (req, res) => {
 
     const result = await farmaci.save();
 
-  if(req.body._id != "" && req.body._id != null){
+  /*if(req.body._id != "" && req.body._id != null){
     console.log('req.body._id: ' + req.body._id);
     const getData = () => {
       return Farmaci.findById(req.body._id);
@@ -115,7 +115,7 @@ router.post("/", async (req, res) => {
         },
       }
       );
-    }
+    }*/
 
 
     const now = new Date();

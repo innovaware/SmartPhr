@@ -22,7 +22,7 @@ export class FarmaciService {
 
   async insert(item: Farmaci) {
     var body = item;
-    return this.http.post<Farmaci>(this.api + "/api/farmaci", body).toPromise();
+    return this.http.post<Farmaci>(this.api + "/api/farmaci/", body).toPromise();
   }
 
 }

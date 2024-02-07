@@ -2,6 +2,7 @@ import { Component, OnInit, ViewChild } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
+import { Console } from "console";
 import { DialogFarmacoComponent } from "src/app/dialogs/dialog-farmaco/dialog-farmaco.component";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Farmaci } from "src/app/models/farmaci";
@@ -33,16 +34,18 @@ export class GestFarmaciComponent implements OnInit {
   dataSource: MatTableDataSource<Farmaci>;
   farmaci: Farmaci[];
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   dipendente: Dipendenti = {} as Dipendenti;
+  OperatorID: String;
+  Operator: String;
   constructor(
     public dialog: MatDialog,
     public farmaciService: GestFarmaciService,
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
     public messageService: MessagesService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.loadUser();
@@ -69,7 +72,8 @@ export class GestFarmaciComponent implements OnInit {
       this.dipendenteService
         .getByIdUser(user._id)
         .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
+          console.log("user: " , user);
+          console.log("\n\n\ndipendente: " , x);
           this.dipendente = x[0];
 
         })
@@ -78,6 +82,8 @@ export class GestFarmaciComponent implements OnInit {
             "Errore Caricamento dipendente (" + err["status"] + ")"
           );
         });
+      this.OperatorID = this.dipendente._id == null ? user._id : this.dipendente._id;
+      this.Operator = this.dipendente.nome == null ? user.username : this.dipendente.nome + " " + this.dipendente.cognome;
     });
   }
 
@@ -87,18 +93,19 @@ export class GestFarmaciComponent implements OnInit {
     var dialogRef = undefined;
 
     dialogRef = this.dialog.open(DialogFarmacoComponent, {
-      data: { row: new Farmaci(),  title: 'Nuovo Farmaco' },
+      data: { row: new Farmaci(), title: 'Nuovo Farmaco' },
     });
 
-    
+
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
-
         if (result != undefined && result) {
-          result.operator = this.dipendente._id;
-          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
-          
+
+
+          result.operator = this.OperatorID
+          result.operatorName = this.Operator;
+
           this.farmaciService
             .insert(result)
             .then((r) => {
@@ -116,16 +123,17 @@ export class GestFarmaciComponent implements OnInit {
   async editItem(item: Farmaci) {
     var dialogRef = undefined;
     dialogRef = this.dialog.open(DialogFarmacoComponent, {
-      data: { row: Farmaci.clone(item),  title: 'Modifica Farmaco' },
+      data: { row: Farmaci.clone(item), title: 'Modifica Farmaco' },
     });
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
         if (result != undefined && result) {
-          result.operator = this.dipendente._id;
-          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;
-
+         /* result.operator = this.dipendente._id;
+          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;*/
+          result.operator = this.OperatorID
+          result.operatorName = this.Operator;
 
           this.farmaciService
             .update(result)

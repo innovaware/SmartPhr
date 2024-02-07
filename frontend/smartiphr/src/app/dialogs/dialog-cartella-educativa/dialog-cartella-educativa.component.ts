@@ -28,9 +28,9 @@ export class DialogCartellaEducativaComponent implements OnInit {
 
   socializzazione: SchedaSocializzazione;
   valutazioneEducativa: valutazioneEducativa;
-  ADL : ADL;
-  IADL : IADL;
-  diarioEducativo : DiarioEducativo[];
+  ADL: ADL;
+  IADL: IADL;
+  diarioEducativo: DiarioEducativo[];
 
 
 
@@ -87,7 +87,7 @@ export class DialogCartellaEducativaComponent implements OnInit {
 
     this.IADL = this.paziente.schedaEducativa.IADL as IADL;
 
- 
+
 
   }
 
@@ -98,25 +98,24 @@ export class DialogCartellaEducativaComponent implements OnInit {
 
 
   async salva() {
-    this.paziente = this.data.paziente;
     console.log(this.paziente);
     console.log(this.data.paziente);
-    this.paziente.schedaEducativa.ADL.totale =  Number(this.paziente.schedaEducativa.ADL.A.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.ADL.B.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.ADL.C.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.ADL.D.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.ADL.E.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.ADL.F.split("-") [1]);
+    this.paziente.schedaEducativa.ADL.totale = Number(this.paziente.schedaEducativa.ADL.A.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.ADL.B.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.ADL.C.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.ADL.D.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.ADL.E.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.ADL.F.split("-")[1]);
 
-    this.paziente.schedaEducativa.IADL.totale =  Number(this.paziente.schedaEducativa.IADL.A.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.B.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.C.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.D.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.E.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.F.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.G.split("-") [1]) +
-                                                Number(this.paziente.schedaEducativa.IADL.H.split("-") [1]);
-
+    this.paziente.schedaEducativa.IADL.totale = Number(this.paziente.schedaEducativa.IADL.A.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.B.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.C.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.D.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.E.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.F.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.G.split("-")[1]) +
+      Number(this.paziente.schedaEducativa.IADL.H.split("-")[1]);
+    this.paziente = this.paziente;
     this.pazienteService.save(this.paziente).then((value: Paziente) => {
       console.log(`Patient  saved`, value);
       this.dialogRef.close(this.paziente);
@@ -124,5 +123,9 @@ export class DialogCartellaEducativaComponent implements OnInit {
   }
 
 
+  async changeData($event: Paziente) {
+    console.log("Change paziente info", $event);
+    this.paziente = $event;
+  }
 
 }
