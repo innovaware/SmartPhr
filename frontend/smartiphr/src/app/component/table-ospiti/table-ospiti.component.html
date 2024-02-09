@@ -39,7 +39,7 @@
             </button>
 
             <div *ngIf="enableCustomButton">
-                <button mat-button *ngFor="let item of CustomButtons" (click)="showPatient(row)" [ngClass]="item.css"
+                <button mat-button *ngFor="let item of CustomButtons" (click)=" item.cmd!=undefined? item.cmd(row): showPatient(row)" [ngClass]="item.css"
                         matTooltip={{item.tooltip}} matTooltipPosition="above">
                     <img *ngIf="item.images != undefined" [src]="item.images" style="width:26px">
 
