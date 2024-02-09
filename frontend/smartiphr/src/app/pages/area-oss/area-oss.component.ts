@@ -33,77 +33,80 @@ export class AreaOssComponent implements OnInit {
       this.pazienti = paz;
 
       this.eventsSubject.next(this.pazienti);
-
-      this.customButtons = [];
-      console.log("Init Area OSS");
-
-      /* this.customButtons.push({
-         images: "../../../assets/medico.svg",
-         label: "Pre-ingresso",
-         tooltip: "Pre-ingresso",
-         cmd: (paziente: Paziente) =>
-           this.dialog.open(DialogPreIngressoComponent, {
-               data: { paziente: paziente, readonly: false },
-               width: "1024px",
-             })
-             .afterClosed()
-             .subscribe((data: Paziente) => {
-               if (data != undefined || data) {
-                 this.pazienti.push(data);
-   
-                 const index = this.pazienti.indexOf(paziente, 0);
-                 if (index > -1) {
-                   this.pazienti.splice(index, 1);
-                   console.log("Removed item");
-                 }
-                 this.eventsSubject.next(this.pazienti);
-               }
-             }),
-         //css: "mat-raised-button raised-button action-button",
-       });*/
-
-      this.customButtons.push({
-        images: "../../../assets/entrance.svg",
-        label: "",
-        tooltip: "Ingresso",
-        cmd: undefined
-      });
-
-      this.customButtons.push({
-        images: "../../../assets/checklist.svg",
-        label: "",
-        tooltip: "AttivitĂ ",
-        cmd: (paziente: Paziente) =>
-          this.dialog.open(DialogAttivitaComponent, {
-            data: { paziente: paziente, readonly: true },
-            width: "1024px",
-          }),
-      });
-
-
-
-      this.customButtons.push({
-        images: "../../../assets/wardrobe.svg",
-        label: "",
-        tooltip: "Armadio",
-        cmd: (paziente: Paziente) =>
-
-          this.cameraService.get(paziente.idCamera).subscribe(
-            (camera: Camere) => {
-              this.dialog.open(DialogArmadioComponent, {
-                data: { camera: camera },
-                width: "1024px",
-              })
-            }
-          )
-      });
-
-
     });
   }
 
   ngOnInit() {
-   
+    this.customButtons = [];
+    console.log("Init Area OSS");
+
+   /* this.customButtons.push({
+      images: "../../../assets/medico.svg",
+      label: "Pre-ingresso",
+      tooltip: "Pre-ingresso",
+      cmd: (paziente: Paziente) =>
+        this.dialog.open(DialogPreIngressoComponent, {
+            data: { paziente: paziente, readonly: false },
+            width: "1024px",
+          })
+          .afterClosed()
+          .subscribe((data: Paziente) => {
+            if (data != undefined || data) {
+              this.pazienti.push(data);
+
+              const index = this.pazienti.indexOf(paziente, 0);
+              if (index > -1) {
+                this.pazienti.splice(index, 1);
+                console.log("Removed item");
+              }
+              this.eventsSubject.next(this.pazienti);
+            }
+          }),
+      //css: "mat-raised-button raised-button action-button",
+    });*/
+
+    this.customButtons.push({
+      images: "../../../assets/entrance.svg",
+      label: "",
+      tooltip: "Ingresso",
+      cmd: (paziente: Paziente) =>
+        this.dialog.open(DialogIngressoComponent, {
+          data: { paziente: paziente, readonly: true },
+          width: "1024px",
+        }),
+    });
+
+    this.customButtons.push({
+      images: "../../../assets/checklist.svg",
+      label: "",
+      tooltip: "AttivitĂ ",
+      cmd: (paziente: Paziente) =>
+        this.dialog.open(DialogAttivitaComponent, {
+          data: { paziente: paziente, readonly: true },
+          width: "1024px",
+        }),
+    });
+
+
+
+    this.customButtons.push({
+      images: "../../../assets/wardrobe.svg",
+      label: "",
+      tooltip: "Armadio",
+      cmd: (paziente: Paziente) =>
+
+      this.cameraService.get(paziente.idCamera).subscribe(
+        (camera: Camere) => {
+          this.dialog.open(DialogArmadioComponent, {
+            data: { camera: camera },
+            width: "1024px",
+          })
+        }
+      )
+    });
+
+
+
   /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
@@ -113,13 +116,4 @@ export class AreaOssComponent implements OnInit {
 
   }
 
-  showFunction(paziente: Paziente) {
-    //console.log(paziente);
-
-    console.log("Show scheda paziente:", paziente);
-    var dialogRef = this.dialog.open(DialogIngressoComponent, {
-      data: { paziente: paziente, readonly: false },
-      width: "1024px",
-    });
-  }
 }
