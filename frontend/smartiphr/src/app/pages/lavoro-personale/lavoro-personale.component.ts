@@ -21,7 +21,6 @@ export class LavoroPersonaleComponent implements OnInit {
   dipendente: Dipendenti = {} as Dipendenti;
 
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
-  DisplayedRichiesteColumns: string[] = ["date", "action"];
 
 
   @ViewChild("paginatorContratto", {static: false})
