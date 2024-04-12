@@ -156,12 +156,12 @@ router.post("/authenticate", async (req, res) => {
     };
     const turno = await Turnimensili.findOne(query);
 
-    if (turno == null && user.username !== "admin") {
-      res.status(401);
-      res.json({ Error: 'Not Authorized - Fuori turno' });
+    //if (turno == null && user.username !== "admin") {
+    //  res.status(401);
+    //  res.json({ Error: 'Not Authorized - Fuori turno' });
 
-      return;
-    }
+    //  return;
+    //}
 
     const presenzeFind = await Dipendenti.aggregate([
       {
