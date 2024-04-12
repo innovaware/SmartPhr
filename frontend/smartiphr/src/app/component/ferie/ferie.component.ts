@@ -13,7 +13,7 @@ import { MessagesService } from "src/app/service/messages.service";
   styleUrls: ["./ferie.component.css"],
 })
 export class FerieComponent implements OnInit, OnChanges {
-  @Input() data: Ferie[];
+  @Input() data: Dipendenti;
   @Input() dipendente: Dipendenti;
 
   @Input() disable: boolean;
@@ -38,12 +38,9 @@ export class FerieComponent implements OnInit, OnChanges {
   ];
 
   displayedColumnsExternal: string[] = [
-    "cognome",
-    "nome",
     "dataInizio",
     "dataFine",
     "dataRichiesta",
-    "cf",
     "action",
   ];
 
@@ -52,69 +49,39 @@ export class FerieComponent implements OnInit, OnChanges {
   public uploadingRichiestaFerie: boolean;
   public addingRichiestaFerie: boolean;
 
-  @ViewChild("paginatordocsMedicina", {static: false})
-  docsMedicinaPaginator: MatPaginator;
+  @ViewChild("paginatorFerie", { static: false })
+  FeriePaginator: MatPaginator;
   dataSource: MatTableDataSource<Ferie>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   constructor(
     public messageService: MessagesService,
     public ferieService: FerieService
   ) //public dipendenteService: DipendentiService
-  {}
-
-  ngOnChanges(changes) {
-    this.dataSource = new MatTableDataSource<Ferie>(this.data);
-    this.dataSource.paginator = this.paginator;
+  {
+    this.richieste = [];
   }
 
-  // loadTable(){
-  //   if(this.isExternal != true){
-  //     if(this.data){
-
-  //       this.ferieService.getFerieByDipendente(this.data._id).then((result) => {
-  //         this.ferie = result;
-
-  //         this.dataSource = new MatTableDataSource<Ferie>(this.ferie);
-  //         this.dataSource.paginator = this.paginator;
-  //       });
-  //     }
-  //     else{
-  //     this.ferieService.getFerie().then((result) => {
-  //       this.ferie = result;
-
-  //       this.dataSource = new MatTableDataSource<Ferie>(this.ferie);
-  //       this.dataSource.paginator = this.paginator;
-  //     });
-  //     }
-  //   }
-  //   else{
-  //     this.loadUser();
-  //   }
-  // }
-
-  // loadUser(){
-  // this.dipendenteService
-  // .getById('620027d56c8df442a73341fa')
-  // .then((x) => {
-  //       this.dipendente = x;
-  //       this.ferieService.getFerieByDipendente(this.dipendente._id).then((result) => {
-  //         this.ferie = result;
-
-  //         this.dataSource = new MatTableDataSource<Ferie>(this.ferie);
-  //         this.dataSource.paginator = this.paginator;
-  //       });
-  // })
-  // .catch((err) => {
-  //   this.messageService.showMessageError(
-  //     "Errore Caricamento dipendente (" + err["status"] + ")"
-  //   );
-  // });
-  // }
+  ngOnChanges(changes) {
+    if (this.data && this.data._id) {
+      this.ferieService.getFerieByDipendenteID(this.data._id).then((result) => {
+        this.dataSource = new MatTableDataSource<Ferie>(result);
+        this.dataSource.paginator = this.paginator;
+        this.richieste = result;
+      });
+    }
+    else {
+      this.ferieService.getFerieByDipendenteID(this.data._id).then((result) => {
+        this.richieste = result;
+      });
+      this.dataSource = new MatTableDataSource<Ferie>(this.richieste);
+        this.dataSource.paginator = this.paginator;
+    }
+  }
 
   ngOnInit() {
-    //this.loadTable();
+    this.nuovoRichiestaFerie = new Ferie();
   }
 
   applyFilter(event: Event) {
@@ -130,11 +97,11 @@ export class FerieComponent implements OnInit, OnChanges {
     this.ferieService
       .updateFerie(ferie)
       .then((result: Ferie) => {
-        const index = this.data.indexOf(ferie);
+        const index = this.richieste.indexOf(ferie);
         ferie.closed = true;
-        this.data[index] = ferie;
+        this.richieste[index] = ferie;
 
-        this.dataSource.data = this.data;
+        this.dataSource.data = this.richieste;
       })
       .catch((err) => {
         this.messageService.showMessageError("Errore modifica stato ferie");
@@ -173,35 +140,47 @@ export class FerieComponent implements OnInit, OnChanges {
   async delete(ferie: Ferie) {
     console.log("Cancella Ferie: ", ferie);
 
-    /*this.ferieService
-        .remove(doc)
+    this.ferieService
+        .remove(ferie)
         .then((x) => {
-          console.log("Privacy cancellata");
-          const index = this.docsprivacy.indexOf(doc);
-          console.log("Privacy cancellata index: ", index);
+          console.log("richisesta cancellata");
+          const index = this.richieste.indexOf(ferie);
+          console.log("richiesta ferie cancellata index: ", index);
           if (index > -1) {
-            this.docsprivacy.splice(index, 1);
+            this.richieste.splice(index, 1);
           }
 
-          console.log("Privacy cancellata : ", this.docsprivacy);
-          this.docsprivacyDataSource.data = this.docsprivacy;
+          console.log("Richiesta cancellata : ", this.richieste);
+          this.dataSource.data = this.richieste;
         })
         .catch((err) => {
-          this.messageService.showMessageError("Errore nella cancellazione Privacy");
+          this.messageService.showMessageError("Errore nella cancellazione della richiesta");
           console.error(err);
-        });*/
+        });
   }
 
   async saveRichiestaFerie(ferie: Ferie) {
     this.uploadingRichiestaFerie = true;
-
+    console.log("Data: ", this.data);
+    ferie.user = this.data._id;
+    var campi = "";
+    if (ferie.dataInizio == undefined || ferie.dataInizio == new Date() || ferie.dataInizio == null) {
+      campi = campi + " data Inizio";
+    }
+    if (ferie.dataFine == undefined || ferie.dataFine == new Date() || ferie.dataFine == null) {
+      campi = campi + " data Fine";
+    }
+    if (campi != "") {
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    }
     console.log("Invio Richiesta Ferie: ", ferie);
     this.ferieService
       .insertFerie(ferie)
       .then((result: Ferie) => {
         console.log("Insert Ferie: ", result);
-        this.data.push(result);
-        this.dataSource.data = this.data;
+        this.richieste.push(result);
+        this.dataSource.data = this.richieste;
         this.addingRichiestaFerie = false;
         this.uploadingRichiestaFerie = false;
       })

@@ -51,8 +51,15 @@ router.get("/dipendente/:id", async (req, res) => {
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 
-    const getData = () => {
-      return Ferie.find({ user: id });
+      const getData = () => {
+          return Ferie.find({
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                  },
+                  { user: id },
+            ],
+        });
     };
 
     if (redisClient == undefined || redisDisabled) {
@@ -183,6 +190,45 @@ router.put("/:id", async (req, res) => {
   } catch (err) {
     res.status(500).json({ Error: err });
   }
+});
+
+/// Eliminare Ferie
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        if (id == null) {
+            res.status(400).json({ error: "id not valid" });
+        }
+
+        const richiesta = await Ferie.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    cancellato: true,
+                    dataCancellazione: new Date().getDate(),
+                },
+            }
+        );
+
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`FERIEBY${id}`);
+            redisClient.del(`FERIEALL`);
+        }
+
+        res.status(200);
+        res.json(richiesta);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
 module.exports = router;
