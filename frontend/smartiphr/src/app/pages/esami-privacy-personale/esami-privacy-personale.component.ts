@@ -91,7 +91,7 @@ export class EsamiPrivacyPersonaleComponent implements OnInit {
       (user)=>{
         console.log('get dipendente');
         this.dipendenteService
-        .getByIdUser(user._id)
+          .getByIdUser(user.dipendenteID)
         .then((x) => {
           console.log('dipendente: ' + JSON.stringify(x));
           this.dipendente = x[0];
