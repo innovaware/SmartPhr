@@ -211,7 +211,7 @@ router.delete("/:id", async (req, res) => {
             {
                 $set: {
                     cancellato: true,
-                    dataCancellazione: new Date().getDate(),
+                    dataCancellazione: new Date(),
                 },
             }
         );

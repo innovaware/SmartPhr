@@ -3,8 +3,9 @@ export class Permessi {
     return JSON.parse(JSON.stringify(obj));
   }
   _id?: string;
-  dataInizio?: Date;
-  dataFine?: Date;
+  dataPermesso?: Date;
+  oraInizio?: String;
+  oraFine?: String;
   dataRichiesta?: Date;
   accettata?: boolean;
   closed?: boolean;
