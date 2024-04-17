@@ -163,7 +163,6 @@ export class PermessiComponent implements OnInit, OnChanges {
   }
 
   async savePermesso(permesso: Permessi) {
-    this.uploadingPermesso = true;
     permesso.user = this.data._id;
     var campi = "";
     if (permesso.dataPermesso == undefined || permesso.dataPermesso == new Date() || permesso.dataPermesso == null) {
@@ -195,7 +194,7 @@ export class PermessiComponent implements OnInit, OnChanges {
       this.messageService.showMessageError("Non puoi impostare la fine del permesso prima dell'inizio!!!");
       return;
     }
-
+    this.uploadingPermesso = true;
     permesso.dataRichiesta = new Date();
     console.log("Invio Richiesta permesso: ", permesso);
     this.permessiService

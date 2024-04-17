@@ -126,15 +126,6 @@ export class FerieComponent implements OnInit, OnChanges {
     let dataCurrent = new Date();
 
     this.addingRichiestaFerie = true;
-    // this.nuovoRichiestaFerie = {
-    //   dataInizio: undefined,
-    //   dataFine: undefined,
-    //   nome: this.dipendente.nome,
-    //   cognome: this.dipendente.cognome,
-    //   cf: this.dipendente.cf,
-    //   user: this.dipendente._id,
-    //   dataRichiesta:dataCurrent
-    // };
   }
 
   async delete(ferie: Ferie) {
@@ -159,8 +150,17 @@ export class FerieComponent implements OnInit, OnChanges {
         });
   }
 
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
+
+
+
   async saveRichiestaFerie(ferie: Ferie) {
-    this.uploadingRichiestaFerie = true;
     console.log("Data: ", this.data);
     ferie.user = this.data._id;
     var campi = "";
@@ -172,8 +172,23 @@ export class FerieComponent implements OnInit, OnChanges {
     }
     if (campi != "") {
       this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      this.addingRichiestaFerie = true;
       return;
     }
+    if (this.dateDiffInDays(new Date(ferie.dataFine), new Date(ferie.dataInizio)) > 0) {
+      this.addingRichiestaFerie = true;
+      this.messageService.showMessageError(`Non puoi impostare la data di fine ferie prima della data inizio ferie!!!`);
+      return;
+    }
+    console.log(this.dateDiffInDays(new Date(), new Date((new Date().getFullYear()), 3, 30, 23, 59, 59)));
+    if ((this.dateDiffInDays(new Date(ferie.dataInizio), new Date((new Date().getFullYear()), 5, 1)) < 0)
+      && this.dateDiffInDays(new Date(), new Date((new Date().getFullYear()), 3, 30, 23, 59, 59))<0
+    ) {
+      this.addingRichiestaFerie = true;
+      this.messageService.showMessageError(`Le ferie estive vanno inserite entro e non oltre il 30 Aprile!!!`);
+      return;
+    }
+    this.uploadingRichiestaFerie = true;
     console.log("Invio Richiesta Ferie: ", ferie);
     this.ferieService
       .insertFerie(ferie)
