@@ -82,7 +82,7 @@ else{
 
   loadUser(){
     this.dipendenteService
-    .getById('620027d56c8df442a73341fa')
+      .getById(this.data._id) //'620027d56c8df442a73341fa'
     .then((x) => {
           this.dipendente = x;
           this.turnimensiliService.getTurnimensiliByDipendente(this.dipendente._id).subscribe((result) => {
