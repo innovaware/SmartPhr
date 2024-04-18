@@ -14,7 +14,7 @@ import { PermessiService } from "src/app/service/permessi.service";
   styleUrls: ["./permessi.component.css"],
 })
 export class PermessiComponent implements OnInit, OnChanges {
-  @Input() data: Permessi;
+  @Input() data: Dipendenti;
   @Input() dipendente: Dipendenti;
 
   @Input() disable: boolean;

@@ -63,52 +63,49 @@ router.get("/", async (req, res) => {
 
 //LISTA PRESENZE DIPENDENTE
 // http://[HOST]:[PORT]/api/presenzeDipendente/[ID_DIPENDENTE]
+//router.get("/dipendente/:id", async (req, res) => {
+//    const { id } = req.params;
+//    try {
+//        redisClient = req.app.get("redis");
+//        redisDisabled = req.app.get("redisDisabled");
+
+//        const getData = () => {
+//            return Presenze.find(
+//                    { user: id }
+//            );
+//        };
+
+//        if (redisClient == undefined || redisDisabled) {
+//            const eventi = await getData();
+//            res.status(200).json(eventi);
+//            return;
+//        }
+
+//        const searchTerm = `PRESENZEBY${id}`;
+//        redisClient.get(searchTerm, async (err, data) => {
+//            if (err) throw err;
+
+//            if (data) {
+//                res.status(200).send(JSON.parse(data));
+//            } else {
+//                const presenze = await getData();
+
+//                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
+//                res.status(200).json(presenze);
+//            }
+//        });
+//    } catch (err) {
+//        res.status(500).json({ Error: err });
+//    }
+//});
 router.get("/dipendente/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-
-    const getData = () => {
-      const presenze = Dipendenti.aggregate([
-        { $match: { _id: mongoose.Types.ObjectId(id) } },
-        {
-          $lookup: {
-            from: "presenze",
-            localField: "idUser",
-            foreignField: "user",
-            as: "presenze",
-          },
-        },
-      ]);
-      //const turnimensili = Turnimensili.find();
-
-      return presenze;
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+    const { id } = req.params;
+    try {
+        const eventi = await Presenze.find({ user: id });
+        res.status(200).json(eventi);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `PRESENZEBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const presenze = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(presenze));
-        res.status(200).json(presenze);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 // http://[HOST]:[PORT]/api/presenze/[ID]
@@ -149,10 +146,13 @@ router.get("/:id", async (req, res) => {
 router.post("/", async (req, res) => {
   try {
     const presenze = new Presenze({
-      data: req.body.data,
+        data: req.body.data,
+        oraInizio: req.body.oraInizio,
+        oraFine: "",
+        turno: req.body.turno,
+        mansione: req.body.mansione,
+        user: req.body.user
     });
-
-
     // Salva i dati sul mongodb
     const result = await presenze.save();
 
@@ -180,8 +180,8 @@ router.put("/:id", async (req, res) => {
     const presenze = await Presenze.updateOne(
       { _id: id },
       {
-        $set: {
-          data: req.body.data,
+          $set: {
+              oraFine: req.body.oraFine
         },
       }
     );

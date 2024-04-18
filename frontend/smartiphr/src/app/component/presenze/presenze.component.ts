@@ -7,6 +7,8 @@ import { DialogMessageErrorComponent } from "src/app/dialogs/dialog-message-erro
 import { Dipendenti } from "src/app/models/dipendenti";
 import { Presenze } from "src/app/models/presenze";
 import { PresenzeService } from "src/app/service/presenze.service";
+import { MessagesService } from "../../service/messages.service";
+import { DipendentiService } from "../../service/dipendenti.service";
 
 @Component({
   selector: "app-presenze",
@@ -14,7 +16,7 @@ import { PresenzeService } from "src/app/service/presenze.service";
   styleUrls: ["./presenze.component.css"],
 })
 export class PresenzeComponent implements OnInit, OnChanges {
-  @Input() data: Presenze[];
+  @Input() data: Dipendenti;
   @Input() dipendente: Dipendenti;
   @Input() disable: boolean;
   @Input() isExternal: boolean;
@@ -27,50 +29,162 @@ export class PresenzeComponent implements OnInit, OnChanges {
   @Input() showInsert: boolean;
 
   displayedColumns: string[] = [
-    "cognome",
-    "nome",
     "data",
-    "mansione",
     "inizioturno",
     "fineturno",
-    "cf",
+    "tipoTurno",
     "action",
   ];
 
   dataSource: MatTableDataSource<Presenze>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   public presenze: Presenze[];
-
+  public addingIngresso: boolean;
+  public addingUscita: boolean;
+  public newPresenza: Presenze;
   constructor(
-    public presenzeService: PresenzeService
-  ) {}
+    public messageService: MessagesService,
+    public presenzeService: PresenzeService,
+    public dipendenteService: DipendentiService
+  ) {
+    this.presenze = [];
+    this.newPresenza = new Presenze();
+  }
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-  ngOnChanges(changes) {
-    console.log(this.data);
-
-    this.dataSource = new MatTableDataSource<Presenze>(this.data);
-    this.dataSource.paginator = this.paginator;
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
+  ngOnChanges(changes) {
+    if (this.data && this.data._id) {
+      this.presenzeService.getPresenzeByDipendenteID(this.data._id).then((result) => {
+        this.presenze = result;
+        this.presenze.sort((a, b) => {
+          const dateA = new Date(a.data);
+          const dateB = new Date(b.data);
+          return dateB.getTime() - dateA.getTime();
+        });
+        this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
+        this.dataSource.paginator = this.paginator;
+        if (this.presenze.length != 0) {
+          this.newPresenza = this.presenze[0];
+          if (this.newPresenza.oraFine == "") {
+            this.addingIngresso = false;
+            this.addingUscita = true;
+          }
+          else {
+            this.addingIngresso = true;
+            this.addingUscita = false;
+          }
+        }
+        else {
+          this.addingIngresso = true;
+          this.addingUscita = false;
+        }
+      });
+    }
+    else {
+      this.presenzeService.getPresenzeByDipendenteID(this.data._id).then((result) => {
+        this.presenze = result;
+        this.presenze.sort((a, b) => {
+          const dateA = new Date(a.data);
+          const dateB = new Date(b.data);
+          return dateB.getTime() - dateA.getTime();
+        });
+        this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
+        this.dataSource.paginator = this.paginator;
+        if (this.presenze.length != 0) {
+          this.newPresenza = this.presenze[0];
+          if (this.newPresenza.oraFine == "") {
+            this.addingIngresso = false;
+            this.addingUscita = true;
+          }
+          else {
+            this.addingIngresso = true;
+            this.addingUscita = false;
+          }
+        }
+        else {
+          this.addingIngresso = true;
+          this.addingUscita = false;
+        }
+      });
+    }
+  }
+
+
   ngOnInit() {
-    // if (this.data) {
-    //   this.presenzeService
-    //     .getPresenzeByDipendente(this.data._id)
-    //     .subscribe((result: Presenze[]) => {
-    //       this.presenze = result;
+   
+    this.newPresenza = new Presenze();
+  }
 
-    //       this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
-    //       this.dataSource.paginator = this.paginator;
-    //     });
-    // } else {
-    //   this.presenzeService.getPresenze().subscribe((result) => {
-    //     this.presenze = result;
+  addIngresso() {
+    this.newPresenza = new Presenze();
+    this.newPresenza.data = new Date();
+    this.newPresenza.oraInizio =
+      ((new Date()).getHours() < 10 ? "0" + (new Date()).getHours() : (new Date()).getHours()) + ":"
+      + ((new Date()).getMinutes() < 10 ? "0" + (new Date()).getMinutes() : (new Date()).getMinutes())
+      + ":" + ((new Date()).getSeconds() < 10 ? "0" + (new Date()).getSeconds() : (new Date()).getSeconds());
+    if ((new Date()).getHours() >= 6 && (new Date()).getHours() < 14) {
+      this.newPresenza.turno = "Mattina";
+    }
+    else {
+      if ((new Date()).getHours() >= 14 && (new Date()).getHours() < 22) {
+        this.newPresenza.turno = "Pomeriggio";
+      }
+      else {
+        this.newPresenza.turno = "Notte";
+      }
+    }
+    this.newPresenza.user = this.data._id;
+    this.newPresenza.mansione = this.data.mansione;
+    this.presenzeService
+      .insertPresenza(this.newPresenza)
+      .then((result: Presenze) => {
+        this.presenze.push(result);
+        this.presenze.sort((a, b) => {
+          const dateA = new Date(a.data);
+          const dateB = new Date(b.data);
+          return dateB.getTime() - dateA.getTime();
+        });
+        this.dataSource.data = this.presenze;
+        this.addingIngresso = false;
+        this.addingUscita = true;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento presenza");
+        console.error(err);
+      });
+  }
 
-    //     this.dataSource = new MatTableDataSource<Presenze>(this.presenze);
-    //     this.dataSource.paginator = this.paginator;
-    //   });
-    // }
+  addUscita() {
+    this.newPresenza = this.presenze[0];
+    this.newPresenza.oraFine =
+      ((new Date()).getHours() < 10 ? "0" + (new Date()).getHours() : (new Date()).getHours()) + ":"
+      + ((new Date()).getMinutes() < 10 ? "0" + (new Date()).getMinutes() : (new Date()).getMinutes())
+    + ":" + ((new Date()).getSeconds() < 10 ? "0" + (new Date()).getSeconds() : (new Date()).getSeconds());
+    this.presenzeService
+      .updatePresenza(this.newPresenza)
+      .then((result: Presenze) => {
+        const index = this.presenze.indexOf(this.newPresenza);
+        this.presenze[index] = this.newPresenza;
+        this.addingIngresso = true;
+        this.addingUscita = false;
+        this.presenze.sort((a, b) => {
+          const dateA = new Date(a.data);
+          const dateB = new Date(b.data);
+          return dateB.getTime() - dateA.getTime();
+        });
+        this.dataSource.data = this.presenze;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore modifica stato Presenze");
+        console.error(err);
+      });
   }
 
   applyFilter(event: Event) {
