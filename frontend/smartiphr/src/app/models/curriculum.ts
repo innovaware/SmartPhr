@@ -22,4 +22,5 @@ export class Curriculum {
   nome: string;
   cognome: string;
   codiceFiscale: string;
+  status?: string;
 }

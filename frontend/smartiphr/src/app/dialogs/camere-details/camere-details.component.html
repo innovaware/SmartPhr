@@ -8,7 +8,14 @@
       </div>
 
       <div class="col right">
-        <img src="../../../assets/maps.svg" title="Mostra nella Mappa" (click)="navCameraMap()">
+
+        <button mat-button title="Mostra nella Mappa" (click)="navCameraMap()">
+          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pin-map-fill" viewBox="0 0 16 16">
+            <path fill-rule="evenodd" d="M3.1 11.2a.5.5 0 0 1 .4-.2H6a.5.5 0 0 1 0 1H3.75L1.5 15h13l-2.25-3H10a.5.5 0 0 1 0-1h2.5a.5.5 0 0 1 .4.2l3 4a.5.5 0 0 1-.4.8H.5a.5.5 0 0 1-.4-.8z" />
+            <path fill-rule="evenodd" d="M4 4a4 4 0 1 1 4.5 3.969V13.5a.5.5 0 0 1-1 0V7.97A4 4 0 0 1 4 3.999z" />
+          </svg>
+        </button>
+        
       </div>
 
     </div>
@@ -62,7 +69,7 @@
     <div class="row">
       <div class="col" [ngClass]="data.editMode ? 'middle' : ''">
         <h4>
-          <mat-label>Numero posti</mat-label>
+          <mat-label>Num. posti occupati</mat-label>
           <img src="../../../assets/info.svg"
               matTooltip="Numero di posti occupati"
               class="info">
@@ -71,7 +78,7 @@
       </div>
       <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
         <mat-form-field *ngIf="data.editMode else labelTextNumPostiLiberi">
-          <input matInput type="number" placeholder="Posti liberi"
+          <input matInput type="number" placeholder="Posti Occupati"
                  [(ngModel)]="countPatientInCamera"
                  [disabled]="true"
                  min="0"
@@ -96,10 +103,10 @@
       </div>
       <div class="col" [ngClass]="!data.editMode ? 'middle' : ''">
         <mat-form-field *ngIf="data.editMode else labelTextNumMaxPosti">
-          <input matInput type="number" placeholder="Numero massimo di posti"
-            [(ngModel)]="data.camera.numMaxPosti"
-            (keyup)="changeMaxPosti($event)"
-            min="{{data.camera.numPostiLiberi}}">
+            <input matInput type="number" placeholder="Numero massimo di posti"
+                   [(ngModel)]="data.camera.numMaxPosti"
+                   (keyup)="changeMaxPosti($event)"
+                   min="{{data.camera.numPostiOccupati}}">
         </mat-form-field>
 
         <ng-template #labelTextNumMaxPosti>
@@ -121,7 +128,7 @@
                   <mat-label>Pazienti</mat-label>
                 </div>
 
-                <div class="col" *ngIf="data.editMode">
+                <div class="col-4" *ngIf="data.editMode">
                   <mat-form-field class="example-full-width" appearance="fill">
                     <input matInput
                            type="text"
@@ -139,7 +146,18 @@
                     </mat-autocomplete>
                   </mat-form-field>
                 </div>
-
+                <div class="col-2">
+                    <mat-label>Num. Letto</mat-label>
+                    <img src="../../../assets/info.svg"
+                         matTooltip="Numero posto letto"
+                         class="info">
+                </div>
+                <div class="col-3">
+                    <select class="input-cartelle" matNativeControl [(ngModel)]="inputBedField">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option *ngFor="let option of lettidisp" [value]="option">{{option}}</option>
+                    </select>
+                </div>
                 <div class="col-1 right" *ngIf="data.editMode && this.countPatientInCamera < this.data.camera.numMaxPosti">
                   <img src="../../../assets/add.svg" matTooltip="Associa paziente"
                        (click)="associaPatient()">
@@ -202,7 +220,7 @@
 
 <div mat-dialog-actions>
   <div class="bottom-actions">
-  <button mat-button [mat-dialog-close]="true" *ngIf="data.editMode">Salva</button>
-  <button mat-button [mat-dialog-close]="false">Chiudi</button>
+  <button mat-button [mat-dialog-close]="true" (click)="salva()" *ngIf="data.editMode">Salva</button>
+  <button mat-button [mat-dialog-close]="true">Chiudi</button>
 </div>
 </div>

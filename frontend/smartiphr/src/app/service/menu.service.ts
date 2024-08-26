@@ -16,6 +16,10 @@ export class MenuService {
     return this.http
       .get<Menu[]>(`${this.api}/api/menu`);
   }
+  getMenuAccess(): Observable<Menu[]> {
+    return this.http
+      .get<Menu[]>(`${this.api}/api/menu/access`);
+  }
 
   update(menu: Menu): Observable<Menu> {
     return this.http

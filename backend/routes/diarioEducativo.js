@@ -4,39 +4,21 @@ const DiarioEducativo = require("../models/diarioEducativo");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        // Ottieni i dati direttamente dal database
+        const eventi = await DiarioEducativo.find({
+            user: id,
+        });
 
-    const getData = () => {
-      return DiarioEducativo.find({
-        user: id,
-      });
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        // Rispondi con i dati ottenuti
+        res.status(200).json(eventi);
+    } catch (err) {
+        // Gestione degli errori
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `DIARIOEDUCATIVOBY${id}`;
-    redisClient.get(searchTerm, async (err, asps) => {
-      if (err) throw err;
-
-      if (asps) {
-        res.status(200).send(JSON.parse(asps));
-      } else {
-        const diario = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(diario));
-        res.status(200).json(diario);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
 
 router.post("/", async (req, res) => {
   try {

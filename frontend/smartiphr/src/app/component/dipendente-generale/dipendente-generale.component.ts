@@ -27,19 +27,16 @@ export class DipendenteGeneraleComponent implements OnInit {
 
 
   ngOnInit() {
-    console.log("Cartella generale dipendente: ", this.data);
     this.mansioniService.get().then((result) => {
       this.mansioni = result;
     });
   }
 
   async save() {
-    console.log("save: ", this.data);
     this.saveEmiter.emit(this.data);
   }
 
   async change() {
-    console.log("change: ", this.data);
     this.dataChange.emit(this.data);
   }
 

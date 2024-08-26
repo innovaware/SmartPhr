@@ -1,7 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
-import { Armadio, Contenuto, Indumento } from 'src/app/models/armadio';
+import { Armadio } from 'src/app/models/armadio';
 import { Paziente } from 'src/app/models/paziente';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -11,6 +11,14 @@ import { Camere } from 'src/app/models/camere';
 import { map, mergeMap } from 'rxjs/operators';
 import { Observable, of } from 'rxjs';
 import { MatSelectChange } from '@angular/material/select';
+import { MatTable, MatTableDataSource } from '@angular/material/table';
+import * as moment from 'moment';
+import { Indumento } from '../../models/indumento';
+import { IndumentiComponent } from '../indumenti/indumenti.component';
+import { DipendentiService } from '../../service/dipendenti.service';
+import { Dipendenti } from '../../models/dipendenti';
+import { DialogIndumentoComponent } from '../dialog-indumento/dialog-indumento.component';
+import { DialogVerificaArmadioComponent } from '../dialog-verifica-armadio/dialog-verifica-armadio.component';
 
 
 export interface Content {
@@ -27,254 +35,218 @@ export interface Content {
 export class DialogArmadioComponent implements OnInit {
 
   camera: Camere;
-  selectedPatient?: Paziente;
-
-  displayedColumnsIndumenti: string[] = [
-    "nome",
-    "quantita",
-    "note",
-    "paziente",
-    "action",
-  ];
-
-  displayedColumnsIndumentiByPatient: string[] = [
-    "nome",
-    "quantita",
-    "note",
-  ];
-
+  paziente?: Paziente;
   currentArmadio: Armadio;
 
   // dataSourceIndumenti: MatTableDataSource<Armadio | GroupBy>;
-  dataSourceIndumenti: Observable<Content[]>;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
-
+  //dataSource: Observable<Content[]>;
+  dataSource: MatTableDataSource<Indumento>;
+  @ViewChild("Indumenti", { static: false }) paginator: MatPaginator;
+  displayedColumns: string[] = ['name', 'quantity', 'load', 'unload', 'notes', 'date', 'operator', 'action'];
   //dataSourceIndumentiByPatient: MatTableDataSource<Armadio>;
-  dataSourceIndumentiByPatient: Observable<Indumento[]>;
-
+  currentMonth: moment.Moment = moment().locale("it");
   dataSourcePatients: Observable<Paziente[]>;
 
   statusCompleted: Number;
-
+  verificato: boolean;
+  lastusercheck: String;
+  lastcheck: Date;
   dataSourceRequest: Observable<Armadio[]>;
-
+  editEnable: Boolean;
   constructor(
     public dialogRef: MatDialogRef<DialogArmadioComponent>,
     private pazienteService: PazienteService,
     public dialog: MatDialog,
     private armadioService: ArmadioService,
     private messageService: MessagesService,
+    private dipendentiService: DipendentiService,
     private authenticationService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       camera: Camere;
+      paziente: Paziente;
     }) {
-      this.camera = data.camera;
-      console.log("Init DataSource Armadio");
-
-      this.dataSourceRequest = this.armadioService.getIndumenti(this.camera._id, new Date());
-      this.dataSourceRequest.subscribe(armadio=> {
-        if (armadio.length > 0) {
-          this.currentArmadio = armadio[0]
-        } else {
-          console.log("Armadio not defined. Creating new Item");
-          this.authenticationService.getCurrentUserAsync().subscribe(
-            (user)=>{
-              const date = new Date();
-              const dateStartRif = new Date(date.getFullYear(), date.getMonth(), 1);
-              const dateEndRif = new Date(date.setMonth(date.getMonth()+8));
-
-              this.armadioService.add({
-                idCamera: this.camera._id,
-                contenuto: [],
-                rateVerifica: 0,
-                pazienti: [],
-                lastChecked: {
-                  data: new Date(),
-                  idUser: user._id
-                },
-                dateStartRif: dateStartRif,
-                dateEndRif: dateEndRif,
-              }, "Creato armadio").subscribe(
-                result => {
-                  console.log("Armadio creato", result);
-                });
-          });
-
+    this.dataSource = new MatTableDataSource<Indumento>();
+    this.currentArmadio = new Armadio();
+    this.camera = data.camera;
+    if (data.paziente != new Paziente()) {
+      this.paziente = data.paziente;
+    }
+    this.editEnable = true;
+    this.loadIndumenti();
+    this.armadioService.getByPaziente(this.paziente._id)
+      .then((result: Armadio) => {
+        this.currentArmadio = result[0];
+        this.dataSource.data = this.currentArmadio.contenuto.filter(x => {
+          const dataCaricamento = moment(x.dataCaricamento); // Converti dataCaricamento in un oggetto moment
+          return dataCaricamento.isSame(this.currentMonth, 'month'); // Confronta mese e anno
+        });
+        if (this.currentArmadio.verified) {
+          this.verificato = true;
         }
-
-
-        if (this.currentArmadio !== undefined) {
-          this.currentArmadio.rateVerifica = 0;
-          this.calculateRateVerifica();
+        else {
+          this.verificato = false;
         }
+        this.dataSource.paginator = this.paginator;
+        this.lastusercheck = this.currentArmadio.lastChecked.idUser;
+        this.lastcheck = this.currentArmadio.lastChecked.datacheck;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento Armadio");
+        console.error(err);
       });
 
-      this.loadPatients();
-      this.loadIndumenti();
-
-    }
+  }
 
   ngOnInit() {
+    this.editEnable = true;
+    if (this.data.paziente != new Paziente()) {
+      this.paziente = this.data.paziente;
+    }
+    console.log(this.paziente);
+
   }
 
   save(model: Armadio) {
     console.log("Insert ElementoArmadio: ", model);
-    // this.armadioService
-    //   .insert(model)
-    //   .then((result: Armadio) => {
-    //     console.log("Insert ElementoArmadio: ", result);
-    //     this.elementiArmadio.push(result);
-    //     this.ElementiArmadioDataSource.data = this.elementiArmadio;
-    //     this.addingElementoArmadio = false;
-    //     this.uploadingElementoArmadio = false;
-    //   })
-    //   .catch((err) => {
-    //     this.messageService.showMessageError("Errore Inserimento ElementoArmadio");
-    //     console.error(err);
-    //   });
   }
 
   carico(item: Content) {
     item.indumento.quantita = item.indumento.quantita + 1;
     this.updateIndumenti(item, "Carico indumenti");
-    this.loadIndumentiByPatient(this.selectedPatient);
   }
 
   scarico(item: Content) {
     if (item.indumento.quantita - 1 >= 0) {
       item.indumento.quantita = item.indumento.quantita - 1;
       this.updateIndumenti(item, "Scarico indumenti");
-      this.loadIndumentiByPatient(this.selectedPatient);
     }
   }
 
   updateIndumenti(item: Content, note: string) {
-    this.currentArmadio.contenuto.forEach(contenuto=> {
-      const indumento = contenuto.items.find(i=> item.indumento._id === i._id);
+  }
 
-      if (indumento !== undefined) {
-        indumento.quantita = item.indumento.quantita;
-      }
-    })
+  loadMonthlyData() {
+    const currentDate = moment();
 
-    this.armadioService.update(this.currentArmadio, note)
-        .subscribe(result => {
-          //console.log("Update completed: ", result);
-        });
+    const currentMonthStart = currentDate.clone().startOf('month');
+    const nextMonthStart = currentMonthStart.clone().add(1, 'month');
+
+    if (this.currentMonth.isSameOrAfter(currentMonthStart) && this.currentMonth.isBefore(nextMonthStart)) {
+      this.editEnable = true;
+    }
+    else {
+      this.editEnable = false;
+    }
+    this.dataSource.data = this.currentArmadio.contenuto.filter(x => {
+      const dataCaricamento = moment(x.dataCaricamento); // Converti dataCaricamento in un oggetto moment
+      return dataCaricamento.isSame(this.currentMonth, 'month'); // Confronta mese e anno
+    });
+    this.dataSource.paginator = this.paginator;
+    this.lastusercheck = this.currentArmadio.lastChecked.idUser;
+    this.lastcheck = this.currentArmadio.lastChecked.datacheck;
+  }
+  previousMonth() {
+    this.currentMonth = moment(this.currentMonth)
+      .add(-1, "M")
+      .clone()
+      .startOf("month");
+    this.loadMonthlyData();
+  }
+
+  nextMonth() {
+    this.currentMonth = moment(this.currentMonth)
+      .add(1, "M")
+      .clone()
+      .startOf("month");
+    this.loadMonthlyData();
   }
 
 
+  details(row: Indumento) {
+    console.log(row);
+    var indumento: Indumento = new Indumento();
+    const contenuto = this.currentArmadio.contenuto;
+    for (var i: number = 0; i < contenuto.length; i++) {
+      if (contenuto[i].nome == row.nome) {
+        indumento = contenuto[i];
+        break;
+      }
+    }
+    if (indumento !== undefined) {
+      var dialogRef = this.dialog.open(DialogIndumentoComponent, {
+        data: {
+          armadioData: this.currentArmadio,
+          indumento: indumento
+        },
+        width: "600px",
+        height: "450px"
+      }).afterClosed()
+        .subscribe(result => {
+          this.dataSource.data = this.currentArmadio.contenuto.filter(x => {
+            const dataCaricamento = moment(x.dataCaricamento); // Converti dataCaricamento in un oggetto moment
+            return dataCaricamento.isSame(this.currentMonth, 'month'); // Confronta mese e anno
+          });
+          this.dataSource.paginator = this.paginator;
+          this.dipendentiService.getById(this.currentArmadio.lastChecked.idUser).then((resulta: Dipendenti) => {
+            this.lastusercheck = resulta.cognome + " " + resulta.nome;
+
+          });
+          this.lastcheck = this.currentArmadio.lastChecked.datacheck;
+        });
+    }
+  }
+
+  AddIndumento() {
+    var dialogRef = this.dialog.open(IndumentiComponent, {
+      data: {
+        armadioData: this.currentArmadio,
+        paziente: this.paziente
+      },
+      width: "1024px",
+      height: "768px"
+    }).afterClosed()
+      .subscribe(result => {
+        this.dataSource.data = this.currentArmadio.contenuto.filter(x => {
+          const dataCaricamento = moment(x.dataCaricamento); // Converti dataCaricamento in un oggetto moment
+          return dataCaricamento.isSame(this.currentMonth, 'month'); // Confronta mese e anno
+        });
+        this.dataSource.paginator = this.paginator;
+        this.lastusercheck = this.currentArmadio.lastChecked.idUser;
+        this.lastcheck = this.currentArmadio.lastChecked.datacheck;
+      });
+
+  }
+
   loadPatients() {
-    this.dataSourcePatients = this.dataSourceRequest.pipe(
-      map((armadio: Armadio[])=> {
 
-        const items = armadio.flatMap(a => a.contenuto.map(c=> {
-          return {
-            idPaziente: c.idPaziente,
-            verificato: c.verificato
-          }
-        })).filter( a=> !a.verificato)
-
-        return armadio.flatMap(p=> p.pazienti).filter(p=> items.findIndex(i=> i.idPaziente === p._id) >= 0);
-      })
-    );
   }
 
   loadIndumenti() {
-    this.dataSourceIndumenti = this.dataSourceRequest.pipe(
-      map((armadio: Armadio[])=>
-        armadio.map(a=> {
-          return {
-              ...a,
-              contenuto: a.contenuto.map( c=>
-              {
-                  return {
-                      ...c,
-                      paziente: a.pazienti.find(p=> p._id === c.idPaziente)
-                  }
-              })
-          }
-        })
-      ),
-      mergeMap((armadi: Armadio[])=> {
-        return armadi.map((a: Armadio) => a.contenuto);
-      }),
-      map((contenuto: Contenuto[]) => {
 
-        const data: Content[] = [];
-
-        contenuto.forEach(c=> {
-          c.items.forEach( i=> {
-            data. push({
-              indumento: i,
-              paziente: c.paziente
-            })
-          })
-        })
-
-        return data;
-      })
-
-    );
   }
 
   calculateRateVerifica() {
-    this.dataSourceRequest.subscribe( armadio => {
-      const countPatients = armadio.flatMap(a=> a.pazienti).length;
 
-      if (countPatients !== 0) {
-        this.currentArmadio.rateVerifica =  ( this.currentArmadio.contenuto.filter(c=> c.verificato).length / countPatients) * 100;
-      }
-    })
   }
 
 
-  async verifica() {
-    this.dataSourceRequest.subscribe( armadio => {
-      const countPatients = armadio.flatMap(a=> a.pazienti).length;
-
-      const contenutoByPatient = this.currentArmadio.contenuto.filter(contenuto=> contenuto.idPaziente === this.selectedPatient?._id);
-      if (contenutoByPatient.length > 0) {
-        contenutoByPatient[0].verificato = true;
-      }
-
-      this.currentArmadio.lastChecked = {
-        idUser: this.authenticationService.getCurrentUser()._id,
-        data: new Date()
-      };
-
-      if (countPatients !== 0) {
-        this.currentArmadio.rateVerifica =  ( this.currentArmadio.contenuto.filter(c=> c.verificato).length / countPatients) * 100;
-      }
-
-      this.armadioService.update(this.currentArmadio, "Verifica Armadio").subscribe(a => {
-        console.log("Update completed: ", a);
-
-        this.loadPatients();
-        this.dataSourceIndumentiByPatient = of([]);
-
-        this.calculateRateVerifica();
-      });
-    });
+  verifica() {
+    var dialogRef = this.dialog.open(DialogVerificaArmadioComponent, {
+      data: {
+        armadio: this.currentArmadio,
+      },
+      width: "600px",
+      height: "600px"
+    }).afterClosed()
+      .subscribe(
+        (result) => {
+          if (this.currentArmadio.verified) this.verificato = true;
+        }
+    );
   }
 
-  loadIndumentiByPatient(patient: Paziente) {
-    this.dataSourceIndumentiByPatient = this.dataSourceRequest.pipe(
-      map((armadi: Armadio[])=> {
-        if (armadi.length === 0) return [];
-        const armadio = armadi[0];
-
-        return armadio.contenuto.filter(i=> i.idPaziente === patient._id)
-      }),
-      map( (contenuto: Contenuto[]) => {
-        const result: Indumento[] = contenuto.flatMap(i=> i.items);
-        return result;
-      }));
-  }
 
   changePatient(event: MatSelectChange) {
-    const patient: Paziente = event.value as Paziente;
-    this.loadIndumentiByPatient(patient);
   }
 }

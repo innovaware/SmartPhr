@@ -87,15 +87,8 @@ router.post("/:id", async (req, res) => {
     const doc = new DocMedicinaLavoro({
       dipendente: id,
       filenameRichiesta: req.body.filenameRichiesta,
-      dateuploadRichiesta: Date.now(),
+      dateuploadRichiesta: new Date(),
       noteRichiesta: req.body.noteRichiesta,
-      filenameCertificato:
-        req.body.filenameCertificato != null
-          ? req.body.filenameCertificato
-          : "",
-      dateuploadCertificato:
-        req.body.filenameCertificato != null ? Date.now() : "",
-      noteCertificato: req.body.noteCertificato,
     });
 
     const result = await doc.save();
@@ -122,9 +115,9 @@ router.put("/documento/:id", async (req, res) => {
       { _id: id },
       {
         $set: {
-          dipendente: req.body.dipendente,
-          filename: req.body.filename,
-          note: req.body.note,
+              filenameCertificato: req.body.filenameCertificato,
+              dateuploadCertificato: new Date(),
+              noteCertificato: req.body.noteCertificato,
         },
       }
     );

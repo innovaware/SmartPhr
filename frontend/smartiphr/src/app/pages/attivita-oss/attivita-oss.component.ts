@@ -35,7 +35,6 @@ export class AttivitaOssComponent implements OnInit {
       .getAllAttivita()
       .then((f: Attivita[]) => {
         this.attivita = f;
-        console.log(`get attivita: ` + JSON.stringify(this.attivita));
         this.attivitaDataSource = new MatTableDataSource<Attivita>(
           this.attivita
         );

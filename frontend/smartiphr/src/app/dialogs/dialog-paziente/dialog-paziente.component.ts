@@ -172,9 +172,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(document.name, this.paziente._id, '')
       .then((x) => {
-        //console.log("download: ", x);
+        //
         x.subscribe((data) => {
-           console.log("download: ", data);
+           
            const newBlob = new Blob([data as BlobPart], {
              type: "application/pdf",
            });
@@ -261,9 +261,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.paziente._id, 'fatture')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -312,6 +312,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    if (!fattura.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     console.log("saveFattura: ", fattura);
     const typeDocument = "FATTURE";
     const path = "fatture";
@@ -360,9 +364,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(notacredito.filename, this.paziente._id, 'notacredito')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -434,6 +438,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveNotaCredito(notacredito: NotaCredito) {
+    if (!notacredito.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     console.log("saveNotaCredito: ", notacredito);
     const typeDocument = "NOTACREDITO";
     const path = "notacredito";
@@ -522,6 +530,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveBonifico(bonifico: Bonifico) {
+    if (!bonifico.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
@@ -583,9 +595,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.paziente._id, 'bonifico')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });

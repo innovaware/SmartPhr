@@ -1,0 +1,30 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Sicurezza - Verifica Ascensori</h1>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <mat-tab-group mat-align-tabs="start">
+
+    <mat-tab label="Certificato conformità impianto">
+        <app-upload-doc [dipendente]=dipendente [tipo]=Certificato></app-upload-doc>
+    </mat-tab>
+
+    <mat-tab label="Rapporto intervento">
+        <app-upload-doc [dipendente]=dipendente [tipo]=Rapporto></app-upload-doc>
+    </mat-tab>
+    
+    <mat-tab label="Verifica biennale">
+        <app-upload-doc [dipendente]=dipendente [tipo]=VerificaBiennale></app-upload-doc>
+    </mat-tab>
+    
+  </mat-tab-group>
+
+
+</div>

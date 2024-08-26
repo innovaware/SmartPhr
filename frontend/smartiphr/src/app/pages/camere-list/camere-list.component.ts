@@ -21,6 +21,7 @@ export class CamereListComponent implements OnInit {
     "camera",
     "piano",
     "numPostiLiberi",
+    "numPostiOccupati",
     "numMaxPosti",
     "action",
   ];
@@ -74,7 +75,7 @@ export class CamereListComponent implements OnInit {
         camera: camera,
         editMode: false
       },
-      width: "600px",
+      width: "900px",
     })
     .afterClosed();
   }
@@ -90,14 +91,17 @@ export class CamereListComponent implements OnInit {
         editMode: true
       },
       //disableClose: true,
-      width: "600px",
+      width: "900px",
     })
     .afterClosed()
     .subscribe( result => {
       //console.log("Closed Camera Dialog: ", result);
         if (result) {
           Camere.copy(cameraEdit, camera)
-
+          if (cameraEdit.numMaxPosti < cameraEdit.numPostiOccupati) {
+            cameraEdit.numMaxPosti = cameraEdit.numPostiOccupati;
+            cameraEdit.numPostiLiberi = 0;
+          }
           this.camereService.update(cameraEdit)
           .subscribe( result => {
             console.log("Aggiornamento camera eseguito con successo");

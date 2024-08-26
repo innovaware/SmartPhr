@@ -1,34 +1,23 @@
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
+const indumenti = require("./indumenti");
 
 const ArmadioSchema = mongoose.Schema({
     idCamera: ObjectId,
-    // indumento: {
-    //     idPaziente: ObjectId,
-    //     nome: String,
-    //     quantita: Number,
-    //     note: String,
-    //   },
-    
-    contenuto: [
-      {
-        idPaziente: ObjectId,
-        verificato: Boolean,
-        items: [{
-          nome: String,
-          quantita: Number,
-          note: String,
-        }]
-      }
-    ],
-  
+    pazienteId: ObjectId,
+    contenuto: [{
+        type: mongoose.Schema.Types.Mixed,
+        ref: 'indumenti'
+    }],
     lastChecked: {
-      idUser: ObjectId,
-      data: Date,
+      idUser: String,
+      datacheck: Date,
     },
-
+    verified: Boolean,
+    stagionale: Boolean,
     rateVerifica: Number,
-
+    cancellato: Boolean,
+    DataEliminazione: Date,
     dateStartRif: Date,
     dateEndRif: Date
   

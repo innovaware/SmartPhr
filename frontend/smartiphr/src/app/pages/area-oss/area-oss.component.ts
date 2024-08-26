@@ -1,6 +1,6 @@
 import { Component, OnInit } from "@angular/core";
 import { MatDialog } from "@angular/material/dialog";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, of } from "rxjs";
 import { DialogArmadioComponent } from "src/app/dialogs/dialog-armadio/dialog-armadio.component";
 import { DialogAttivitaComponent } from "src/app/dialogs/dialog-attivita/dialog-attivita.component";
 import { DialogPreIngressoComponent } from "src/app/dialogs/dialog-pre-ingresso/dialog-pre-ingresso.component";
@@ -11,6 +11,7 @@ import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { CamereService } from "src/app/service/camere.service";
 import { Camere } from "src/app/models/camere";
+import { catchError } from "rxjs/operators";
 
 @Component({
   selector: 'app-area-oss',
@@ -40,30 +41,30 @@ export class AreaOssComponent implements OnInit {
     this.customButtons = [];
     console.log("Init Area OSS");
 
-   /* this.customButtons.push({
-      images: "../../../assets/medico.svg",
-      label: "Pre-ingresso",
-      tooltip: "Pre-ingresso",
-      cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogPreIngressoComponent, {
-            data: { paziente: paziente, readonly: false },
-            width: "1024px",
-          })
-          .afterClosed()
-          .subscribe((data: Paziente) => {
-            if (data != undefined || data) {
-              this.pazienti.push(data);
-
-              const index = this.pazienti.indexOf(paziente, 0);
-              if (index > -1) {
-                this.pazienti.splice(index, 1);
-                console.log("Removed item");
-              }
-              this.eventsSubject.next(this.pazienti);
-            }
-          }),
-      //css: "mat-raised-button raised-button action-button",
-    });*/
+    /* this.customButtons.push({
+       images: "../../../assets/medico.svg",
+       label: "Pre-ingresso",
+       tooltip: "Pre-ingresso",
+       cmd: (paziente: Paziente) =>
+         this.dialog.open(DialogPreIngressoComponent, {
+             data: { paziente: paziente, readonly: false },
+             width: "1024px",
+           })
+           .afterClosed()
+           .subscribe((data: Paziente) => {
+             if (data != undefined || data) {
+               this.pazienti.push(data);
+ 
+               const index = this.pazienti.indexOf(paziente, 0);
+               if (index > -1) {
+                 this.pazienti.splice(index, 1);
+                 console.log("Removed item");
+               }
+               this.eventsSubject.next(this.pazienti);
+             }
+           }),
+       //css: "mat-raised-button raised-button action-button",
+     });*/
 
     this.customButtons.push({
       images: "../../../assets/entrance.svg",
@@ -88,32 +89,34 @@ export class AreaOssComponent implements OnInit {
     });
 
 
-
     this.customButtons.push({
       images: "../../../assets/wardrobe.svg",
       label: "",
       tooltip: "Armadio",
-      cmd: (paziente: Paziente) =>
-
-      this.cameraService.get(paziente.idCamera).subscribe(
-        (camera: Camere) => {
-          this.dialog.open(DialogArmadioComponent, {
-            data: { camera: camera },
-            width: "1024px",
+      cmd: (paziente: Paziente) => {
+        let bedroom = undefined;
+        this.cameraService.get(paziente.idCamera).pipe(
+          catchError(error => {
+            if (error.status === 500) {
+              this.messageService.showMessageError(`Il paziente non ha ancora una camera assegnata!!!`);
+            }
+            return of(null);
           })
-        }
-      )
+        ).subscribe(
+          (camera: Camere) => {
+            if (camera) {
+              this.dialog.open(DialogArmadioComponent, {
+                data: {
+                  camera: camera,
+                  paziente: paziente
+                },
+                width: "1024px",
+              });
+            }
+          }
+        );
+      }
     });
 
-
-
-  /*  this.pazienteService.getPazienti().then((paz: Paziente[]) => {
-      this.pazienti = paz;
-
-      this.eventsSubject.next(this.pazienti);
-    });*/
-
-
   }
-
 }

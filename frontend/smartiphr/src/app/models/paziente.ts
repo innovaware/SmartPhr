@@ -45,6 +45,7 @@ export class Paziente {
     dst.diagnosiingresso = src.diagnosiingresso;
     dst.allergie = src.allergie;
 
+    dst.obiettiviPAI = src.obiettiviPAI;
 
     dst.schedaAssSociale = src.schedaAssSociale;
     dst.schedaEducativa = src.schedaEducativa;
@@ -93,6 +94,7 @@ export class Paziente {
   areaRiabilitativa: AreaRiabilitativa;
   areaRiabilitativaProgramma: AreaRiabilitativaProgramma;
   areaRiabilitativaDiario: AreaRiabilitativaDiario[];
+  obiettiviPAI?: String;
 
   dimissione?: {
     typeDimissione: string,
@@ -120,6 +122,7 @@ export class Paziente {
     this.provenienza = paziente.provenienza;
     this.comuneNascita = paziente.comuneNascita;
     this.idCamera = paziente.idCamera;
+    this.obiettiviPAI = paziente.obiettiviPAI;
   }
 
   constructor() {
@@ -142,6 +145,7 @@ export class Paziente {
     this.comuneNascita= "";
     this.provinciaNascita= "";
     this.idCamera = undefined;
+    this.obiettiviPAI = "";
 
   }
 

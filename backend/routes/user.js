@@ -99,43 +99,49 @@ router.get("/", async (req, res) => {
  * Ritorna informazioni dell'utente 
  */
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  redisClient = req.app.get("redis");
-  redisDisabled = req.app.get("redisDisabled");
-  
-  /**
-   * Ritorna informazioni dell'utente utilizzando l'id
-   * @param {*} id 
-   * @returns models/user.js
-   */
-  const getDataById = (id) => {
-    return User.findById(id);
-  };
+    const { id } = req.params;
 
-  try {
-    if (redisClient == undefined || redisDisabled) {
-      const users = await getDataById(id);
-      res.status(200).json(users);
+    /**
+     * Returns user information using the id
+     * @param {*} id 
+     * @returns models/user.js
+     */
+    const getDataById = (id) => {
+        return User.findById(id);
+    };
 
-    } else {
-      const searchTerm = `USERBY${id}`;
-      redisClient.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-
-        if (data) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          const user = await getDataById(id);
-          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(user));
-          res.status(200).json(user);
-
-        }
-      });
+    try {
+        const user = await getDataById(id);
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
+
+/**
+ * Ritorna informazioni dell'utente mediante DipendenteID
+ */
+router.get("/dipendente/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+
+        // Funzione per ottenere i dati dal database
+        const getData = async () => {
+            return await User.find({ dipendenteID: id });
+        };
+
+        // Ottieni i dati dal database
+        const user = await getData();
+        console.log("user: ",user);
+        // Invia i dati come risposta
+        res.status(200).json(user);
+    } catch (err) {
+        // Gestione degli errori
+        res.status(500).json({ Error: err.message });
+    }
+});
+
 
 /**
  * Login utente

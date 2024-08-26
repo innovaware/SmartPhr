@@ -1,0 +1,97 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>INDUMENTI Ingresso del paziente: {{data.paziente.nome}} {{data.paziente.cognome}}</h3>
+            </div>
+            <div class="col">
+                <button class="close-button" [mat-dialog-close]="true">
+                    ×
+                </button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-dialog-content>
+    <div class="row">
+        <div class="col">
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="noninelenco" [(ngModel)]="noninelenco" (change)="change()">
+                <label class="form-check-label" for="noninelenco">Non in elenco</label>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <hr />
+        </div>
+    </div>
+    <div class="container-fluid">
+        <div class="row">
+            <ng-container *ngIf="!enablenote">
+                <div class="col">
+                    <mat-form-field appearance="fill" style="display: unset;">
+                        <mat-label>Seleziona l'indumento</mat-label>
+                        <mat-select [(ngModel)]="selectedAddingIndumento">
+                            <mat-option *ngFor="let item of indumenti" [value]="item._id + '/' + item.nome ">{{ item.nome }}</mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+                <div class="col">
+                    <mat-form-field appearance="fill" style="display: unset;">
+                        <mat-label>Seleziona la quantit&agrave;</mat-label>
+                        <input matInput type="number" placeholder="Quantit&agrave;" min="0" [(ngModel)]="selectedQtaIndumento">
+                    </mat-form-field>
+                </div>
+            </ng-container>
+            <ng-container *ngIf="enablenote">
+                <div class="col">
+                    <mat-form-field appearance="fill" style="display: unset;">
+                        <mat-label>Seleziona la quantit&agrave;</mat-label>
+                        <input matInput type="number" placeholder="Quantit&agrave;" min="0" [(ngModel)]="selectedQtaIndumento">
+                    </mat-form-field>
+                </div>
+            </ng-container>
+        </div>
+
+        <ng-container *ngIf="!enablenote">
+            <div class="row">
+                <div class="col">
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="richiesto" [(ngModel)]="richiesto" (change)="changemi()">
+                        <label class="form-check-label" for="richiesto">Richiesto</label>
+                    </div>
+                </div>
+
+                <div class="col">
+                    <ng-container *ngIf="enableconf">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="conforme" [(ngModel)]="conforme">
+                            <label class="form-check-label" for="conforme">Conforme</label>
+                        </div>
+                    </ng-container>
+                </div>
+            </div>
+        </ng-container>
+        <div class="row">
+            <div class="col">
+                <ng-container *ngIf="enablenote">
+                    <mat-form-field>
+                        <textarea matInput rows="1" [(ngModel)]="note" placeholder="Note"></textarea>
+                    </mat-form-field>
+                </ng-container>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<mat-dialog-actions class="bottom-actions">
+    <button mat-button (click)="AddIndumento()">Inserisci</button>
+</mat-dialog-actions>
+

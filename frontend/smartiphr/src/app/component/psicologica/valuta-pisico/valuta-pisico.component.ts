@@ -10,6 +10,7 @@ import { schedaPsico } from 'src/app/models/schedaPsico';
 })
 export class ValutaPisicoComponent implements OnInit {
   @Input() schedaPsico: schedaPsico;
+  @Input() disable: Boolean;
 
   constructor() { }
 

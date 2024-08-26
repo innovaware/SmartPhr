@@ -6,7 +6,8 @@ const PresenzeSchema = mongoose.Schema({
     oraFine: String,
     turno: String,
     mansione: mongoose.Types.ObjectId,
-    user: mongoose.Types.ObjectId
+    user: mongoose.Types.ObjectId,
+    note: String
 });
 
 module.exports = mongoose.model("Presenze", PresenzeSchema, "presenze");

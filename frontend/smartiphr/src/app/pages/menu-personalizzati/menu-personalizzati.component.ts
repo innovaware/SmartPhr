@@ -1,17 +1,18 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
-import { from } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { DialogArchivioMenuPersonalizzatoComponent } from 'src/app/dialogs/dialog-archivio-menu-personalizzato/dialog-archivio-menu-personalizzato.component';
 import { DialogMenuPersonalizzatoComponent } from 'src/app/dialogs/dialog-menu-personalizzato/dialog-menu-personalizzato.component';
-import { CucinaMenuPersonalizzato } from 'src/app/models/CucinaMenuPersonalizzato';
+import { CucinaPersonalizzato } from 'src/app/models/cucinaPersonalizzato';
 import { MenuPersonalizzatiView } from 'src/app/models/MenuPersonalizzatoView';
 import { Paziente } from 'src/app/models/paziente';
-import { CucinaService } from 'src/app/service/cucina.service';
+import { CucinaPersonalizzatoService } from '../../service/cucinaMenuPersonalizzato.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
+import { ItemMenuPersonalizzato } from '../../models/itemMenuPersonalizzato';
+import { ArchivioMenuCucinaPersonalizzatoService } from '../../service/archivioMenuCucinaPersonalizzato.service';
+import { ArchivioMenuCucinaPersonalizzato } from '../../models/archivioMenuCucinaPersonalizzato';
 
 @Component({
   selector: 'app-menu-personalizzati',
@@ -23,132 +24,66 @@ export class MenuPersonalizzatiComponent implements OnInit {
   displayedColumns: string[] = [
     "cognome",
     "nome",
-    "codiceFiscale",
-    "data",
-    "descrizione",
+    "dataCreazione",
+    "dataUltimaModifica",
     "action",
   ];
 
-  dataSourceCucinaPersonalizzato: MatTableDataSource<MenuPersonalizzatiView>;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  public dataSourceCucinaPersonalizzato = new MatTableDataSource<ItemMenuPersonalizzato>();
+  @ViewChild("menuPersonalizzato", { static: false }) paginator: MatPaginator;
+  public dataSourceArchvioCucina = new MatTableDataSource<ArchivioMenuCucinaPersonalizzato>();
+  @ViewChild("archvioCucina", { static: false }) paginatorArchivio: MatPaginator;
 
   constructor(
-    private cucinaService: CucinaService,
+    private cucinaService: CucinaPersonalizzatoService,
     private pazientiService: PazienteService,
+    private ArchivioServ: ArchivioMenuCucinaPersonalizzatoService,
     private dialog: MatDialog,
-    private messageService: MessagesService
+    private messageService: MessagesService,
+    private changeDetectorRefs: ChangeDetectorRef
   ) { }
 
-  ngOnInit(): void {
-    from(this.pazientiService.getPazienti())
-      .pipe(
-        map((pazienti: Paziente[])=> {
-          return pazienti.map(p => {
-            return {
-              idPaziente: p._id,
-              nome: p.nome,
-              codiceFiscale: p.codiceFiscale,
-              cognome: p.cognome,
-              menuPersonalizzato: undefined
-            }
-          });
-        }),
-        map( (it: MenuPersonalizzatiView[])=> {
-
-          this.cucinaService.getAll()
-              .subscribe((items: CucinaMenuPersonalizzato[])=> {
-                it.forEach(i=> {
-                  return {
-                    ...i,
-                    menuPersonalizzato: items
-                                  .sort((a: CucinaMenuPersonalizzato, b: CucinaMenuPersonalizzato) => <any>a.data - <any>b.data)
-                                  .find(x=> x.idPaziente === i.idPaziente)
-                  }
-                });
-          })
-
-          return it;
-        })
-      )
-      .subscribe(
-        (items: MenuPersonalizzatiView[]) => {
-          this.cucinaService.getAll()
-              .subscribe((lavs: CucinaMenuPersonalizzato[])=> {
-                lavs.forEach(i=> {
-                  const itemView = items.find(x=> x.idPaziente === i.idPaziente);
-                  itemView.menuPersonalizzato = i;
-                });
-
-                this.dataSourceCucinaPersonalizzato= new MatTableDataSource(items);
-                this.dataSourceCucinaPersonalizzato.paginator = this.paginator;
-              });
-        }
-      )
-
-
+  ngOnInit() {
+    this.getItemMenu();
+    this.getArchivio();
   }
 
-
-  add(element: MenuPersonalizzatiView) {
-    var dialogRef = this.dialog.open(DialogMenuPersonalizzatoComponent, {
-      width: "600px",
+  addPaziente() {
+    const dialogRef = this.dialog.open(DialogMenuPersonalizzatoComponent, {
+      width: `${window.screen.width}px`,
       data: {
-        paziente: {
-          nome: element.nome,
-          cognome: element.cognome,
-          codiceFiscale: element.codiceFiscale,
-          menuPersonalizzato: element.menuPersonalizzato
-        }
+        paziente: new Paziente(),
+        menu: new CucinaPersonalizzato(),
+        add: true,
+        readOnly: false
       }
     });
 
-
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((
-        result: {
-          note: string;
-          date: Date;
-          colazione: string;
-          pranzo: string;
-          cena: string;
-        }) => {
-        if(result != null && result != undefined){
-          const cucinaMenuPersonalizzato: CucinaMenuPersonalizzato = {
-            data: result.date,
-            descrizione: result.note,
-            idPaziente: element.idPaziente,
-            menuCena: result.cena,
-            menuColazione: result.colazione,
-            menuPranzo: result.pranzo
-          }
-
-          this.cucinaService.add(cucinaMenuPersonalizzato)
-              .subscribe( result => {
-                  console.log("Salvataggio eseguito con successo", result);
-                  this.messageService.showMessageError("Aggiornato correttamente");
-                  if (!element.menuPersonalizzato) {
-                      element.menuPersonalizzato = {
-                        data: result.data,
-                        descrizione: result.descrizione,
-                        idPaziente: element.idPaziente,
-                        menuCena: result.menuCena,
-                        menuColazione: result.menuColazione,
-                        menuPranzo:result.menuPranzo
-                      }
-                  } else {
-                    element.menuPersonalizzato.data = result.data;
-                    element.menuPersonalizzato.descrizione = result.descrizione;
-                    element.menuPersonalizzato.menuColazione = result.menuColazione;
-                    element.menuPersonalizzato.menuPranzo = result.menuPranzo;
-                    element.menuPersonalizzato.menuCena = result.menuCena;
-                  }
-              },
-              err => {
-                console.error("Errore inserimento", err);
-                this.messageService.showMessageError("Errore Aggiornamento");
-              });
-        }
+    if (dialogRef) {
+      dialogRef.afterClosed().subscribe(() => {
+        this.getItemMenu();
+        this.getArchivio();
       });
+    }
+  }
+
+  editPaziente(row: ItemMenuPersonalizzato) {
+    const dialogRef = this.dialog.open(DialogMenuPersonalizzatoComponent, {
+      width: `${window.screen.width}px`,
+      data: {
+        paziente: row.paziente,
+        menu: row.cucina,
+        add: false,
+        readOnly: false
+      }
+    });
+
+    if (dialogRef) {
+      dialogRef.afterClosed().subscribe(() => {
+        this.getItemMenu();
+        this.getArchivio();
+      });
+    }
   }
 
   applyFilter(event: Event) {
@@ -157,11 +92,10 @@ export class MenuPersonalizzatiComponent implements OnInit {
   }
 
   cleanSearchField() {
-    this.dataSourceCucinaPersonalizzato.filter = undefined;
+    this.dataSourceCucinaPersonalizzato.filter = '';
   }
 
   archiveMenuPersonalizzato(element: MenuPersonalizzatiView) {
-    // Apertura dialog menu personalizzato
     this.dialog.open(DialogArchivioMenuPersonalizzatoComponent, {
       width: `${window.screen.width}px`,
       data: {
@@ -169,5 +103,77 @@ export class MenuPersonalizzatiComponent implements OnInit {
       }
     });
   }
-}
 
+  getItemMenu() {
+    this.dataSourceCucinaPersonalizzato.data = [];
+    let items: ItemMenuPersonalizzato[] = [];
+
+    this.cucinaService.getCucinaPersonalizzato().subscribe((res: CucinaPersonalizzato[]) => {
+      const activeItems = res.filter(x => x.active);
+
+      console.log('Active Items:', activeItems); // Debugging output
+
+      activeItems.forEach((cucinaItem) => {
+        let item = new ItemMenuPersonalizzato();
+        item.cucina = [];
+        this.pazientiService.getPaziente(cucinaItem.paziente.valueOf()).then((paziente: Paziente) => {
+          let existingItem = items.find(z => z.paziente._id == paziente[0]._id);
+          if (existingItem) {
+            const index = items.indexOf(existingItem);
+            existingItem.cucina.push(cucinaItem);
+            items[index] = existingItem;
+          } else {
+            item.paziente = paziente[0];
+            item.cucina.push(cucinaItem);
+            item.active = cucinaItem.active;
+            item.data = cucinaItem.dataCreazione;
+            item.dataUM = cucinaItem.dataUltimaModifica;
+            items.push(item);
+          }
+        }).finally(() => {
+          // Ensure this part runs after all promises are resolved
+          this.dataSourceCucinaPersonalizzato.data = items;
+          this.dataSourceCucinaPersonalizzato.paginator = this.paginator;
+          this.changeDetectorRefs.detectChanges();
+          console.log('Final Data Source:', this.dataSourceCucinaPersonalizzato.data); // Debugging output
+        });
+      });
+    });
+  }
+
+  getArchivio() {
+    this.ArchivioServ.get().subscribe((res: ArchivioMenuCucinaPersonalizzato[]) => {
+      if (res.length > 0 && res != undefined) {
+        this.dataSourceArchvioCucina.data = res;
+        this.dataSourceArchvioCucina.paginator = this.paginatorArchivio;
+      }
+    });
+  }
+
+  viewMenu(row: ArchivioMenuCucinaPersonalizzato) {
+    this.pazientiService.getPaziente(row.paziente.valueOf()).then((res: Paziente) => {
+      const paziente = res[0];
+      console.log("paziente: ", paziente);
+
+      const dialogRef = this.dialog.open(DialogMenuPersonalizzatoComponent, {
+        width: `${window.screen.width}px`,
+        data: {
+          paziente: paziente,
+          menu: row.menu,
+          add: false,
+          readOnly: true
+        }
+      });
+
+      if (dialogRef) {
+        dialogRef.afterClosed().subscribe(() => {
+          this.getItemMenu();
+          this.getArchivio();
+        });
+      }
+    }).catch(error => {
+      console.error("Error fetching paziente:", error);
+    });
+  }
+
+}

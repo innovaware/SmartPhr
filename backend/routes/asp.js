@@ -5,36 +5,21 @@ const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        // Get the redisDisabled flag from the app settings
+        const redisDisabled = req.app.get("redisDisabled");
 
-    const getData = () => {
-      return ASP.find();
-    };
+        const getData = () => {
+            return ASP.find();
+        };
 
-    if (redisClient == undefined || redisDisabled) {
-      const asp = await getData();
-      res.status(200).json(asp);
-      return;
-    }
-
-    const searchTerm = "ASPALL";
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+        // Fetch data directly if Redis is disabled or undefined
         const asp = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(asp));
         res.status(200).json(asp);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
 });
 
 router.get("/:id", async (req, res) => {

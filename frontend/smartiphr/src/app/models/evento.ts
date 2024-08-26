@@ -7,4 +7,8 @@ export class Evento {
   utente: string;
   tipo: string;
   descrizione: string;
+  visibile?: Boolean;
+  finito?: Boolean;
+  dataCreazione?: Date;
+  dataCompletato?: Date;
 }

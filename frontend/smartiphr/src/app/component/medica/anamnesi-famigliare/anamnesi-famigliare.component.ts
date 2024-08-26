@@ -10,7 +10,7 @@ import { schedaAnamnesiFamigliare } from 'src/app/models/schedaAnamnesiFamigliar
 export class AnamnesiFamigliareComponent implements OnInit {
 
   @Input() data: schedaAnamnesiFamigliare;
-
+  @Input() disable: Boolean;
   constructor() {}
 
   ngOnInit() {

@@ -8,6 +8,7 @@ import { schedaEsameNeurologia } from 'src/app/models/schedaEsameNeurologia';
 })
 export class EsameNeurologicaComponent implements OnInit {
   @Input() data: schedaEsameNeurologia;
+  @Input() disable: Boolean;
 
   constructor() {}
 

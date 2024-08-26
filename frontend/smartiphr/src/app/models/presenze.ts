@@ -13,5 +13,6 @@ export class Presenze {
   cognome?: string;
   cf?: string;
   mansione?: string;
+  note?: String;
 }
 

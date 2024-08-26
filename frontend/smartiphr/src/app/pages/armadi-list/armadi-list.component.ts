@@ -9,6 +9,14 @@ import { User } from 'src/app/models/user';
 import { CamereService } from 'src/app/service/camere.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { UsersService } from 'src/app/service/users.service';
+import { ArmadioService } from '../../service/armadio.service';
+import { PazienteService } from '../../service/paziente.service';
+import { Paziente } from '../../models/paziente';
+import { Observable } from 'rxjs';
+import { Armadio } from '../../models/armadio';
+import { itemDialog } from '../../models/itemDialog';
+import { AuthenticationService } from '../../service/authentication.service';
+import { DipendentiService } from '../../service/dipendenti.service';
 
 
 @Component({
@@ -20,67 +28,87 @@ export class ArmadiListComponent implements OnInit {
   piano: string = "2p";
 
   displayedColumns: string[] = [
+    "paziente",
     "camera",
+    "armadio",
     "armadioCheck",
     "dataArmadioCheck",
     "firmaArmadio",
     "action",
   ];
-  dataSourceCamere: MatTableDataSource<Camere>;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
 
 
+  itemDialog: itemDialog[];
+  dataSource: MatTableDataSource<itemDialog>;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
+  pazienti: Paziente[];
+  paziente: Paziente;
+  camere: Camere[];
+  armadioCheck: boolean;
+  dataCheck: Date;
+  userCheck: String;
   constructor(
     public dialog: MatDialog,
     private camereService: CamereService,
+    private armadioService: ArmadioService,
+    private pazienteService: PazienteService,
     private messageService: MessagesService,
-    private userService: UsersService
-  ) { }
+    private dipendentiService: DipendentiService
+  ) {
+    this.dataSource = new MatTableDataSource<itemDialog>();
+  }
 
   ngOnInit(): void {
+    this.itemDialog = []
     this.refresh();
   }
 
   refresh() {
-    this.camereService.getByPiano(this.piano)
-    .pipe(
-      map( (x: any[])=>
-          x.filter(c=> c.forPatient === true).sort((o1, o2)=> o1.order - o2.order)),
-      map( (x: any[])=>
-          x.map( c => {
-            return {
-              ...c,
-              firmaArmadio: c.firmaArmadio.length >0 ? c.firmaArmadio[0]._id : undefined,
-              userArmadio: c.firmaArmadio.length >0 ? c.firmaArmadio[0] : undefined,
-              geometryObject: JSON.parse(c.geometry)
-            };
-          })),
-    )
-    .subscribe(
-      (camere: Camere[]) => {
-        // console.log("camere:", camere);
+    this.itemDialog = [];
+    this.pazienteService.getPazienti().then((result: Paziente[]) => {
+      const pazientiConCamera = result.filter(x => x.idCamera !== undefined && x.idCamera !== null);
 
-        this.dataSourceCamere = new MatTableDataSource<Camere>(camere);
-        this.dataSourceCamere.paginator = this.paginator;
-      },
+      const promises = pazientiConCamera.map((p: Paziente) => {
+        const item = new itemDialog();
+        item.paziente = p;
 
-      err => {
-        console.error("Error loading camere: ", err);
-        this.messageService.showMessageError("Errore nel recuperare lista delle camere");
-      }
-    );
-
+        return this.armadioService.getByPaziente(p._id).then((resulta: Armadio) => {
+          item.armadio = resulta;
+          item.verified = resulta[0].verified;
+          item.datacheck = resulta[0].lastChecked.datacheck;
+          item.Firmacheck = resulta[0].lastChecked.idUser;
+          console.log("item.armadio: ",item.armadio[0]);
+          //item.datacheck = ;
+          return this.camereService.get(p.idCamera).toPromise().then((resulto: Camere) => {
+            item.camera = resulto;
+            this.itemDialog.push(item);
+          });
+        });
+      });
+      console.log(this.itemDialog);
+      Promise.all(promises).then(() => {
+        this.dataSource.data = this.itemDialog.sort((a, b) => new Date(b.datacheck).getTime() - new Date(a.datacheck).getTime());
+        this.dataSource.paginator = this.paginator;
+      }).catch(error => {
+        console.error('Errore durante il caricamento dei dati:', error);
+      });
+    }).catch(error => {
+      console.error('Errore durante il recupero dei pazienti:', error);
+    });
   }
 
-  verifica(camera: Camere) {
+
+  verifica(item: itemDialog) {
     this.dialog.open(DialogArmadioComponent, {
-      data: { camera: camera },
+      data: {
+        camera: item.camera,
+        paziente: item.paziente
+      },
       width: "1024px",
       height: "800px"
     }).afterClosed().subscribe(
       result => {
         this.refresh();
-    });
+      });
   }
-
 }

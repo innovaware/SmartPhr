@@ -15,7 +15,7 @@ export class LavanderiaView {
   idDipendente: string;
   cognome: string;
   nome: string;
-  codiceFiscale: string;
+  codiceFiscale?: string;
   lavanderia: Lavanderia;
 }
 
@@ -29,7 +29,6 @@ export class LavanderiaComponent implements OnInit {
   displayedColumns: string[] = [
     "cognome",
     "nome",
-    "codiceFiscale",
     "data",
     "descrizione",
     "operazione"
@@ -61,7 +60,7 @@ export class LavanderiaComponent implements OnInit {
             from(this.dipendenteService.getById(idDipendente))
               .subscribe( (dipendente: Dipendenti) => {
                 itemsView.push({
-                  codiceFiscale: dipendente.cf,
+                 // codiceFiscale: dipendente.cf,
                   cognome: dipendente.cognome,
                   nome: dipendente.nome,
                   idDipendente: idDipendente,
@@ -85,7 +84,7 @@ export class LavanderiaComponent implements OnInit {
   add(tipologia: TypeOperationLavanderia) {
     this.authenticationService.getCurrentUserAsync()
         .subscribe( (user) => {
-          from(this.dipendenteService.getByIdUser(user._id))
+          from(this.dipendenteService.getByIdUser(user.dipendenteID))
               .subscribe( (dipendente: Dipendenti) => {
 
                 var dialogRef = this.dialog.open(DialogLavanderiaComponent, {

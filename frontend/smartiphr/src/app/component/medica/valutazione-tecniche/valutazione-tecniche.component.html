@@ -21,7 +21,12 @@
           <mat-card-title>VALUTAZIONE EDUCATIVA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150"  readonly  [(ngModel)]="data.schedaEducativa.valutazioneEducativa.valutazione"></textarea>
+          <ng-container *ngIf="data.schedaEducativa!=null && data.schedaEducativa!=undefined && data.schedaEducativa.valutazioneEducativa!=null && data.schedaEducativa.valutazioneEducativa!=undefined">
+            <textarea class="form-control value_input" rows="1" cols="150" readonly [(ngModel)]="data.schedaEducativa.valutazioneEducativa.valutazione"></textarea>
+          </ng-container>
+          <ng-container *ngIf="data.schedaEducativa==null || data.schedaEducativa==undefined">
+            <textarea class="form-control value_input" rows="1" cols="150" readonly></textarea>
+          </ng-container>
         </mat-card-content>
       </mat-card>
     </div>

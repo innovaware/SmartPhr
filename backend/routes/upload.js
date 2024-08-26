@@ -5,44 +5,19 @@ const SmartDocument = require("../models/SmartDocument");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
+    const { id } = req.params;
+    const getData = () => {
+        return SmartDocument.find({ user: id });
+    };
 
-  redisClient = req.app.get("redis");
-  redisDisabled = req.app.get("redisDisabled");
-
-  const getData = () => {
-    return SmartDocument.find({ user: id });
-  };
-
-  if (redisClient == undefined || redisDisabled) {
-    const documents = await getData();
-    res.status(200).json(documents);
-    return;
-  }
-
-  try {
-    const searchTerm = `FILEBYUSER${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      // console.log(`Data from redis: ${data}`);
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+    try {
         const documents = await getData();
-
-        redisClient.setex(
-          searchTerm,
-          redisTimeCache,
-          JSON.stringify(documents)
-        );
         res.status(200).json(documents);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        res.status(500).json({ Error: err.message });
+    }
 });
+
 
 router.post("/", async (req, res, next) => {
   try {

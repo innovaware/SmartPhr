@@ -1,6 +1,7 @@
 import { valutazioneSociale } from './valutazioneSociale';
 import { IndiceSocializzazione } from './indiceSocializzazione';
 import { AltroCartellaSociale } from './altroCartellaSociale';
+import { ICF } from './ICF';
 
 
 export class cartellaAssSociale {
@@ -17,7 +18,8 @@ export class cartellaAssSociale {
     
     altroCartellaSociale? :AltroCartellaSociale;
     valutazioneSociale?: valutazioneSociale;
-    indiceSocializzazione?: IndiceSocializzazione;
+  indiceSocializzazione?: IndiceSocializzazione;
+  ICF?:ICF;
 
    
   

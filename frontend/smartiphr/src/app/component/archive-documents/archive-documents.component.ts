@@ -52,7 +52,6 @@ export class ArchiveDocumentsComponent implements OnInit {
     }>(this.documentiPaziente);
     this.documentiPazienteDataSource.filterPredicate = this.createFilter();
 
-    console.log("Get docs");
 
     this.patientService
       .getDocumentByType(this.typeDocument)
@@ -120,9 +119,7 @@ export class ArchiveDocumentsComponent implements OnInit {
     this.uploadService
       .download(doc.documentoPaziente.filename, doc.paziente._id, this.typeDocument)
       .then((x) => {
-        console.log("download: ", x);
         x.subscribe((data) => {
-          console.log("download: ", data);
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });

@@ -48,11 +48,9 @@ export class TableFattureFornitoriComponent implements OnInit {
     this.newItem = this.data.newItem || false;
 
     //this.fornitore = JSON.parse(JSON.stringify(this.data.fornitore));
-    console.log("Dialog fornitore generale", this.data);
   }
 
   async getFatture() {
-    console.log(`Get Fatture fornitore: ${this.fornitore._id}`);
     this.fattureService
       .getByUserId(this.fornitore._id)
       .then((f: Fatture[]) => {
@@ -73,9 +71,9 @@ export class TableFattureFornitoriComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.fornitore._id, "fatture")
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });

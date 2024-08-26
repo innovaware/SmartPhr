@@ -1,0 +1,35 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Sicurezza - Autocertificazioni</h1>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <mat-tab-group mat-align-tabs="start">
+
+    <mat-tab label="Caratteristiche del microclima">
+      <app-upload-doc [dipendente]=dipendente [tipo]=Caratteristiche></app-upload-doc>
+    </mat-tab>
+
+    <mat-tab label="Assenza di radiazioni ionizzanti">
+      <app-upload-doc [dipendente]=dipendente [tipo]=ionizzanti></app-upload-doc>
+    </mat-tab>
+    
+    <mat-tab label="Assenza di rumore">
+      <app-upload-doc [dipendente]=dipendente [tipo]=rumore></app-upload-doc>
+    </mat-tab>
+    
+    <mat-tab label="Altra autocertificazione">
+      <app-upload-doc [dipendente]=dipendente [tipo]=AltraAutocertificazione></app-upload-doc>
+    </mat-tab>
+
+    
+  </mat-tab-group>
+
+
+</div>

@@ -4,11 +4,15 @@ export class DocumentoDipendente {
   }
 
   _id?: string;
-  type: string;
+  type?: string;
   filename: string;
   dateupload?: Date;
+  dataScadenza?: Date;
   note?: string;
   descrizione?: string;
   filenameesito?: string;
   file?: File;
+  accettata?: boolean;
+  closed?: boolean;
+  dipendente?: String;
 }

@@ -12,7 +12,7 @@ import { SanificazioneService } from 'src/app/service/sanificazione.service';
   styleUrls: ['./sanificazione-registro.component.css']
 })
 export class SanificazioneRegistroComponent implements OnInit {
-  @ViewChild("paginatorControlliOSS",{static: false}) ControlliOSSPaginator: MatPaginator;
+  @ViewChild("ControlliOSSPaginator",{static: false}) ControlliOSSPaginator: MatPaginator;
 
   public registroSanficazioneDataSource: MatTableDataSource<RegistroSanificazione>;
   DisplayedColumns: string[] = [
@@ -43,6 +43,7 @@ export class SanificazioneRegistroComponent implements OnInit {
       console.log(registro);
 
       this.registroSanficazioneDataSource = new MatTableDataSource<RegistroSanificazione>(registro);
+      this.registroSanficazioneDataSource.paginator = this.ControlliOSSPaginator;
     });
 
    }

@@ -9,6 +9,7 @@ export class Contratto {
   idConsulente?: string;
   filename: string;
   dateupload?: Date;
+  dataScadenza?: Date;
   note?: string;
   file?: File;
 }

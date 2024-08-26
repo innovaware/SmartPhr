@@ -4,62 +4,42 @@ const AnticipoFatture = require("../models/anticipoFatture");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        // Get the redisDisabled flag from the app settings
+        redisDisabled = req.app.get("redisDisabled");
 
-    const getData = (query) => {
-      return AnticipoFatture.find(query);
-    };
+        const getData = (query) => {
+            return AnticipoFatture.find(query);
+        };
 
-    if (redisClient == undefined || redisDisabled) {
-      const query = {
-        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-      };
-      const eventi = await getData(query);
-      res.status(200).json(eventi);
-      return;
-    }
-
-    const searchTerm = `ANTICIPOFATTUREALL`;
-    const showOnlyCancellati = req.query.show == "deleted";
-    const showAll = req.query.show == "all";
-
-    if (showOnlyCancellati || showAll) {
-      console.log("Show all or deleted");
-      let query = {};
-      if (showOnlyCancellati) {
-        query = { cancellato: true };
-      }
-      const anticipoFatture = await getData(query);
-      res.status(200).json(anticipoFatture);
-    } else {
-      redisClient.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-
-        if (data) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          const query = {
+        // Define the query for retrieving data
+        const defaultQuery = {
             $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          };
-          const anticipoFatture = await getData(query);
+        };
 
-          res.status(200).json(anticipoFatture);
-          redisClient.setex(
-            searchTerm,
-            redisTimeCache,
-            JSON.stringify(anticipoFatture)
-          );
-          // res.status(200).json(curriculum);
+        // Handle the request based on the query parameters
+        const showOnlyCancellati = req.query.show == "deleted";
+        const showAll = req.query.show == "all";
+
+        if (showOnlyCancellati || showAll) {
+            console.log("Show all or deleted");
+            let query = {};
+            if (showOnlyCancellati) {
+                query = { cancellato: true };
+            }
+            const anticipoFatture = await getData(query);
+            res.status(200).json(anticipoFatture);
+        } else {
+            // Retrieve data without caching
+            const anticipoFatture = await getData(defaultQuery);
+            res.status(200).json(anticipoFatture);
         }
-      });
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
 });
+
 
 router.get("/:id", async (req, res) => {
   try {

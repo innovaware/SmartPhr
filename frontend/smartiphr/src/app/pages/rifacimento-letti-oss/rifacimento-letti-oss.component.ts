@@ -68,9 +68,9 @@ export class RifacimentoLettiOssComponent implements OnInit {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
-        .getByIdUser(user._id)
+        .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
+          
           this.dipendente = x[0];
 
         })
@@ -90,7 +90,6 @@ export class RifacimentoLettiOssComponent implements OnInit {
       .then((f: LettoCamera[]) => {
         this.LavanderiaExt = f;
         this.LavanderiaInt = f;
-        console.log('ReportLetti: ' + JSON.stringify(this.LavanderiaExt));
         this.LavanderiaIntDataSource = new MatTableDataSource<LettoCamera>(
           this.LavanderiaInt
         );
@@ -120,7 +119,6 @@ export class RifacimentoLettiOssComponent implements OnInit {
       .then((f: AttivitaRifacimentoLetti[]) => {
         this.LavanderiaAttivitaExt = f;
         this.LavanderiaAttivitaInt = f;
-        console.log('ReportAttivita: ' + JSON.stringify(this.LavanderiaAttivitaExt));
         this.LavanderiaAttivitaExtDataSource = new MatTableDataSource<AttivitaRifacimentoLetti>(
           this.LavanderiaAttivitaExt
         );
@@ -155,10 +153,11 @@ export class RifacimentoLettiOssComponent implements OnInit {
     this.gestLettoCameraService
       .update(row)
       .then((result: LettoCamera) => {
-        console.log("Save LettoCamera: ", result);
-        this.LavanderiaExt.push(result);
+
+        const index = this.LavanderiaExt.indexOf(row);
+        this.LavanderiaExt[index] = row;
         this.LavanderiaExtDataSource.data = this.LavanderiaExt;
-       
+        this.LavanderiaExtDataSource.paginator = this.LavanderiaExtPaginator;
       })
       .catch((err) => {
         this.messageService.showMessageError("Errore Inserimento attivita + update record");
@@ -177,10 +176,10 @@ export class RifacimentoLettiOssComponent implements OnInit {
     this.gestLettoCameraService
       .update(row)
       .then((result: LettoCamera) => {
-        console.log("Save LettoCamera: ", result);
-        this.LavanderiaExt.push(result);
-        this.LavanderiaExtDataSource.data = this.LavanderiaExt;
-       
+        const index = this.LavanderiaInt.indexOf(row);
+        this.LavanderiaInt[index] = row;
+        this.LavanderiaIntDataSource.data = this.LavanderiaInt;
+        this.LavanderiaIntDataSource.paginator = this.LavanderiaIntPaginator;
       })
       .catch((err) => {
         this.messageService.showMessageError("Errore Inserimento attivita + update record");

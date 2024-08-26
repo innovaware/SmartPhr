@@ -221,9 +221,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.fornitore._id, 'fatture')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -272,6 +272,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    if (!fattura.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "FATTURE";
     const path = "fatture";
     const file: File = fattura.file;
@@ -341,6 +345,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveBonifico(bonifico: Bonifico) {
+    if (!bonifico.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
@@ -402,9 +410,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.fornitore._id, 'bonifico')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -547,7 +555,7 @@ export class DialogFornitoreComponent implements OnInit {
       .then((x) => {
         console.log("Documento cancellato");
         const index = this.documentiFornitore.indexOf(documentoFornitore);
-        console.log("Documento cancellato index: ", index);
+        
         if (index > -1) {
           this.documentiFornitore.splice(index, 1);
         }
@@ -565,9 +573,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(documentoFornitore.filename, this.fornitore._id, 'documentoFornitore')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -605,7 +613,7 @@ export class DialogFornitoreComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumentoFornitore.filename = file.name;
       this.nuovoDocumentoFornitore.file = file;
 
@@ -616,6 +624,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveDocumentoFornitore(documentoFornitore: DocumentoFornitore) {
+    if (!documentoFornitore.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "DOCUMENTO FORNITORE";
     const path = "documentoFornitore";
     const file: File = documentoFornitore.file;

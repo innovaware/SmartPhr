@@ -4,72 +4,48 @@ const Eventi = require("../models/eventi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
 
-    const getData = () => {
-      return Eventi.find();
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
-    }
-
-    const searchTerm = `EVENTIALL`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+        const getData = () => {
+            return Eventi.find();
+        };
+        
         const eventi = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
 });
+
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        const getData = () => {
+            return Eventi.findById(id);
+        };
 
-    const getData = () => {
-      return Eventi.findById(id);
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
-    }
-
-    const searchTerm = `EVENTIBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
         const eventi = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
         res.status(200).json(eventi);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
+
+router.get("/tipo/:tipo", async (req, res) => {
+    const { tipo } = req.params;
+    try {
+        const eventi = await Eventi.find({ tipo: tipo });
+        res.status(200).json(eventi);
+    } catch (err) {
+        console.error("Errore durante il recupero degli eventi:", err); // Log dell'errore
+        res.status(500).json({ error: err.message || "Errore del server" }); // Risposta più chiara
+    }
+});
+
+
 
 //YYYYMMDD
 router.get("/search/:data", async (req, res) => {
@@ -139,82 +115,91 @@ router.get("/search/:data", async (req, res) => {
   }
 });
 
-router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
-  const { dataStart, dataEnd } = req.params;
-  const { user } = req.query;
+router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => {
+    const { dataStart, dataEnd, type } = req.params;
 
-  try {
-    const searchTerm = `EVENTISEARCH${dataStart}${dataEnd}${user}`;
-
-    if (dataStart == undefined || dataEnd == undefined) {
-      res.status(400);
-      res.json({ Error: "dataStart or dataEnd not defined" });
-      return;
+    if (!dataStart || !dataEnd) {
+        return res.status(400).json({ Error: "dataStart or dataEnd not defined" });
     }
-
-    if (user == undefined) {
-      res.status(400);
-      res.json({ Error: "user not defined" });
-      return;
+    console.log(type);
+    if (!type) {
+        return res.status(400).json({ Error: "type not defined" });
     }
+    try {
+        const yearStart = dataStart.substring(0, 4);
+        const monthStart = dataStart.substring(4, 6);
+        const dayStart = dataStart.substring(6, 8);
 
-    const yearStart = dataStart.substring(0, 4);
-    const monthStart = dataStart.substring(4, 6);
-    const dayStart = dataStart.substring(6, 8);
+        const yearEnd = dataEnd.substring(0, 4);
+        const monthEnd = dataEnd.substring(4, 6);
+        const dayEnd = dataEnd.substring(6, 8);
 
-    const yearEnd = dataEnd.substring(0, 4);
-    const monthEnd = dataEnd.substring(4, 6);
-    const dayEnd = dataEnd.substring(6, 8);
+        const query = {
+            $and: [
+                {
+                    data: {
+                        $gte: new Date(yearStart, monthStart - 1, dayStart, 0, 0, 0),
+                        $lt: new Date(yearEnd, monthEnd - 1, dayEnd, 23, 59, 59),
+                    },
+                },
+                {
+                    tipo: type
+                }
+            ]
+        };
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const query = {
-      $and: [
-        {
-          data: {
-            $gte: new Date(
-              yearStart,
-              monthStart - 1,
-              dayStart,
-              "00",
-              "00",
-              "00"
-            ),
-            $lt: new Date(yearEnd, monthEnd - 1, dayEnd, "23", "59", "59"),
-          },
-          utente: user,
-        },
-      ],
-    };
-
-    const getData = () => {
-      return Eventi.find(query);
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
-    }
-
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        //console.log(`Event Buffered - ${searchTerm}`);
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const eventi = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+        const eventi = await Eventi.find(query);
+        console.log(eventi);
         res.status(200).json(eventi);
-      }
-    });
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
+
+    } catch (err) {
+        res.status(500).json({ Error: err.message });
+    }
+});
+router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
+    const { dataStart, dataEnd } = req.params;
+    const { user } = req.query;
+
+    if (!dataStart || !dataEnd) {
+        return res.status(400).json({ Error: "dataStart or dataEnd not defined" });
+    }
+
+    if (!user) {
+        return res.status(400).json({ Error: "user not defined" });
+    }
+
+    try {
+        const yearStart = dataStart.substring(0, 4);
+        const monthStart = dataStart.substring(4, 6);
+        const dayStart = dataStart.substring(6, 8);
+
+        const yearEnd = dataEnd.substring(0, 4);
+        const monthEnd = dataEnd.substring(4, 6);
+        const dayEnd = dataEnd.substring(6, 8);
+
+        const query = {
+            $and: [
+                {
+                    data: {
+                        $gte: new Date(yearStart, monthStart - 1, dayStart, 0, 0, 0),
+                        $lt: new Date(yearEnd, monthEnd - 1, dayEnd, 23, 59, 59),
+                    },
+                },
+                {
+                    $or: [
+                        { utente: user },
+                        { visibile: true }
+                    ]
+                }
+            ]
+        };
+
+        const eventi = await Eventi.find(query);
+        res.status(200).json(eventi);
+
+    } catch (err) {
+        res.status(500).json({ Error: err.message });
+    }
 });
 
 router.post("/", async (req, res) => {
@@ -223,7 +208,10 @@ router.post("/", async (req, res) => {
       data: req.body.data,
       descrizione: req.body.descrizione,
       tipo: req.body.tipo,
-      utente: req.body.utente,
+        utente: req.body.utente,
+        visibile: req.body.visibile,
+        effettuato: false,
+        dataCreazione: new Date(),
     });
 
     const result = await eventi.save();
@@ -254,7 +242,10 @@ router.put("/:id", async (req, res) => {
           data: req.body.data,
           descrizione: req.body.descrizione,
           tipo: req.body.tipo,
-          utente: req.body.utente,
+              utente: req.body.utente,
+              visibile: req.body.visibile,
+              finito: req.body.finito,
+              dataCompletato: new Date(),
         },
       }
     );

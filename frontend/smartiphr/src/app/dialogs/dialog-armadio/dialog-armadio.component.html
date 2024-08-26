@@ -1,186 +1,126 @@
 <div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>Gestione Armadio - {{camera.camera}}</h3>
-      </div>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Gestione Armadio - {{camera.camera}}</h3>
+            </div>
 
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">×
-        </button>
-      </div>
-    </div>
+            <div class="col">
+                <button class="close-button" [mat-dialog-close]="true">
+                    ×
+                </button>
+            </div>
+        </div>
 
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <mat-label>Periodo di riferimento -
-          Dal <span style="font-weight: bold;">{{currentArmadio?.dateStartRif | date: 'dd/MM/yyyy'}}</span>
-          Al  <span style="font-weight: bold;">{{currentArmadio?.dateEndRif | date: 'dd/MM/yyyy'}}</span>
-        </mat-label>
-      </div>
-
-      <div class="col">
-        <mat-label>Ultima Verifica:
-          <span style="font-weight: bold;">{{currentArmadio?.lastChecked.data | date: 'dd/MM/yyyy'}}</span>
-        </mat-label>
-      </div>
-    </div>
-
-    <hr>
-
-    <div class="row">
-      <div class="col">
-        <mat-form-field appearance="fill" style="display: unset;">
-          <mat-label>Seleziona il Paziente</mat-label>
-          <mat-select [(ngModel)]="selectedPatient"
-            (selectionChange)="changePatient($event)">
-            <mat-option *ngFor="let item of dataSourcePatients | async"
-                        [value]="item"
-            >{{item.nome}} {{item.cognome}}</mat-option>
-          </mat-select>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-
-
-        <mat-tab-group mat-align-tabs="start">
-
-          <mat-tab label="Verifica Armadio">
-            <div class="container-fluid" style="padding: 0 12px">
-              <div class="row">
-                <mat-label>Verifica completata al {{currentArmadio?.rateVerifica}} % (
-                  <span [ngStyle]="{'color':
-                  currentArmadio?.rateVerifica === 100 ? '#007800' :
-                  currentArmadio?.rateVerifica === 0 ? 'rgb(255 0 0)':
-                  'rgb(255 165 0)'}">{{currentArmadio?.rateVerifica | castingVerifica}}</span>
-                  )</mat-label>
-              </div>
-
-              <div class="row" *ngIf="currentArmadio?.rateVerifica !== 100">
-                <div class="col" style="
-                    padding: unset;">
-                  <button #btnVerifica mat-button  (click)="verifica()"
-                    style="
-                      width: 100%;
-                      padding: unset;
-                      border: 1px solid #ff000030;
-                      border-radius: 4px;
-                      margin: 6px 0;
-                    "
-                    [disabled]="currentArmadio?.rateVerifica === 100 || selectedPatient === undefined">
-                    Verifica
-                  </button>
-                </div>
-              </div>
-
-              <div class="row" *ngIf="currentArmadio?.rateVerifica !== 100">
-                <table mat-table [dataSource]="dataSourceIndumentiByPatient | async">
-
-                  <ng-container matColumnDef="nome">
-                    <th mat-header-cell *matHeaderCellDef> Descrizione </th>
-                    <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="quantita">
-                    <th mat-header-cell *matHeaderCellDef> Quantit&agrave; </th>
-                    <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
-                  </ng-container>
-
-                  <ng-container matColumnDef="note">
-                    <th mat-header-cell *matHeaderCellDef> Nota </th>
-                    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-                  </ng-container>
-
-                  <tr mat-header-row *matHeaderRowDef="displayedColumnsIndumentiByPatient"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayedColumnsIndumentiByPatient;"></tr>
-
-                </table>
-              </div>
-
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-5">
+                <button mat-button (click)="previousMonth()" title="Precedente">
+                    <fa-icon icon="chevron-left"></fa-icon>
+                </button>
             </div>
-
-
-          </mat-tab>
-
-          <mat-tab label="Contenuto">
-
-            <div>
-              <table mat-table [dataSource]="dataSourceIndumenti" class="mat-elevation-z8">
-                <ng-container matColumnDef="action">
-                  <th mat-header-cell *matHeaderCellDef>
-                  </th>
-                  <td mat-cell *matCellDef="let row" style="text-align: right;">
-
-                    <button mat-button (click)="carico(row)">
-                      carico
-                    </button>
-
-                    <button mat-button (click)="scarico(row)" [disabled]="row.indumento.quantita - 1 < 0">
-                      scarico
-                    </button>
-
-                  </td>
-                </ng-container>
-
-                <ng-container matColumnDef="nome">
-                  <th mat-header-cell *matHeaderCellDef> Descrizione </th>
-                  <td mat-cell *matCellDef="let element"> {{element.indumento.nome}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="quantita">
-                  <th mat-header-cell *matHeaderCellDef> Quantit&agrave; </th>
-                  <td mat-cell *matCellDef="let element"> {{element.indumento.quantita}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="note">
-                  <th mat-header-cell *matHeaderCellDef> Nota </th>
-                  <td mat-cell *matCellDef="let element"> {{element.indumento.note}} </td>
-                </ng-container>
-
-                <ng-container matColumnDef="paziente">
-                  <th mat-header-cell *matHeaderCellDef> Paziente </th>
-                  <td mat-cell *matCellDef="let element"> {{element.paziente.nome}} {{element.paziente.cognome}}</td>
-                </ng-container>
-
-                <tr mat-header-row *matHeaderRowDef="displayedColumnsIndumenti"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnsIndumenti;"></tr>
-
-                <!-- Group header
-                <ng-container matColumnDef="groupHeader">
-                  <td colspan="999" mat-cell *matCellDef="let groupBy"><strong>{{groupBy.paziente.nome}} {{groupBy.paziente.cognome}}</strong></td>
-                </ng-container>
-
-                <tr style="background-color: #d4f2ff;" mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup"> </tr> -->
-
-              </table>
+            <div class="col-6">
+                <span>{{ currentMonth.format('MMMM YYYY') }}</span>
             </div>
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-            </mat-paginator>
-
-          </mat-tab>
-        </mat-tab-group>
-
-      </div>
+            <div class="col-1">
+                <button mat-button (click)="nextMonth()" title="Successivo">
+                    <fa-icon icon="chevron-right"></fa-icon>
+                </button>
+            </div>
+        </div>
     </div>
-  </div>
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+        <ng-container matColumnDef="name">
+            <th mat-header-cell *matHeaderCellDef> Nome indumento </th>
+            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="quantity">
+            <th mat-header-cell *matHeaderCellDef> Quantità </th>
+            <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="load">
+            <th mat-header-cell *matHeaderCellDef> Carico </th>
+            <td mat-cell *matCellDef="let element"> {{element.carico}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="unload">
+            <th mat-header-cell *matHeaderCellDef> Scarico </th>
+            <td mat-cell *matCellDef="let element"> {{element.scarico}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="notes">
+            <th mat-header-cell *matHeaderCellDef> Note </th>
+            <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+            <th mat-header-cell *matHeaderCellDef> Data </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastChecked.datacheck | date: 'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="operator">
+            <th mat-header-cell *matHeaderCellDef> Operatore </th>
+            <td mat-cell *matCellDef="let element"> {{element.lastChecked.UserName}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+                <ng-container *ngIf="editEnable">
+                    <button class="btn btn-link p-0" (click)="AddIndumento()">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                        </svg>
+                    </button>
+                </ng-container>
+            </th>
+            <td mat-cell *matCellDef="let element">
+                <ng-container *ngIf="editEnable">
+                    <button class="btn btn-link p-0" (click)="details(element)">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                        </svg>
+                    </button>
+                </ng-container>
+            </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+    <div class="paginator-container">
+
+        <mat-paginator #Indumenti [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+    </div>
+    <div class="legend">
+        <div class="legend-item">
+            Ultima modifica effettuata in data {{lastcheck | date: 'dd/MM/yyyy'}} da: {{lastusercheck}}
+        </div>
+      
+    </div>
 </mat-dialog-content>
 
 
+
 <div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-  </div>
+    <div class="bottom-actions">
+        <ng-container *ngIf="!verificato">
+            <button mat-button class="button-insert" (click)="verifica()">Verifica</button>
+        </ng-container>
+            <button mat-button [mat-dialog-close]="true">Chiudi</button>
+</div>
 </div>

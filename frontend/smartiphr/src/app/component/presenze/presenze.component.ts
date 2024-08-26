@@ -33,6 +33,7 @@ export class PresenzeComponent implements OnInit, OnChanges {
     "inizioturno",
     "fineturno",
     "tipoTurno",
+    "note",
     "action",
   ];
 
@@ -72,18 +73,20 @@ export class PresenzeComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
         if (this.presenze.length != 0) {
           this.newPresenza = this.presenze[0];
-          if (this.newPresenza.oraFine == "") {
+          if (this.newPresenza.oraFine == "" && this.dateDiffInDays(new Date(), new Date(this.newPresenza.data)) == 0) {
             this.addingIngresso = false;
             this.addingUscita = true;
           }
           else {
             this.addingIngresso = true;
             this.addingUscita = false;
+
           }
         }
         else {
           this.addingIngresso = true;
           this.addingUscita = false;
+          
         }
       });
     }
@@ -99,7 +102,7 @@ export class PresenzeComponent implements OnInit, OnChanges {
         this.dataSource.paginator = this.paginator;
         if (this.presenze.length != 0) {
           this.newPresenza = this.presenze[0];
-          if (this.newPresenza.oraFine == "") {
+          if (this.newPresenza.oraFine == "" && this.dateDiffInDays(new Date(), new Date(this.newPresenza.data)) == 0) {
             this.addingIngresso = false;
             this.addingUscita = true;
           }
@@ -118,7 +121,7 @@ export class PresenzeComponent implements OnInit, OnChanges {
 
 
   ngOnInit() {
-   
+
     this.newPresenza = new Presenze();
   }
 
@@ -166,7 +169,7 @@ export class PresenzeComponent implements OnInit, OnChanges {
     this.newPresenza.oraFine =
       ((new Date()).getHours() < 10 ? "0" + (new Date()).getHours() : (new Date()).getHours()) + ":"
       + ((new Date()).getMinutes() < 10 ? "0" + (new Date()).getMinutes() : (new Date()).getMinutes())
-    + ":" + ((new Date()).getSeconds() < 10 ? "0" + (new Date()).getSeconds() : (new Date()).getSeconds());
+      + ":" + ((new Date()).getSeconds() < 10 ? "0" + (new Date()).getSeconds() : (new Date()).getSeconds());
     this.presenzeService
       .updatePresenza(this.newPresenza)
       .then((result: Presenze) => {
@@ -190,6 +193,25 @@ export class PresenzeComponent implements OnInit, OnChanges {
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
     this.dataSource.filter = filterValue.trim().toLowerCase();
+  }
+
+  async addNote(giorno: Presenze) {
+    this.presenzeService
+      .updatePresenza(giorno)
+      .then((result: Presenze) => {
+        const index = this.presenze.indexOf(giorno);
+        this.presenze[index] = giorno;
+        this.presenze.sort((a, b) => {
+          const dateA = new Date(a.data);
+          const dateB = new Date(b.data);
+          return dateB.getTime() - dateA.getTime();
+        });
+        this.dataSource.data = this.presenze;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore modifica stato Presenze");
+        console.error(err);
+      });
   }
 
   call(presenze: Presenze, item: string) {

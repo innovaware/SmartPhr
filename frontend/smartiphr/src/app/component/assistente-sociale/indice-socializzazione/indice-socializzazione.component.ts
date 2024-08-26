@@ -20,7 +20,6 @@ export class IndiceSocializzazioneComponent implements OnInit {
 
 
   valChange(){
-    console.log(this.data.totale);
     let A = isNaN(Number(this.data.adattamentoSociale)) == false ? Number(this.data.adattamentoSociale) : 0;
     let B = isNaN(Number(this.data.relAmicizia)) == false ? Number(this.data.relAmicizia) : 0;
     let C = isNaN(Number(this.data.integrazioneGruppo)) == false ? Number(this.data.integrazioneGruppo) : 0;

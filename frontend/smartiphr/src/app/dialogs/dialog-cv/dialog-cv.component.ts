@@ -21,9 +21,16 @@ export class DialogCvComponent implements OnInit {
     public messageService: MessagesService,
     public uploadService: UploadService,
     public dialogRef: MatDialogRef<DialogCvComponent>,
-    private curriculumService: CurriculumService
+    private curriculumService: CurriculumService,
+    @Inject(MAT_DIALOG_DATA)
+    public data: {
+        cv: Curriculum,
+        disabled: Boolean
+    }
   ) {
     this.nuovoCurriculum = new Curriculum();
+    if (data.disabled) this.nuovoCurriculum = data.cv;
+    else this.nuovoCurriculum.status = "Da Valutare";
     this.uploadingCV = false;
   }
 
@@ -44,6 +51,28 @@ export class DialogCvComponent implements OnInit {
   }
 
   async save() {
+
+    if (!this.nuovoCurriculum.file) {
+      this.messageService.showMessageError("Inserire File");
+      return;
+    }
+    if (!this.nuovoCurriculum.nome) {
+      this.messageService.showMessageError("Inserire Nome");
+      return;
+    }
+    if (!this.nuovoCurriculum.cognome) {
+      this.messageService.showMessageError("Inserire Cognome");
+      return;
+    }
+    if (!this.nuovoCurriculum.codiceFiscale) {
+      this.messageService.showMessageError("Inserire Codice Fiscale");
+      return;
+    }
+    if (!this.nuovoCurriculum.mansione) {
+      this.messageService.showMessageError("Inserire Mansione");
+      return;
+    }
+
     const typeDocument = "CURRICULUM";
     const path = "curriculum";
     const file: File = this.nuovoCurriculum.file;
@@ -75,9 +104,18 @@ export class DialogCvComponent implements OnInit {
           });
       },
       (err) => {
-        this.messageService.showMessageError("Errore Inserimento fattura");
+        this.messageService.showMessageError("Errore Inserimento CV");
         console.error(err);
       }
     );
+  }
+
+  async edit() {
+    this.curriculumService.update(this.nuovoCurriculum).subscribe(
+      (result: Curriculum) => { },
+      (err) => {
+        this.messageService.showMessageError("Errore modifica CV");
+        console.error(err);
+      });
   }
 }

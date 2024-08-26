@@ -137,6 +137,10 @@ export class AnticipoFattureASPComponent implements OnInit {
   }
 
   async saveAnticipo(anticipo: AnticipoFatture) {
+    if (!anticipo.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "ANTICIPOFATTURE";
     const path = "anticipofatture";
     const file: File = anticipo.file;
@@ -183,10 +187,10 @@ export class AnticipoFattureASPComponent implements OnInit {
     this.uploadService
       .download(anticipo.filename, anticipo.identifyUser, "anticipofatture")
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe(
           (data) => {
-            console.log("download: ", data);
+            
             const newBlob = new Blob([data as BlobPart], {
               type: "application/pdf",
             });

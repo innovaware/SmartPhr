@@ -1,0 +1,67 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>Nuova Richiesta</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <mat-label>Materiale: </mat-label>
+      </div>
+      <div class="col">
+        <mat-form-field>
+          <mat-select placeholder="Materiale" [(ngModel)]="richiesta.materiale">
+            <mat-option value="" selected>Seleziona ...</mat-option>
+            <mat-option *ngFor="let option of materiali" [value]="option.Title">{{option.Title}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+    <br />
+    <div class="row">
+      <div class="col">
+        <mat-label>Quantità: </mat-label>
+      </div>
+      <div class="col">
+        <mat-form-field>
+          <input matInput type="number" placeholder="Quantità" [(ngModel)]="richiesta.quantita" min="0">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <mat-label>Note: </mat-label>
+      </div>
+      <div class="col">
+        <mat-form-field>
+          <textarea matInput rows="1" [(ngModel)]="richiesta.note" placeholder="Note"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+    <br />
+  </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+    <button mat-button [mat-dialog-close]="true" (click)="salva()">Salva</button>
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+  </div>
+</div>

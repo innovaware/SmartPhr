@@ -26,6 +26,8 @@ import { CambiturniService } from "src/app/service/cambiturni.service";
 import { Cambiturno } from "src/app/models/cambiturni";
 import { Presenze } from "src/app/models/presenze";
 import { PresenzeService } from "src/app/service/presenze.service";
+import { DialogCaricadocumentoMedicinaComponent } from "../dialog-caricadocumentoMedicina/dialog-caricadocumentoMedicina.component";
+import { User } from "../../models/user";
 
 @Component({
   selector: "app-dialog-dipendente",
@@ -41,19 +43,20 @@ export class DialogDipendenteComponent implements OnInit {
   public permessi: Permessi[];
   public cambioTurni: Cambiturno[];
   public presenze: Presenze[];
-
+  public admin: Boolean = true;
   public newItem: boolean;
   public document: any[] = [];
   public uploading: boolean;
   public uploadingFattura: boolean;
   public uploadingNotaCredito: boolean;
-
+  public user: User;
   public addingNotaCredito: boolean;
   public addingBonifici: boolean;
 
   public nuovaFattura: Fatture;
   public nuovaNotacredito: NotaCredito;
   public nuovaBonifico: Bonifico;
+  public nuovoMedicina: DocumentoMedicinaLavoro;
 
 
   DisplayedRichiesteColumns: string[] = ["date", "action"];
@@ -72,7 +75,8 @@ export class DialogDipendenteComponent implements OnInit {
     "filenameCertificato",
     "dateuploadCertificato",
     "noteCertificato",
-    "action",
+    "actionReq",
+    "actionCert",
   ];
 
   public noteCreditoDataSource: MatTableDataSource<NotaCredito>;
@@ -130,6 +134,9 @@ export class DialogDipendenteComponent implements OnInit {
   cedoliniPaginator: MatPaginator;
   public cedoliniDataSource: MatTableDataSource<DocumentoDipendente>;
   public cedolini: DocumentoDipendente[];
+  public uploadingCedolino: boolean;
+  public addingCedolino: boolean;
+  public nuovoCedolino: DocumentoDipendente;
 
   @ViewChild("paginatorRichieste", { static: false })
   richiestePaginator: MatPaginator;
@@ -140,6 +147,8 @@ export class DialogDipendenteComponent implements OnInit {
   docsMedicinaPaginator: MatPaginator;
   public docsMedicinaDataSource: MatTableDataSource<DocumentoMedicinaLavoro>;
   public docsMedicina: DocumentoMedicinaLavoro[];
+  public uploadingMedicina: boolean;
+  public addingMedicina: boolean;
 
   @ViewChild("paginatorCertificatoMalattia", { static: false })
   certificatiMalattiaPaginator: MatPaginator;
@@ -152,21 +161,22 @@ export class DialogDipendenteComponent implements OnInit {
 
   tabLabels: { index: number, init: any, key: string, label: string }[] = [
     { index: 0, init: () => { }, key: 'DatiGenerali', label: "Dati anagrafici generale" },
-    { index: 1, init: () => this.getDocIdentita(), key: 'DocumentiIdentità', label: "Documenti d'identità" },
-    { index: 2, init: () => this.getDocMedicinaLav(), key: 'MedicinaLavoro', label: 'Medicina del lavoro' },
-    { index: 3, init: () => this.getContratti(), key: 'ContrattiLavoro', label: 'Contratti di lavoro' },
-    { index: 4, init: () => this.getDocsPrivacy(), key: 'Privacy', label: 'Privacy' },
-    { index: 5, init: () => this.getDiplomi(), key: 'DiplomiAttestati', label: 'Diplomi e attestati' },
-    { index: 6, init: () => this.getAttestatiECM(), key: 'AttestatiECM', label: 'Attestati ECM' },
-    { index: 7, init: () => this.getCedolini(), key: 'CedoliniCU', label: 'Cedolini e CU' },
-    { index: 8, init: () => this.getCertificatoMalattia(), key: 'CertificatiMalattia', label: 'Certificati malattia' },
-    { index: 9, init: () => { }, key: 'RegolamentoInterno', label: 'Regolamento interno' },
-    { index: 10, init: () => this.getRichiesteMaterialiPresidi(), key: 'RichiesteMaterialePresidi', label: 'Richieste materiale o presidi' },
-    { index: 11, init: () => this.getFerie(), key: 'Ferie', label: 'Ferie' },
-    { index: 12, init: () => this.getPermessi(), key: 'Permessi', label: 'Permessi' },
-    { index: 13, init: () => this.getCambioTurni(), key: 'CambiTurno', label: 'Cambi turno' },
-    { index: 14, init: () => this.getPresenze(), key: 'Presenze', label: 'Presenze' },
-    { index: 15, init: () => { }, key: 'TurniMensili', label: 'Turni mensili' },
+    { index: 1, init: () => this.loadUserCred(), key: 'GestUtenza', label: "Gest. Utenza" },
+    { index: 2, init: () => this.getDocIdentita(), key: 'DocumentiIdentità', label: "Documenti d'identità" },
+    { index: 3, init: () => this.getDocMedicinaLav(), key: 'MedicinaLavoro', label: 'Medicina del lavoro' },
+    { index: 4, init: () => this.getContratti(), key: 'ContrattiLavoro', label: 'Contratti di lavoro' },
+    { index: 5, init: () => this.getDocsPrivacy(), key: 'Privacy', label: 'Privacy' },
+    { index: 6, init: () => this.getDiplomi(), key: 'DiplomiAttestati', label: 'Diplomi e attestati' },
+    { index: 7, init: () => this.getAttestatiECM(), key: 'AttestatiECM', label: 'Attestati ECM' },
+    { index: 8, init: () => this.getCedolini(), key: 'CedoliniCU', label: 'Cedolini e CU' },
+    { index: 9, init: () => this.getCertificatoMalattia(), key: 'CertificatiMalattia', label: 'Certificati malattia' },
+    { index: 10, init: () => { }, key: 'RegolamentoInterno', label: 'Regolamento interno' },
+    { index: 11, init: () => this.getRichiesteMaterialiPresidi(), key: 'RichiesteMaterialePresidi', label: 'Richieste materiale o presidi' },
+    { index: 12, init: () => this.getFerie(), key: 'Ferie', label: 'Ferie' },
+    { index: 13, init: () => this.getPermessi(), key: 'Permessi', label: 'Permessi' },
+    { index: 14, init: () => this.getCambioTurni(), key: 'CambiTurno', label: 'Cambi turno' },
+    //{ index: 15, init: () => this.getPresenze(), key: 'Presenze', label: 'Presenze' },
+    //{ index: 16, init: () => { }, key: 'TurniMensili', label: 'Turni mensili' },
   ];
 
   constructor(
@@ -194,12 +204,23 @@ export class DialogDipendenteComponent implements OnInit {
     this.uploading = false;
     this.dipendente = this.data.dipendente;
     this.newItem = this.data.newItem || false;
-
+    this.user = new User();
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
 
+    this.uploadingMedicina = false;
+    this.addingMedicina = false;
+    this.nuovoMedicina = new DocumentoMedicinaLavoro();
+
+    
+    this.cedoliniDataSource = new MatTableDataSource<DocumentoDipendente>();
+    this.cedolini = [];
+    this.uploadingCedolino = false;
+    this.addingCedolino = false;
+    this.nuovoCedolino = new DocumentoDipendente();
+
     //this.dipendente = JSON.parse(JSON.stringify(this.data.dipendente));
-    console.log("Dialog dipendente generale", this.data);
+    this.loadUserCred();
   }
 
   tabChanged = (tabChangeEvent: MatTabChangeEvent): void => {
@@ -217,10 +238,23 @@ export class DialogDipendenteComponent implements OnInit {
     return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
-  async save(saveAndClose: boolean) {
+  loadUserCred() {
+    if (!this.dipendente || !this.dipendente._id) return;
+    this.usersService
+      .getByDipendenteId(this.dipendente._id)
+      .then((x:User) => {
+        this.user = x[0];
+      })
+      .catch((err) => {
+        this.messageService.showMessageError(
+          "Errore Caricamento dipendente (" + err["status"] + ")"
+        );
+      });
+  }
 
-    console.log("this.dipendente.cf: ", this.dipendente.cf);
-    console.log("this.data.dipendente.cf: ", this.data.dipendente.cf);
+
+  async save(saveAndClose: boolean) {
+    
 
     // this.data.dipendente = this.dipendente;
     console.log("insert dipendente");
@@ -322,6 +356,7 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   ngOnInit() {
+    this.loadUserCred();
     if (this.dipendente._id != undefined) {
       //this.getDocIdentita();
       //this.getDocMedicinaLav();
@@ -339,9 +374,9 @@ export class DialogDipendenteComponent implements OnInit {
     this.uploadService
       .downloadDocDipendente(doc.filename, doc.type, this.dipendente)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -381,7 +416,7 @@ export class DialogDipendenteComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumentoIdentita.filename = file.name;
       this.nuovoDocumentoIdentita.file = file;
     } else {
@@ -416,6 +451,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async saveDocIdentita(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "DocumentoIdentita";
     const path = "DocumentoIdentita";
     const file: File = doc.file;
@@ -504,9 +543,11 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async getPresenze() {
+    console.log(this.dipendente._id);
     this.presenzeService.getPresenzeByDipendente(this.dipendente._id).subscribe(
       (arr: Presenze[]) => this.presenze = arr
     )
+
   }
 
 
@@ -530,7 +571,7 @@ export class DialogDipendenteComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoCertificatoMalattia.filename = file.name;
       this.nuovoCertificatoMalattia.file = file;
     } else {
@@ -565,6 +606,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async saveCertificatoMalattia(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "CertificatoMalattia";
     const path = "CertificatoMalattia";
     const file: File = doc.file;
@@ -611,9 +656,9 @@ export class DialogDipendenteComponent implements OnInit {
     this.uploadService
       .downloadDocDipendente(doc.filenameesito, doc.type, this.dipendente)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -710,13 +755,13 @@ export class DialogDipendenteComponent implements OnInit {
     this.uploadService
       .downloadDocMedicinaLavoro(
         doc.filenameRichiesta,
-        "medicinaLavoro",
+        "MedicinaLavoroRichiesta",
         this.dipendente
       )
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -745,13 +790,13 @@ export class DialogDipendenteComponent implements OnInit {
     this.uploadService
       .downloadDocDipendente(
         doc.filenameCertificato,
-        "medicinaLavoro",
+        "MedicinaLavoroCertificato",
         this.dipendente
       )
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -776,6 +821,108 @@ export class DialogDipendenteComponent implements OnInit {
       });
   }
 
+  uploadMedicinaCertificato(doc: DocumentoMedicinaLavoro) {
+
+    const dialogDocCMCF = this.dialog.open(DialogCaricadocumentoMedicinaComponent, {
+      data: { dipendente: this.dipendente, doc: doc },
+    });
+
+    dialogDocCMCF.afterClosed().subscribe((result) => {
+      console.log("result upload VMCF", result);
+      if (result !== false) {
+        this.docService
+          .updateMed(result)
+          .then((x) => {
+            const index = this.docsMedicina.indexOf(doc);
+
+            this.docsMedicina[index] = x;
+
+            this.docsMedicinaDataSource.data = this.docsMedicina;
+            //dialogDocCMCF.close(result);
+          })
+          .catch((err) => {
+            if (err["status"] != undefined && err["status"] != 500)
+              this.messageService.showMessageError(
+                "Errore upload VMCF (" + err["status"] + ")"
+              );
+          });
+      }
+    });
+
+  }
+
+  async saveMedicinaRichiesta(doc: DocumentoMedicinaLavoro) {
+    if (!doc.fileRichiesta) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
+    const typeDocument = "MedicinaLavoroRichiesta";
+    const path = "MedicinaLavoroRichiesta";
+    const file: File = doc.fileRichiesta;
+    this.uploadingMedicina = true;
+
+    console.log("Invio Contratto: ", doc);
+    this.docService
+      .insertDocMed(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert Contratto: ", result);
+        this.docsMedicina.push(result);
+        this.docsMedicinaDataSource.data = this.docsMedicina;
+        this.addingMedicina = false;
+        this.uploadingMedicina = false;
+
+        let formData: FormData = new FormData();
+
+        const nameDocument: string = doc.filenameRichiesta;
+
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
+
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento fattura");
+        console.error(err);
+      });
+  }
+
+
+  async addMedicinaRichiesta() {
+    this.addingMedicina = true;
+    this.nuovoMedicina = {
+      filenameRichiesta: undefined,
+      noteRichiesta: ""
+    };
+  }
+
+
+  async uploadMedicinaRichiesta($event) {
+    let fileList: FileList = $event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+
+      
+      this.nuovoMedicina.filenameRichiesta = file.name;
+      this.nuovoMedicina.fileRichiesta = file;
+    } else {
+      this.messageService.showMessageError("File non valido");
+      console.error("File non valido o non presente");
+    }
+  }
+
+
   // FINE DOCUMENTI IDENTITA
 
   // CONTRATTI
@@ -788,12 +935,13 @@ export class DialogDipendenteComponent implements OnInit {
     };
   }
 
+
   async uploadContratto($event) {
     let fileList: FileList = $event.target.files;
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload contratto: ", $event);
+      
       this.nuovoContratto.filename = file.name;
       this.nuovoContratto.file = file;
     } else {
@@ -825,6 +973,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async saveContratto(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Contratto";
     const path = "Contratto";
     const file: File = doc.file;
@@ -934,6 +1086,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async savePrivacy(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Privacy";
     const path = "Privacy";
     const file: File = doc.file;
@@ -1043,6 +1199,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async saveDiploma(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Diploma";
     const path = "Diploma";
     const file: File = doc.file;
@@ -1157,6 +1317,10 @@ export class DialogDipendenteComponent implements OnInit {
   }
 
   async saveAttestatoECM(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "AttestatoECM";
     const path = "AttestatoECM";
     const file: File = doc.file;
@@ -1221,10 +1385,103 @@ export class DialogDipendenteComponent implements OnInit {
 
   // CEDOLINI
 
+  async addCedolino() {
+    this.addingCedolino = true;
+    this.nuovoCedolino = {
+      filename: undefined,
+      note: "",
+      type: "Cedolino",
+    };
+  }
+
+  async uploadCedolino($event) {
+    let fileList: FileList = $event.target.files;
+    if (fileList.length > 0) {
+      let file: File = fileList[0];
+
+      console.log("upload Cedolino: ", $event);
+      this.nuovoCedolino.filename = file.name;
+      this.nuovoCedolino.file = file;
+    } else {
+      this.messageService.showMessageError("File non valido");
+      console.error("File non valido o non presente");
+    }
+  }
+
+  async deleteCedolino(doc: DocumentoDipendente) {
+    console.log("Cancella Cedolino: ", doc);
+
+    this.docService
+      .remove(doc)
+      .then((x) => {
+        console.log("cedolino cancellato");
+        const index = this.cedolini.indexOf(doc);
+        console.log("cedolino cancellato index: ", index);
+        if (index > -1) {
+          this.cedolini.splice(index, 1);
+        }
+
+        console.log("cedolino cancellato : ", doc);
+        this.cedoliniDataSource.data = this.cedolini;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore nella cancellazione Cedolino");
+        console.error(err);
+      });
+  }
+
+  async saveCedolino(doc: DocumentoDipendente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
+    const typeDocument = "Cedolino";
+    const path = "Cedolino";
+    const file: File = doc.file;
+    this.uploadingCedolino = true;
+
+    console.log("Invio Cedolino: ", doc);
+    this.docService
+      .insert(doc, this.dipendente)
+      .then((result: DocumentoDipendente) => {
+        console.log("Insert Cedolino: ", result);
+        this.cedolini.push(result);
+        this.cedoliniDataSource.data = this.cedolini;
+        this.addingCedolino = false;
+        this.uploadingCedolino = false;
+
+        let formData: FormData = new FormData();
+
+        const nameDocument: string = doc.filename;
+
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.dipendente._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
+
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento fattura");
+        console.error(err);
+      });
+  }
+
+
   async getCedolini() {
     console.log(`get Cedolini dipendente: ${this.dipendente._id}`);
     this.docService
-      .get(this.dipendente, "Cedolini")
+      .get(this.dipendente, "Cedolino")
       .then((f: DocumentoDipendente[]) => {
         this.cedolini = f;
 

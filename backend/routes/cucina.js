@@ -390,6 +390,23 @@ router.get("/generale/getAll", async (req, res) => {
   }
 });
 
+router.get("/generale/getByType", async (req, res) => {
+    const { type } = req.query;
+    try {
+        const getData = () => {
+            return CucinaGenerale.find({
+                type: type
+            });
+        };
+
+        const cucina = await getData();
+        res.status(200).json(cucina);
+
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
 /**
  * Update menu generale
  */

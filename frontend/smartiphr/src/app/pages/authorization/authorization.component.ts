@@ -28,7 +28,7 @@ export class AuthorizationComponent implements OnInit {
       (mansioni: Mansione[]) => this.mansioni = mansioni
     );
 
-    this.menuService.getMenu().subscribe(
+    this.menuService.getMenuAccess().subscribe(
       (menu: Menu[]) => {
         this.menu = menu.sort((a:Menu, b:Menu) => a.order - b.order);
 

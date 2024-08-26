@@ -2,6 +2,7 @@ import { BrowserModule } from "@angular/platform-browser";
 import { NgModule } from "@angular/core";
 import { FormsModule } from "@angular/forms";
 
+
 import { AppRoutingModule } from "./app-routing.module";
 import { AppComponent } from "./app.component";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -17,6 +18,7 @@ import { far } from "@fortawesome/free-regular-svg-icons";
 
 import { MenuComponent } from "./component/menu/menu.component";
 import { PsicologicaComponent } from "./pages/psicologica/psicologica.component";
+import { SegnalazioneComponent } from "./pages/segnalazioni/segnalazioni.component";
 import { PazienteGeneraleComponent } from "./component/paziente-generale/paziente-generale.component";
 import { EsamePisicoComponent } from "./component/psicologica/esame-pisico/esame-pisico.component";
 import { ValutaPisicoComponent } from "./component/psicologica/valuta-pisico/valuta-pisico.component";
@@ -66,6 +68,7 @@ import { VisiteSpecialisticheComponent } from "./component/medica/visite-special
 import { AnamnesiPatologicaComponent } from "./component/medica/anamnesi-patologica/anamnesi-patologica.component";
 import { SchedaBAIComponent } from "./component/infermeristica/scheda-bai/scheda-bai.component";
 import { SchedaUlcereComponent } from "./component/infermeristica/scheda-ulcere/scheda-ulcere.component";
+import { AssegnazioneLettoComponent } from "./component/assegnazione-letto/assegnazione-letto.component";
 import { SchedaMNARComponent } from "./component/infermeristica/scheda-mnar/scheda-mnar.component";
 import { SchedaVASComponent } from "./component/infermeristica/scheda-vas/scheda-vas.component";
 import { SchedaUlcereDiabeteComponent } from "./component/infermeristica/scheda-ulcere-diabete/scheda-ulcere-diabete.component";
@@ -74,6 +77,8 @@ import { SchedaLesioniDecubitoComponent } from "./component/infermeristica/sched
 import { SchedaInterventiComponent } from "./component/infermeristica/scheda-interventi/scheda-interventi.component";
 import { DecessoComponent } from "./component/medica/decesso/decesso.component";
 import { DialogEventComponent } from "./dialogs/dialog-event/dialog-event.component";
+import { DialogTurniComponent } from "./dialogs/dialog-turni/dialog-turni.component";
+
 
 // import {
 //   NgxMatDatetimePickerModule,
@@ -117,6 +122,7 @@ import { FerieComponent } from "./component/ferie/ferie.component";
 import { PermessiComponent } from "./component/permessi/permessi.component";
 import { TurnimensiliComponent } from "./component/turnimensili/turnimensili.component";
 import { CambiturnoComponent } from "./component/cambiturno/cambiturno.component";
+import { ContrattoConsulentiComponent } from "./component/contratto-consulenti/contratto-consulenti.component";
 import { PresenzeComponent } from "./component/presenze/presenze.component";
 import { FornitoreGeneraleComponent } from "./component/fornitore-generale/fornitore-generale.component";
 import { DipendenteGeneraleComponent } from "./component/dipendente-generale/dipendente-generale.component";
@@ -166,12 +172,18 @@ import { AreaRiabilitativaComponent } from './component/area-riabilitativa/area-
 import { DialogRiabilitazioneLesioneComponent } from './dialogs/dialog-riabilitazione-lesione/dialog-riabilitazione-lesione.component';
 import { AreaRiabilitazioneProgrammaComponent } from './component/area-riabilitazione-programma/area-riabilitazione-programma.component';
 import { AreaRiabilitazioneDiarioComponent } from './component/area-riabilitazione-diario/area-riabilitazione-diario.component';
+import { IndumentiIngressoComponent } from './component/indumenti-ingresso/indumenti-ingresso.component';
 import { DialogRiabilitazioneDiarioComponent } from './dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { RegisterInformationDipendenteComponent } from './component/register-information-dipendente/register-information-dipendente.component';
 import { GeneralePersonaleComponent } from './pages/generale-personale/generale-personale.component';
 import { EsamiPrivacyPersonaleComponent } from './pages/esami-privacy-personale/esami-privacy-personale.component';
-import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
+//import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
+import { QualitaGeneraleComponent } from "./pages/areaqualita-generale/areaqualita-generale.component";
+import { NominaDPOComponent } from "./pages/nominadpo/nominadpo.component";
+import { NominaResponsabileComponent } from "./pages/nomina-responsabile/nomina-responsabile.component";
+import { RichiestaMaterialeComponent } from './pages/richieste-materiale/richieste-materiale.component';
+import { ArchivioConsulentiComponent } from './pages/archivio-consulenti/archivio-consulenti.component';
 import { FerieAltroPersonaleComponent } from './pages/ferie-altro-personale/ferie-altro-personale.component';
 import { DebugComponent } from './component/debug/debug.component';
 import { AuthorizationComponent } from './pages/authorization/authorization.component';
@@ -200,12 +212,19 @@ import { PrettyprintPipe } from './pipe/prettyprint.pipe';
 import { CastingVerificaPipe } from "./pipe/castingVerifica";
 import { IndumentiListComponent } from './pages/indumenti-list/indumenti-list.component';
 import { IndumentiComponent } from './dialogs/indumenti/indumenti.component';
-import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
-import { RifacimentoLettiOssComponent } from './pages/rifacimento-letti-oss/rifacimento-letti-oss.component';
+import { DialogIndumentiIngressoComponent } from './dialogs/dialog-indumento-ingresso/dialog-indumento-ingresso.component';
+import { DialogIndumentoComponent } from './dialogs/dialog-indumento/dialog-indumento.component';
+import { DialogRifacimentoLettiComponent } from './dialogs/dialog-rifacimento-letti/dialog-rifacimento-letti.component';
+import { DialogVerificaArmadioComponent } from './dialogs/dialog-verifica-armadio/dialog-verifica-armadio.component';
+//import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
+//import { RifacimentoLettiOssComponent } from './pages/rifacimento-letti-oss/rifacimento-letti-oss.component';
+import { LavanderiaInternaComponent } from './pages/lavanderia-interna/lavanderia-interna.component';
+import { LavanderiaEsternaComponent } from './pages/lavanderia-esterna/lavanderia-esterna.component';
 import { GestFarmaciComponent } from './pages/gest-farmaci/gest-farmaci.component';
 import { GestPresidiComponent } from './pages/gest-presidi/gest-presidi.component';
 import { GestFarmacipresidiPazientiComponent } from './pages/gest-farmacipresidi-pazienti/gest-farmacipresidi-pazienti.component';
 import { DialogPresidioComponent } from './dialogs/dialog-presidio/dialog-presidio.component';
+import { DialogSegnalazioneComponent } from './dialogs/dialog-segnalazione/dialog-segnalazione.component';
 import { ModulisticafarmaciComponent } from './pages/modulisticafarmaci/modulisticafarmaci.component';
 import { DialogPresidiPazienteComponent } from './dialogs/dialog-presidi-paziente/dialog-presidi-paziente.component';
 import { DialogFarmaciPazienteComponent } from './dialogs/dialog-farmaci-paziente/dialog-farmaci-paziente.component';
@@ -235,6 +254,41 @@ import { CucinaAutoControlloComponent } from './pages/cucina-auto-controllo/cuci
 import { CucinaDerrateAlimentariComponent } from './pages/cucina-derrate-alimentari/cucina-derrate-alimentari.component';
 import { DialogCucinaDerranteAlimentiComponent } from './dialogs/dialog-cucina-derrante-alimenti/dialog-cucina-derrante-alimenti.component';
 import { DialogCucinaDerranteAlimentiCaricoComponent } from './dialogs/dialog-cucina-derrante-alimenti-carico/dialog-cucina-derrante-alimenti-carico.component';
+import { calendarioTurniComponent } from "./pages/calendario-turni/calendario-turni.component";
+import { ArchivioCertificatiComponent } from "./pages/archivio-certificati/archivio-certificati.component";
+import { AuditInternoComponent } from "./pages/audit-interno/audit-interno.component";
+import { OrganigrammaComponent } from "./pages/organigramma/organigramma.component";
+import { DialogControlloMensileComponent } from "./dialogs/dialog-controllo-mensile/dialog-controllo-mensile.component";
+import { ControlloMensileComponent } from "./pages/controllo-mensile/controllo-mensile.component";
+import { ReportControlloMensileComponent } from "./pages/Report-controllo-mensile/Report-controllo-mensile.component";
+import { PianificazioneCorsiComponent } from "./pages/pianificazione-corsi/pianificazione-corsi.component";
+import { ElencoModulisticaComponent } from "./pages/elenco-modulistica/elenco-modulistica.component";
+import { ICFComponent } from "./component/assistente-sociale/ICF/ICF.component";
+import { DialogTestRiabilitativoComponent } from "./dialogs/dialog-test/dialog-test.component";
+import { VisitePreAssunzioniComponent } from "./pages/visita-pre-assunzioni/visita-pre-assunzioni.component";
+import { VisitePeriodicheComponent } from "./pages/visita-periodica/visita-periodica.component";
+import { MedicoLavoroComponent } from "./pages/medico-lavoro/medico-lavoro.component";
+import { RLSComponent } from "./pages/rls/rls.component";
+import { RSPPComponent } from "./pages/rspp/rspp.component";
+import { AntincendioComponent } from "./pages/antincendio/antincendio.component";
+import { AreaFormazioneComponent } from "./pages/area-formazione-sicurezza/area-formazione-sicurezza.component";
+import { ControlloAntincendioComponent } from "./pages/controllo-antincendio/controllo-antincendio.component";
+import { UploadDocComponent } from "./component/upload-doc/upload-doc.component";
+import { ApparecchiatureComponent } from "./pages/apparecchiature-impianti/apparecchiature-impianti.component";
+import { AutocertificazioniComponent } from "./pages/autocertificazioni/autocertificazioni.component";
+import { CertificazioniComponent } from "./pages/certificazioni/certificazioni.component";
+import { PianoScadenzeComponent } from "./pages/piano-scadenze/piano-scadenze.component";
+import { VerificaAscensoriComponent } from "./pages/verifica-ascensori/verifica-ascensori.component";
+import { PrevenzioneRischiComponent } from "./pages/prevenzione-rischi/prevenzione-rischi.component";
+import { ControlloLegionellosiComponent } from "./pages/controllo-legionellosi/controllo-legionellosi.component";
+import { AgendaClinicaComponent } from "./pages/agendaClinica/agendaClinica.component";
+import { DialogAgendaClinicaComponent } from "./dialogs/dialog-agendaClinica/dialog-agendaClinica.component";
+import { DialogCaricadocumentoMedicinaComponent } from "./dialogs/dialog-caricadocumentoMedicina/dialog-caricadocumentoMedicina.component";
+import { SettingsComponent } from "./pages/settings/settings.component";
+import { UtenzaComponent } from "./component/utenza/utenza.component";
+import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
+import { DialogRichiestaPresidiComponent } from "./dialogs/dialog-richiesta/dialog-richiesta.component";
+import { RichiestaPresidiComponent } from "./component/richiestePresidi/richiestePresidi.component";
 
 const materialModules = [
   MatTableModule,
@@ -272,10 +326,12 @@ const materialModules = [
 const dialogModule = [
   DialogPisicologicaComponent,
   DialogDiarioComponent,
+  DialogTestRiabilitativoComponent,
   DialogStanzaComponent,
   DialogCartellaClinicaComponent,
   DialogCartellaInfermeristicaComponent,
   DialogEventComponent,
+  DialogTurniComponent,
   DialogFarmacoComponent,
   DialogPresidioComponent,
   DialogDipendenteComponent,
@@ -287,10 +343,14 @@ const dialogModule = [
   DialogDocumentComponent,
   DialogCvComponent,
   DialogCaricadocumentoComponent,
+  DialogCaricadocumentoMedicinaComponent,
   DialogQuestionComponent,
   DialogDiarioClinicoComponent,
   DialogVisitespecialisticheComponent,
   DialogInterventiComponent,
+  DialogSegnalazioneComponent,
+  DialogAgendaClinicaComponent,
+  DialogRichiestaPresidiComponent,
   DialogCartellaAssistenteSocialeComponent,
   DialogCartellaEducativaComponent,
   DialogRiabilitazioneComponent,
@@ -300,10 +360,15 @@ const dialogModule = [
   DialogRiabilitazioneDiarioComponent,
   DialogPreIngressoComponent,
   DialogIngressoComponent,
+  DialogControlloMensileComponent,
   DialogAttivitaComponent,
   DialogArmadioComponent,
   CamereDetailsComponent,
   IndumentiComponent,
+  DialogIndumentiIngressoComponent,
+  DialogRifacimentoLettiComponent,
+  DialogIndumentoComponent,
+  DialogVerificaArmadioComponent,
 ];
 
 const pipes = [
@@ -322,6 +387,7 @@ const pipes = [
     MenuComponent,
     MenuItemComponent,
     PsicologicaComponent,
+    SegnalazioneComponent,
     PazienteGeneraleComponent,
     EsamePisicoComponent,
     ValutaPisicoComponent,
@@ -336,7 +402,25 @@ const pipes = [
     GeneralePersonaleComponent,
     GestStanzeComponent,
     CalendarComponent,
+    VisitePreAssunzioniComponent,
+    VisitePeriodicheComponent,
+    MedicoLavoroComponent,
+    RLSComponent,
+    RSPPComponent,
+    AntincendioComponent,
+    ContrattiConsulentiComponent,
+    AgendaClinicaComponent,
+    ApparecchiatureComponent,
+    AutocertificazioniComponent,
+    PrevenzioneRischiComponent,
+    ControlloLegionellosiComponent,
+    VerificaAscensoriComponent,
+    PianoScadenzeComponent,
+    CertificazioniComponent,
+    AreaFormazioneComponent,
+    ControlloAntincendioComponent,
     DashboardComponent,
+    calendarioTurniComponent,
     AnamnesiFamigliareComponent,
     EsameGeneraleComponent,
     EsameNeurologicaComponent,
@@ -346,6 +430,7 @@ const pipes = [
     AnamnesiPatologicaComponent,
     SchedaBAIComponent,
     SchedaUlcereComponent,
+    AssegnazioneLettoComponent,
     SchedaMNARComponent,
     SchedaVASComponent,
     SchedaUlcereDiabeteComponent,
@@ -372,9 +457,13 @@ const pipes = [
     LoginComponent,
     TableDipendentiComponent,
     FerieComponent,
+    UploadDocComponent,
+    RichiestaPresidiComponent,
+    UtenzaComponent,
     PermessiComponent,
     TurnimensiliComponent,
     CambiturnoComponent,
+    ContrattoConsulentiComponent,
     PresenzeComponent,
     FornitoreGeneraleComponent,
     DipendenteGeneraleComponent,
@@ -399,6 +488,7 @@ const pipes = [
     AreaSocialeComponent,
     ValutazioneSocialeComponent,
     IndiceSocializzazioneComponent,
+    ICFComponent,
     DiarioSocialeComponent,
     DiarioEducativoComponent,
     ValutazioneEducativaComponent,
@@ -408,15 +498,29 @@ const pipes = [
     ValutazioneMotoriaComponent,
     AreaRiabilitativaComponent,
     AreaRiabilitazioneProgrammaComponent,
+    IndumentiIngressoComponent,
     AreaRiabilitazioneDiarioComponent,
     RegisterComponent,
     RegisterInformationDipendenteComponent,
     GeneralePersonaleComponent,
     EsamiPrivacyPersonaleComponent,
-    LavoroPersonaleComponent,
+    //LavoroPersonaleComponent,
+    QualitaGeneraleComponent,
+    ElencoModulisticaComponent,
+    NominaDPOComponent,
+    PianificazioneCorsiComponent,
+    AuditInternoComponent,
+    OrganigrammaComponent,
+    ArchivioCertificatiComponent,
+    ControlloMensileComponent,
+    ReportControlloMensileComponent,
+    NominaResponsabileComponent,
+    RichiestaMaterialeComponent,
+    ArchivioConsulentiComponent,
     FerieAltroPersonaleComponent,
     DebugComponent,
     AuthorizationComponent,
+    SettingsComponent,
     AreaOssComponent,
     CamereComponent,
     AttivitaOssComponent,
@@ -429,8 +533,10 @@ const pipes = [
     AltreinfoCartellasocialeComponent,
     DialogAttivitaQuotidianeComponent,
     IndumentiListComponent,
-    ChiaviOssComponent,
-    RifacimentoLettiOssComponent,
+    //ChiaviOssComponent,
+    //RifacimentoLettiOssComponent,
+    LavanderiaInternaComponent,
+    LavanderiaEsternaComponent,
     GestFarmaciComponent,
     GestPresidiComponent,
     GestFarmacipresidiPazientiComponent,
@@ -440,6 +546,9 @@ const pipes = [
     DialogFarmaciPazienteComponent,
     DialogFarmacoPazienteComponent,
     DialogPresidioPazienteComponent,
+    DialogSegnalazioneComponent,
+    DialogAgendaClinicaComponent,
+    DialogRichiestaPresidiComponent,
     DialogModulisticaPazienteComponent,
     AttivitaFarmaciComponent,
     AttivitaPresidiComponent,
@@ -470,7 +579,6 @@ const pipes = [
     AppRoutingModule,
     BrowserAnimationsModule,
     FontAwesomeModule,
-
     HttpClientModule,
     ChartsModule,
   ],
@@ -486,6 +594,7 @@ const pipes = [
   entryComponents: [
     DialogPisicologicaComponent,
     DialogDiarioComponent,
+    DialogTestRiabilitativoComponent,
     DialogStanzaComponent,
     DialogCartellaClinicaComponent,
     DialogCartellaInfermeristicaComponent,
@@ -502,6 +611,7 @@ const pipes = [
     DialogPazienteComponent,
     DialogCvComponent,
     DialogCaricadocumentoComponent,
+    DialogCaricadocumentoMedicinaComponent,
     DialogQuestionComponent,
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
@@ -513,6 +623,7 @@ const pipes = [
     DialogDiarioAsssocialeComponent,
     DialogPreIngressoComponent,
     DialogIngressoComponent,
+    DialogControlloMensileComponent,
     DialogAttivitaComponent,
     DialogArmadioComponent,
   ],

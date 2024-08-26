@@ -33,9 +33,310 @@
           <mat-tab label="VALUTAZIONE MOTORIA">
             <app-valutazione-motoria [data]=valutazioneMotoria [disable]=false></app-valutazione-motoria>
           </mat-tab>
-          <mat-tab label="AREA RIABILITATIVA">
-            <app-area-riabilitativa [data]=areaRiabilitativa [disable]=false></app-area-riabilitativa>
+
+          <mat-tab label="TINETTI">
+            <br />
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingDocSchedaTinetti">
+              <button mat-button class="button-insert" (click)="addDocSchedaTinetti()">Aggiungi Documento</button>
+            </div>
+
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                 *ngIf="addingDocSchedaTinetti && !uploadingDocSchedaTinetti">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadDocSchedaTinetti($event)" accept=".pdf" *ngIf="!uploadingDocSchedaTinetti">
+                  <label *ngIf="uploadingDocSchedaTinetti">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocSchedaTinetti.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveDocSchedaTinetti(nuovoDocSchedaTinetti)">Salva</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingDocSchedaTinetti">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="this.docsSchedaTinetti?.length <= 0" class="notPresent">
+              Nessun documento presente
+            </div>
+
+            <table mat-table [dataSource]="DocsSchedaTinettiDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.docsSchedaTinetti?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+                  <button mat-button (click)="showDocument(row)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                    </svg>
+                  </button>
+
+                  <button mat-button (click)="deleteDocSchedaTinetti(row, i)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                    </svg>
+                  </button>
+
+
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+
+            <div class="paginator-container">
+
+              <mat-paginator #paginatorDocsSchedaTinetti [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                             aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
           </mat-tab>
+          <mat-tab label="FIM">
+            <br />
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingSchedaFIM">
+              <button mat-button class="button-insert" (click)="addSchedaFIM()">Aggiungi Documento</button>
+            </div>
+
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                 *ngIf="addingSchedaFIM && !uploadingSchedaFIM">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadSchedaFIM($event)" accept=".pdf" *ngIf="!uploadingSchedaFIM">
+                  <label *ngIf="uploadingSchedaFIM">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Punteggio</mat-label>
+                    <input matInput placeholder="Inserisci il punteggio" [(ngModel)]="nuovoSchedaFIM.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveSchedaFIM(nuovoSchedaFIM)">Salva</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingSchedaFIM">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="this.SchedaFIM?.length <= 0" class="notPresent">
+              Nessun documento presente
+            </div>
+
+            <table mat-table [dataSource]="SchedaFIMDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.SchedaFIM?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+                  <button mat-button (click)="showDocument(row)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                    </svg>
+                  </button>
+
+                  <button mat-button (click)="deleteSchedaFIM(row, i)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                    </svg>
+                  </button>
+
+
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Punteggio </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+
+            <div class="paginator-container">
+
+              <mat-paginator #paginatorSchedaFIM [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                             aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+          </mat-tab>
+          <mat-tab label="BARTHEL">
+
+
+            <br />
+            <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingSchedaBARTHEL">
+              <button mat-button class="button-insert" (click)="addSchedaBARTHEL()">Aggiungi Documento</button>
+            </div>
+
+            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+                 *ngIf="addingSchedaBARTHEL && !uploadingSchedaBARTHEL">
+              <div class="row">
+                <div class="col">
+                  <input type="file" (change)="uploadSchedaBARTHEL($event)" accept=".pdf" *ngIf="!uploadingSchedaBARTHEL">
+                  <label *ngIf="uploadingSchedaBARTHEL">Caricamento in corso ...</label>
+                </div>
+                <div class="col">
+                </div>
+              </div>
+              <div class="row">
+                <div class="col">
+                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                    <mat-label>Note</mat-label>
+                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoSchedaBARTHEL.note">
+                  </mat-form-field>
+                </div>
+                <div class="col-2">
+                  <button mat-button class="button-insert" (click)="saveSchedaBARTHEL(nuovoSchedaBARTHEL)">Salva</button>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingSchedaBARTHEL">
+                <div class="row">
+                  <div class="col-1">
+                    <mat-spinner [diameter]="24"></mat-spinner>
+                  </div>
+                  <div class="col">
+                    <label>Caricamento in corso ...</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+
+            <div *ngIf="this.SchedaBARTHEL?.length <= 0" class="notPresent">
+              Nessun documento presente
+            </div>
+
+            <table mat-table [dataSource]="SchedaBARTHELDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.SchedaBARTHEL?.length > 0">
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row; let i = index;" style="text-align: right;">
+                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+                  <button mat-button (click)="showDocument(row)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                      <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                    </svg>
+                  </button>
+
+                  <button mat-button (click)="deleteSchedaBARTHEL(row, i)">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                    </svg>
+                  </button>
+
+
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="namefile">
+                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="date">
+                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="note">
+                <th mat-header-cell *matHeaderCellDef> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+
+            <div class="paginator-container">
+
+              <mat-paginator #paginatorSchedaBARTHEL [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                             aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+
+
+          </mat-tab>
+
+
+          <mat-tab label="AREA RIABILITATIVA">
+            <app-area-riabilitativa [data]=areaRiabilitativa [disable]=false
+                                    [paziente]=data.paziente
+                                    ></app-area-riabilitativa>
+          </mat-tab>
+
           <mat-tab label="PROGRAMMA RIABILITATIVO">
             <app-area-riabilitazione-programma [data]=areaRiabilitativaProgramma [disable]=false></app-area-riabilitazione-programma>
           </mat-tab>

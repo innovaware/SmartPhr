@@ -9,6 +9,7 @@ import { valutazioneSociale } from 'src/app/models/valutazioneSociale';
 export class ValutazioneSocialeComponent implements OnInit {
 
   @Input() data: valutazioneSociale;
+  @Input() disable: Boolean;
   constructor() { }
 
   ngOnInit() {

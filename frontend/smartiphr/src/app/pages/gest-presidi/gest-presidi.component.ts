@@ -47,9 +47,9 @@ export class GestPresidiComponent implements OnInit {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
-        .getByIdUser(user._id)
+        .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
+          
           this.dipendente = x[0];
 
         })

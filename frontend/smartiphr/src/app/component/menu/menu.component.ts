@@ -16,11 +16,12 @@ import { MenuService } from "src/app/service/menu.service";
 export class MenuComponent implements OnInit {
   menu: Menu[];
   mansione: string;
-
+  username: String;
   constructor(
     public menuService: MenuService,
     private authenticationService: AuthenticationService
   ) {
+    this.username = "";
     this.menu = [];
   }
 
@@ -29,7 +30,7 @@ export class MenuComponent implements OnInit {
 
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
       if (user !== undefined && user !== null) {
-
+        this.username = user.username;
         this.menuService.getMenu().subscribe((items: Menu[]) => {
           this.menu = items.sort((a: Menu, b: Menu) => {
             return a.order - b.order;

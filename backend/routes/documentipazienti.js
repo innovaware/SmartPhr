@@ -4,134 +4,72 @@ const DocPaziente = require("../models/documentiPazienti");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/paziente/:id/:type", async (req, res) => {
-  try {
-    let id = req.params.id;
-    let type = req.params.type;
+    try {
+        let id = req.params.id;
+        let type = req.params.type;
 
-    console.log('GET DOCS(id):' + id);
-    console.log('GET DOCS(type):' + type);
+        console.log('GET DOCS(id): ' + id);
+        console.log('GET DOCS(type): ' + type);
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const getData = () => {
+            return DocPaziente.find({
+                $and: [
+                    { paziente: id },
+                    { type: type },
+                    {
+                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                    },
+                ],
+            });
+        };
 
-    const getData = () => {
-      return DocPaziente.find({
-        $and: [
-          { paziente: id },
-          { type: type },
-          {
-            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-          },
-        ]
-      });
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const documenti = await getData();
-      res.status(200).json(documenti);
-      return;
-    }
-
-    const searchTerm = `DOCUMENTIPAZIENTEBY${id}`;
-    redisClient.get(searchTerm, async (err, asps) => {
-      if (err) throw err;
-
-      if (asps) {
-        res.status(200).send(JSON.parse(asps));
-      } else {
         const documenti = await getData();
-        redisClient.setex(
-          searchTerm,
-          redisTimeCache,
-          JSON.stringify(documenti)
-        );
+        console.log("documenti: ", documenti);
         res.status(200).json(documenti);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
 });
+
 
 
 router.get("/pazienteingresso/:id", async (req, res) => {
-  try {
-    let id = req.params.id;
-    let type = req.params.type;
+    try {
+        let id = req.params.id;
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const getData = () => {
+            return DocPaziente.find({
+                paziente: id,
+                typeDocument: "ingresso",
+            });
+        };
 
-    const getData = () => {
-      return DocPaziente.find({
-        paziente: id,
-        typeDocument: "ingresso",
-      });
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        const eventi = await getData();
+        res.status(200).json(eventi);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `DOCUMENTIPAZIENTEBY${id}`;
-    redisClient.get(searchTerm, async (err, asps) => {
-      if (err) throw err;
-
-      if (asps) {
-        res.status(200).send(JSON.parse(asps));
-      } else {
-        const documenti = await getData();
-        redisClient.setex(
-          searchTerm,
-          redisTimeCache,
-          JSON.stringify(documenti)
-        );
-        res.status(200).json(visita);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
 });
+
 
 
 
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        const getData = () => {
+            return DocPaziente.findById(id);
+        };
 
-    const getData = () => {
-      return DocPaziente.findById(id);
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        const eventi = await getData();
+        res.status(200).json(eventi);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `DOCUMENTIPAZIENTEBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const doc = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(doc));
-        res.status(200).json(doc);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
 
 router.post("/:id", async (req, res) => {
   try {

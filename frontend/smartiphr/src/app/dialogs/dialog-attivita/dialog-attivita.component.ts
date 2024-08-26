@@ -44,10 +44,13 @@ export class DialogAttivitaComponent implements OnInit {
       paziente: Paziente;
       readonly: boolean;
     }) { 
-      this.paziente = Paziente.clone(data.paziente);
+    this.paziente = Paziente.clone(data.paziente);
+    this.loadUser();
     }
 
   ngOnInit() {
+    this.getAttivitaOdierne();
+    this.loadUser();
     var data =  new Date();
     let hour = data.getHours();
     var turno = 'Mattina';
@@ -74,9 +77,6 @@ export class DialogAttivitaComponent implements OnInit {
       tagliounghie: false,
       lenzuola: false
     };
-
-    this.getAttivitaOdierne();
-    this.loadUser();
   }
 
 
@@ -85,9 +85,9 @@ export class DialogAttivitaComponent implements OnInit {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
-        .getByIdUser(user._id)
+        .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x[0]));
+          
           this.dipendente = x[0];
 
         })
@@ -102,7 +102,47 @@ export class DialogAttivitaComponent implements OnInit {
 
 
   async saveAttivita(nuovoAttivita: AttivitaOSS) {
+    console.log(nuovoAttivita);
+    nuovoAttivita.operatorName = this.dipendente.cognome + " " + this.dipendente.nome;
+    nuovoAttivita.operator = this.dipendente._id;
+    var descrizione: string = "";
+    if (nuovoAttivita.letto) {
+      descrizione += "G.Letto";
+    }
+    if (nuovoAttivita.diuresi) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Diuresi";
+    }
+    if (nuovoAttivita.evacuazione) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Evaquazione";
+    }
+    if (nuovoAttivita.igiene) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Igiene";
+    }
 
+    if (nuovoAttivita.barba) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Barba";
+    }
+
+    if (nuovoAttivita.tagliocapelli) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Taglio capelli";
+    }
+
+    if (nuovoAttivita.tagliounghie) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "Taglio unghie";
+    }
+
+    if (nuovoAttivita.lenzuola) {
+      descrizione = descrizione != "" ? descrizione + ", " : "";
+      descrizione += "C. lenzuola";
+    }
+    nuovoAttivita.descrizione = descrizione;
+    console.log(nuovoAttivita);
     this.attivitaService
       .insert(nuovoAttivita)
       .then((result: AttivitaOSS) => {

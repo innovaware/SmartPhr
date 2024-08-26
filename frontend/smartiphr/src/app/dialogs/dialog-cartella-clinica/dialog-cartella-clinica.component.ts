@@ -27,6 +27,8 @@ import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
+import { CartellaEducativa } from "../../models/cartellaEducativa";
+import { ValutazioneMotoria } from "../../models/ValutazioneMotoria";
 
 @Component({
   selector: "app-dialog-cartella-clinica",
@@ -152,7 +154,15 @@ console.log('altro: ' + this.data.altro);
       this.paziente.schedaClinica.schedaValutazioneTecniche = new schedaValutazioneTecniche();
     }
 
+    if (this.paziente.schedaEducativa == undefined || this.paziente.schedaEducativa == null) {
+      console.log("dentro");
+      this.paziente.schedaEducativa = new CartellaEducativa();
+    }
 
+    if (this.paziente.valutazioneMotoria == undefined || this.paziente.valutazioneMotoria == null) {
+      this.paziente.valutazioneMotoria = new ValutazioneMotoria();
+    }
+    
     if (this.paziente.schedaClinica.schedaDimissioneOspite == undefined) {
       this.paziente.schedaClinica.schedaDimissioneOspite = new schedaDimissioneOspite();
     }
@@ -173,12 +183,10 @@ console.log('altro: ' + this.data.altro);
       .schedaMezziContenzione as schedaMezziContenzione;
     this.schedaValutazioneTecniche = this.paziente.schedaClinica
       .schedaValutazioneTecniche as schedaValutazioneTecniche;
-
       this.schedaDecessoOspite = this.paziente.schedaClinica
       .schedaDecessoOspite as schedaDecessoOspite;
     this.schedaDimissioneOspite = this.paziente.schedaClinica
       .schedaDimissioneOspite as schedaDimissioneOspite;
-
 
   }
 
@@ -198,9 +206,9 @@ console.log('altro: ' + this.data.altro);
     this.uploadService
       .download(document.name, this.paziente._id, '')
       .then((x) => {
-        //console.log("download: ", x);
+        //
         x.subscribe((data) => {
-           console.log("download: ", data);
+           
            const newBlob = new Blob([data as BlobPart], {
              type: "application/pdf",
            });
@@ -283,11 +291,11 @@ console.log('altro: ' + this.data.altro);
   async showDocument(doc: DocumentoPaziente) {
     console.log("doc: ", JSON.stringify(doc));
     this.uploadService
-    .download(doc.filename, doc._id, doc.type)
+    .download(doc.filename, doc.paziente, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -386,6 +394,10 @@ console.log('altro: ' + this.data.altro);
   }
 
   async savePianoTerapeutico(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "PianoTerapeutico";
     const path = "PianoTerapeutico";
     const file: File = doc.file;
@@ -503,6 +515,10 @@ console.log('altro: ' + this.data.altro);
   }
 
   async saveRefertoEsameStrumentale(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "RefertoEsameStrumentale";
     const path = "RefertoEsameStrumentale";
     const file: File = doc.file;
@@ -620,6 +636,10 @@ console.log('altro: ' + this.data.altro);
   }
 
   async saveRefertoEsameEmatochimico(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "RefertoEsameEmatochimico";
     const path = "RefertoEsameEmatochimico";
     const file: File = doc.file;
@@ -734,6 +754,10 @@ console.log('altro: ' + this.data.altro);
   }
 
   async saveRelazione(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Relazione";
     const path = "Relazione";
     const file: File = doc.file;
@@ -826,28 +850,35 @@ console.log('altro: ' + this.data.altro);
   async deleteVerbale(doc: DocumentoPaziente) {
     console.log("Cancella Verbale: ", doc);
 
-    this.docService
-      .remove(doc)
-      .then((x) => {
-        console.log("Verbale cancellata");
-        const index = this.verbali.indexOf(doc);
-        console.log("Verbale cancellata index: ", index);
-        if (index > -1) {
-          this.verbali.splice(index, 1);
-        }
+    try {
+      await this.docService.remove(doc);
+      console.log("Verbale cancellata");
 
-        console.log("Verbale cancellato: ", this.verbali);
-        this.VerbaliDataSource.data = this.verbali;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore nella cancellazione doc identita"
-        );
-        console.error(err);
-      });
+      const index = this.verbali.indexOf(doc);
+      console.log("Verbale cancellata index: ", index);
+
+      if (index > -1) {
+        this.verbali.splice(index, 1);
+      }
+
+      // Forza l'aggiornamento della tabella creando una nuova istanza dell'array
+      this.VerbaliDataSource.data = [...this.verbali];
+      console.log("Verbale cancellato: ", this.VerbaliDataSource.data);
+
+    } catch (err) {
+      this.messageService.showMessageError(
+        "Errore nella cancellazione del documento di identità"
+      );
+      console.error(err);
+    }
   }
 
+
   async saveVerbale(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Verbale";
     const path = "Verbale";
     const file: File = doc.file;
@@ -962,6 +993,10 @@ console.log('verbali: ' + JSON.stringify(this.verbali));
   }
 
   async saveImpegnativa(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Impegnativa";
     const path = "Impegnativa";
     const file: File = doc.file;

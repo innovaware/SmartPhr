@@ -4,13 +4,17 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { Paziente } from 'src/app/models/paziente';
 import { ArmadioService } from 'src/app/service/armadio.service';
 import { MessagesService } from 'src/app/service/messages.service';
-import { Armadio, Contenuto, Indumento, IndumentoTemplate } from 'src/app/models/armadio';
+import { Armadio } from 'src/app/models/armadio';
 import { map } from 'rxjs/operators';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
 import { IndumentiService } from 'src/app/service/indumenti.service';
 import { Camere } from 'src/app/models/camere';
 import { CamereService } from 'src/app/service/camere.service';
+import { Indumento } from '../../models/indumento';
+import { AuthenticationService } from '../../service/authentication.service';
+import { DipendentiService } from '../../service/dipendenti.service';
+import { Dipendenti } from '../../models/dipendenti';
 
 @Component({
   selector: 'app-indumenti',
@@ -27,14 +31,14 @@ export class IndumentiComponent implements OnInit {
   ];
 
   dataSourceIndumenti: MatTableDataSource<Indumento>;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
 
   adding: boolean = false;
 
   selectedAddingIndumento: string;
   selectedQtaIndumento: number = 1;
   selectedNoteIndumento: string = "";
-  indumenti: Observable<IndumentoTemplate[]>;
+  indumenti: Observable<Indumento[]>;
 
   currentArmadio: Armadio;
   currentCamera: BehaviorSubject<Camere> = new BehaviorSubject(null);
@@ -42,49 +46,25 @@ export class IndumentiComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<IndumentiComponent>,
     private armadioService: ArmadioService,
+    private authenticationService: AuthenticationService,
+    private dipendentiService: DipendentiService,
     private indumentiService: IndumentiService,
-    private camereService: CamereService,
     public dialog: MatDialog,
     private messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
+      armadioData: Armadio;
       paziente: Paziente;
     }) {
-      this.dataSourceIndumenti = new MatTableDataSource([]);
+    this.dataSourceIndumenti = new MatTableDataSource([]);
+    this.currentArmadio = this.data.armadioData;
+    this.load();
+  }
 
-      this.load();
-    }
-
-    load() {
-      console.log("paziente:", this.data.paziente);
-
-      this.camereService.get(this.data.paziente.idCamera).subscribe((camera: Camere) => this.currentCamera.next(camera))
-      this.armadioService.getIndumenti(this.data.paziente.idCamera, new Date())
-      .pipe(
-        map( (armadio: Armadio[])=> {
-          return armadio[0]
-        })
-      )
-      .subscribe((armadio: Armadio)=>{
-
-        this.currentArmadio = armadio;
-
-        if (this.currentArmadio === undefined) {
-          this.messageService.showMessageError("Attenzione armadio non presente in questa camera. Procedere nella creazione nella sezione Camere");
-        }
-        // if (armadio !== undefined) {
-        //   this.camereService.get(armadio.idCamera).subscribe((camera: Camere) => this.currentCamera.next(camera))
-        // }
-
-        let indumenti: Indumento[] = [];
-        if (armadio !== undefined) {
-          const contenuto = armadio.contenuto.filter(content=> content.idPaziente === this.data.paziente._id);
-          indumenti = contenuto.flatMap(c => c.items);
-        }
-
-        this.dataSourceIndumenti = new MatTableDataSource(indumenti);
-        this.dataSourceIndumenti.paginator = this.paginator;
-      });
+  load() {
+    let indumenti = this.currentArmadio.contenuto;
+    this.dataSourceIndumenti = new MatTableDataSource(indumenti);
+    this.dataSourceIndumenti.paginator = this.paginator;
   }
 
   ngOnInit(): void {
@@ -116,30 +96,50 @@ export class IndumentiComponent implements OnInit {
     const indumentoAdding: Indumento = {
       nome: this.selectedAddingIndumento,
       quantita: this.selectedQtaIndumento,
-      note: this.selectedNoteIndumento,
+      carico: 0,
+      dataCaricamento: new Date(),
+      lastChecked: {
+        UserName: "",
+        datacheck: new Date()
+      },
+      scarico: 0,
+      note: ""
     };
 
+    const contenuto = this.currentArmadio.contenuto;
 
-    const contenuto = this.currentArmadio.contenuto.filter(c => c.idPaziente === this.data.paziente._id);
-    if (contenuto !== undefined) {
-      if (contenuto.length <= 0) {
-        this.currentArmadio.contenuto.push({
-          idPaziente: this.data.paziente._id,
-          items: [indumentoAdding],
-          verificato: false,
-          paziente: this.data.paziente
+    this.authenticationService.getCurrentUserAsync().subscribe(
+      (user) => {
+        this.dipendentiService.getById(user.dipendenteID).then((resulta: Dipendenti) => {
+          indumentoAdding.lastChecked.UserName = resulta.cognome + " " + resulta.nome;
+          console.log("User set: ", indumentoAdding.lastChecked.UserName);
+          console.log("User get: ", resulta.cognome + " " + resulta.nome);
+          this.currentArmadio.lastChecked.idUser = resulta.cognome + " " + resulta.nome;
+          this.currentArmadio.lastChecked.datacheck = new Date();
+
+          if (contenuto !== undefined) {
+            var flag: boolean = false;
+            for (var i: number = 0; i < contenuto.length; i++) {
+              if (contenuto[i].nome == indumentoAdding.nome) {
+                contenuto[i].quantita += indumentoAdding.quantita;
+                contenuto[i].carico += indumentoAdding.quantita;
+                contenuto[i].lastChecked = indumentoAdding.lastChecked;
+                flag = true;
+                break;
+              }
+            }
+            if (!flag) this.currentArmadio.contenuto.push(indumentoAdding);
+            this.armadioService.update(this.currentArmadio, "Inserimento Indumento").subscribe(result => {
+              this.messageService.showMessageError("Indumento inserito correttamente");
+              this.adding = false;
+              this.load();
+              this.Reset();
+            });
+          }
         });
-      } else {
-        contenuto[0].items.push(indumentoAdding);
       }
+    );
 
-      this.armadioService.update(this.currentArmadio, "Inserimento Indumento").subscribe( result => {
-        this.messageService.showMessageError("Indumento inserito correttamente");
-        this.load();
-        this.adding = false;
-      });
-    }
 
   }
-
 }

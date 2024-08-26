@@ -71,7 +71,7 @@ export class LavoroPersonaleComponent implements OnInit {
         this.dipendenteService
           .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log('dipendente: ' + JSON.stringify(x));
+          
               this.dipendente = x[0];
               this.getContratti();
               this.getCedolini();
@@ -89,9 +89,9 @@ export class LavoroPersonaleComponent implements OnInit {
     this.uploadService
       .downloadDocDipendente(doc.filename, doc.type, this.dipendente)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -132,7 +132,7 @@ export class LavoroPersonaleComponent implements OnInit {
       if (fileList.length > 0) {
         let file: File = fileList[0];
   
-        console.log("upload contratto: ", $event);
+        
         this.nuovoContratto.filename = file.name;
         this.nuovoContratto.file = file;
       } else {
@@ -232,7 +232,7 @@ export class LavoroPersonaleComponent implements OnInit {
   async getCedolini() {
     console.log(`get Cedolini dipendente: ${this.dipendente._id}`);
     this.docService
-      .get(this.dipendente, "Cedolini")
+      .get(this.dipendente, "Cedolino")
       .then((f: DocumentoDipendente[]) => {
         this.cedolini = f;
 

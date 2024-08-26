@@ -1,0 +1,252 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Sicurezza - Visite Pre-Assunzioni</h1>
+    </div>
+  </div>
+  <mat-tab-group mat-align-tabs="start">
+
+
+    <!-- esamilab -->
+    <br />
+    <mat-tab label="Esami di laboratorio">
+
+      <br />
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="standard">
+            <mat-label>Cerca</mat-label>
+            <input matInput (keyup)="applyFilter($event,'esamilab')" placeholder="Cerca qui..." [(ngModel)]="inputSearchField1">
+          </mat-form-field>
+        </div>
+        <div class="col-1 right middle" style="width: fit-content;">
+          <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField('esamilab')">
+        </div>
+      </div>
+      <br>
+      <ng-container *ngIf="admin">
+        <br>
+        <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingesamilab">
+          <button mat-button class="button-insert" (click)="addesamilab()">Aggiungi Documento</button>
+        </div>
+        <br><br>
+        <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+             *ngIf="addingesamilab && !uploadingesamilab">
+          <div class="row">
+            <div class="col">
+              <input type="file" (change)="uploadesamilab($event)" accept=".pdf" *ngIf="!uploadingesamilab">
+              <label *ngIf="uploadingesamilab">Caricamento in corso ...</label>
+            </div>
+            <div class="col">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full" appearance="fill">
+                <mat-label>Note</mat-label>
+                <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoesamilab.note">
+              </mat-form-field>
+            </div>
+            <div class="col-2">
+              <button mat-button class="button-insert" (click)="saveesamilab(nuovoesamilab)">Salva</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingesamilab">
+            <div class="row">
+              <div class="col-1">
+                <mat-spinner [diameter]="24"></mat-spinner>
+              </div>
+              <div class="col">
+                <label>Caricamento in corso ...</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+
+      <div *ngIf="this.esamilab?.length <= 0" class="notPresent">
+        Nessun documento presente
+      </div>
+
+      <table mat-table [dataSource]="esamilabDataSource" class="mat-elevation-z8" *ngIf="this.esamilab?.length > 0">
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: right;">
+            <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+        <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+            <button mat-button (click)="showDocument(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+              </svg>
+            </button>
+            <ng-container *ngIf="admin">
+              <button mat-button (click)="deleteesamilab(row)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                </svg>
+              </button>
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="namefile">
+          <th mat-header-cell *matHeaderCellDef> Nome file </th>
+          <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+          <th mat-header-cell *matHeaderCellDef> Note </th>
+          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+      </table>
+
+      <div class="paginator-container">
+
+        <mat-paginator #paginatoresamilab [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+
+    </mat-tab>
+
+
+    <!-- certificatoIdoneita -->
+    <mat-tab label="Certificato di Idoneità">
+
+      <br />
+      <div class="row">
+        <div class="col">
+          <mat-form-field appearance="standard">
+            <mat-label>Cerca</mat-label>
+            <input matInput (keyup)="applyFilter($event,'certificatoIdoneita')" placeholder="Cerca qui..." [(ngModel)]="inputSearchField2">
+          </mat-form-field>
+        </div>
+        <div class="col-1 right middle" style="width: fit-content;">
+          <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField('certificatoIdoneita')">
+        </div>
+      </div>
+      <br>
+      <ng-container *ngIf="admin">
+        <br>
+        <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingcertificatoIdoneita">
+          <button mat-button class="button-insert" (click)="addcertificatoIdoneita()">Aggiungi Documento</button>
+        </div>
+        <br><br>
+        <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
+             *ngIf="addingcertificatoIdoneita && !uploadingcertificatoIdoneita">
+          <div class="row">
+            <div class="col">
+              <input type="file" (change)="uploadcertificatoIdoneita($event)" accept=".pdf" *ngIf="!uploadingcertificatoIdoneita">
+              <label *ngIf="uploadingcertificatoIdoneita">Caricamento in corso ...</label>
+            </div>
+            <div class="col">
+            </div>
+          </div>
+          <div class="row">
+            <div class="col">
+              <mat-form-field class="full" appearance="fill">
+                <mat-label>Note</mat-label>
+                <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovaCertificatoIdoneita.note">
+              </mat-form-field>
+            </div>
+            <div class="col-2">
+              <button mat-button class="button-insert" (click)="saveCertificatoIdoneita(nuovaCertificatoIdoneita)">Salva</button>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingcertificatoIdoneita">
+            <div class="row">
+              <div class="col-1">
+                <mat-spinner [diameter]="24"></mat-spinner>
+              </div>
+              <div class="col">
+                <label>Caricamento in corso ...</label>
+              </div>
+            </div>
+          </div>
+        </div>
+      </ng-container>
+
+
+      <div *ngIf="this.certificatoIdoneita?.length <= 0" class="notPresent">
+        Nessun documento presente
+      </div>
+
+      <table mat-table [dataSource]="certificatoIdoneitaDataSource" class="mat-elevation-z8" *ngIf="this.certificatoIdoneita?.length > 0">
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: right;">
+            <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+        <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
+
+            <button mat-button (click)="showDocument(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+              </svg>
+            </button>
+            <ng-container *ngIf="admin">
+              <button mat-button (click)="deletecertificatoIdoneita(row)">
+                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                </svg>
+              </button>
+            </ng-container>
+
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="namefile">
+          <th mat-header-cell *matHeaderCellDef> Nome file </th>
+          <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="date">
+          <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+          <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+          <th mat-header-cell *matHeaderCellDef> Note </th>
+          <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+        </ng-container>
+
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+      </table>
+
+      <div class="paginator-container">
+
+        <mat-paginator #paginatorcertificatoIdoneita [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                       aria-label="Select page of periodic elements">
+        </mat-paginator>
+      </div>
+
+
+    </mat-tab>
+
+  </mat-tab-group>
+
+
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+    </div>
+  </div>
+
+
+</div>

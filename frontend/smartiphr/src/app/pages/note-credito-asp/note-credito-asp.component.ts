@@ -136,7 +136,11 @@ import { UploadService } from "src/app/service/upload.service";
         }
       }
     
-      async saveNota(nota: NotaCredito) {
+  async saveNota(nota: NotaCredito) {
+    if (!nota.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
         const typeDocument = "NOTACREDITO";
         const path = "notacredito";
         const file: File = nota.file;
@@ -183,10 +187,10 @@ import { UploadService } from "src/app/service/upload.service";
         this.uploadService
           .download(nota.filename, nota.identifyUser, "notacredito")
           .then((x) => {
-            console.log("download: ", x);
+            
             x.subscribe(
               (data) => {
-                console.log("download: ", data);
+                
                 const newBlob = new Blob([data as BlobPart], {
                   type: "application/pdf",
                 });
@@ -216,4 +220,3 @@ import { UploadService } from "src/app/service/upload.service";
       }
 
   }
-  

@@ -1,0 +1,27 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">AREA Sicurezza - Certificazioni</h1>
+    </div>
+  </div>
+  <br />
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <mat-tab-group mat-align-tabs="start">
+
+    <mat-tab label="Protezione contro i fulmini">
+      <app-upload-doc [dipendente]=dipendente [tipo]=ProtezioneFulmini></app-upload-doc>
+    </mat-tab>
+
+    <mat-tab label="Allaccio rete idrica e fognante">
+      <app-upload-doc [dipendente]=dipendente [tipo]=AllaccioReteIdrica></app-upload-doc>
+    </mat-tab>
+    
+    
+  </mat-tab-group>
+
+
+</div>

@@ -24,7 +24,7 @@ export class UploadService {
     };
 
 
-    let type = body.get('type');
+    let type = body.get('typeDocument');
     console.log('uploadDocument type: ' + type);
 
     if( type == 'richiestaMedico' || type == 'certificatoMedico')
@@ -52,7 +52,7 @@ export class UploadService {
     }
 
     if (filename[0] != "/") path = `/${path}`;
-
+    console.log(path);
 
     let formData: FormData = new FormData();
     formData.append("fileName", path);
@@ -88,6 +88,89 @@ export class UploadService {
   async downloadDocDipendente(filename: string, type: string, dipendente: Dipendenti) {
     // let params = new HttpParams();
     let path = `${dipendente._id}/${type}/${filename}`;
+    if (filename[0] != "/") path = `/${path}`;
+    console.log(path);
+    // const options = {
+    //   params: params,
+    //   reportProgress: true,
+    // };
+
+    // const body = {
+    //   fileName: path,
+    // };
+
+    let formData: FormData = new FormData();
+    formData.append("fileName", path);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    let params = {
+      params: {
+      }
+    }
+
+    let options = {
+      params: {
+        fileName: encodeURIComponent(path)
+      },
+      reportProgress: true,
+      responseType: 'arraybuffer' as 'json'
+    }
+
+    // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
+    //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
+    return this.http.get(`${this.api}/api/download`, options);
+  }
+
+
+  async downloadDocQuality(filename: string, type: string) {
+    // let params = new HttpParams();
+    let path = `${type}/${filename}`;
+    console.log(path);
+    if (filename[0] != "/") path = `/${path}`;
+
+    // const options = {
+    //   params: params,
+    //   reportProgress: true,
+    // };
+
+    // const body = {
+    //   fileName: path,
+    // };
+
+    let formData: FormData = new FormData();
+    formData.append("fileName", path);
+
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Accept': 'application/json'
+    });
+
+    let params = {
+      params: {
+      }
+    }
+
+    let options = {
+      params: {
+        fileName: encodeURIComponent(path)
+      },
+      reportProgress: true,
+      responseType: 'arraybuffer' as 'json'
+    }
+
+    // return this.http.post(`${this.api}/api/download`, formData, options).toPromise();
+    //return this.http.post<Blob>(`${this.api}/api/download`, formData,  { responseType: 'arraybuffer' });
+    return this.http.get(`${this.api}/api/download`, options);
+  }
+
+
+  async downloadDocPaziente(filename: string, type: string,id:String) {
+    // let params = new HttpParams();
+    let path = `${id}/${type}/${filename}`;
     if (filename[0] != "/") path = `/${path}`;
 
     // const options = {
