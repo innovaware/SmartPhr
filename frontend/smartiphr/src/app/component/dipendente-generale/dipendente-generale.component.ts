@@ -4,6 +4,7 @@ import { Output, EventEmitter } from '@angular/core';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { Mansione } from 'src/app/models/mansione';
 import { MansioniService } from 'src/app/service/mansioni.service';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-dipendente-generale',
@@ -19,22 +20,27 @@ export class DipendenteGeneraleComponent implements OnInit {
 
   mansioni: Mansione[] = [];
 
-  constructor( public mansioniService: MansioniService,) { }
+  constructor(public mansioniService: MansioniService, public dialogRef: MatDialogRef<DipendenteGeneraleComponent>,)
+  {
+    dialogRef.disableClose = true;
+  }
+
 
   ngOnInit() {
-    console.log("Cartella generale dipendente: ", this.data);
     this.mansioniService.get().then((result) => {
       this.mansioni = result;
     });
   }
 
   async save() {
-    console.log("save: ", this.data);
     this.saveEmiter.emit(this.data);
   }
 
   async change() {
-    console.log("change: ", this.data);
     this.dataChange.emit(this.data);
+  }
+
+  async Close() {
+    window.location.reload();
   }
 }

@@ -1,6 +1,8 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
 import { schedaDimissioneOspite } from 'src/app/models/schedaDimissioneOspite';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from 'src/app/models/paziente';
 import { DocumentipazientiService } from 'src/app/service/documentipazienti.service';
@@ -29,7 +31,7 @@ export class DimissioniComponent implements OnInit {
   public uploadingDocDimissione: boolean;
   public addingDocDimissione: boolean;
 
-  constructor(    
+  constructor(
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,
@@ -44,11 +46,11 @@ export class DimissioniComponent implements OnInit {
   async showDocument(doc: DocumentoPaziente) {
     console.log("doc: ", JSON.stringify(doc));
     this.uploadService
-    .download(doc.filename, doc._id, doc.type)
+    .download(doc.filename, doc.paziente, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -122,6 +124,10 @@ export class DimissioniComponent implements OnInit {
   }
 
   async saveDocDimissione(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Dimissione";
     const path = "Dimissione";
     const file: File = doc.file;

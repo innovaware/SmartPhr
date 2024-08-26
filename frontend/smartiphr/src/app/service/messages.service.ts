@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Observable } from 'rxjs';
 import { DialogMessageErrorComponent } from '../dialogs/dialog-message-error/dialog-message-error.component';
 import { DialogQuestionComponent } from '../dialogs/dialog-question/dialog-question.component';
@@ -23,6 +23,18 @@ export class MessagesService {
       dialogRef.afterClosed().subscribe((result) => {
       });
   }
+
+  showMessage(message: string) {
+    var dialogRef = this.dialog.open(DialogMessageErrorComponent, {
+      panelClass: "custom-modalbox",
+      data: message
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+      });
+  }
+
 
   deleteMessageQuestion(messageQuestion: string): Observable<any> {
     return this.dialog

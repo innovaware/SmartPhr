@@ -592,7 +592,7 @@
         "$oid": "622889e6db052456342eb5e5"
       },
       "title": "Gestione Presidi",
-      "link": "/nopage",
+      "link": "/Updating",
       "icon": "",
       "active": true
     },
@@ -612,7 +612,7 @@
         "$oid": "622889e6db052456342eb5e7"
       },
       "title": "Gestione Carrello",
-      "link": "/nopage",
+      "link": "/Updating",
       "icon": "",
       "active": true
     },
@@ -690,7 +690,7 @@
   "__v": 0,
   "active": true,
   "icon": "user",
-  "link": "/pisicologica",
+  "link": "/psicologica",
   "order": 7,
   "roles": [
     {
@@ -743,7 +743,7 @@
         "$oid": "62288b6ddb052456342eb663"
       },
       "title": "Cartelle Psicologiche",
-      "link": "/pisicologica",
+      "link": "/psicologica",
       "icon": "",
       "active": true
     }
@@ -791,7 +791,7 @@
         "$oid": "62288b6ddb052456342eb676"
       },
       "title": "Gestione Menù",
-      "link": "/nopage",
+      "link": "/Updating",
       "icon": "",
       "active": true
     },
@@ -869,7 +869,7 @@
   "__v": 0,
   "active": true,
   "icon": "user",
-  "link": "/nopage",
+  "link": "/Updating",
   "order": 10,
   "roles": [
     {
@@ -1071,7 +1071,7 @@
         "$oid": "622889e7db052456342eb5ff"
       },
       "title": "Gestione Covid-19",
-      "link": "/nopage",
+      "link": "/Updating",
       "icon": "shield-virus",
       "active": true
     }
@@ -1084,7 +1084,7 @@
   "__v": 0,
   "active": true,
   "icon": "",
-  "link": "/nopage",
+  "link": "/Updating",
   "order": 15,
   "roles": [
     {
@@ -1118,7 +1118,7 @@
   "__v": 0,
   "active": true,
   "icon": "",
-  "link": "/nopage",
+  "link": "/Updating",
   "order": 17,
   "roles": [
     {
@@ -1173,7 +1173,7 @@
   "__v": 0,
   "active": true,
   "icon": "",
-  "link": "/nopage",
+  "link": "/Updating",
   "order": 16,
   "roles": [
     {

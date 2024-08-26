@@ -1,11 +1,10 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from 'src/app/models/paziente';
-import { User } from 'src/app/models/user';
-import { AuthenticationService } from 'src/app/service/authentication.service';
-import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { DocumentipazientiService } from 'src/app/service/documentipazienti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -19,7 +18,7 @@ import { UploadService } from 'src/app/service/upload.service';
 export class DialogPreIngressoComponent implements OnInit {
 
 
-  @ViewChild("paginatorDocument",{static: false})
+  @ViewChild("paginatorDocument", {static: false})
   DocumentoPaginator: MatPaginator;
   public nuovoDocumento: DocumentoPaziente;
   public DocumentDataSource: MatTableDataSource<DocumentoPaziente>;
@@ -30,60 +29,33 @@ export class DialogPreIngressoComponent implements OnInit {
   paziente: Paziente;
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
-  dipendente: Dipendenti = {} as Dipendenti;
-  utente: User = {} as User;
 
   constructor(public dialogRef: MatDialogRef<DialogPreIngressoComponent>,
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,
     public uploadService: UploadService,
-    public dipendenteService: DipendentiService,
-    public authenticationService: AuthenticationService,
     public messageService: MessagesService,
     @Inject(MAT_DIALOG_DATA)
     public data: {
       paziente: Paziente;
       readonly: boolean;
-    }) { 
+    }) {
       this.paziente = Paziente.clone(data.paziente);
     }
 
   ngOnInit() {
-    this.loadUser();
     this.getDocumento();
   }
-
-
-
-  
-  loadUser() {
-    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
-      console.log("get dipendente");
-      this.dipendenteService
-        .getByIdUser(user._id)
-        .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x));
-          this.dipendente = x[0];
-
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Caricamento dipendente (" + err["status"] + ")"
-          );
-        });
-    });
-  }
-
 
 
   async showDocument(documento: DocumentoPaziente) {
     this.uploadService
       .download(documento.filename, documento._id, documento.typeDocument)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -117,13 +89,13 @@ export class DialogPreIngressoComponent implements OnInit {
         type: "ListaIndumenti",
       };
     }
-  
+
     async uploadDocumento($event) {
       let fileList: FileList = $event.target.files;
       if (fileList.length > 0) {
         let file: File = fileList[0];
-  
-        console.log("upload Documento: ", $event);
+
+        
         this.nuovoDocumento.filename = file.name;
         this.nuovoDocumento.file = file;
       } else {
@@ -131,10 +103,10 @@ export class DialogPreIngressoComponent implements OnInit {
         console.error("File non valido o non presente");
       }
     }
-  
+
     async deleteDocumento(doc: DocumentoPaziente) {
       console.log("Cancella Documento: ", doc);
-  
+
       this.docService
         .remove(doc)
         .then((x) => {
@@ -144,7 +116,7 @@ export class DialogPreIngressoComponent implements OnInit {
           if (index > -1) {
             this.documenti.splice(index, 1);
           }
-  
+
           console.log(
             "Documento cancellato: ",
             this.documenti
@@ -158,13 +130,13 @@ export class DialogPreIngressoComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async saveDocumento(doc: DocumentoPaziente) {
       const typeDocument = "ListaIndumenti";
       const path = "ListaIndumenti";
       const file: File = doc.file;
       this.uploadingDocumento = true;
-  
+
       console.log("Invio Documento: ", doc);
       this.docService
         .insert(doc, this.paziente)
@@ -174,11 +146,11 @@ export class DialogPreIngressoComponent implements OnInit {
           this.DocumentDataSource.data = this.documenti;
           this.addingDocumento = false;
           this.uploadingDocumento = false;
-  
+
           let formData: FormData = new FormData();
-  
+
           const nameDocument: string = doc.filename;
-  
+
           formData.append("file", file);
           formData.append("typeDocument", typeDocument);
           formData.append("path", `${this.paziente._id}/${path}`);
@@ -187,7 +159,7 @@ export class DialogPreIngressoComponent implements OnInit {
             .uploadDocument(formData)
             .then((x) => {
               this.uploadingDocumento = false;
-  
+
               console.log("Uploading completed: ", x);
             })
             .catch((err) => {
@@ -201,14 +173,14 @@ export class DialogPreIngressoComponent implements OnInit {
           console.error(err);
         });
     }
-  
+
     async getDocumento() {
       console.log(`get Documento paziente: ${this.paziente._id}`);
       this.docService
         .get(this.paziente, "ListaIndumenti")
         .then((f: DocumentoPaziente[]) => {
           this.documenti = f;
-  
+
           this.DocumentDataSource = new MatTableDataSource<DocumentoPaziente>(
             this.documenti
           );

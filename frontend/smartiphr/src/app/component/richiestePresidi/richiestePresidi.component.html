@@ -1,0 +1,142 @@
+
+<div class="row align-items-center">
+  <div class="col-11">
+    <mat-form-field appearance="standard" style="width: 100%;">
+      <mat-label>Cerca</mat-label>
+      <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." [(ngModel)]="inputSearchField">
+    </mat-form-field>
+  </div>
+  <div class="col-1 d-flex justify-content-center">
+    <img src="../../../assets/clean.png" style="width:26px; cursor: pointer;" (click)="cleanSearchField()">
+  </div>
+</div>
+
+
+
+
+<ng-container *ngIf="!Admin">
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button class="button-insert" (click)="AddRichiesta()">Crea una nuova Richiesta</button>
+    </div>
+  </div>
+</ng-container>
+<br />
+<br />
+<table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+
+  <!-- Definizione delle colonne -->
+  <ng-container matColumnDef="action">
+    <th mat-header-cell *matHeaderCellDef>
+      <ng-container *ngIf="!Admin">
+        <button class="btn btn-link p-0" (click)="AddRichiesta()" title="Crea una nuova Richiesta">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+          </svg>
+        </button>
+      </ng-container>
+    </th>
+    <td mat-cell *matCellDef="let row" style="text-align: right;">
+      <div class="row">
+        <ng-container *ngIf="Admin">
+          <div class="col">
+            <ng-container *ngIf="row.status=='Richiesto'">
+              <button mat-button (click)="Acquista(row)" title="Acquista">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-fill" viewBox="0 0 16 16">
+                  <path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1m3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4z" />
+                </svg>
+              </button>
+            </ng-container>
+            <ng-container *ngIf="row.status=='Acquistato'">
+              <button mat-button (click)="Consegna(row)" title="Consegna">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-seam-fill" viewBox="0 0 16 16">
+                  <path fill-rule="evenodd" d="M15.528 2.973a.75.75 0 0 1 .472.696v8.662a.75.75 0 0 1-.472.696l-7.25 2.9a.75.75 0 0 1-.557 0l-7.25-2.9A.75.75 0 0 1 0 12.331V3.669a.75.75 0 0 1 .471-.696L7.443.184l.01-.003.268-.108a.75.75 0 0 1 .558 0l.269.108.01.003zM10.404 2 4.25 4.461 1.846 3.5 1 3.839v.4l6.5 2.6v7.922l.5.2.5-.2V6.84l6.5-2.6v-.4l-.846-.339L8 5.961 5.596 5l6.154-2.461z" />
+                </svg>
+              </button>
+            </ng-container>
+          </div>
+        </ng-container>
+
+        <div class="col">
+          <ng-container *ngIf="row.status=='Richiesto'">
+            <button mat-button (click)="AnnullaRichiesta(row)" title="Risolto">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" style="color:red;" fill="currentColor" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
+              </svg>
+            </button>
+          </ng-container>
+        </div>
+      </div>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="utente">
+    <th mat-header-cell *matHeaderCellDef>
+      <ng-container *ngIf="Admin">
+        Operatore
+      </ng-container>
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="Admin">
+        {{element.dipendenteName}}
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="name">
+    <th mat-header-cell *matHeaderCellDef> Materiale richiesto </th>
+    <td mat-cell *matCellDef="let element"> {{element.materiale}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="type">
+    <th mat-header-cell *matHeaderCellDef>
+      <ng-container *ngIf="Admin">
+        Tipologia
+      </ng-container>
+    </th>
+    <td mat-cell *matCellDef="let element">
+      <ng-container *ngIf="Admin">
+        {{element.type}}
+      </ng-container>
+    </td>
+  </ng-container>
+
+  <ng-container matColumnDef="quantita">
+    <th mat-header-cell *matHeaderCellDef> Quantità </th>
+    <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="status">
+    <th mat-header-cell *matHeaderCellDef> Status </th>
+    <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dataRichiesta">
+    <th mat-header-cell *matHeaderCellDef> Data Richiesta </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dataAcquisto">
+    <th mat-header-cell *matHeaderCellDef> Data Acquisto </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataAcquisto | date: 'dd/MM/yyyy'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="dataConsegna">
+    <th mat-header-cell *matHeaderCellDef> Data Consegna </th>
+    <td mat-cell *matCellDef="let element"> {{element.dataConsegna | date: 'dd/MM/yyyy'}} </td>
+  </ng-container>
+
+  <ng-container matColumnDef="note">
+    <th mat-header-cell *matHeaderCellDef> Note </th>
+    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+  </ng-container>
+
+  <!-- Definizione delle righe -->
+  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+  <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+</table>
+
+<!-- Paginator -->
+<div>
+  <mat-paginator #paginatorRichieste [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+</div>

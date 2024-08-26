@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { Paziente } from 'src/app/models/paziente';
-import { schedaPisico } from 'src/app/models/schedaPisico';
+import { schedaPsico } from 'src/app/models/schedaPsico';
 
 @Component({
   selector: 'app-valuta-pisico',
@@ -9,7 +9,8 @@ import { schedaPisico } from 'src/app/models/schedaPisico';
   styleUrls: ['./valuta-pisico.component.css']
 })
 export class ValutaPisicoComponent implements OnInit {
-  @Input() schedaPisico: schedaPisico;
+  @Input() schedaPsico: schedaPsico;
+  @Input() disable: Boolean;
 
   constructor() { }
 

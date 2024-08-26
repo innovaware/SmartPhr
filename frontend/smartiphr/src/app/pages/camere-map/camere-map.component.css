@@ -37,8 +37,23 @@
   width: 18px;
   height: 18px;
   border: 1px solid rgba(0, 0, 0, 1);
-  background: rgba(0, 0 ,0, 0.3);
+  background: rgba(0, 0, 0, 0.3);
   border-radius: 7px;
   padding: unset;
   margin: 0px 10px;
+}
+
+.orange {
+  width: 18px;
+  height: 18px;
+  border: 1px solid rgb(255 197 0);
+  background: rgba(255, 255, 0, 0.3);
+  border-radius: 7px;
+  padding: unset;
+  margin: 0px 10px;
+}
+
+.didascalia {
+  display: inline-flex;
+  align-items: center;
 }

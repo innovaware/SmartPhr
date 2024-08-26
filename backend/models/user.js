@@ -7,6 +7,7 @@ const UserSchema = mongoose.Schema({
   password: String,
   active: Boolean,
   role: ObjectId,
+  dipendenteID: ObjectId
 });
 
 module.exports = mongoose.model('User', UserSchema, 'user');

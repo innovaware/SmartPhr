@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogCvComponent } from "src/app/dialogs/dialog-cv/dialog-cv.component";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { Curriculum } from "src/app/models/curriculum";
@@ -20,6 +22,8 @@ export class CvComponent implements OnInit {
     "cognome",
     "codiceFiscale",
     "mansione",
+    "dateUpload",
+    "status",
     "note",
     "action",
   ];
@@ -51,16 +55,40 @@ export class CvComponent implements OnInit {
   }
 
   async insert() {
-    var dialogRef = this.dialog.open(DialogCvComponent, {});
+    var dialogRef = this.dialog.open(DialogCvComponent, {
+      data: {
+        cv: new Curriculum(),
+        disabled: false
+      }
+    });
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
-        if (result != undefined) {
-          this.curriculum.push(result);
-          this.dataSource.data = this.curriculum;
-          console.log("Inserito curriculum", result);
-        }
+        this.curriculumService.get().subscribe((curs: Curriculum[]) => {
+          this.curriculum = curs;
+          this.dataSource = new MatTableDataSource<Curriculum>(this.curriculum);
+          this.dataSource.paginator = this.paginator;
+        });
+      });
+  }
+
+  async edit(row: Curriculum) {
+    var dialogRef = this.dialog.open(DialogCvComponent, {
+      data: {
+        cv: row,
+        disabled: true
+      }
+      });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed");
+        this.curriculumService.get().subscribe((curs: Curriculum[]) => {
+          this.curriculum = curs;
+          this.dataSource = new MatTableDataSource<Curriculum>(this.curriculum);
+          this.dataSource.paginator = this.paginator;
+        });
       });
   }
 
@@ -68,10 +96,10 @@ export class CvComponent implements OnInit {
     this.uploadService
       .download(curriculum.filename, undefined, "curriculum")
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe(
           (data) => {
-            console.log("download: ", data);
+            
             const newBlob = new Blob([data as BlobPart], {
               type: "application/pdf",
             });
@@ -105,8 +133,8 @@ export class CvComponent implements OnInit {
     this.dialog
       .open(DialogQuestionComponent, {
         data: { message: "Cancellare il cv?" },
-        //width: "600px",
-        height: "auto !important"
+        //width: "300px",
+        //height: "300px"
       })
       .afterClosed()
       .subscribe(

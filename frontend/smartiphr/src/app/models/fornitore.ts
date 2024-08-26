@@ -8,6 +8,7 @@ export class Fornitore {
   codiceFiscale: string;
   dataNascita: Date;
   comuneNascita: string;
+  sesso: String;
   provinciaNascita: string;
   indirizzoNascita: string;
   indirizzoResidenza: string;
@@ -18,32 +19,22 @@ export class Fornitore {
   telefono: string;
   email: string;
 
-  public update(fornitore: Fornitore): void {
-    this.cognome = fornitore.cognome;
-    this.nome = fornitore.nome;
-    this.codiceFiscale = fornitore.codiceFiscale;
-    this.dataNascita = fornitore.dataNascita;
-    this.indirizzoResidenza = fornitore.indirizzoResidenza;
-    this.comuneResidenza = fornitore.comuneResidenza;
-    this.provinciaResidenza = fornitore.provinciaResidenza;
-    this.mansione = fornitore.mansione;
-    this.telefono = fornitore.telefono;
-    this.indirizzoNascita = fornitore.indirizzoNascita;
-    this.comuneNascita = fornitore.comuneNascita;
-    this.provinciaNascita = fornitore.provinciaNascita;
-    this.email = fornitore.email;
-    this.tipoContratto = fornitore.tipoContratto;
-  }
 
   constructor() {
     this.cognome = "";
     this.nome = "";
-    this.dataNascita = undefined;
+    this.codiceFiscale = "";
+    this.dataNascita = new Date();
+    this.comuneNascita = "";
+    this.provinciaNascita = "";
+    this.indirizzoNascita = "";
     this.indirizzoResidenza = "";
     this.comuneResidenza = "";
     this.provinciaResidenza = "";
+    this.mansione = "";
+    this.sesso = "";
     this.telefono = "";
-    this.comuneNascita = "";
-    this.provinciaNascita = "";
+    this.tipoContratto = "";
+    this.email = "";
   }
 }

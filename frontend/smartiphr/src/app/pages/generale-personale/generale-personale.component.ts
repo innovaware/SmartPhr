@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { DocumentoDipendente } from "src/app/models/documentoDipendente";
 import { User } from "src/app/models/user";
@@ -9,6 +10,8 @@ import { DocumentiService } from "src/app/service/documenti.service";
 import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
 import { UsersService } from "src/app/service/users.service";
+import { MansioniService } from "../../service/mansioni.service";
+import { Mansione } from "../../models/mansione";
 
 @Component({
   selector: "app-generale-personale",
@@ -19,15 +22,16 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploading: boolean;
   public uploadingCred: boolean;
   public errorCred: boolean;
-
-  dipendente: Dipendenti = {} as Dipendenti;
-  utente: User = {} as User;
+  disable: boolean = true;
+  dipendente: Dipendenti;
+  utente: User;
 
   public notenuovoDocumentoIdentita = "";
 
   DisplayedColumns: string[] = ["namefile", "date", "note", "action"];
+  DisplayedColumnsFile: string[] = ["namefile", "date","type", "note", "action"];
 
-  @ViewChild("paginatorDocIdent",{static: false})
+  @ViewChild("paginatorDocIdent", {static: false})
   docIdentitaPaginator: MatPaginator;
   public nuovoDocumentoIdentita: DocumentoDipendente;
   public docIdentitaDataSource: MatTableDataSource<DocumentoDipendente>;
@@ -35,22 +39,22 @@ export class GeneralePersonaleComponent implements OnInit {
   public uploadingDocIdentita: boolean;
   public addingDocIdentita: boolean;
 
-  @ViewChild("paginatorDiploma",{static: false})
+  @ViewChild("paginatorDiploma", {static: false})
   diplomaPaginator: MatPaginator;
   public nuovoDiploma: DocumentoDipendente;
   public diplomiDataSource: MatTableDataSource<DocumentoDipendente>;
   public diplomi: DocumentoDipendente[];
   public uploadingDiploma: boolean;
   public addingDiploma: boolean;
-
-  @ViewChild("paginatorAttestatiECM",{static: false})
+  public mansione: string = "";
+  @ViewChild("paginatorAttestatiECM", {static: false})
   attestatiPaginator: MatPaginator;
   public nuovoAttestatoECM: DocumentoDipendente;
   public attestatiECMDataSource: MatTableDataSource<DocumentoDipendente>;
   public attestati: DocumentoDipendente[];
   public uploadingAttestatoECM: boolean;
   public addingAttestatoECM: boolean;
-
+  public admin: Boolean = false;
   confirmpassword: String;
 
   constructor(
@@ -59,29 +63,41 @@ export class GeneralePersonaleComponent implements OnInit {
     public uploadService: UploadService,
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
-    public usersService: UsersService
+    public usersService: UsersService,
+    public mansioniService: MansioniService
   ) {
+    this.dipendente = new Dipendenti();
+    this.utente = new User();
     this.loadUser();
-
     this.uploadingDocIdentita = false;
     this.addingDocIdentita = false;
     this.uploading = false;
     this.uploadingCred = false;
     this.errorCred = false;
+    this.mansioniService.get().then((result) => {
+      result.forEach((x: Mansione) => {
+        if (x._id == this.dipendente.mansione) {
+          this.mansione = x.descrizione;
+          return;
+        }
+      });
+    });
   }
 
-  ngOnInit() {}
+
+  ngOnInit() {
+    this.loadUser();
+}
 
   loadUser() {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
-        .getByIdUser(user._id)
+        .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log("dipendente: " + JSON.stringify(x));
           this.dipendente = x[0];
-          console.log("loadUserCred: " + this.dipendente.idUser);
-          this.loadUserCred(this.dipendente.idUser);
+          console.log("loadUserCred: " + user._id);
+          this.loadUserCred(user._id);
           this.getDocIdentita();
           this.getDiplomi();
           this.getAttestatiECM();
@@ -152,9 +168,9 @@ export class GeneralePersonaleComponent implements OnInit {
     this.uploadService
       .downloadDocDipendente(doc.filename, doc.type, this.dipendente)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -194,7 +210,7 @@ export class GeneralePersonaleComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumentoIdentita.filename = file.name;
       this.nuovoDocumentoIdentita.file = file;
     } else {
@@ -389,22 +405,26 @@ export class GeneralePersonaleComponent implements OnInit {
 
   async getDiplomi() {
     console.log(`get Diplomi dipendente: ${this.dipendente._id}`);
-    this.docService
-      .get(this.dipendente, "Diploma")
-      .then((f: DocumentoDipendente[]) => {
-        this.diplomi = f;
 
-        this.diplomiDataSource = new MatTableDataSource<DocumentoDipendente>(
-          this.diplomi
-        );
-        this.diplomiDataSource.paginator = this.diplomaPaginator;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore caricamento lista Diplomi"
-        );
-        console.error(err);
-      });
+    try {
+      const [diplomi, testFinali] = await Promise.all([
+        this.docService.get(this.dipendente, "Diploma"),
+        this.docService.get(this.dipendente, "areaFormazione")
+      ]);
+
+      // Combine all documents into one array
+      const file = [...diplomi, ...testFinali];
+
+      // Assign combined documents to diplomi
+      this.diplomi = file;
+
+      // Set up data source for table
+      this.diplomiDataSource = new MatTableDataSource<DocumentoDipendente>(this.diplomi);
+      this.diplomiDataSource.paginator = this.diplomaPaginator;
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento lista Diplomi");
+      console.error(err);
+    }
   }
 
   // FINE DIPLOMA

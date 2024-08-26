@@ -1,302 +1,401 @@
+const { ObjectId } = require("bson");
 const express = require("express");
 const router = express.Router();
-const ElementiArmadio = require("../models/elementiArmadio");
-const AttivitaArmadio = require("../models/attivitaArmadio");
+const Armadio = require("../models/armadio");
+const Camere = require("../models/camere");
+const registroArmadi = require("../models/registroArmadi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 
-//ELEMENTI
+
+router.get("/registro", async (req, res) => {
+    try {
+        const getData = async () => {
+            const query = [
+                {
+                    '$match': {
+                        'stato': true
+                    }
+                },
+                {
+                    '$match': {
+                        'note': {
+                            '$nin': ["Creato armadio", "Inserimento Indumento"]
+                        }
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'pazienti',
+                        'localField': 'paziente',
+                        'foreignField': '_id',
+                        'as': 'pazienteInfo'
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'camera',
+                        'localField': 'idCamera',
+                        'foreignField': '_id',
+                        'as': 'cameraInfo'
+                    }
+                }
+            ];
+            // console.log("Query by piano: ", query);
+            return await registroArmadi.aggregate(query).exec();
+        };
+
+        const registro = await getData();
+        res.status(200).json(registro);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err.message });
+    }
+});
+
+
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        // Get the redisDisabled flag from the app settings
+        redisDisabled = req.app.get("redisDisabled");
 
-    const getData = () => {
-      return ElementiArmadio.find();
-    };
+        const getData = () => {
+            return Armadio.find();
+        };
 
-    if (redisClient == undefined || redisDisabled) {
-      const elementiArmadio = await getData();
-      res.status(200).json(elementiArmadio);
-      return;
+        // Directly fetch data from MongoDB if redis is disabled or undefined
+        const armadio = await getData();
+        res.status(200).json(armadio);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `ELEMENTIARMADIOALL`;
-    // Ricerca su Redis Cache
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        // Dato trovato in cache - ritorna il json
-        res.status(200).send(JSON.parse(data));
-      } else {
-        // Recupero informazioni dal mongodb
-        const elementiArmadio = await getData();
-
-        // Aggiorno la cache con i dati recuperati da mongodb
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(elementiArmadio));
-
-        // Ritorna il json
-        res.status(200).json(elementiArmadio);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
-});
-
-//LISTA ELEMENTIARMADIO PAZIENTE
-// http://[HOST]:[PORT]/api/armadio/[PAZIENTE]
-router.get("/paziente/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return ElementiArmadio.find({ paziente: id });
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const elementiArmadio = await getData();
-      res.status(200).json(elementiArmadio);
-      return;
-    }
-
-    const searchTerm = `ELEMENTIARMADIOBYPAZIENTE-${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const elementiArmadio = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(elementiArmadio));
-        res.status(200).json(elementiArmadio);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
-});
-
-// http://[HOST]:[PORT]/api/armadio/[ID]
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return ElementiArmadio.findById(id);
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const elementiArmadio = await getData();
-      res.status(200).json(elementiArmadio);
-      return;
-    }
-
-    const searchTerm = `ELEMENTOARMADIOBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const elementiArmadio = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(elementiArmadio));
-        res.status(200).json(elementiArmadio);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 
 
-
-//LISTA ATTIVITA
-router.get("/attivita/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return AttivitaArmadio.find();
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const attivitaArmadio = await getData();
-      res.status(200).json(attivitaArmadio);
-      return;
-    }
-
-    const searchTerm = `ATTARMADIOALL`;
-    // Ricerca su Redis Cache
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        // Dato trovato in cache - ritorna il json
-        res.status(200).send(JSON.parse(data));
-      } else {
-        // Recupero informazioni dal mongodb
-        const attivitaArmadio = await getData();
-
-        // Aggiorno la cache con i dati recuperati da mongodb
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(attivitaArmadio));
-
-        // Ritorna il json
-        res.status(200).json(attivitaArmadio);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
-});
-
-//LISTA ELEMENTIARMADIO PAZIENTE
-// http://[HOST]:[PORT]/api/armadio/attivitapaziente/[PAZIENTE]
-router.get("/attivitapaziente/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return AttivitaArmadio.find({ paziente: id });
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const attivitaArmadio = await getData();
-      res.status(200).json(attivitaArmadio);
-      return;
-    }
-
-    const searchTerm = `ATT-ARMADIOBYPAZIENTE-${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const attivitaArmadio = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(attivitaArmadio));
-        res.status(200).json(attivitaArmadio);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
-});
-
-
-
-
-
-// http://[HOST]:[PORT]/api/elementiArmadio (POST)
-// INSERT permessi su DB
-router.post("/", async (req, res) => {
-  try {
-    const elementoArmadio = new ElementiArmadio({
-        paziente: req.body.paziente,
-        pazienteName: req.body.pazienteName,
-        data: req.body.data,
-        elemento: req.body.elemento,
-        note: req.body.note,
-        quantita: req.body.quantita
-    });
-
-    // Salva i dati sul mongodb
-    const result = await elementoArmadio.save();
-
-
-    const attivitaArmadio = new AttivitaArmadio({
-      operator: req.body.operator,
-      operatorName: req.body.operatorName,
-      paziente: req.body.paziente,
-      pazienteName: req.body.pazienteName,
-      data: req.body.data,
-      elemento: req.body.elemento,
-      note: req.body.note,
-      quantita: req.body.quantita
-  });
-
-  // Salva i dati sul mongodb
-  const resultAtt = await attivitaArmadio.save();
-
-
-
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`ELEMENTIARMADIOALL`);
-    }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
-});
-
-// http://[HOST]:[PORT]/api/cambiturno/[ID]
-// Modifica delle cambiturno
-router.put("/:id", async (req, res) => {
-  try {
+router.get("/camera/:id", async (req, res) => {
     const { id } = req.params;
-    // Aggiorna il documento su mongodb
-    const cambiturno = await ElementiArmadio.updateOne(
-      { _id: id },
-      {
-        $set: {
-            paziente: req.body.paziente,
-            pazienteName: req.body.pazienteName,
-            data: req.body.data,
-            elemento: req.body.elemento,
-            note: req.body.note,
-            quantita: req.body.quantita
-        },
-      }
-    );
+    let dateRif = req.query.date;
 
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    const attivitaArmadio = new AttivitaArmadio({
-      operator: req.body.operator,
-      operatorName: req.body.operatorName,
-      paziente: req.body.paziente,
-      pazienteName: req.body.pazienteName,
-      data: req.body.data,
-      elemento: req.body.elemento,
-      note: req.body.note,
-      quantita: req.body.quantita
-  });
+        //new Armadio({
+        //  idCamera: new ObjectId("6233776e7ec5d255b8cb1919"),
+        //  contenuto: [
+        //    {
+        //      idPaziente: new ObjectId("6172d8631340fec684deea28"),
+        //      items: [
+        //        {
+        //          nome: "Calzini",
+        //          quantita: 1,
+        //          note: "Calzini di notte",
+        //        }
+        //      ]
+        //    },
+        //    {
+        //      idPaziente: new ObjectId("61815ef594bb265624eddb78"),
+        //      items: [
+        //        {
+        //          nome: "Pantaloni",
+        //          quantita: 1,
+        //          note: "Pantaloni neri",
+        //        }
+        //      ]
+        //    }
+        //  ],
+        //  lastChecked: {
+        //    idUser: new ObjectId("62262a3e4a682930a8f3ee4e"),
+        //    data: new Date(),
+        //  }
+        //}).save()
+        //console.log("Save Armadio");
 
-  // Salva i dati sul mongodb
-  const result = await attivitaArmadio.save();
+        const getData = () => {
+            const query = [
+                {
+                    '$match': {
+                        'idCamera': ObjectId(id),
+                        'dateStartRif': { $lte: new Date(dateRif.toString()) },
+                        'dateEndRif': { $gte: new Date(dateRif.toString()) }
+                    }
+                }, {
+                    '$lookup': {
+                        'from': 'pazienti',
+                        'localField': 'contenuto.idPaziente',
+                        'foreignField': '_id',
+                        'as': 'pazienti'
+                    }
+                }
+            ];
 
+            // console.log("Armadi query:", query);
+            // console.log("Armadi dateRif:", dateRif);
+            return Armadio.aggregate(query);
+        };
 
+        const armadio = await getData();
+        res.status(200).json(armadio);
+        return;
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        if (redisClient == undefined || redisDisabled) {
+            const armadio = await getData();
+            res.status(200).json(armadio);
+            return;
+        }
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`CAMBITURNOBY${id}`);
+        const searchTerm = `ARMADIO${id}`;
+        redisClient.get(searchTerm, async (err, data) => {
+            if (err) throw err;
+
+            if (data) {
+                res.status(200).send(JSON.parse(data));
+            } else {
+                const armadio = await getData();
+
+                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(armadio));
+                res.status(200).json(armadio);
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    res.status(200).json(cambiturno);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
+router.get("/camera/get/:id", async (req, res) => {
+    const { id } = req.params;
+    let dateRif = req.query.date;
+
+    try {
+        const getData = () => {
+            const query = [
+                {
+                    '$match': {
+                        'idCamera': ObjectId(id),
+                    }
+                }
+            ];
+
+            // console.log("Armadi query:", query);
+            // console.log("Armadi dateRif:", dateRif);
+            return Armadio.aggregate(query);
+        };
+
+        const armadio = await getData();
+        res.status(200).json(armadio);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+
+
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        const getData = () => {
+            return Armadio.findById(id);
+        };
+
+        if (redisClient == undefined || redisDisabled) {
+            const armadio = await getData();
+            res.status(200).json(armadio);
+            return;
+        }
+
+        const searchTerm = `ARMADIO${id}`;
+        redisClient.get(searchTerm, async (err, data) => {
+            if (err) throw err;
+
+            if (data) {
+                res.status(200).send(JSON.parse(data));
+            } else {
+                const armadio = await getData();
+
+                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(armadio));
+                res.status(200).json(armadio);
+            }
+        });
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.get("/paziente/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        // Assicurati che Armadio sia importato correttamente
+        const registro = await Armadio.find({ pazienteId: id });
+        console.log(registro);
+        if (!registro) {
+            return res.status(404).json({ message: "Paziente non trovato" });
+        }
+
+        res.status(200).json(registro);
+    } catch (err) {
+        console.error("Errore durante il recupero dei dati: ", err);
+        res.status(500).json({ error: "Si è verificato un errore durante il recupero dei dati." });
+    }
+});
+
+
+
+router.put("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const armadio = await Armadio.updateOne(
+            { _id: id },
+            {
+                $set: req.body.armadio,
+            }
+        );
+
+        // const idCamera = req.body.armadio.idCamera;
+        var checked = 0;
+        switch (req.body.armadio.rateVerifica) {
+            case 0:
+                checked = 0;
+                break;
+            case 100:
+                checked = 2;
+                break;
+            default:
+                checked = 1;
+        }
+
+        console.log("Armadio Salvato!!");
+        await Camere.updateOne(
+            { _id: req.body.armadio.idCamera },
+            {
+                $set: {
+                    armadioCheck: checked,
+                    dataArmadioCheck: req.body.armadio.lastChecked.datacheck,
+                    firmaArmadio: req.body.armadio.lastChecked.idUser,
+                },
+            }
+        );
+        console.log("Camere Salvato!!");
+        console.log(req.body);
+        const registro = new registroArmadi({
+            stato: req.body.armadio.verified,
+            idCamera: req.body.armadio.idCamera,
+            paziente: req.body.armadio.pazienteId,
+            data: req.body.armadio.lastChecked.datacheck,
+            note: req.body.note,
+            firma: req.body.armadio.lastChecked.idUser
+        });
+        console.log(registro);
+        const result = await registro.save();
+
+        console.log("registro Salvato!!");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `ARMADIO${id}`;
+            redisClient.del(searchTerm);
+        }
+
+        res.status(200);
+        res.json(armadio);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const getData = () => {
+            return Armadio.findById(id);
+        };
+        getData.cancellato = true;
+        getData.DataEliminazione = new Date();
+        const armadio = await Armadio.updateOne(
+            { _id: id },
+            {
+                $set: getData,
+            }
+        );
+
+        // const idCamera = req.body.armadio.idCamera;
+        var checked = 0;
+        switch (getData.rateVerifica) {
+            case 0:
+                checked = 0;
+                break;
+            case 100:
+                checked = 2;
+                break;
+            default:
+                checked = 1;
+        }
+
+        await Camere.updateOne(
+            { _id: getData.idCamera },
+            {
+                $set: {
+                    armadioCheck: checked,
+                    dataArmadioCheck: getData.lastChecked.datacheck,
+                    firmaArmadio: getData.lastChecked.idUser,
+                },
+            }
+        );
+
+        const registro = new registroArmadi({
+            cameraId: getData.idCamera,
+            stato: checked,
+            data: getData.lastChecked.datacheck,
+            note: "Eliminato!!",
+            firma: getData.lastChecked.idUser
+        });
+
+        const result = await registro.save();
+
+
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `ARMADIO${id}`;
+            redisClient.del(searchTerm);
+        }
+
+        res.status(200);
+        res.json(armadio);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.post("/", async (req, res) => {
+    try {
+        const armadio = new Armadio(req.body.armadio);
+
+        const resultArmadio = await armadio.save();
+
+        const registro = new registroArmadi({
+            idCamera: req.body.armadio.idCamera,
+            stato: false,
+            paziente: req.body.armadio.pazienteId,
+            data: new Date(),
+            note: req.body.note,
+            firma: req.body.armadio.lastChecked.idUser
+        });
+
+        const resultRegistro = await registro.save();
+
+        res.status(200).json(armadio);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
 
 module.exports = router;

@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { BonificiConsulenti } from "src/app/models/bonificiConsulenti";
 import { BonificiConsulentiService } from "src/app/service/bonificiConsulenti.service";
 import { MessagesService } from "src/app/service/messages.service";
@@ -66,10 +67,10 @@ import { UploadService } from "src/app/service/upload.service";
         this.uploadService
           .download(bonifico.filename, bonifico.identifyUserObj, "bonifico")
           .then((x) => {
-            console.log("download: ", x);
+            
             x.subscribe(
               (data) => {
-                console.log("download: ", data);
+                
                 const newBlob = new Blob([data as BlobPart], {
                   type: "application/pdf",
                 });

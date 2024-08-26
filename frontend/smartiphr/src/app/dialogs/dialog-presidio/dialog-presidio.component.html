@@ -1,0 +1,150 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <h1>{{data.title}}</h1>
+        </div>
+  
+        <div class="col">
+          <button class="close-button" [mat-dialog-close]="true">×
+          </button>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <span>Tutti i campi indicati con * sono obbligatori.</span>
+          <hr>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <mat-dialog-content>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <label>Nome*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.nome" [disabled]=disable></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+  
+      <div class="row">
+        <div class="col">
+          <label>Descrizione*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.descrizione"
+              [disabled]=disable></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+  
+      <div class="row">
+        <div class="col">
+          <label>Quantità</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   placeholder="Quantità" [(ngModel)]="data.row.qtyTot" [disabled]=disable>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <label>Quantità per confezione*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   placeholder="Quantità per confezione" [(ngModel)]="data.row.qty" [disabled]=disable>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col">
+          <label>Giacenza*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   placeholder="Giacenza" [(ngModel)]="data.row.giacenza" [disabled]=disable>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+
+      <div class="row">
+        <div class="col">
+          <label>Taglia*</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="taglia" [(ngModel)]="data.row.taglia"
+              [disabled]=disable></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+      <div class="row">
+        <div class="col">
+          <label>Note</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+  
+          <mat-form-field appearance="fill">
+            <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.note"
+              [disabled]=disable></textarea>
+          </mat-form-field>
+        </div>
+      </div>
+
+
+  
+ 
+  
+    </div>
+  
+  
+  </mat-dialog-content>
+  
+  
+  <div mat-dialog-actions>
+    <div class="bottom-actions">
+      <button mat-button [mat-dialog-close]="false">Chiudi</button>
+      <button mat-button class="button-save" (click)="save()">Salva</button>
+    </div>
+  </div>
+  

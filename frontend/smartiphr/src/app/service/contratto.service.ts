@@ -23,12 +23,13 @@ export class ContrattoService {
       .toPromise();
   }
 
-  getAll(): Observable<Contratto[]> {
+  async getAll(): Promise<Contratto[]> {
     const headers = {
+      // 'Authorization': 'Bearer ' + this.token,
+      // 'x-refresh': this.refreshToken
     }
-
     return this.http
-      .get<Contratto[]>(`${this.api}/api/contratto`, { headers })
+      .get<Contratto[]>(`${this.api}/api/contratto`, {headers}).toPromise();
   }
 
   async insert(contratto: Contratto, id: string) {

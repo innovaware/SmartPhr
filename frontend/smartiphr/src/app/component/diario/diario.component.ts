@@ -5,7 +5,9 @@ import {
   OnInit,
   ViewChild,
 } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogDiarioComponent } from "src/app/dialogs/dialog-diario/dialog-diario.component";
 import { Diario } from "src/app/models/diario";
 import { SchedaDiario } from "src/app/models/SchedaDiario";
@@ -28,7 +30,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = ["data", "valore", "firma", "action"];
   dataSource: MatTableDataSource<Diario>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild("paginatorDiario", { static: false }) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) {}
 
@@ -37,7 +39,9 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
     this.dataSource.paginator = this.paginator;
   }
 
-  ngAfterViewInit() {}
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
@@ -53,7 +57,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       .afterClosed()
       .subscribe((result) => {
         if (result != undefined && result) {
-          console.log("result:", result);
+          
           this.diario.push(result);
           this.dataSource.data = this.diario;
         }
@@ -68,7 +72,7 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        console.log("result:", result);
+        
         if (result != undefined && result) {
           const data = this.diario;
 

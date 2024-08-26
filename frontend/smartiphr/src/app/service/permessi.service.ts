@@ -19,6 +19,9 @@ export class PermessiService {
     return this.http.get<Permessi[]>(this.api + "/api/permessi/dipendente/" + id);
   }
 
+  getPermessiByDipendenteID(id): Promise<Permessi[]> {
+    return this.http.get<Permessi[]>(this.api + "/api/permessi/dipendente/" + id).toPromise();
+  }
 
   async getPermessi(): Promise<Permessi[]> {
     return this.http.get<Permessi[]>(this.api + "/api/permessi").toPromise();
@@ -32,5 +35,9 @@ export class PermessiService {
   async updatePermesso(permessi: Permessi) {
     var body = permessi;
     return this.http.put(this.api + "/api/permessi/" + permessi._id, body).toPromise();
+  }
+
+  async remove(permesso: Permessi) {
+    return this.http.delete(this.api + "/api/permessi/" + permesso._id).toPromise();
   }
 }

@@ -6,27 +6,23 @@ import {
 import { HttpClientModule, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { async, ComponentFixture, TestBed } from "@angular/core/testing";
 import { FormsModule } from "@angular/forms";
-import {
-  MatButtonModule,
-  MatButtonToggleModule,
-  MatCardModule,
-  MatCheckboxModule,
-  MatDatepickerModule,
-  MatDialogModule,
-  MatDialogRef,
-  MatExpansionModule,
-  MatFormFieldModule,
-  MatIconModule,
-  MatInputModule,
-  MatNativeDateModule,
-  MatPaginatorModule,
-  MatProgressSpinnerModule,
-  MatRadioModule,
-  MatTableModule,
-  MatTabsModule,
-  MatTooltipModule,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatButtonModule } from "@angular/material/button";
+import { MatButtonToggleModule } from "@angular/material/button-toggle";
+import { MatCardModule } from "@angular/material/card";
+import { MatCheckboxModule } from "@angular/material/checkbox";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatExpansionModule } from "@angular/material/expansion";
+import { MatFormFieldModule } from "@angular/material/form-field";
+import { MatIconModule } from "@angular/material/icon";
+import { MatInputModule } from "@angular/material/input";
+import { MatPaginatorModule } from "@angular/material/paginator";
+import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatTableModule } from "@angular/material/table";
+import { MatTabsModule } from "@angular/material/tabs";
+import { MatTooltipModule } from "@angular/material/tooltip";
 import { BrowserModule } from "@angular/platform-browser";
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { FontAwesomeModule } from "@fortawesome/angular-fontawesome";
@@ -89,7 +85,7 @@ import { LoginComponent } from "src/app/pages/login/login.component";
 import { NoteCreditoASPComponent } from "src/app/pages/note-credito-asp/note-credito-asp.component";
 import { OspitiComponent } from "src/app/pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "src/app/pages/pagenotfound/pagenotfound.component";
-import { PisicologicaComponent } from "src/app/pages/pisicologica/pisicologica.component";
+import { PsicologicaComponent } from "src/app/pages/psicologica/psicologica.component";
 import { ProspettoCMASPComponent } from "src/app/pages/prospetto-cm-asp/prospetto-cm-asp.component";
 import { PuntoFattureASPComponent } from "src/app/pages/punto-fatture-asp/punto-fatture-asp.component";
 import { BasicAuthInterceptor } from "src/app/_helpers/basic-auth.interceptor";
@@ -106,7 +102,7 @@ import { DialogFarmacoComponent } from "../dialog-farmaco/dialog-farmaco.compone
 import { DialogFornitoreComponent } from "../dialog-fornitore/dialog-fornitore.component";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 import { DialogPazienteComponent } from "../dialog-paziente/dialog-paziente.component";
-import { DialogPisicologicaComponent } from "../dialog-pisicologica/dialog-pisicologica.component";
+import { DialogPisicologicaComponent } from "../dialog-psicologica/dialog-psicologica.component";
 import { DialogQuestionComponent } from "../dialog-question/dialog-question.component";
 import { DialogStanzaComponent } from "../dialog-stanza/dialog-stanza.component";
 
@@ -215,7 +211,7 @@ describe("DialogCartellaInfermeristicaComponent", () => {
         DialogCaricadocumentoComponent,
         DialogQuestionComponent,
         DiarioClinicoComponent,
-        PisicologicaComponent,
+        PsicologicaComponent,
       ],
       imports: [
         BrowserModule,

@@ -1,5 +1,5 @@
 import { Component, Inject, Input, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Farmaci } from 'src/app/models/farmaci';
 
 @Component({
@@ -8,14 +8,12 @@ import { Farmaci } from 'src/app/models/farmaci';
   styleUrls: ['./dialog-farmaco.component.css']
 })
 export class DialogFarmacoComponent implements OnInit {
-  @Input() disable : boolean;
-  @Input() isNew: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DialogFarmacoComponent>,
-    @Inject(MAT_DIALOG_DATA) public item: Farmaci) {
+    @Inject(MAT_DIALOG_DATA) public data: { row: Farmaci; title: string;  }) {
 
-      console.log("item: ", item);
+      console.log("item: ", this.data.row);
     }
 
 
@@ -23,7 +21,7 @@ export class DialogFarmacoComponent implements OnInit {
   }
 
   save() {
-    this.dialogRef.close(this.item);
+    this.dialogRef.close(this.data.row);
   }
 
 }

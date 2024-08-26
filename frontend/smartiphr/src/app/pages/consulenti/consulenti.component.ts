@@ -1,10 +1,15 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogConsulenteComponent } from "src/app/dialogs/dialog-consulente/dialog-consulente.component";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { Consulenti } from "src/app/models/consulenti";
 import { ConsulentiService } from "src/app/service/consulenti.service";
 import { MessagesService } from 'src/app/service/messages.service';
+import { Settings } from "../../models/settings";
+import { SettingsService } from "../../service/settings.service";
+import { ContrattoService } from "../../service/contratto.service";
 
 @Component({
   selector: "app-consulenti",
@@ -27,24 +32,75 @@ export class ConsulentiComponent implements OnInit {
 
   @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
   data: Consulenti[];
+  settings: Settings;
+
 
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public consulentiService: ConsulentiService
+    public consulentiService: ConsulentiService,
+    private contrServ: ContrattoService,
+    private settServ: SettingsService,
   ) {
     this.data = [];
+    this.settings = new Settings();
+    settServ.getSettings().then((res) => { this.settings = res[0] });
+  }
+
+  dateDiff(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
   ngOnInit() {}
 
   ngAfterViewInit() {
-    this.consulentiService.getConsulenti().then((result) => {
-      this.data = result;
-      this.dataSource = new MatTableDataSource<Consulenti>(this.data);
-      this.dataSource.paginator = this.paginator;
+    this.settings = new Settings();
+    this.settServ.getSettings().then((res) => {
+      this.settings = res[0];
+      console.log("Settings:", this.settings); // Punto di debug
+
+      var mess = "";
+      this.consulentiService.getConsulenti().then((result) => {
+        console.log("Consulenti:", result); // Punto di debug
+
+        const contrattoPromises = result.map((x) => {
+          return this.contrServ.getContratto(x._id).then((res) => {
+            console.log(`Contratti per ${x.cognome} ${x.nome}:`, res); // Punto di debug
+
+            res = res.filter(y => new Date(y.dataScadenza) > new Date());
+            console.log(`Contratti validi per ${x.cognome} ${x.nome}:`, res); // Punto di debug
+
+            const cont = res.length > 0 ? res[0] : undefined;
+            if (cont != undefined) {
+              const numScad = this.dateDiff(new Date(), new Date(cont.dataScadenza));
+              console.log(`Giorni alla scadenza per ${x.cognome} ${x.nome}:`, numScad); // Punto di debug
+
+              if (numScad < this.settings.alertContratto.valueOf()) {
+                mess += `Mancano ${numScad} giorni alla scadenza del contratto di: ${x.cognome} ${x.nome}\n`;
+                console.log("Mess aggiornato:", mess); // Punto di debug
+              }
+            }
+          });
+        });
+
+        Promise.all(contrattoPromises).then(() => {
+          if (mess != "") {
+            console.log("Mostra messaggio:", mess); // Punto di debug
+            this.messageService.showMessage(mess);
+          }
+          this.data = result;
+          this.dataSource = new MatTableDataSource<Consulenti>(this.data);
+          this.dataSource.paginator = this.paginator;
+        });
+      });
     });
   }
+
+
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;

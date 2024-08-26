@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { Paziente } from 'src/app/models/paziente';
 import { schedaDecessoOspite } from 'src/app/models/schedaDecessoOspite';
@@ -28,8 +30,8 @@ export class DecessoComponent implements OnInit {
   public uploadingDocDecesso: boolean;
   public addingDocDecesso: boolean;
 
-  
-  constructor(    
+
+  constructor(
     public pazienteService: PazienteService,
     public dialog: MatDialog,
     public docService: DocumentipazientiService,
@@ -44,11 +46,11 @@ export class DecessoComponent implements OnInit {
   async showDocument(doc: DocumentoPaziente) {
     console.log("doc: ", JSON.stringify(doc));
     this.uploadService
-    .download(doc.filename, doc._id, doc.type)
+      .download(doc.filename, doc.paziente, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -122,6 +124,10 @@ export class DecessoComponent implements OnInit {
   }
 
   async saveDocDecesso(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Decesso";
     const path = "Decesso";
     const file: File = doc.file;

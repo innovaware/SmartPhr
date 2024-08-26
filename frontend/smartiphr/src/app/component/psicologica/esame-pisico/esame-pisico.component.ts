@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { CartellaClinica } from 'src/app/models/cartellaClinica';
 import { Paziente } from 'src/app/models/paziente';
-import { schedaPisico } from 'src/app/models/schedaPisico';
+import { schedaPsico } from 'src/app/models/schedaPsico';
 
 @Component({
   selector: 'app-esame-pisico',
@@ -9,12 +9,12 @@ import { schedaPisico } from 'src/app/models/schedaPisico';
   styleUrls: ['./esame-pisico.component.css']
 })
 export class EsamePisicoComponent implements OnInit {
-  @Input() schedaPisico: schedaPisico;
+  @Input() schedaPsico: schedaPsico;
 
   constructor() { }
 
   ngOnInit() {
-    // console.log("Esame Psicologico Dialog", this.schedaPisico);
+    // console.log("Esame Psicologico Dialog", this.schedaPsico);
   }
 
 

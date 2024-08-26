@@ -1,0 +1,101 @@
+<div class="row" style="padding-bottom: 10px;">
+  <div class="col-2">
+      <label>Paziente: {{this.paziente.nome}} {{this.paziente.cognome}}</label>
+  </div>
+  <div class="col-8">
+  </div>
+
+  <div class="col right">
+    {{ this.date | date: 'dd/MM/yyyy':'UTC' }}
+  </div>
+</div>
+<br />
+<div class="row">
+    <div class="col-4"></div>
+    <div class="col-4">
+        <mat-form-field class="example-full-width" appearance="fill">
+            <input matInput
+                   type="text"
+                   placeholder="Seleziona Paziente"
+                   [matAutocomplete]="auto"
+                   (keyup)="applyFilter($event)"
+                   [(ngModel)]="paziente"
+                    [disabled]="readOnly" />
+                    <mat-autocomplete autoActiveFirstOption
+                              #auto="matAutocomplete"
+                              [displayWith]="displayFn">
+                <mat-option *ngFor="let option of allPazienti" [value]="option">
+                    {{option.nome}} {{option.cognome}}
+                </mat-option>
+            </mat-autocomplete>
+        </mat-form-field>
+    </div>
+    <div class="col-4"></div>
+</div>
+<br />
+<table>
+      <tr style="color: black; background-color: dodgerblue;" >
+          <th style="background-color: white;"></th>
+          <th style="background-color: red;">Domenica</th>
+          <th>Lunedi</th>
+          <th>Martedi</th>
+          <th>Mercoledi</th>
+          <th>Giovedi</th>
+          <th>Venedi</th>
+          <th>Sabato</th>
+      </tr>
+
+
+      <tr>
+          <td style="background-color: dodgerblue;"><strong>Colazione</strong></td>
+          <td *ngFor="let item of menuData">
+              <input matInput type="text" class="form-control" placeholder="Inserisci Colazione" [(ngModel)]="item.menuColazione"
+                     [disabled]="data.readOnly">
+          </td>
+      </tr>
+
+
+      <tr>
+          <td style="background-color: dodgerblue;"><strong>Spuntino</strong></td>
+          <td *ngFor="let item of menuData">
+              <input matInput type="text" class="form-control" placeholder="Inserisci Spuntino" [(ngModel)]="item.menuSpuntino" [disabled]="data.readOnly">
+          </td>
+      </tr>
+
+      <tr>
+          <td style="background-color: dodgerblue;"><strong>Pranzo</strong></td>
+          <td *ngFor="let item of menuData">
+              <input matInput type="text" class="form-control" placeholder="Inserisci Pranzo" [(ngModel)]="item.menuPranzo" [disabled]="data.readOnly">
+          </td>
+      </tr>
+
+      <tr>
+          <td style="background-color: dodgerblue;"><strong>Merenda</strong></td>
+          <td *ngFor="let item of menuData">
+              <input matInput type="text" class="form-control" placeholder="Inserisci Merenda" [(ngModel)]="item.menuMerenda" [disabled]="data.readOnly">
+          </td>
+      </tr>
+
+      <tr>
+          <td style="background-color: dodgerblue;"><strong>Cena</strong></td>
+          <td *ngFor="let item of menuData">
+              <input matInput type="text" class="form-control" placeholder="Inserisci Cena" [(ngModel)]="item.menuCena" [disabled]="data.readOnly">
+          </td>
+      </tr>
+
+
+  </table>
+
+  <br />
+<div class="row">
+    <div class="col">
+        <ng-container *ngIf="!data.readOnly">
+            <button mat-button [mat-dialog-close]="undefined" (click)="save()">Salva</button>
+        </ng-container>
+        <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
+    </div>
+
+  
+</div>
+
+

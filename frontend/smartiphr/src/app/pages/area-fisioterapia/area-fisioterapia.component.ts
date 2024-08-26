@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import { DialogRiabilitazioneComponent } from "src/app/dialogs/dialog-riabilitazione/dialog-riabilitazione.component";
 import { DinamicButton } from "src/app/models/dinamicButton";
@@ -27,6 +27,15 @@ export class AreaFisioterapiaComponent implements OnInit {
       this.pazienti = paz;
 
       this.eventsSubject.next(this.pazienti);
+      this.customButtons = [];
+      console.log("Init Area Infermeristica");
+
+      this.customButtons.push({
+        images: "../../../assets/rehabilitation.svg",
+        label: "",
+        tooltip: "Cartella Riabilitativa",
+        cmd: undefined
+      });
     });
   }
 
@@ -34,37 +43,46 @@ export class AreaFisioterapiaComponent implements OnInit {
     this.customButtons = [];
     console.log("Init Area Infermeristica");
 
-    this.customButtons.push({
-      images: "../../../assets/rehabilitation.svg",
-      label: "",
-      tooltip: "Cartella Riabilitativa",
-      cmd: (paziente: Paziente) =>
-        this.dialog
-          .open(DialogRiabilitazioneComponent, {
-            data: { paziente: paziente, readonly: true },
-            width: "1024px",
-            height: "800px",
-          })
-          .afterClosed()
-          .subscribe((result: Paziente) => {
-            if (result != undefined) {
-              const index = this.pazienti.findIndex(
-                (x) => x._id == paziente._id
-              );
-              if (index > -1) {
-                this.pazienti.splice(index, 1);
-                // this.pazienti.push(result);
-                this.pazienti.splice(index, 0, result);
-                this.eventsSubject.next(this.pazienti);
-              }
-            }
-          }),
-    });
+    //this.customButtons.push({
+    //  images: "../../../assets/rehabilitation.svg",
+    //  label: "",
+    //  tooltip: "Cartella Riabilitativa",
+    //  cmd: (paziente: Paziente) =>
+    //    this.dialog
+    //      .open(DialogRiabilitazioneComponent, {
+    //        data: { paziente: paziente, readonly: true },
+    //        width: "1024px",
+    //        height: "800px",
+    //      })
+    //      .afterClosed()
+    //      .subscribe((result: Paziente) => {
+    //        if (result != undefined) {
+    //          const index = this.pazienti.findIndex(
+    //            (x) => x._id == paziente._id
+    //          );
+    //          if (index > -1) {
+    //            this.pazienti.splice(index, 1);
+    //            // this.pazienti.push(result);
+    //            this.pazienti.splice(index, 0, result);
+    //            this.eventsSubject.next(this.pazienti);
+    //          }
+    //        }
+    //      }),
+    //});
 
     this.pazienteService.getPazienti().then((paz: Paziente[]) => {
       this.pazienti = paz;
 
       this.eventsSubject.next(this.pazienti);
+    });
+  }
+  showFunction(paziente: Paziente) {
+    //console.log(paziente);
+
+    console.log("Show scheda paziente:", paziente);
+    var dialogRef = this.dialog.open(DialogRiabilitazioneComponent, {
+      data: { paziente: paziente, readonly: false },
+      width: "1024px",
     });
   }
 }

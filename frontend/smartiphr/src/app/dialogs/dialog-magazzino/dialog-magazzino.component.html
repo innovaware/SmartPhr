@@ -1,0 +1,118 @@
+
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h4 class="title">
+        <label>
+          {{data.isNew ? 'Nuovo Materiale o Presidio' : 'Materiale o Presidio'}}
+        </label>
+      </h4>
+    </div>
+
+    <div class="col right">
+      <div class="container">
+        <div class="row">
+          <div class="col right">
+            <label>Data di Riferimento</label>
+          </div>
+          <div class="col1">
+            {{magazzino.dateInsert | date: 'dd/MM/yyyy'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+
+
+  <div class="row">
+    <div class="col"><h3>Nome</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Nome</mat-label>
+        <input matInput placeholder="Inserisci Nome" [(ngModel)]="magazzino.nome">
+      </mat-form-field>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col"><h3>Descrizione</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <label>Descrizione</label>
+      <textarea class="form-control" rows="5" cols="150" [(ngModel)]="magazzino.descrizione"></textarea>
+    </div>
+  </div>
+
+
+  <div class="row">
+    <div class="col"><h3>Area</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Area</mat-label>
+        <input matInput placeholder="Inserisci Area" [(ngModel)]="magazzino.area">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col"><h3>Quantit&aacute;</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Quantit&aacute;</mat-label>
+        <input matInput placeholder="Inserisci quantità" [(ngModel)]="magazzino.quantita" type="number">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col"><h3>Giacenza</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Giacenza</mat-label>
+        <input matInput placeholder="Inserisci giacenza" [(ngModel)]="magazzino.giacenza" type="number">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col"><h3>Conformi</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Conformi</mat-label>
+        <input matInput placeholder="Inserisci conformi" [(ngModel)]="magazzino.conformi" type="number">
+      </mat-form-field>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col"><h3>Conformi</h3></div>
+  </div>
+  <div class="row">
+    <div class="col">
+        <mat-checkbox matInput [(ngModel)]="magazzino.inuso">In Uso</mat-checkbox>
+    </div>
+  </div>
+
+
+
+  <hr>
+  <div class="row">
+    <div class="col">
+    <button mat-button (click)="save()">Salva</button>
+    <button mat-button (click)="cancel()">Cancella</button>
+  </div>
+</div>

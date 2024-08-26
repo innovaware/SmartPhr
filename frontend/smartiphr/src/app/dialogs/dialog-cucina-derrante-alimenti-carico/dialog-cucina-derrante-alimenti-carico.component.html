@@ -1,0 +1,54 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h4 class="title">
+        <label>
+          Derrante Alimentare - Carico / Scarico
+        </label>
+      </h4>
+    </div>
+
+    <div class="col right">
+      <div class="container">
+        <div class="row">
+          <div class="col right">
+            <label>Data di Riferimento</label>
+          </div>
+          <div class="col1">
+            {{data.dateInsert | date: 'dd/MM/yyyy HH:ss'}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-label>Nome: <span style="font-weight: bold;">{{data.nome}}</span></mat-label>
+    </div>
+  </div>
+  <hr>
+
+  <div class="row">
+    <div class="col">
+      <mat-form-field class="full" appearance="fill" >
+        <mat-label>Quantit&aacute;</mat-label>
+        <input matInput type="number" min="0" placeholder="Inserisci quantità" [(ngModel)]="data.quantita">
+      </mat-form-field>
+    </div>
+    <div class="col-2" style="text-align: right;">
+      <mat-label>Unit&aacute; <span style="font-weight: bold;">{{data.unita}}</span></mat-label>
+    </div>
+  </div>
+
+  <hr>
+  <div class="row">
+    <div class="col">
+    <button mat-button (click)="save()">Salva</button>
+    <button mat-button (click)="cancel()">Cancella</button>
+  </div>
+</div>
+
+
+

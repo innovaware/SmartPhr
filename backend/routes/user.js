@@ -1,6 +1,7 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
+const { ObjectId } = require("bson");
 
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
@@ -21,8 +22,27 @@ router.get("/info/:id", async (req, res) => {
   const { id } = req.params;
 
   try {
-    var query = { idUser: mongoose.Types.ObjectId(id) };
-    const dipendenti = await Dipendenti.find(query);
+    // var query = { 
+    //   idUser: mongoose.Types.ObjectId(id) 
+    // };
+    // const dipendenti = await Dipendenti.find(query);
+
+    const query = [
+      {
+        '$match': {
+          'idUser': new ObjectId(id)
+        }
+      }, {
+        '$lookup': {
+          'from': 'mansioni', 
+          'localField': 'mansione', 
+          'foreignField': '_id', 
+          'as': 'mansione'
+        }
+      }
+    ];
+
+    const dipendenti = await Dipendenti.aggregate(query);
 
     res.status(200).json(dipendenti);
   } catch (err) {
@@ -79,43 +99,49 @@ router.get("/", async (req, res) => {
  * Ritorna informazioni dell'utente 
  */
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  redisClient = req.app.get("redis");
-  redisDisabled = req.app.get("redisDisabled");
-  
-  /**
-   * Ritorna informazioni dell'utente utilizzando l'id
-   * @param {*} id 
-   * @returns models/user.js
-   */
-  const getDataById = (id) => {
-    return User.findById(id);
-  };
+    const { id } = req.params;
 
-  try {
-    if (redisClient == undefined || redisDisabled) {
-      const users = await getDataById(id);
-      res.status(200).json(users);
+    /**
+     * Returns user information using the id
+     * @param {*} id 
+     * @returns models/user.js
+     */
+    const getDataById = (id) => {
+        return User.findById(id);
+    };
 
-    } else {
-      const searchTerm = `USERBY${id}`;
-      redisClient.get(searchTerm, async (err, data) => {
-        if (err) throw err;
-
-        if (data) {
-          res.status(200).send(JSON.parse(data));
-        } else {
-          const user = await getDataById(id);
-          redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(user));
-          res.status(200).json(user);
-
-        }
-      });
+    try {
+        const user = await getDataById(id);
+        res.status(200).json(user);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
+
+/**
+ * Ritorna informazioni dell'utente mediante DipendenteID
+ */
+router.get("/dipendente/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+
+        // Funzione per ottenere i dati dal database
+        const getData = async () => {
+            return await User.find({ dipendenteID: id });
+        };
+
+        // Ottieni i dati dal database
+        const user = await getData();
+        console.log("user: ",user);
+        // Invia i dati come risposta
+        res.status(200).json(user);
+    } catch (err) {
+        // Gestione degli errori
+        res.status(500).json({ Error: err.message });
+    }
+});
+
 
 /**
  * Login utente
@@ -136,12 +162,12 @@ router.post("/authenticate", async (req, res) => {
     };
     const turno = await Turnimensili.findOne(query);
 
-    if (turno == null && user.username !== "admin") {
-      res.status(401);
-      res.json({ Error: 'Not Authorized - Fuori turno' });
+    //if (turno == null && user.username !== "admin") {
+    //  res.status(401);
+    //  res.json({ Error: 'Not Authorized - Fuori turno' });
 
-      return;
-    }
+    //  return;
+    //}
 
     const presenzeFind = await Dipendenti.aggregate([
       {
@@ -251,8 +277,8 @@ router.post("/authenticate", async (req, res) => {
 router.post("/logout", async (req, res) => {
   try {
     const user = res.locals.auth;
-    console.log("Logout");
-
+      console.log("Logout");
+      console.log(res.locals.auth);
     redisClient = req.app.get("redis");
     redisDisabled = req.app.get("redisDisabled");
 

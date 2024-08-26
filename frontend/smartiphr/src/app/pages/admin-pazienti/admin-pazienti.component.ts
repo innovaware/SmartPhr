@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import { DialogPazienteComponent } from "src/app/dialogs/dialog-paziente/dialog-paziente.component";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
@@ -76,6 +76,12 @@ export class AdminPazientiComponent implements OnInit {
               "Errore Inserimento Paziente (" + err["status"] + ")"
             );
           });
+      }
+      else {
+        this.pazienteService.getPazienti().then((paz: Paziente[]) => {
+          this.pazienti = paz;
+          this.eventsSubject.next(this.pazienti);
+        });
       }
     });
   }

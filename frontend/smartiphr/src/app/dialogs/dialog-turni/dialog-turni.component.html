@@ -1,0 +1,65 @@
+<h2>Mattina: </h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Utente
+            </th>
+            <th>
+                Mansione
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of data.table1">
+            <td>{{ row.user }}</td>
+            <td>{{ row.role }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Pomeriggio: </h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Utente
+            </th>
+            <th>
+                Mansione
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of data.table2">
+            <td>{{ row.user }}</td>
+            <td>{{ row.role }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<h2>Notte: </h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>
+                Utente
+            </th>
+            <th>
+                Mansione
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let row of data.table3">
+            <td>{{ row.user }}</td>
+            <td>{{ row.role }}</td>
+        </tr>
+    </tbody>
+</table>
+
+<div mat-dialog-actions>
+    <div class="bottom-actions">
+        <button mat-button (click)="Close()" [mat-dialog-close]="undefined">Chiudi</button>
+    </div>
+</div>

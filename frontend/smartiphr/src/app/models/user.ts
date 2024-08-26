@@ -11,4 +11,5 @@ export class User {
   role?: string;
   password?: string;
   active: boolean;
+  dipendenteID?: string;
 }

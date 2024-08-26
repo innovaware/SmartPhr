@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { AreaRiabilitativaDiario } from 'src/app/models/AreaRiabilitativaDiario';
 import { MessagesService } from 'src/app/service/messages.service';
 
@@ -21,7 +21,8 @@ export class DialogRiabilitazioneDiarioComponent implements OnInit {
 
 
   save() {
-    if ((this.diario.controllo == undefined || this.diario.controllo <= 0 ) ||
+     const num:Number = 0;
+    if ((this.diario.controllo == undefined || this.diario.controllo <= num ) ||
         (this.diario.note == "" || this.diario.note == undefined) ||
         (this.diario.firma == "" || this.diario.firma == undefined)) {
           this.messageService.showMessageError("Compila tutti i campi.");

@@ -14,7 +14,7 @@ import { PermessiService } from "src/app/service/permessi.service";
   styleUrls: ["./permessi.component.css"],
 })
 export class PermessiComponent implements OnInit, OnChanges {
-  @Input() data: Permessi[];
+  @Input() data: Dipendenti;
   @Input() dipendente: Dipendenti;
 
   @Input() disable: boolean;
@@ -39,16 +39,14 @@ export class PermessiComponent implements OnInit, OnChanges {
   ];
 
   displayedColumnsExternal: string[] = [
-    "cognome",
-    "nome",
-    "dataInizio",
-    "dataFine",
+    "dataPermesso",
+    "oraInizio",
+    "oraFine",
     "dataRichiesta",
-    "cf",
     "action",
   ];
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
   public nuovoPermesso: Permessi;
   dataSource: MatTableDataSource<Permessi>;
   public permessi: Permessi[];
@@ -59,11 +57,26 @@ export class PermessiComponent implements OnInit, OnChanges {
     public messageService: MessagesService,
     public permessiService: PermessiService,
     public dipendenteService: DipendentiService
-  ) {}
+  ) {
+    this.permessi = [];
+    this.nuovoPermesso = new Permessi();
+  }
 
   ngOnChanges(changes) {
-    this.dataSource = new MatTableDataSource<Permessi>(this.data);
-    this.dataSource.paginator = this.paginator;
+    if (this.data && this.data._id) {
+      this.permessiService.getPermessiByDipendenteID(this.data._id).then((result) => {
+        this.dataSource = new MatTableDataSource<Permessi>(result);
+        this.dataSource.paginator = this.paginator;
+        this.permessi = result;
+      });
+    }
+    else {
+      this.permessiService.getPermessiByDipendenteID(this.data._id).then((result) => {
+        this.permessi = result;
+      });
+      this.dataSource = new MatTableDataSource<Permessi>(this.permessi);
+      this.dataSource.paginator = this.paginator;
+    }
   }
 
   ngOnInit() {
@@ -112,9 +125,10 @@ export class PermessiComponent implements OnInit, OnChanges {
 
     this.addingPermesso = true;
     this.nuovoPermesso = {
-      dataInizio: undefined,
-      dataFine: undefined,
-      user: this.dipendente._id,
+      dataPermesso: undefined,
+      oraInizio: undefined,
+      oraFine: undefined,
+      user: undefined,
       dataRichiesta: dataCurrent,
     };
   }
@@ -122,28 +136,66 @@ export class PermessiComponent implements OnInit, OnChanges {
   async delete(permesso: Permessi) {
     console.log("Cancella permesso: ", permesso);
 
-    /*this.ferieService
-          .remove(doc)
-          .then((x) => {
-            console.log("Privacy cancellata");
-            const index = this.docsprivacy.indexOf(doc);
-            console.log("Privacy cancellata index: ", index);
-            if (index > -1) {
-              this.docsprivacy.splice(index, 1);
-            }
+    this.permessiService
+      .remove(permesso)
+      .then((x) => {
+        console.log("richisesta cancellata");
+        const index = this.permessi.indexOf(permesso);
+        console.log("richiesta ferie cancellata index: ", index);
+        if (index > -1) {
+          this.permessi.splice(index, 1);
+        }
 
-            console.log("Privacy cancellata : ", this.docsprivacy);
-            this.docsprivacyDataSource.data = this.docsprivacy;
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore nella cancellazione Privacy");
-            console.error(err);
-          });*/
+        console.log("Richiesta cancellata : ", this.permessi);
+        this.dataSource.data = this.permessi;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore nella cancellazione della richiesta");
+        console.error(err);
+      });
+  }
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
   async savePermesso(permesso: Permessi) {
-    this.uploadingPermesso = true;
+    permesso.user = this.data._id;
+    var campi = "";
+    if (permesso.dataPermesso == undefined || permesso.dataPermesso == new Date() || permesso.dataPermesso == null) {
+      campi = campi + " Data permesso, ";
+    }
+    if (permesso.oraInizio == undefined || permesso.oraInizio == "" || permesso.oraInizio == null) {
+      campi = campi + " Ora inizio, ";
+    }
+    if (permesso.oraFine == undefined || permesso.oraFine == "" || permesso.oraFine == null) {
+      campi = campi + " Ora fine, ";
+    }
+    if (campi != "") {
+      this.addingPermesso = false;
+      this.nuovoPermesso = new Permessi();
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    }
 
+    if (this.dateDiffInDays(new Date(), new Date(permesso.dataPermesso)) < 3) {
+      this.addingPermesso = false;
+      this.nuovoPermesso = new Permessi();
+      this.messageService.showMessageError("Il permesso va richiesto entro 3 giorni lavorativi di anticipo al giorno della richiesta");
+      return;
+    }
+
+    if (permesso.oraFine < permesso.oraInizio) {
+      this.addingPermesso = false;
+      this.nuovoPermesso = new Permessi();
+      this.messageService.showMessageError("Non puoi impostare la fine del permesso prima dell'inizio!!!");
+      return;
+    }
+    this.uploadingPermesso = true;
+    permesso.dataRichiesta = new Date();
     console.log("Invio Richiesta permesso: ", permesso);
     this.permessiService
       .insertPermesso(permesso)

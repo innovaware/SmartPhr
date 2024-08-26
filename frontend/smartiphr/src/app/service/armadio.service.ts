@@ -3,6 +3,8 @@ import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Armadio } from '../models/armadio';
+import { RegistroArmadio } from "../models/RegistroArmadio";
+import { Paziente } from "../models/paziente";
 
 @Injectable({
   providedIn: 'root'
@@ -14,67 +16,33 @@ export class ArmadioService {
   constructor(private http: HttpClient) {}
 
 
-  async getAll(): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/", { headers })
-      .toPromise();
+  getIndumenti(idCamera: string, date: Date): Observable<Armadio[]> {
+    const headers = {}
+    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/${idCamera}?date=${date.toISOString()}`, { headers });
   }
 
-
-  async getElementiByPaziente(id): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/paziente/" + id, { headers })
-      .toPromise();
+  getByCamera(idCamera: string): Observable<Armadio[]> {
+    const headers = {}
+    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/get/${idCamera}`, { headers });
   }
 
-
-
-  async getAllAttivita(): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/attivita", { headers })
-      .toPromise();
+  getByPaziente(idPaziente: String): Promise<Armadio>{
+    return this.http.get<Armadio>(`${this.api}/api/armadio/paziente/${idPaziente}`).toPromise();
   }
 
-
-  async getAttivitaByPaziente(id): Promise<Armadio[]> {
-
-    const headers = {
-      // 'Authorization': 'Bearer ' + this.token,
-      // 'x-refresh': this.refreshToken
-    }
-
-    return this.http
-      .get<Armadio[]>(this.api + "/api/armadio/attivitapaziente/" + id, { headers })
-      .toPromise();
+  update(armadio: Armadio, note: string) {
+    return this.http.put(`${this.api}/api/armadio/${armadio._id}`, {armadio: armadio, note: note});
   }
 
-
-  async insert(armadio: Armadio) {
-    var body = armadio;
-    return this.http.post(this.api + "/api/armadio", body).toPromise();
+  getRegistro():Observable<RegistroArmadio[]> {
+    const headers = {}
+    return this.http.get<RegistroArmadio[]>(`${this.api}/api/armadio/registro`, { headers });
   }
 
-
-  async update(armadio: Armadio) {
-    var body = armadio;
-    return this.http.put(this.api + "/api/armadio/" + armadio._id, body).toPromise();
+  add(armadio: Armadio, note: string) {
+    return this.http.post(`${this.api}/api/armadio`, {armadio: armadio, note: note});
+  }
+  delete(armadio: Armadio) {
+    return this.http.delete(`${this.api}/api/armadio/${armadio._id}`);
   }
 }

@@ -4,43 +4,27 @@ const Fatture = require("../models/fatture");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        const { id } = req.params;
 
-    const getData = () => {
-      return Fatture.find({
-        identifyUser: id,
-      });
-    };
+        // Function to get data from the database
+        const getData = () => {
+            return Fatture.find({
+                identifyUser: id,
+            });
+        };
 
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
-    }
-
-    const searchTerm = `fatture${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+        // Fetch data from the database
         const fatture = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fatture));
-        res.status(200).json(fatture);
-      }
-    });
 
-    // const fatture = await fatture.find();
-    // res.status(200).json(fatture);
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+        // Send the data in the response
+        res.status(200).json(fatture);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err.message });
+    }
 });
+
 
 /* router.get("/:id", async (req, res) => {
   const { id } = req.params;

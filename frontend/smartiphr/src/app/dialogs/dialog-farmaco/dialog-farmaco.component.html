@@ -2,7 +2,7 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <h3>Farmaco</h3>
+        <h2>{{ data.title }}</h2>
       </div>
 
       <div class="col">
@@ -24,29 +24,28 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <label>Nome</label>
+        <label>Nome*</label>
       </div>
     </div>
     <div class="row">
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.nome" [disabled]=disable></textarea>
+          <input matInput type="text" placeholder="Inserisci il contenuto" [(ngModel)]="data.row.nome">
         </mat-form-field>
       </div>
     </div>
 
     <div class="row">
       <div class="col">
-        <label>Descrizione</label>
+        <label>Descrizione*</label>
       </div>
     </div>
     <div class="row">
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.descrizione"
-            [disabled]=disable></textarea>
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.descrizione"></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -54,8 +53,8 @@
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <label for="select_formato">Formato</label>
-          <select class="form-control" [(ngModel)]="item.formato">
+          <label for="select_formato">Formato*</label>
+          <select class="form-control" [(ngModel)]="data.row.formato">
             <option value="Compresse">Compresse</option>
             <option value="Fiale">Fiale</option>
             <option value="Bustine">Bustine</option>
@@ -66,43 +65,101 @@
 
       <div class="col">
         <div class="form-group">
-          <label for="select_formato">Dose</label>
+          <label for="select_formato">Formulazione*</label>
           <mat-form-field appearance="fill">
-            <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.dose"
-              [disabled]=disable></textarea>
+            <input matInput type="text" placeholder="Inserisci la formulazione" [(ngModel)]="data.row.formulazione">
           </mat-form-field>
         </div>
       </div>
     </div>
 
-    <div class="row">
-      <div class="col">
-        <label>Pezzi confezione</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
 
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Pezzi confezione" [(ngModel)]="item.qty" [disabled]=disable></textarea>
-        </mat-form-field>
-      </div>
-    </div>
 
     <div class="row">
       <div class="col">
-        <label>Codice interno</label>
+        <div class="form-group">
+          <label>Quantità per confezione*</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.qty">
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <label>Codice Lotto*</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="text" placeholder="Inserisci Codice Lotto" [(ngModel)]="data.row.lotto">
+          </mat-form-field>
+        </div>
       </div>
     </div>
+
+
+
     <div class="row">
       <div class="col">
+        <div class="form-group">
+          <label>Quantità</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.qtyTot">
+          </mat-form-field>
+        </div>
+      </div>
 
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Codice interno" [(ngModel)]="item.codice_interno"
-            [disabled]=disable></textarea>
-        </mat-form-field>
+      <div class="col">
+        <div class="form-group">
+          <label>Giacenza</label>
+          <mat-form-field appearance="fill">
+            <input matInput type="number"   [(ngModel)]="data.row.giacenza">
+          </mat-form-field>
+        </div>
       </div>
     </div>
+
+
+
+    <div class="row">
+      <div class="col">
+        <div>
+          <mat-form-field appearance="fill">
+            <mat-label>Data scadenza</mat-label>
+            <input matInput [matDatepicker]="scadenza" [(ngModel)]="data.row.scadenza">
+            <mat-datepicker-toggle matSuffix [for]="scadenza"></mat-datepicker-toggle>
+            <mat-datepicker #scadenza></mat-datepicker>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="col">
+        <div class="form-group">
+          <label for="select_formato">Classe </label>
+          <select class="form-control" [(ngModel)]="data.row.classe">
+            <option value="pianoTerapeutico">Piano Terapeutico</option>
+            <option value="fasciaA">Fascia A</option>
+            <option value="fasciaB">Fascia B</option>
+            <option value="fasciaC">Fascia C</option>
+            <option value="usoComune">Uso comune</option>
+          </select>
+        </div>
+      </div>
+    </div>
+ 
+
+    <div class="row">
+    <div class="col">
+      <label>Note</label>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+
+      <mat-form-field appearance="fill">
+        <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.note"
+         ></textarea>
+      </mat-form-field>
+    </div>
+  </div>
 
   </div>
 

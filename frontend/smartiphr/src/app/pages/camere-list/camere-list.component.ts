@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild, ɵɵqueryRefresh } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { Router } from '@angular/router';
 import { map } from 'rxjs/operators';
 import { CamereDetailsComponent } from 'src/app/dialogs/camere-details/camere-details.component';
@@ -19,6 +21,7 @@ export class CamereListComponent implements OnInit {
     "camera",
     "piano",
     "numPostiLiberi",
+    "numPostiOccupati",
     "numMaxPosti",
     "action",
   ];
@@ -47,6 +50,7 @@ export class CamereListComponent implements OnInit {
           x.map( c => {
             return {
               ...c,
+              firmaArmadio: c.firmaArmadio[0],
               geometryObject: JSON.parse(c.geometry)
             };
           }))
@@ -71,13 +75,15 @@ export class CamereListComponent implements OnInit {
         camera: camera,
         editMode: false
       },
-      width: "600px",
+      width: "900px",
     })
     .afterClosed();
   }
 
   editCamera(camera: Camere) {
     const cameraEdit: Camere = Camere.clone(camera);
+    console.log("camera edit:", cameraEdit);
+
 
     this.dialogCamera.open(CamereDetailsComponent, {
       data: {
@@ -85,14 +91,17 @@ export class CamereListComponent implements OnInit {
         editMode: true
       },
       //disableClose: true,
-      width: "600px",
+      width: "900px",
     })
     .afterClosed()
     .subscribe( result => {
       //console.log("Closed Camera Dialog: ", result);
         if (result) {
           Camere.copy(cameraEdit, camera)
-
+          if (cameraEdit.numMaxPosti < cameraEdit.numPostiOccupati) {
+            cameraEdit.numMaxPosti = cameraEdit.numPostiOccupati;
+            cameraEdit.numPostiLiberi = 0;
+          }
           this.camereService.update(cameraEdit)
           .subscribe( result => {
             console.log("Aggiornamento camera eseguito con successo");

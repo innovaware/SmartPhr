@@ -1,9 +1,8 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { Component, Input, OnInit, ViewChild, AfterViewInit } from "@angular/core";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogInterventiComponent } from "src/app/dialogs/dialog-interventi/dialog-interventi.component";
-import { CartellaClinica } from "src/app/models/cartellaClinica";
-import { Diario } from "src/app/models/diario";
-import { Paziente } from "src/app/models/paziente";
 import { SchedaInterventi } from "src/app/models/SchedaInterventi";
 
 @Component({
@@ -11,7 +10,7 @@ import { SchedaInterventi } from "src/app/models/SchedaInterventi";
   templateUrl: "./scheda-interventi.component.html",
   styleUrls: ["./scheda-interventi.component.css"],
 })
-export class SchedaInterventiComponent implements OnInit {
+export class SchedaInterventiComponent implements OnInit, AfterViewInit {
   @Input() data: SchedaInterventi[];
   @Input() data2: SchedaInterventi;
   @Input() disable: boolean;
@@ -27,13 +26,18 @@ export class SchedaInterventiComponent implements OnInit {
   ];
 
   dataSource: MatTableDataSource<SchedaInterventi>;
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild("paginatorSchedaInverventi", { static: false }) paginator: MatPaginator;
 
-  constructor(public dialog: MatDialog) {}
+  constructor(public dialog: MatDialog) {
+    this.dataSource = new MatTableDataSource<SchedaInterventi>();
+  }
 
   ngOnInit() {
     console.log("SchedaInterventi: ", this.data);
-    this.dataSource = new MatTableDataSource<SchedaInterventi>(this.data);
+    this.dataSource.data = this.data;
+  }
+
+  ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
 
@@ -51,9 +55,9 @@ export class SchedaInterventiComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result != undefined && result) {
-          console.log("result:", result);
           this.data.push(result);
           this.dataSource.data = this.data;
+          this.dataSource.paginator = this.paginator;
         }
       });
   }
@@ -66,7 +70,6 @@ export class SchedaInterventiComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        console.log("result:", result);
         if (result != undefined && result) {
           const data = this.data;
 
@@ -78,6 +81,7 @@ export class SchedaInterventiComponent implements OnInit {
 
           data.push(result);
           this.dataSource.data = this.data;
+          this.dataSource.paginator = this.paginator;
         }
       });
   }

@@ -6,6 +6,7 @@ const FornitoriSchema = mongoose.Schema({
   codiceFiscale: String,
   dataNascita: Date,
   comuneNascita: String,
+  sesso: String,
   provinciaNascita: String,
   indirizzoNascita: String,
   indirizzoResidenza: String,
@@ -14,7 +15,12 @@ const FornitoriSchema = mongoose.Schema({
   mansione: String,
   tipoContratto: String,
   telefono: String,
-  email: String
+  email: String,
+  cancellato: Boolean,
+    dataCancellazione: Date,
+    dataUltimaModifica: Date,
+    dataCreazione: Date
+
 });
 
 module.exports = mongoose.model('Fornitori', FornitoriSchema, 'fornitori');

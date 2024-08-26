@@ -9,6 +9,7 @@ import { schedaAnamnesiPatologica } from 'src/app/models/schedaAnamnesiPatologic
 })
 export class AnamnesiPatologicaComponent implements  OnInit {
   @Input() data: schedaAnamnesiPatologica;
+  @Input() disable: Boolean;
 
   constructor() {}
 

@@ -1,0 +1,136 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Dati Evento</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+<mat-dialog-content>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <mat-label>Paziente: </mat-label>
+                <ng-container *ngIf="data.add">
+                    <mat-form-field class="example-full-width" appearance="fill">
+                        <input matInput
+                               type="text"
+                               placeholder="Seleziona Paziente"
+                               [matAutocomplete]="auto"
+                               (keyup)="applyFilter($event)"
+                               [(ngModel)]="PazienteSelect">
+                        <mat-autocomplete autoActiveFirstOption
+                                          #auto="matAutocomplete"
+                                          [displayWith]="displayFn">
+                            <mat-option *ngFor="let option of AllPazienti" [value]="option">
+                                {{option.nome}} {{option.cognome}}
+                            </mat-option>
+                        </mat-autocomplete>
+                    </mat-form-field>
+                </ng-container>
+                <ng-container *ngIf="!data.add">
+                    <input type="text" [(ngModel)]="PazienteName" disabled="disabled" readonly />
+                </ng-container>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-label>Evento: </mat-label>
+                <br />
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Evento" [(ngModel)]="evento">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <ng-container *ngIf="data.add">
+                    <mat-label>Tipologia Evento: </mat-label>
+                    <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" (change)="onSelectionChange()">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                        <option value="Altra visita specialistica">Altra visita specialistica</option>
+                        <option value="Esame ematochimico">Esame ematochimico</option>
+                        <option value="Uscita con familiari">Uscita con familiari</option>
+                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                        <option value="Uscita per esame">Uscita per esame</option>
+                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+                    </select>
+                </ng-container>
+                <ng-container *ngIf="!data.add">
+                    <mat-label>Tipologia Evento: </mat-label>
+                    <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" disabled="disabled" readonly>
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                        <option value="Altra visita specialistica">Altra visita specialistica</option>
+                        <option value="Esame ematochimico">Esame ematochimico</option>
+                        <option value="Uscita con familiari">Uscita con familiari</option>
+                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                        <option value="Uscita per esame">Uscita per esame</option>
+                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+                    </select>
+                </ng-container>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-label>Status: </mat-label>
+                <select class="input-cartelle" matNativeControl [(ngModel)]="stato" (change)="onSelectionChange()">
+                    <option selected="" value="">Seleziona ...</option>
+                    <option value="Richiesta inviata">Richiesta inviata</option>
+                    <option value="Impegnativa ricevuta">Impegnativa ricevuta</option>
+                    <option value="Richiesta ASP">Richiesta ASP</option>
+                    <option value="Visita fissata con data">Visita fissata con data</option>
+                </select>
+            </div>
+        </div>
+        <ng-container *ngIf="enabled">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group">
+                        <mat-form-field appearance="fill">
+                            <mat-label>DataEvento: </mat-label>
+                            <input matInput [matDatepicker]="picker" [(ngModel)]="dataEvento">
+                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                            <mat-datepicker #picker></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+
+                </div>
+            </div>
+        </ng-container>
+        <div class="row">
+            <div class="col">
+                <mat-form-field>
+                    <mat-label>Note: </mat-label>
+                    <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+        <br />
+    </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions>
+    <div class="bottom-actions">
+        <button mat-button [mat-dialog-close]="true" (click)="salva()">Salva</button>
+        <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    </div>
+</div>

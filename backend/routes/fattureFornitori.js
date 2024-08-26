@@ -1,87 +1,74 @@
 const express = require("express");
 const router = express.Router();
 const Fatture = require("../models/fatture");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        // Funzione per ottenere i dati da MongoDB
+        const getData = () => {
+            return Fatture.aggregate([
+                {
+                    $project: {
+                        identifyUserObj: {
+                            $cond: {
+                                if: { $eq: [{ $strLenCP: "$identifyUser" }, 24] },
+                                then: { $toObjectId: "$identifyUser" },
+                                else: null,
+                            },
+                        },
+                        filename: 1,
+                        dateupload: 1,
+                        note: 1,
+                    },
+                },
+                {
+                    $lookup: {
+                        localField: "identifyUserObj",
+                        from: "fornitori",
+                        foreignField: "_id",
+                        as: "fromFornitori",
+                    },
+                },
+                {
+                    $replaceRoot: {
+                        newRoot: {
+                            $mergeObjects: [
+                                { $arrayElemAt: ["$fromFornitori", 0] },
+                                "$$ROOT",
+                            ],
+                        },
+                    },
+                },
+                {
+                    $project: {
+                        dataNascita: 0,
+                        comuneNascita: 0,
+                        provinciaNascita: 0,
+                        indirizzoNascita: 0,
+                        indirizzoResidenza: 0,
+                        comuneResidenza: 0,
+                        provinciaResidenza: 0,
+                        mansione: 0,
+                        tipoContratto: 0,
+                        telefono: 0,
+                        email: 0,
+                        fromFornitori: 0,
+                    },
+                },
+                {
+                    $match: { identifyUserObj: { $ne: null } }, // Esclude documenti con ObjectId non valido
+                },
+            ]);
+        };
 
-    const getData = () => {
-      return Fatture.aggregate([
-          {
-            $project: {
-              identifyUserObj: { $toObjectId: "$identifyUser" },
-              filename: 1,
-              dateupload: 1,
-              note: 1,
-            },
-          },
-          {
-            $lookup: {
-              localField: "identifyUserObj",
-              from: "fornitori",
-              foreignField: "_id",
-              as: "fromFornitori",
-            },
-          },
-          {
-            $replaceRoot: {
-              newRoot: {
-                $mergeObjects: [
-                  { $arrayElemAt: ["$fromFornitori", 0] },
-                  "$$ROOT",
-                ],
-              },
-            },
-          },
-          {
-            $project: {
-              dataNascita: 0,
-              comuneNascita: 0,
-              provinciaNascita: 0,
-              indirizzoNascita: 0,
-              indirizzoResidenza: 0,
-              comuneResidenza: 0,
-              provinciaResidenza: 0,
-              mansione: 0,
-              tipoContratto: 0,
-              telefono: 0,
-              email: 0,
-              fromFornitori: 0,
-            },
-          },
-        ]);
-;
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        // Recupera i dati direttamente da MongoDB
+        const eventi = await getData();
+        res.status(200).json(eventi);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err.message });
     }
-
-    const searchTerm = `FATTUREFORNITORIALL`;
-
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const fattureFornitori = await getData();
-        redisClient.setex(
-          searchTerm,
-          redisTimeCache,
-          JSON.stringify(fattureFornitori)
-        );
-        res.status(200).json(fattureFornitori);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 module.exports = router;

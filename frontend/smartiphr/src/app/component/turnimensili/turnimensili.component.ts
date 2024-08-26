@@ -1,6 +1,6 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import { Output, EventEmitter } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
@@ -34,7 +34,8 @@ export class TurnimensiliComponent implements OnInit {
     "nome",
     "cf",
     "turno",
-    "dataRif"
+    "dataRif",
+    "type"
   ];
 
   dataSource: MatTableDataSource<Turnimensili>;
@@ -82,7 +83,7 @@ else{
 
   loadUser(){
     this.dipendenteService
-    .getById('620027d56c8df442a73341fa')
+      .getById(this.data._id) //'620027d56c8df442a73341fa'
     .then((x) => {
           this.dipendente = x;
           this.turnimensiliService.getTurnimensiliByDipendente(this.dipendente._id).subscribe((result) => {

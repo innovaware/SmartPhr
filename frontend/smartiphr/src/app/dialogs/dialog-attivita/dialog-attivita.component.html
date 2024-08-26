@@ -1,109 +1,209 @@
 <div mat-dialog-title>
-    <div class="container-fluid" >
-      <div class="row">
-        <div class="col">
-          <h3>Attività quotidiane</h3>
-        </div>
-  
-        <div class="col">
-          <button class="close-button" [mat-dialog-close]="true">×
-          </button>
-        </div>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col">
+        <h3>Attività quotidiane</h3>
       </div>
-  
-      <div class="row">
-        <div class="col">
-          <hr>
-        </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
       </div>
     </div>
   </div>
-  
-  <mat-dialog-content>
-    <div class="container-fluid" >
-      <div class="row">
-        <div class="col">
-  
-          <mat-tab-group mat-align-tabs="start">
-           
-                <mat-tab label="Registra la tua attivita quotidiana">
+</div>
+
+<mat-dialog-content>
+  <div class="container-fluid" >
+    <div class="row">
+      <div class="col">
+
+        <mat-tab-group mat-align-tabs="start">
+
+          <mat-tab label="Attività">
+            <br>
+            <table style="width: 100%;">
+              <tr>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.letto"/>
+                  <label>G.Letto</label>
+                </td>
+                <td>
+                 
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.diuresi"/>
+                  <label>Diuresi</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.evacuazione"/>
+                  <label>Evacuazione</label>
+                </td>
+                <td>
                 
-                    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;" *ngIf="!this.visible">
-                      <div class="row">
-                        <div class="col">
-                          <br>
-                            <label>Attività quotidiana completata</label>
-                            <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.completato"/>
-                        </div>
-                        <div class="col">
-                        </div>
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.igiene"/>
+                  <label>Igiene</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.doccia"/>
+                  <label>Doccia</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.barba"/>
+                  <label>Barba</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.tagliocapelli"/>
+                  <label>Taglio capelli</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.tagliounghie"/>
+                  <label>Taglio unghie</label>
+                </td>
+                <td>
+                  
+                  <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.lenzuola"/>
+                  <label>C.Lenzuola</label>
+                </td>
+                <td>
+                </td>
+              </tr>
+            </table>
+
+                <br>
+
+            <mat-form-field class="full" appearance="fill" style="width: 100%;">
+              <mat-label>Note</mat-label>
+              <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoAttivita.note">
+            </mat-form-field>
+          
+            
+
+
+            <table mat-table [dataSource]="attivitaDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.attivita?.length > 0">
+              <ng-container matColumnDef="description">
+                <th mat-header-cell *matHeaderCellDef> Attività </th>
+                <td mat-cell *matCellDef="let element"> {{element.descrizione}} </td>
+              </ng-container>
+        
+              <ng-container matColumnDef="data">
+                <th mat-header-cell *matHeaderCellDef> Data </th>
+                <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+              </ng-container>
+        
+
+              <ng-container matColumnDef="operator">
+                <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="turno">
+                <th mat-header-cell *matHeaderCellDef> Turno </th>
+                <td mat-cell *matCellDef="let element"> {{element.turno}} </td>
+              </ng-container>
+        
+              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+            </table>
+        
+            <div class="paginator-container">
+        
+              <mat-paginator #paginatorAttivita [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                aria-label="Select page of periodic elements">
+              </mat-paginator>
+            </div>
+
+
+            </mat-tab>
+         
+              <!--<mat-tab label="Registra la tua attivita quotidiana">
+              
+                  <div class="container-flex" class="notPresent" style="margin-bottom: 10px;" *ngIf="!this.visible">
+                    <div class="row">
+                      <div class="col">
+                        <br>
+                          <label>Attività quotidiana completata</label>
+                          <input type="checkbox" slot="end"  [(ngModel)]="nuovoAttivita.completato"/>
                       </div>
-                      <div class="row">
-                        <div class="col">
-                          <mat-form-field class="full" appearance="fill" style="width: 100%;">
-                            <mat-label>Descrivi attività</mat-label>
-                            <input matInput placeholder="Inserisci descrizione" [(ngModel)]="nuovoAttivita.description">
-                          </mat-form-field>
-                        </div>
-                        <div class="col-2">
-                          <button mat-button class="button-insert" (click)="save(nuovoAttivita)" *ngIf="nuovoAttivita.completato">Conferma</button>
-                        </div>
+                      <div class="col">
                       </div>
                     </div>
-                
-                
-                
-                    <div *ngIf="this.attivita?.length <= 0" class="notPresent">
-                      Nessuna attivita svolta nella giornata attuale
+                    <div class="row">
+                      <div class="col">
+                        <mat-form-field class="full" appearance="fill" style="width: 100%;">
+                          <mat-label>Descrivi attività</mat-label>
+                          <input matInput placeholder="Inserisci descrizione" [(ngModel)]="nuovoAttivita.description">
+                        </mat-form-field>
+                      </div>
+                      <div class="col-2">
+                        <button mat-button class="button-insert" (click)="save(nuovoAttivita)" *ngIf="nuovoAttivita.completato">Conferma</button>
+                      </div>
                     </div>
-                
-                    <table mat-table [dataSource]="attivitaDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.attivita?.length > 0">
-                      <ng-container matColumnDef="description">
-                        <th mat-header-cell *matHeaderCellDef> Attività </th>
-                        <td mat-cell *matCellDef="let element"> {{element.description}} </td>
-                      </ng-container>
-                
-                      <ng-container matColumnDef="data">
-                        <th mat-header-cell *matHeaderCellDef> Data </th>
-                        <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
-                      </ng-container>
-                
+                  </div>
+              
+              
+              
+                  <div *ngIf="this.attivita?.length <= 0" class="notPresent">
+                    Nessuna attivita svolta nella giornata attuale
+                  </div>
+              
+                  <table mat-table [dataSource]="attivitaDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.attivita?.length > 0">
+                    <ng-container matColumnDef="description">
+                      <th mat-header-cell *matHeaderCellDef> Attività </th>
+                      <td mat-cell *matCellDef="let element"> {{element.description}} </td>
+                    </ng-container>
+              
+                    <ng-container matColumnDef="data">
+                      <th mat-header-cell *matHeaderCellDef> Data </th>
+                      <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
+                    </ng-container>
+              
 
-                      <ng-container matColumnDef="operator">
-                        <th mat-header-cell *matHeaderCellDef> Operatore </th>
-                        <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
-                      </ng-container>
+                    <ng-container matColumnDef="operator">
+                      <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                      <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+                    </ng-container>
 
-                      <ng-container matColumnDef="turno">
-                        <th mat-header-cell *matHeaderCellDef> Turno </th>
-                        <td mat-cell *matCellDef="let element"> {{element.turno}} </td>
-                      </ng-container>
-                
-                      <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-                      <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-                    </table>
-                
-                    <div class="paginator-container">
-                
-                      <mat-paginator #paginatorAttivita [pageSizeOptions]="[5]" showFirstLastButtons
-                        aria-label="Select page of periodic elements">
-                      </mat-paginator>
-                    </div>
-                
-                  </mat-tab>
+                    <ng-container matColumnDef="turno">
+                      <th mat-header-cell *matHeaderCellDef> Turno </th>
+                      <td mat-cell *matCellDef="let element"> {{element.turno}} </td>
+                    </ng-container>
+              
+                    <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+                  </table>
+              
+                  <div class="paginator-container">
+              
+                    <mat-paginator #paginatorAttivita [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                      aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                  </div>
+              
+                </mat-tab>-->
 
-  
-          </mat-tab-group>
-  
-        </div>
+
+        </mat-tab-group>
+
       </div>
     </div>
-  </mat-dialog-content>
-  
-  
-  <div mat-dialog-actions>
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
     <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-  </div>
-  </div>
-  
+        <button mat-button [mat-dialog-close]="true">Chiudi</button>
+        <button mat-button (click)="saveAttivita(nuovoAttivita)" class="button-insert">Salva</button>
+    </div>
+</div>

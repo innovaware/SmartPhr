@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from '@angular/core';
-import { MatSelectChange } from '@angular/material';
+import { MatSelectChange } from '@angular/material/select';
 import { ADL } from 'src/app/models/ADL';
 
 @Component({
@@ -10,6 +10,7 @@ import { ADL } from 'src/app/models/ADL';
 export class SchedaADLComponent implements OnInit {
 
   @Input() data: ADL;
+  @Input() disable: boolean;
 
   constructor() {
 

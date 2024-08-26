@@ -6,7 +6,7 @@
           <mat-card-title>ANAMNESI PATOLOGICA REMOTA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.anamnesiRemota"  ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.anamnesiRemota"  [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -21,7 +21,7 @@
           <mat-card-title>ANAMNESI PATOLOGICA PROSSIMA</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.anamnesiProssima" ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.anamnesiProssima" [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -36,7 +36,7 @@
           <mat-card-title>TERAPIA IN ATTO A DOMICILIO</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.terapiaDomicilio" ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.terapiaDomicilio" [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>
@@ -51,7 +51,7 @@
           <mat-card-title>REAZIONI AVVERSE DA FARMACI</mat-card-title>
         </mat-card-header>
         <mat-card-content>
-          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.reazioneAFarmaci" ></textarea>
+          <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.reazioneAFarmaci" [disabled]=disable></textarea>
         </mat-card-content>
       </mat-card>
     </div>

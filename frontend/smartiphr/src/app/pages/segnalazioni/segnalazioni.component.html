@@ -1,0 +1,101 @@
+<div class="container pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">Segnalazioni</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <button mat-raised-button class="button-insert" (click)="AddSegnalazione()">Apri una segnalazione</button>
+    </div>
+  </div>
+  <br />
+  <br />
+  <table mat-table [dataSource]="dataSourceSegnalazioni" class="mat-elevation-z8" style="width: 100%;">
+
+    <!-- Definizione delle colonne -->
+    <ng-container matColumnDef="action">
+      <th mat-header-cell *matHeaderCellDef>
+        <button class="btn btn-link p-0" (click)="AddSegnalazione()" title="Apri una nuova segnalazione">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+          </svg>
+        </button>
+      </th>
+      <td mat-cell *matCellDef="let row" style="text-align: right;">
+        <ng-container *ngIf="admin">
+          <div class="row">
+            <div class="col">
+              <ng-container *ngIf="!row.presoincarico">
+                <button mat-button (click)="presoInCarico(row)" title="Presa in Carico">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:dodgerblue;" class="bi bi-hand-thumbs-up-fill" viewBox="0 0 16 16">
+                    <path d="M6.956 1.745C7.021.81 7.908.087 8.864.325l.261.066c.463.116.874.456 1.012.965.22.816.533 2.511.062 4.51a10 10 0 0 1 .443-.051c.713-.065 1.669-.072 2.516.21.518.173.994.681 1.2 1.273.184.532.16 1.162-.234 1.733q.086.18.138.363c.077.27.113.567.113.856s-.036.586-.113.856c-.039.135-.09.273-.16.404.169.387.107.819-.003 1.148a3.2 3.2 0 0 1-.488.901c.054.152.076.312.076.465 0 .305-.089.625-.253.912C13.1 15.522 12.437 16 11.5 16H8c-.605 0-1.07-.081-1.466-.218a4.8 4.8 0 0 1-.97-.484l-.048-.03c-.504-.307-.999-.609-2.068-.722C2.682 14.464 2 13.846 2 13V9c0-.85.685-1.432 1.357-1.615.849-.232 1.574-.787 2.132-1.41.56-.627.914-1.28 1.039-1.639.199-.575.356-1.539.428-2.59z" />
+                  </svg>
+                </button>
+              </ng-container>
+            </div>
+            <div class="col">
+              <ng-container *ngIf="!row.risolto && row.presoincarico">
+                <button mat-button (click)="risolto(row)" title="Risolto">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color:forestgreen;" class="bi bi-check-circle-fill" viewBox="0 0 16 16">
+                    <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
+                  </svg>
+                </button>
+              </ng-container>
+            </div>
+          </div>
+        </ng-container>
+      </td>
+    </ng-container>
+
+    <ng-container matColumnDef="numero">
+      <th mat-header-cell *matHeaderCellDef> n° Ticket </th>
+      <td mat-cell *matCellDef="let element"> {{element.numTicket}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="utenteNome">
+      <th mat-header-cell *matHeaderCellDef> Utente </th>
+      <td mat-cell *matCellDef="let element"> {{element.utenteNome}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="descrizione">
+      <th mat-header-cell *matHeaderCellDef> Descrizione </th>
+      <td mat-cell *matCellDef="let element"> {{element.descrizione}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="status">
+      <th mat-header-cell *matHeaderCellDef> Status </th>
+      <td mat-cell *matCellDef="let element"> {{element.status}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="dataSegnalazione">
+      <th mat-header-cell *matHeaderCellDef> Data Segnalazione </th>
+      <td mat-cell *matCellDef="let element"> {{element.dataSegnalazione | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="datapresaincarico">
+      <th mat-header-cell *matHeaderCellDef> Data presa in carico </th>
+      <td mat-cell *matCellDef="let element"> {{element.datapresaincarico | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="datarisoluzione">
+      <th mat-header-cell *matHeaderCellDef> Data Risoluzione </th>
+      <td mat-cell *matCellDef="let element"> {{element.datarisoluzione | date: 'dd/MM/yyyy'}} </td>
+    </ng-container>
+
+    <!-- Definizione delle righe -->
+    <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+  </table>
+
+  <!-- Paginator -->
+  <div>
+    <mat-paginator #paginatorSegnalazioni [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+  </div>
+
+</div>

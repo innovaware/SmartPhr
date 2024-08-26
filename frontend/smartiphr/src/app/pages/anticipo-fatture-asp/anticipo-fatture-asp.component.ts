@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
 import { AnticipoFatture } from "src/app/models/anticipoFatture";
 import { AnticipoFattureService } from "src/app/service/anticipoFatture.service";
@@ -135,6 +137,10 @@ export class AnticipoFattureASPComponent implements OnInit {
   }
 
   async saveAnticipo(anticipo: AnticipoFatture) {
+    if (!anticipo.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "ANTICIPOFATTURE";
     const path = "anticipofatture";
     const file: File = anticipo.file;
@@ -181,10 +187,10 @@ export class AnticipoFattureASPComponent implements OnInit {
     this.uploadService
       .download(anticipo.filename, anticipo.identifyUser, "anticipofatture")
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe(
           (data) => {
-            console.log("download: ", data);
+            
             const newBlob = new Blob([data as BlobPart], {
               type: "application/pdf",
             });

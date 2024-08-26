@@ -6,3 +6,4 @@
 .github
 
 /services/mqtt/mosquitto
+package-lock.json

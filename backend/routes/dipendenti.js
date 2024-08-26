@@ -2,6 +2,7 @@ const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
 const express = require("express");
 const redis = require("redis");
+const { ObjectId } = require("bson");
 
 const router = express.Router();
 //const redisPort = process.env.REDISPORT || 6379;
@@ -11,277 +12,140 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 //const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        const getData = () => {
+            return Dipendenti.find();
+        };
 
-    const getData = () => {
-      return Dipendenti.find();
-    };
- 
-    if (redisClient == undefined || redisDisabled) {
-      const dipendenti = await getData();
-      res.status(200).json(dipendenti);
-      return
-    }
-
-    const searchTerm = `DIPENDENTIALL`;
-    // Ricerca su Redis Cache
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        // Dato trovato in cache - ritorna il json
-        res.status(200).send(JSON.parse(data));
-      } else {
-        // Recupero informazioni dal mongodb
+        // Directly fetch data from MongoDB
         const dipendenti = await getData();
-
-        // Aggiorno la cache con i dati recuperati da mongodb
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
-
-        // Ritorna il json
         res.status(200).json(dipendenti);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
 });
+
 
 // http://[HOST]:[PORT]/api/dipendenti/[ID_DIPENDENTE]
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        const getData = () => {
+            return Dipendenti.findById(id);
+        };
 
-    const getData = () => {
-      return Dipendenti.findById(id);
-    };
- 
-    if (redisClient == undefined || redisDisabled) {
-      const dipendenti = await getData();
-      res.status(200).json(dipendenti);
-      return
-    }
-
-    const searchTerm = `DIPENDENTIBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
         const dipendenti = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
         res.status(200).json(dipendenti);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
+
 
 
 // http://[HOST]:[PORT]/api/dipendenti/byuser/[ID_USER]
 router.get("/byuser/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        // Funzione per ottenere i dati dal database
+        const getData = async () => {
+            return await Dipendenti.find({ _id: id });
+        };
 
-    const getData = () => {
-      return Dipendenti.find(
-              { idUser: id }
-      );
-    };
- 
-    if (redisClient == undefined || redisDisabled) {
-      const dipendenti = await getData();
-      res.status(200).json(dipendenti);
-      return
-    }
-
-    const searchTerm = `DIPENDENTIBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+        // Ottieni i dati dal database
         const dipendenti = await getData();
 
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(dipendenti));
+        // Invia i dati come risposta
         res.status(200).json(dipendenti);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        // Gestione degli errori
+        res.status(500).json({ Error: err.message });
+    }
 });
+
 
 
 // http://[HOST]:[PORT]/api/dipendenti (POST)
 // INSERT dipendente su DB
 router.post("/", async (req, res) => {
-  try {
+    try {
+        const newDip = req.body.dipendente;
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    clientMailerService = req.app.get("mailer");
-    clientMailerTopic = req.app.get("mailerTopic");
-    clientMailerDiabled = req.app.get("mailerDisabled");
+        if (!newDip.email || !newDip.mansione) {
+            res.status(400).json({ Error: 'Email or Mansione not defined' });
+            return;
+        }
 
-    if (req.body.email === undefined) {
-      res.status(400).json({ Error: 'Email not defined'})
-      return;
+        const passwordAutoGenerated = `${newDip.email + new Date().getUTCSeconds().toString() + Math.random() * 100}`;
+
+        const dipendente = new Dipendenti(newDip);
+        const result = await dipendente.save();
+
+        const user = new User({
+            username: newDip.email,
+            password: passwordAutoGenerated,
+            active: false,
+            role: newDip.mansione,
+            dipendenteID: result._id
+        });
+        const userResult = await user.save();
+
+        // Mailer
+        const clientMailerService = req.app.get("mailer");
+        const clientMailerTopic = req.app.get("mailerTopic");
+        const clientMailerDisabled = req.app.get("mailerDisabled");
+        if (clientMailerService && !clientMailerDisabled) {
+            clientMailerService.publish(clientMailerTopic, JSON.stringify({
+                message: dipendente,
+                operation: "insert",
+            }), { qos: 0, retain: false }, (error) => {
+                if (error) {
+                    console.error(error);
+                }
+            });
+        }
+
+        res.status(200).json(result);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-    if (req.body.mansione === undefined) {
-      res.status(400).json({ Error: 'Mansione not defined'})
-      return;
-    }
-
-    passwordAutoGenerated = 
-      `${req.body.email + new Date().getUTCSeconds().toString() + Math.random() * 100}`;
-
-    const user = new User({
-      username: req.body.email,
-      password: passwordAutoGenerated,
-      active: false,
-      role: req.body.mansione, //TODO Sistemare questo campo
-    });
-
-    const userResult = await user.save();
-
-    const dipendente = new Dipendenti({
-      cognome: req.body.cognome,
-      nome: req.body.nome,
-      cf: req.body.cf,
-      dataNascita: req.body.dataNascita,
-      comuneNascita: req.body.comuneNascita,
-      provinciaNascita: req.body.provinciaNascita,
-      indirizzoNascita: req.body.indirizzoNascita,
-      indirizzoResidenza: req.body.indirizzoResidenza,
-      comuneResidenza: req.body.comuneResidenza,
-      provinciaResidenza: req.body.provinciaResidenza,
-      titoloStudio: req.body.titoloStudio,
-      mansione: req.body.mansione,
-      tipoContratto: req.body.tipoContratto,
-      telefono: req.body.telefono,
-      email: req.body.email,
-      idUser: userResult._id,
-      accettatoRegolamento: req.accettatoRegolamento
-    });
-
-    // Salva i dati sul mongodb
-    const result = await dipendente.save();
-
-    if (redisClient != undefined && redisDisabled) {
-      const searchTermUser = `USERALL`;
-      redisClient.del(searchTermUser);
-      const searchTerm = `DIPENDENTIALL`;
-      redisClient.del(searchTerm);
-    }
-
-    if (clientMailerService != undefined && !clientMailerDiabled) {
-      clientMailerService.publish( clientMailerTopic, 
-        JSON.stringify({
-          message: dipendente,
-          operation: "insert",
-        }),
-        { qos: 0, retain: false },
-        (error) => {
-          if (error) {
-            console.error(error);
-          }
-      });
-    }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
 });
+
 
 // http://[HOST]:[PORT]/api/dipendenti/[ID_DIPENDENTE]
 // Modifica del dipendente
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
+        const { dipendente } = req.body;
 
-    console.log('accettatoRegolamento: ' + req.body.accettatoRegolamento);
-    console.log('idUser: ' + req.body.idUser);
-    // Aggiorna il documento su mongodb
-    const dipendenti = await Dipendenti.updateOne(
-      { _id: id },
-      {
-        $set: {
-          cognome: req.body.cognome,
-          nome: req.body.nome,
-          cf: req.body.codiceFiscale,
-          dataNascita: req.body.dataNascita,
-          comuneNascita: req.body.comuneNascita,
-          provinciaNascita: req.body.provinciaNascita,
-          indirizzoNascita: req.body.indirizzoNascita,
-          indirizzoResidenza: req.body.indirizzoResidenza,
-          comuneResidenza: req.body.comuneResidenza,
-          provinciaResidenza: req.body.provinciaResidenza,
-          titoloStudio: req.body.titoloStudio,
-          mansione: req.body.mansione,
-          tipoContratto: req.body.tipoContratto,
-          telefono: req.body.telefono,
-          email: req.body.email,
-          accettatoRegolamento: req.body.accettatoRegolamento
-        },
-      }
-    );
+        console.log('accettatoRegolamento: ' + dipendente.accettatoRegolamento);
+        console.log('idUser: ' + dipendente.idUser);
 
+        // Aggiorna il documento su mongodb
+        const dipendenti = await Dipendenti.updateOne(
+            { _id: id },
+            { $set: dipendente }
+        );
 
-    const userUpdated = await User.updateOne(
-      { _id: req.body.idUser },
-      {
-        $set: {
-          role: req.body.mansione
-        },
-      }
-    );
-    
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    clientMailerService = req.app.get("mailer");
-    clientMailerTopic = req.app.get("mailerTopic");
-    clientMailerDiabled = req.app.get("mailerDisabled");
+        console.log("Update Dipendente: ", dipendenti);
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `DIPENDENTIBY${id}`;
-      redisClient.del(searchTerm);
+        // Aggiorna il documento dell'utente associato
+        console.log("Update Dipendente User:",
+            await User.updateOne(
+                { dipendenteID: dipendente._id },
+                { $set: { role: dipendente.mansione } }
+            )
+        );
+
+        // Rispondi con il risultato dell'aggiornamento
+        res.status(200).json(dipendenti);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    if (clientMailerService != undefined && !clientMailerDiabled) {
-      clientMailerService.publish(
-        clientMailerTopic,
-        JSON.stringify({
-          message: dipendenti,
-          operation: "update",
-        }),
-        { qos: 0, retain: false },
-        (error) => {
-          if (error) {
-            console.error(error);
-          }
-        });
-    }
-
-    res.status(200).json(dipendenti);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
+
 
 router.delete("/:id", async (req, res) => {
   try {

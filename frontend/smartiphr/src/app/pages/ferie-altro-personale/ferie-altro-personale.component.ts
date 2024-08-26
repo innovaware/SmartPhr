@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { MatDialog } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
 import { Dipendenti } from 'src/app/models/dipendenti';
 import { AuthenticationService } from 'src/app/service/authentication.service';
 import { DipendentiService } from 'src/app/service/dipendenti.service';
@@ -14,7 +14,7 @@ import { UploadService } from 'src/app/service/upload.service';
 })
 export class FerieAltroPersonaleComponent implements OnInit {
 
-  dipendente: Dipendenti = {} as Dipendenti;
+  dipendente: Dipendenti;
   isExternal : boolean;
  
   constructor( public dipendenteService: DipendentiService,  
@@ -34,12 +34,10 @@ export class FerieAltroPersonaleComponent implements OnInit {
   loadUser(){
     this.authenticationService.getCurrentUserAsync().subscribe(
       (user)=>{
-   
-        console.log('get dipendente');
         this.dipendenteService
-        .getByIdUser(user._id)
-        .then((x) => {
-          this.dipendente = x[0];
+          .getByIdUser(user.dipendenteID)
+          .then((x) => {
+            this.dipendente = x[0];
         })
         .catch((err) => {
           this.messageService.showMessageError(

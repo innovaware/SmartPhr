@@ -29,13 +29,13 @@
     <div>
       <p>
         <mat-form-field>
-          <input type="text" matInput placeholder="Username" [(ngModel)]="username">
+          <input type="text" matInput placeholder="Username" [(ngModel)]="username" (keyup.enter)="access()">
         </mat-form-field>
       </p>
 
       <p>
         <mat-form-field>
-          <input type="password" matInput placeholder="Password" [(ngModel)]="password">
+          <input type="password" matInput placeholder="Password" [(ngModel)]="password" (keyup.enter)="access()">
         </mat-form-field>
       </p>
 
@@ -48,7 +48,8 @@
 
 
       <div>
-        © 2020-2021
+          <!-- © 2020-2024 -->
+          {{LastYear}}
       </div>
 
       <div *ngIf="messageError !== ''" style="color:red">

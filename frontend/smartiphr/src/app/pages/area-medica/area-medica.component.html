@@ -17,9 +17,11 @@
 
       <app-table-ospiti
         [eventPazienti]="eventsSubject.asObservable()"
+        [insertFunction]="getInsertFunction()"
+        [showPatient]="showFunction"
         [enableShow]=false
         [enableDeleting]=false
-        [showInsert]=false
+        [showInsert]=true
         [enableCustomButton]=true
         [CustomButtons] = customButtons
         >

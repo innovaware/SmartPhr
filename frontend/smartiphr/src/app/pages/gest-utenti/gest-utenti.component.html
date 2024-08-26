@@ -2,29 +2,22 @@
 <div class="containter pad">
   <div class="row">
     <div class="col ">
-      <h1 class="title">GESTIONE DIPENDENTI</h1>
+      <h1 class="title">AREA Amministrativa - Dipendenti</h1>
     </div>
   </div>
 
   <hr>
 
-
-
-
   <div class="row">
     <div class="col">
-<!--       <app-table-dipendenti 
-      (showItemEmiter)="show($event)" 
-      [buttons]='["Mostra"]' 
-      [showInsert]=true>
-    </app-table-dipendenti> -->
-    <app-table-dipendenti 
-    [eventDipendente]="eventsSubject.asObservable()"
-    [showDipendente]="showFunction"
-    [enableShow]=true
-    [enableDeleting]=true
-    [showInsert]=true>
-  </app-table-dipendenti>
+        <app-table-dipendenti [eventDipendente]="eventsSubject.asObservable()"
+                              [showDipendente]="showFunction"
+                              [insertFunction]="getInsertFunction()"
+                              [enableShow]=true
+                              (deletePatientEmiter)="deleteDipendente($event)"
+                              [enableDeleting]=true
+                              [showInsert]=true>
+        </app-table-dipendenti>
     </div>
   </div>
 </div>

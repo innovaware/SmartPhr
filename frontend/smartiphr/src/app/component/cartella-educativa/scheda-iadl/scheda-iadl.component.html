@@ -12,7 +12,7 @@
                 <tr>
                   <td>A) CAPACITA’ DI USARE IL TELEFONO </td>
                   <td>
-                      <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.A">
+                      <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.A">
                         <option selected="" value="">Seleziona ...</option>
                         <option value="1-1">Usa il telefono di propria iniziativa (alza la cornetta, compone il numero.....):  1</option>
                         <option value="2-1">Compone solo alcuni numeri ben conosciuti: 1</option>
@@ -27,7 +27,7 @@
                 <tr>
                     <td>B) FARE ACQUISTI</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.B">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable  [(ngModel)]="data.B">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Fa tutte le proprie spese senza aiuto: 1</option>
                           <option value="2-0">Fa piccoli acquisti senza aiuto: 0</option>
@@ -43,7 +43,7 @@
                   <tr>
                     <td>C) PREPARAZIONE DEL CIBO</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.C">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.C">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Organizza, prepara e serve i pasti in modo adeguato e senza aiuto: 1
                             </option>
@@ -61,7 +61,7 @@
                   <tr>
                     <td>D) CAPACITA’ DI ACCUDIRE LA CASA</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.D">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.D">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Sbriga le faccende domestiche da solo o con assistenza occasionale per i lavori pesanti: 1
                             </option>
@@ -80,7 +80,7 @@
                   <tr>
                     <td>E) AUTONOMIA NEL LAVAGGIO DELLA BIANCHERIA</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.E">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.E">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Lava personalmente tutta la sua biancheria: 1</option>
                           <option value="2-1">Lava solo i piccoli capi di biancheria (calzini, fazzoletti): 1</option>
@@ -95,7 +95,7 @@
                   <tr>
                     <td>F) MEZZI DI TRASPORTO</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.F">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.F">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Si sposta da solo utilizzando i mezzi pubblici o guidando la propria auto: 1</option>
                           <option value="2-1">Per spostarsi usa il taxi, ma non i mezzi pubblici: 1</option>
@@ -114,7 +114,7 @@
                   <tr>
                     <td>G) RESPONSABILITÀ NELL’USO DEI MEDICINALI</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.G">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.G">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Assume i medicinali prescritti nelle dosi giuste e negli orari corretti: 1</option>
                           <option value="2-0">Assume i medicinali solo se preparati in anticipo in dosi separate: 0</option>
@@ -131,7 +131,7 @@
                   <tr>
                     <td>H) CAPACITA’ DI GESTIRE LE PROPRIE FINANZE</td>
                     <td>
-                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)" [(ngModel)]="data.H">
+                        <select matNativeControl required class="custom-select" (change)="valIADLChange($event)"  [disabled]=disable [(ngModel)]="data.H">
                           <option selected="" value="">Seleziona ...</option>
                           <option value="1-1">Gestisce le proprie finanze in modo autonomo (scrive assegni, paga le tasse, va in banca, raccoglie e tiene nota delle entrate, riscuote la pensione): 1</option>
                           <option value="2-1">E’ in grado di fare piccoli acquisti ma necessita di aiuto per le operazioni più complesse (operazioni bancarie, acquisti maggiori....): 1</option>

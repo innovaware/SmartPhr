@@ -1,5 +1,5 @@
 import { Component, OnInit } from "@angular/core";
-import { MatDialog } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
 import { Subject } from "rxjs";
 import { DialogFornitoreComponent } from 'src/app/dialogs/dialog-fornitore/dialog-fornitore.component';
 import { DialogQuestionComponent } from "src/app/dialogs/dialog-question/dialog-question.component";
@@ -30,21 +30,14 @@ export class AdminFornitoriComponent implements OnInit {
     });
   }
 
+  showFunction(data: Fornitore) {
+    //console.log(paziente);
 
-  getButtons() {
-    const showButton: DinamicButton = {
-      label: "Mostra",
-      icon: "",
-      cmd: this.showAdmin.bind({ ...this }),
-    };
-
-    const deleteButton: DinamicButton = {
-      label: "Cancella",
-      icon: "",
-      cmd: this.deleteAdmin.bind({ ...this }),
-    };
-
-    return [showButton, deleteButton];
+    console.log("Show scheda fornitore:", data);
+    var dialogRef = this.dialog.open(DialogFornitoreComponent, {
+      data: { fornitore: data, readonly: false },
+      width: "1024px",
+    });
   }
 
   getInsertFunction(): any {
@@ -88,41 +81,47 @@ export class AdminFornitoriComponent implements OnInit {
     });
   }
 
-  deleteAdmin(fornitore: Fornitore) {
-    console.log("Cancella fornitore");
-    this.dialog
-      .open(DialogQuestionComponent, {
-        data: { message: "Cancellare il fornitore?" },
-        //width: "600px",
-      })
-      .afterClosed()
-      .subscribe(
-        (result) => {
-          if (result == true) {
-
-    this.fornitoreService.delete(fornitore).then(
-      (x) => {
-        const index = this.fornitori.indexOf(fornitore);
-        if (index > -1) {
-          this.fornitori.splice(index, 1);
-        }
-        console.log("Cancella Fornitore eseguita con successo");
-        this.eventsSubject.next(this.fornitori);
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore nella cancellazione Fornitore");
-  console.error(err);
-      });
-  } else {
-    console.log("Cancellazione fornitore annullata");
-    this.messageService.showMessageError(
-      "Cancellazione Paziente Annullata"
-    );
-  }
-},
-(err) => console.error(`Error Cancellazione fornitore: ${err}`)
-);
-
+  deleteAdmin(data: Fornitore) {
+    console.log("Cancella Fornitore ", data);
+    if (data != undefined) {
+      this.dialog
+        .open(DialogQuestionComponent, {
+          data: { message: "Cancellare il fornitore?" },
+          //width: "600px",
+        })
+        .afterClosed()
+        .subscribe(
+          (result) => {
+            if (result == true) {
+              this.fornitoreService.delete(data).subscribe(
+                (result: Fornitore) => {
+                  const index = this.fornitori.indexOf(data, 0);
+                  if (index > -1) {
+                    this.fornitori.splice(index, 1);
+                  }
+                  console.log(
+                    "Cancella Paziente eseguita con successo",
+                    result
+                  );
+                  this.eventsSubject.next(this.fornitori);
+                },
+                (err) =>
+                  console.error(`Error Cancellazione fornitore: ${err.message}`)
+              );
+            } else {
+              console.log("Cancellazione fornitore annullata");
+              this.messageService.showMessageError(
+                "Cancellazione fornitore Annullata"
+              );
+            }
+          },
+          (err) => console.error(`Error Cancellazione fornitore: ${err}`)
+        );
+    } else {
+      this.messageService.showMessageError(
+        "Cancellazione fornitore Annullata"
+      );
+    }
   }
 
   showAdmin(fornitore: Fornitore) {

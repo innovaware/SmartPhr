@@ -12,7 +12,7 @@ import { DocumentoEsitoStrumentale } from "../models/documentoEsitoStrumentale";
 import { DocumentoPaziente } from "../models/documentoPaziente";
 import { ParametriVitali } from "../models/parametriVitali";
 import { Paziente } from "../models/paziente";
-import { schedaPisico } from '../models/schedaPisico';
+import { schedaPsico } from '../models/schedaPsico';
 
 @Injectable({
   providedIn: "root",
@@ -21,6 +21,11 @@ export class PazienteService {
   api: string = environment.api;
 
   constructor(private http: HttpClient) {}
+
+
+  getPazientiAsync(): Observable<Paziente[]> {
+    return this.http.get<Paziente[]>(`${this.api}/api/pazienti`);
+  }
 
   async getPazienti(): Promise<Paziente[]> {
     return this.http.get<Paziente[]>(`${this.api}/api/pazienti`).toPromise();
@@ -205,9 +210,9 @@ export class PazienteService {
 
   // SCHEDA PSICOLOGICA
 
-  updateSchedaPisicologica(
+  updateschedaPsicologica(
     id: string,
-    data: schedaPisico,
+    data: schedaPsico,
   ): Observable<any> {
     return this.http.put<any>(
       `${this.api}/api/pazienti/schedaPsicologica/${id}`,

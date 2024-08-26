@@ -1,0 +1,29 @@
+<div class="row" style="padding-bottom: 10px;">
+  <div class="col-1">
+    <label>User</label>
+  </div>
+  <div class="col">
+    {{this.user.username}}
+  </div>
+
+  <div class="col right">
+    {{ this.date | date: 'dd/MM/yyyy':'UTC' }}
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <mat-form-field class="full" appearance="fill" >
+      <mat-label>Note</mat-label>
+      <input matInput placeholder="Inserisci delle note" [(ngModel)]="note">
+    </mat-form-field>
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <button mat-button (click)="save()">Salva</button>
+    <button mat-button (click)="cancel()">Cancella</button>
+  </div>
+</div>

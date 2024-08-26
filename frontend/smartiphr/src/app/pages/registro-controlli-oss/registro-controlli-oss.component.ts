@@ -1,9 +1,15 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource, MAT_DIALOG_DATA } from '@angular/material';
-import { Attivita } from 'src/app/models/attivita';
-import { ControlliOSS } from 'src/app/models/controlliOSS';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
+import { map } from 'rxjs/operators';
+import { RegistroArmadio } from 'src/app/models/RegistroArmadio';
+import { ArmadioService } from 'src/app/service/armadio.service';
 import { ControlliOSSService } from 'src/app/service/controlli-oss.service';
 import { MessagesService } from 'src/app/service/messages.service';
+import { CamereService } from '../../service/camere.service';
+import { AuthenticationService } from '../../service/authentication.service';
+import { DipendentiService } from '../../service/dipendenti.service';
 
 
 @Component({
@@ -13,40 +19,43 @@ import { MessagesService } from 'src/app/service/messages.service';
 })
 export class RegistroControlliOssComponent implements OnInit {
 
-  @ViewChild("paginatorControlliOSS",{static: false})
-  ControlliOSSPaginator: MatPaginator;
-  public controlliOSSDataSource: MatTableDataSource<ControlliOSS>;
-  public controlliOSS: ControlliOSS[];
+  public registroArmadioDataSource: MatTableDataSource<RegistroArmadio>;
+  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  DisplayedColumns: string[] = [
+    "paziente",
+    "cameraId",
+    "armadio",
+    "stato",
+    "data",
+    "note",
+    "firma"
+  ];
 
-  DisplayedColumns: string[] = ["paziente", "primavera", "estate", "autunno","inverno", "gennaio", "febbraio", "marzo","aprile", "maggio", "giugno", "luglio","agosto","settembre", "ottobre", "novembre","dicembre"];
-
-  constructor( public controlliOSSService: ControlliOSSService,
-    public dialog: MatDialog,
-    public messageService: MessagesService) { }
-
-  ngOnInit() {
-    this.getAllControlli();
+  ngOnInit(): void {
   }
 
+  constructor(
+    private registroArmadioService: ArmadioService,
+    private camereService: CamereService,
+    private userService: AuthenticationService,
+    private dipendentiService: DipendentiService
+  ) {
+    this.registroArmadioService.getRegistro()
+      .pipe(
+      map( (r: RegistroArmadio[]) =>
+        r.map((x: RegistroArmadio) => {
+        return {
+            ...x,
+          cameraInfo: x.cameraInfo[0],
+          pazienteInfo: x.pazienteInfo[0],
+        }
+      }))
+    ).subscribe((registro: RegistroArmadio[])=> {
+      console.log(registro);
 
-  async getAllControlli() {
-    console.log(`get Controlli`);
-    this.controlliOSSService
-      .getAll()
-      .then((f: Attivita[]) => {
-        this.controlliOSS = f;
-        console.log(`get Controlli: ` + JSON.stringify(this.controlliOSS));
-        this.controlliOSSDataSource = new MatTableDataSource<ControlliOSS>(
-          this.controlliOSS
-        );
-        this.controlliOSSDataSource.paginator = this.ControlliOSSPaginator;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore caricamento lista Controlli"
-        );
-        console.error(err);
-      });
+      this.registroArmadioDataSource = new MatTableDataSource<RegistroArmadio>(registro);
+      this.registroArmadioDataSource.paginator = this.paginator;
+    });
   }
 
 

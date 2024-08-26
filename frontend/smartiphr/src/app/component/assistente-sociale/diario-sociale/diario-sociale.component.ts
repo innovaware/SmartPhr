@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogCartellaAssistenteSocialeComponent } from 'src/app/dialogs//dialog-cartella-assistente-sociale/dialog-cartella-assistente-sociale.component';
 import { DialogDiarioAsssocialeComponent } from 'src/app/dialogs/dialog-diario-asssociale/dialog-diario-asssociale.component';
 import { DialogMessageErrorComponent } from 'src/app/dialogs/dialog-message-error/dialog-message-error.component';
@@ -38,7 +40,6 @@ export class DiarioSocialeComponent implements OnInit {
 
 
   async getDataDiario() {
-    console.log(`get DataCartella SOCIALE paziente: ${this.data._id}`);
     this.cartellaService
       .getDiarioByUser( String(this.data._id) )
       .then((f) => {
@@ -57,8 +58,7 @@ export class DiarioSocialeComponent implements OnInit {
 
 
   async addDiario() {
-
-    console.log("Show Add Diario:", this.data);
+    
     var dialogRef = this.dialog.open(DialogDiarioAsssocialeComponent, {
       data: { paziente: this.data, readonly: false },
       width: "600px",
@@ -84,7 +84,6 @@ export class DiarioSocialeComponent implements OnInit {
 
 
   editItem(diario: DiarioAssSociale) {
-    console.log("Edit item (DiarioAssSociale)");
     this.dialog
       .open(DialogDiarioAsssocialeComponent, {
         data: DiarioAssSociale.clone(diario),
@@ -92,14 +91,12 @@ export class DiarioSocialeComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        console.log("result:", result);
         if (result != undefined ) {
           const data = this.dataDiario;
 
           const index = data.indexOf(diario, 0);
           if (index > -1) {
             data.splice(index, 1);
-            console.log("Removed item");
           }
 
           data.push(result);

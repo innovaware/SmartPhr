@@ -1,5 +1,7 @@
 import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, ViewChild } from '@angular/core';
-import { MatDialog, MatDialogRef, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog, MatDialogRef } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogCartellaAssistenteSocialeComponent } from 'src/app/dialogs//dialog-cartella-assistente-sociale/dialog-cartella-assistente-sociale.component';
 import { DialogCartellaEducativaComponent } from 'src/app/dialogs/dialog-cartella-educativa/dialog-cartella-educativa.component';
 import { DialogDiarioEducativoComponent } from 'src/app/dialogs/dialog-diario-educativo/dialog-diario-educativo.component';
@@ -94,19 +96,32 @@ export class DiarioEducativoComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        console.log("result:", result);
-        if (result != undefined ) {
-          const data = this.dataDiario;
+        
+        //if (result != undefined ) {
+        //  const data = this.dataDiario;
 
-          const index = data.indexOf(diario, 0);
-          if (index > -1) {
-            data.splice(index, 1);
-            console.log("Removed item");
-          }
+        //  const index = data.indexOf(diario, 0);
+        //  if (index > -1) {
+        //    data.splice(index, 1);
+        //    console.log("Removed item");
+        //  }
 
-          data.push(result);
-          this.diarioEducativoDataSource.data = this.dataDiario;
-        }
+        //  data.push(result);
+        //  this.diarioEducativoDataSource.data = this.dataDiario;
+        // }
+        this.cartellaService
+          .getDiarioByUser(String(this.data._id))
+          .then((f) => {
+
+            this.dataDiario = f;
+            this.diarioEducativoDataSource = new MatTableDataSource<DiarioEducativo>(this.dataDiario);
+            this.diarioEducativoDataSource.paginator = this.diarioEducativoPaginator;
+
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore caricamento diario");
+            console.error(err);
+          });
       });
   }
 

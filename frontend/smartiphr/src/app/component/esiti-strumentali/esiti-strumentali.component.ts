@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
 import { MessagesService } from 'src/app/service/messages.service';
 import { PazienteService } from 'src/app/service/paziente.service';
@@ -48,7 +50,7 @@ export class EsitiStrumentaliComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumento.filename = file.name;
       this.nuovoDocumento.file = file;
     } else {
@@ -129,9 +131,9 @@ export class EsitiStrumentaliComponent implements OnInit {
     this.uploadService
       .download(documento.filename, this.id, this.typeDocument)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -164,7 +166,7 @@ export class EsitiStrumentaliComponent implements OnInit {
                 .subscribe(
                   x => {
                     const index = this.documenti.indexOf(documento);
-                    console.log("Documento cancellato index: ", index);
+                    
                     if (index > -1) {
                       this.documenti.splice(index, 1);
                     }
@@ -180,7 +182,7 @@ export class EsitiStrumentaliComponent implements OnInit {
           }
         },
         err=> {
-          console.log("Error ", err);
+          
           this.messageService.showMessageError("Cancellazione documento annullata");
         })
   }

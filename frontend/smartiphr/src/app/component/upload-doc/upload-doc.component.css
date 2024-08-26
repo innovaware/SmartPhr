@@ -1,0 +1,130 @@
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-action {
+  width: 32px;
+}
+
+.mat-column-title {
+  flex: 2;
+}
+/*
+  .mat-column-cognome {
+    width: 100px !important;
+  }
+  .mat-column-nome {
+    width: 100px !important;
+  }
+  .mat-column-email {
+    width: 100px !important;
+  }
+  .mat-column-user {
+    width: 100px !important;
+  }
+   */
+/* General Styles */
+.container-flex {
+  display: flex;
+  flex-direction: column;
+}
+
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: 0 -15px;
+}
+
+.col {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.col-1, .col-2 {
+  flex: 0 0 auto;
+}
+
+/* Breakpoints for Responsiveness */
+@media (max-width: 1200px) {
+  .col-1, .col-2 {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .container-flex {
+    margin-bottom: 20px;
+  }
+
+  .button-insert {
+    margin-bottom: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .mat-form-field {
+    width: 100%;
+  }
+
+  .mat-paginator {
+    display: flex;
+    justify-content: center;
+  }
+
+  .paginator-container {
+    display: flex;
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  .notPresent {
+    text-align: center;
+  }
+
+  table {
+    width: 100%;
+  }
+}
+
+@media (max-width: 576px) {
+  .container-flex {
+    padding: 0 10px;
+  }
+
+  .button-insert {
+    width: 100%;
+  }
+
+  .mat-paginator {
+    flex-direction: column;
+  }
+}
+
+/* Specific Styles */
+.mat-form-field {
+  width: 100%;
+}
+
+button.mat-button {
+  margin-right: 5px;
+}

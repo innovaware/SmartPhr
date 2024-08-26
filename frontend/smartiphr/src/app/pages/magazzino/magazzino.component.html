@@ -1,0 +1,149 @@
+<div class="containter pad">
+  <div class="row">
+    <div class="col ">
+      <h1 class="title">Menu Magazzino</h1>
+    </div>
+  </div>
+
+
+
+
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Magazzino">
+      <div class="containter" style="padding-top: 20px;">
+
+        <div class="row">
+          <div class="col">
+            <button mat-button class="button-insert" (click)="addNewMaterialeMagazzino()">Nuovo
+              Materiale/Presidio</button>
+          </div>
+        </div>
+
+        <hr>
+
+        <div class="row">
+          <div class="col">
+            <mat-form-field appearance="standard">
+              <mat-label>Cerca</mat-label>
+              <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
+            </mat-form-field>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col">
+            <table mat-table [dataSource]="dataSourceMagazzino" class="mat-elevation-z8">
+
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef>
+                </th>
+                <td mat-cell *matCellDef="let row">
+
+                  <button mat-button class="btnAction">
+                    <img src="../../../assets/scarico_carico.svg" class="actionIcon" (click)="carico(row)"
+                      matTooltip="Carico">
+                  </button>
+
+                  <button mat-button class="btnAction">
+                    <img src="../../../assets/scarico_carico.svg" class="actionIcon"  (click)="scarico(row)"
+                      matTooltip="Scarico">
+                  </button>
+
+                  <button mat-button class="btnAction">
+                    <img src="../../../assets/menu.png" class="actionIcon"  (click)="details(row)"
+                      matTooltip="Apri dettaglio">
+                  </button>
+
+                </td>
+              </ng-container>
+
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef> Nome </th>
+                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="descrizione">
+                <th mat-header-cell *matHeaderCellDef> Descrizione </th>
+                <td mat-cell *matCellDef="let element"> {{element.descrizione}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="area">
+                <th mat-header-cell *matHeaderCellDef> Area </th>
+                <td mat-cell *matCellDef="let element"> {{element.area}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="quantita">
+                <th mat-header-cell *matHeaderCellDef> Quantità </th>
+                <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="giacenza">
+                <th mat-header-cell *matHeaderCellDef> Giacenza </th>
+                <td mat-cell *matCellDef="let element"> {{element.giacenza}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="conformi">
+                <th mat-header-cell *matHeaderCellDef> Conformi </th>
+                <td mat-cell *matCellDef="let element"> {{element.conformi}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="inuso">
+                <th mat-header-cell *matHeaderCellDef> In Uso </th>
+                <td mat-cell *matCellDef="let element"> {{element.inuso ? 'Si' : 'No'}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Archivio">
+      <div class="containter" style="padding-top: 20px;">
+        <div class="row">
+          <div class="col">
+            <table mat-table [dataSource]="dataSourceMagazzinoOperazioni" class="mat-elevation-z8">
+
+              <ng-container matColumnDef="dateInsert">
+                <th mat-header-cell *matHeaderCellDef> Data </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateInsert | date: "dd/MM/yyyy HH:ss"}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="nome">
+                <th mat-header-cell *matHeaderCellDef> Nome </th>
+                <td mat-cell *matCellDef="let element"> {{element.magazzino?.nome}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="user">
+                <th mat-header-cell *matHeaderCellDef> Utente </th>
+                <td mat-cell *matCellDef="let element"> {{element.user?.username}} </td>
+              </ng-container>
+
+              <ng-container matColumnDef="tipologiaOperazione">
+                <th mat-header-cell *matHeaderCellDef> Tipologia </th>
+                <td mat-cell *matCellDef="let element"> {{element.tipologiaOperazione}} </td>
+              </ng-container>
+
+              <tr mat-header-row *matHeaderRowDef="displayedColumnsOperazioni"></tr>
+              <tr mat-row *matRowDef="let row; columns: displayedColumnsOperazioni;"></tr>
+            </table>
+
+            <mat-paginator #paginatorOperazioni [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+              aria-label="Select page of periodic elements">
+            </mat-paginator>
+          </div>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+
+
+
+</div>

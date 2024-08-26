@@ -9,175 +9,143 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.cognome" [disabled]=disable (change)="change()">
           </td>
-  
+
           <td>
             <h5>Nome*: </h5>
           </td>
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.nome" [disabled]=disable (change)="change()">
           </td>
-  
-
-
-
-
-          <tr>
+        <tr>
             <td>
-              <label>
-                <h5>Codice fiscale*: </h5>
-              </label>
+                <label>
+                    <h5>Codice fiscale*: </h5>
+                </label>
             </td>
             <td>
-              <input class="input-cartelle" type="text" [(ngModel)]="data.cf" [disabled]=disable (change)="change()">
+                <input class="input-cartelle" type="text" [(ngModel)]="data.cf" [disabled]=disable (change)="change()">
             </td>
             <td>
-              <h5 class="font-normal">Data di nascita:</h5>
+                <h5>Sesso*: </h5>
             </td>
             <td>
-              <div class="form-group" >
-                <mat-form-field appearance="fill" >
-                  <mat-label>Scegli una date</mat-label>
-                  <input matInput [matDatepicker]="dataNascita" [(ngModel)]="data.dataNascita" [disabled]=disable (change)="change()">
-                  <mat-datepicker-toggle matSuffix [for]="dataNascita" ></mat-datepicker-toggle>
-                  <mat-datepicker #dataNascita></mat-datepicker>
-                </mat-form-field>
-              </div>
-    
+                <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                                 [(ngModel)]="data.sesso" (change)="change()" [disabled]=disable>
+                    <mat-radio-button class="example-radio-button" value='M'>M</mat-radio-button>
+                    <mat-radio-button class="example-radio-button" value='F'>F</mat-radio-button>
+                </mat-radio-group>
             </td>
-    
-          </tr>
+        </tr>
 
-
-
-
-
-  
         <tr>
-          <td>
-            <label>
-              <h5>Luogo di nascita: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoNascita" [disabled]=disable (change)="change()">
-          </td>
-          <td>
-            <label>
-              <h5>Comune di nascita: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.comuneNascita" [disabled]=disable (change)="change()">
-          </td>
-  
-        </tr>
+            <td>
+                <h5 class="font-normal">Data di nascita*:</h5>
+            </td>
+            <td>
+                <div class="form-group">
+                    <mat-form-field appearance="fill">
+                        <mat-label>Scegli una date</mat-label>
+                        <input matInput [matDatepicker]="dataNascita" [(ngModel)]="data.dataNascita" [disabled]=disable (change)="change()">
+                        <mat-datepicker-toggle matSuffix [for]="dataNascita"></mat-datepicker-toggle>
+                        <mat-datepicker #dataNascita></mat-datepicker>
+                    </mat-form-field>
+                </div>
+
+            </td>
+            <td>
+                <label>
+                    <h5>Luogo di nascita: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoNascita" [disabled]=disable (change)="change()">
+            </td>
+         </tr>
 
 
-    <tr>
-        <td>
-          <label>
-            <h5>Provincia di nascita: </h5>
-          </label>
-        </td>
-        <td>
-          <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaNascita" [disabled]=disable (change)="change()">
-        </td>
-        <td>
-          <label>
-            <h5>Residenza: </h5>
-          </label>
-        </td>
-        <td>
-          <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoResidenza" [disabled]=disable (change)="change()">
-        </td>
-        
-  
-        </tr>
-  
         <tr>
-          <td>
-            <label>
-              <h5>Comune di Residenza: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" [disabled]=disable (change)="change()">
-          </td>
-  
-          <td>
-            <label>
-              <h5>Provincia di Residenza: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaResidenza" [disabled]=disable (change)="change()">
-          </td>
+            <td>
+                <label>
+                    <h5>Comune di nascita: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.comuneNascita" [disabled]=disable (change)="change()">
+            </td>
+            <td>
+                <label>
+                    <h5>Provincia di nascita: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaNascita" [disabled]=disable (change)="change()">
+            </td>
         </tr>
-  
-  
-        <tr>
-          <td>
-            <h5>Titolo di studio: </h5>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.titoloStudio" [disabled]=disable (change)="change()">
-          </td>
-          <td>
-            <label>
-              <h5>Mansione: </h5>
-            </label>
-          </td>
-          <td>
-            <select class="input-cartelle" matNativeControl  [(ngModel)]="data.mansione">
-              <option selected="" value="">Seleziona ...</option>
-              <option *ngFor="let option of mansioni" [value]="option._id" >{{option.descrizione}}</option>
-              <!--<option value="LR">Legale rappresentante </option>
-              <option value="AA">Addetta Accoglienza </option>
-              <option value="AU">Amministratore Unico </option>
-              <option value="DA">Direttore Amministrativo</option>
-              <option value="DS">Direzione Sanitaria </option>
-              <option value="RA">Responsabile Amministrativo  </option>
-              <option value="RGD">Responsabile Gestione Dispensa </option>
-              <option value="RUA">Responsabile Ufficio Acquisti  </option>
-              <option value="UCG">Ufficio Controllo Gestione </option>
-              <option value="UPA">Ufficio Protocollo/Archivio </option>
-              <option value="RSPP">Responsabile Sicurezza e Protezione  </option>
-              <option value="DPO">Responsabile Data Protection Officer</option>
-              <option value="RGQ">Responsabile Gestione Qualità  </option>
-              <option value="HACCP">Responsabile HACCP </option>
-              <option value="CUC">Cucina  </option>
-              <option value="RUA">Responsabile Ufficio Acquisti   </option>
-              <option value="MAG">Responsabile Magazzino   </option>
-              <option value="AU">Ausiliario   </option>
-              <option value="URP">Ufficio Relazioni Pubblico  </option>
-              <option value="RP">Responsabile Privacy   </option>
-              <option value="MED">Medico di Modulo   </option>
-              <option value="NEU">Neurologo   </option>
-              <option value="INF">Infermiere   </option>
-              <option value="TDR">Fisioterapista   </option>
-              <option value="EDU">Educatore   </option>
-              <option value="ASS">Assistente Sociale   </option>
-              <option value="PSI">Psicologo   </option>
-              <option value="OSS">Operatore Socio Sanitario  </option>-->
 
-          </select>
-          </td>
-  
-        </tr>
-  
-  
         <tr>
-          <td>
-            <h5>Tipologia di contratto: </h5>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.contratto" [disabled]=disable (change)="change()">
-          </td>
+            <td>
+                <label>
+                    <h5>Residenza: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.indirizzoResidenza" [disabled]=disable (change)="change()">
+            </td>
+
+            <td>
+                <label>
+                    <h5>Comune di Residenza: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.comuneResidenza" [disabled]=disable (change)="change()">
+            </td>
 
         </tr>
-  
-  
-  
+
+
+        <tr>
+
+            <td>
+                <label>
+                    <h5>Provincia di Residenza: </h5>
+                </label>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.provinciaResidenza" [disabled]=disable (change)="change()">
+            </td>
+            <td>
+                <h5>Titolo di studio: </h5>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.titoloStudio" [disabled]=disable (change)="change()">
+            </td>
+        </tr>
+
+
+        <tr>
+            <td>
+                <label>
+                    <h5>Mansione*: </h5>
+                </label>
+            </td>
+            <td>
+                <select class="input-cartelle" matNativeControl [(ngModel)]="data.mansione">
+                    <option selected="" value="">Seleziona ...</option>
+                    <option *ngFor="let option of mansioni" [value]="option._id">{{option.descrizione}}</option>
+                </select>
+            </td>
+            <td>
+                <h5>Tipologia di contratto: </h5>
+            </td>
+            <td>
+                <input class="input-cartelle" type="text" [(ngModel)]="data.contratto" [disabled]=disable (change)="change()">
+            </td>
+
+        </tr>
+
+
+
         <tr>
           <td>
             <h5>Email: </h5>
@@ -191,21 +159,20 @@
           <td>
             <input class="input-cartelle" type="text" [(ngModel)]="data.telefono" [disabled]=disable (change)="change()">
           </td>
-  
+
         </tr>
 
-  
+
       </tbody>
     </table>
 
     <strong>I campi indicati con * sono obbligatori!</strong>
-  
+
   </div>
-  
+
   <!--
   <div mat-dialog-actions *ngIf="!disable">
     <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="true">Chiudi</button>
     <button mat-button class="button-insert" (click)="save()">Salva</button>
   </div> -->
-  

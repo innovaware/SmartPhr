@@ -1,0 +1,17 @@
+
+.debug {
+  position: absolute;
+  z-index: 9999;
+
+  width: auto;
+  cursor: pointer;
+}
+
+img {
+  width: 20px;
+  margin-right: 10px;
+}
+
+mat-expansion-panel {
+  margin: 0 0 10px 0;
+}

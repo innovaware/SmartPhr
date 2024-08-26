@@ -4,9 +4,7 @@ import { BehaviorSubject, Observable, Subject } from "rxjs";
 import { map } from "rxjs/operators";
 import { environment } from "src/environments/environment";
 import { User } from "../models/user";
-import { id } from "date-fns/locale";
 import { Dipendenti } from "../models/dipendenti";
-import { DebugService } from "./debug.service";
 
 @Injectable({
   providedIn: "root",
@@ -18,12 +16,9 @@ export class AuthenticationService {
 
   constructor(
     private http: HttpClient,
-    private debugService: DebugService
   ) {
     this.load();
     this.isAuthenticateHandler = new Subject<User>();
-
-    //this.debugService.appendVariable('AuthenticationUser', this.isAuthenticateHandler);
   }
 
   getCurrentUserAsync(): Observable<User> {
@@ -33,20 +28,28 @@ export class AuthenticationService {
     });
   }
 
+  getCurrentUser() {
+    return this.currentUser;
+  }
+
   load() {
     this.currentUser = JSON.parse(
       localStorage.getItem(AuthenticationService.KEY_CURRENTUSER)
     );
   }
 
+
   refresh() {
-    if (this.currentUser === undefined) {
+    if (this.currentUser === undefined || this.currentUser === null) {
       localStorage.removeItem(AuthenticationService.KEY_CURRENTUSER);
     } else {
+
       localStorage.setItem(
         AuthenticationService.KEY_CURRENTUSER,
         JSON.stringify(this.currentUser)
       );
+
+
     }
 
     this.isAuthenticateHandler.next(this.currentUser);
@@ -77,7 +80,6 @@ export class AuthenticationService {
     const httpOptions = {
       headers: headers,
     };
-
     return this.http
       .post<any>(`${environment.api}/api/users/authenticate`, body, httpOptions)
       .pipe(

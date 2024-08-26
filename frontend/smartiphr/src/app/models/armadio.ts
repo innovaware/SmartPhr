@@ -1,15 +1,25 @@
+import { Indumento } from "./indumento";
+import { Paziente } from "./paziente";
+
+
 export class Armadio {
-    static clone(obj:Armadio) {
-      return JSON.parse(JSON.stringify(obj));
-    }
-    _id?: string;
-    operator?: string;
-    operatorName?: string;
-    paziente?: string;
-    pazienteName?: string;
-    data?: Date;
-    elemento?: string;
-    note?: string;
-    quantita?: number;
+  rateVerifica: number;
+  static clone(obj: Armadio) {
+    return JSON.parse(JSON.stringify(obj));
   }
-  
+  _id?: string;
+  idCamera: string;
+  contenuto: Indumento[];
+  lastChecked?: {
+    idUser: string;
+    datacheck: Date;
+  };
+  //rateVerifica: Number; //Stato di completamento in %
+  //pazienti?: Paziente[];
+  pazienteId?: String;
+  pazienti?: Paziente[];
+  dateStartRif: Date;
+  dateEndRif: Date;
+  verified: Boolean;
+  stagionale?: Boolean;
+}

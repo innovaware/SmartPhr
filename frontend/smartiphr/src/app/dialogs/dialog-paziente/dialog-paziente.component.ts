@@ -1,11 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { PazienteGeneraleComponent } from "src/app/component/paziente-generale/paziente-generale.component";
 import { Bonifico } from 'src/app/models/bonifico';
 import { Documento } from "src/app/models/documento";
@@ -18,6 +14,7 @@ import { MessagesService } from 'src/app/service/messages.service';
 import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
+import CodiceFiscale from "codice-fiscale-js";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
 
 @Component({
@@ -48,11 +45,11 @@ export class DialogPazienteComponent implements OnInit {
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture",{static: false})
+  @ViewChild("paginatorFatture", {static: false})
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorNoteCredito",{static: false})
+  @ViewChild("paginatorNoteCredito", {static: false})
   notacreditoPaginator: MatPaginator;
-  @ViewChild("paginatorBonifici",{static: false})
+  @ViewChild("paginatorBonifici", {static: false})
   bonificiPaginator: MatPaginator;
 
   public fatture: Fatture[];
@@ -79,25 +76,58 @@ export class DialogPazienteComponent implements OnInit {
     this.addingNotaCredito = false;
     this.uploadingNotaCredito = false;
     this.uploadingBonifici = false;
-
+    dialogRef.disableClose = true;
 
     //this.paziente = JSON.parse(JSON.stringify(this.data.paziente));
     console.log("Dialog paziente generale", this.data);
   }
 
+
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
   async save(saveAndClose: boolean) {
     console.log("this.newItem: " + this.newItem);
     this.data.paziente = this.paziente;
 
+
     if (
-      this.paziente.cognome == "" || this.paziente.cognome == null || this.paziente.cognome.length == 0 ||
-      this.paziente.nome == "" || this.paziente.nome == null || this.paziente.nome.length == 0 ||
-      this.paziente.codiceFiscale == "" || this.paziente.codiceFiscale == null || this.paziente.codiceFiscale.length == 0
+      this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined ||
+      this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined ||
+      this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined ||
+      this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined
     ) {
-      alert("Alcuni campi obbligatori sono mancanti!");
+
+      var campi = "";
+      if (this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
+
+      if (this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined) {
+        campi = campi + " Nome"
+      }
+
+      if (this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
       return;
     } else {
 
+      if (this.dateDiffInDays(new Date(this.data.paziente.dataNascita), new Date()) < 10) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+    }
     if (saveAndClose) {
       this.dialogRef.close(this.data.paziente);
     } else {
@@ -134,9 +164,7 @@ export class DialogPazienteComponent implements OnInit {
           this.uploading = false;
         });
     }
-
-  }
-
+    if (saveAndClose == true) this.dialogRef.close(this.data.paziente);
   }
 
   showDocument(document: any) {
@@ -144,9 +172,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(document.name, this.paziente._id, '')
       .then((x) => {
-        //console.log("download: ", x);
+        //
         x.subscribe((data) => {
-           console.log("download: ", data);
+           
            const newBlob = new Blob([data as BlobPart], {
              type: "application/pdf",
            });
@@ -177,6 +205,14 @@ export class DialogPazienteComponent implements OnInit {
       documentRemoving.status=false;
     });
   }
+
+  async Close() {
+   /* if (this.newItem == true)
+    {
+    window.location.reload();
+    }*/
+  }
+
 
   async changeData($event: Paziente) {
     console.log("Change paziente info", $event);
@@ -225,9 +261,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.paziente._id, 'fatture')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -276,6 +312,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    if (!fattura.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     console.log("saveFattura: ", fattura);
     const typeDocument = "FATTURE";
     const path = "fatture";
@@ -324,9 +364,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(notacredito.filename, this.paziente._id, 'notacredito')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -398,6 +438,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveNotaCredito(notacredito: NotaCredito) {
+    if (!notacredito.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     console.log("saveNotaCredito: ", notacredito);
     const typeDocument = "NOTACREDITO";
     const path = "notacredito";
@@ -486,6 +530,10 @@ export class DialogPazienteComponent implements OnInit {
   }
 
   async saveBonifico(bonifico: Bonifico) {
+    if (!bonifico.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
@@ -547,9 +595,9 @@ export class DialogPazienteComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.paziente._id, 'bonifico')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -668,4 +716,5 @@ export class DialogPazienteComponent implements OnInit {
         });
     }
   }
+
 }

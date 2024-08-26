@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { valutazioneEducativa } from 'src/app/models/valutazioneEducativa';
 
 @Component({
@@ -9,9 +9,21 @@ import { valutazioneEducativa } from 'src/app/models/valutazioneEducativa';
 export class ValutazioneEducativaComponent implements OnInit {
 
   @Input() data: valutazioneEducativa;
+  @Input() disable: boolean;
   constructor() { }
+  @Output() dataChange = new EventEmitter<valutazioneEducativa>();
+  @Output() saveEmiter = new EventEmitter<valutazioneEducativa>();
 
   ngOnInit() {
   }
 
+  async save() {
+    console.log("save: ", this.data);
+    this.saveEmiter.emit(this.data);
+  }
+
+  async change() {
+    console.log("change: ", this.data);
+    this.dataChange.emit(this.data);
+  }
 }

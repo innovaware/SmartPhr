@@ -1,17 +1,14 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { FornitoreGeneraleComponent } from "src/app/component/fornitore-generale/fornitore-generale.component";
 import { Bonifico } from 'src/app/models/bonifico';
 import { Documento } from "src/app/models/documento";
 import { Fatture } from "src/app/models/fatture";
 import { DocumentoFornitore } from "src/app/models/documentoFornitore";
 import { Fornitore } from "src/app/models/fornitore";
+import { Observable } from "rxjs";
 import { BonificoService } from 'src/app/service/bonifico.service';
 import { FattureService } from "src/app/service/fatture.service";
 import { DocumentoFornitoreService } from 'src/app/service/documentoFornitore.service';
@@ -48,11 +45,11 @@ export class DialogFornitoreComponent implements OnInit {
   public documentiFornitoreDataSource: MatTableDataSource<DocumentoFornitore>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture",{static: false})
+  @ViewChild("paginatorFatture", {static: false})
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorBonifici",{static: false})
+  @ViewChild("paginatorBonifici", {static: false})
   bonificiPaginator: MatPaginator;
-  @ViewChild("paginatorDocumentiFornitori",{static: false})
+  @ViewChild("paginatorDocumentiFornitori", {static: false})
   documentiFornitorePaginator: MatPaginator;
 
   public fatture: Fatture[];
@@ -86,25 +83,56 @@ export class DialogFornitoreComponent implements OnInit {
     console.log("Dialog fornitore generale", this.data);
   }
 
+
+
+// a e b sono oggetti Data
+ dateDiffInDays(a, b) {
+  var _MS_PER_ANNO = 1000 * 60 * 60 * 24*365;
+  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+   return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+}
+
   async save(saveAndClose: boolean) {
     // this.data.fornitore = this.fornitore;
     console.log("update fornitore");
 
     this.data.fornitore = this.fornitore;
 
-/*     this.data.fornitore.cognome = this.fornitore.cognome;
-    this.data.fornitore.nome = this.fornitore.nome;
-    this.data.fornitore.codiceFiscale = this.fornitore.codiceFiscale;
-    this.data.fornitore.comuneResidenza = this.fornitore.comuneResidenza;
-    this.data.fornitore.indirizzoNascita = this.fornitore.indirizzoNascita;
-    this.data.fornitore.indirizzoResidenza = this.fornitore.indirizzoResidenza;
+    if (
+      this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined ||
+      this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined ||
+      this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined ||
+      this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined
+    ) {
 
+      var campi = "";
+      if (this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined) {
+        campi = campi + " Cognome"
+      }
 
+      if (this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined) {
+        campi = campi + " Nome"
+      }
 
-    this.data.fornitore.dataNascita = this.fornitore.dataNascita;
-    this.data.fornitore.telefono = this.fornitore.telefono;
-    this.data.fornitore.comuneNascita = this.fornitore.comuneNascita;
-    this.data.fornitore.provinciaNascita = this.fornitore.provinciaNascita */;
+      if (this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined) {
+        campi = campi + " Codice Fiscale"
+      }
+
+      if (this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined) {
+        campi = campi + " Sesso"
+      }
+
+      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+      return;
+    } else {
+
+      if (this.dateDiffInDays(new Date(this.fornitore.dataNascita),new Date())<10) {
+        this.messageService.showMessageError("Data di nascita Errata!!!");
+        return;
+      }
+    }
 
     if (saveAndClose) {
       this.dialogRef.close(this.data.fornitore);
@@ -123,7 +151,7 @@ export class DialogFornitoreComponent implements OnInit {
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore Inserimento Fornitore (" + err["status"] + ")"
+            "Errore Inserimento fornitore (" + err["status"] + ")"
           );
           this.uploading = false;
         });
@@ -137,12 +165,14 @@ export class DialogFornitoreComponent implements OnInit {
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore salvataggio Fornitore (" + err["status"] + ")"
+            "Errore salvataggio fornitore (" + err["status"] + ")"
           );
           this.uploading = false;
         });
     }
+  if(saveAndClose == true) this.dialogRef.close(this.data.fornitore);
   }
+  
 
   async changeData($event: Fornitore) {
     console.log("Change fornitore info", $event);
@@ -191,9 +221,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.fornitore._id, 'fatture')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -242,6 +272,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    if (!fattura.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "FATTURE";
     const path = "fatture";
     const file: File = fattura.file;
@@ -311,6 +345,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveBonifico(bonifico: Bonifico) {
+    if (!bonifico.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
@@ -372,9 +410,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.fornitore._id, 'bonifico')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -517,7 +555,7 @@ export class DialogFornitoreComponent implements OnInit {
       .then((x) => {
         console.log("Documento cancellato");
         const index = this.documentiFornitore.indexOf(documentoFornitore);
-        console.log("Documento cancellato index: ", index);
+        
         if (index > -1) {
           this.documentiFornitore.splice(index, 1);
         }
@@ -535,9 +573,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(documentoFornitore.filename, this.fornitore._id, 'documentoFornitore')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -575,7 +613,7 @@ export class DialogFornitoreComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumentoFornitore.filename = file.name;
       this.nuovoDocumentoFornitore.file = file;
 
@@ -586,6 +624,10 @@ export class DialogFornitoreComponent implements OnInit {
   }
 
   async saveDocumentoFornitore(documentoFornitore: DocumentoFornitore) {
+    if (!documentoFornitore.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    } 
     const typeDocument = "DOCUMENTO FORNITORE";
     const path = "documentoFornitore";
     const file: File = documentoFornitore.file;

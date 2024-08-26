@@ -22,6 +22,9 @@ export class FerieService {
     return this.http.get<Ferie[]>(this.api + "/api/ferie/dipendente/" + id);
   }
 
+  getFerieByDipendenteID(id): Promise<Ferie[]> {
+    return this.http.get<Ferie[]>(this.api + "/api/ferie/dipendente/" + id).toPromise();
+  }
   async insertFerie(ferie: Ferie) {
     var body = ferie;
     return this.http.post(this.api + "/api/ferie", body).toPromise();
@@ -30,5 +33,9 @@ export class FerieService {
   async updateFerie(ferie: Ferie) {
     var body = ferie;
     return this.http.put(this.api + "/api/ferie/" + ferie._id, body).toPromise();
+  }
+
+  async remove(ferie: Ferie) {
+    return this.http.delete(this.api + "/api/ferie/" + ferie._id).toPromise();
   }
 }

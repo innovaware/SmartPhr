@@ -1,9 +1,43 @@
-/* .mat-dialog-actions {
-  margin: 0 -24px;
+mat-dialog-container {
+  padding-top: 0 !important; /* Rimuove il padding predefinito */
 }
 
 .dialog-bg {
-  background-color: red;
-  margin: -24px;
-  padding: 24px 24px 0 24px;
-} */
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  border-radius: 8px;
+  max-width: 400px;
+  margin: auto;
+}
+
+.dialog-content {
+  padding: 16px; /* Aggiunge padding all'interno del contenuto del dialogo */
+}
+
+.dialog-actions {
+  display: flex;
+  justify-content: space-between;
+  padding: 16px; /* Aggiunge padding ai bottoni */
+}
+
+  .dialog-actions button {
+    flex: 1;
+    margin: 0 8px;
+  }
+
+@media (max-width: 600px) {
+  .dialog-bg {
+    width: 100%;
+    max-width: none;
+  }
+
+  .dialog-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+    .dialog-actions button {
+      margin: 8px 0;
+    }
+}

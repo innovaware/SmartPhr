@@ -1,0 +1,50 @@
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>VERIFICA ARMADIO</h3>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<mat-dialog-content>
+    <div class="container-fluid">
+
+        <div class="row">
+            <div class="col">
+                <mat-label>Note: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <textarea matInput rows="1" [(ngModel)]="note" placeholder="Note"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+      <div class="row">
+        <div class="col">
+          <mat-label>Controllo Stagionale: </mat-label>
+        </div>
+        <div class="col">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="stagionale" [(ngModel)]="stagionale">
+          </div>
+        </div>
+      </div>
+    </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
+      <button mat-button class="button-insert" (click)="verifica()" [mat-dialog-close]="true">Conferma</button>
+    <button mat-button [mat-dialog-close]="true">Chiudi</button>
+  </div>
+</div>

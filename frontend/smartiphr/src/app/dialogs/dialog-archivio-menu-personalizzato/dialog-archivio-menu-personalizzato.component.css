@@ -1,0 +1,66 @@
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-action {
+  width: 200px;
+  text-align: right;
+}
+
+.mat-column-nome {
+  padding-right: 20px;
+}
+
+.mat-column-codiceFiscale {
+  padding-right: 20px;
+}
+
+.mat-column-cognome {
+  padding-right: 20px;
+}
+
+.mat-column-data {
+  padding-right: 20px;
+  text-align: center;
+}
+
+.mat-column-descrizione {
+  text-align: justify;
+  padding-right: 20px;
+}
+
+.mat-column-colazione {
+  text-align: justify;
+  padding-right: 20px;
+}
+
+.mat-column-pranzo {
+  text-align: justify;
+  padding-right: 20px;
+}
+
+.mat-column-cena {
+  text-align: justify;
+  padding-right: 20px;
+}
+
+
+
+

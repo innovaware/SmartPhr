@@ -12,77 +12,36 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
   try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
     const getData = () => {
       return Mansioni.find();
     };
- 
-    if (redisClient == undefined || redisDisabled) {
-      const mansioni = await getData();
-      res.status(200).json(mansioni);
-      return
-    }
 
-    const searchTerm = `MANSIONIALL`;
-    // Ricerca su Redis Cache
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
+    // Se non usamu Redis
+    const mansioni = await getData();
+    res.status(200).json(mansioni);
 
-      if (data) {
-        // Dato trovato in cache - ritorna il json
-        res.status(200).send(JSON.parse(data));
-      } else {
-        // Recupero informazioni dal mongodb
-        const mansioni = await getData();
-
-        // Aggiorno la cache con i dati recuperati da mongodb
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(mansioni));
-
-        // Ritorna il json
-        res.status(200).json(mansioni);
-      }
-    });
   } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
+    console.error("Errore: ", err);
+    res.status(500).json({ Errore: err });
   }
 });
 
+
 // http://[HOST]:[PORT]/api/mansioni/[ID]
 router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    const { id } = req.params;
+    try {
+        // Funzioni ca pigghia i dati di na mansioni particolari
+        const getData = () => {
+            return Mansioni.findById(id);
+        };
 
-    const getData = () => {
-      return Mansioni.findById(id);
-    };
- 
-    if (redisClient == undefined || redisDisabled) {
-      const mansioni = await getData();
-      res.status(200).json(mansioni);
-      return
-    }
-
-    const searchTerm = `MANSIONIBY${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data && !redisDisabled) {
-        res.status(200).send(JSON.parse(data));
-      } else {
+        // Si non stamu usannu Redis
         const mansioni = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(mansioni));
         res.status(200).json(mansioni);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+    } catch (err) {
+        res.status(500).json({ Errore: err });
+    }
 });
 
 

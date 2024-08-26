@@ -1,5 +1,7 @@
 import { Component, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import { DialogAspComponent } from 'src/app/dialogs/dialog-asp/dialog-asp.component';
 import { Asp } from "src/app/models/asp";
 import { AspService } from "src/app/service/asp.service";

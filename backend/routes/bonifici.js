@@ -3,43 +3,26 @@ const router = express.Router();
 const Bonifici = require("../models/bonifici");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-async function get(req, res) {
-  try {
-    const { id } = req.params;
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+router.get('/:id', async (req, res) => {
+    try {
+        const { id } = req.params;
 
-    const getData = () => {
-      return Bonifici.find({
-        identifyUser: id,
-      });
-    };
+        // Funzione per ottenere i dati dal database
+        const getData = async () => {
+            return Bonifici.find({
+                identifyUser: id,
+            });
+        };
 
-    if (redisClient == undefined || redisDisabled) {
-      const bonifici = await getData();
-      res.status(200).json(bonifici);
-      return;
-    }
-
-    const searchTerm = `bonifici${id}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        //console.log(`${searchTerm}: ${data}`);
-        res.status(200).send(JSON.parse(data));
-      } else {
+        // Recupera i dati senza caching
         const bonifici = await getData();
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(bonifici));
-
         res.status(200).json(bonifici);
-      }
-    });
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
-}
+
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err.message });
+    }
+});
 
 async function insertBonifico(req, res) {
   try {
@@ -119,7 +102,6 @@ async function deleteBonifico(req, res) {
   }
 }
 
-router.get("/:id", get);
 router.post("/:id", insertBonifico);
 router.put("/:id", modifyBonifico);
 router.delete("/:id", deleteBonifico);

@@ -1,11 +1,7 @@
 import { Component, Inject, OnInit, ViewChild } from "@angular/core";
-import {
-  MatDialog,
-  MatDialogRef,
-  MatPaginator,
-  MatTableDataSource,
-  MAT_DIALOG_DATA,
-} from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 
 import { FornitoreGeneraleComponent } from "src/app/component/fornitore-generale/fornitore-generale.component";
 import { Fatture } from "src/app/models/fatture";
@@ -33,7 +29,7 @@ export class TableFattureFornitoriComponent implements OnInit {
   public fattureDataSource: MatTableDataSource<Fatture>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture",{static: false})
+  @ViewChild("paginatorFatture", {static: false})
   fatturePaginator: MatPaginator;
 
   public fatture: Fatture[];
@@ -52,11 +48,9 @@ export class TableFattureFornitoriComponent implements OnInit {
     this.newItem = this.data.newItem || false;
 
     //this.fornitore = JSON.parse(JSON.stringify(this.data.fornitore));
-    console.log("Dialog fornitore generale", this.data);
   }
 
   async getFatture() {
-    console.log(`Get Fatture fornitore: ${this.fornitore._id}`);
     this.fattureService
       .getByUserId(this.fornitore._id)
       .then((f: Fatture[]) => {
@@ -77,9 +71,9 @@ export class TableFattureFornitoriComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.fornitore._id, "fatture")
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });

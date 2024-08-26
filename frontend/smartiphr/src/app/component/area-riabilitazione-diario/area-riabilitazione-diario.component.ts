@@ -1,5 +1,7 @@
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { MatDialog, MatPaginator, MatTableDataSource } from '@angular/material';
+import { AfterViewInit, Component, Input, OnInit, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { MatPaginator } from '@angular/material/paginator';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogRiabilitazioneDiarioComponent } from 'src/app/dialogs/dialog-riabilitazione-diario/dialog-riabilitazione-diario.component';
 import { AreaRiabilitativaDiario } from 'src/app/models/AreaRiabilitativaDiario';
 
@@ -8,13 +10,13 @@ import { AreaRiabilitativaDiario } from 'src/app/models/AreaRiabilitativaDiario'
   templateUrl: './area-riabilitazione-diario.component.html',
   styleUrls: ['./area-riabilitazione-diario.component.css']
 })
-export class AreaRiabilitazioneDiarioComponent implements OnInit {
+export class AreaRiabilitazioneDiarioComponent implements OnInit, AfterViewInit {
   @Input() data: AreaRiabilitativaDiario[];
   @Input() disable: boolean;
 
   dataSourceRiabilitativaDiario: MatTableDataSource<AreaRiabilitativaDiario>;
 
-  @ViewChild(MatPaginator, {static: false}) paginator: MatPaginator;
+  @ViewChild("paginatorDiarioRiabilitativo", {static: false}) paginator: MatPaginator;
 
   constructor(public dialog: MatDialog) { }
 
@@ -33,8 +35,11 @@ export class AreaRiabilitazioneDiarioComponent implements OnInit {
     this.dataSourceRiabilitativaDiario.paginator = this.paginator;
   }
 
+  ngAfterViewInit() {
+    this.dataSourceRiabilitativaDiario.paginator = this.paginator;
+  }
+
   addNewDiario() {
-    console.log("New Item lesione");
     this.dialog
       .open(DialogRiabilitazioneDiarioComponent, {
         data: new AreaRiabilitativaDiario(),
@@ -42,7 +47,6 @@ export class AreaRiabilitazioneDiarioComponent implements OnInit {
       .afterClosed()
       .subscribe((result) => {
         if (result != undefined && result) {
-          console.log("result:", result);
           this.data.push(result);
           this.dataSourceRiabilitativaDiario.paginator = this.paginator;
         }

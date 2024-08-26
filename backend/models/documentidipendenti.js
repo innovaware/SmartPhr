@@ -4,10 +4,13 @@ const DocDipendenteSchema = mongoose.Schema({
   dipendente: String,
   filename: String,
   dateupload: Date,
+  dataScadenza: Date,
   note: String,
   type: String,
   descrizione: String,
-  filenameesito: String
+  filenameesito: String,
+    closed: Boolean,
+    accettata: Boolean,
 });
 
 module.exports = mongoose.model(

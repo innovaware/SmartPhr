@@ -1,0 +1,152 @@
+<div class="containter pad">
+    <div class="row">
+        <div class="col ">
+            <h1 class="title">MENU PERSONALIZZATI</h1>
+        </div>
+    </div>
+
+    <hr>
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Menu Personalizzato">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="standard">
+                        <mat-label>Cerca</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui...">
+                    </mat-form-field>
+                </div>
+                <div class="col-1 right middle" style="width: fit-content;">
+                    <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField()">
+                </div>
+            </div>
+
+            <br />
+
+            <div class="row">
+                <div class="col">
+                    <div class="notPresent" style="margin-bottom: 10px;">
+                        <button mat-button class="button-insert" title="Crea un nuovo menu personalizzato" (click)="addPaziente()">Nuovo menu</button>
+                    </div>
+                </div>
+            </div>
+
+            <br />
+            <div class="row">
+                <div class="col">
+                    <table mat-table [dataSource]="dataSourceCucinaPersonalizzato" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-button class="btn" (click)="editPaziente(row)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="cognome">
+                            <th mat-header-cell *matHeaderCellDef> Cognome </th>
+                            <td mat-cell *matCellDef="let element"> {{element.paziente.cognome}} </td>
+                        </ng-container>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="nome">
+                            <th mat-header-cell *matHeaderCellDef> Nome </th>
+                            <td mat-cell *matCellDef="let element"> {{element.paziente.nome}} </td>
+                        </ng-container>
+
+                        <!-- Data Column -->
+                        <ng-container matColumnDef="dataCreazione">
+                            <th mat-header-cell *matHeaderCellDef> Data Creazione </th>
+                            <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy HH:mm'}} </td>
+                        </ng-container>
+
+                        <!-- Data Column -->
+                        <ng-container matColumnDef="dataUltimaModifica">
+                            <th mat-header-cell *matHeaderCellDef> Data Ultima Modifica </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dataUM | date: 'dd/MM/yyyy HH:mm'}} </td>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator #menuPersonalizzato [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+        </mat-tab>
+
+
+        <mat-tab label="Archivio Menu">
+            <div class="row">
+                <div class="col">
+                    <mat-form-field appearance="standard">
+                        <mat-label>Cerca</mat-label>
+                        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui...">
+                    </mat-form-field>
+                </div>
+                <div class="col-1 right middle" style="width: fit-content;">
+                    <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField()">
+                </div>
+            </div>
+
+            <br />
+            <br />
+
+            <div class="row">
+                <div class="col">
+                    <table mat-table [dataSource]="dataSourceArchvioCucina" class="mat-elevation-z8">
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef>
+                            </th>
+                            <td mat-cell *matCellDef="let row">
+                                <button mat-button class="btn" (click)="viewMenu(row)">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-archive" viewBox="0 0 16 16">
+                                        <path d="M0 2a1 1 0 0 1 1-1h14a1 1 0 0 1 1 1v2a1 1 0 0 1-1 1v7.5a2.5 2.5 0 0 1-2.5 2.5h-9A2.5 2.5 0 0 1 1 12.5V5a1 1 0 0 1-1-1zm2 3v7.5A1.5 1.5 0 0 0 3.5 14h9a1.5 1.5 0 0 0 1.5-1.5V5zm13-3H1v2h14zM5 7.5a.5.5 0 0 1 .5-.5h5a.5.5 0 0 1 0 1h-5a.5.5 0 0 1-.5-.5" />
+                                    </svg>
+                                </button>
+                            </td>
+                        </ng-container>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="cognome">
+                            <th mat-header-cell *matHeaderCellDef> Cognome </th>
+                            <td mat-cell *matCellDef="let element"> {{element.pazienteCognome}} </td>
+                        </ng-container>
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="nome">
+                            <th mat-header-cell *matHeaderCellDef> Nome </th>
+                            <td mat-cell *matCellDef="let element"> {{element.pazienteNome}} </td>
+                        </ng-container>
+
+                        <!-- Data Column -->
+                        <ng-container matColumnDef="dataCreazione">
+                            <th mat-header-cell *matHeaderCellDef> Data Creazione </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dataCreazione | date: 'dd/MM/yyyy HH:mm'}} </td>
+                        </ng-container>
+
+                        <!-- Data Column -->
+                        <ng-container matColumnDef="dataUltimaModifica">
+                            <th mat-header-cell *matHeaderCellDef> Data Ultima Modifica </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dataUltimaModifica | date: 'dd/MM/yyyy HH:mm'}} </td>
+                        </ng-container>
+
+
+                        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator #archvioCucina [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+
+</div>
+

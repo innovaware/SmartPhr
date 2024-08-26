@@ -1,96 +1,113 @@
 <div class="containter pad">
-    <div class="row" *ngIf="showInsert">
-      <div class="col">
-        <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Dipendente</button>
-      </div>
+  <div class="row" *ngIf="showInsert">
+    <div class="col">
+      <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Dipendente</button>
     </div>
+  </div>
 
 
-    <div class="row">
-      <div class="col">
-        <mat-form-field appearance="standard">
-          <mat-label>Cerca</mat-label>
-          <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
-        </mat-form-field>
-      </div>
+  <div class="row">
+    <div class="col">
+      <mat-form-field appearance="standard">
+        <mat-label>Cerca</mat-label>
+        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." [(ngModel)]="inputSearchField">
+      </mat-form-field>
     </div>
+    <div class="col-1 right middle" style="width: fit-content;">
+      <img src="../../../assets/clean.png" style="width:26px" (click)="cleanSearchField()">
+    </div>
+  </div>
 
 
 
-    <div class="row">
-      <div class="col">
-        <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+  <div class="row">
+    <div class="col">
+      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>
-            </th>
-            <td mat-cell *matCellDef="let row;let i = index;">
-<!--                 <button *ngFor="let item of buttons" mat-raised-button color="accent" class="action-button" (click)="call(row, item)">{{item}}</button>
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef>
+          </th>
+          <td mat-cell *matCellDef="let row;let i = index;">
+            <!--                 <button *ngFor="let item of buttons" mat-raised-button color="accent" class="action-button" (click)="call(row, item)">{{item}}</button>
 
                 <button mat-button (click)="delete(row)" mat-raised-button color="accent" class="action-button">
                  Cancella
                 </button> -->
-                <button mat-button
-                *ngIf="enableShow" (click)="showDipendente(row)" >
-                <img src="../../../assets/read.svg" style="height:31px">
+            <button mat-button
+                    *ngIf="enableShow" (click)="showDipendente(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+              </svg>
+            </button>
+
+            <button mat-button
+                    *ngIf="enableDeleting" (click)="deleteDipendente(row)">
+              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+              </svg>
+            </button>
+            <div *ngIf="enableCustomButton">
+              <button mat-button *ngFor="let item of CustomButtons" (click)="item.cmd(row)" [ngClass]="item.css"
+                      matTooltip={{item.tooltip}} matTooltipPosition="above">
+                <img *ngIf="item.images != undefined" [src]="item.images" style="width:26px">
+
+                <fa-icon *ngIf="item.icon !== undefined && item.icon != ''" icon={{item.icon}}></fa-icon>
+                <span class="nav-label"> {{item.label != undefined ? item.label : item}}</span>
               </button>
+            </div>
+          </td>
+        </ng-container>
 
-              <button mat-button
-                *ngIf="enableDeleting" (click)="delete(row,i)" >
-                <img src="../../../assets/cestino.svg" style="width:26px">
-              </button>
-            </td>
-          </ng-container>
+        <!-- Position Column -->
+        <ng-container matColumnDef="cognome">
+          <th mat-header-cell *matHeaderCellDef> Cognome </th>
+          <td mat-cell *matCellDef="let element"> {{element.cognome}} </td>
+        </ng-container>
 
-          <!-- Position Column -->
-          <ng-container matColumnDef="cognome">
-            <th mat-header-cell *matHeaderCellDef> Cognome </th>
-            <td mat-cell *matCellDef="let element"> {{element.cognome}} </td>
-          </ng-container>
+        <!-- Name Column -->
+        <ng-container matColumnDef="nome">
+          <th mat-header-cell *matHeaderCellDef> Nome </th>
+          <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
+        </ng-container>
 
-          <!-- Name Column -->
-          <ng-container matColumnDef="nome">
-            <th mat-header-cell *matHeaderCellDef> Nome </th>
-            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
-          </ng-container>
+        <!-- CF Column -->
+        <ng-container matColumnDef="cf">
+          <th mat-header-cell *matHeaderCellDef> Codice Fiscale </th>
+          <td mat-cell *matCellDef="let element"> {{element.cf}} </td>
+        </ng-container>
 
-          <!-- CF Column -->
-          <ng-container matColumnDef="cf">
-            <th mat-header-cell *matHeaderCellDef> Codice Fiscale </th>
-            <td mat-cell *matCellDef="let element"> {{element.cf}} </td>
-          </ng-container>
+        <!-- Weight Column -->
+        <ng-container matColumnDef="dataNascita">
+          <th mat-header-cell *matHeaderCellDef> Data di Nascita </th>
+          <td mat-cell *matCellDef="let element"> {{element.dataNascita | date: 'dd/MM/yyyy'}} </td>
+        </ng-container>
 
-          <!-- Weight Column -->
-          <ng-container matColumnDef="dataNascita">
-            <th mat-header-cell *matHeaderCellDef> Data di Nascita </th>
-            <td mat-cell *matCellDef="let element"> {{element.dataNascita | date: 'dd/MM/yyyy'}} </td>
-          </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="indirizzo">
+          <th mat-header-cell *matHeaderCellDef> Residenza </th>
+          <td mat-cell *matCellDef="let element"> {{element.indirizzoResidenza}} </td>
+        </ng-container>
 
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="indirizzo">
-            <th mat-header-cell *matHeaderCellDef> Residenza </th>
-            <td mat-cell *matCellDef="let element"> {{element.indirizzoResidenza}} </td>
-          </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="localita">
+          <th mat-header-cell *matHeaderCellDef> Comune </th>
+          <td mat-cell *matCellDef="let element"> {{element.comuneResidenza}} </td>
+        </ng-container>
 
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="localita">
-            <th mat-header-cell *matHeaderCellDef> Comune </th>
-            <td mat-cell *matCellDef="let element"> {{element.comuneResidenza}} </td>
-          </ng-container>
+        <!-- Symbol Column -->
+        <ng-container matColumnDef="provincia">
+          <th mat-header-cell *matHeaderCellDef> Provincia </th>
+          <td mat-cell *matCellDef="let element"> {{element.provinciaResidenza}} </td>
+        </ng-container>
 
-          <!-- Symbol Column -->
-          <ng-container matColumnDef="provincia">
-            <th mat-header-cell *matHeaderCellDef> Provincia </th>
-            <td mat-cell *matCellDef="let element"> {{element.provinciaResidenza}} </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
 
-        <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-        </mat-paginator>
-      </div>
+      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+      </mat-paginator>
     </div>
   </div>
+</div>

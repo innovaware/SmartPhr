@@ -1,0 +1,25 @@
+<div class="containter pad">
+    <div class="row">
+      <div class="col ">
+        <h1 class="title">PAI</h1>
+      </div>
+    </div>
+  
+    <hr>
+  
+    <div class="row">
+      <div class="col">
+  
+        <app-table-ospiti
+        [eventPazienti]="eventsSubject.asObservable()"
+        [enableShow]=false
+        [enableDeleting]=false
+        [showInsert]=false
+        [enableCustomButton]=true
+        [CustomButtons] = customButtons
+        >
+      </app-table-ospiti>
+      </div>
+    </div>
+  </div>
+  

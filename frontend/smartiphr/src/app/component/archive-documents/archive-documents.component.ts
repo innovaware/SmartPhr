@@ -1,5 +1,7 @@
 import { Component, Input, OnInit, ViewChild } from "@angular/core";
-import { MatDialog, MatPaginator, MatTableDataSource } from "@angular/material";
+import { MatDialog } from "@angular/material/dialog";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatTableDataSource } from "@angular/material/table";
 import * as moment from "moment";
 import { map } from "rxjs/operators";
 import { DocumentoPaziente } from 'src/app/models/documentoPaziente';
@@ -50,7 +52,6 @@ export class ArchiveDocumentsComponent implements OnInit {
     }>(this.documentiPaziente);
     this.documentiPazienteDataSource.filterPredicate = this.createFilter();
 
-    console.log("Get docs");
 
     this.patientService
       .getDocumentByType(this.typeDocument)
@@ -118,18 +119,15 @@ export class ArchiveDocumentsComponent implements OnInit {
     this.uploadService
       .download(doc.documentoPaziente.filename, doc.paziente._id, this.typeDocument)
       .then((x) => {
-        console.log("download: ", x);
         x.subscribe((data) => {
-          console.log("download: ", data);
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
 
           // IE doesn't allow using a blob object directly as link href
           // instead it is necessary to use msSaveOrOpenBlob
-          const msSaveOrOpenBlob: any = window.navigator;
-          if (msSaveOrOpenBlob && msSaveOrOpenBlob.msSaveOrOpenBlob) {
-            msSaveOrOpenBlob(newBlob);
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
             return;
           }
           // For other browsers:

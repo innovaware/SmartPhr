@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from "@angular/core";
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { Dipendenti } from "src/app/models/dipendenti";
 import { DocumentoDipendente } from "src/app/models/documentoDipendente";
 import { DocumentiService } from "src/app/service/documenti.service";
@@ -36,7 +36,7 @@ export class DialogCaricadocumentoComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.documento.filenameesito = file.name;
       this.documento.file = file;
     } else {
