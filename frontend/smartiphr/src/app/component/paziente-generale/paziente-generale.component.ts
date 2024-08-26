@@ -17,16 +17,13 @@ export class PazienteGeneraleComponent implements OnInit {
   constructor() { }
 
   ngOnInit() {
-    console.log("Cartella generale paziente: ", this.data);
   }
 
   async save() {
-    console.log("save: ", this.data);
     this.saveEmiter.emit(this.data);
   }
 
   async change() {
-    console.log("change: ", this.data);
     this.dataChange.emit(this.data);
   }
 

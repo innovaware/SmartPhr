@@ -105,6 +105,20 @@ table {
   width: 100%;
 }
 
+td{
+    padding:0%;
+}
+
+input{
+    padding: 0px;
+    border: 0px;
+    margin: 0px;
+}
+
+tr {
+  padding: 0%;
+}
+
 .full {
   width: 100%;
 }

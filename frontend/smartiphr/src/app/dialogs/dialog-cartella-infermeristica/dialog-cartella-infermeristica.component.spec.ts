@@ -85,7 +85,7 @@ import { LoginComponent } from "src/app/pages/login/login.component";
 import { NoteCreditoASPComponent } from "src/app/pages/note-credito-asp/note-credito-asp.component";
 import { OspitiComponent } from "src/app/pages/ospiti/ospiti.component";
 import { PagenotfoundComponent } from "src/app/pages/pagenotfound/pagenotfound.component";
-import { PisicologicaComponent } from "src/app/pages/pisicologica/pisicologica.component";
+import { PsicologicaComponent } from "src/app/pages/psicologica/psicologica.component";
 import { ProspettoCMASPComponent } from "src/app/pages/prospetto-cm-asp/prospetto-cm-asp.component";
 import { PuntoFattureASPComponent } from "src/app/pages/punto-fatture-asp/punto-fatture-asp.component";
 import { BasicAuthInterceptor } from "src/app/_helpers/basic-auth.interceptor";
@@ -211,7 +211,7 @@ describe("DialogCartellaInfermeristicaComponent", () => {
         DialogCaricadocumentoComponent,
         DialogQuestionComponent,
         DiarioClinicoComponent,
-        PisicologicaComponent,
+        PsicologicaComponent,
       ],
       imports: [
         BrowserModule,

@@ -6,7 +6,8 @@ const RegistroSanificazioneSchema = mongoose.Schema({
   stato: Boolean,
   data: Date,
   note: String,
-  firma: ObjectId
+  operatore: ObjectId,
+  firma: String
 });
 
 module.exports = mongoose.model("RegistroSanificazione", RegistroSanificazioneSchema, "registroSanificazione");

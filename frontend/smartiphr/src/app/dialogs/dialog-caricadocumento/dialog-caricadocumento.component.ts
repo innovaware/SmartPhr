@@ -36,7 +36,7 @@ export class DialogCaricadocumentoComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.documento.filenameesito = file.name;
       this.documento.file = file;
     } else {

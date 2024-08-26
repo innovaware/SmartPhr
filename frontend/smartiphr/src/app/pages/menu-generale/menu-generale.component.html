@@ -20,9 +20,9 @@
                       </th>
                       <td mat-cell *matCellDef="let row">
 
-                        <button mat-button >
-                          <img src="../../../assets/menu.png" style="height:31px" (click)="openMenuGenerale(row)" matTooltip="Apri menu Estivo">
-                        </button>
+                          <button mat-button (click)="openMenuGenerale(row)">
+                              <img src="../../../assets/menu.png" style="height:31px" matTooltip="Apri menu Estivo">
+                          </button>
 
                       </td>
                     </ng-container>
@@ -48,8 +48,8 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                   </table>
 
-                  <mat-paginator #paginatorEstivo [pageSizeOptions]="[12]" showFirstLastButtons
-                    aria-label="Select page of periodic elements">
+                  <mat-paginator #paginatorEstivo [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                                 aria-label="Select page of periodic elements">
                   </mat-paginator>
                 </div>
               </div>
@@ -73,9 +73,9 @@
                       </th>
                       <td mat-cell *matCellDef="let row">
 
-                        <button mat-button >
-                          <img src="../../../assets/menu.png" style="height:31px" (click)="openMenuGenerale(row)" matTooltip="Apri menu Invernale">
-                        </button>
+                          <button mat-button (click)="openMenuGenerale(row)">
+                              <img src="../../../assets/menu.png" style="height:31px" matTooltip="Apri menu Invernale">
+                          </button>
 
                       </td>
                     </ng-container>
@@ -101,7 +101,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                   </table>
 
-                  <mat-paginator #paginatorInvernale [pageSizeOptions]="[12]" showFirstLastButtons aria-label="Select page of periodic elements">
+                  <mat-paginator #paginatorInvernale [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="Select page of periodic elements">
                   </mat-paginator>
                 </div>
               </div>
@@ -118,21 +118,21 @@
                       </th>
                       <td mat-cell *matCellDef="let row">
 
-                        <button mat-button *ngIf="isEstivo(row.dataStartRif)">
-                          <div style="position: relative; left: 0; top: 0"
-                              (click)="openMenuGeneraleArchivio(row, 0)" matTooltip="Apri menu Generale Estivo">
-                            <img src="../../../assets/sun.svg" style="height:26px; position: relative; bottom: -7px; right: -11px">
-                            <img src="../../../assets/menu.png" style="height:31px; position: absolute; top: 0; left: 0;">
-                          </div>
-                        </button>
+                          <button mat-button *ngIf="isEstivo(row.dataStartRif)"
+                                  (click)="openMenuGeneraleArchivio(row, 0)">
+                              <div style="position: relative; left: 0; top: 0" matTooltip="Apri menu Generale Estivo">
+                                  <img src="../../../assets/sun.svg" style="height:26px; position: relative; bottom: -7px; right: -11px">
+                                  <img src="../../../assets/menu.png" style="height:31px; position: absolute; top: 0; left: 0;">
+                              </div>
+                          </button>
 
-                        <button mat-button *ngIf="!isEstivo(row.dataStartRif)">
-                          <div style="position: relative; left: 0; top: 0"
-                              (click)="openMenuGeneraleArchivio(row, 1)" matTooltip="Apri menu Generale Invernale">
-                            <img src="../../../assets/winter.svg" style="height:26px; position: relative; bottom: -7px; right: -11px">
-                            <img src="../../../assets/menu.png" style="height:31px; position: absolute; top: 0; left: 0;">
-                          </div>
-                        </button>
+                          <button mat-button *ngIf="!isEstivo(row.dataStartRif)"
+                                  (click)="openMenuGeneraleArchivio(row, 1)">
+                              <div style="position: relative; left: 0; top: 0" matTooltip="Apri menu Generale Invernale">
+                                  <img src="../../../assets/winter.svg" style="height:26px; position: relative; bottom: -7px; right: -11px">
+                                  <img src="../../../assets/menu.png" style="height:31px; position: absolute; top: 0; left: 0;">
+                              </div>
+                          </button>
 
                       </td>
                     </ng-container>
@@ -165,7 +165,7 @@
                     <tr mat-row *matRowDef="let row; columns: displayedArchivioColumns;"></tr>
                   </table>
 
-                  <mat-paginator #paginatorArchivio [pageSizeOptions]="[12]" showFirstLastButtons aria-label="Select page of periodic elements">
+                  <mat-paginator #paginatorArchivio [pageSizeOptions]="[5,10,20]" showFirstLastButtons aria-label="Select page of periodic elements">
                   </mat-paginator>
 
                 </div>

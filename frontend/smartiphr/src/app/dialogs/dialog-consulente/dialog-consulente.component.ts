@@ -13,6 +13,9 @@ import { ContrattoService } from "src/app/service/contratto.service";
 import { FattureService } from "src/app/service/fatture.service";
 import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
+import { SettingsService } from "../../service/settings.service";
+import { Settings } from "../../models/settings";
+import { addDays } from "date-fns/esm/fp";
 
 @Component({
   selector: "app-dialog-consulente",
@@ -25,10 +28,17 @@ export class DialogConsulenteComponent implements OnInit {
 
   public uploading: boolean;
 
+  inputSearchFieldBon: String;
+  inputSearchFieldFat: String;
+
   addingContratto: boolean;
   uploadingContratto: boolean;
   nuovaContratto: Contratto;
-  contratto: Contratto;
+  contratto: Contratto[];
+  public ContrattoDataSource: MatTableDataSource<Contratto>;
+  @ViewChild("paginatorContratto", { static: false })
+  contrattoPaginator: MatPaginator;
+  contrattoDisplayedColumns: string[] = ["namefile", "date", "dataScadenza", "note", "action"];
 
   addingFattura: boolean;
   uploadingFattura: boolean;
@@ -36,14 +46,15 @@ export class DialogConsulenteComponent implements OnInit {
   public fatture: Fatture[];
   fattureDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
   public fattureDataSource: MatTableDataSource<Fatture>;
-  @ViewChild("paginatorFatture", {static: false})
+  @ViewChild("paginatorFatture", { static: false })
   fatturePaginator: MatPaginator;
 
+  private settings: Settings;
   public addingBonifici: boolean;
   public nuovaBonifico: Bonifico;
   public uploadingBonifici: boolean;
   public bonifici: Bonifico[];
-  @ViewChild("paginatorBonifici", {static: false})
+  @ViewChild("paginatorBonifici", { static: false })
   bonificiPaginator: MatPaginator;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
@@ -55,6 +66,7 @@ export class DialogConsulenteComponent implements OnInit {
     public contrattoService: ContrattoService,
     public fattureService: FattureService,
     public bonficoService: BonificoService,
+    private settingService: SettingsService,
     @Inject(MAT_DIALOG_DATA)
     public item: {
       consulente: Consulenti;
@@ -64,7 +76,11 @@ export class DialogConsulenteComponent implements OnInit {
   ) {
     this.disable = item.readonly;
     this.result = undefined;
+    this.settings = new Settings();
 
+    this.settingService.getSettings().then((res) => {
+      this.settings = res[0];
+    });
     this.fatture = [];
 
     this.addingContratto = false;
@@ -73,16 +89,50 @@ export class DialogConsulenteComponent implements OnInit {
     this.uploading = false;
     this.uploadingFattura = false;
     this.addingFattura = false;
-
+    this.contratto = [];
+    this.ContrattoDataSource = new MatTableDataSource<Contratto>();
     this.uploadingBonifici = false;
   }
 
   ngOnInit() {
+    this.settings = new Settings();
+    this.settingService.getSettings().then((res) => {
+      this.settings = res[0];
+    });
     if (this.item.consulente._id != undefined) {
       this.getContratto();
       this.getFatture();
       this.getBonificiAssegniContanti();
     }
+  }
+
+
+
+  dateDiff(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
+
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
+
+  addDays(date: Date, days: number): Date {
+    // Crea una nuova data copiando l'originale
+    const newDate = new Date(date);
+
+    // Aggiunge i giorni specificati
+    newDate.setDate(newDate.getDate() + days);
+
+    // Ritorna la nuova data
+    return newDate;
   }
 
   save() {
@@ -115,7 +165,7 @@ export class DialogConsulenteComponent implements OnInit {
       return;
     } else {
 
-      if (this.item.consulente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+      if (this.dateDiffInDays(new Date(this.item.consulente.dataNascita), new Date()) < 10) {
         this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
@@ -139,7 +189,7 @@ export class DialogConsulenteComponent implements OnInit {
         (e) => console.error(e)
       );
     }
-    }
+  }
 
 
   private insert(): Observable<Consulenti> {
@@ -202,7 +252,7 @@ export class DialogConsulenteComponent implements OnInit {
       return;
     } else {
 
-      if (this.item.consulente.dataNascita.getFullYear() > ((new Date()).getFullYear() - 10)) {
+      if (this.dateDiffInDays(new Date(this.item.consulente.dataNascita), new Date()) < 10) {
         this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
@@ -229,9 +279,22 @@ export class DialogConsulenteComponent implements OnInit {
         .getContratto(this.item.consulente._id)
         .then((f: Contratto[]) => {
           if (f.length > 0) {
-            this.contratto = f[0];
+            f = f.filter(x => new Date(x.dataScadenza) > new Date());
+            this.contratto[0] = f.length > 0 ? f[0] : undefined;
             //this.contratto.dataupload = new Date(this.contratto.dataupload);
           }
+          else {
+            this.contratto = [];
+          }
+          if (this.contratto[0] != undefined) {
+            const numScad = this.dateDiff(new Date(),new Date(this.contratto[0].dataScadenza));
+            console.log("numero scadenza: ",numScad);
+            if (numScad < this.settings.alertContratto.valueOf()) {
+              this.messageService.showMessage("Mancano " + numScad + " giorni alla scadenza del contratto");
+            }
+          }
+          this.ContrattoDataSource.data = this.contratto[0] != undefined ? this.contratto : [];
+          this.ContrattoDataSource.paginator = this.contrattoPaginator;
         })
         .catch((err) => {
           this.messageService.showMessageError(
@@ -254,9 +317,9 @@ export class DialogConsulenteComponent implements OnInit {
     this.uploadService
       .download(contratto.filename, this.item.consulente._id, 'contratti')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -302,7 +365,7 @@ export class DialogConsulenteComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload Contratto: ", $event);
+      
       this.nuovaContratto.filename = file.name;
       this.nuovaContratto.file = file;
     } else {
@@ -312,6 +375,14 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   async saveContratto(contratto: Contratto) {
+    if (!contratto.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    }
+    if (!contratto.dataScadenza) {
+      this.messageService.showMessageError("Inserire una data di scadenza");
+      return;
+    }
     const typeDocument = "CONTRATTO";
     const path = "contratti";
     const file: File = contratto.file;
@@ -337,7 +408,9 @@ export class DialogConsulenteComponent implements OnInit {
             this.addingContratto = false;
             this.uploadingContratto = false;
             this.uploading = false;
-            this.contratto = result;
+            this.contratto[0] = result;
+            this.ContrattoDataSource.data = this.contratto;
+            this.ContrattoDataSource.paginator = this.contrattoPaginator;
 
             console.log("Uploading completed: ", x);
           })
@@ -360,7 +433,7 @@ export class DialogConsulenteComponent implements OnInit {
       this.fattureService
         .getByUserId(this.item.consulente._id)
         .then((f: Fatture[]) => {
-          this.fatture = f;
+          this.fatture = f.length > 0 ? f : [];
 
           this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
           this.fattureDataSource.paginator = this.fatturePaginator;
@@ -396,6 +469,10 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   async saveFattura(fattura: Fatture) {
+    if (!fattura.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    }
     const typeDocument = "FATTURE";
     const path = "fatture";
     const file: File = fattura.file;
@@ -440,9 +517,9 @@ export class DialogConsulenteComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.item.consulente._id, 'fatture')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -515,6 +592,10 @@ export class DialogConsulenteComponent implements OnInit {
   }
 
   async saveBonifico(bonifico: Bonifico) {
+    if (!bonifico.file) {
+      this.messageService.showMessageError("Selezionare il file");
+      return;
+    }
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
@@ -561,7 +642,7 @@ export class DialogConsulenteComponent implements OnInit {
     this.bonficoService
       .getByUserId(this.item.consulente._id)
       .then((f: Bonifico[]) => {
-        this.bonifici = f;
+        this.bonifici = f.length > 0 ? f : [];
 
         this.bonificiDataSource = new MatTableDataSource<Bonifico>(
           this.bonifici
@@ -580,9 +661,9 @@ export class DialogConsulenteComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.item.consulente._id, 'bonifico')
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -628,4 +709,31 @@ export class DialogConsulenteComponent implements OnInit {
         console.error(err);
       });
   }
+
+
+
+  cleanSearchField(type: String) {
+    if (type == "Bonifici") {
+      this.bonificiDataSource.filter = undefined;
+      this.inputSearchFieldBon = undefined;
+    }
+    if (type == "Fattura") {
+      this.fattureDataSource.filter = undefined;
+      this.inputSearchFieldFat = undefined;
+    }
+
+
+  }
+
+  applyFilter(event: Event, type: String) {
+    const filterValue = (event.target as HTMLInputElement).value;
+    if (type == "Bonifici") {
+      this.bonificiDataSource.filter = filterValue.trim().toLowerCase();
+    }
+    if (type == "Fattura") {
+      this.fattureDataSource.filter = filterValue.trim().toLowerCase();
+    }
+  }
+
+
 }

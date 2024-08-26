@@ -1,530 +1,569 @@
 <div mat-dialog-title>
-    <div class="container-fluid" >
-      <div class="row">
-        <div class="col">
-          <h3>PAI</h3>
-        </div>
-  
-        <div class="col">
-          <button class="close-button" [mat-dialog-close]="true">×
-          </button>
-        </div>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>PAI</h3>
       </div>
-  
-      <div class="row">
-        <div class="col">
-          <hr>
-        </div>
+
+      <div class="col">
+        <button class="close-button" [mat-dialog-close]="true">
+          ×
+        </button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="col">
+        <hr>
       </div>
     </div>
   </div>
-  
-  <mat-dialog-content>
-    <div class="container-fluid" >
-      <div class="row">
-        <div class="col">
-  
-          
-  
-          <mat-tab-group mat-align-tabs="start">
+</div>
 
-            <mat-tab label="Dati anagrafici generale">
-                <app-paziente-generale [data]=paziente>
-                </app-paziente-generale>
-              </mat-tab>
-
-  
-            <mat-tab label="Valutazione medico">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
-                        <mat-tab label="Anamnesi Patologica">
-                            <app-anamnesi-patologica [data]=paziente.schedaClinica.schedaAnamnesiPatologica ></app-anamnesi-patologica>
-                          </mat-tab>
-                
-                            <mat-tab label="Anamnesi Famigliare">
-                            <app-anamnesi-famigliare [data]=paziente.schedaClinica.schedaAnamnesiFamigliare ></app-anamnesi-famigliare>
-                          </mat-tab>
-
-                
-                         <mat-tab label="Esame Neurologica" >
-                            <app-esame-neurologica [data]=paziente.schedaClinica.schedaEsameNeurologia  ></app-esame-neurologica>
-                          </mat-tab>
-
-                    </mat-tab-group>
-                </mat-dialog-content>
-            </mat-tab>
+<mat-dialog-content>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
 
 
-            <mat-tab label="Valutazione assistente sociale">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
 
-                    
-                
-                            <!-- ALTRE INFO 
-                                <mat-tab label="Altre info">
-                                    <app-altreinfo-cartellasociale [data]=paziente.schedaAssSociale.altroCartellaSociale></app-altreinfo-cartellasociale>
-                                </mat-tab>
-                                 ALTRE INFO -->
-                    
-                            <!-- DOCUMENTAZIONE 
-                                <mat-tab label="Documentazione">
-                                <div class="container-fluid">
-                                    <div class="row title">
-                                    <div class="col-1"></div>
-                                    <div class="col-3">Nome</div>
-                                    <div class="col-1">Data</div>
-                                    <div class="col"></div>
-                                    </div>
-                    
-                                    <hr>
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['CONTRATTO_RICOVERO']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['CONTRATTO_RICOVERO']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['CONTRATTO_RICOVERO']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                    
-                                    </div>
-                                    <div class="col-3">Contratto ricovero</div>
-                                    <div class="col-1">{{document['CONTRATTO_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('CONTRATTO_RICOVERO', $event)" accept=".pdf"
-                                        *ngIf="!document['CONTRATTO_RICOVERO']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['CONTRATTO_RICOVERO']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['CONTRATTO_RICOVERO']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+        <mat-tab-group mat-align-tabs="start">
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONTRATTO_RICOVERO'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONTRATTO_RICOVERO'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                    
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['DOC_IDENTITA']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['DOC_IDENTITA']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['DOC_IDENTITA']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                    
-                                    </div>
-                                    <div class="col-3">Doc identit&aacute;</div>
-                                    <div class="col-1">{{document['DOC_IDENTITA']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf"
-                                        *ngIf="!document['DOC_IDENTITA']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['DOC_IDENTITA']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+          <mat-tab label="Dati anagrafici generale">
+            <app-paziente-generale [data]=paziente [disable]=true>
+            </app-paziente-generale>
+          </mat-tab>
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['DOC_IDENTITA'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['DOC_IDENTITA'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['CONS_RICOVERO']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['CONS_RICOVERO']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['CONS_RICOVERO']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Consenso al ricovero</div>
-                                    <div class="col-1">{{document['CONS_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('CONS_RICOVERO', $event)" accept=".pdf"
-                                        *ngIf="!document['CONS_RICOVERO']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['CONS_RICOVERO']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['CONS_RICOVERO']?.name}}</label>
-                                            </div>
-                                            <div class="col">
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONS_RICOVERO'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONS_RICOVERO'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['AUTORI_CONTENZIONE']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['AUTORI_CONTENZIONE']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['AUTORI_CONTENZIONE']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Autorizzazione alla contenzione</div>
-                                    <div class="col-1">{{document['AUTORI_CONTENZIONE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('AUTORI_CONTENZIONE', $event)" accept=".pdf"
-                                        *ngIf="!document['AUTORI_CONTENZIONE']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['AUTORI_CONTENZIONE']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['AUTORI_CONTENZIONE']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+          <mat-tab label="Valutazione medico">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+                <mat-tab label="Anamnesi Patologica">
+                  <app-anamnesi-patologica [data]=paziente.schedaClinica.schedaAnamnesiPatologica [disable]=true></app-anamnesi-patologica>
+                </mat-tab>
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_CONTENZIONE'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_CONTENZIONE'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['AUTORI_USCITE']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['AUTORI_USCITE']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['AUTORI_USCITE']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Autorizzazione alle uscite</div>
-                                    <div class="col-1">{{document['AUTORI_USCITE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('AUTORI_USCITE', $event)" accept=".pdf"
-                                        *ngIf="!document['AUTORI_USCITE']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['AUTORI_USCITE']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+                <mat-tab label="Anamnesi Famigliare">
+                  <app-anamnesi-famigliare [data]=paziente.schedaClinica.schedaAnamnesiFamigliare [disable]=true></app-anamnesi-famigliare>
+                </mat-tab>
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_USCITE'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_USCITE'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['AUTORI_RIPRESE']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['AUTORI_RIPRESE']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['AUTORI_RIPRESE']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Autorizzazione alle riprese audio, video e foto</div>
-                                    <div class="col-1">{{document['AUTORI_RIPRESE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('AUTORI_RIPRESE', $event)" accept=".pdf"
-                                        *ngIf="!document['AUTORI_RIPRESE']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['AUTORI_RIPRESE']?.name}}</label>
-                                            </div>
-                                            <div class="col">
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_RIPRESE'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_RIPRESE'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['AUTORI_VACCINO']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['AUTORI_VACCINO']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['AUTORI_VACCINO']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Consenso somministrazione vaccino</div>
-                                    <div class="col-1">{{document['AUTORI_VACCINO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('AUTORI_VACCINO', $event)" accept=".pdf"
-                                        *ngIf="!document['AUTORI_VACCINO']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['AUTORI_VACCINO']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+                <mat-tab label="Esame Neurologica">
+                  <app-esame-neurologica [data]=paziente.schedaClinica.schedaEsameNeurologia [disable]=true></app-esame-neurologica>
+                </mat-tab>
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_VACCINO'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_VACCINO'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
-                                    <div class="row fileitem">
-                                    <div class="col-1" [ngClass]="document['LIST_EFFETTIPERSONALI']?.status ? 'success': 'notload'">
-                                        <div *ngIf="!document['LIST_EFFETTIPERSONALI']?.uploading">
-                                        <fa-icon icon="check-circle"></fa-icon>
-                                        </div>
-                                        <div *ngIf="document['LIST_EFFETTIPERSONALI']?.uploading">
-                                        <mat-spinner [diameter]="18"></mat-spinner>
-                                        </div>
-                                    </div>
-                                    <div class="col-3">Check list indumenti ed effetti personali</div>
-                                    <div class="col-1">{{document['LIST_EFFETTIPERSONALI']?.dateupload | date: 'dd/MM/yyyy' }}</div>
-                                    <div class="col right">
-                                        <input type="file" (change)="upload('LIST_EFFETTIPERSONALI', $event)" accept=".pdf"
-                                        *ngIf="!document['LIST_EFFETTIPERSONALI']?.status">
-                    
-                                        <div class="container-flex" *ngIf="document['LIST_EFFETTIPERSONALI']?.status">
-                                        <div class="row">
-                                            <div class="col">
-                                            <label>{{document['LIST_EFFETTIPERSONALI']?.name}}</label>
-                                            </div>
-                                            <div class="col">
+              </mat-tab-group>
+            </mat-dialog-content>
+          </mat-tab>
 
-                                            <button mat-button >
-                                                <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['LIST_EFFETTIPERSONALI'])" style="width: 26px;">
-                                            </button>
-                    
-                                            <button mat-button >
-                                                <img src="../../../assets/cestino.svg" (click)="removeDocument(document['LIST_EFFETTIPERSONALI'])" style="width:26px">
-                                            </button>
-                    
-                                            </div>
-                                        </div>
-                                        </div>
-                                    </div>
-                                    </div>
-                    
+
+          <mat-tab label="Valutazione assistente sociale">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+
+
+
+                <!-- ALTRE INFO
+                    <mat-tab label="Altre info">
+                        <app-altreinfo-cartellasociale [data]=paziente.schedaAssSociale.altroCartellaSociale></app-altreinfo-cartellasociale>
+                    </mat-tab>
+                     ALTRE INFO -->
+                <!-- DOCUMENTAZIONE
+                    <mat-tab label="Documentazione">
+                    <div class="container-fluid">
+                        <div class="row title">
+                        <div class="col-1"></div>
+                        <div class="col-3">Nome</div>
+                        <div class="col-1">Data</div>
+                        <div class="col"></div>
+                        </div>
+
+                        <hr>
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['CONTRATTO_RICOVERO']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['CONTRATTO_RICOVERO']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['CONTRATTO_RICOVERO']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+
+                        </div>
+                        <div class="col-3">Contratto ricovero</div>
+                        <div class="col-1">{{document['CONTRATTO_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('CONTRATTO_RICOVERO', $event)" accept=".pdf"
+                            *ngIf="!document['CONTRATTO_RICOVERO']?.status">
+
+                            <div class="container-flex" *ngIf="document['CONTRATTO_RICOVERO']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['CONTRATTO_RICOVERO']?.name}}</label>
                                 </div>
-                    
-                                </mat-tab>-->
-                    
-                    
-                            <!-- VALUTAZIONE SOCIALE -->
-                            <mat-tab label="Valutazione Sociale">
-                            <app-valutazione-sociale [data]=paziente.schedaAssSociale.valutazioneSociale></app-valutazione-sociale>
-                            </mat-tab>
-                            <!-- VALUTAZIONE SOCIALE -->
-                    
-                            <!-- INDICE DI SOCIALIZZAZIONE 
-                            <mat-tab label="Indice di socializzazione">
-                            <app-indice-socializzazione [data]=paziente.schedaAssSociale.indiceSocializzazione></app-indice-socializzazione>
-                            </mat-tab>
-                
-                                INDICE DI SOCIALIZZAZIONE -->
-                    
-                            <!-- DIARIO SOCIALE 
-                            <mat-tab label="Diario Sociale">
-                                <app-diario-sociale [data]=data.paziente >></app-diario-sociale>
-                                </mat-tab>
-                            DIARIO SOCIALE -->
+                                <div class="col">
 
-                        </mat-tab-group>
-                    </mat-dialog-content>
-            </mat-tab>
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONTRATTO_RICOVERO'])" style="width: 26px;">
+                                </button>
 
-            <mat-tab label="Valutazione psicologo">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONTRATTO_RICOVERO'])" style="width:26px">
+                                </button>
 
-                        <!--<mat-tab label="Esame Psichico">
-                            <app-esame-pisico [schedaPsico]=paziente.schedaPsico></app-esame-pisico>
-                        </mat-tab>-->
-                        <mat-tab label="Valutazione Psicologica Clinica">
-                            <app-valuta-pisico [schedaPsico]=paziente.schedaPsico></app-valuta-pisico>
-                        </mat-tab>
-                       <!--<mat-tab label="Diario Psicologico Clinico">
-                            <app-diario [diario]=paziente.schedaPsico.diario></app-diario>
-                        </mat-tab>-->
-                    </mat-tab-group>
-                </mat-dialog-content>
+                                </div>
+                            </div>
+                            </div>
+
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['DOC_IDENTITA']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['DOC_IDENTITA']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['DOC_IDENTITA']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+
+                        </div>
+                        <div class="col-3">Doc identit&aacute;</div>
+                        <div class="col-1">{{document['DOC_IDENTITA']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('DOC_IDENTITA', $event)" accept=".pdf"
+                            *ngIf="!document['DOC_IDENTITA']?.status">
+
+                            <div class="container-flex" *ngIf="document['DOC_IDENTITA']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['DOC_IDENTITA']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['DOC_IDENTITA'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['DOC_IDENTITA'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['CONS_RICOVERO']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['CONS_RICOVERO']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['CONS_RICOVERO']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Consenso al ricovero</div>
+                        <div class="col-1">{{document['CONS_RICOVERO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('CONS_RICOVERO', $event)" accept=".pdf"
+                            *ngIf="!document['CONS_RICOVERO']?.status">
+
+                            <div class="container-flex" *ngIf="document['CONS_RICOVERO']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['CONS_RICOVERO']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['CONS_RICOVERO'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['CONS_RICOVERO'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['AUTORI_CONTENZIONE']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['AUTORI_CONTENZIONE']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['AUTORI_CONTENZIONE']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Autorizzazione alla contenzione</div>
+                        <div class="col-1">{{document['AUTORI_CONTENZIONE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('AUTORI_CONTENZIONE', $event)" accept=".pdf"
+                            *ngIf="!document['AUTORI_CONTENZIONE']?.status">
+
+                            <div class="container-flex" *ngIf="document['AUTORI_CONTENZIONE']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['AUTORI_CONTENZIONE']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_CONTENZIONE'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_CONTENZIONE'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['AUTORI_USCITE']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['AUTORI_USCITE']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['AUTORI_USCITE']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Autorizzazione alle uscite</div>
+                        <div class="col-1">{{document['AUTORI_USCITE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('AUTORI_USCITE', $event)" accept=".pdf"
+                            *ngIf="!document['AUTORI_USCITE']?.status">
+
+                            <div class="container-flex" *ngIf="document['AUTORI_USCITE']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['AUTORI_USCITE']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_USCITE'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_USCITE'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['AUTORI_RIPRESE']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['AUTORI_RIPRESE']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['AUTORI_RIPRESE']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Autorizzazione alle riprese audio, video e foto</div>
+                        <div class="col-1">{{document['AUTORI_RIPRESE']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('AUTORI_RIPRESE', $event)" accept=".pdf"
+                            *ngIf="!document['AUTORI_RIPRESE']?.status">
+
+                            <div class="container-flex" *ngIf="document['AUTORI_RIPRESE']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['AUTORI_RIPRESE']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_RIPRESE'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_RIPRESE'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['AUTORI_VACCINO']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['AUTORI_VACCINO']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['AUTORI_VACCINO']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Consenso somministrazione vaccino</div>
+                        <div class="col-1">{{document['AUTORI_VACCINO']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('AUTORI_VACCINO', $event)" accept=".pdf"
+                            *ngIf="!document['AUTORI_VACCINO']?.status">
+
+                            <div class="container-flex" *ngIf="document['AUTORI_VACCINO']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['AUTORI_VACCINO']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['AUTORI_VACCINO'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['AUTORI_VACCINO'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                        <div class="row fileitem">
+                        <div class="col-1" [ngClass]="document['LIST_EFFETTIPERSONALI']?.status ? 'success': 'notload'">
+                            <div *ngIf="!document['LIST_EFFETTIPERSONALI']?.uploading">
+                            <fa-icon icon="check-circle"></fa-icon>
+                            </div>
+                            <div *ngIf="document['LIST_EFFETTIPERSONALI']?.uploading">
+                            <mat-spinner [diameter]="18"></mat-spinner>
+                            </div>
+                        </div>
+                        <div class="col-3">Check list indumenti ed effetti personali</div>
+                        <div class="col-1">{{document['LIST_EFFETTIPERSONALI']?.dateupload | date: 'dd/MM/yyyy' }}</div>
+                        <div class="col right">
+                            <input type="file" (change)="upload('LIST_EFFETTIPERSONALI', $event)" accept=".pdf"
+                            *ngIf="!document['LIST_EFFETTIPERSONALI']?.status">
+
+                            <div class="container-flex" *ngIf="document['LIST_EFFETTIPERSONALI']?.status">
+                            <div class="row">
+                                <div class="col">
+                                <label>{{document['LIST_EFFETTIPERSONALI']?.name}}</label>
+                                </div>
+                                <div class="col">
+
+                                <button mat-button >
+                                    <img src="../../../assets/pdf.jpg" (click)="showDocumentGeneric(document['LIST_EFFETTIPERSONALI'])" style="width: 26px;">
+                                </button>
+
+                                <button mat-button >
+                                    <img src="../../../assets/cestino.svg" (click)="removeDocument(document['LIST_EFFETTIPERSONALI'])" style="width:26px">
+                                </button>
+
+                                </div>
+                            </div>
+                            </div>
+                        </div>
+                        </div>
+
+                    </div>
+
+                    </mat-tab>-->
+                <!-- VALUTAZIONE SOCIALE -->
+                <mat-tab label="Valutazione Sociale">
+                  <app-valutazione-sociale [data]=paziente.schedaAssSociale.valutazioneSociale [disable]=true></app-valutazione-sociale>
+                </mat-tab>
+                <!-- VALUTAZIONE SOCIALE -->
+                <!-- INDICE DI SOCIALIZZAZIONE
+                <mat-tab label="Indice di socializzazione">
+                <app-indice-socializzazione [data]=paziente.schedaAssSociale.indiceSocializzazione></app-indice-socializzazione>
+                </mat-tab>
+
+                    INDICE DI SOCIALIZZAZIONE -->
+                <!-- DIARIO SOCIALE
+                <mat-tab label="Diario Sociale">
+                    <app-diario-sociale [data]=data.paziente >></app-diario-sociale>
+                    </mat-tab>
+                DIARIO SOCIALE -->
+
+              </mat-tab-group>
+            </mat-dialog-content>
+          </mat-tab>
+
+          <mat-tab label="Valutazione psicologo">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+
+                <!--<mat-tab label="Esame Psichico">
+                    <app-esame-pisico [schedaPsico]=paziente.schedaPsico></app-esame-pisico>
+                </mat-tab>-->
+                <mat-tab label="Valutazione Psicologica Clinica">
+                  <app-valuta-pisico [schedaPsico]=paziente.schedaPsico [disable]=true></app-valuta-pisico>
+                </mat-tab>
+                <!--<mat-tab label="Diario Psicologico Clinico">
+                     <app-diario [diario]=paziente.schedaPsico.diario></app-diario>
+                 </mat-tab>-->
+              </mat-tab-group>
+            </mat-dialog-content>
 
 
-            </mat-tab>
+          </mat-tab>
 
 
-            <mat-tab label="Valutazione fisioterapista">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
-                            <mat-tab label="VALUTAZIONE MOTORIA">
-                                <app-valutazione-motoria [data]=paziente.valutazioneMotoria ></app-valutazione-motoria>
-                            </mat-tab>
-                            <!--<mat-tab label="AREA RIABILITATIVA">
-                                <app-area-riabilitativa [data]=paziente.areaRiabilitativa ></app-area-riabilitativa>
-                            </mat-tab>
-                            <mat-tab label="PROGRAMMA RIABILITATIVO">
-                                <app-area-riabilitazione-programma [data]=paziente.areaRiabilitativaProgramma ></app-area-riabilitazione-programma>
-                            </mat-tab>
-                            <mat-tab label="DIARIO RIABILITATIVO">
-                                <app-area-riabilitazione-diario [data]=paziente.areaRiabilitativaDiario ></app-area-riabilitazione-diario>
-                            </mat-tab>-->
-                        </mat-tab-group>
-                    </mat-dialog-content>
-            </mat-tab>
+          <mat-tab label="Valutazione fisioterapista">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+                <mat-tab label="VALUTAZIONE MOTORIA">
+                  <app-valutazione-motoria [data]=paziente.valutazioneMotoria [disable]=true></app-valutazione-motoria>
+                </mat-tab>
+                <!--<mat-tab label="AREA RIABILITATIVA">
+                    <app-area-riabilitativa [data]=paziente.areaRiabilitativa ></app-area-riabilitativa>
+                </mat-tab>
+                <mat-tab label="PROGRAMMA RIABILITATIVO">
+                    <app-area-riabilitazione-programma [data]=paziente.areaRiabilitativaProgramma ></app-area-riabilitazione-programma>
+                </mat-tab>
+                <mat-tab label="DIARIO RIABILITATIVO">
+                    <app-area-riabilitazione-diario [data]=paziente.areaRiabilitativaDiario ></app-area-riabilitazione-diario>
+                </mat-tab>-->
+              </mat-tab-group>
+            </mat-dialog-content>
+          </mat-tab>
 
 
-            <mat-tab label="Valutazione educatori">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
-                            <!--SOCIALIZZAZIONE 
-                                <mat-tab label="Socializzazione">
-                                    <app-socializzazione-educativa [data]=paziente.schedaEducativa.schedaSocializzazione></app-socializzazione-educativa>
-                                </mat-tab>
-                            SOCIALIZZAZIONE -->
-                            <!-- ADL 
-                            <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
-                                <app-scheda-adl [data]=paziente.schedaEducativa.ADL></app-scheda-adl>
-                            </mat-tab>
-                             ADL -->
-                
-                
-                            <!-- IADL 
-                            <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
-                                <app-scheda-iadl [data]=paziente.schedaEducativa.IADL></app-scheda-iadl>
-                            </mat-tab>
-                             IADL -->
-                    
-                
-                            <!-- VALUTAZIONE EDUCATIVA -->
-                            <mat-tab label="Valutazione Educativa">
-                                <app-valutazione-educativa [data]=paziente.schedaEducativa.valutazioneEducativa></app-valutazione-educativa>
-                            </mat-tab>
-                            <!-- VALUTAZIONE EDUCATIVA -->
-                
-                
-                            <!-- DIARIO EDUCATIVO
-                            <mat-tab label="Diario Educativo">
-                                <app-diario-educativo [data]=data.paziente >></app-diario-educativo>
-                            </mat-tab>
-                             DIARIO EDUCATIVO -->
+          <mat-tab label="Valutazione educatori">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+                <!--SOCIALIZZAZIONE
+                    <mat-tab label="Socializzazione">
+                        <app-socializzazione-educativa [data]=paziente.schedaEducativa.schedaSocializzazione></app-socializzazione-educativa>
+                    </mat-tab>
+                SOCIALIZZAZIONE -->
+                <!-- ADL
+                <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
+                    <app-scheda-adl [data]=paziente.schedaEducativa.ADL></app-scheda-adl>
+                </mat-tab>
+                 ADL -->
+                <!-- IADL
+                <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
+                    <app-scheda-iadl [data]=paziente.schedaEducativa.IADL></app-scheda-iadl>
+                </mat-tab>
+                 IADL -->
+                <!-- VALUTAZIONE EDUCATIVA -->
+                <mat-tab label="Valutazione Educativa">
+                  <app-valutazione-educativa [data]=paziente.schedaEducativa.valutazioneEducativa [disable]=true></app-valutazione-educativa>
+                </mat-tab>
+                <!-- VALUTAZIONE EDUCATIVA -->
+                <!-- DIARIO EDUCATIVO
+                <mat-tab label="Diario Educativo">
+                    <app-diario-educativo [data]=data.paziente >></app-diario-educativo>
+                </mat-tab>
+                 DIARIO EDUCATIVO -->
 
-                        </mat-tab-group>
-                    </mat-dialog-content>
-            </mat-tab>
+              </mat-tab-group>
+            </mat-dialog-content>
+          </mat-tab>
 
 
-            <mat-tab label="Risultati test">
-                <br>
-                <mat-dialog-content>
-                    <mat-tab-group mat-align-tabs="start">
-                            <!-- ADL -->
-                            <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
-                                <app-scheda-adl [data]=paziente.schedaEducativa.ADL></app-scheda-adl>
-                            </mat-tab>
-                            <!-- ADL -->
-                
-                
-                            <!-- IADL -->
-                            <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
-                                <app-scheda-iadl [data]=paziente.schedaEducativa.IADL></app-scheda-iadl>
-                            </mat-tab>
-                            <!-- IADL -->
-                    
+          <mat-tab label="Risultati test">
+            <br>
+            <mat-dialog-content>
+              <mat-tab-group mat-align-tabs="start">
+                <!-- ADL -->
+                <mat-tab label="ADL (ACTIVITIES OF DAILY LIVING)">
+                  <app-scheda-adl [data]=paziente.schedaEducativa.ADL [disable]=true></app-scheda-adl>
+                </mat-tab>
+                <!-- ADL -->
+                <!-- IADL -->
+                <mat-tab label="IADL (indice di dipendenza nelle attività strumentali della vita quotidiana) ">
+                  <app-scheda-iadl [data]=paziente.schedaEducativa.IADL [disable]=true> </app-scheda-iadl>
+                </mat-tab>
+                <!-- FIM -->
 
+                <mat-tab label="FIM">
+                  <br />
+                  <div *ngIf="this.SchedaFIM?.length <= 0" class="notPresent">
+                    Nessun documento presente
+                  </div>
 
-                        </mat-tab-group>
-                    </mat-dialog-content>
-            </mat-tab>
+                  <table mat-table [dataSource]="SchedaFIMDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.SchedaFIM?.length > 0">
+                    <ng-container matColumnDef="action">
+                      <th mat-header-cell *matHeaderCellDef>
+                      </th>
+                      <td mat-cell *matCellDef="let row; let i = index;" style="text-align: right;">
+                        <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
+          <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
 
-            <mat-tab label="Check list ICF">
-            </mat-tab>
+                        <button mat-button (click)="showDocument(row)">
+                          <img src="../../../assets/pdf.jpg" style="width: 26px;">
+                        </button>
 
-            <mat-tab label="Obiettivi">
-            </mat-tab>
-  
-  
+                      </td>
+                    </ng-container>
 
-  
-          </mat-tab-group>
-  
-        </div>
+                    <ng-container matColumnDef="namefile">
+                      <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                      <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="date">
+                      <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                      <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+                    </ng-container>
+
+                    <ng-container matColumnDef="note">
+                      <th mat-header-cell *matHeaderCellDef> Punteggio </th>
+                      <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+                  </table>
+
+                  <div class="paginator-container">
+
+                    <mat-paginator #paginatorSchedaFIM [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                                   aria-label="Select page of periodic elements">
+                    </mat-paginator>
+                  </div>
+                </mat-tab>
+
+              </mat-tab-group>
+            </mat-dialog-content>
+          </mat-tab>
+
+          <mat-tab label="Check list ICF">
+            <app-ICF [data]=paziente.schedaAssSociale.ICF [disable]=true></app-ICF>
+          </mat-tab>
+
+          <mat-tab label="Obiettivi">
+            <br />
+            <br />
+            <div class="row">
+              <div class="col">
+                <textarea matInput class="form-control" rows="4" id="exampleFormControlTextarea1" [(ngModel)]="paziente.obiettiviPAI" placeholder="Obiettivi" style="border:1px;"></textarea>
+              </div>
+            </div>
+          </mat-tab>
+
+        </mat-tab-group>
+
       </div>
     </div>
-  </mat-dialog-content>
-  
-  
-  <div mat-dialog-actions>
-    <div class="bottom-actions">
+  </div>
+</mat-dialog-content>
+
+
+<div mat-dialog-actions>
+  <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    <button mat-button (click)="Salva()">Salva</button>
   </div>
-  </div>
-  
+</div>

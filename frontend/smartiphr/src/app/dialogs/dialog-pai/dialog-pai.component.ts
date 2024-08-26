@@ -16,6 +16,8 @@ import { NotaCreditoService } from "src/app/service/notacredito.service";
 import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
+import { ICF } from "../../models/ICF";
+import { DocumentoPaziente } from "../../models/documentoPaziente";
 
 @Component({
   selector: 'app-dialog-pai',
@@ -27,7 +29,15 @@ export class DialogPaiComponent implements OnInit {
   public document: any[] = [];
   public uploading: boolean;
 
+  @ViewChild("paginatorSchedaFIM", { static: false })
+  SchedaFIMPaginator: MatPaginator;
+  public nuovoSchedaFIM: DocumentoPaziente;
+  public SchedaFIMDataSource: MatTableDataSource<DocumentoPaziente>;
+  public SchedaFIM: DocumentoPaziente[];
+  public uploadingSchedaFIM: boolean;
+  public addingSchedaFIM: boolean;
 
+  DisplayedColumns: string[] = ["namefile", "date", "note","action"];
   constructor(
     public uploadService: UploadService,
     public docService: DocumentipazientiService,
@@ -43,10 +53,48 @@ export class DialogPaiComponent implements OnInit {
   ) {
     this.paziente = this.data.paziente;
     console.log("Dialog paziente PAI", this.data);
+    if (this.paziente.schedaAssSociale.ICF == undefined || this.paziente.schedaAssSociale.ICF == null)
+      this.paziente.schedaAssSociale.ICF = new ICF();
+
+    this.nuovoSchedaFIM = new DocumentoPaziente();
+    this.SchedaFIMDataSource = new MatTableDataSource<DocumentoPaziente>();
+    this.SchedaFIM = [];
+    this.getSchedaFIM();
   }
 
   ngOnInit() {
     //this.getListFile();
+  }
+
+  async showDocument(doc: DocumentoPaziente) {
+    console.log("doc: ", JSON.stringify(doc));
+    this.uploadService
+      .downloadDocPaziente(doc.filename, doc.type, this.paziente._id)
+      .then((x) => {
+        
+        x.subscribe((data) => {
+          
+          const newBlob = new Blob([data as BlobPart], {
+            type: "application/pdf",
+          });
+
+          // IE doesn't allow using a blob object directly as link href
+          // instead it is necessary to use msSaveOrOpenBlob
+          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+            window.navigator.msSaveOrOpenBlob(newBlob);
+            return;
+          }
+
+          // For other browsers:
+          // Create a link pointing to the ObjectURL containing the blob.
+          const downloadURL = URL.createObjectURL(newBlob);
+          window.open(downloadURL);
+        });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore caricamento file");
+        console.error(err);
+      });
   }
 
 
@@ -55,9 +103,9 @@ export class DialogPaiComponent implements OnInit {
     this.uploadService
       .download(document.name, this.paziente._id, '')
       .then((x) => {
-        //console.log("download: ", x);
+        //
         x.subscribe((data) => {
-           console.log("download: ", data);
+           
            const newBlob = new Blob([data as BlobPart], {
              type: "application/pdf",
            });
@@ -140,9 +188,9 @@ export class DialogPaiComponent implements OnInit {
     this.uploadService
     .download(doc.filename, doc._id, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -187,5 +235,31 @@ export class DialogPaiComponent implements OnInit {
       });
   }*/
 
+  async Salva() {
+    this.pazienteService.save(this.paziente).then((value: Paziente) => {
+      console.log(`Patient  saved`, value);
+      //this.dialogRef.close(this.paziente);
+    });
+  }
 
+
+  async getSchedaFIM() {
+    console.log(`get DocsSchedaFIM paziente: ${this.paziente._id}`);
+    this.docService
+      .get(this.paziente, "SchedaFIM")
+      .then((f: DocumentoPaziente[]) => {
+        this.SchedaFIM = f;
+
+        this.SchedaFIMDataSource = new MatTableDataSource<DocumentoPaziente>(
+          this.SchedaFIM
+        );
+        this.SchedaFIMDataSource.paginator = this.SchedaFIMPaginator;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError(
+          "Errore caricamento lista DocsSchedaFIM"
+        );
+        console.error(err);
+      });
+  }
 }

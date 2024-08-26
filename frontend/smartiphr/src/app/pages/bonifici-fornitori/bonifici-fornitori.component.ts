@@ -67,10 +67,10 @@ import { UploadService } from "src/app/service/upload.service";
         this.uploadService
           .download(bonifico.filename, bonifico.identifyUserObj, "bonifico")
           .then((x) => {
-            console.log("download: ", x);
+            
             x.subscribe(
               (data) => {
-                console.log("download: ", data);
+                
                 const newBlob = new Blob([data as BlobPart], {
                   type: "application/pdf",
                 });

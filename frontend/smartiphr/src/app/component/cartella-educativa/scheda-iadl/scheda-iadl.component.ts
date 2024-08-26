@@ -8,6 +8,7 @@ import { IADL } from 'src/app/models/IADL';
 })
 export class SchedaIADLComponent implements OnInit {
   @Input() data: IADL;
+  @Input() disable: boolean;
   constructor() { }
 
   ngOnInit() {

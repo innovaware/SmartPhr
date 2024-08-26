@@ -51,7 +51,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload documento: ", $event);
+      
       this.nuovoDocumento.filename = file.name;
       this.nuovoDocumento.file = file;
     } else {
@@ -70,12 +70,10 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     const file: File = doc.file;
     this.uploadingDocumento = true;
 
-    console.log("Invio documento: ", doc);
     this.docService
       .insertAutorizzazioneUscita(this.id, doc)
       .subscribe(
         (result: DocumentoPaziente) => {
-          console.log("Insert documento: ", result);
 
           let formData: FormData = new FormData();
 
@@ -93,7 +91,6 @@ export class AutorizzazioneUscitaComponent implements OnInit {
               this.uploadingDocumento = false;
 
               this.documenti.push(result);
-              console.log("Uploading completed: ", result);
               this.documentiDataSource.data = this.documenti;
 
             })
@@ -115,14 +112,12 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     .getAutorizzazioneUscita(this.id)
     .subscribe(
       (result: DocumentoPaziente[]) => {
-        console.log("Loaded document: ", result);
         this.documenti = result;
 
         this.documentiDataSource = new MatTableDataSource<DocumentoPaziente>(this.documenti);
         this.documentiDataSource.paginator = this.documentiPaginator;
       },
       (err) => {
-        console.log("Error load autorizzazione uscita");
         this.messageService.showMessageError("Errore nel caricamento Documento di Autorizzazione Uscita");
       }
     );
@@ -132,9 +127,9 @@ export class AutorizzazioneUscitaComponent implements OnInit {
     this.uploadService
       .download(documento.filename, this.id, this.typeDocument)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -167,7 +162,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
                 .subscribe(
                   x => {
                     const index = this.documenti.indexOf(documento);
-                    console.log("Documento cancellato index: ", index);
+                    
                     if (index > -1) {
                       this.documenti.splice(index, 1);
                     }
@@ -183,7 +178,7 @@ export class AutorizzazioneUscitaComponent implements OnInit {
           }
         },
         err=> {
-          console.log("Error ", err);
+          
           this.messageService.showMessageError("Cancellazione fattura annullata");
         })
   }

@@ -11,7 +11,6 @@ import { CucinaService } from 'src/app/service/cucina.service';
 export class DialogMenuGeneraleComponent implements OnInit {
 
   arrayWeek: MenuGeneraleView[];
-
   constructor(
     private cucinaService: CucinaService,
     public dialogRef: MatDialogRef<DialogMenuGeneraleComponent>,

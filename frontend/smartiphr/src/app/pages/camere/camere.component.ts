@@ -26,6 +26,7 @@ import Fill from "ol/style/Fill";
 import Text from "ol/style/Text";
 import { ActivatedRoute, ParamMap } from "@angular/router";
 import { Color } from "ol/color";
+import { MessagesService } from "../../service/messages.service";
 
 @Component({
   selector: "app-camere",
@@ -115,7 +116,8 @@ export class CamereComponent implements OnInit {
   constructor(
     private mapService: MapService,
     private camereService: CamereService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private messageService: MessagesService
   ) {
     this.selectedPiano = "2p";
     this.editMode = false;
@@ -217,19 +219,19 @@ export class CamereComponent implements OnInit {
     const polygon = vectorSource.getFeatures()[0].getGeometry() as Polygon;
     const coordinate = polygon.getCoordinates()[0][0];
 
-    this.text.setText(`${this.selectedCamera.camera}\nN. Posti ${this.selectedCamera.numPostiLiberi}/${this.selectedCamera.numMaxPosti}`);
+    this.text.setText(`${this.selectedCamera.camera}\nN. Posti ${this.selectedCamera.numPostiOccupati}/${this.selectedCamera.numMaxPosti}`);
     this.cameraStyle.setText(this.text);
 
     const colorRGB = () => {
-      if (this.selectedCamera.numPostiLiberi === 0) return [0, 0 ,0, 0.3] as Color;
+      if (this.selectedCamera.numPostiOccupati === 0) return [0, 0 ,0, 0.3] as Color;
 
       //if((this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) === 0) {
       //
       //}
 
       return [
-        (this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) === 0 ? 255 : 0,
-        (this.selectedCamera.numMaxPosti-this.selectedCamera.numPostiLiberi) !== 0 ? 255 : 0,
+        (this.selectedCamera.numMaxPosti - this.selectedCamera.numPostiOccupati) === 0 ? 255 : 0,
+        (this.selectedCamera.numMaxPosti - this.selectedCamera.numPostiOccupati) !== 0 ? 255 : 0,
         0,
         0.3
       ];
@@ -255,6 +257,8 @@ export class CamereComponent implements OnInit {
   saveLayerCamera() {
     this.camereService.update(this.selectedCamera).subscribe((res) => {
       console.log(res);
+      this.messageService.showMessage("Camera Aggiornata!");
+      this.editMode = false;
     });
   }
 

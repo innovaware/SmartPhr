@@ -46,11 +46,11 @@ export class DimissioniComponent implements OnInit {
   async showDocument(doc: DocumentoPaziente) {
     console.log("doc: ", JSON.stringify(doc));
     this.uploadService
-    .download(doc.filename, doc._id, doc.type)
+    .download(doc.filename, doc.paziente, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -124,6 +124,10 @@ export class DimissioniComponent implements OnInit {
   }
 
   async saveDocDimissione(doc: DocumentoPaziente) {
+    if (!doc.file) {
+      this.messageService.showMessageError("Inserire il file");
+      return;
+    }
     const typeDocument = "Dimissione";
     const path = "Dimissione";
     const file: File = doc.file;

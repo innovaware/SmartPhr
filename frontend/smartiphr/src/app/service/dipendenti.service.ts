@@ -14,10 +14,14 @@ export class DipendentiService {
 
   api: string = environment.api;
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient) { }
 
   async get(): Promise<Dipendenti[]> {
     return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti").toPromise();
+  }
+
+  getObservable(): Observable<Dipendenti[]> {
+    return this.http.get<Dipendenti[]>(this.api + "/api/dipendenti");
   }
 
   async getById(id: string): Promise<Dipendenti> {
@@ -29,14 +33,14 @@ export class DipendentiService {
   }
 
   save(data: Dipendenti): Promise<Dipendenti> {
-    var body = {dipendente: data };
+    var body = { dipendente: data };
     return this.http
       .put<Dipendenti>(this.api + "/api/dipendenti/" + data._id, body)
       .toPromise();
   }
 
   insert(data: Dipendenti): Promise<Dipendenti> {
-    var body = {dipendente: data };
+    var body = { dipendente: data };
     return this.http
       .post<Dipendenti>(this.api + "/api/dipendenti", body)
       .toPromise();

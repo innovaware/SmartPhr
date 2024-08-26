@@ -89,7 +89,6 @@ export class TableOspitiComponent implements OnInit, OnDestroy {
   }
 
   async deletePatient(paziente: Paziente) {
-    console.log("Delete patient:", paziente);
 
     if (this.deletePatientEmiter !== undefined) {
       this.deletePatientEmiter.emit(paziente);

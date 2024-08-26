@@ -1,6 +1,6 @@
 import { Camere } from "./camere";
+import { Paziente } from "./paziente";
 import { Registro } from "./Registro";
-import { User } from "./user";
 
 export class RegistroArmadio implements Registro {
   static clone(obj: RegistroArmadio) {
@@ -13,8 +13,7 @@ export class RegistroArmadio implements Registro {
   data: Date;
   note: string;
   firma: string;
-
+  paziente?: String;
+  pazienteInfo?: Paziente;
   cameraInfo?: Camere;
-  userInfo?: User;
-
 }

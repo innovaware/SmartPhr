@@ -151,7 +151,8 @@ router.post("/", async (req, res) => {
         oraFine: "",
         turno: req.body.turno,
         mansione: req.body.mansione,
-        user: req.body.user
+        user: req.body.user,
+        note: ""
     });
     // Salva i dati sul mongodb
     const result = await presenze.save();
@@ -181,7 +182,8 @@ router.put("/:id", async (req, res) => {
       { _id: id },
       {
           $set: {
-              oraFine: req.body.oraFine
+              oraFine: req.body.oraFine,
+              note: req.body.note
         },
       }
     );

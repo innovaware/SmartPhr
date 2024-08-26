@@ -41,7 +41,15 @@ import { UploadService } from "src/app/service/upload.service";
       });
     }
   
-    ngOnInit() {}
+  ngOnInit() {
+    this.fattureFornitori = [];
+
+    this.fattureFornitoriService.get().subscribe((curs: FattureFornitori[]) => {
+      this.fattureFornitori = curs;
+      this.dataSource = new MatTableDataSource<FattureFornitori>(this.fattureFornitori);
+      this.dataSource.paginator = this.paginator;
+    });
+  }
   
   
     applyFilter(event: Event) {
@@ -67,10 +75,10 @@ import { UploadService } from "src/app/service/upload.service";
         this.uploadService
           .download(fattura.filename, fattura.identifyUserObj, "fatture")
           .then((x) => {
-            console.log("download: ", x);
+            
             x.subscribe(
               (data) => {
-                console.log("download: ", data);
+                
                 const newBlob = new Blob([data as BlobPart], {
                   type: "application/pdf",
                 });
@@ -122,4 +130,3 @@ import { UploadService } from "src/app/service/upload.service";
     } */
 
   }
-  

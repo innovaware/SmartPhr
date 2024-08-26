@@ -1,0 +1,119 @@
+<div class="container-fluid">
+    <div class="row">
+        <div class="col">
+            <h1 class="title">Impostazioni - Impostazioni generali</h1>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col">
+            <hr />
+        </div>
+    </div>
+    <mat-tab-group mat-align-tabs="start">
+        <mat-tab label="Regolamento Interno">
+            <app-upload-doc [dipendente]="dipendente" [tipo]="Regolamento"></app-upload-doc>
+        </mat-tab>
+        <mat-tab label="Configurazione scadenze">
+            <br />
+            <div class="container">
+                <div class="row">
+                    <div class="col-2">
+                        <button mat-button class="btn" title="Salva" (click)="updateSettings()">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" style="color:dodgerblue;" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+                                <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
+                                <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z" />
+                            </svg>
+                            <br />
+                            Salva
+                        </button>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <div class="row">
+                    <div class="col-2">
+                        <label>Alert contratto consulenti: </label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field>
+                            <input matInput type="number" placeholder="Alert Contratto Consulenti" [(ngModel)]="setting.alertContratto" min="0">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <p>Indicare il numero di giorni preavviso della scadenza contratto consulenti</p>
+                    </div>
+                </div>
+                <br />
+                <div class="row">
+                    <div class="col-2">
+                        <label>Alert diario clinico: </label>
+                        <br />
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field>
+                            <input matInput type="number" placeholder="Alert Diario Clinico" [(ngModel)]="setting.alertDiarioClinico" min="0">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-2"></div>
+                    <div class="col-5">
+                        <p>Indicare il numero di giorni di inattività Nel Diario Clinico</p>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-2">
+                        <label>Intervallo menù Invernale: </label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Menu invernale Inizio</mat-label>
+                            <input matInput [matDatepicker]="invernaleStart" [(ngModel)]="setting.menuInvernaleStart">
+                            <mat-datepicker-toggle matSuffix [for]="invernaleStart"></mat-datepicker-toggle>
+                            <mat-datepicker #invernaleStart></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Menu invernale Fine</mat-label>
+                            <input matInput [matDatepicker]="invernaleEnd" [(ngModel)]="setting.menuInvernaleEnd">
+                            <mat-datepicker-toggle matSuffix [for]="invernaleEnd"></mat-datepicker-toggle>
+                            <mat-datepicker #invernaleEnd></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-4">
+                        <p>Indicare il periodo per il menù invernale</p>
+                    </div>
+                </div>
+
+                <br />
+                <div class="row">
+                    <div class="col-2">
+                        <label>Intervallo menù Estivo: </label>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Menu estivo Inizio</mat-label>
+                            <input matInput [matDatepicker]="estivoStart" [(ngModel)]="setting.menuEstivoStart">
+                            <mat-datepicker-toggle matSuffix [for]="estivoStart"></mat-datepicker-toggle>
+                            <mat-datepicker #estivoStart></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3">
+                        <mat-form-field appearance="fill">
+                            <mat-label>Menu estivo Fine</mat-label>
+                            <input matInput [matDatepicker]="estivoEnd" [(ngModel)]="setting.menuEstivoEnd">
+                            <mat-datepicker-toggle matSuffix [for]="estivoEnd"></mat-datepicker-toggle>
+                            <mat-datepicker #estivoEnd></mat-datepicker>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-4">
+                        <p>Indicare il periodo per il menù Estivo</p>
+                    </div>
+                </div>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
+</div>

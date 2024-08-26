@@ -105,6 +105,25 @@ tbody {
   background-color: #8a575e;
   color: white;
 }
+.event_type_corsi {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.event_type_corsiFormazione {
+  background-color: blue;
+  color: white;
+}
+
+.event_type_controlli {
+  background-color: orange;
+  color: black;
+}
+
+.event_type_agendaClinica {
+  background-color: royalblue;
+  color: white;
+}
 
 .title {
   text-align: center;

@@ -78,7 +78,6 @@ export class TableDipendentiComponent implements OnInit {
 
 
   deleteDipendente(row: Dipendenti) {
-    console.log("Delete dipendente:", row);
 
     if (this.deletePatientEmiter !== undefined) {
       this.deletePatientEmiter.emit(row);
@@ -166,23 +165,28 @@ ngOnDestroy() {
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      console.log("result insert paziente", result);
+      
+      this.dipendentiService.get().then((resulta) => {
+        this.dipendenti = resulta;
+        this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
+        this.dataSource.paginator = this.paginator;
+      });
 
-      if (dialogRef != undefined)
-        dialogRef.afterClosed().subscribe((result) => {
-          console.log("The dialog was closed");
-          if (result != undefined) {
-            this.dipendenti.push(result);
-            this.dataSource.data = this.dipendenti;
-            console.log("Inserito consulente", result);
-          }
-        });
-      else {
-        this.dipendentiService.get().then((paz: Dipendenti[]) => {
-          this.dipendenti = paz;
-          this.eventsSubject.next(this.dipendenti);
-        });
-      }
+      //if (dialogRef != undefined)
+      //  dialogRef.afterClosed().subscribe((result) => {
+      //    console.log("The dialog was closed");
+      //    if (result != undefined) {
+      //      this.dipendenti.push(result);
+      //      this.dataSource.data = this.dipendenti;
+      //      console.log("Inserito consulente", result);
+      //    }
+      //  });
+      //else {
+      //  this.dipendentiService.get().then((paz: Dipendenti[]) => {
+      //    this.dipendenti = paz;
+      //    this.eventsSubject.next(this.dipendenti);
+      //  });
+      //}
     });
 
   }

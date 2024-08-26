@@ -2,23 +2,26 @@ const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 
 const CameraSchema = mongoose.Schema({
-  camera: String,
-  piano: String,
-  geometry: String,
-  forPatient: Boolean,
-  order: Number,
-  numPostiLiberi: Number,
-  numMaxPosti: Number,
+    camera: String,
+    piano: String,
+    geometry: String,
+    forPatient: Boolean,
+    order: Number,
+    numPostiLiberi: Number,
+    numPostiOccupati: Number,
+    numMaxPosti: Number,
+    operatore: ObjectId,
+    sanificata: Boolean,
+    dataSanificazione: Date,
+    firmaSanificazione: String,
 
-  sanificata: Boolean,
-  dataSanificazione: Date,
-  firmaSanificazione: ObjectId,
+    armadioCheck: Number,
+    dataArmadioCheck: Date,
+    firmaArmadio: String,
 
-  armadioCheck: Number,
-  dataArmadioCheck: Date,
-  firmaArmadio: ObjectId,
-
-  statoPulizia: Number,
+    statoPulizia: Number,
+    trappola: Boolean,
+    verificaDerattificazione: Boolean,
 });
 
 module.exports = mongoose.model("Camera", CameraSchema, "camera");

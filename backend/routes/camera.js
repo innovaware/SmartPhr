@@ -6,206 +6,207 @@ const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/piano/:p", async (req, res) => {
-  const { p } = req.params;
-  try {
-    const getData = () => {
-      //const query = {piano: p}
+    const { p } = req.params;
 
-      const query = [
-        {
-          '$match': {
-            'piano': p
-          }
-        }, {
-          '$lookup': {
-            'from': 'user', 
-            'localField': 'firmaArmadio', 
-            'foreignField': '_id', 
-            'as': 'firmaArmadio'
-          }
-        }
-      ];
-      // console.log("Query by piano: ", query);
-      return Camere.aggregate(query);
-      // return Camere.find(query);
-    };
+    try {
+        const getData = () => {
+            const query = [
+                {
+                    '$match': {
+                        'piano': p
+                    }
+                },
+                {
+                    '$lookup': {
+                        'from': 'user',
+                        'localField': 'firmaArmadio',
+                        'foreignField': '_id',
+                        'as': 'firmaArmadio'
+                    }
+                }
+            ];
+            // console.log("Query by piano: ", query);
+            return Camere.aggregate(query);
+            // return Camere.find(query);
+        };
 
-    const camere = await getData();
-    res.status(200).json(camere);
-    return;
-  
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
+        const camere = await getData();
+        res.status(200).json(camere);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  try {
-    const getData = () => {
-      return Camere.findById(id);
-    };
 
-    const camere = await getData();
-    res.status(200).json(camere);
-  
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        const getData = () => {
+            return Camere.findById(id);
+        };
+
+        const camere = await getData();
+        res.status(200).json(camere);
+
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const camera = await Camere.updateOne(
-      { _id: id },
-      {
-        $set: {
-          camera: req.body.camera,
-          piano: req.body.piano,
-          geometry: req.body.geometry,
-          forPatient: req.body.forPatient,
-          order: req.body.order,
-          numPostiLiberi: req.body.numPostiLiberi,
-          numMaxPosti: req.body.numMaxPosti,
-          sanificata: req.body.sanificata,
-          dataSanificazione: req.body.dataSanificazione,
-          firmaSanificazione: req.body.firmaSanificazione,
+    try {
+        const { id } = req.params;
 
-          armadioCheck: req.body.armadioCheck,
-          dataArmadioCheck: req.body.dataArmadioCheck,
-          firmaArmadio: req.body.firmaArmadio,
-          statoPulizia: req.body.statoPulizia,
-        },
-      }
-    );
+        // Loggare l'input per il debug
+        console.log("Update Camera req.body:", req.body);
 
-    //console.log("Update Camera req.body:", req.body);
-    console.log("Update Camera:", camera);
-    
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        // Validazione dei dati in req.body (esempio di base, personalizza come necessario)
+        if (!req.body.camera || !req.body.piano) {
+            return res.status(400).json({ Error: "Dati mancanti" });
+        }
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = "CAMEREALL*";
-      redisClient.del(searchTerm);
+        const camera = await Camere.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    camera: req.body.camera,
+                    piano: req.body.piano,
+                    geometry: req.body.geometry,
+                    forPatient: req.body.forPatient,
+                    order: req.body.order,
+                    numPostiLiberi: req.body.numPostiLiberi,
+                    numMaxPosti: req.body.numMaxPosti,
+                    sanificata: req.body.sanificata,
+                    dataSanificazione: req.body.dataSanificazione,
+                    firmaSanificazione: req.body.firmaSanificazione,
+                    numPostiOccupati: req.body.numPostiOccupati,
+                    armadioCheck: req.body.armadioCheck,
+                    dataArmadioCheck: req.body.dataArmadioCheck,
+                    statoPulizia: req.body.statoPulizia,
+                    trappola: req.body.trappola,
+                    verificaDerattificazione: req.body.verificaDerattificazione,
+                },
+            }
+        );
+
+        console.log("Update Camera result:", camera);
+
+        res.status(200).json(camera);
+    } catch (err) {
+        console.error("Errore durante l'aggiornamento della camera:", err);
+        res.status(500).json({ Error: err.message });
     }
-    
-
-    res.status(200);
-    res.json(camera);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 router.post("/", async (req, res) => {
-  try {
-    const camera = new Camere({
-      camera: req.body.camera,
-      piano: req.body.piano,
-      geometry: req.body.geometry,
-      forPatient: req.body.forPatient,
-      order: req.body.order,
-      numPostiLiberi: req.body.numPostiLiberi,
-      numMaxPosti: req.body.numPostiLiberi,
-      sanificata: req.body.sanificata,
-      dataSanificazione: req.body.dataSanificazione,
-      firmaSanificazione: req.body.firmaSanificazione,
+    try {
+        const camera = new Camere({
+            camera: req.body.camera,
+            piano: req.body.piano,
+            geometry: req.body.geometry,
+            forPatient: req.body.forPatient,
+            order: req.body.order,
+            numPostiLiberi: req.body.numPostiLiberi,
+            numMaxPosti: req.body.numPostiLiberi,
+            sanificata: req.body.sanificata,
+            dataSanificazione: req.body.dataSanificazione,
+            firmaSanificazione: req.body.firmaSanificazione,
+            numPostiOccupati: req.body.numPostiOccupati,
+            armadioCheck: req.body.armadioCheck,
+            dataArmadioCheck: req.body.dataArmadioCheck,
+            firmaArmadio: req.body.firmaArmadio,
+            statoPulizia: req.body.statoPulizia,
+        });
 
-      armadioCheck: req.body.armadioCheck,
-      dataArmadioCheck: req.body.dataArmadioCheck,
-      firmaArmadio: req.body.firmaArmadio,
-      statoPulizia: req.body.statoPulizia,
-    });
+        // Salva i dati sul mongodb
+        const result = await camera.save();
 
-    // Salva i dati sul mongodb
-    const result = await camera.save();
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`CAMERE*`);
+        }
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`CAMERE*`);
+        res.status(200);
+        res.json(result);
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
     }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
 });
 
 
 router.put("/sanifica/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    console.log("Sanificazione CAMERA", id);
-    const camera = await Camere.updateOne(
-      { _id: id },
-      {
-        $set: {
-          camera: req.body.camera,
-          piano: req.body.piano,
-          geometry: req.body.geometry,
-          forPatient: req.body.forPatient,
-          order: req.body.order,
-          numPostiLiberi: req.body.numPostiLiberi,
-          numMaxPosti: req.body.numMaxPosti,
+    try {
+        const { id } = req.params;
+        console.log("Sanificazione CAMERA", id);
+        console.log(req.body);
+        const camera = await Camere.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    camera: req.body.camera,
+                    piano: req.body.piano,
+                    geometry: req.body.geometry,
+                    forPatient: req.body.forPatient,
+                    order: req.body.order,
+                    numPostiLiberi: req.body.numPostiLiberi,
+                    numMaxPosti: req.body.numMaxPosti,
+                    operatore: req.body.operatore,
+                    sanificata: req.body.sanificata,
+                    dataSanificazione: req.body.dataSanificazione,
+                    firmaSanificazione: req.body.firmaSanificazione,
+                    armadioCheck: req.body.armadioCheck,
+                    dataArmadioCheck: req.body.dataArmadioCheck,
+                    statoPulizia: req.body.statoPulizia,
+                    trappola: req.body.trappola,
+                    verificaDerattificazione: req.body.verificaDerattificazione,
+                },
+            }
+        );
 
-          sanificata: req.body.sanificata,
-          dataSanificazione: req.body.dataSanificazione,
-          firmaSanificazione: req.body.firmaSanificazione,
+        new registroSanificazione({
+            cameraId: id,
+            stato: req.body.sanificata,
+            data: req.body.dataSanificazione,
+            note: req.body.note,
+            firma: req.body.firmaSanificazione,
+            operatore: req.body.operatore,
+        }).save();
 
-          armadioCheck: req.body.armadioCheck,
-          dataArmadioCheck: req.body.dataArmadioCheck,
-          firmaArmadio: req.body.firmaArmadio,
-          statoPulizia: req.body.statoPulizia,
-        },
-      }
-    );
+        //console.log("Update Camera req.body:", req.body);
+        // console.log("Update Camera:", camera);
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    new registroSanificazione({
-      cameraId: id,
-      stato: req.body.sanificata,
-      data: req.body.dataSanificazione,
-      note: req.body.note,
-      firma: req.body.firmaSanificazione
-    }).save();
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = "CAMEREALL*";
+            redisClient.del(searchTerm);
+        }
 
-    //console.log("Update Camera req.body:", req.body);
-    // console.log("Update Camera:", camera);
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = "CAMEREALL*";
-      redisClient.del(searchTerm);
+        res.status(200);
+        res.json(camera);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-    
-
-    res.status(200);
-    res.json(camera);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const camera = await Camere.remove({ _id: id });
+    try {
+        const { id } = req.params;
+        const camera = await Camere.remove({ _id: id });
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`CAMERE*`);
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`CAMERE*`);
+        }
+
+        res.status(200);
+        res.json(camera);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    res.status(200);
-    res.json(camera);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 module.exports = router;

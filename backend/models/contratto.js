@@ -4,6 +4,7 @@ const ContrattoSchema = mongoose.Schema({
   idConsulente: String,
   filename: String,
   dateupload: Date,
+  dataScadenza: Date,
   note: String,
 });
 

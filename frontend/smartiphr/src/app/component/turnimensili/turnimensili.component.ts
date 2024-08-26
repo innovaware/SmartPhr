@@ -34,7 +34,8 @@ export class TurnimensiliComponent implements OnInit {
     "nome",
     "cf",
     "turno",
-    "dataRif"
+    "dataRif",
+    "type"
   ];
 
   dataSource: MatTableDataSource<Turnimensili>;

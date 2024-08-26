@@ -3,6 +3,9 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { Magazzino, TypeProcedureMagazzino } from 'src/app/models/magazzino';
 import { MagazzinoService } from 'src/app/service/magazzino.service';
 import { MessagesService } from 'src/app/service/messages.service';
+import { UsersService } from '../../service/users.service';
+import { AuthenticationService } from '../../service/authentication.service';
+import { User } from '../../models/user';
 
 @Component({
   selector: 'app-dialog-carico-magazzino',
@@ -11,10 +14,12 @@ import { MessagesService } from 'src/app/service/messages.service';
 })
 export class DialogCaricoMagazzinoComponent implements OnInit {
   quantita: number;
-
+  user: User;
   constructor(
     private messageService: MessagesService,
     private magazzinoService: MagazzinoService,
+    private userService: UsersService,
+    private authenticationService: AuthenticationService,
     public dialogRef: MatDialogRef<DialogCaricoMagazzinoComponent>,
     @Inject(MAT_DIALOG_DATA) public data: {
       magazzino: Magazzino,
@@ -23,7 +28,12 @@ export class DialogCaricoMagazzinoComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    this.user = new User();
     this.quantita = 0;
+    this.authenticationService.getCurrentUserAsync().subscribe(
+      (user) => {
+        this.user = user;
+      });
   }
 
   check() {
@@ -40,6 +50,8 @@ export class DialogCaricoMagazzinoComponent implements OnInit {
 
       this.check();
 
+
+
       if (this.data.type === TypeProcedureMagazzino.Carico) {
         this.data.magazzino.quantita+=this.quantita;
       }
@@ -47,7 +59,11 @@ export class DialogCaricoMagazzinoComponent implements OnInit {
       if (this.data.type === TypeProcedureMagazzino.Scarico) {
         this.data.magazzino.quantita-=this.quantita;
       }
-
+      this.data.magazzino.quantita < 0 ?
+        this.data.magazzino.quantita = 0 :
+        this.data.magazzino.quantita =
+        this.data.magazzino.quantita;
+      this.data.magazzino.idUser = this.user._id;
       this.magazzinoService.carico_scarico(this.data.magazzino, this.data.type)
           .subscribe(
             result=> {

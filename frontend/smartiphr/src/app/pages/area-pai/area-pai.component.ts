@@ -48,7 +48,7 @@ export class AreaPaiComponent implements OnInit {
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogPaiComponent, {
           data: { paziente: paziente, readonly: true },
-          width: "1024px",
+          width: "1200px",
         }),
     });
 

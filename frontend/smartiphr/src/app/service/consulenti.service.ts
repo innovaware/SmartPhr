@@ -16,6 +16,9 @@ export class ConsulentiService {
   async getConsulenti(): Promise<Consulenti[]> {
     return this.http.get<Consulenti[]>(this.api + "/api/consulenti").toPromise();
   }
+  async getById(id:String): Promise<Consulenti> {
+    return this.http.get<Consulenti>(this.api + "/api/consulenti/"+id).toPromise();
+  }
 
   insert(consulente: Consulenti): Observable<Consulenti> {
     var body = consulente;

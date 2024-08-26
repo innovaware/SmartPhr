@@ -24,6 +24,7 @@ import { cartellaAssSociale } from "src/app/models/cartellaAssSociale";
 import { DocumentoPaziente } from "src/app/models/documentoPaziente";
 import { Documento } from "src/app/models/documento";
 import { AltroCartellaSociale } from "src/app/models/altroCartellaSociale";
+import { ICF } from "../../models/ICF";
 
 @Component({
   selector: 'app-dialog-cartella-assistente-sociale',
@@ -36,7 +37,7 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
   indiceSocializzazione: IndiceSocializzazione;
   public document: any[] = [];
   public uploading: boolean;
-
+  icf: ICF;
 
   paziente: Paziente;
 
@@ -65,7 +66,10 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
       this.paziente.schedaAssSociale.valutazioneSociale = new valutazioneSociale();
     }
 
-
+    if (this.paziente.schedaAssSociale.ICF !== undefined && this.paziente.schedaAssSociale.ICF !== null) this.icf = this.paziente.schedaAssSociale.ICF as ICF;
+    else {
+      this.paziente.schedaAssSociale.ICF = new ICF();
+    }
 
     if (this.paziente.schedaAssSociale.indiceSocializzazione == undefined) {
       this.paziente.schedaAssSociale.indiceSocializzazione = new IndiceSocializzazione();
@@ -83,10 +87,13 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
 
     this.indiceSocializzazione = this.paziente.schedaAssSociale
       .indiceSocializzazione as IndiceSocializzazione;
+      
 
       this.altroCartellaSociale = this.paziente.schedaAssSociale
       .altroCartellaSociale as AltroCartellaSociale;
-   
+
+    this.icf = this.paziente.schedaAssSociale.ICF as ICF;
+    
   }
 
 
@@ -100,9 +107,9 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
     this.uploadService
       .download(document.name, this.paziente._id, '')
       .then((x) => {
-        //console.log("download: ", x);
+        //
         x.subscribe((data) => {
-           console.log("download: ", data);
+           
            const newBlob = new Blob([data as BlobPart], {
              type: "application/pdf",
            });
@@ -185,9 +192,9 @@ export class DialogCartellaAssistenteSocialeComponent implements OnInit {
     this.uploadService
     .download(doc.filename, doc._id, doc.type)
       .then((x) => {
-        console.log("download: ", x);
+        
         x.subscribe((data) => {
-          console.log("download: ", data);
+          
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });

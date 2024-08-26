@@ -10,6 +10,7 @@ import { ADL } from 'src/app/models/ADL';
 export class SchedaADLComponent implements OnInit {
 
   @Input() data: ADL;
+  @Input() disable: boolean;
 
   constructor() {
 

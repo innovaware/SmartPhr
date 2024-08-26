@@ -1,0 +1,27 @@
+<div class="container pad">
+  <div class="row">
+    <div class="col ">
+      <ng-container *ngIf="admin">
+        <h1 class="title">Area Amministrativa - Richieste materiale o presidi</h1>
+      </ng-container>
+
+      <ng-container *ngIf="!admin && type=='OSS'">
+        <h1 class="title">Area OSS - Richieste materiale o presidi</h1>
+      </ng-container>
+
+      <ng-container *ngIf="!admin && type=='Infermieri'">
+        <h1 class="title">Area Infermieristica - Richieste materiale o presidi</h1>
+      </ng-container>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <br />
+      <app-richiestePresidi [dipendente]=dipendente
+                            [Admin]=admin
+                            [type]=type>
+      </app-richiestePresidi>
+</div>

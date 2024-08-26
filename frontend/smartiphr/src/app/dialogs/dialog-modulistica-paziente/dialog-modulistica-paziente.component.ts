@@ -64,9 +64,9 @@ export class DialogModulisticaPazienteComponent implements OnInit {
       this.authenticationService.getCurrentUserAsync().subscribe((user) => {
         console.log("get dipendente");
         this.dipendenteService
-          .getByIdUser(user._id)
+          .getByIdUser(user.dipendenteID)
           .then((x) => {
-            console.log("dipendente: " + JSON.stringify(x[0]));
+            
             this.dipendente = x[0];
   
           })
@@ -84,9 +84,9 @@ export class DialogModulisticaPazienteComponent implements OnInit {
       this.uploadService
         .download(documento.filename, "", "")
         .then((x) => {
-          console.log("download: ", x);
+          
           x.subscribe((data) => {
-            console.log("download: ", data);
+            
             const newBlob = new Blob([data as BlobPart], {
               type: "application/pdf",
             });
@@ -129,7 +129,7 @@ export class DialogModulisticaPazienteComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      console.log("upload Documento: ", $event);
+      
       this.nuovoDocumento.filename = file.name;
       this.nuovoDocumento.file = file;
     } else {

@@ -11,7 +11,7 @@ router.get("/registro", async (req, res) => {
         {
           '$lookup': {
             'from': 'user', 
-            'localField': 'firma', 
+            'localField': 'operatore', 
             'foreignField': '_id', 
             'as': 'userInfo'
           }

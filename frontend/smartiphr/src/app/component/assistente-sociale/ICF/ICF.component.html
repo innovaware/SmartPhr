@@ -1,0 +1,817 @@
+<div class="container-fluid tabcontent">
+  <div class="row">
+    <div class="col">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>ICF</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Menomazioni Funzioni Corporee">
+              <br />
+              <table>
+                <tr>
+                  <td colspan="7">Attribuire per ognuna delle seguenti voci il punteggio che si ritiene più idoneo:</td>
+                </tr>
+                <tr>
+                  <td>9 = non applicabile</td>
+                  <td>8 = non specificato </td>
+                  <td>4 = Completa</td>
+                  <td>3 = grave</td>
+                  <td>2 = media</td>
+                  <td>1 = lieve</td>
+                  <td>0 = nessuna menomazione</td>
+                </tr>
+              </table>
+              <br />
+              <table>
+                <tr>
+                  <td>Mentali/intellettive (b110, b114, b117, b140, b144, b156, b164, b167)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.intellettive">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Mentali/comportamentali (b130, b134, b148, b152)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.comportamentali">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Sensoriale e del dolore (b2)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.sensiorialeDolore">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Della voce e dell’eloquio (b3)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.voceEloquio">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td>Dei sistemi cardiovascolare, ematologico, immunologico, respiratorio (b4)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.sistemiCEIR">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Del sistema digerente, metabolico ed endocrino (b5)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.sistemiDME">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Genito urinarie e riproduttive (b6)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.genitoUR">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Neuro-muscolo-scheletriche e corr. al movimento (b7)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.NMS">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Ogni altra funzione corporea</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniFunzioniCorporee.altreFunzioni">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+              </table>
+
+            </mat-tab>
+
+
+            <mat-tab label="Menomazioni strutture Corporee">
+              <br />
+              <table>
+                <tr>
+                  <td colspan="7">Attribuire per ognuna delle seguenti voci il punteggio che si ritiene più idoneo:</td>
+                </tr>
+                <tr>
+                  <td>9 = non applicabile</td>
+                  <td>8 = non specificato </td>
+                  <td>4 = Completa</td>
+                  <td>3 = grave</td>
+                  <td>2 = media</td>
+                  <td>1 = lieve</td>
+                  <td>0 = nessuna menomazione</td>
+                </tr>
+              </table>
+              <br />
+              <table>
+                <tr>
+                  <td>Sistema nervoso (s1)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.sistemaNervoso">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Occhio, orecchio e strutture annesse (s2)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.occhioOrecchio">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Legate alla voce e all’eloquio (s3)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.voce">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Dei sistemi cardiovascolari, ematologici, immun. e respiratorio (s4)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.sistemiCEIR">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+
+                <tr>
+                  <td>Dell’apparato digerente e dei sistemi endocrino e metabolico (s5)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.apparatoDigerente">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Correlati al sistema genitourinario (s6)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.sistemaGenitouriano">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Legati al movimento (s7)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.movimento">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Cute e strutture correlate (s8)</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.cute">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>Ogni altra struttura  corporea</td>
+                  <td>
+                    <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.menomazioniStruttureCorporee.altreStrutture">
+                      <option selected="" value="">Seleziona ...</option>
+                      <option value="9">9</option>
+                      <option value="8">8</option>
+                      <option value="4">4</option>
+                      <option value="3">3</option>
+                      <option value="2">2</option>
+                      <option value="1">1</option>
+                      <option value="0">0</option>
+                    </select>
+                  </td>
+                </tr>
+
+              </table>
+
+            </mat-tab>
+
+
+            <mat-tab label="Fattori ambientali">
+              <br />
+              <table>
+                <tr>
+                  <td colspan="7">Attribuire per ognuna delle seguenti voci il punteggio che si ritiene più idoneo:</td>
+                </tr>
+                <tr>
+                  <td>9 = non applicabile</td>
+                  <td>8 = non specificato </td>
+                  <td>4 = Completa</td>
+                  <td>3 = grave</td>
+                  <td>2 = media</td>
+                  <td>1 = lieve</td>
+                  <td>0 = nessuna barriera/facilitatore</td>
+                </tr>
+              </table>
+              <br />
+
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th style="text-align:center; vertical-align:middle;">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                          <p><strong>Barriera</strong></p>
+                        </div>
+                      </div>
+                    </th>
+                    <th style="text-align:center; vertical-align:middle;">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <p><strong>Facilitatore</strong></p>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Prodotti e tecnologie (e1)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.prodottiTecnologie.barriera">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.prodottiTecnologie.Facilitatore">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Ambiente naturale e cambiamenti effettuati dall’uomo (e2)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.cambiamentiAmbiente.barriera">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.cambiamentiAmbiente.Facilitatore">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Relazioni e sostegno sociale (e3)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.sostegnoSociale.barriera">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.sostegnoSociale.Facilitatore">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Atteggiamenti (e4)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.atteggiamenti.barriera">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.atteggiamenti.Facilitatore">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Servizi e politiche (e5)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.servizi.barriera">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.fattoriAmbientali.servizi.Facilitatore">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </mat-tab>
+
+
+            <mat-tab label="Limitazioni dell’attività e restrizioni della partecipazione">
+              <br />
+              <table>
+                <tr>
+                  <td colspan="7">Attribuire per ognuna delle seguenti voci il punteggio che si ritiene più idoneo:</td>
+                </tr>
+                <tr>
+                  <td>9 = non applicabile</td>
+                  <td>8 = non specificato </td>
+                  <td>4 = Completa</td>
+                  <td>3 = grave</td>
+                  <td>2 = media</td>
+                  <td>1 = lieve</td>
+                  <td>0 = nessuna performance/Capacità</td>
+                </tr>
+              </table>
+              <br />
+
+              <table>
+                <thead>
+                  <tr>
+                    <th></th>
+                    <th style="text-align:center; vertical-align:middle;">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <div>
+                          <p><strong>Performance</strong></p>
+                        </div>
+                      </div>
+                    </th>
+                    <th style="text-align:center; vertical-align:middle;">
+                      <div class="d-flex justify-content-center align-items-center">
+                        <p><strong>Capacità</strong></p>
+                      </div>
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>Apprendimento e applicazione delle conoscenze (d1)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.apprendimento.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.apprendimento.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Compiti ed esigenze generali (d2)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.compiti.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.compiti.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Comunicazione (d3)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.comunicazione.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.comunicazione.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Mobilità (d4)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.mobilita.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.mobilita.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Cura della propria persona (d5)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.cura.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.cura.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Attività domestiche (d6)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.attDomestiche.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.attDomestiche.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Attività interpersonali (d7)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.attInterpersonali.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.attInterpersonali.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Principali aree di vita (d8)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.principaliAreeVita.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.principaliAreeVita.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>Alla vita sociale, civile e di comunità (d9)</td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.vitaSociale.performance">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                    <td>
+                      <select matNativeControl class="custom-select" [disabled]=disable [(ngModel)]="data.limitazioni.vitaSociale.capacita">
+                        <option selected="" value="">Seleziona ...</option>
+                        <option value="9">9</option>
+                        <option value="8">8</option>
+                        <option value="4">4</option>
+                        <option value="3">3</option>
+                        <option value="2">2</option>
+                        <option value="1">1</option>
+                        <option value="0">0</option>
+                      </select>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+
+            </mat-tab>
+
+
+
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+</div>
+

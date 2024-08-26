@@ -1,0 +1,72 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3>Dati Controllo</h3>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<mat-dialog-content>
+    <div class="container-fluid">
+      <div class="row">
+        <!-- <div class="col">
+    <mat-form-field appearance="fill">
+      <mat-label>Data di Controllo</mat-label>
+      <input matInput [matDatepicker]="datacontrollo" [(ngModel)]="dataControllo">
+      <mat-datepicker-toggle matSuffix [for]="datacontrollo"></mat-datepicker-toggle>
+      <mat-datepicker #datacontrollo></mat-datepicker>
+    </mat-form-field>
+  </div>-->
+        <div class="col">
+          <mat-form-field appearance="fill">
+            <mat-label>Tipologia di controllo</mat-label>
+            <select matNativeControl class="custom-select" [(ngModel)]="tipologia">
+              <option value="">Seleziona ...</option>
+              <option value="Gestione Infermeria">Gestione Infermeria</option>
+              <option value="Riordino Armadi">Riordino Armadi</option>
+            </select>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="esito" [(ngModel)]="esito">
+            <label class="form-check-label" for="esito">Esito Positivo</label>
+          </div>
+        </div>
+      </div>
+        <div class="row">
+            <div class="col">
+                <mat-label>Note: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+        <br />
+    </div>
+</mat-dialog-content>
+
+
+
+<div mat-dialog-actions>
+    <div class="bottom-actions">
+        <button mat-button  [mat-dialog-close]="true" (click)="salva()">Salva</button>
+        <button mat-button [mat-dialog-close]="true">Chiudi</button>
+    </div>
+</div>

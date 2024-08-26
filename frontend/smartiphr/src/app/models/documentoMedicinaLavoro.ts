@@ -2,15 +2,16 @@ export class DocumentoMedicinaLavoro {
   static clone(obj: DocumentoMedicinaLavoro) {
     return JSON.parse(JSON.stringify(obj));
   }
-
+  dipendente?: String;
   _id?: string;
-  filenameRichiesta: string;
+  filenameRichiesta?: string;
   dateuploadRichiesta?: Date;
   noteRichiesta?: string;
 
-  filenameCertificato: string;
+  filenameCertificato?: string;
   dateuploadCertificato?: Date;
   noteCertificato?: string;
 
-  file?: File;
+  fileRichiesta?: File;
+  fileCertificato?: File;
 }

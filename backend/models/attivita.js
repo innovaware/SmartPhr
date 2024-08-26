@@ -10,7 +10,7 @@ const AttivitaSchema = mongoose.Schema({
     //description: String,
     note: String,
     //completato: Boolean,
-
+    descrizione: String,
     letto: Boolean,
     diuresi: Boolean,
     evacuazione: Boolean,

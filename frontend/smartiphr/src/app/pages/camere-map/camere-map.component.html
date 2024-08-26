@@ -3,7 +3,8 @@
     <div class="col">
       <h1 class="title" *ngIf="isLetti">AREA CAMERE - Letti</h1>
       <h1 class="title" *ngIf="isSanificazione">AREA CAMERE - Sanificazione</h1>
-      <h1 class="title" *ngIf="isArmadi">AREA CAMERE - Armadi</h1>
+      <h1 class="title" *ngIf="isArmadi">AREA CAMERE - Armadi Mensili</h1>
+      <h1 class="title" *ngIf="isStagionale">AREA CAMERE - Armadi Stagionali</h1>
     </div>
 
     <div class="col middle">
@@ -19,9 +20,17 @@
       </div>
 
       <div class="didascalia" *ngIf="isArmadi">
-        <div style="padding-right:20px"><div class="red"></div> <span>Non Verificato</span></div>
-        <div style="padding-right:20px"><div class="orange"></div> <span>Parzialmente</span></div>
-        <div style="padding-right:20px"><div class="green"></div> <span>Verificato</span></div>
+          <div style="padding-right:20px"><div class="red"></div> <span>Non Verificato</span></div>
+          <div style="padding-right:20px"><div class="orange"></div> <span>Parzialmente</span></div>
+          <div style="padding-right:20px"><div class="green"></div> <span>Verificato</span></div>
+          <div style="padding-right:20px"> <div class="gray"></div> <span>Nessun Paziente</span></div>
+      </div>
+
+      <div class="didascalia" *ngIf="isStagionale">
+          <div style="padding-right:20px"><div class="red"></div> <span>Non effettuato</span></div>
+          <div style="padding-right:20px"><div class="orange"></div> <span>Parzialmente</span></div>
+          <div style="padding-right:20px"><div class="green"></div> <span>Effettuato</span></div>
+          <div style="padding-right:20px"> <div class="gray"></div> <span>Nessun Paziente</span></div>
       </div>
 
     </div>

@@ -4,6 +4,7 @@ import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { Armadio } from '../models/armadio';
 import { RegistroArmadio } from "../models/RegistroArmadio";
+import { Paziente } from "../models/paziente";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,15 @@ export class ArmadioService {
     return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/${idCamera}?date=${date.toISOString()}`, { headers });
   }
 
+  getByCamera(idCamera: string): Observable<Armadio[]> {
+    const headers = {}
+    return this.http.get<Armadio[]>(`${this.api}/api/armadio/camera/get/${idCamera}`, { headers });
+  }
+
+  getByPaziente(idPaziente: String): Promise<Armadio>{
+    return this.http.get<Armadio>(`${this.api}/api/armadio/paziente/${idPaziente}`).toPromise();
+  }
+
   update(armadio: Armadio, note: string) {
     return this.http.put(`${this.api}/api/armadio/${armadio._id}`, {armadio: armadio, note: note});
   }
@@ -31,5 +41,8 @@ export class ArmadioService {
 
   add(armadio: Armadio, note: string) {
     return this.http.post(`${this.api}/api/armadio`, {armadio: armadio, note: note});
+  }
+  delete(armadio: Armadio) {
+    return this.http.delete(`${this.api}/api/armadio/${armadio._id}`);
   }
 }

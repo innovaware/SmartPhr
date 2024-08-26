@@ -12,15 +12,12 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
         const getData = (query) => {
             return Consulenti.find(query);
         };
 
-        const showOnlyCancellati = req.query.show == "deleted";
-        const showAll = req.query.show == "all";
+        const showOnlyCancellati = req.query.show === "deleted";
+        const showAll = req.query.show === "all";
 
         if (showOnlyCancellati || showAll) {
             console.log("Show all or deleted");
@@ -31,35 +28,15 @@ router.get("/", async (req, res) => {
             const consulenti = await getData(query);
             res.status(200).json(consulenti);
         } else {
-
-            if (redisClient == undefined || redisDisabled) {
-                const consulenti = await getData({
-                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                })
-
-                if (consulenti.length > 0) res.status(200).json(consulenti);
-                else res.status(404).json({ error: "No consultant found" });
-
-                return;
-            }
-
-            const searchTerm = `CONSULENTIALL`;
-            redisClient.get(searchTerm, async (err, data) => {
-                if (err) throw err;
-
-                if (data) {
-                    res.status(200).send(JSON.parse(data));
-                } else {
-                    const consulenti = await getData({
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    });
-
-                    if (consulenti.length > 0) res.status(200).json(consulenti);
-                    else res.status(404).json({ error: "No consultant found" });
-
-                    redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
-                }
+            const consulenti = await getData({
+                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
             });
+
+            if (consulenti.length > 0) {
+                res.status(200).json(consulenti);
+            } else {
+                res.status(404).json({ error: "No consultant found" });
+            }
         }
     } catch (err) {
         console.error("Error: ", err);
@@ -67,12 +44,10 @@ router.get("/", async (req, res) => {
     }
 });
 
+
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
         if (id == undefined || id === "undefined") {
             console.log("Error id is not defined ", id);
             res.status(404).json({ Error: "Id not defined" });
@@ -90,32 +65,18 @@ router.get("/:id", async (req, res) => {
             });
         };
 
-        if (redisClient == undefined || redisDisabled) {
-            const consulenti = await getData();
+        const consulenti = await getData();
 
-            if (consulenti != null) res.status(200).json(consulenti);
-            else res.status(404).json({ error: "No patient found" });
-            return;
+        if (consulenti != null && consulenti.length > 0) {
+            res.status(200).json(consulenti);
+        } else {
+            res.status(404).json({ error: "No patient found" });
         }
-
-        const searchTerm = `CONSULENTIBY${id}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data && !redisDisabled) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const consulenti = await getData();
-
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(consulenti));
-                if (consulenti != null) res.status(200).json(consulenti);
-                else res.status(404).json({ error: "No patient found" });
-            }
-        });
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
+
 
 router.post("/", async (req, res) => {
     try {

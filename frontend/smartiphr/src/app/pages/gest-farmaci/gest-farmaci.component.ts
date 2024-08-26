@@ -70,7 +70,7 @@ export class GestFarmaciComponent implements OnInit {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
-        .getByIdUser(user._id)
+        .getByIdUser(user.dipendenteID)
         .then((x) => {
           console.log("user: " , user);
           console.log("\n\n\ndipendente: " , x);

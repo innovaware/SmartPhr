@@ -2,7 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
 import { environment } from 'src/environments/environment';
-import { Indumento, IndumentoTemplate } from '../models/armadio';
+import { Indumento } from "../models/indumento";
 
 @Injectable({
   providedIn: 'root'
@@ -13,12 +13,12 @@ export class IndumentiService {
 
   constructor(private http: HttpClient) {}
 
-  getIndumenti(): Observable<IndumentoTemplate[]> {
+  getIndumenti(): Observable<Indumento[]> {
     const headers = {}
-    return this.http.get<IndumentoTemplate[]>(`${this.api}/api/indumenti`, { headers });
+    return this.http.get<Indumento[]>(`${this.api}/api/indumenti`, { headers });
   }
 
-  addIndumenti(indumento: IndumentoTemplate) {
+  addIndumenti(indumento: Indumento) {
     return this.http.post(`${this.api}/api/indumenti`, indumento);
   }
 

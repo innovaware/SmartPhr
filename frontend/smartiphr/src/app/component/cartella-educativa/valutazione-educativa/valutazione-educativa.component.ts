@@ -9,6 +9,7 @@ import { valutazioneEducativa } from 'src/app/models/valutazioneEducativa';
 export class ValutazioneEducativaComponent implements OnInit {
 
   @Input() data: valutazioneEducativa;
+  @Input() disable: boolean;
   constructor() { }
   @Output() dataChange = new EventEmitter<valutazioneEducativa>();
   @Output() saveEmiter = new EventEmitter<valutazioneEducativa>();

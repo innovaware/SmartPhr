@@ -5,52 +5,53 @@ const Menu = require("../models/menu");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    const mansioneRole = res.locals.auth.role;
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+        const mansioneRole = res.locals.auth.role;
 
-    const getData = () => {
-      const query = { 
-        roles: { 
-          $all: [ObjectId(mansioneRole)] 
-        } 
-      };
+        const getData = () => {
+            const query = {
+                roles: {
+                    $all: [ObjectId(mansioneRole)]
+                }
+            };
 
-      console.log(query);
-      // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
-      return Menu.find(query);
-    };
+            console.log(query);
+            // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
+            return Menu.find(query);
+        };
 
-    const eventi = await getData();
-    res.status(200).json(eventi);
-    return;
-    
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        const eventi = await getData();
+        res.status(200).json(eventi);
+        return;
+
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-
-    const searchTerm = `MENUALL${mansioneRole}`;
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const menu = await getData();
-
-        redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(menu));
-        res.status(200).json(menu);
-      }
-    });
-
-  } catch (err) {
-    console.error("Error: ", err);
-    res.status(500).json({ Error: err });
-  }
 });
+
+
+router.get("/access", async (req, res) => {
+    try {
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        const getData = () => {
+            return Menu.find();
+        };
+
+        const eventi = await getData();
+        res.status(200).json(eventi);
+        return;
+
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
+});
+
 
 router.put("/:id", async (req, res) => {
   try {

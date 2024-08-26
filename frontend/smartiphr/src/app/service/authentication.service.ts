@@ -80,12 +80,10 @@ export class AuthenticationService {
     const httpOptions = {
       headers: headers,
     };
-    console.log("httpOptions in auth service: ", httpOptions);
     return this.http
       .post<any>(`${environment.api}/api/users/authenticate`, body, httpOptions)
       .pipe(
         map((user: User) => {
-          console.log("User in auth service: ",user);
           this.currentUser = user;
           this.refresh();
           return this.currentUser;

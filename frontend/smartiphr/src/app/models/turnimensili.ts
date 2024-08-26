@@ -9,8 +9,11 @@ export class Turnimensili {
   turnoInizio: Number;
   turnoFine: Number;
   user: string;
-
+  mansione?: string;
+  utente?: String;
   cognome?: string;
   nome?: string;
   cf?: string;
+  tipoTurno?: string;
+
 }

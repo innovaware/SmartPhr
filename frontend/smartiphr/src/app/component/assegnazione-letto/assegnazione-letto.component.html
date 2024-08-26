@@ -1,0 +1,70 @@
+<div class="container mt-3">
+    <div class="row align-items-center">
+        <div class="col-md-4">
+            <ng-container *ngIf="!assegnato">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Seleziona Camera</mat-label>
+                    <mat-select [(ngModel)]="paziente.idCamera" (selectionChange)="changeCamera($event)">
+                        <mat-option *ngFor="let option of camere" [value]="option._id">{{option.camera}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ng-container>
+            <ng-container *ngIf="assegnato">
+                <div class="row">
+                    <div class="col">
+                        <mat-label>Camera: </mat-label>
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Camera" [value]="nomecamera" disabled>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="col-md-4">
+            <ng-container *ngIf="!assegnato">
+                <mat-form-field appearance="fill" class="w-100">
+                    <mat-label>Seleziona posto letto</mat-label>
+                    <mat-select [(ngModel)]="paziente.numletto">
+                        <mat-option *ngFor="let option of lettidisp" [value]="option">{{option}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </ng-container>
+            <ng-container *ngIf="assegnato">
+                <div class="row">
+                    <div class="col">
+                        <mat-label>Posto Letto: </mat-label>
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Posto Letto" [value]="paziente.numletto" disabled>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+        <div class="col-md-4 text-center">
+            <ng-container *ngIf="!assegnato">
+                <button class="btn btn-primary p-0" (click)="associaCamera()" >
+                  <!--   <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor" class="bi bi-plus-circle-fill text-primary" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                    </svg> -->
+                    Assegna Camera
+                </button>
+            </ng-container>
+            <ng-container *ngIf="assegnato">
+                <div class="row">
+                    <div class="col">
+                        <mat-label>Armadio: </mat-label>
+                    </div>
+                    <div class="col">
+                        <mat-form-field>
+                            <input matInput type="text" placeholder="Armadio" [value]="paziente.numletto" disabled>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </ng-container>
+        </div>
+    </div>
+</div>

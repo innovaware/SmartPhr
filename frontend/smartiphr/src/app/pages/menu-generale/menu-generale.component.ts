@@ -7,6 +7,8 @@ import { DialogMenuGeneraleComponent } from 'src/app/dialogs/dialog-menu-general
 import { MenuGeneraleView, TypeMenu } from 'src/app/models/MenuGeneraleView';
 import { CucinaService } from 'src/app/service/cucina.service';
 import { MessagesService } from 'src/app/service/messages.service';
+import { Settings } from '../../models/settings';
+import { SettingsService } from '../../service/settings.service';
 
 @Component({
   selector: "app-menu-generale",
@@ -17,26 +19,32 @@ export class MenuGeneraleComponent implements OnInit {
   displayedColumns: string[] = ["week", "dataStartRif", "dataEndRif", "action"];
   displayedArchivioColumns: string[] = ["week", "type", "dataStartRif", "dataEndRif", "action"];
 
-
+  settings: Settings;
   currentDate: Date;
 
   dataSourceMenuGeneraleEstivo: MatTableDataSource<MenuGeneraleView>;
   @ViewChild('paginatorEstivo') paginatorEstivo: MatPaginator;
 
   dataSourceMenuGeneraleInvernale: MatTableDataSource<MenuGeneraleView>;
-  @ViewChild("paginatorInvernale", {static: false}) paginatorInvernale: MatPaginator;
+  @ViewChild("paginatorInvernale", { static: false }) paginatorInvernale: MatPaginator;
 
   dataSourceMenuGeneraleArchivio: MatTableDataSource<MenuGeneraleView>;
-  @ViewChild("paginatorArchivio", {static: false}) paginatorArchivio: MatPaginator;
+  @ViewChild("paginatorArchivio", { static: false }) paginatorArchivio: MatPaginator;
 
   constructor(
     private cucinaService: CucinaService,
     private dialog: MatDialog,
     private messageService: MessagesService,
-    private datepipe: DatePipe
-  ) {}
+    private datepipe: DatePipe,
+    private setServ: SettingsService
+  ) {
+    setServ.getSettings().then((set: Settings) => {
+      this.settings = set[0];
+    });
+  }
   ngAfterViewInit() {
 
+    this.dataSourceMenuGeneraleArchivio.paginator = this.paginatorArchivio;
     this.dataSourceMenuGeneraleEstivo.paginator = this.paginatorEstivo;
     this.dataSourceMenuGeneraleInvernale.paginator = this.paginatorInvernale;
   }
@@ -44,19 +52,20 @@ export class MenuGeneraleComponent implements OnInit {
   ngOnInit(): void {
     this.initArchivio();
 
-    this.currentDate = new Date();
+    this.setServ.getSettings().then((set: Settings) => {
+      this.settings = set[0];
 
-    const menuGeneraleEstivoView: MenuGeneraleView[] = [];
-    const menuGeneraleInvernaleView: MenuGeneraleView[] = [];
+      this.currentDate = new Date();
 
-    let numberWeek = 3 * 4; // 3 month + 4 week
-    for (let index = 0; index < numberWeek; index++) {
-      const currentWeek = this.datepipe.transform(this.currentDate, "w");
-      const sunday = this.getSunday(this.currentDate);
-      const saturday = new Date(new Date(sunday).setDate(sunday.getDate() + 6));
-      const isEstivo = this.isEstivo(this.currentDate);
+      const menuGeneraleEstivoView: MenuGeneraleView[] = [];
+      const menuGeneraleInvernaleView: MenuGeneraleView[] = [];
+      var startDate = new Date(this.settings.menuEstivoStart);
 
-      if (isEstivo) {
+      for (; startDate < new Date(this.settings.menuEstivoEnd); startDate.setDate(startDate.getDate() + 6)) {
+        console.log("Dentro: ", startDate);
+        const currentWeek = this.datepipe.transform(startDate, "w");
+        const sunday = this.getSunday(startDate);
+        const saturday = new Date(new Date(sunday).setDate(sunday.getDate() + 6));
         menuGeneraleEstivoView.push({
           year: sunday.getFullYear(),
           week: parseInt(currentWeek, 10),
@@ -65,7 +74,13 @@ export class MenuGeneraleComponent implements OnInit {
           dataStartRif: sunday,
           dataEndRif: saturday,
         });
-      } else {
+      }
+      console.log(menuGeneraleEstivoView);
+      startDate = new Date(this.settings.menuInvernaleStart);
+      for (; startDate < new Date(this.settings.menuInvernaleEnd); startDate.setDate(startDate.getDate() + 6)) {
+        const currentWeek = this.datepipe.transform(startDate, "w");
+        const sunday = this.getSunday(startDate);
+        const saturday = new Date(new Date(sunday).setDate(sunday.getDate() + 6));
         menuGeneraleInvernaleView.push({
           year: sunday.getFullYear(),
           week: parseInt(currentWeek, 10),
@@ -74,28 +89,62 @@ export class MenuGeneraleComponent implements OnInit {
           dataStartRif: sunday,
           dataEndRif: saturday,
         });
+
       }
 
-      this.currentDate.setTime(saturday.getTime() + 1 * 24 * 60 * 60 * 1000);
-    }
+      //let numberWeek = 3 * 4; // 3 month + 4 week
+      //for (let index = 0; index < numberWeek; index++) {
+      //  const currentWeek = this.datepipe.transform(this.currentDate, "w");
+      //  const sunday = this.getSunday(this.currentDate);
+      //  const saturday = new Date(new Date(sunday).setDate(sunday.getDate() + 6));
+      const isEstivo = this.isEstivo(this.currentDate);
+      console.log(isEstivo);
+      //  if (isEstivo) {
+      //    menuGeneraleEstivoView.push({
+      //      year: sunday.getFullYear(),
+      //      week: parseInt(currentWeek, 10),
+      //      type: TypeMenu.Estivo,
+      //      dataInsert: undefined,
+      //      dataStartRif: sunday,
+      //      dataEndRif: saturday,
+      //    });
+      //  } else {
+      //    menuGeneraleInvernaleView.push({
+      //      year: sunday.getFullYear(),
+      //      week: parseInt(currentWeek, 10),
+      //      type: TypeMenu.Invernale,
+      //      dataInsert: undefined,
+      //      dataStartRif: sunday,
+      //      dataEndRif: saturday,
+      //    });
+      //  }
 
-    this.dataSourceMenuGeneraleEstivo = new MatTableDataSource<MenuGeneraleView>(
-      menuGeneraleEstivoView
-    );
-    this.dataSourceMenuGeneraleEstivo.paginator = this.paginatorEstivo;
+      //  this.currentDate.setTime(saturday.getTime() + 1 * 24 * 60 * 60 * 1000);
+      //}
 
-    this.dataSourceMenuGeneraleInvernale = new MatTableDataSource<MenuGeneraleView>(
-      menuGeneraleInvernaleView
-    );
-    this.dataSourceMenuGeneraleInvernale.paginator = this.paginatorInvernale;
+      this.dataSourceMenuGeneraleEstivo = new MatTableDataSource<MenuGeneraleView>(
+        menuGeneraleEstivoView.filter(x => new Date(x.dataEndRif)>new Date())
+      );
+      this.dataSourceMenuGeneraleEstivo.paginator = this.paginatorEstivo;
+
+      this.dataSourceMenuGeneraleInvernale = new MatTableDataSource<MenuGeneraleView>(
+        menuGeneraleInvernaleView.filter(x => new Date(x.dataEndRif) > new Date())
+      );
+      this.dataSourceMenuGeneraleInvernale.paginator = this.paginatorInvernale;
+
+      let array = menuGeneraleEstivoView.filter(x => new Date(x.dataEndRif) < new Date());
+      array.concat(menuGeneraleInvernaleView.filter(x => new Date(x.dataEndRif) < new Date()));
+      this.dataSourceMenuGeneraleArchivio.data = array;
+      this.dataSourceMenuGeneraleArchivio.paginator = this.paginatorArchivio;
+    });
   }
 
   isEstivo(date: Date) {
     const year = new Date(date).getFullYear();
-    const month = new Date(date).getMonth()+1;
+    const month = new Date(date).getMonth() + 1;
     const day = new Date(date).getDate();
 
-    switch( month) {
+    switch (month) {
       case 12:
       case 1:
       case 2:
@@ -110,46 +159,29 @@ export class MenuGeneraleComponent implements OnInit {
   initArchivio() {
     this.currentDate = new Date();
     const menuGeneraleArchivioView: MenuGeneraleView[] = [];
-    let numberWeek = 3 * 4; // 3 month + 4 week
-    for (let index = 0; index < numberWeek; index++) {
-      const currentWeek = this.datepipe.transform(this.currentDate, "w");
-      const sunday = this.getSunday(this.currentDate);
-      const saturday = new Date(new Date(sunday).setDate(sunday.getDate() + 6));
+    const currentDate = new Date();
 
-      const menuEstivo = {}
-      const menuInvernale = {}
+    const addMenuToArchivio = (menus: MenuGeneraleView[], type: TypeMenu) => {
+      menus.forEach(m => {
+        if (new Date(m.dataEndRif) < currentDate) {
+          menuGeneraleArchivioView.push(m);
+        }
+      });
+    };
 
-      this.cucinaService.getMenuGenerale(TypeMenu.Estivo, parseInt(currentWeek,10), sunday.getFullYear() )
-          .subscribe( (menuGenerale: MenuGeneraleView[]) => {
+    // Fetch Estivo menus
+    this.cucinaService.getMenuGeneraleType(TypeMenu.Estivo)
+      .subscribe((menuGeneraleEstivo: MenuGeneraleView[]) => {
+        addMenuToArchivio(menuGeneraleEstivo, TypeMenu.Estivo);
+        this.refreshArchivio(menuGeneraleArchivioView);
+      });
 
-            menuGenerale.forEach(m=> {
-              menuEstivo[m.week]=m;
-            })
-
-            for (const key in menuEstivo) {
-              const element = menuEstivo[key];
-              menuGeneraleArchivioView.push(element);
-            }
-
-            this.refreshArchivio(menuGeneraleArchivioView);
-          });
-
-      this.cucinaService.getMenuGenerale(TypeMenu.Invernale, parseInt(currentWeek,10), sunday.getFullYear() )
-          .subscribe( (menuGenerale: MenuGeneraleView[]) => {
-            menuGenerale.forEach(m=> {
-              menuInvernale[m.week]=m;
-            })
-
-            for (const key in menuInvernale) {
-              const element = menuInvernale[key];
-              menuGeneraleArchivioView.push(element);
-            }
-
-            this.refreshArchivio(menuGeneraleArchivioView);
-          });
-
-      this.currentDate.setTime(saturday.getTime() + 1 * 24 * 60 * 60 * 1000);
-    }
+    // Fetch Invernale menus
+    this.cucinaService.getMenuGeneraleType(TypeMenu.Invernale)
+      .subscribe((menuGeneraleInvernale: MenuGeneraleView[]) => {
+        addMenuToArchivio(menuGeneraleInvernale, TypeMenu.Invernale);
+        this.refreshArchivio(menuGeneraleArchivioView);
+      });
   }
 
   refreshArchivio(data: MenuGeneraleView[]) {
@@ -158,6 +190,8 @@ export class MenuGeneraleComponent implements OnInit {
     );
     this.dataSourceMenuGeneraleArchivio.paginator = this.paginatorArchivio;
   }
+
+
 
   getSunday(dateInput: Date) {
     const d = new Date(dateInput);
@@ -168,14 +202,14 @@ export class MenuGeneraleComponent implements OnInit {
 
   addMenuWeek() {
     this.dialog.open(DialogMenuGeneraleComponent, {
-      width: `${window.screen.width}px`,
+      width: `${window.screen.width}px`
     });
   }
 
   openMenuGenerale(menuGeneraleEstivoView: MenuGeneraleView) {
     this.dialog.open(DialogMenuGeneraleComponent, {
       data: menuGeneraleEstivoView,
-      width: `${window.screen.width}px`,
+      width: `${window.screen.width}px`
     });
   }
 
@@ -188,7 +222,7 @@ export class MenuGeneraleComponent implements OnInit {
 
     this.dialog.open(DialogMenuGeneraleComponent, {
       data,
-      width: `${window.screen.width}px`,
+      width: `${window.screen.width}px`
     });
   }
 }

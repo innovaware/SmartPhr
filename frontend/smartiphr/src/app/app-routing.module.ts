@@ -11,6 +11,7 @@ import { AreaEducativaComponent } from "./pages/area-educativa/area-educativa.co
 import { AreaFisioterapiaComponent } from "./pages/area-fisioterapia/area-fisioterapia.component";
 import { AreaInfermieristicaComponent } from "./pages/area-infermieristica/area-infermieristica.component";
 import { AreaMedicaComponent } from "./pages/area-medica/area-medica.component";
+import { SegnalazioneComponent } from "./pages/segnalazioni/segnalazioni.component";
 import { AspComponent } from "./pages/asp/asp.component";
 import { ConsulentiComponent } from "./pages/consulenti/consulenti.component";
 import { DashboardComponent } from "./pages/dashboard/dashboard.component";
@@ -47,7 +48,11 @@ import { RegisterComponent } from './pages/register/register.component';
 
 import { EsamiPrivacyPersonaleComponent } from "./pages/esami-privacy-personale/esami-privacy-personale.component";
 import { FerieAltroPersonaleComponent } from "./pages/ferie-altro-personale/ferie-altro-personale.component";
-import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
+//import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
+import { QualitaGeneraleComponent } from "./pages/areaqualita-generale/areaqualita-generale.component";
+import { NominaDPOComponent } from "./pages/nominadpo/nominadpo.component";
+import { RichiestaMaterialeComponent } from "./pages/richieste-materiale/richieste-materiale.component";
+import { ArchivioConsulentiComponent } from "./pages/archivio-consulenti/archivio-consulenti.component";
 import { GeneralePersonaleComponent } from "./pages/generale-personale/generale-personale.component";
 import { AuthorizationComponent } from "./pages/authorization/authorization.component";
 import { CamereComponent } from "./pages/camere/camere.component";
@@ -65,8 +70,10 @@ import { ArmadiListComponent } from "./pages/armadi-list/armadi-list.component";
 import { IndumentiListComponent } from "./pages/indumenti-list/indumenti-list.component";
 
 
-import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
-import { RifacimentoLettiOssComponent } from "./pages/rifacimento-letti-oss/rifacimento-letti-oss.component";
+//import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
+//import { RifacimentoLettiOssComponent } from "./pages/rifacimento-letti-oss/rifacimento-letti-oss.component";
+import { LavanderiaInternaComponent } from "./pages/lavanderia-interna/lavanderia-interna.component";
+import { LavanderiaEsternaComponent } from './pages/lavanderia-esterna/lavanderia-esterna.component';
 import { GestFarmaciComponent } from "./pages/gest-farmaci/gest-farmaci.component";
 import { GestPresidiComponent } from "./pages/gest-presidi/gest-presidi.component";
 import { GestFarmacipresidiPazientiComponent } from "./pages/gest-farmacipresidi-pazienti/gest-farmacipresidi-pazienti.component";
@@ -82,6 +89,33 @@ import { CucinaSanificazioneAmbientiComponent } from "./pages/cucina-sanificazio
 import { CucinaControlloTamponiComponent } from "./pages/cucina-controllo-tamponi/cucina-controllo-tamponi.component";
 import { CucinaAutoControlloComponent } from "./pages/cucina-auto-controllo/cucina-auto-controllo.component";
 import { CucinaDerrateAlimentariComponent } from "./pages/cucina-derrate-alimentari/cucina-derrate-alimentari.component";
+import { calendarioTurniComponent } from "./pages/calendario-turni/calendario-turni.component";
+import { NominaResponsabileComponent } from "./pages/nomina-responsabile/nomina-responsabile.component";
+import { ArchivioCertificatiComponent } from "./pages/archivio-certificati/archivio-certificati.component";
+import { AuditInternoComponent } from "./pages/audit-interno/audit-interno.component";
+import { OrganigrammaComponent } from "./pages/organigramma/organigramma.component";
+import { ControlloMensileComponent } from "./pages/controllo-mensile/controllo-mensile.component";
+import { ReportControlloMensileComponent } from "./pages/Report-controllo-mensile/Report-controllo-mensile.component";
+import { PianificazioneCorsiComponent } from "./pages/pianificazione-corsi/pianificazione-corsi.component";
+import { ElencoModulisticaComponent } from "./pages/elenco-modulistica/elenco-modulistica.component";
+import { VisitePreAssunzioniComponent } from "./pages/visita-pre-assunzioni/visita-pre-assunzioni.component";
+import { VisitePeriodicheComponent } from "./pages/visita-periodica/visita-periodica.component";
+import { MedicoLavoroComponent } from "./pages/medico-lavoro/medico-lavoro.component";
+import { RLSComponent } from "./pages/rls/rls.component";
+import { RSPPComponent } from "./pages/rspp/rspp.component";
+import { AntincendioComponent } from "./pages/antincendio/antincendio.component";
+import { AreaFormazioneComponent } from "./pages/area-formazione-sicurezza/area-formazione-sicurezza.component";
+import { ControlloAntincendioComponent } from "./pages/controllo-antincendio/controllo-antincendio.component";
+import { ApparecchiatureComponent } from "./pages/apparecchiature-impianti/apparecchiature-impianti.component";
+import { AutocertificazioniComponent } from "./pages/autocertificazioni/autocertificazioni.component";
+import { CertificazioniComponent } from "./pages/certificazioni/certificazioni.component";
+import { PianoScadenzeComponent } from "./pages/piano-scadenze/piano-scadenze.component";
+import { VerificaAscensoriComponent } from "./pages/verifica-ascensori/verifica-ascensori.component";
+import { PrevenzioneRischiComponent } from "./pages/prevenzione-rischi/prevenzione-rischi.component";
+import { ControlloLegionellosiComponent } from "./pages/controllo-legionellosi/controllo-legionellosi.component";
+import { AgendaClinicaComponent } from "./pages/agendaClinica/agendaClinica.component";
+import { SettingsComponent } from "./pages/settings/settings.component";
+import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -91,8 +125,14 @@ const routes: Routes = [
   { path: "educativa", component: AreaEducativaComponent, canActivate: [AuthGuard]  },
   { path: "pisicologica", component: PsicologicaComponent, canActivate: [AuthGuard]  },
   { path: "fisioterapia", component: AreaFisioterapiaComponent, canActivate: [AuthGuard]  },
-  { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard]  },
+  { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard] },
+  { path: "agenda_clinica", component: AgendaClinicaComponent, canActivate: [AuthGuard] },
+  { path: "agendaInfermeristica", component: AgendaClinicaComponent, canActivate: [AuthGuard] },
   { path: "infermieristica", component: AreaInfermieristicaComponent, canActivate: [AuthGuard]  },
+
+  //Calendario Turni
+
+  { path: "calendario-turni", component: calendarioTurniComponent, canActivate: [AuthGuard] },
 
   // CARTELLA ASS.SOCIALE
   { path: "assistente-sociale", component: AreaSocialeComponent, canActivate: [AuthGuard]  },
@@ -108,7 +148,8 @@ const routes: Routes = [
   // AREA PERSONALE
   { path: "generale", component: GeneralePersonaleComponent, canActivate: [AuthGuard]  },
   { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
-  { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard]  },
+  //{ path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard] },
+  { path: "MaterialRequest", component: RichiestaMaterialeComponent, canActivate: [AuthGuard] },
   { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
 
   // PAI
@@ -117,15 +158,20 @@ const routes: Routes = [
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
   { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
-  { path: "gest_chiavi", component: ChiaviOssComponent, canActivate: [AuthGuard]  },
-  { path: "rifacimento_letti", component: RifacimentoLettiOssComponent, canActivate: [AuthGuard]  },
+  //{ path: "gest_chiavi", component: ChiaviOssComponent, canActivate: [AuthGuard]  },
+  //{ path: "rifacimento_letti", component: RifacimentoLettiOssComponent, canActivate: [AuthGuard]  },
+  { path: "Report_Controllo_Mensile", component: ReportControlloMensileComponent, canActivate: [AuthGuard]  },
+  { path: "lavanderia_in", component: LavanderiaInternaComponent, canActivate: [AuthGuard]  },
+  { path: "lavanderia_ext", component: LavanderiaEsternaComponent, canActivate: [AuthGuard]  },
 
   // AMMINISTRAZIONE
-  { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
+ 
   { path: "gest_pazienti", component: AdminPazientiComponent, canActivate: [AuthGuard] },
   { path: "gest_consulenti", component: ConsulentiComponent, canActivate: [AuthGuard] },
+  { path: "gest_contratti", component: ArchivioConsulentiComponent, canActivate: [AuthGuard] },
   { path: "fatture_consulenti", component: FattureConsulentiComponent, canActivate: [AuthGuard] },
   { path: "bonifici_consulenti", component: BonificiConsulentiComponent, canActivate: [AuthGuard] },
+  { path: "contratti_consulenti", component: ContrattiConsulentiComponent, canActivate: [AuthGuard] },
   { path: "gest_fornitori", component: AdminFornitoriComponent, canActivate: [AuthGuard] },
   { path: "fatture_fornitori", component: FattureFornitoriComponent, canActivate: [AuthGuard] },
   { path: "bonifici_fornitori", component: BonificiFornitoriComponent, canActivate: [AuthGuard] },
@@ -163,6 +209,17 @@ const routes: Routes = [
   // INDUMENTI
   { path: "gest_indumenti", component: IndumentiListComponent, canActivate: [AuthGuard]  },
 
+  // Area Qualità
+  { path: "qualita_generale", component: QualitaGeneraleComponent, canActivate: [AuthGuard] },
+  { path: "NominaDPO", component: NominaDPOComponent, canActivate: [AuthGuard] },
+  { path: "Archivio_Certificati", component: ArchivioCertificatiComponent, canActivate: [AuthGuard] },
+  { path: "NominaResponsabile", component: NominaResponsabileComponent, canActivate: [AuthGuard] },
+  { path: "Audit_Interno", component: AuditInternoComponent, canActivate: [AuthGuard] },
+  { path: "Organigramma", component: OrganigrammaComponent, canActivate: [AuthGuard] },
+  { path: "controllo_mensile", component: ControlloMensileComponent, canActivate: [AuthGuard] },
+  { path: "pianificazione_corsi", component: PianificazioneCorsiComponent, canActivate: [AuthGuard] },
+  { path: "elenco_moduli", component: ElencoModulisticaComponent, canActivate: [AuthGuard] },
+  { path: "PianoScandenzeGestionali", component: PianoScadenzeComponent, canActivate: [AuthGuard] },
 
   // ARCHIVI
   { path: "archio_visitespecialistiche", component: ArchiviVisiteSpecialisticheComponent, canActivate: [AuthGuard]  },
@@ -173,7 +230,9 @@ const routes: Routes = [
   { path: "archivio_impegnative", component: ArchiviImpegnativeComponent, canActivate: [AuthGuard]  },
   { path: "archivio_pai", component: ArchiviPAIComponent, canActivate: [AuthGuard]  },
 
+  // SEGNALAZIONI
 
+  { path: "segnalazioni", component: SegnalazioneComponent, canActivate: [AuthGuard] },
 
   //GEST FARMACI
   { path: "gest-farmaci", component: GestFarmaciComponent, canActivate: [AuthGuard]  },
@@ -195,6 +254,26 @@ const routes: Routes = [
   { path: "cucina-tamponi", component: CucinaControlloTamponiComponent, canActivate: [AuthGuard]  },
   { path: "cucina-autocontrolli", component: CucinaAutoControlloComponent, canActivate: [AuthGuard]  },
   { path: "cucina-derrate", component: CucinaDerrateAlimentariComponent, canActivate: [AuthGuard]  },
+
+
+  //AREA SICUREZZA
+  { path: "visita_preview", component: VisitePreAssunzioniComponent, canActivate: [AuthGuard] },
+  { path: "visite_periodiche", component: VisitePeriodicheComponent, canActivate: [AuthGuard] },
+  { path: "medico_lavoro", component: MedicoLavoroComponent, canActivate: [AuthGuard] },
+  { path: "rls", component: RLSComponent, canActivate: [AuthGuard] },
+  { path: "rspp", component: RSPPComponent, canActivate: [AuthGuard] },
+  { path: "antincendio", component: AntincendioComponent, canActivate: [AuthGuard] },
+  { path: "area_formazione_sicurezza", component: AreaFormazioneComponent, canActivate: [AuthGuard] },
+  { path: "ControlloAntincendio", component: ControlloAntincendioComponent, canActivate: [AuthGuard] },
+  { path: "Apparecchiature", component: ApparecchiatureComponent, canActivate: [AuthGuard] },
+  { path: "AutoCertificazioni", component: AutocertificazioniComponent, canActivate: [AuthGuard] },
+  { path: "Certificazioni", component: CertificazioniComponent, canActivate: [AuthGuard] },
+  { path: "Ascensori", component: VerificaAscensoriComponent, canActivate: [AuthGuard] },
+  { path: "PrevenzioneRischi", component: PrevenzioneRischiComponent, canActivate: [AuthGuard] },
+  { path: "ControlloLegionellosi", component: ControlloLegionellosiComponent, canActivate: [AuthGuard] },
+  //Impostazioni
+  { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
+  { path: "settings", component: SettingsComponent, canActivate: [AuthGuard] },
 
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },

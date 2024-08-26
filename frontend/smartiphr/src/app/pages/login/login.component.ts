@@ -39,11 +39,9 @@ export class LoginComponent implements OnInit {
       this.messageError = "Username non valida";
       return;
     }
-    console.log("user: ", this.username, "\nPassword: ", this.password,"\n");
     this.auth.login(this.username, this.password).subscribe(
       
       (user: User) => {
-        console.log("Log Here!!!\n",user);
         this.route.navigate(["/"]).then(x=> {
           window.location.reload();
         });
