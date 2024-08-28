@@ -6,5 +6,5 @@ export class Settings {
   menuInvernaleEnd?: Date;
   menuEstivoStart?: Date;
   menuEstivoEnd?: Date;
-
+  ScadenzaPersonalizzato?: Number;
 }

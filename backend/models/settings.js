@@ -7,6 +7,7 @@ const settingsSchema = mongoose.Schema({
     menuInvernaleEnd: Date,
     menuEstivoStart: Date,
     menuEstivoEnd: Date,
+    ScadenzaPersonalizzato: Number,
 });
 
 module.exports = mongoose.model("Settings", settingsSchema, "settings");

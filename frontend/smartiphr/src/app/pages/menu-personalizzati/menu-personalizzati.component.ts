@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -26,12 +26,14 @@ export class MenuPersonalizzatiComponent implements OnInit {
     "nome",
     "dataCreazione",
     "dataUltimaModifica",
+    "dataInizio",
+    "dataFine",
     "action",
   ];
 
   public dataSourceCucinaPersonalizzato = new MatTableDataSource<ItemMenuPersonalizzato>();
   @ViewChild("menuPersonalizzato", { static: false }) paginator: MatPaginator;
-  public dataSourceArchvioCucina = new MatTableDataSource<ArchivioMenuCucinaPersonalizzato>();
+  public dataSourceArchvioCucina = new MatTableDataSource<ItemMenuPersonalizzato>();
   @ViewChild("archvioCucina", { static: false }) paginatorArchivio: MatPaginator;
 
   constructor(
@@ -39,8 +41,7 @@ export class MenuPersonalizzatiComponent implements OnInit {
     private pazientiService: PazienteService,
     private ArchivioServ: ArchivioMenuCucinaPersonalizzatoService,
     private dialog: MatDialog,
-    private messageService: MessagesService,
-    private changeDetectorRefs: ChangeDetectorRef
+    private messageService: MessagesService
   ) { }
 
   ngOnInit() {
@@ -104,54 +105,85 @@ export class MenuPersonalizzatiComponent implements OnInit {
     });
   }
 
-  getItemMenu() {
-    this.dataSourceCucinaPersonalizzato.data = [];
+  async getItemMenu() {
+    let items: ItemMenuPersonalizzato[] = [];
+
+    try {
+      const res: CucinaPersonalizzato[] = await this.cucinaService.getCucinaPersonalizzato().toPromise();
+
+      // Filtra gli elementi attivi e non scaduti
+      const activeItems = res.filter(x =>
+        x.active === true &&
+        (!x.dataScadenza || new Date(x.dataScadenza) > new Date())
+      );
+
+      // Mappa gli elementi attivi a promesse che includono il recupero del paziente
+      const promises = activeItems.map(async (cucina) => {
+        let item = new ItemMenuPersonalizzato();
+        try {
+          const paziente: Paziente = await this.pazientiService.getPaziente(cucina.paziente.valueOf());
+          item.paziente = paziente[0]; // Assumi che paziente[0] sia corretto
+          item.cucina = cucina;
+          item.data = cucina.dataCreazione;
+          item.dataUM = cucina.dataUltimaModifica;
+          item.dataInizio = cucina.dataInizio;
+          item.dataFine = cucina.dataFine;
+          items.push(item);
+        } catch (error) {
+          console.error('Errore nel recupero del paziente:', error);
+        }
+      });
+
+      // Attendi che tutte le promesse siano risolte
+      await Promise.all(promises);
+
+      // Aggiorna la datasource e il paginator
+      this.dataSourceCucinaPersonalizzato.data = items.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());;
+      this.dataSourceCucinaPersonalizzato.paginator = this.paginator;
+
+    } catch (error) {
+      console.error('Errore nel recupero dei menu personalizzati:', error);
+    }
+  }
+
+
+
+  getArchivio() {
     let items: ItemMenuPersonalizzato[] = [];
 
     this.cucinaService.getCucinaPersonalizzato().subscribe((res: CucinaPersonalizzato[]) => {
-      const activeItems = res.filter(x => x.active);
+      const activeItems = res.filter(x =>
+        x.active === false ||
+        (x.dataScadenza && new Date(x.dataScadenza) < new Date())
+      );
 
-      console.log('Active Items:', activeItems); // Debugging output
-
-      activeItems.forEach((cucinaItem) => {
+      // Crea una lista di promesse
+      const promises = activeItems.map((cucina) => {
+        // Crea una nuova istanza di ItemMenuPersonalizzato per ogni elemento
         let item = new ItemMenuPersonalizzato();
-        item.cucina = [];
-        this.pazientiService.getPaziente(cucinaItem.paziente.valueOf()).then((paziente: Paziente) => {
-          let existingItem = items.find(z => z.paziente._id == paziente[0]._id);
-          if (existingItem) {
-            const index = items.indexOf(existingItem);
-            existingItem.cucina.push(cucinaItem);
-            items[index] = existingItem;
-          } else {
-            item.paziente = paziente[0];
-            item.cucina.push(cucinaItem);
-            item.active = cucinaItem.active;
-            item.data = cucinaItem.dataCreazione;
-            item.dataUM = cucinaItem.dataUltimaModifica;
-            items.push(item);
-          }
-        }).finally(() => {
-          // Ensure this part runs after all promises are resolved
-          this.dataSourceCucinaPersonalizzato.data = items;
-          this.dataSourceCucinaPersonalizzato.paginator = this.paginator;
-          this.changeDetectorRefs.detectChanges();
-          console.log('Final Data Source:', this.dataSourceCucinaPersonalizzato.data); // Debugging output
+        return this.pazientiService.getPaziente(cucina.paziente.valueOf()).then((paziente: Paziente) => {
+          item.paziente = paziente[0];
+          item.cucina = cucina;
+          item.data = cucina.dataCreazione;
+          item.dataUM = cucina.dataUltimaModifica;
+          item.dataInizio = cucina.dataInizio;
+          item.dataFine = cucina.dataFine;
+          items.push(item);
         });
+      });
+
+      // Qui potresti attendere tutte le promesse prima di aggiornare la tua dataSource
+      Promise.all(promises).then(() => {
+        this.dataSourceArchvioCucina.data = items.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+        this.dataSourceArchvioCucina.paginator = this.paginatorArchivio;
       });
     });
   }
 
-  getArchivio() {
-    this.ArchivioServ.get().subscribe((res: ArchivioMenuCucinaPersonalizzato[]) => {
-      if (res.length > 0 && res != undefined) {
-        this.dataSourceArchvioCucina.data = res;
-        this.dataSourceArchvioCucina.paginator = this.paginatorArchivio;
-      }
-    });
-  }
+  
 
-  viewMenu(row: ArchivioMenuCucinaPersonalizzato) {
-    this.pazientiService.getPaziente(row.paziente.valueOf()).then((res: Paziente) => {
+  viewMenu(row: ItemMenuPersonalizzato) {
+    this.pazientiService.getPaziente(row.paziente._id.valueOf()).then((res: Paziente) => {
       const paziente = res[0];
       console.log("paziente: ", paziente);
 
@@ -159,7 +191,7 @@ export class MenuPersonalizzatiComponent implements OnInit {
         width: `${window.screen.width}px`,
         data: {
           paziente: paziente,
-          menu: row.menu,
+          menu: row.cucina,
           add: false,
           readOnly: true
         }

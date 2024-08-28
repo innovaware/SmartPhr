@@ -11,7 +11,11 @@ const CucinaPersonalizzatoSchema = mongoose.Schema({
      * Data utilizzo
      */
     dataCreazione: Date,
+    dataInizio: Date,
+    dataFine: Date,
     dataUltimaModifica: Date,
+    dataScadenza: Date,
+    dataDisable: Date,
     giornoRif: String,
     giornoRifNum: Number,
     active: Boolean,
@@ -20,6 +24,12 @@ const CucinaPersonalizzatoSchema = mongoose.Schema({
     menuCena: String,
     menuSpuntino: String,
     menuMerenda: String,
+    personalizzatoColazione: String,
+    personalizzatoPranzo: String,
+    personalizzatoCena: String,
+    //menuSpuntino: String,
+    //menuMerenda: String,
+    firma: String,
 });
 
 module.exports = mongoose.model("CucinaPersonalizzato", CucinaPersonalizzatoSchema, "cucinaPersonalizzato");

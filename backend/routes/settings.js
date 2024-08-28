@@ -47,6 +47,7 @@ router.put("/:id", async (req, res) => {
                     menuInvernaleEnd: req.body.menuInvernaleEnd,
                     menuEstivoStart: req.body.menuEstivoStart,
                     menuEstivoEnd: req.body.menuEstivoEnd,
+                    ScadenzaPersonalizzato: req.body.ScadenzaPersonalizzato,
                 },
             }
         );

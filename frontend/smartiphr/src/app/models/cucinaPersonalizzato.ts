@@ -4,6 +4,8 @@ export class CucinaPersonalizzato {
   pazienteName: String;
   dataCreazione: Date;
   dataUltimaModifica?: Date;
+  dataInizio?: Date;
+  dataFine?: Date;
   giornoRif: String;
   giornoRifNum?: Number;
   menuColazione?: String;
@@ -11,5 +13,9 @@ export class CucinaPersonalizzato {
   menuCena?: String;
   menuSpuntino?: String;
   menuMerenda?: String;
+  dataScadenza?: Date;
+  personalizzatoColazione?: String;
+  personalizzatoPranzo?: String;
+  personalizzatoCena?: String;
   active: Boolean;
 }
