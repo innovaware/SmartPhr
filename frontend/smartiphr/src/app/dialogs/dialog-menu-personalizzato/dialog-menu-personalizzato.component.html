@@ -1,101 +1,270 @@
-<div class="row" style="padding-bottom: 10px;">
-  <div class="col-2">
-      <label>Paziente: {{this.paziente.nome}} {{this.paziente.cognome}}</label>
-  </div>
-  <div class="col-8">
-  </div>
+<div class="container">
+  <div class="row">
 
-  <div class="col right">
-    {{ this.date | date: 'dd/MM/yyyy':'UTC' }}
+    <div class="col-5">
+      <label>Paziente: {{this.paziente.nome}} {{this.paziente.cognome}}</label>
+    </div>
+    <div class="col-4">
+      {{ this.date | date: 'dd/MM/yyyy':'UTC' }}
+    </div>
+    <div class="col right">
+      <button mat-button mat-dialog-close>X</button>
+    </div>
   </div>
-</div>
-<br />
-<div class="row">
+  <!--<div class="row">
+    <div class="col-2">
+      <button mat-button class="btn" title="Salva" (click)="save()">
+        <svg xmlns="http://www.w3.org/2000/svg" width="30" height="30" style="color:dodgerblue;" fill="currentColor" class="bi bi-floppy-fill" viewBox="0 0 16 16">
+          <path d="M0 1.5A1.5 1.5 0 0 1 1.5 0H3v5.5A1.5 1.5 0 0 0 4.5 7h7A1.5 1.5 0 0 0 13 5.5V0h.086a1.5 1.5 0 0 1 1.06.44l1.415 1.414A1.5 1.5 0 0 1 16 2.914V14.5a1.5 1.5 0 0 1-1.5 1.5H14v-5.5A1.5 1.5 0 0 0 12.5 9h-9A1.5 1.5 0 0 0 2 10.5V16h-.5A1.5 1.5 0 0 1 0 14.5z" />
+          <path d="M3 16h10v-5.5a.5.5 0 0 0-.5-.5h-9a.5.5 0 0 0-.5.5zm9-16H4v5.5a.5.5 0 0 0 .5.5h7a.5.5 0 0 0 .5-.5zM9 1h2v4H9z" />
+        </svg>
+        <br />
+        Salva
+      </button>
+    </div>
+  </div>-->
+  <div class="row">
     <div class="col-4"></div>
     <div class="col-4">
-        <mat-form-field class="example-full-width" appearance="fill">
-            <input matInput
-                   type="text"
-                   placeholder="Seleziona Paziente"
-                   [matAutocomplete]="auto"
-                   (keyup)="applyFilter($event)"
-                   [(ngModel)]="paziente"
-                    [disabled]="readOnly" />
-                    <mat-autocomplete autoActiveFirstOption
-                              #auto="matAutocomplete"
-                              [displayWith]="displayFn">
-                <mat-option *ngFor="let option of allPazienti" [value]="option">
-                    {{option.nome}} {{option.cognome}}
-                </mat-option>
-            </mat-autocomplete>
-        </mat-form-field>
+      <mat-form-field class="example-full-width" appearance="fill" placeholder="Seleziona ospite">
+        <input matInput
+               type="text"
+               placeholder="Seleziona ospite"
+               [matAutocomplete]="auto"
+               (keyup)="applyFilter($event)"
+               [(ngModel)]="paziente"
+               [disabled]="readOnly">
+        <mat-autocomplete autoActiveFirstOption
+                          #auto="matAutocomplete"
+                          [displayWith]="displayFn">
+          <mat-option *ngFor="let option of allPazienti | async" [value]="option">
+          {{option.nome}} {{option.cognome}}
+          </mat-option>
+        </mat-autocomplete>
+      </mat-form-field>
     </div>
     <div class="col-4"></div>
-</div>
-<br />
-<table>
-      <tr style="color: black; background-color: dodgerblue;" >
-          <th style="background-color: white;"></th>
-          <th style="background-color: red;">Domenica</th>
-          <th>Lunedi</th>
-          <th>Martedi</th>
-          <th>Mercoledi</th>
-          <th>Giovedi</th>
-          <th>Venedi</th>
-          <th>Sabato</th>
-      </tr>
+  </div>
+
+  <div class="row">
+    <div class="col-2"></div>
+    <div class="col-8">
+      <ng-container *ngIf="data.add">
+        <mat-form-field appearance="fill" class="date-field">
+          <mat-label>Data Inizio</mat-label>
+          <input matInput [matDatepicker]="dataInizioStart" [(ngModel)]="menu.dataInizio"  [min]="minDate">
+          <mat-datepicker-toggle matSuffix [for]="dataInizioStart"></mat-datepicker-toggle>
+          <mat-datepicker #dataInizioStart></mat-datepicker>
+        </mat-form-field>
+
+        <span class="date-separator"> - </span>
+
+        <mat-form-field appearance="fill" class="date-field">
+          <mat-label>Data Fine</mat-label>
+          <input matInput [matDatepicker]="dataFineEnd" [(ngModel)]="menu.dataFine" [min]="minDate2">
+          <mat-datepicker-toggle matSuffix [for]="dataFineEnd"></mat-datepicker-toggle>
+          <mat-datepicker #dataFineEnd></mat-datepicker>
+        </mat-form-field>
+      </ng-container>
+
+      <ng-container *ngIf="!data.add">
+        <mat-form-field appearance="fill" class="date-field">
+          <mat-label>Data Inizio</mat-label>
+          <input matInput [matDatepicker]="dataInizioStart" [(ngModel)]="menu.dataInizio" readonly disabled="disabled">
+          <mat-datepicker-toggle matSuffix [for]="dataInizioStart"></mat-datepicker-toggle>
+          <mat-datepicker #dataInizioStart></mat-datepicker>
+        </mat-form-field>
+
+        <span class="date-separator"> - </span>
+
+        <mat-form-field appearance="fill" class="date-field">
+          <mat-label>Data Fine</mat-label>
+          <input matInput [matDatepicker]="dataFineEnd" [(ngModel)]="menu.dataFine" [min]="minDate2" [disabled]="data.readOnly">
+          <mat-datepicker-toggle matSuffix [for]="dataFineEnd"></mat-datepicker-toggle>
+          <mat-datepicker #dataFineEnd></mat-datepicker>
+        </mat-form-field>
+      </ng-container>
+    </div>
+    <div class="col-2"></div>
+  </div>
 
 
-      <tr>
-          <td style="background-color: dodgerblue;"><strong>Colazione</strong></td>
-          <td *ngFor="let item of menuData">
-              <input matInput type="text" class="form-control" placeholder="Inserisci Colazione" [(ngModel)]="item.menuColazione"
-                     [disabled]="data.readOnly">
-          </td>
-      </tr>
 
+  <div class="row">
 
-      <tr>
-          <td style="background-color: dodgerblue;"><strong>Spuntino</strong></td>
-          <td *ngFor="let item of menuData">
-              <input matInput type="text" class="form-control" placeholder="Inserisci Spuntino" [(ngModel)]="item.menuSpuntino" [disabled]="data.readOnly">
-          </td>
-      </tr>
-
-      <tr>
-          <td style="background-color: dodgerblue;"><strong>Pranzo</strong></td>
-          <td *ngFor="let item of menuData">
-              <input matInput type="text" class="form-control" placeholder="Inserisci Pranzo" [(ngModel)]="item.menuPranzo" [disabled]="data.readOnly">
-          </td>
-      </tr>
-
-      <tr>
-          <td style="background-color: dodgerblue;"><strong>Merenda</strong></td>
-          <td *ngFor="let item of menuData">
-              <input matInput type="text" class="form-control" placeholder="Inserisci Merenda" [(ngModel)]="item.menuMerenda" [disabled]="data.readOnly">
-          </td>
-      </tr>
-
-      <tr>
-          <td style="background-color: dodgerblue;"><strong>Cena</strong></td>
-          <td *ngFor="let item of menuData">
-              <input matInput type="text" class="form-control" placeholder="Inserisci Cena" [(ngModel)]="item.menuCena" [disabled]="data.readOnly">
-          </td>
-      </tr>
-
-
-  </table>
-
-  <br />
-<div class="row">
     <div class="col">
-        <ng-container *ngIf="!data.readOnly">
-            <button mat-button [mat-dialog-close]="undefined" (click)="save()">Salva</button>
-        </ng-container>
-        <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
+      <label>Colazione</label>
+      <div class="row">
+        <div class="col">
+          <!-- Checkbox options for "Colazione" -->
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="normaleColazione" type="checkbox" id="normale" (change)="Change('normale')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="normale">Normale</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="digiunoColazione" type="checkbox" id="digiuno" (change)="Change('digiuno')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="digiuno">Digiuno</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="leggeroColazione" type="checkbox" id="leggero" (change)="Change('leggero')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="leggero">Leggero</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidoColazione" type="checkbox" id="liquido" (change)="Change('liquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquido">Liquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidochiaroColazione" type="checkbox" id="liquidochiaro" (change)="Change('liquidochiaro')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquidochiaro">Liquido chiaro</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="semiliquidoColazione" type="checkbox" id="semiliquido" (change)="Change('semiliquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="semiliquido">Semiliquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="personalizzatoColazione" type="checkbox" id="personalizzato" (change)="Change('personalizzato')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="personalizzato">Personalizzato</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom menu description -->
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="personalizzatoColazione">
+            <mat-form-field>
+              <textarea matInput rows="2" [(ngModel)]="descrizioneColazione" placeholder="Inserisci menu personalizzato" [disabled]="data.readOnly"></textarea>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </div>
     </div>
 
-  
+    <div class="col">
+
+      <label>Pranzo</label>
+      <div class="row">
+        <div class="col">
+          <!-- Checkbox options for "Pranzo" -->
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="normalePranzo" type="checkbox" id="normale" (change)="ChangeP('normale')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="normale">Normale</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="digiunoPranzo" type="checkbox" id="digiuno" (change)="ChangeP('digiuno')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="digiuno">Digiuno</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="leggeroPranzo" type="checkbox" id="leggero" (change)="ChangeP('leggero')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="leggero">Leggero</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidoPranzo" type="checkbox" id="liquido" (change)="ChangeP('liquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquido">Liquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="iposodicoPranzo" type="checkbox" id="iposodico" (change)="ChangeP('iposodico')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="iposodico">Iposodico</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="ascoricoPranzo" type="checkbox" id="ascorico" (change)="ChangeP('ascorico')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="ascorico">Ascorico</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidochiaroPranzo" type="checkbox" id="liquidochiaro" (change)="ChangeP('liquidochiaro')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquidochiaro">Liquido chiaro</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="semiliquidoPranzo" type="checkbox" id="semiliquido" (change)="ChangeP('semiliquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="semiliquido">Semiliquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="personalizzatoPranzo" type="checkbox" id="personalizzato" (change)="ChangeP('personalizzato')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="personalizzato">Personalizzato</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom menu description -->
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="personalizzatoPranzo">
+            <mat-form-field>
+              <textarea matInput rows="2" [(ngModel)]="descrizionePranzo" placeholder="Inserisci menu personalizzato" [disabled]="data.readOnly"></textarea>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+    <div class="col">
+
+      <div class="row">
+
+        <label>Cena</label>
+        <div class="col">
+          <!-- Checkbox options for "Cena" -->
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="normaleCena" type="checkbox" id="normale" (change)="ChangeC('normale')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="normale">Normale</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="digiunoCena" type="checkbox" id="digiuno" (change)="ChangeC('digiuno')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="digiuno">Digiuno</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="leggeroCena" type="checkbox" id="leggero" (change)="ChangeC('leggero')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="leggero">Leggero</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidoCena" type="checkbox" id="liquido" (change)="ChangeC('liquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquido">Liquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="iposodicoCena" type="checkbox" id="iposodico" (change)="ChangeC('iposodico')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="iposodico">Iposodico</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="ascoricoCena" type="checkbox" id="ascorico" (change)="ChangeC('ascorico')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="ascorico">Ascorico</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="liquidochiaroCena" type="checkbox" id="liquidochiaro" (change)="ChangeC('liquidochiaro')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="liquidochiaro">Liquido chiaro</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="semiliquidoCena" type="checkbox" id="semiliquido" (change)="ChangeC('semiliquido')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="semiliquido">Semiliquido</label>
+          </div>
+          <div class="form-check form-switch">
+            <input class="form-check-input" [(ngModel)]="personalizzatoCena" type="checkbox" id="personalizzato" (change)="ChangeC('personalizzato')" [disabled]="data.readOnly">
+            <label class="form-check-label" for="personalizzato">Personalizzato</label>
+          </div>
+        </div>
+      </div>
+
+      <!-- Custom menu description -->
+      <div class="row">
+        <div class="col">
+          <ng-container *ngIf="personalizzatoCena">
+            <mat-form-field>
+              <textarea matInput rows="2" [(ngModel)]="descrizioneCena" placeholder="Inserisci menu personalizzato" [disabled]="data.readOnly"></textarea>
+            </mat-form-field>
+          </ng-container>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+
+
+
+  <!-- Buttons section -->
+  <div class="row" style="margin-top: 20px;">
+    <div class="col text-right">
+      <button mat-button *ngIf="!data.readOnly" (click)="save()">Salva</button>
+      <button mat-button mat-dialog-close>Chiudi</button>
+    </div>
+  </div>
 </div>
-
-

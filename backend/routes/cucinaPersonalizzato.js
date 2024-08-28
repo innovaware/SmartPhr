@@ -87,6 +87,8 @@ router.post("/", async (req, res) => {
             pazienteName: req.body.pazienteName,
             paziente: req.body.paziente,
             dataCreazione: req.body.dataCreazione,
+            dataInizio: req.body.dataInizio,
+            dataFine: req.body.dataFine,
             giornoRif: req.body.giornoRif,
             menuColazione: req.body.menuColazione,
             menuPranzo: req.body.menuPranzo,
@@ -94,6 +96,11 @@ router.post("/", async (req, res) => {
             menuCena: req.body.menuCena,
             menuSpuntino: req.body.menuSpuntino,
             menuMerenda: req.body.menuMerenda,
+            firma: req.body.firma,
+            dataScadenza: req.body.dataScadenza,
+            personalizzatoColazione: req.body.personalizzatoColazione,
+            personalizzatoPranzo: req.body.personalizzatoPranzo,
+            personalizzatoCena: req.body.personalizzatoCena,
             active: true,
         });
 
