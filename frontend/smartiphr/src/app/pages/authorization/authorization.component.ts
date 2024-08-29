@@ -1,8 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { forkJoin } from 'rxjs';
 import { Mansione } from 'src/app/models/mansione';
 import { Menu } from 'src/app/models/menu';
 import { MansioniService } from 'src/app/service/mansioni.service';
 import { MenuService } from 'src/app/service/menu.service';
+import { MessagesService } from '../../service/messages.service';
 
 @Component({
   selector: 'app-authorization',
@@ -19,11 +21,15 @@ export class AuthorizationComponent implements OnInit {
   constructor(
     private mansioniService: MansioniService,
     private menuService: MenuService,
+    private messServ: MessagesService,
   ) {
     this.mansioni = [];
+    this.menu = [];
   }
 
   ngOnInit() {
+    this.mansioni = [];
+    this.menu = [];
     this.mansioniService.get().then(
       (mansioni: Mansione[]) => this.mansioni = mansioni
     );
@@ -41,15 +47,22 @@ export class AuthorizationComponent implements OnInit {
   }
 
   save() {
-    this.menu.forEach(x => {
-      if (this.menuXmansione[x._id] !== undefined) {
-        x.roles = this.menuXmansione[x._id];
-        this.menuService.update(x).subscribe(res=> {
-          //console.log("update res:", res);
+    this.menu.forEach(menu => {
+      const updatedMenu = { ...menu };  // Clona l'oggetto menu, inclusi i sottomenu
+      console.log("Menu: ", menu);
+      console.log("UPMenu: ", updatedMenu);
 
-        })
+      if (this.menuXmansione[menu._id] !== undefined) {
+        updatedMenu.roles = this.menuXmansione[menu._id];
+
+        this.menuService.update(updatedMenu).subscribe(res => {
+          console.log("Menu aggiornato:", res);
+        });
       }
-    })
+    });
+    this.messServ.showMessage("Salvataggio Effettuato");
   }
+
+
 
 }

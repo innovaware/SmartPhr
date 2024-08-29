@@ -54,41 +54,43 @@ router.get("/access", async (req, res) => {
 
 
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const data = req.body;
+    try {
+        const { id } = req.params;
+        const data = req.body;
 
-    if (id == undefined || id === "undefined") {
-      console.log("Error id is not defined ", id);
-      res.status(404).json({ Error: "Id not defined" });
-      return;
+        if (!id || !data) {
+            res.status(404).json({ Error: "Id or data not defined" });
+            return;
+        }
+
+        // Recupera il menu esistente
+        const existingMenu = await Menu.findById(id);
+
+        if (!existingMenu) {
+            res.status(404).json({ Error: "Menu not found" });
+            return;
+        }
+
+        // Aggiorna solo i campi specificati senza sovrascrivere i sottomenu
+        existingMenu.title = data.title || existingMenu.title;
+        existingMenu.link = data.link || existingMenu.link;
+        existingMenu.icon = data.icon || existingMenu.icon;
+        existingMenu.roles = data.roles || existingMenu.roles;
+        existingMenu.active = data.active !== undefined ? data.active : existingMenu.active;
+        existingMenu.order = data.order !== undefined ? data.order : existingMenu.order;
+
+        // Mantieni i sottomenu esistenti se non sono inclusi nel payload
+        if (data.subMenu) {
+            existingMenu.subMenu = data.subMenu;
+        }
+
+        const result = await existingMenu.save();
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
     }
-
-    if (data == undefined || data === "undefined") {
-      console.log("Error data is not defined ", id);
-      res.status(404).json({ Error: "Data not defined" });
-      return;
-    }
-
-    const result = await Menu.updateOne(
-      { _id: id },
-      {
-        $set: data,
-      },
-      { upsert: true }
-    );
-
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`MENU*`);
-    }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
 });
+
 module.exports = router;
