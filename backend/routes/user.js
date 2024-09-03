@@ -2,6 +2,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const router = express.Router();
 const { ObjectId } = require("bson");
+const bcrypt = require('bcrypt');
 
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
@@ -340,6 +341,20 @@ router.post("/", async (req, res) => {
   }
 });
 
+
+async function codificaPassword(password) {
+    const saltRounds = 12;
+    try {
+        // Codifica della password
+        const hash = await bcrypt.hash(password, saltRounds);
+        return hash;
+    } catch (err) {
+        console.error("Errore nella codifica della password:", err);
+        throw err; // Rilancia l'errore per essere gestito nel chiamante
+    }
+}
+
+
 /**
  * Modifica data dell'utente
  * @see model/user.js
@@ -356,11 +371,11 @@ router.put("/:id", async (req, res) => {
     mailer = req.app.get('mailer');
     mailerTopic = req.app.get('mailerTopic');
     mailerDisabled = req.app.get('mailerDisabled');
-
+      const pwd = await codificaPassword(req.body.password);
     const userUpdate = {
       group: req.body.group,
       username: req.body.username,
-      password: req.body.password,
+        password: pwd,
       active: req.body.active
     }
 

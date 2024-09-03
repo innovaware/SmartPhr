@@ -23,7 +23,7 @@
         <input id="password"
                [type]="showPassword ? 'text' : 'password'"
                placeholder="Inserisci Password"
-               [(ngModel)]="utente.password"
+               [(ngModel)]="password"
                class="form-control">
         <span class="input-group-text" (click)="togglePassword()">
           <ng-container *ngIf="showPassword">
@@ -104,6 +104,6 @@
           (click)="saveCred()">
     Aggiorna utenza
   </button>
-  <b *ngIf="uploadingCred" style="padding-left: 10px;">Modifica credenziali avvenuta con successo.</b>
-  <b *ngIf="errorCred" style="padding-left: 10px;">Credenziali inserite non corrispondono.</b>
+  <!--<b *ngIf="uploadingCred" style="padding-left: 10px;">Modifica credenziali avvenuta con successo.</b>
+  <b *ngIf="errorCred" style="padding-left: 10px;">Credenziali inserite non corrispondono.</b>-->
 </div>

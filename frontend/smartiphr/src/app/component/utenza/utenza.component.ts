@@ -22,6 +22,7 @@ export class UtenzaComponent implements OnInit {
   public uploadingCred: boolean;
   public errorCred: boolean;
   confirmpassword: String;
+  password: String;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
   //utente: User;
@@ -56,6 +57,7 @@ export class UtenzaComponent implements OnInit {
 
   saveCred() {
     if (this.admin) {
+      this.utente.password = this.password.valueOf();
       this.usersService
         .save(this.utente)
         .then((x) => {
@@ -64,6 +66,7 @@ export class UtenzaComponent implements OnInit {
           setInterval(() => {
             this.uploadingCred = false;
           }, 3000);
+          this.messageService.showMessage("Salvataggio Effettuato");
         })
         .catch((err) => {
           this.messageService.showMessageError(
@@ -73,7 +76,8 @@ export class UtenzaComponent implements OnInit {
         });
       return;
     }
-    if (this.confirmpassword == this.utente.password) {
+    if (this.confirmpassword == this.password) {
+      this.utente.password = this.password.valueOf();
       this.usersService
         .save(this.utente)
         .then((x) => {
@@ -82,6 +86,7 @@ export class UtenzaComponent implements OnInit {
           setInterval(() => {
             this.uploadingCred = false;
           }, 3000);
+          this.messageService.showMessage("Salvataggio Effettuato");
         })
         .catch((err) => {
           this.messageService.showMessageError(
@@ -90,7 +95,10 @@ export class UtenzaComponent implements OnInit {
           this.uploadingCred = false;
         });
     }
-    else this.errorCred = true;
+    else {
+      this.errorCred = true;
+      this.messageService.showMessageError("Le due password non corrispondono");
+    }
   }
 
   //loadUserCred() {
