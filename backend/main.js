@@ -6,7 +6,7 @@ const basicAuth = require("express-basic-auth");
 const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
-
+const bcrypt = require('bcrypt');
 // LOGGER
 const morgan = require('morgan');
 
@@ -625,9 +625,7 @@ const getAuth = (req) => {
         return null;
     }
 
-    var auth = new Buffer.from(authheader.split(" ")[1], "base64")
-        .toString()
-        .split(":");
+    var auth = new Buffer.from(authheader.split(" ")[1], "base64").toString().split(":");
     var username = auth[0];
     var password = auth[1];
 
@@ -635,73 +633,77 @@ const getAuth = (req) => {
 };
 
 const authorizationHandler = async (req, res, next) => {
-    //console.log("AuthorizationHandler: ", req);
     const userAuth = getAuth(req);
 
-    //console.log("user auth: ", userAuth);
     if (userAuth == null) {
-        //var err = new Error("You are not authenticated!");
         res.setHeader("WWW-Authenticate", "Basic");
-        //err.status = 401;
         res.statusCode = 401;
-        res.end("Not Authorizated");
-        //return next(null, "You are not authenticated!");
-
-        console.log("User not authorizated");
+        res.end("Not Authorized");
         return;
     }
 
     var username = userAuth.user;
     var password = userAuth.password;
+    
 
-    //console.log("Auth: ", userAuth)
-    var userMatches = false;
-    var passwordMatches = false;
-    var resultAuthorization = false;
-    getUser(username, password)
-        .then((user) => {
-            //console.log("GetUser completed: ", user);
+    try {
+        const user = await getUser(username, password);
 
-            userMatches = user.username != undefined && user.active == true;
-            passwordMatches = user.password != undefined;
-            resultAuthorization = userMatches & passwordMatches;
-
-            //console.log("User username: ", user.username);
-            //console.log("User password: ", user.password);
-            //console.log("User active: ", user.active);
-            //console.log("User authorizated: ", resultAuthorization);
-            if (!resultAuthorization) {
-                res.statusCode = 401;
-                res.setHeader("WWW-Authenticate", "Basic");
-                res.end("Not Authorizated");
-                //console.log("[AUTHORIZATIONHANDLER] User not authorized");
-
-            } else {
-                res.locals.auth = user;
-                //console.log("Setted local parameter user");
-                //console.log(`[AUTHORIZATIONHANDLER] res.locals.auth:`, res.locals.auth);
-                return next(null, resultAuthorization);
-            }
-        })
-        .catch((err) => {
-            console.log("No matching: Err ", err);
-            // return next(null, result_authorization);
+        if (user) {
+            res.locals.auth = user;
+            return next();
+        } else {
             res.statusCode = 401;
-            res.setHeader("Content-Type", "text/plain");
-            res.end("Not Authorizated");
-        });
+            res.setHeader("WWW-Authenticate", "Basic");
+            res.end("Not Authorized");
+        }
+    } catch (err) {
+        res.statusCode = 500;
+        res.setHeader("Content-Type", "text/plain");
+        res.end("Internal Server Error");
+    }
 };
 
-function getUser(username, password) {
-    const readFromMongo = (username, password) => {
-        return user.find({
-            $and: [{ username: username }, { password: password }]
-        });
-    }
+async function readFromMongo(username, password) {
+    try {
+        const utente = await user.findOne({ username: username });
 
+        if (!utente) {
+            return null; // L'utente non esiste
+        }
+
+        const passwordMatches = await comparePassword(password, utente.password);
+
+        if (passwordMatches) {
+            return utente;
+        } else {
+            return null;
+        }
+    } catch (err) {
+        console.error("Errore in readFromMongo:", err);
+        throw err;
+    }
+}
+
+async function comparePassword(password, pwdUser) {
+    try {
+        const isMatch = await bcrypt.compare(password, pwdUser);
+        if (!isMatch) {
+            if (password == pwdUser) return true;
+            else return false;
+        }
+        return isMatch;
+    } catch (err) {
+        console.error("Errore nel confronto delle password:", err);
+        return false;
+    }
+}
+
+function getUser(username, password) {
     return new Promise(async (resolve, reject) => {
+        const searchTerm = `AUTH${username}`;
+
         if (clientRedis && !redisDisabled) {
-            const searchTerm = `AUTH${username}${password}`;
             clientRedis.get(searchTerm, async (err, data) => {
                 if (err) {
                     reject(err);
@@ -710,36 +712,46 @@ function getUser(username, password) {
 
                 if (data) {
                     const userFind = JSON.parse(data);
-                    resolve(userFind);
 
-                } else {
-                    //console.log(`[GETUSER] Get from MONGODB searchTerm:${searchTerm}`);
-                    const usersFind = await readFromMongo(username, password);
-                    if (usersFind.length > 0) {
-                        const userFind = usersFind[0];
-
-                        clientRedis.setex(
-                            searchTerm,
-                            redisTimeCache,
-                            JSON.stringify(userFind)
-                        );
-
+                    // Esegui il confronto delle password fuori da Redis
+                    const passwordMatches = await comparePassword(password, userFind.password);
+                    if (passwordMatches) {
                         resolve(userFind);
                     } else {
-                        reject("Not found");
+                        reject("Password non corrisponde.");
+                    }
+                } else {
+                    try {
+                        const userFind = await readFromMongo(username, password);
+                        if (userFind) {
+                            // Memorizza i dati dell'utente senza la password in Redis
+                            const userWithoutPassword = { ...userFind._doc};
+                            clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(userWithoutPassword));
+                            resolve(userFind);
+                        } else {
+                            reject("Utente non trovato.");
+                        }
+                    } catch (err) {
+                        reject(err);
                     }
                 }
             });
         } else {
-            const usersFind = await readFromMongo(username, password);
-            if (usersFind.length > 0) {
-                resolve(usersFind[0]);
-            } else {
-                reject("User not found");
+            try {
+                const userFind = await readFromMongo(username, password);
+                if (userFind) {
+                    resolve(userFind);
+                } else {
+                    reject("Utente non trovato.");
+                }
+            } catch (err) {
+                reject(err);
             }
         }
     });
 }
+
+
 
 const checkAuthRole = async (user) => {
     const mansioneRole = user.role;

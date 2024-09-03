@@ -4,7 +4,7 @@
   "description": "Innova Backend",
   "main": "index.js",
   "dependencies": {
-    "bcrypt": "^5.0.1",
+    "bcrypt": "^5.1.1",
     "bootstrap": "^5.3.2",
     "bson": "^4.5.2",
     "codice-fiscale-js": "^2.3.20",
