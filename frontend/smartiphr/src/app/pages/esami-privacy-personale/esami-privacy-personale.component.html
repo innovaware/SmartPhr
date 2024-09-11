@@ -241,21 +241,25 @@
 
   </mat-tab>-->
     <!-- REGOLAMENTO -->
-    <mat-tab label="Regolamento interno" >
-      <br />
-      <div class="pdf-container">
-        <iframe *ngIf="pdfSrc" [src]="pdfSrc"
-                frameBorder="0"
-                scrolling="auto"
-                height="100%"
-                width="100%"></iframe>
+      <mat-tab label="Regolamento interno">
+        <br />
+        <div class="pdf-container">
+          <iframe *ngIf="pdfSrc" [src]="pdfSrc"
+                  frameBorder="0"
+                  scrolling="auto"
+                  height="100%"
+                  width="100%"></iframe>
 
-      </div>
-        <br>
-        <div class="form-check form-switch">
-          <input class="form-check-input" type="checkbox" id="presa" slot="end" [(ngModel)]="dipendente.accettatoRegolamento" />
-          <label class="form-check-label" for="presa">Presa visione Regolamento interno.</label>
         </div>
+        <div class="row">
+          <div class="col">
+            <div class="form-check form-switch" style="transform: scale(2); padding-left: 330px; padding-top: 10px;">
+              <input class="form-check-input" type="checkbox" id="presa" slot="end" [(ngModel)]="dipendente.accettatoRegolamento" />
+              <label class="form-check-label" for="presa" style="font-size: 1.5rem;">Presa visione Regolamento interno.</label>
+            </div>
+          </div>
+        </div>
+
         <br>
         <button mat-button class="button-insert" (click)="saveDipendente()">Salva</button>
         <b *ngIf="uploadingRegolamento" style="padding-left: 10px;">Modifica avvenuta con successo.</b>

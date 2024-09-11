@@ -308,6 +308,7 @@ export class DialogConsulenteComponent implements OnInit {
   async addContratto() {
     this.addingContratto = true;
     this.nuovaContratto = {
+
       filename: undefined,
       note: "",
     };
@@ -388,7 +389,7 @@ export class DialogConsulenteComponent implements OnInit {
     const file: File = contratto.file;
     this.uploadingContratto = true;
     this.addingContratto = true;
-
+    contratto.consulenteNome = this.item.consulente.cognome + "/" + this.item.consulente.nome + "/" + this.item.consulente.codiceFiscale;
     console.log("Invio contratto: ", contratto);
     this.contrattoService
       .insert(contratto, this.item.consulente._id)

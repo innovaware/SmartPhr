@@ -7,6 +7,7 @@ export class Contratto {
 
   _id?: string;
   idConsulente?: string;
+  consulenteNome?: String;
   filename: string;
   dateupload?: Date;
   dataScadenza?: Date;

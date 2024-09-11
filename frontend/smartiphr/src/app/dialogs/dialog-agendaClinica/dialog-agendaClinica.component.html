@@ -51,42 +51,47 @@
             </div>
         </div>
         <div class="row">
-            <div class="col">
-                <ng-container *ngIf="data.add">
-                    <mat-label>Tipologia Evento: </mat-label>
-                    <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" (change)="onSelectionChange()">
-                        <option selected="" value="">Seleziona ...</option>
-                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
-                        <option value="Altra visita specialistica">Altra visita specialistica</option>
-                        <option value="Esame ematochimico">Esame ematochimico</option>
-                        <option value="Uscita con familiari">Uscita con familiari</option>
-                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
-                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
-                        <option value="Uscita per esame">Uscita per esame</option>
-                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
-                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
-                    </select>
-                </ng-container>
-                <ng-container *ngIf="!data.add">
-                    <mat-label>Tipologia Evento: </mat-label>
-                    <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" disabled="disabled" readonly>
-                        <option selected="" value="">Seleziona ...</option>
-                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
-                        <option value="Altra visita specialistica">Altra visita specialistica</option>
-                        <option value="Esame ematochimico">Esame ematochimico</option>
-                        <option value="Uscita con familiari">Uscita con familiari</option>
-                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
-                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
-                        <option value="Uscita per esame">Uscita per esame</option>
-                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
-                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
-                    </select>
-                </ng-container>
-            </div>
+          <div class="col">
+            <label>Tipologia Evento: </label>
+          </div>
+          <div class="col">
+            <ng-container *ngIf="data.add">
+             
+              <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" (change)="onSelectionChange()">
+                <option selected="" value="">Seleziona ...</option>
+                <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                <option value="Altra visita specialistica">Altra visita specialistica</option>
+                <option value="Esame ematochimico">Esame ematochimico</option>
+                <option value="Uscita con familiari">Uscita con familiari</option>
+                <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                <option value="Uscita per esame">Uscita per esame</option>
+                <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+              </select>
+            </ng-container>
+            <ng-container *ngIf="!data.add">
+              <select class="input-cartelle" matNativeControl [(ngModel)]="tipo" disabled="disabled" readonly>
+                <option selected="" value="">Seleziona ...</option>
+                <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                <option value="Altra visita specialistica">Altra visita specialistica</option>
+                <option value="Esame ematochimico">Esame ematochimico</option>
+                <option value="Uscita con familiari">Uscita con familiari</option>
+                <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                <option value="Uscita per esame">Uscita per esame</option>
+                <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+              </select>
+            </ng-container>
+          </div>
         </div>
+      <br />
         <div class="row">
+          <div class="col">
+            <label>Status: </label>
+          </div>
             <div class="col">
-                <mat-label>Status: </mat-label>
                 <select class="input-cartelle" matNativeControl [(ngModel)]="stato" (change)="onSelectionChange()">
                     <option selected="" value="">Seleziona ...</option>
                     <option value="Richiesta inviata">Richiesta inviata</option>
@@ -107,7 +112,12 @@
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
-
+                </div>
+                <div class="col">
+                  <div class="col">
+                    <label>Orario: </label>
+                    <input type="time" class="form-control" [(ngModel)]="time">
+                  </div>
                 </div>
             </div>
         </ng-container>

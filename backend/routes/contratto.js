@@ -80,6 +80,7 @@ router.post("/consulente/:id", async (req, res) => {
         const { id } = req.params;
         const contratto = new Contratto({
             idConsulente: id,
+            consulenteNome: req.body.consulenteNome,
             filename: req.body.filename,
             dateupload: Date.now(),
             dataScadenza: req.body.dataScadenza,
@@ -113,6 +114,7 @@ router.put("/:id", async (req, res) => {
                 $set: {
                     idConsulente: req.body.pazienteID,
                     filename: req.body.filename,
+                    consulenteNome: req.body.consulenteNome,
                     note: req.body.note,
                     dataScadenza: req.body.dataScadenza,
                 },

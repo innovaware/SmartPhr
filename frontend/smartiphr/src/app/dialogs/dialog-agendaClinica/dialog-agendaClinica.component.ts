@@ -28,6 +28,7 @@ export class DialogAgendaClinicaComponent implements OnInit {
   evento: String;
   add: Boolean;
   enabled: Boolean;
+  time: string;  // Usa stringa per l'input di tempo
 
   constructor(
     private agendaClinicaService: AgendaClinicaService,
@@ -46,6 +47,11 @@ export class DialogAgendaClinicaComponent implements OnInit {
       this.tipo = data.item.tipo;
       this.evento = data.item.evento;
       this.dataEvento = data.item.dataEvento;
+      if (this.dataEvento) {
+        const hours = this.dataEvento.getHours().toString().padStart(2, '0');
+        const minutes = this.dataEvento.getMinutes().toString().padStart(2, '0');
+        this.time = `${hours}:${minutes}`;
+      }
       this.enabled = this.stato === 'Visita fissata con data';
     } else {
       this.note = '';
@@ -53,6 +59,7 @@ export class DialogAgendaClinicaComponent implements OnInit {
       this.tipo = '';
       this.evento = '';
       this.enabled = false;
+      this.time = `00:00`;
     }
     this.getPazienti();
   }
@@ -87,6 +94,11 @@ export class DialogAgendaClinicaComponent implements OnInit {
       item.evento = this.evento;
       if (this.dataEvento) {
         item.dataEvento = this.dataEvento;
+        if (this.time && this.time != null && this.time != undefined) {
+          const [hours, minutes] = this.time.split(':').map(Number);
+          item.dataEvento.setHours(hours);
+          item.dataEvento.setMinutes(minutes);
+        }
         var event = new Evento();
         event.tipo = "agendaClinica";
         event.data = this.dataEvento;
