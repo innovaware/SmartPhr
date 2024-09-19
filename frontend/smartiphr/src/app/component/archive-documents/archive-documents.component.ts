@@ -117,7 +117,7 @@ export class ArchiveDocumentsComponent implements OnInit {
     paziente: Paziente;
   }) {
     this.uploadService
-      .download(doc.documentoPaziente.filename, doc.paziente._id, this.typeDocument)
+      .download(doc.documentoPaziente.filename, doc.documentoPaziente.paziente, this.typeDocument)
       .then((x) => {
         x.subscribe((data) => {
           const newBlob = new Blob([data as BlobPart], {
