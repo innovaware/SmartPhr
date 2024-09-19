@@ -6,7 +6,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./archivi-relazioni-certificati.component.css']
 })
 export class ArchiviRelazioniCertificatiComponent implements OnInit {
-  typeDocument: string = "Verbali";
+  typeDocument: string = "Relazione";
 
   constructor() {}
 

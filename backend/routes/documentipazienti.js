@@ -41,7 +41,7 @@ router.get("/pazienteingresso/:id", async (req, res) => {
         const getData = () => {
             return DocPaziente.find({
                 paziente: id,
-                typeDocument: "ingresso",
+                type: "ingresso",
             });
         };
 
@@ -508,5 +508,36 @@ router.get("/refertoEmatochimico/all", async (req, res) => {
     res.status(500).json({ Error: err });
   }
 });
+
+// Filtro
+
+router.get("/documentoType/:type", async (req, res) => {
+    const { type } = req.params;
+    try {
+        const getData = (query) => {
+            return DocPaziente.find(query);
+        };
+
+        const query = {
+            $and: [
+                { type: type },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
+        };
+
+        const pazienti = await getData(query);
+
+        if (pazienti != null) {
+            res.status(200).json(pazienti);
+        } else {
+            res.status(404).json({ error: "No patient found" });
+        }
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
 
 module.exports = router;

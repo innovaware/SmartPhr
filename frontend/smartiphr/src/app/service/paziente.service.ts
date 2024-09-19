@@ -201,9 +201,9 @@ export class PazienteService {
         );
 
       default:
-        return new Observable((observer) => {
-          observer.next([]);
-        });
+        return this.http.get<DocumentoPaziente[]>(
+          `${this.api}/api/documentipazienti/documentoType/${typeDocument}`
+        );
     }
   }
 
