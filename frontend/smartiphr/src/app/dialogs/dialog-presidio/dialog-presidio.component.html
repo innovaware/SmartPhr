@@ -54,7 +54,7 @@
   
       <div class="row">
         <div class="col">
-          <label>Quantità</label>
+          <label>Giacenza</label>
         </div>
       </div>
       <div class="row">
@@ -85,7 +85,7 @@
 
       <div class="row">
         <div class="col">
-          <label>Giacenza*</label>
+          <label>Giacenza minima*</label>
         </div>
       </div>
       <div class="row">
@@ -112,6 +112,24 @@
             <textarea matInput placeholder="taglia" [(ngModel)]="data.row.taglia"
               [disabled]=disable></textarea>
           </mat-form-field>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col">
+          <label>Data Scadenza</label>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col">
+          <div>
+            <mat-form-field appearance="fill">
+              <mat-label>Data scadenza</mat-label>
+              <input matInput [matDatepicker]="scadenza" [(ngModel)]="data.row.scadenza" [disabled]=disable>
+              <mat-datepicker-toggle matSuffix [for]="scadenza"></mat-datepicker-toggle>
+              <mat-datepicker #scadenza></mat-datepicker>
+            </mat-form-field>
+          </div>
         </div>
       </div>
 
@@ -147,4 +165,3 @@
       <button mat-button class="button-save" (click)="save()">Salva</button>
     </div>
   </div>
-  

@@ -11,6 +11,7 @@ export class Armadio {
   idCamera: string;
   contenuto: Indumento[];
   lastChecked?: {
+    _id?: String;
     idUser: string;
     datacheck: Date;
   };

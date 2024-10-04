@@ -39,3 +39,12 @@
   .mat-dialog-actions{
     float:right;
   }
+
+.centered-table th,
+.centered-table td {
+  text-align: center; /* Per centrare il contenuto delle celle */
+}
+
+.centered-table th {
+  font-weight: bold;
+}

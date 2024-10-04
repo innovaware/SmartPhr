@@ -289,6 +289,7 @@ import { UtenzaComponent } from "./component/utenza/utenza.component";
 import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
 import { DialogRichiestaPresidiComponent } from "./dialogs/dialog-richiesta/dialog-richiesta.component";
 import { RichiestaPresidiComponent } from "./component/richiestePresidi/richiestePresidi.component";
+import { AttivitaFarmPresComponent } from "./component/attivitaFarmaciPresidi/attivitaFarmaciPresidi.component";
 
 const materialModules = [
   MatTableModule,
@@ -402,6 +403,7 @@ const pipes = [
     GeneralePersonaleComponent,
     GestStanzeComponent,
     CalendarComponent,
+    AttivitaFarmPresComponent,
     VisitePreAssunzioniComponent,
     VisitePeriodicheComponent,
     MedicoLavoroComponent,

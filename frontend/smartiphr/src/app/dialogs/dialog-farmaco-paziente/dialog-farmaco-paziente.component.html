@@ -2,7 +2,12 @@
   <div class="container-fluid">
     <div class="row">
       <div class="col">
-        <h4>{{ data.title }}</h4>
+        <ng-container *ngIf="!data.editMode">
+          <h4>Nuovo {{ data.type }}</h4>
+        </ng-container>
+        <ng-container *ngIf="data.editMode">
+          <h4>{{ data.type }}: {{data.materiale.nome}}</h4>
+        </ng-container>
       </div>
 
       <div class="col">
@@ -22,49 +27,27 @@
 
 <mat-dialog-content>
   <div class="container-fluid">
-    
-    <mat-form-field appearance="fill" *ngIf="data.row.nome == ''">
-      <mat-label>Seleziona Farmaco</mat-label>
-      <mat-select [(ngModel)]="data.row._id" [(value)]="selected">
-        <mat-option *ngFor="let farmaco of farmaci"  [value]="farmaco._id">
-          {{farmaco.nome}}
-        </mat-option>
+    <mat-form-field appearance="fill" class="w-100">
+      <mat-label>Seleziona {{ data.type }} </mat-label>
+      <mat-select [(ngModel)]="materiale" (selectionChange)="changeMat($event,data.type)" [disabled]=disable>
+        <mat-option *ngFor="let option of materiali" [value]="option._id">{{option.nome}} (scad. {{option.scadenza | date: 'dd/MM/yyyy'}})</mat-option>
       </mat-select>
     </mat-form-field>
-
-
-    <div class="row" *ngIf="data.row.nome != ''">
-      <div class="col">
-        <div class="form-group">
-          <label>Farmaco</label><br>
-          <h2>{{ data.row.nome }}</h2>
-
-        </div>
-      </div>
-    </div>
-
-
     <div class="row">
       <div class="col">
-        <div class="form-group">
-          <label>Quantità*</label>
-          <mat-form-field appearance="fill">
-            <input matInput type="number"   [(ngModel)]="data.row.qty">
-          </mat-form-field>
-        </div>
-      </div>
-
-      <div class="col">
-        <div class="form-group">
-          <label>Giacenza*</label>
-          <mat-form-field appearance="fill">
-            <input matInput type="text" placeholder="Inserisci Giacenza" [(ngModel)]="data.row.giacenza">
-          </mat-form-field>
-        </div>
+        <mat-form-field appearance="fill">
+          <mat-label>Seleziona la quantità</mat-label>
+          <input matInput type="number" placeholder="Quantità" min="0" [attr.max]="quantitaMax" [(ngModel)]="quantita">
+        </mat-form-field>
       </div>
     </div>
-
-
+    <div class="row">
+      <div class="col">
+        <mat-form-field>
+          <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+        </mat-form-field>
+      </div>
+    </div>
 
   </div>
 

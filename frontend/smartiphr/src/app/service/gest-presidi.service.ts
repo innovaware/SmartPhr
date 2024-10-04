@@ -16,6 +16,9 @@ export class GestPresidiService {
     return this.http.get<Presidi[]>(this.api + "/api/presidi").toPromise();
   }
 
+  async getById(id: String): Promise<Presidi> {
+    return this.http.get<Presidi>(this.api + "/api/presidi/"+id).toPromise();
+  }
   
   async getPresidiByPaziente(id): Promise<Presidi[]> {
     return this.http.get<Presidi[]>(this.api + "/api/presidi/paziente/" + id).toPromise();

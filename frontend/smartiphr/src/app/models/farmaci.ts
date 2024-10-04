@@ -1,4 +1,7 @@
 export class Farmaci {
+  quantitaDisponibile?: Number;
+  cestino?: Boolean;
+  quantitaOccupata?: Number;
 
   constructor() {
     this._id = "";
@@ -14,19 +17,21 @@ export class Farmaci {
     this.qty = 1;
     this.qtyTot = 1;
     this.giacenza = 1;
-    this.codice_interno   = "";
-
+    this.codice_interno = "";
+    this.quantitaDisponibile = 1;
+    this.quantitaOccupata = 0;
     this.operator = "";
     this.operatorName = "";
     this.paziente = "";
     this.pazienteName = "";
+    this.cestino = false;
   }
 
   static clone(obj: Farmaci) {
     return JSON.parse(JSON.stringify(obj));
   }
   _id?: string;
-  rif_id:string;
+  rif_id: string;
   nome: string;
   descrizione: string;
   formulazione: string;
@@ -43,6 +48,6 @@ export class Farmaci {
 
   operator: string;
   operatorName: string;
-  paziente: string;
-  pazienteName: string;
+  paziente?: string;
+  pazienteName?: string;
 }

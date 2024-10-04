@@ -159,6 +159,7 @@ export class CamereDetailsComponent implements OnInit {
                   rateVerifica: 0,
                   pazienteId: selectedPatient._id,
                   lastChecked: {
+                    _id: user.dipendenteID,
                     datacheck: new Date(),
                     idUser: dipendente
                   },

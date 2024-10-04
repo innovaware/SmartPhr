@@ -5,12 +5,14 @@ const AttivitaFarmaciPresidiSchema = mongoose.Schema({
     operatorName: String,
     paziente: String,
     pazienteName: String,
-    data: Date,
+    dataOP: Date,
     elemento: String,
+    elementotype: String,
     elemento_id: String,
     type: String,
-    data: String,
-    qty: String
+    operation: String,
+    qty: String,
+    qtyRes: String,
 });
 
 module.exports = mongoose.model("AttivitaFarmaciPresidi", AttivitaFarmaciPresidiSchema, "attivitaFarmaciPresidi");

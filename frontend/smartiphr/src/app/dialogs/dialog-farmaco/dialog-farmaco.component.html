@@ -31,7 +31,7 @@
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <input matInput type="text" placeholder="Inserisci il contenuto" [(ngModel)]="data.row.nome">
+          <input matInput type="text" placeholder="Inserisci il contenuto" [(ngModel)]="data.row.nome" [disabled]=disabled>
         </mat-form-field>
       </div>
     </div>
@@ -45,7 +45,7 @@
       <div class="col">
 
         <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.descrizione"></textarea>
+          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.descrizione" [disabled]=disabled></textarea>
         </mat-form-field>
       </div>
     </div>
@@ -54,7 +54,7 @@
       <div class="col">
         <div class="form-group">
           <label for="select_formato">Formato*</label>
-          <select class="form-control" [(ngModel)]="data.row.formato">
+          <select class="form-control" [(ngModel)]="data.row.formato" [disabled]=disabled>
             <option value="Compresse">Compresse</option>
             <option value="Fiale">Fiale</option>
             <option value="Bustine">Bustine</option>
@@ -67,7 +67,7 @@
         <div class="form-group">
           <label for="select_formato">Formulazione*</label>
           <mat-form-field appearance="fill">
-            <input matInput type="text" placeholder="Inserisci la formulazione" [(ngModel)]="data.row.formulazione">
+            <input matInput type="text" placeholder="Inserisci la formulazione" [(ngModel)]="data.row.formulazione" [disabled]=disabled>
           </mat-form-field>
         </div>
       </div>
@@ -80,7 +80,7 @@
         <div class="form-group">
           <label>Quantità per confezione*</label>
           <mat-form-field appearance="fill">
-            <input matInput type="number"   [(ngModel)]="data.row.qty">
+            <input matInput type="number"   [(ngModel)]="data.row.qty" [disabled]=disabled>
           </mat-form-field>
         </div>
       </div>
@@ -89,7 +89,7 @@
         <div class="form-group">
           <label>Codice Lotto*</label>
           <mat-form-field appearance="fill">
-            <input matInput type="text" placeholder="Inserisci Codice Lotto" [(ngModel)]="data.row.lotto">
+            <input matInput type="text" placeholder="Inserisci Codice Lotto" [(ngModel)]="data.row.lotto" [disabled]=disabled>
           </mat-form-field>
         </div>
       </div>
@@ -100,18 +100,18 @@
     <div class="row">
       <div class="col">
         <div class="form-group">
-          <label>Quantità</label>
+          <label>Giacenza</label>
           <mat-form-field appearance="fill">
-            <input matInput type="number"   [(ngModel)]="data.row.qtyTot">
+            <input matInput type="number"   [(ngModel)]="data.row.qtyTot" [disabled]=disabled>
           </mat-form-field>
         </div>
       </div>
 
       <div class="col">
         <div class="form-group">
-          <label>Giacenza</label>
+          <label>Giacenza Minima</label>
           <mat-form-field appearance="fill">
-            <input matInput type="number"   [(ngModel)]="data.row.giacenza">
+            <input matInput type="number"   [(ngModel)]="data.row.giacenza" [disabled]=disabled>
           </mat-form-field>
         </div>
       </div>
@@ -124,7 +124,7 @@
         <div>
           <mat-form-field appearance="fill">
             <mat-label>Data scadenza</mat-label>
-            <input matInput [matDatepicker]="scadenza" [(ngModel)]="data.row.scadenza">
+            <input matInput [matDatepicker]="scadenza" [(ngModel)]="data.row.scadenza" [disabled]=disabled>
             <mat-datepicker-toggle matSuffix [for]="scadenza"></mat-datepicker-toggle>
             <mat-datepicker #scadenza></mat-datepicker>
           </mat-form-field>
@@ -134,7 +134,7 @@
       <div class="col">
         <div class="form-group">
           <label for="select_formato">Classe </label>
-          <select class="form-control" [(ngModel)]="data.row.classe">
+          <select class="form-control" [(ngModel)]="data.row.classe" [disabled]=disabled>
             <option value="pianoTerapeutico">Piano Terapeutico</option>
             <option value="fasciaA">Fascia A</option>
             <option value="fasciaB">Fascia B</option>
@@ -155,8 +155,7 @@
     <div class="col">
 
       <mat-form-field appearance="fill">
-        <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.note"
-         ></textarea>
+        <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="data.row.note" [disabled]=disabled></textarea>
       </mat-form-field>
     </div>
   </div>
@@ -170,6 +169,6 @@
 <div mat-dialog-actions>
   <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="false">Chiudi</button>
-    <button mat-button class="button-save" (click)="save()">Salva</button>
+    <button mat-button class="button-save" *ngIf="!disabled" (click)="save()">Salva</button>
   </div>
 </div>

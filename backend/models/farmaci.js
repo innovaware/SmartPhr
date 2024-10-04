@@ -12,11 +12,12 @@ const FarmaciSchema = mongoose.Schema({
     dose: String,
     qty: Number, 
     qtyTot: Number,
+    quantitaDisponibile: Number,
+    quantitaOccupata: Number,
     giacenza: Number,
-    note:String,
+    note: String,
+    cestino: Boolean,
     codice_interno: String,
-    paziente: String,
-    pazienteName: String,
 });
 
 module.exports = mongoose.model('Farmaci', FarmaciSchema, 'farmaci');

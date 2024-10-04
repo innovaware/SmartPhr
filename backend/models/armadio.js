@@ -10,6 +10,7 @@ const ArmadioSchema = mongoose.Schema({
         ref: 'indumenti'
     }],
     lastChecked: {
+        _id: String,
       idUser: String,
       datacheck: Date,
     },

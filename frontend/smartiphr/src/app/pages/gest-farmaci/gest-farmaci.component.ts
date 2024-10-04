@@ -10,6 +10,9 @@ import { AuthenticationService } from "src/app/service/authentication.service";
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { GestFarmaciService } from "src/app/service/gest-farmaci.service";
 import { MessagesService } from "src/app/service/messages.service";
+import { Paziente } from "../../models/paziente";
+import { AttivitaFarmaciPresidi } from "../../models/attivitaFarmaciPresidi";
+import { AttivitafarmacipresidiService } from "../../service/attivitafarmacipresidi.service";
 
 @Component({
   selector: 'app-gest-farmaci',
@@ -17,26 +20,36 @@ import { MessagesService } from "src/app/service/messages.service";
   styleUrls: ['./gest-farmaci.component.css']
 })
 export class GestFarmaciComponent implements OnInit {
-
+  type: String;
+  paziente: Paziente;
+  ospite: Boolean;
+  DisplayedColumnsN: string[] = ["elemento", "operazione", "quantita", "date", "operatore"];
   displayedColumns: string[] = [
     "nome",
-    "descrizione",
-    "formulazione",
+    // "descrizione",
+    // "formulazione",
     "formato",
     "lotto",
     "qtyTot",
-    "qty",
-    "giacenza",
+    // "qty",
+    "disponibile",
+    "occupate",
+    //"giacenza",
     "scadenza",
-    "classe",
+    //  "classe",
     "action",
   ];
   dataSource: MatTableDataSource<Farmaci>;
+  dataSourceR: MatTableDataSource<AttivitaFarmaciPresidi>;
+  dataSourceS: MatTableDataSource<Farmaci>;
   farmaci: Farmaci[];
+  farmaciScad: Farmaci[];
+  public attivita: AttivitaFarmaciPresidi[];
+  @ViewChild("Farmaci", { static: false }) paginator: MatPaginator;
+  @ViewChild("Scaduti", { static: false }) paginatorS: MatPaginator;
+  @ViewChild("Registro", { static: false }) paginatorR: MatPaginator;
 
-  @ViewChild(MatPaginator, { static: false }) paginator: MatPaginator;
-
-  dipendente: Dipendenti = {} as Dipendenti;
+  dipendente: Dipendenti ;
   OperatorID: String;
   Operator: String;
   constructor(
@@ -45,35 +58,82 @@ export class GestFarmaciComponent implements OnInit {
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
     public messageService: MessagesService,
-  ) { }
+    public AFPS: AttivitafarmacipresidiService
+  ) {
+    this.type = "Farmaci";
+    this.paziente = new Paziente();
+    this.ospite = false;
+    this.farmaci = [];
+    this.farmaciScad = [];
+    this.dataSource = new MatTableDataSource<Farmaci>();
+    this.dataSourceS = new MatTableDataSource<Farmaci>();
+    this.farmaciService.getFarmaci().then((result) => {
+      console.log(result); // Log per verificare il contenuto di result
 
-  ngOnInit(): void {
+      this.farmaci = result.filter(x => new Date(x.scadenza) < new Date());
+      this.farmaciScad = result.filter(x => new Date(x.scadenza) >= new Date());
+
+      this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
+      this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
+
+      // Assicurati che i paginator siano stati inizializzati
+      this.dataSourceS.paginator = this.paginatorS;
+      this.dataSource.paginator = this.paginator;
+    });
+    this.dipendente = new Dipendenti();
+    this.getAttivita();
     this.loadUser();
   }
 
+  ngOnInit(): void {
+    this.dipendente = new Dipendenti();
+    this.loadUser();
+
+  }
+
   ngAfterViewInit() {
+    this.dipendente = new Dipendenti();
+    this.loadUser();
     this.farmaciService.getFarmaci().then((result) => {
-      this.farmaci = result;
+      console.log(result); // Log per verificare il contenuto di result
+
+      this.farmaci = result.filter(x => new Date(x.scadenza) >= new Date());
+      this.farmaciScad = result.filter(x => new Date(x.scadenza) < new Date());
 
       this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
+      this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
+
+      // Assicurati che i paginator siano stati inizializzati
+      this.dataSourceS.paginator = this.paginatorS;
       this.dataSource.paginator = this.paginator;
     });
+    this.getAttivita();
   }
 
-  applyFilter(event: Event) {
+
+
+  applyFilter(event: Event, t: String) {
     const filterValue = (event.target as HTMLInputElement).value;
-    this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (t == "farmaci")
+      this.dataSource.filter = filterValue.trim().toLowerCase();
+    if (t == "scaduti")
+      this.dataSourceS.filter = filterValue.trim().toLowerCase();
+    if (t == "registro")
+      this.dataSourceR.filter = filterValue.trim().toLowerCase();
   }
+
+
 
 
   loadUser() {
+
+    this.dipendente = new Dipendenti();
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
       console.log("get dipendente");
       this.dipendenteService
         .getByIdUser(user.dipendenteID)
         .then((x) => {
-          console.log("user: " , user);
-          console.log("\n\n\ndipendente: " , x);
+
           this.dipendente = x[0];
 
         })
@@ -82,59 +142,135 @@ export class GestFarmaciComponent implements OnInit {
             "Errore Caricamento dipendente (" + err["status"] + ")"
           );
         });
-      this.OperatorID = this.dipendente._id == null ? user._id : this.dipendente._id;
-      this.Operator = this.dipendente.nome == null ? user.username : this.dipendente.nome + " " + this.dipendente.cognome;
     });
+
+    this.Operator = this.dipendente.nome + " " + this.dipendente.cognome;
+    this.OperatorID = this.dipendente._id;
   }
+
 
 
 
   async newItem() {
-    var dialogRef = undefined;
-
-    dialogRef = this.dialog.open(DialogFarmacoComponent, {
+    const dialogRef = this.dialog.open(DialogFarmacoComponent, {
       data: { row: new Farmaci(), title: 'Nuovo Farmaco' },
     });
 
+    // Attende la chiusura della finestra di dialogo
+    const result = await dialogRef.afterClosed().toPromise();
 
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
-        console.log("The dialog was closed");
-        if (result != undefined && result) {
+    if (result) {
+      result.operator = this.OperatorID;
+      result.operatorName = this.Operator;
 
+      try {
+        const insertResult = await this.farmaciService.insert(result);
+        console.log("Update Completed. Result: ", insertResult);
+        this.farmaci.push(result);
 
-          result.operator = this.OperatorID
-          result.operatorName = this.Operator;
+        // Creazione e inizializzazione dell'oggetto AttivitaFarmaciPresidi
+        const af: AttivitaFarmaciPresidi = {
+          dataOP: new Date(),
+          elemento: result.nome,
+          elemento_id: result._id,
+          operation: "Inserimento Farmaco",
+          type: "Farmaci",
+          qty: result.qtyTot.toString(),
+          operator: this.dipendente._id,
+          operatorName: `${this.dipendente.nome} ${this.dipendente.cognome}`,
+        };
 
-          this.farmaciService
-            .insert(result)
-            .then((r) => {
-              console.log("Update Completed. Result: ", r);
-              this.farmaci.push(result);
-              this.dataSource.data = this.farmaci;
-            })
-            .catch((err) => {
-              console.error("Error update farmaco: ", err);
-            });
-        }
-      });
+        // Inserimento dell'attività
+        await this.AFPS.addFarm(af);
+
+        // Aggiornamento dei farmaci
+        const farmaciResult = await this.farmaciService.getFarmaci();
+        console.log(farmaciResult); // Log per verificare il contenuto di result
+
+        // Filtraggio dei farmaci per scadenza
+        this.farmaci = farmaciResult.filter((x) => new Date(x.scadenza) >= new Date());
+        this.farmaciScad = farmaciResult.filter((x) => new Date(x.scadenza) < new Date());
+
+        // Aggiornamento delle dataSource per la visualizzazione nelle tabelle
+        this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
+        this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
+
+        // Impostazione dei paginator (assicurandosi che siano già stati inizializzati)
+        this.dataSource.paginator = this.paginator;
+        this.dataSourceS.paginator = this.paginatorS;
+
+        this.getAttivita();
+      } catch (err) {
+        console.error("Error during farmaco insertion or update: ", err);
+      }
+    }
   }
+
 
   async editItem(item: Farmaci) {
     var dialogRef = undefined;
     dialogRef = this.dialog.open(DialogFarmacoComponent, {
-      data: { row: Farmaci.clone(item), title: 'Modifica Farmaco' },
+      data: { row: Farmaci.clone(item), title: 'Modifica Farmaco', readOnly: false },
     });
 
     if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result) => {
+      dialogRef.afterClosed().subscribe(async (result) => {
         console.log("The dialog was closed");
         if (result != undefined && result) {
-         /* result.operator = this.dipendente._id;
-          result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;*/
+          /* result.operator = this.dipendente._id;
+           result.operatorName = this.dipendente.nome + ' ' + this.dipendente.cognome;*/
+
+          if (item.qtyTot > result.qtyTot) {
+            // Creazione e inizializzazione dell'oggetto AttivitaFarmaciPresidi
+            const af: AttivitaFarmaciPresidi = {
+              dataOP: new Date(),
+              elemento: result.nome,
+              elemento_id: result._id,
+              operation: "Scarico Farmaco",
+              type: "Farmaci",
+              qty: (item.qtyTot - result.qtyTot).toString(),
+              operator: this.dipendente._id,
+              operatorName: `${this.dipendente.nome} ${this.dipendente.cognome}`,
+            };
+            // Inserimento dell'attività
+            await this.AFPS.addFarm(af);
+          }
+          else {
+            if (item.qtyTot < result.qtyTot) {
+              // Creazione e inizializzazione dell'oggetto AttivitaFarmaciPresidi
+              const af: AttivitaFarmaciPresidi = {
+                dataOP: new Date(),
+                elemento: result.nome,
+                elemento_id: result._id,
+                operation: "Carico Farmaco",
+                type: "Farmaci",
+                qty: (item.qtyTot + result.qtyTot).toString(),
+                operator: this.dipendente._id,
+                operatorName: `${this.dipendente.nome} ${this.dipendente.cognome}`,
+              };
+              // Inserimento dell'attività
+              await this.AFPS.addFarm(af);
+            }
+            else {
+              // Creazione e inizializzazione dell'oggetto AttivitaFarmaciPresidi
+              const af: AttivitaFarmaciPresidi = {
+                dataOP: new Date(),
+                elemento: result.nome,
+                elemento_id: result._id,
+                operation: "Modifica dati Farmaco",
+                type: "Farmaci",
+                qty:"",
+                operator: this.dipendente._id,
+                operatorName: `${this.dipendente.nome} ${this.dipendente.cognome}`,
+              };
+              // Inserimento dell'attività
+              await this.AFPS.addFarm(af);
+            }
+          }
+
+
           result.operator = this.OperatorID
           result.operatorName = this.Operator;
-
           this.farmaciService
             .update(result)
             .then((r) => {
@@ -147,13 +283,61 @@ export class GestFarmaciComponent implements OnInit {
               }
 
               this.farmaci.push(result);
-              this.dataSource.data = this.farmaci;
             })
             .catch((err) => {
               console.error("Error update farmaco: ", err);
             });
+          this.farmaciService.getFarmaci().then((result) => {
+            console.log(result); // Log per verificare il contenuto di result
+
+            this.farmaci = result.filter(x => new Date(x.scadenza) >= new Date());
+            this.farmaciScad = result.filter(x => new Date(x.scadenza) < new Date());
+
+            this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
+            this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
+
+            // Assicurati che i paginator siano stati inizializzati
+            this.dataSourceS.paginator = this.paginatorS;
+            this.dataSource.paginator = this.paginator;
+
+            this.getAttivita();
+          });
         }
       });
   }
+
+  view(row: Farmaci) {
+    var dialogRef = undefined;
+    dialogRef = this.dialog.open(DialogFarmacoComponent, {
+      data: { row: Farmaci.clone(row), title: 'Modifica Farmaco', readOnly: true },
+    });
+
+    if (dialogRef != undefined)
+      dialogRef.afterClosed().subscribe((result) => {
+        console.log("The dialog was closed");
+      });
+  }
+
+
+  getAttivita() {
+
+    this.attivita = [];
+    this.dataSourceR = new MatTableDataSource<AttivitaFarmaciPresidi>();
+    this.AFPS.getAllAttivitaFarmaci()
+      .then((result: AttivitaFarmaciPresidi[]) => {
+        // Ordinamento delle attività per data
+        this.attivita = result.sort((a, b) => new Date(b.dataOP).getTime() - new Date(a.dataOP).getTime());
+
+        // Imposta la sorgente dati con l'array ordinato
+        this.dataSourceR.data = this.attivita;
+
+        // Configura il paginatore
+        this.dataSourceR.paginator = this.paginatorR;
+      })
+      .catch(error => {
+        console.error('Errore durante il recupero delle attività:', error);
+      });
+  }
+
 
 }

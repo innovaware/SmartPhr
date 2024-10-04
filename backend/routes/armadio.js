@@ -2,7 +2,10 @@ const { ObjectId } = require("bson");
 const express = require("express");
 const router = express.Router();
 const Armadio = require("../models/armadio");
+const armadioFarmaci = require("../models/armadioFarmaci");
+const attivitaFarm = require("../models/attivitaFarmaciPresidi");
 const Camere = require("../models/camere");
+const Paziente = require("../models/pazienti");
 const registroArmadi = require("../models/registroArmadi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
@@ -374,28 +377,62 @@ router.delete("/:id", async (req, res) => {
     }
 });
 
+
 router.post("/", async (req, res) => {
     try {
+        // Crea e salva il documento 'Armadio'
         const armadio = new Armadio(req.body.armadio);
-
         const resultArmadio = await armadio.save();
 
+        // Crea e salva il documento 'Registro Armadi'
         const registro = new registroArmadi({
             idCamera: req.body.armadio.idCamera,
             stato: false,
             paziente: req.body.armadio.pazienteId,
             data: new Date(),
             note: req.body.note,
-            firma: req.body.armadio.lastChecked.idUser
+            firma: req.body.armadio.lastChecked.idUser,
         });
-
         const resultRegistro = await registro.save();
 
-        res.status(200).json(armadio);
+        // Crea e salva il documento 'Armadio Farmaci'
+        const ArmFarm = new armadioFarmaci({
+            pazienteId: req.body.armadio.pazienteId,
+            farmaci: [],
+            presidi: [],
+            cancellato: false,
+            dataCreazione: new Date(),
+            lastChecked: req.body.armadio.lastChecked,
+        });
+        await ArmFarm.save();
+
+        // Recupera le informazioni del paziente
+        const paziente = await Paziente.findById(ArmFarm.pazienteId);
+        if (!paziente) {
+            return res.status(404).json({ error: "Paziente non trovato" });
+        }
+
+        const nome = `${paziente.nome} ${paziente.cognome}`;
+
+        // Crea e salva il documento 'AttivitaFarm'
+        const attivitaF = new attivitaFarm({
+            operator: req.body.armadio.lastChecked._id,
+            operatorName: req.body.armadio.lastChecked.idUser,
+            operation: "Creazione armadio farmaci",
+            type: "ArmadioFarmaci",
+            dataOP: new Date(),
+            paziente: req.body.armadio.pazienteId,
+            pazienteName: nome,
+        });
+
+        await attivitaF.save();
+
+        // Risposta con il documento 'armadio' salvato
+        res.status(200).json(resultArmadio);
     } catch (err) {
-        res.status(500).json({ Error: err });
+        // Risposta in caso di errore
+        res.status(500).json({ error: err.message });
     }
 });
-
 
 module.exports = router;

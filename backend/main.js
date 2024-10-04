@@ -55,8 +55,8 @@ const MONGO_USERNAME = "innova";
 const MONGO_PASSWORD = "innova2019";
 const MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
 const MONGO_PORT = "27017";
-//const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
-const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
+const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
+//const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
 // LOGGER 
@@ -464,6 +464,11 @@ const InitApiFunctions = () => {
     app.use(apiArmadio.path, logHandler, authorizationHandler, ArmadioRouter);
     routesList.push(apiArmadio);
 
+
+    var ArmadioFarmaciRouter = require("./routes/armadioFarmaci");
+    var apiArmadioFarmaci = { key: 'armadioFarmaci', path: '/api/armadioFarmaci' }
+    app.use(apiArmadioFarmaci.path, logHandler, authorizationHandler, ArmadioFarmaciRouter);
+    routesList.push(apiArmadioFarmaci);
 
     // Attivita e elementi armadio API
     var controlliOSSRouter = require("./routes/controlliOSS");

@@ -15,6 +15,9 @@ export class GestFarmaciService {
   async getFarmaci(): Promise<Farmaci[]> {
     return this.http.get<Farmaci[]>(this.api + "/api/farmaci").toPromise();
   }
+  async getById(id:String): Promise<Farmaci> {
+    return this.http.get<Farmaci>(this.api + "/api/farmaci/"+id).toPromise();
+  }
 
   async getFarmaciByPaziente(id): Promise<Farmaci[]> {
     return this.http.get<Farmaci[]>(this.api + "/api/farmaci/paziente/" + id).toPromise();
@@ -22,7 +25,7 @@ export class GestFarmaciService {
 
   async update(item: Farmaci) {
     var body = item;
-    console.log('async update: ' + JSON.stringify(item));
+    //console.log('async update: ' + JSON.stringify(item));
     return this.http.put<Farmaci>(this.api + "/api/farmaci/" + item._id, body).toPromise();
   }
 

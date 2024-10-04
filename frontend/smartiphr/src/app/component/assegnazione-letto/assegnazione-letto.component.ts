@@ -113,6 +113,7 @@ export class AssegnazioneLettoComponent implements OnInit {
                 rateVerifica: 0,
                 pazienteId: this.paziente._id,
                 lastChecked: {
+                  _id: user.dipendenteID,
                   datacheck: new Date(),
                   idUser: dipendente
                 },
