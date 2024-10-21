@@ -234,4 +234,13 @@ export class ParametriVitaliComponent implements OnInit {
 
     this.loadCharts();
   }
+
+  aggiungiRiga() {
+    // Crea un nuovo oggetto ParametriVitali
+    const nuovaRiga: ParametriVitali = new ParametriVitali(moment(), this.paramVitali.length+1);
+    
+    // Aggiungi la nuova riga all'array paramVitali
+    this.paramVitali.push(nuovaRiga);
+  }
+
 }

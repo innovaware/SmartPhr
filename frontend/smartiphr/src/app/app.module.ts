@@ -289,6 +289,7 @@ import { UtenzaComponent } from "./component/utenza/utenza.component";
 import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
 import { DialogRichiestaPresidiComponent } from "./dialogs/dialog-richiesta/dialog-richiesta.component";
 import { RichiestaPresidiComponent } from "./component/richiestePresidi/richiestePresidi.component";
+import { SchedaTerapeuticaComponent } from "./component/scheda-terapeutica/scheda-terapeutica.component";
 import { AttivitaFarmPresComponent } from "./component/attivitaFarmaciPresidi/attivitaFarmaciPresidi.component";
 
 const materialModules = [
@@ -433,6 +434,7 @@ const pipes = [
     SchedaBAIComponent,
     SchedaUlcereComponent,
     AssegnazioneLettoComponent,
+    SchedaTerapeuticaComponent,
     SchedaMNARComponent,
     SchedaVASComponent,
     SchedaUlcereDiabeteComponent,

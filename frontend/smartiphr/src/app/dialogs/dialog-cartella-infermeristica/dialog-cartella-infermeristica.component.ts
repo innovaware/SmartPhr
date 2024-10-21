@@ -106,15 +106,21 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
   ngOnInit() {}
 
   async save() {
+    try {
+      // Salva i dati del paziente
+      const savedPaziente = await this.pazienteService.save(this.paziente);
+      console.log(`Patient saved`, savedPaziente);
 
-    this.pazienteService.save(this.paziente).then(
-      (value: Paziente) => {
-        console.log(`Patient  saved`, value);
-        //this.dialogRef.close(this.paziente);
+      // Emetti l'evento di salvataggio per i parametri vitali
+      this.saveParametriVitali.next(this.paziente._id);
 
-        this.saveParametriVitali.next(this.paziente._id);
-      }
-    )
+      // Chiudi il dialog solo dopo il salvataggio
+      this.dialogRef.close(this.paziente);
+
+    } catch (error) {
+      console.error("Error saving patient data:", error);
+      // Gestisci l'errore, ad esempio mostra un messaggio di errore all'utente
+    }
   }
 
   changeTab(event) {

@@ -55,8 +55,8 @@ const MONGO_USERNAME = "innova";
 const MONGO_PASSWORD = "innova2019";
 const MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
 const MONGO_PORT = "27017";
-const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
-//const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
+//const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
+const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
 // LOGGER 
@@ -482,6 +482,12 @@ const InitApiFunctions = () => {
     var apiAttivitafarmaci = { key: 'attivitafarmaci', path: '/api/attivitafarmaci' }
     app.use(apiAttivitafarmaci.path, logHandler, authorizationHandler, AttivitaFarmaciRouter);
     routesList.push(apiAttivitafarmaci);
+
+    // SchedaTerapeutica
+    var SchedaTerapeuticaRouter = require("./routes/schedaTerapeutica");
+    var apiSchedaTerapeutica = { key: 'schedaTerapeutica', path: '/api/schedaTerapeutica' }
+    app.use(apiSchedaTerapeutica.path, logHandler, authorizationHandler, SchedaTerapeuticaRouter);
+    routesList.push(apiSchedaTerapeutica);
 
     // Gestione Chiavi API
     var gestChiaviRouter = require("./routes/gestChiavi");

@@ -40,18 +40,27 @@ export class DialogAgendaClinicaComponent implements OnInit {
   ) {
     this.AllPazienti = [];
     this.add = data.add;
+
     if (!data.add) {
       this.PazienteName = data.item.pazienteName;
       this.note = data.item.note;
       this.stato = data.item.status;
       this.tipo = data.item.tipo;
       this.evento = data.item.evento;
-      this.dataEvento = data.item.dataEvento;
-      if (this.dataEvento) {
+
+      // Controllo e conversione dell'evento in una data valida
+      if (data.item.dataEvento) {
+        this.dataEvento = new Date(data.item.dataEvento);
+      }
+
+      if (this.dataEvento instanceof Date && !isNaN(this.dataEvento.getTime())) {
         const hours = this.dataEvento.getHours().toString().padStart(2, '0');
         const minutes = this.dataEvento.getMinutes().toString().padStart(2, '0');
         this.time = `${hours}:${minutes}`;
+      } else {
+        this.time = '00:00';
       }
+
       this.enabled = this.stato === 'Visita fissata con data';
     } else {
       this.note = '';
@@ -92,6 +101,7 @@ export class DialogAgendaClinicaComponent implements OnInit {
       item.note = this.note;
       item.tipo = this.tipo;
       item.evento = this.evento;
+
       if (this.dataEvento) {
         item.dataEvento = this.dataEvento;
         if (this.time && this.time != null && this.time != undefined) {
@@ -99,7 +109,7 @@ export class DialogAgendaClinicaComponent implements OnInit {
           item.dataEvento.setHours(hours);
           item.dataEvento.setMinutes(minutes);
         }
-        var event = new Evento();
+        const event = new Evento();
         event.tipo = "agendaClinica";
         event.data = this.dataEvento;
         event.dataCreazione = this.dataEvento;
@@ -114,7 +124,7 @@ export class DialogAgendaClinicaComponent implements OnInit {
       item.note = this.note;
       if (this.dataEvento) {
         item.dataEvento = this.dataEvento;
-        var event = new Evento();
+        const event = new Evento();
         event.tipo = "agendaClinica";
         event.data = this.dataEvento;
         event.dataCreazione = this.dataEvento;
@@ -151,16 +161,14 @@ export class DialogAgendaClinicaComponent implements OnInit {
     ) {
       this.enabled = true;
       this.stato = 'Visita fissata con data';
-    }
-    else {
+    } else {
       this.stato = '';
       this.enabled = false;
     }
 
     if (this.stato == 'Visita fissata con data') {
       this.enabled = true;
-    }
-    else {
+    } else {
       this.enabled = false;
     }
   }

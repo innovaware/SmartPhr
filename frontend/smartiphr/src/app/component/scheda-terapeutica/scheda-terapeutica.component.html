@@ -1,0 +1,241 @@
+<div class="container-flex">
+
+    <div class="row">
+        <div class="col">
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <!-- TABELLA TERAPIA ORALE -->
+            <table>
+                <thead style="background: #ff000099; font-weight: bold;">
+                    <tr>
+                        <th class="center title" style="width: 20%;">Data Inizio</th>
+                        <th class="center title" style="width: 35%;">Terapia Orale</th>
+                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
+                        <th class="center title" style="width: 20%;">Data Fine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let riga of righeTabellaOrale; let i = index">
+                        <td class="center">
+                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
+                                   (change)="onDataInizioChange($event, i, 'orale')"
+                                   (click)="openCalendar($event)"
+                                   style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'orale')"
+                                   placeholder="Medicina e Quantità" style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <table class="table-header">
+                                <tr>
+                                    <td class="item center title without-border">
+                                        07
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        08
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        10
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        12
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        16
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        17
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        18
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        20
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        22
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'orale')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        23
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'orale')"></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="center">
+                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
+                                   (click)="openCalendar($event)" style="width: 100%;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+
+            <!-- TABELLA TERAPIA I.M./E.V./S.C. -->
+            <table>
+                <thead style="background: #76d676; font-weight: bold;">
+                    <tr>
+                        <th class="center title" style="width: 20%;">Data Inizio</th>
+                        <th class="center title" style="width: 35%;">Terapia I.M./E.V./S.C.</th>
+                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
+                        <th class="center title" style="width: 20%;">Data Fine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let riga of righeTabellaImEvSc; let i = index">
+                        <td class="center">
+                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
+                                   (change)="onDataInizioChange($event, i, 'imevsc')"
+                                   (click)="openCalendar($event)"
+                                   style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'imevsc')"
+                                   placeholder="Medicina e Quantità" style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <table class="table-header">
+                                <tr>
+                                    <td class="item center title without-border">
+                                        07
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        08
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        10
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        12
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        16
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        17
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        18
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        20
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        22
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'imevsc')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        23
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'imevsc')"></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="center">
+                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
+                                   (click)="openCalendar($event)" style="width: 100%;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <!-- TABELLA TERAPIA ESTEMPORANEA -->
+            <table>
+                <thead style="background: #82acff; font-weight: bold;">
+                    <tr>
+                        <th class="center title" style="width: 20%;">Data Inizio</th>
+                        <th class="center title" style="width: 35%;">Terapia Estemporanea</th>
+                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
+                        <th class="center title" style="width: 20%;">Data Fine</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let riga of righeTabellaEstemporanea; let i = index">
+                        <td class="center">
+                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
+                                   (change)="onDataInizioChange($event, i, 'estemporanea')"
+                                   (click)="openCalendar($event)"
+                                   style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'estemporanea')"
+                                   placeholder="Medicina e Quantità" style="width: 100%;">
+                        </td>
+                        <td class="center">
+                            <table class="table-header">
+                                <tr>
+                                    <td class="item center title without-border">
+                                        07
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        08
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        10
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        12
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        16
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        17
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        18
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        20
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        22
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'estemporanea')"></label>
+                                    </td>
+                                    <td class="item center title without-border">
+                                        23
+                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'estemporanea')"></label>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="center">
+                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
+                                   (click)="openCalendar($event)" style="width: 100%;">
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
