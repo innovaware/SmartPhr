@@ -290,6 +290,9 @@ import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contr
 import { DialogRichiestaPresidiComponent } from "./dialogs/dialog-richiesta/dialog-richiesta.component";
 import { RichiestaPresidiComponent } from "./component/richiestePresidi/richiestePresidi.component";
 import { AttivitaFarmPresComponent } from "./component/attivitaFarmaciPresidi/attivitaFarmaciPresidi.component";
+import { CarrelloComponent } from "./pages/carrello/carrello.component";
+import { DialogCartComponent } from "./dialogs/dialog-cart/dialog-cart.component";
+import { DialogCartItemComponent } from "./dialogs/dialog-cart-item/dialog-cart-item.component";
 
 const materialModules = [
   MatTableModule,
@@ -338,6 +341,8 @@ const dialogModule = [
   DialogDipendenteComponent,
   DialogConsulenteComponent,
   DialogFornitoreComponent,
+  DialogCartComponent,
+  DialogCartItemComponent,
   DialogAspComponent,
   DialogMessageErrorComponent,
   DialogPazienteComponent,
@@ -570,6 +575,7 @@ const pipes = [
     DialogCaricoMagazzinoComponent,
     CucinaSanificazioneAmbientiComponent,
     CucinaControlloTamponiComponent,
+    CarrelloComponent,
     CucinaAutoControlloComponent,
     CucinaDerrateAlimentariComponent,
     DialogCucinaDerranteAlimentiComponent,

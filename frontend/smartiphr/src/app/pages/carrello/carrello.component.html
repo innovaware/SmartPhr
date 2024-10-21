@@ -1,0 +1,143 @@
+<div class="container pad">
+  <div class="row">
+    <div class="col">
+      <h1 class="title">Carrello {{title}}</h1>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col">
+      <hr />
+    </div>
+  </div>
+  <mat-tab-group mat-align-tabs="start">
+    <mat-tab label="Gestione Carrelli">
+      <div class="row">
+        <div class="col">
+          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="nome">
+              <th mat-header-cell *matHeaderCellDef> Carrello </th>
+              <td mat-cell *matCellDef="let element"> {{element.nomeCarrello}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Status">
+              <th mat-header-cell *matHeaderCellDef> Stato </th>
+              <td mat-cell *matCellDef="let element">
+
+                <ng-container *ngIf="element.inUso">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red;" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                  </svg>
+                </ng-container>
+                <ng-container *ngIf="!element.inUso">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:green;" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
+                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
+                  </svg>
+                </ng-container>
+
+              </td>
+            </ng-container>
+            
+            <!-- Name Column -->
+            <ng-container matColumnDef="totElementi">
+              <th mat-header-cell *matHeaderCellDef> Contenuto </th>
+              <td mat-cell *matCellDef="let element"> {{element.contenuto.length}} </td>
+            </ng-container>
+
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="Ultimo">
+              <th mat-header-cell *matHeaderCellDef>Data ultimo utilizzo </th>
+              <td mat-cell *matCellDef="let element"> {{element.dataUtilizzo  | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
+
+            <ng-container matColumnDef="action">
+              <th mat-header-cell *matHeaderCellDef> </th>
+              <td mat-cell *matCellDef="let row" style="text-align: right;">
+
+                <button mat-button (click)="openDialog(row)">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                  </svg>
+                </button>
+              </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+
+
+          <mat-paginator #NonInUso [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+
+    <mat-tab label="Registro Attività">
+      <div class="row">
+        <div class="col">
+          <table mat-table [dataSource]="dataSourceReg" class="mat-elevation-z8">
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="Carrello">
+              <th mat-header-cell *matHeaderCellDef> Carrello</th>
+              <td mat-cell *matCellDef="let element"> {{element.carrelloName}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Elemento">
+              <th mat-header-cell *matHeaderCellDef> Elemento </th>
+              <td mat-cell *matCellDef="let element"> {{element.elemento}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Operazione">
+              <th mat-header-cell *matHeaderCellDef> Operazione </th>
+              <td mat-cell *matCellDef="let element"> {{element.operation}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Quantita">
+              <th mat-header-cell *matHeaderCellDef> Quantita </th>
+              <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Res">
+              <th mat-header-cell *matHeaderCellDef> Quantita Residua </th>
+              <td mat-cell *matCellDef="let element"> {{element.quantitaRes}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="DataModifica">
+              <th mat-header-cell *matHeaderCellDef>Data Modifica</th>
+              <td mat-cell *matCellDef="let element">
+                {{ element.dataModifica | date: 'dd/MM/yyyy, HH:mm':'UTC+2' }}
+              </td>
+            </ng-container>
+
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="Operatore">
+              <th mat-header-cell *matHeaderCellDef> Operatore </th>
+              <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsReg"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsReg;"></tr>
+          </table>
+
+
+          <mat-paginator #Registro [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+          </mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+  
+</div>

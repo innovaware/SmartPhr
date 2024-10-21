@@ -55,8 +55,8 @@ const MONGO_USERNAME = "innova";
 const MONGO_PASSWORD = "innova2019";
 const MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
 const MONGO_PORT = "27017";
-//const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
-const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
+const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
+//const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
 // LOGGER 
@@ -469,6 +469,16 @@ const InitApiFunctions = () => {
     var apiArmadioFarmaci = { key: 'armadioFarmaci', path: '/api/armadioFarmaci' }
     app.use(apiArmadioFarmaci.path, logHandler, authorizationHandler, ArmadioFarmaciRouter);
     routesList.push(apiArmadioFarmaci);
+
+    var RegistroCarrelloRouter = require("./routes/registroCarrello");
+    var apiRegistroCarrello = { key: 'registroCarrello', path: '/api/registroCarrello' }
+    app.use(apiRegistroCarrello.path, logHandler, authorizationHandler, RegistroCarrelloRouter);
+    routesList.push(apiRegistroCarrello);
+    
+    var CarrelloRouter = require("./routes/carrello");
+    var apiCarrello = { key: 'carrello', path: '/api/carrello' }
+    app.use(apiCarrello.path, logHandler, authorizationHandler, CarrelloRouter);
+    routesList.push(apiCarrello);
 
     // Attivita e elementi armadio API
     var controlliOSSRouter = require("./routes/controlliOSS");
