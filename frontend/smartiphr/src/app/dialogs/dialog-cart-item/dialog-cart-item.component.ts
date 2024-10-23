@@ -15,6 +15,8 @@ import { RegistroCarrelloService } from '../../service/registroCarrello.service'
 import { RegistroCarrello } from '../../models/registroCarrello';
 import { AttivitaFarmaciPresidi } from '../../models/attivitaFarmaciPresidi';
 import { AttivitafarmacipresidiService } from '../../service/attivitafarmacipresidi.service';
+import { Farmaci } from '../../models/farmaci';
+import { FarmacoArmadio } from '../../models/armadioFarmaciPresidi';
 
 @Component({
   selector: 'app-dialog-cart-item',
@@ -30,6 +32,7 @@ export class DialogCartItemComponent implements OnInit {
   note: String;
   paziente: Paziente;
   material: ItemCartMat;
+  nomePaziente: String;
   constructor(
     private AFPS: AttivitafarmacipresidiService,
     private messageService: MessagesService,
@@ -44,193 +47,250 @@ export class DialogCartItemComponent implements OnInit {
       edit: Boolean,
       type: String,
       dipendente: Dipendenti
-    }) {
+    }
+  ) {
+    this.initializeDefaults();
+
+    if (data.edit) {
+      this.setupEditData();
+    }
+
+    if (data.type.toLowerCase() === 'infermieri') {
+      this.loadPazienti();
+    }
+  }
+
+  private initializeDefaults(): void {
+    this.nomePaziente = '';
     this.material = new ItemCartMat();
     this.material.quantita = 0;
     this.AllPazienti = [];
     this.paziente = new Paziente();
     this.quantita = 0;
-    this.note = "";
-    if (data.edit) {
-      this.materiale = data.elemento.elementoName;
-      this.quantita = data.elemento.quantita;
-      this.note = data.elemento.note;
-      if (data.type.toLowerCase() == "infermieri")
-        this.PS.getPaziente(data.elemento.pazienteID.valueOf()).then((result: Paziente) => {
-          this.paziente = result[0];
-        });
-    }
-    if (data.type.toLowerCase() == 'infermieri') {
-      this.loadPazienti();
+    this.note = '';
+  }
+
+  private setupEditData(): void {
+    const { elemento, type } = this.data;
+
+    this.materiale = elemento.elementoName;
+    this.quantita = elemento.quantita;
+    this.note = elemento.note;
+
+    if (type.toLowerCase() === 'infermieri') {
+      this.loadPazienteData(elemento.pazienteID.valueOf(), elemento.elementoType.valueOf(), elemento.elementoID.valueOf());
     }
   }
+
+  private loadPazienteData(pazienteID: string, elementoType: string, elementoID: string): void {
+    this.PS.getPaziente(pazienteID).then((result: Paziente) => {
+      this.paziente = result[0];
+      this.nomePaziente = `${this.paziente.nome} ${this.paziente.cognome}`;
+
+      this.aF.getByPaziente(this.paziente._id).then((res: ArmadioFarmaci) => {
+        const armF = res[0];
+        if (elementoType === 'Farmaci') {
+          this.assignMaterialFromList(armF.farmaci, elementoID, 'Farmaci');
+        } else if (elementoType === 'Presidi') {
+          this.assignMaterialFromList(armF.presidi, elementoID, 'Presidi');
+        }
+      });
+    });
+  }
+
+  private assignMaterialFromList(list: any[], elementoID: string, type: string): void {
+    list.forEach(item => {
+      if ((type === 'Farmaci' && item.farmacoID === elementoID) ||
+        (type === 'Presidi' && item.presidioID === elementoID)) {
+        this.material = new ItemCartMat();
+        this.material.elementoID = type === 'Farmaci' ? item.farmacoID : item.presidioID;
+        this.material.elemento = item.nome;
+        const n: Number = item.quantita;
+        this.material.quantita = Number(n) + Number(this.data.elemento.quantita);
+        console.log(this.material.quantita);
+        this.material.type = type;
+      }
+    });
+  }
+
 
 
   ngOnInit(): void {
   }
 
   async salva() {
-    // Se è un nuovo elemento
-    if (!this.data.edit) {
+    try {
+      const isOSS = this.data.carrello.type.toLowerCase() === 'oss';
+      const isInfermiere = this.data.carrello.type.toLowerCase() === 'infermieri';
+
       let item: CarrelloItem = new CarrelloItem();
 
-      // Se il carrello è di tipo OSS
-      if (this.data.carrello.type.toLowerCase() === 'oss') {
-        item.elementoName = this.materiale;
-        item.elementoType = "oss";
-        item.note = this.note;
-        item.quantita = this.quantita;
-        console.log(this.quantita);
-
-        // Inizializza il contenuto se non esiste
+      // Funzione per aggiungere l'elemento al carrello
+      const aggiungiElementoAlCarrello = () => {
         if (!this.data.carrello.contenuto || this.data.carrello.contenuto.length === 0) {
           this.data.carrello.contenuto = [];
         }
-
-        // Aggiungi l'elemento al carrello
         this.data.carrello.contenuto.push(item);
+      };
 
-        // Aggiorna il carrello
-        await this.CServ.update(this.data.carrello).toPromise();
-
-        // Aggiungi al registro
+      // Funzione per aggiungere al registro
+      const aggiungiAlRegistro = async (tipo: string, operazione: string, qRes: number,q:number = 0) => {
         let reg: RegistroCarrello = new RegistroCarrello();
         reg.carrelloID = this.data.carrello._id;
         reg.carrelloName = this.data.carrello.nomeCarrello;
         reg.dataModifica = new Date();
-        reg.elemento = this.materiale;
-        reg.type = "OSS";
-        reg.operation = "Inserimento materiale";
-        reg.quantita = this.quantita;
+        reg.elemento = isOSS ? this.materiale : this.material.elemento;
+        reg.type = tipo;
+        reg.operation = operazione;
+        reg.quantita = q != 0 ? q : this.quantita;
+        reg.quantitaRes = qRes;
         reg.operator = this.data.dipendente._id;
         reg.operatorName = `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`;
+        if (isInfermiere) {
+          reg.paziente = this.paziente._id;
+          reg.pazienteName = `${this.paziente.nome} ${this.paziente.cognome}`;
+        }
         await this.RegServ.add(reg);
-      }
+      };
 
-      // Se il carrello è di tipo infermieri
-      if (this.data.carrello.type.toLowerCase() === 'infermieri') {
-        if (this.quantita > this.material.quantita) {
-          this.messageService.showMessageError("Hai superato la quantità massima");
-          return;
+      // Funzione per gestire farmaci o presidi
+      const gestioneScarico = async (armF: ArmadioFarmaci, tipo: string, elementoID: string, qtaRes: number, q: number = 0) => {
+        const af: AttivitaFarmaciPresidi = {
+          dataOP: new Date(),
+          elemento: this.material.elemento,
+          elemento_id: elementoID,
+          operation: tipo + " " + this.material.type + " dal carrello " + this.data.carrello.nomeCarrello,
+          type: this.material.type,
+          elementotype: this.material.type,
+          qty: q != 0 ? q.toString() : this.quantita.toString(),
+          qtyRes: qtaRes.toString(),
+          operator: this.data.dipendente._id,
+          operatorName: `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`,
+          paziente: this.paziente._id,
+          pazienteName: `${this.paziente.nome} ${this.paziente.cognome}`,
+        };
+        await this.AFPS.addArmF(af);
+      };
+
+      // Se è un nuovo elemento
+      if (!this.data.edit) {
+        if (isOSS) {
+          // Set OSS-specific item details
+          item.elementoName = this.materiale;
+          item.elementoType = "oss";
+          item.note = this.note;
+          item.quantita = this.quantita;
+          aggiungiElementoAlCarrello();
+          await this.CServ.update(this.data.carrello).toPromise();
+          await aggiungiAlRegistro("OSS", "Inserimento materiale", Number(this.quantita));
         }
-        item.elementoName = this.material.elemento;
-        item.elementoID = this.material.elementoID;
-        item.elementoType = this.material.type;
-        item.note = this.note;
-        item.quantita = this.quantita;
-        console.log(this.quantita);
 
-        // Inizializza il contenuto se non esiste
-        if (!this.data.carrello.contenuto || this.data.carrello.contenuto.length === 0) {
-          this.data.carrello.contenuto = [];
-        }
+        if (isInfermiere) {
+          if (Number(this.quantita) > Number(this.material.quantita)) {
+            this.messageService.showMessageError("Hai superato la quantità massima");
+            return;
+          }
+          // Set infermiere-specific item details
+          item.elementoName = this.material.elemento;
+          item.elementoID = this.material.elementoID;
+          item.elementoType = this.material.type;
+          item.note = this.note;
+          item.quantita = Number(this.quantita);
+          item.pazienteID = this.paziente._id;
+          item.pazienteNome = `${this.paziente.nome} ${this.paziente.cognome}`;
+          aggiungiElementoAlCarrello();
+          await this.CServ.update(this.data.carrello).toPromise();
+          await aggiungiAlRegistro("Infermieri", "Inserimento " + this.material.type, Number(this.quantita));
 
-        // Aggiungi l'elemento al carrello
-        this.data.carrello.contenuto.push(item);
-
-        // Aggiorna il carrello
-        await this.CServ.update(this.data.carrello).toPromise();
-
-        // Aggiungi al registro
-        let reg: RegistroCarrello = new RegistroCarrello();
-        reg.carrelloID = this.data.carrello._id;
-        reg.carrelloName = this.data.carrello.nomeCarrello;
-        reg.dataModifica = new Date();
-        reg.elemento = this.materiale;
-        reg.type = "Infermieri";
-        reg.operation = "Inserimento materiale";
-        reg.quantita = this.quantita;
-        reg.operator = this.data.dipendente._id;
-        reg.operatorName = `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`;
-        reg.paziente = this.paziente._id;
-        reg.pazienteName = `${this.paziente.nome} ${this.paziente.cognome}`;
-        await this.RegServ.add(reg);
-
-        let arm: ArmadioFarmaci = await this.aF.getByPaziente(this.paziente._id);
-        if (this.material.type == "Farmaci") {
-          arm.farmaci.forEach(async x => {
-            if (x.farmacoID == this.material.elemento) {
-              x.quantita = x.quantita.valueOf() - this.quantita.valueOf();
-              const af: AttivitaFarmaciPresidi = {
-                dataOP: new Date(),
-                elemento: this.material.elemento,
-                elemento_id: this.material.elemento,
-                operation: "Scarico Farmaco",
-                type: "Farmaci",
-                elementotype: "Farmaci",
-                qty: (Math.abs(x.quantita.valueOf() - this.quantita.valueOf())).toString(),
-                qtyRes: x.quantita.toString(),
-                operator: this.data.dipendente._id,
-                operatorName: `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`,
-                paziente: this.paziente._id,
-                pazienteName: `${this.paziente.nome} ${this.paziente.cognome}`,
-              };
-              await this.AFPS.addArmF(af);
+          // Gestione farmaci/presidi
+          let arm: ArmadioFarmaci = await this.aF.getByPaziente(this.paziente._id);
+          let armF: ArmadioFarmaci = arm[0];
+          if (this.material.type == "Farmaci" || this.material.type == "Presidi") {
+            for (let x of this.material.type == "Farmaci" ? armF.farmaci : armF.presidi) {
+              if (x[this.material.type == "Farmaci" ? 'farmacoID' : 'presidioID'] == this.material.elementoID) {
+                x.quantita = Math.max(0, Number(x.quantita) - Number(this.quantita));
+                await gestioneScarico(armF, "Scarico", this.material.elementoID.valueOf(), Number(x.quantita));
+              }
             }
-          });
-          await this.aF.update(arm,"").toPromise();
+          }
         }
-        if (this.material.type == "Presidi") {
-          arm.presidi.forEach(async x => {
-            if (x.presidioID == this.material.elemento) {
-              x.quantita = x.quantita.valueOf() - this.quantita.valueOf();
-              const af: AttivitaFarmaciPresidi = {
-                dataOP: new Date(),
-                elemento: this.material.elemento,
-                elemento_id: this.material.elemento,
-                operation: "Scarico Presidio",
-                type: "Presidi",
-                elementotype: "Presidi",
-                qty: (Math.abs(x.quantita.valueOf() - this.quantita.valueOf())).toString(),
-                qtyRes: x.quantita.toString(),
-                operator: this.data.dipendente._id,
-                operatorName: `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`,
-                paziente: this.paziente._id,
-                pazienteName: `${this.paziente.nome} ${this.paziente.cognome}`,
-              };
-              await this.AFPS.addArmF(af);
-            }
-          });
-          await this.aF.update(arm, "").toPromise();
-        }
-
       }
-    }
-    // Se si sta modificando un elemento esistente
-    else {
-      // Se il carrello è di tipo OSS
-      if (this.data.carrello.type.toLowerCase() === 'oss') {
+      // Se si sta modificando un elemento esistente
+      else {
         const q: number = this.quantita.valueOf() - this.data.elemento.quantita.valueOf();
+        console.log("q= ",q);
         const index = this.data.carrello.contenuto.indexOf(this.data.elemento);
 
-        // Aggiorna le quantità e le note dell'elemento
-        this.data.carrello.contenuto[index].quantita = this.quantita;
-        this.data.carrello.contenuto[index].note = this.note;
+        if (isOSS) {
+          this.data.carrello.contenuto[index].quantita = Number(this.quantita);
+          this.data.carrello.contenuto[index].note = this.note;
+          await this.CServ.update(this.data.carrello).toPromise();
+          await aggiungiAlRegistro("OSS", q <= 0 ? "Scarico materiale" : "Carico materiale", Number(this.quantita), Math.abs(q));
+        }
 
-        // Aggiorna il carrello
-        await this.CServ.update(this.data.carrello).toPromise();
+        if (isInfermiere) {
+          if (Number(this.quantita) > Number(this.material.quantita)) {
+            this.messageService.showMessageError("Hai superato la quantità massima");
+            return;
+          }
+          if (Number(this.quantita) <= 0) {
+            if (index > -1) {
+              this.data.carrello.contenuto.splice(index, 1);
+              let reg1: RegistroCarrello = {
+                carrelloID: this.data.carrello._id,
+                carrelloName: this.data.carrello.nomeCarrello,
+                elemento: this.data.elemento.elementoName,
+                dataModifica: new Date(),
+                type: this.data.carrello.type,
+                operator: this.data.dipendente._id,
+                operatorName: this.data.dipendente.nome + " " + this.data.dipendente.cognome,
+                operation: "Elemento rimosso"
+              };
+              console.log("Registro: ", reg1);
+              await this.RegServ.add(reg1);
+            }
+            await this.CServ.update(this.data.carrello).toPromise();
+            this.messageService.showMessage("Salvataggio effettuato");
+            return;
+          }
+          this.data.carrello.contenuto[index].quantita = Number(this.quantita);
+          this.data.carrello.contenuto[index].note = this.note;
+          await this.CServ.update(this.data.carrello).toPromise();
+          await aggiungiAlRegistro("Infermieri", "Modifica " + this.material.type, Number(this.quantita), Math.abs(q));
 
-        // Aggiungi al registro
-        let reg: RegistroCarrello = new RegistroCarrello();
-        reg.carrelloID = this.data.carrello._id;
-        reg.carrelloName = this.data.carrello.nomeCarrello;
-        reg.dataModifica = new Date();
-        reg.elemento = this.materiale;
-        reg.type = "OSS";
-        reg.operation = q <= 0 ? "Scarico materiale" : "Carico materiale";
-        reg.quantita = Math.abs(q);
-        reg.quantitaRes = this.quantita;
-        reg.operator = this.data.dipendente._id;
-        reg.operatorName = `${this.data.dipendente.nome} ${this.data.dipendente.cognome}`;
-        await this.RegServ.add(reg);
+          // Gestione farmaci/presidi aggiornati
+          let arm: ArmadioFarmaci = await this.aF.getByPaziente(this.paziente._id);
+          let armF: ArmadioFarmaci = arm[0];
+          console.log(armF);
+          if (this.material.type == "Farmaci" || this.material.type == "Presidi") {
+            console.log("dentro");
+            for (let x of this.material.type == "Farmaci" ? armF.farmaci : armF.presidi) {
+              if (x[this.material.type == "Farmaci" ? 'farmacoID' : 'presidioID'] == this.material.elementoID) {
+                let y: any = x;
+                console.log("dentro ed y= ",y);
+                const index = this.material.type == "Farmaci" ? armF.farmaci.indexOf(y) : armF.presidi.indexOf(y);
+                x.quantita = Math.abs(Number(x.quantita) - q);// Adjust quantity
+                if (Number(x.quantita) < 0) x.quantita = 0;
+                console.log("Number(x.quantita) + (q > 0 ? -q : q)", Number(x.quantita) + (q > 0 ? -q : q));
+                console.log("index= ", index);
+                console.log("quantita mod= ", x.quantita);
+                y = x;
+                this.material.type == "Farmaci" ? armF.farmaci[index] = y : armF.presidi[index] = y;
+                await this.aF.update(armF, "").toPromise();
+                await gestioneScarico(armF, "Scarico", this.material.elementoID.valueOf(), Number(x.quantita),Math.abs(q));
+              }
+            }
+          }
+        }
       }
 
-      // Se il carrello è di tipo infermieri
-      if (this.data.carrello.type.toLowerCase() === 'infermieri') {
-
-      }
+      this.messageService.showMessage("Salvataggio effettuato");
+    } catch (error) {
+      console.error('Errore:', error);
+      this.messageService.showMessageError("Errore durante l'operazione");
     }
   }
+
 
   async loadPazienti() {
     try {
@@ -266,12 +326,14 @@ export class DialogCartItemComponent implements OnInit {
         if (res) {
           const armF: ArmadioFarmaci = res[0];
           armF.farmaci.forEach(x => {
-            let item: ItemCartMat = new ItemCartMat();
-            item.elementoID = x.farmacoID;
-            item.elemento = x.nome;
-            item.quantita = x.quantita;
-            item.type = "Farmaci";
-            this.MaterialList.push(item);
+            if (x.quantita.valueOf() > 0) {
+              let item: ItemCartMat = new ItemCartMat();
+              item.elementoID = x.farmacoID;
+              item.elemento = x.nome;
+              item.quantita = x.quantita;
+              item.type = "Farmaci";
+              this.MaterialList.push(item);
+            }
           });
 
           armF.presidi.forEach(x => {

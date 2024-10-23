@@ -56,8 +56,46 @@
         </div>
       </div>
     </ng-container>
-    <ng-container *ngIf="data.carrello.type.toLowerCase() == 'infermieri'">
 
+    <ng-container *ngIf="data.carrello.type.toLowerCase() == 'infermieri'">
+        <div class="row">
+            <div class="col">
+                <mat-label>Paziente: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Elemento" [(ngModel)]="nomePaziente" disabled>
+                </mat-form-field>
+            </div>
+            <div class="col">
+                <mat-label>Elemento: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <input matInput type="text" placeholder="Elemento" [(ngModel)]="materiale" disabled>
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-label>Quantità: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <input matInput type="number" placeholder="Quantità" [(ngModel)]="quantita" min="0" [attr.max]="material.quantita">
+                </mat-form-field>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <mat-label>Note: </mat-label>
+            </div>
+            <div class="col">
+                <mat-form-field>
+                    <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
     </ng-container>
   </ng-container>
 

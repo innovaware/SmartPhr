@@ -25,7 +25,7 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
   title: String;
   items: CarrelloItem[];
   uso: Boolean;
-  displayedColumns: string[] = ["nome", "tipo", "quantita", "paziente", "note", "action"];
+  displayedColumns: string[] = ["nome", "tipo", "quantita", "paziente", "note","somministra","scarta", "action"];
   dataSource: MatTableDataSource<CarrelloItem>;
   dipendente: Dipendenti;
   @ViewChild("Contenuto", { static: false }) paginator: MatPaginator;
@@ -91,7 +91,6 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
   }
 
   edit(row: CarrelloItem) {
-
     const dialogRef = this.dialog.open(DialogCartItemComponent, {
       data: {
         carrello: this.data.carrello,
@@ -103,21 +102,29 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
       width: "800px",
       height: "400px"
     });
-    dialogRef.afterClosed().subscribe(() => {
-      this.CartServ.getById(this.data.carrello._id).then((res: Carrello) => {
-        console.log(res);
-        this.data.carrello = res;
-        this.dataSource.data = this.data.carrello.contenuto;
+
+    // Subscribe to dialog close event
+    dialogRef.afterClosed().subscribe(async () => {
+      try {
+        await this.delay(1000); // Aggiungi il delay qui
+        const updatedCarrello = await this.CartServ.getById(this.data.carrello._id);
+        console.log(updatedCarrello);
+
+        this.data.carrello = updatedCarrello;
+        this.dataSource.data = updatedCarrello.contenuto;
         this.dataSource.paginator = this.paginator;
-      });
+      } catch (error) {
+        console.error('Failed to update cart:', error);
+        // Optionally show an error notification to the user
+      }
     });
   }
+
 
 
   async save() {
     let cart: Carrello = await this.CartServ.getById(this.data.carrello._id);
     cart.inUso = this.uso;
-    cart.contenuto = this.items;
     cart.operatoreID = this.dipendente._id;
     cart.operatoreName = this.dipendente.nome + " " + this.dipendente.cognome;
     console.log("Carrello: ", cart);
@@ -125,36 +132,100 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
     // Aggiorna il carrello
     await this.CartServ.update(cart).toPromise();
 
-    let frase = "";
+    if (cart.inUso != this.uso) {
+      let frase = "";
 
-    if (this.uso) {
-      frase = "Carrello Occupato";
-    }
-    else {
-      if (cart.type.toLowerCase() == "oss") {
-        frase = "Carrello ordinato e liberato";
+      if (this.uso) {
+        frase = "Carrello Occupato";
       }
       else {
-        frase = "Carrello liberato";
+        if (cart.type.toLowerCase() == "oss") {
+          frase = "Carrello ordinato e liberato";
+        }
+        else {
+          frase = "Carrello liberato";
+        }
       }
+      // Crea e popola l'oggetto RegistroCarrello
+      let reg: RegistroCarrello = {
+        carrelloID: cart._id,
+        carrelloName: cart.nomeCarrello,
+        dataModifica: new Date(),
+        type: cart.type,
+        operator: cart.operatoreID,
+        operatorName: cart.operatoreName,
+        operation: frase
+      };
+
+      console.log("Registro: ", reg);
+
+      // Aggiunge il registro al servizio
+      await this.regServ.add(reg);
     }
 
-    // Crea e popola l'oggetto RegistroCarrello
+    this.messageService.showMessage("Salvataggio effettuato");
+  }
+
+  async modificaQuantita(row: CarrelloItem, operazione: string) {
+    let cart: Carrello = await this.CartServ.getById(this.data.carrello._id);
+    const index = cart.contenuto.findIndex(item => item._id === row._id);
+    if (index === -1) {
+      console.error("Elemento non trovato nel carrello");
+      return; // Uscita dalla funzione se l'elemento non è trovato
+    }
+    // Riduzione della quantità
+    cart.contenuto[index].quantita = Number(cart.contenuto[index].quantita) - 1;
+
+    // Registro della modifica
     let reg: RegistroCarrello = {
       carrelloID: cart._id,
       carrelloName: cart.nomeCarrello,
+      elemento: row.elementoName,
       dataModifica: new Date(),
+      quantita: 1,
+      quantitaRes: cart.contenuto[index].quantita.valueOf() >= 0 ? cart.contenuto[index].quantita : 0,
       type: cart.type,
-      operator: cart.operatoreID,
-      operatorName: cart.operatoreName,
-      operation: frase
+      operator: this.dipendente._id,
+      operatorName: this.dipendente.nome + " " + this.dipendente.cognome,
+      operation: operazione
     };
-
     console.log("Registro: ", reg);
-
-    // Aggiunge il registro al servizio
     await this.regServ.add(reg);
+
+    // Rimozione dell'elemento se la quantità è zero o inferiore
+    if (cart.contenuto[index].quantita.valueOf() <= 0) {
+      if (index > -1) {
+        cart.contenuto.splice(index, 1);
+        let reg1: RegistroCarrello = {
+          carrelloID: cart._id,
+          carrelloName: cart.nomeCarrello,
+          elemento: row.elementoName,
+          dataModifica: new Date(),
+          type: cart.type,
+          operator: this.dipendente._id,
+          operatorName: this.dipendente.nome + " " + this.dipendente.cognome,
+          operation: "Elemento rimosso"
+        };
+        console.log("Registro: ", reg1);
+        await this.regServ.add(reg1);
+      }
+    }
+
+    this.dataSource.data = cart.contenuto;
+    this.dataSource.paginator = this.paginator;
+    await this.CartServ.update(cart).toPromise();
   }
+
+  async scarto(row: CarrelloItem) {
+    await this.modificaQuantita(row, "Elemento compromesso");
+    this.messageService.showMessage("Elemento scartato");
+  }
+
+  async somministra(row: CarrelloItem) {
+    await this.modificaQuantita(row, "Elemento somministrato");
+    this.messageService.showMessage("Elemento somministrato");
+  }
+
 
   async toggleUso() {
     if (this.data.carrello.type.toLowerCase() == "oss" && this.uso) {
@@ -189,5 +260,10 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
         });
     });
   }
+
+  private delay(ms: number) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+
 
 }

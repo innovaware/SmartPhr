@@ -59,34 +59,45 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-
 router.put("/:id", async (req, res) => {
     try {
-        console.log("Chiamato PUT con ID:", req.params.id);
+        const { id } = req.params;
+
+        console.log("Chiamato PUT con ID:", id);
         console.log("Dati ricevuti per l'aggiornamento:", req.body);
 
-        const { id } = req.params;
-        if (!id) {
-            return res.status(400).json({ Error: "ID mancante nella richiesta" });
+        // Verifica se l'ID ha un formato valido (MongoDB ObjectId)
+        if (!id.match(/^[0-9a-fA-F]{24}$/)) {
+            return res.status(400).json({ error: "ID non valido" });
         }
 
-        
-
         // Esegui l'aggiornamento nel database
-        const carrelloAggiornato = await Cart.updateOne({ _id: id }, { $set: req.body });
+        const carrelloAggiornato = await Cart.updateOne(
+            { _id: id },
+            { $set: req.body }
+        );
 
-        // Verifica se è stato aggiornato almeno un documento
-        if (carrelloAggiornato.nModified === 0) {
-            return res.status(404).json({ message: "Nessun carrello trovato con questo ID o dati non modificati" });
+
+
+
+
+        // Verifica se è stato trovato e aggiornato almeno un documento
+        if (carrelloAggiornato.matchedCount === 0) {
+            return res.status(404).json({ message: "Nessun carrello trovato con questo ID" });
+        }
+
+        if (carrelloAggiornato.modifiedCount === 0) {
+            return res.status(200).json({ message: "Nessun cambiamento apportato ai dati esistenti" });
         }
 
         console.log("Aggiornamento completato:", carrelloAggiornato);
         res.status(200).json({ message: "Aggiornamento riuscito", data: carrelloAggiornato });
     } catch (err) {
         console.error("Errore durante l'aggiornamento del carrello:", err);
-        res.status(500).json({ Error: err.message });
+        res.status(500).json({ error: err.message });
     }
 });
+
 
 
 module.exports = router;
