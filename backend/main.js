@@ -489,6 +489,7 @@ const InitApiFunctions = () => {
     app.use(apiSchedaTerapeutica.path, logHandler, authorizationHandler, SchedaTerapeuticaRouter);
     routesList.push(apiSchedaTerapeutica);
 
+
     // Gestione Chiavi API
     var gestChiaviRouter = require("./routes/gestChiavi");
     var apigestChiavi = { key: 'gestChiavi', path: '/api/gestChiavi' }

@@ -1,241 +1,222 @@
-<div class="container-flex">
+<!-- Aggiungi la classe CSS qui, se necessario -->
+<div class="container">
+  <mat-tab-group mat-align-tabs="start">
 
-    <div class="row">
-        <div class="col">
-        </div>
-    </div>
+    <!-- Scheda per la Terapia Orale -->
+    <mat-tab label="Orale">
+      <table mat-table [dataSource]="dataSourceOrale" class="mat-elevation-z8" style="width: 100%; border: none;">
 
-    <div class="row">
-        <div class="col">
-            <!-- TABELLA TERAPIA ORALE -->
-            <table>
-                <thead style="background: #ff000099; font-weight: bold;">
-                    <tr>
-                        <th class="center title" style="width: 20%;">Data Inizio</th>
-                        <th class="center title" style="width: 35%;">Terapia Orale</th>
-                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
-                        <th class="center title" style="width: 20%;">Data Fine</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let riga of righeTabellaOrale; let i = index">
-                        <td class="center">
-                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
-                                   (change)="onDataInizioChange($event, i, 'orale')"
-                                   (click)="openCalendar($event)"
-                                   style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'orale')"
-                                   placeholder="Medicina e Quantità" style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <table class="table-header">
-                                <tr>
-                                    <td class="item center title without-border">
-                                        07
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        08
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        10
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        12
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        16
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        17
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        18
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        20
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        22
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'orale')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        23
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'orale')"></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="center">
-                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
-                                   (click)="openCalendar($event)" style="width: 100%;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <!-- Definizione delle colonne -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
+            <button class="btn btn-link p-0" (click)="add('orale')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+              </svg>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
+            <button mat-button (click)="edit(row,'orale')" title="Modifica Terapia" aria-label="Modifica Terapia">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+              </svg>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataInizio">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="terapiaOrale">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia Orale </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fasceOrarie">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">
+            <!-- Correzione errori di sintassi nelle fasce orarie -->
+            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFine">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
+        </ng-container>
+
+        <!-- Definizione delle righe -->
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+      </table>
+
+      <!-- Paginator -->
+      <div>
+        <mat-paginator #paginatorOrale [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+    </mat-tab>
+
+    <!-- Schede aggiuntive -->
+    <mat-tab label="IMEVSC">
+
+      <table mat-table [dataSource]="dataSourceIMEVSC" class="mat-elevation-z8" style="width: 100%; border: none;">
+
+        <!-- Definizione delle colonne -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
+            <button class="btn btn-link p-0" (click)="add('IMEVSC')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+              </svg>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
+            <button mat-button (click)="edit(row,'IMEVSC')" title="Modifica Terapia" aria-label="Modifica Terapia">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+              </svg>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataInizio">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="terapiaOrale">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia IMEVSC </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fasceOrarie">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">
+            <!-- Correzione errori di sintassi nelle fasce orarie -->
+            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFine">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
+        </ng-container>
+
+        <!-- Definizione delle righe -->
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+      </table>
+
+      <!-- Paginator -->
+      <div>
+        <mat-paginator #paginatorImevsc [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
 
 
-            <!-- TABELLA TERAPIA I.M./E.V./S.C. -->
-            <table>
-                <thead style="background: #76d676; font-weight: bold;">
-                    <tr>
-                        <th class="center title" style="width: 20%;">Data Inizio</th>
-                        <th class="center title" style="width: 35%;">Terapia I.M./E.V./S.C.</th>
-                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
-                        <th class="center title" style="width: 20%;">Data Fine</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let riga of righeTabellaImEvSc; let i = index">
-                        <td class="center">
-                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
-                                   (change)="onDataInizioChange($event, i, 'imevsc')"
-                                   (click)="openCalendar($event)"
-                                   style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'imevsc')"
-                                   placeholder="Medicina e Quantità" style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <table class="table-header">
-                                <tr>
-                                    <td class="item center title without-border">
-                                        07
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        08
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        10
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        12
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        16
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        17
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        18
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        20
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        22
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'imevsc')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        23
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'imevsc')"></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="center">
-                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
-                                   (click)="openCalendar($event)" style="width: 100%;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+    </mat-tab>
+    <mat-tab label="Estemporanea">
 
-            <!-- TABELLA TERAPIA ESTEMPORANEA -->
-            <table>
-                <thead style="background: #82acff; font-weight: bold;">
-                    <tr>
-                        <th class="center title" style="width: 20%;">Data Inizio</th>
-                        <th class="center title" style="width: 35%;">Terapia Estemporanea</th>
-                        <th class="center title" style="width: 25%;">Fasce Orarie</th>
-                        <th class="center title" style="width: 20%;">Data Fine</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr *ngFor="let riga of righeTabellaEstemporanea; let i = index">
-                        <td class="center">
-                            <input type="date" [max]="maxDate" [(ngModel)]="riga.dataInizio"
-                                   (change)="onDataInizioChange($event, i, 'estemporanea')"
-                                   (click)="openCalendar($event)"
-                                   style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <input type="text" [(ngModel)]="riga.terapiaOrale" (input)="onTerapiaOraleChange($event, i, 'estemporanea')"
-                                   placeholder="Medicina e Quantità" style="width: 100%;">
-                        </td>
-                        <td class="center">
-                            <table class="table-header">
-                                <tr>
-                                    <td class="item center title without-border">
-                                        07
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '07:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        08
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '08:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        10
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '10:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        12
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '12:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        16
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '16:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        17
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '17:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        18
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '18:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        20
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '20:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        22
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '22:00', i, 'estemporanea')"></label>
-                                    </td>
-                                    <td class="item center title without-border">
-                                        23
-                                        <label><input type="checkbox" (change)="onFasciaOrariaChange($event, '23:00', i, 'estemporanea')"></label>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td class="center">
-                            <input type="date" [disabled]="disable" [(ngModel)]="riga.dataFine"
-                                   (click)="openCalendar($event)" style="width: 100%;">
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+      <table mat-table [dataSource]="dataSourceEstemporanea" class="mat-elevation-z8" style="width: 100%; border: none;">
 
-        </div>
-    </div>
+        <!-- Definizione delle colonne -->
+        <ng-container matColumnDef="action">
+          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
+            <button class="btn btn-link p-0" (click)="add('estemporanea')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+              </svg>
+            </button>
+          </th>
+          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
+            <button mat-button (click)="edit(row,'estemporanea')" title="Modifica Terapia" aria-label="Modifica Terapia">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+              </svg>
+            </button>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataInizio">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="terapiaOrale">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia Estemporanea </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="fasceOrarie">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">
+            <!-- Correzione errori di sintassi nelle fasce orarie -->
+            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="dataFine">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+
+        <ng-container matColumnDef="note">
+          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
+          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
+        </ng-container>
+
+        <!-- Definizione delle righe -->
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+      </table>
+
+      <!-- Paginator -->
+      <div>
+        <mat-paginator #paginatorEstemporanea [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+      </div>
+
+    </mat-tab>
+
+  </mat-tab-group>
 </div>

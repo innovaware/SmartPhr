@@ -19,6 +19,17 @@
   </div>
 </div> -->
 
+<div mat-dialog-title>
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col">
+        <h3>Ospite: {{paziente.cognome}} {{paziente. nome}}</h3>
+      </div>
+    </div>
+    <hr>
+  </div>
+</div>
+
 <mat-dialog-content>
   <div class="container-fluid">
     <div class="row">
@@ -216,7 +227,7 @@
               </mat-tab>
 
               <mat-tab label="Scheda terapeutica">
-                  <app-scheda-terapeutica [id]=this.paziente._id></app-scheda-terapeutica>
+                  <app-scheda-terapeutica *ngIf="paziente && paziente._id" [id]="paziente._id" [inLettura]="false"></app-scheda-terapeutica>
               </mat-tab>
 
 

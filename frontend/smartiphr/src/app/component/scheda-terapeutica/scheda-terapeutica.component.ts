@@ -1,20 +1,14 @@
-import { Component, Input, OnInit } from "@angular/core";
-import { ChartDataSets, ChartType, RadialChartOptions } from "chart.js";
-import * as moment from "moment";
-import { Label } from "ng2-charts";
-import { Subject } from 'rxjs';
+import { AfterViewInit, Component, Input, OnChanges, OnInit, ViewChild } from "@angular/core";
 import { PazienteService } from "src/app/service/paziente.service";
 import { SchedaTerapeuticaService } from "../../service/schedaTerapeutica.service";
-import { SchedaTerapeutica } from "../../models/schedaTerapeutica";
+import { ItemsArray, SchedaTerapeutica } from "../../models/schedaTerapeutica";
 import { Paziente } from "../../models/paziente";
-import { AttivitaFarmaciPresidi } from "../../models/attivitaFarmaciPresidi";
+import { MatTableDataSource } from "@angular/material/table";
+import { MatPaginator } from "@angular/material/paginator";
+import { DataSource } from "@angular/cdk/collections";
+import { MatDialog } from '@angular/material/dialog';
+import { DialogSchedaTerapeuticaComponent } from "../../dialogs/dialog-schedaTerapeutica/dialog-schedaTerapeutica.component";
 
-interface RigaTabella {
-  dataInizio: string;
-  terapiaOrale: string;
-  fasceOrarie: string[];
-  dataFine: string;
-}
 
 @Component({
   selector: "app-scheda-terapeutica",
@@ -22,181 +16,129 @@ interface RigaTabella {
   styleUrls: ["./scheda-terapeutica.component.css"],
 })
 
-export class SchedaTerapeuticaComponent implements OnInit {
+export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChanges {
   @Input() id: string; //Id paziente
-  @Input() saveEvent: Subject<string>;
   @Input() inLettura: boolean;
 
   currentDate: moment.Moment;
   maxDate: string;
-  disable: boolean;
+  disable: boolean = true;
   paziente: Paziente;
-
-  // Aggiungi variabili separate per ogni tabella
-  righeTabellaOrale: RigaTabella[] = [];
-  righeTabellaImEvSc: RigaTabella[] = [];
-  righeTabellaEstemporanea: RigaTabella[] = [];
-
+  DisplayedColumns: string[] = ["dataInizio", "terapiaOrale", "fasceOrarie", "dataFine", "note", "action"];
+  public dataSourceOrale: MatTableDataSource<ItemsArray>;
+  public dataSourceIMEVSC: MatTableDataSource<ItemsArray>;
+  public dataSourceEstemporanea: MatTableDataSource<ItemsArray>;
+  public orali: ItemsArray[];
+  public IMEVSC: ItemsArray[];
+  public Estemporanea: ItemsArray[];
+  private scheda: SchedaTerapeutica;
+  @ViewChild("paginatorOrale", { static: false }) paginatorO: MatPaginator;
+  @ViewChild("paginatorImevsc", { static: false }) paginatorI: MatPaginator;
+  @ViewChild("paginatorEstemporanea", { static: false }) paginatorE: MatPaginator;
   constructor(
+    public dialog: MatDialog,
     public pazienteService: PazienteService,
     private schedaServ: SchedaTerapeuticaService
   ) {
+    this.scheda = new SchedaTerapeutica();
     this.paziente = new Paziente();
-    this.pazienteService.getPaziente(this.id).then((res: Paziente) => {
-      this.paziente = res[0];
+    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
+    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
+    this.orali = [];
+    this.IMEVSC = [];
+    this.Estemporanea = [];
+
+    pazienteService.getPaziente(this.id).then((x: Paziente) => {
+      this.paziente = x[0];
     });
 
-    this.schedaServ.getByPaziente(this.id).then((result: SchedaTerapeutica) => {
-      if (result) {
-        this.righeTabellaOrale = result.terapieOrali.map(terapia => ({
-          dataInizio: terapia.dataInizio,
-          terapiaOrale: terapia.terapiaOrale,
-          fasceOrarie: terapia.fasceOrarie || [],
-          dataFine: terapia.dataFine || '',
-        }));
-
-        this.righeTabellaImEvSc = result.terapieImEvSc.map(terapia => ({
-          dataInizio: terapia.dataInizio,
-          terapiaImEvSc: terapia.terapiaImEvSc,
-          fasceOrarie: terapia.fasceOrarie || [],
-          dataFine: terapia.dataFine || '',
-        }));
-
-        this.righeTabellaEstemporanea = result.terapieEstemporanee.map(terapia => ({
-          dataInizio: terapia.dataInizio,
-          terapiaEstemporanea: terapia.terapiaEstemporanea,
-          fasceOrarie: terapia.fasceOrarie || [],
-          dataFine: terapia.dataFine || '',
-        }));
-      }
-    });
+    this.getDati();
   }
 
   ngOnInit() {
-    this.disable = true;
-    this.currentDate = moment();
-    this.setMaxDateForDataInizio();
-    this.aggiungiRiga('orale');
-    this.aggiungiRiga('imevsc');
-    this.aggiungiRiga('estemporanea');
 
-    if (this.saveEvent) {
-      this.saveEvent.subscribe(v => {
-        console.log('saveEvent', v);
-      });
-    }
+    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
+    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
+    this.orali = [];
+    this.IMEVSC = [];
+    this.Estemporanea = [];
+    this.getDati();
   }
 
-  async save() {
-    // Creazione di un oggetto SchedaTerapeutica per il salvataggio
-    const schedaTerapeutica: SchedaTerapeutica = {
-      idPaziente: this.id, // Imposta l'id del paziente se necessario
-      terapieOrali: this.righeTabellaOrale.map(riga => ({
-        dataInizio: riga.dataInizio,
-        terapiaOrale: riga.terapiaOrale,
-        fasceOrarie: riga.fasceOrarie,
-        dataFine: riga.dataFine
-      })),
-      terapieImEvSc: this.righeTabellaImEvSc.map(riga => ({
-        dataInizio: riga.dataInizio,
-        terapiaImEvSc: riga.terapiaOrale, // se il campo "terapiaImEvSc" è diverso, aggiusta qui
-        fasceOrarie: riga.fasceOrarie,
-        dataFine: riga.dataFine
-      })),
-      terapieEstemporanee: this.righeTabellaEstemporanea.map(riga => ({
-        dataInizio: riga.dataInizio,
-        terapiaEstemporanea: riga.terapiaOrale,
-        fasceOrarie: riga.fasceOrarie,
-        dataFine: riga.dataFine
-      }))
-    };
+  ngOnChanges() {
+    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
+    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
+    this.orali = [];
+    this.IMEVSC = [];
+    this.Estemporanea = [];
+    this.getDati();
+  }
 
-    // Utilizzo del servizio per il salvataggio
-    this.schedaServ.saveSchedaTerapeutica(schedaTerapeutica).then(response => {
-      console.log("Dati salvati con successo:", response);
-      // Qui potresti gestire la logica post-salvataggio (notifiche, reindirizzamenti, ecc.)
-    }).catch(error => {
-      console.error("Errore durante il salvataggio:", error);
+  ngAfterViewInit() {
+    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
+    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
+    this.orali = [];
+    this.IMEVSC = [];
+    this.Estemporanea = [];
+    this.getDati();
+  }
+
+  add(type: string) {
+    const dialogRef = this.dialog.open(DialogSchedaTerapeuticaComponent, {
+      data: {
+        scheda: this.scheda,
+        paziente: this.paziente,
+        id: this.id,
+        type: type,
+        edit: false
+      },
+      width: "800px",
+      height: "550px"
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getDati();
     });
   }
 
-  setMaxDateForDataInizio(): void {
-    const today = moment();
-    this.maxDate = today.format('YYYY-MM-DD');
+  edit(row: ItemsArray, type: String) {
+    const dialogRef = this.dialog.open(DialogSchedaTerapeuticaComponent, {
+      data: {
+        scheda: this.scheda,
+        paziente: this.paziente,
+        type: type,
+        id: this.id,
+        edit: true,
+        item: row
+      },
+      width: "800px",
+      height: "550px"
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+      this.getDati();
+    });
   }
 
-  onDataInizioChange(event: any, index: number, tipo: string): void {
-    this.getRigheTabella(tipo)[index].dataInizio = event.target.value;
-    this.onDataFineEnabled(index, tipo);
-    this.checkFormCompletion(index, tipo);
+  async getDati() {
+    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    this.scheda = await this.schedaServ.getByPaziente(this.id);
+    console.log(this.scheda);
+    this.orali = this.scheda.Orale;
+    this.dataSourceOrale.data = this.orali;
+    this.dataSourceOrale.paginator = this.paginatorO;
+
+    this.IMEVSC = this.scheda.IMEVSC;
+    this.dataSourceIMEVSC.data = this.IMEVSC;
+    this.dataSourceIMEVSC.paginator = this.paginatorI;
+
+    this.Estemporanea = this.scheda.Estemporanea;
+    this.dataSourceEstemporanea.data = this.Estemporanea;
+    this.dataSourceEstemporanea.paginator = this.paginatorE;
   }
 
-  onTerapiaOraleChange(event: any, index: number, tipo: string): void {
-    this.getRigheTabella(tipo)[index].terapiaOrale = event.target.value;
-    this.onDataFineEnabled(index, tipo);
-    this.checkFormCompletion(index, tipo);
-  }
-
-  onFasciaOrariaChange(event: any, orario: string, index: number, tipo: string): void {
-    const righeTabella = this.getRigheTabella(tipo);
-    if (event.target.checked) {
-      righeTabella[index].fasceOrarie.push(orario);
-    } else {
-      righeTabella[index].fasceOrarie = righeTabella[index].fasceOrarie.filter(o => o !== orario);
-    }
-    this.onDataFineEnabled(index, tipo);
-    this.checkFormCompletion(index, tipo);
-  }
-
-  onDataFineEnabled(index: number, tipo: string): void {
-    const riga = this.getRigheTabella(tipo)[index];
-    if (riga.dataInizio) {
-      this.disable = false;
-    } else {
-      riga.dataFine = ''; // Reset di dataFine se manca un campo obbligatorio
-    }
-  }
-
-  checkFormCompletion(index: number, tipo: string): void {
-    const riga = this.getRigheTabella(tipo)[index];
-    if (riga.dataInizio) {
-      this.aggiungiRiga(tipo); // Aggiunge una nuova riga solo quando tutti i campi sono completati
-    }
-  }
-
-  openCalendar(event: any): void {
-    event.target.showPicker();
-  }
-
-  aggiungiRiga(tipo: string): void {
-    const nuovaRiga: RigaTabella = {
-      dataInizio: '',
-      terapiaOrale: '',
-      fasceOrarie: [],
-      dataFine: '',
-    };
-
-    const righeTabella = this.getRigheTabella(tipo);
-    const ultimaRiga = righeTabella[righeTabella.length - 1];
-    if (!ultimaRiga || ultimaRiga.dataInizio) {
-      righeTabella.push(nuovaRiga);
-    }
-  }
-
-  // Funzione per ottenere il corretto array di righe per ogni tabella
-  getRigheTabella(tipo: string): RigaTabella[] {
-    if (tipo === 'orale') {
-      return this.righeTabellaOrale;
-    } else if (tipo === 'imevsc') {
-      return this.righeTabellaImEvSc;
-    } else if (tipo === 'estemporanea') {
-      return this.righeTabellaEstemporanea;
-    }
-    return [];
-  }
-
-}
-
-function result(value: SchedaTerapeutica): SchedaTerapeutica | PromiseLike<SchedaTerapeutica> {
-    throw new Error("Function not implemented.");
 }

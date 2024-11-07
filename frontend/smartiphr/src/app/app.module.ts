@@ -291,6 +291,7 @@ import { DialogRichiestaPresidiComponent } from "./dialogs/dialog-richiesta/dial
 import { RichiestaPresidiComponent } from "./component/richiestePresidi/richiestePresidi.component";
 import { SchedaTerapeuticaComponent } from "./component/scheda-terapeutica/scheda-terapeutica.component";
 import { AttivitaFarmPresComponent } from "./component/attivitaFarmaciPresidi/attivitaFarmaciPresidi.component";
+import { DialogSchedaTerapeuticaComponent } from "./dialogs/dialog-schedaTerapeutica/dialog-schedaTerapeutica.component";
 
 const materialModules = [
   MatTableModule,
@@ -347,6 +348,7 @@ const dialogModule = [
   DialogCaricadocumentoComponent,
   DialogCaricadocumentoMedicinaComponent,
   DialogQuestionComponent,
+  DialogSchedaTerapeuticaComponent,
   DialogDiarioClinicoComponent,
   DialogVisitespecialisticheComponent,
   DialogInterventiComponent,
@@ -617,6 +619,7 @@ const pipes = [
     DialogCaricadocumentoComponent,
     DialogCaricadocumentoMedicinaComponent,
     DialogQuestionComponent,
+    DialogSchedaTerapeuticaComponent,
     DialogDiarioClinicoComponent,
     DialogVisitespecialisticheComponent,
     DialogInterventiComponent,

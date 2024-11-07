@@ -4,6 +4,7 @@ import { Observable, throwError } from "rxjs";
 import { environment } from 'src/environments/environment';
 import { SchedaTerapeutica } from '../models/schedaTerapeutica';
 import { catchError, tap } from "rxjs/operators";
+import { of } from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -29,6 +30,11 @@ export class SchedaTerapeuticaService {
   }
 
   async getByPaziente(id: String): Promise<SchedaTerapeutica> {
+    console.log("ID paziente:", id);
+
+    if (!id) {
+      throw new Error("ID del paziente non valido o non definito");
+    }
 
     const headers = {
       // 'Authorization': 'Bearer ' + this.token,
@@ -36,7 +42,7 @@ export class SchedaTerapeuticaService {
     }
 
     return this.http
-      .get<SchedaTerapeutica>(this.api + "/api/schedaTerapeutica/paziente/" + id, { headers })
+      .get<SchedaTerapeutica>(`${this.api}/api/schedaTerapeutica/paziente/${id}`, { headers })
       .toPromise();
   }
 
@@ -45,12 +51,17 @@ export class SchedaTerapeuticaService {
       // 'Authorization': 'Bearer ' + this.token,
       // 'x-refresh': this.refreshToken
     }
+    console.log("Il Body: ", body);
     return this.http
-      .post<SchedaTerapeutica>(this.api + "/api/schedaTerapeutica", body)
+      .post<SchedaTerapeutica>(`${this.api}/api/schedaTerapeutica`, body, { headers }) // Aggiungi { headers }
       .toPromise();
   }
 
   update(body: SchedaTerapeutica): Observable<any> {
+    if (!body._id) {
+      console.error("Errore: ID mancante nel body per l'aggiornamento.");
+      return throwError(() => new Error('ID mancante per l\'aggiornamento della schedaTerapeutica'));
+    }
 
     return this.http.put(`${this.api}/api/schedaTerapeutica/${body._id}`, body).pipe(
       tap(response => console.log("Risposta dall'aggiornamento:", response)),
@@ -70,12 +81,7 @@ export class SchedaTerapeuticaService {
   }
 
   saveSchedaTerapeutica(scheda: SchedaTerapeutica): Promise<any> {
-    return this.http.post('url_del_backend_per_salvare', scheda).toPromise();
+    return this.http.post(`${this.api}/api/schedaTerapeutica`, scheda).toPromise();
   }
 
-}
-
-
-function of<T extends {}>(arg0: T): Observable<T> {
-    throw new Error("Function not implemented.");
 }

@@ -1,30 +1,31 @@
 const mongoose = require("mongoose");
 
-const SchedaTerapeuticaSchema = mongoose.Schema({
-    idPaziente: String,
-    Orale: [{
-        DataInizioOrale: Date,
-        TerapiaOrale: String,
-        FasceOrarieOrale: [{ sette: Boolean, otto: Boolean, dieci: Boolean, dodici: Boolean, sedici: Boolean, diciassette: Boolean, diciotto: Boolean, venti: Boolean, ventidue: Boolean, ventitre: Boolean }],
-        DataFineOrale: Date,
-    }],
-
-    IMEVSC: [{
-        DataInizioIMEVSC: Date,
-        TerapiaIMEVSC: String,
-        FasceOrarieIMEVSC: [{ sette: Boolean, otto: Boolean, dieci: Boolean, dodici: Boolean, sedici: Boolean, diciassette: Boolean, diciotto: Boolean, venti: Boolean, ventidue: Boolean, ventitre: Boolean }],
-        DataFineIMEVSC: Date,
-    }],
-    Estemporanea: [{
-        DataInizioEstemporanea: Date,
-        TerapiaEstemporanea: String,
-        FasceOrarieEstemporanea: [{ sette: Boolean, otto: Boolean, dieci: Boolean, dodici: Boolean, sedici: Boolean, diciassette: Boolean, diciotto: Boolean, venti: Boolean, ventidue: Boolean, ventitre: Boolean }],
-        DataFineEstemporanea: Date,
-    }],
+const FasciaOrariaSchema = mongoose.Schema({
+    sette: { type: Boolean, default: false },
+    otto: { type: Boolean, default: false },
+    dieci: { type: Boolean, default: false },
+    dodici: { type: Boolean, default: false },
+    sedici: { type: Boolean, default: false },
+    diciassette: { type: Boolean, default: false },
+    diciotto: { type: Boolean, default: false },
+    venti: { type: Boolean, default: false },
+    ventidue: { type: Boolean, default: false },
+    ventitre: { type: Boolean, default: false },
 });
 
-module.exports = mongoose.model(
-    "SchedaTerapeutica",
-    SchedaTerapeuticaSchema,
-    "schedaTerapeutica"
-);
+const ItemsArraySchema = mongoose.Schema({
+    DataInizio: { type: Date, required: true },
+    Terapia: { type: String, required: true },
+    FasceOrarie: [FasciaOrariaSchema],
+    DataFine: { type: Date },
+    Note: { type: String },
+});
+
+const SchedaTerapeuticaSchema = mongoose.Schema({
+    idPaziente: { type: String, required: true },
+    Orale: [ItemsArraySchema],
+    IMEVSC: [ItemsArraySchema],
+    Estemporanea: [ItemsArraySchema],
+});
+
+module.exports = mongoose.model("SchedaTerapeutica", SchedaTerapeuticaSchema, "schedaTerapeutica");
