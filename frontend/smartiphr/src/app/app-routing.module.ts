@@ -116,6 +116,7 @@ import { ControlloLegionellosiComponent } from "./pages/controllo-legionellosi/c
 import { AgendaClinicaComponent } from "./pages/agendaClinica/agendaClinica.component";
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
+import { CarrelloComponent } from "./pages/carrello/carrello.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -128,6 +129,7 @@ const routes: Routes = [
   { path: "medica", component: AreaMedicaComponent, canActivate: [AuthGuard] },
   { path: "agenda_clinica", component: AgendaClinicaComponent, canActivate: [AuthGuard] },
   { path: "agendaInfermeristica", component: AgendaClinicaComponent, canActivate: [AuthGuard] },
+  { path: "gest_carrello", component: CarrelloComponent, canActivate: [AuthGuard] },
   { path: "infermieristica", component: AreaInfermieristicaComponent, canActivate: [AuthGuard]  },
 
   //Calendario Turni

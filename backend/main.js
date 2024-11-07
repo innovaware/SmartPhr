@@ -470,6 +470,16 @@ const InitApiFunctions = () => {
     app.use(apiArmadioFarmaci.path, logHandler, authorizationHandler, ArmadioFarmaciRouter);
     routesList.push(apiArmadioFarmaci);
 
+    var RegistroCarrelloRouter = require("./routes/registroCarrello");
+    var apiRegistroCarrello = { key: 'registroCarrello', path: '/api/registroCarrello' }
+    app.use(apiRegistroCarrello.path, logHandler, authorizationHandler, RegistroCarrelloRouter);
+    routesList.push(apiRegistroCarrello);
+    
+    var CarrelloRouter = require("./routes/carrello");
+    var apiCarrello = { key: 'carrello', path: '/api/carrello' }
+    app.use(apiCarrello.path, logHandler, authorizationHandler, CarrelloRouter);
+    routesList.push(apiCarrello);
+
     // Attivita e elementi armadio API
     var controlliOSSRouter = require("./routes/controlliOSS");
     var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
