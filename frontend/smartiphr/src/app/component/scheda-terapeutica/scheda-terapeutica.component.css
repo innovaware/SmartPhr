@@ -40,3 +40,18 @@ table {
 .title {
   font-weight: bold;
 }
+
+h4 {
+  font-size: 17px;
+  color: #676a6c;
+}
+
+.table-title {
+  text-align: center; /* Centratura del titolo */
+  font-family: 'Arial', sans-serif; /* Font diverso */
+  font-weight: bold; /* Grassetto */
+  color: #555555; /* Grigio scuro */
+  font-size: 1rem; /* Dimensione del testo */
+  margin-bottom: 1rem; /* Spaziatura sotto il titolo */
+}
+

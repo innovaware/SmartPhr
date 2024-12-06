@@ -36,10 +36,29 @@ export class ItemsArray {
   }
 }
 
+
+export class ItemsArrayFirme {
+  data: Date;
+  firmaMattina: String;
+  firmaPomeriggio: String;
+  firmaNotte: String;
+  attivaFirma: Boolean;
+}
+
+export class ItemsArrayAlvo {
+  attivo: Boolean;
+  data: Date;
+  numeroAlviNormali: Number;
+  numeroAlviDiarroici: Number;
+}
+
 export class SchedaTerapeutica {
   _id?: String;
   idPaziente: String;
   Orale?: ItemsArray[] = [];   // Inizializzazione come array vuoto
   IMEVSC?: ItemsArray[] = []; // Inizializzazione come array vuoto
   Estemporanea?: ItemsArray[] = []; // Inizializzazione come array vuoto
+  firme: ItemsArrayFirme[] = [];
+  alvo: ItemsArrayAlvo[] = [];
+  allergie: string;
 }

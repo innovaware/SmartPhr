@@ -4,7 +4,7 @@ import { Dipendenti } from '../../models/dipendenti';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { Segnalazione } from '../../models/segnalazione';
 import { SegnalazioneService } from '../../service/segnalazione.service';
-import { ItemsArray, SchedaTerapeutica } from '../../models/schedaTerapeutica';
+import { ItemsArray, ItemsArrayAlvo, SchedaTerapeutica } from '../../models/schedaTerapeutica';
 import { Paziente } from '../../models/paziente';
 import { SchedaTerapeuticaService } from '../../service/schedaTerapeutica.service';
 
@@ -30,6 +30,8 @@ export class DialogSchedaTerapeuticaComponent implements OnInit {
     23: 'ventitre'
   };
 
+  element2: ItemsArrayAlvo;
+
   maxDate: String;
   minDate: String;
   constructor(
@@ -43,11 +45,19 @@ export class DialogSchedaTerapeuticaComponent implements OnInit {
       type: String,
       id: String,
       edit: Boolean,
-      item: ItemsArray
+      item: any,
+        theraphy: Boolean,
+        alvo: Boolean,
+
     }) {
     this.element = new ItemsArray();
-    if (data.edit) {
+    if (data.edit && data.theraphy) {
       this.element = data.item;
+    }
+
+    this.element2 = new ItemsArrayAlvo();
+    if (data.edit && data.alvo) {
+      this.element2 = data.item;
     }
     this.maxDate = new Date().toISOString().split('T')[0];
     this.minDate = new Date().toISOString().split('T')[0];
@@ -60,35 +70,55 @@ export class DialogSchedaTerapeuticaComponent implements OnInit {
   async salva() {
     try {
       let scheda: SchedaTerapeutica = this.data.scheda;
-      if (!this.element.DataInizio) {
+      if (!this.element.DataInizio && this.data.theraphy) {
         this.messageService.showMessage("Inserire la data inizio terapia");
         return;
       }
-      if (!this.element.Terapia || this.element.Terapia.trim() == "") {
+      if (!this.element2.data && this.data.alvo) {
+        this.messageService.showMessage("Inserire la data");
+        return;
+      }
+      if ((!this.element.Terapia || this.element.Terapia.trim() == "") && this.data.theraphy) {
         this.messageService.showMessage("Inserire la terapia");
         return;
       }
       if (!this.data.edit) {
-        if (!scheda || Object.keys(scheda).length === 0) {
-          console.log("Nuova scheda");
-          scheda = new SchedaTerapeutica();
-          scheda.idPaziente = this.data.id;
-          scheda.Orale = [];
-          scheda.IMEVSC = [];
-          scheda.Estemporanea = [];
+        if (this.data.theraphy) {
+          if (!scheda || Object.keys(scheda).length === 0) {
+            console.log("Nuova scheda");
+            scheda = new SchedaTerapeutica();
+            scheda.idPaziente = this.data.id;
+            scheda.Orale = [];
+            scheda.IMEVSC = [];
+            scheda.Estemporanea = [];
 
-          this.addElementToScheda(scheda, this.data.type, this.element);
-          
+            this.addElementToScheda(scheda, this.data.type, this.element);
 
-          await this.schedaServ.add(scheda);
-          this.messageService.showMessage("Salvataggio Effettuato");
-        } else {
-          this.addElementToScheda(scheda, this.data.type, this.element);
+
+            await this.schedaServ.add(scheda);
+            this.messageService.showMessage("Salvataggio Effettuato");
+          }
+          else {
+            this.addElementToScheda(scheda, this.data.type, this.element);
+            await this.schedaServ.update(scheda).toPromise();
+            this.messageService.showMessage("Salvataggio Effettuato");
+          }
+        }
+        if (this.data.alvo) {
+          scheda.alvo.push(this.element2);
           await this.schedaServ.update(scheda).toPromise();
           this.messageService.showMessage("Salvataggio Effettuato");
         }
-      } else {
-        this.editExistingElement(scheda, this.data.type, this.data.item, this.element);
+      }
+      else {
+        if (this.data.theraphy) {
+          this.editExistingElement(scheda, this.data.type, this.data.item, this.element);
+        }
+        if (this.data.alvo) {
+          const item: ItemsArrayAlvo = this.data.item;
+          const index = scheda.alvo.indexOf(item);
+          scheda.alvo[index] = this.element2;
+        }
         await this.schedaServ.update(scheda).toPromise();
         this.messageService.showMessage("Modifica Effettuata");
       }

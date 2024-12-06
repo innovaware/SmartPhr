@@ -1,95 +1,182 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>{{ data.edit ? 'Terapia' : 'Nuova terapia' }} {{ data.type }}</h3>
+<!-- Terapie -->
+
+<ng-container *ngIf="data.theraphy">
+  <div mat-dialog-title>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <h3>{{ data.edit ? 'Terapia' : 'Nuova terapia' }} {{ data.type }}</h3>
+        </div>
       </div>
+      <hr>
     </div>
-    <hr>
   </div>
-</div>
 
-<mat-dialog-content>
-  <div class="container-fluid">
-    <!-- Date Section -->
-    <div class="row align-items-center mb-3">
-      <div class="col">
-        <mat-label>Data Inizio:</mat-label>
+  <mat-dialog-content>
+    <div class="container-fluid">
+      <!-- Date Section -->
+      <div class="row align-items-center mb-3">
+        <div class="col">
+          <mat-label>Data Inizio:</mat-label>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Scegli una data</mat-label>
+            <input matInput [matDatepicker]="dataI" [(ngModel)]="element.DataInizio" [disabled]="data.edit" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="dataI"></mat-datepicker-toggle>
+            <mat-datepicker #dataI></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col">
+          <mat-label>Data Fine:</mat-label>
+        </div>
+        <div class="col">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Scegli una data</mat-label>
+            <input matInput [matDatepicker]="dataF" [(ngModel)]="element.DataFine" [min]="minDate">
+            <mat-datepicker-toggle matSuffix [for]="dataF"></mat-datepicker-toggle>
+            <mat-datepicker #dataF></mat-datepicker>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="col">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Scegli una data</mat-label>
-          <input matInput [matDatepicker]="dataI" [(ngModel)]="element.DataInizio" [disabled]="data.edit" [max]="maxDate">
-          <mat-datepicker-toggle matSuffix [for]="dataI"></mat-datepicker-toggle>
-          <mat-datepicker #dataI></mat-datepicker>
-        </mat-form-field>
-      </div>
-      <div class="col">
-        <mat-label>Data Fine:</mat-label>
-      </div>
-      <div class="col">
-        <mat-form-field appearance="fill" class="w-100">
-          <mat-label>Scegli una data</mat-label>
-          <input matInput [matDatepicker]="dataF" [(ngModel)]="element.DataFine" [min]="minDate">
-          <mat-datepicker-toggle matSuffix [for]="dataF"></mat-datepicker-toggle>
-          <mat-datepicker #dataF></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
 
-    <!-- Therapy Section -->
-    <div class="row mb-3">
-      <div class="col-1">
-        <mat-label>Terapia:</mat-label>
+      <!-- Therapy Section -->
+      <div class="row mb-3">
+        <div class="col-1">
+          <mat-label>Terapia:</mat-label>
+        </div>
+        <div class="col-11">
+          <mat-form-field class="w-100">
+            <textarea matInput rows="1" [(ngModel)]="element.Terapia" placeholder="Terapia"></textarea>
+          </mat-form-field>
+        </div>
       </div>
-      <div class="col-11">
-        <mat-form-field class="w-100">
-          <textarea matInput rows="1" [(ngModel)]="element.Terapia" placeholder="Terapia"></textarea>
-        </mat-form-field>
-      </div>
-    </div>
 
-    <!-- Time Slots Section -->
-    <div class="row mb-3">
-      <div class="col-2">
-        <label>Fasce Orarie:</label>
-      </div>
-      <div class="col d-flex flex-wrap">
-        <div *ngFor="let hour of [7, 8, 10, 12, 16, 17, 18, 20, 22, 23]" class="me-3">
-          <div class="form-check form-switch d-flex flex-column align-items-center" style="width: 50px;">
-            <!-- Centered hour label above the switch -->
-            <label class="form-check-label mb-1" [for]="'hour-' + hour" style="text-align: center; width: 100%;">
-              {{ hour < 10 ? '0' + hour : hour }}
-            </label>
-            <!-- Centered switch input -->
-            <input class="form-check-input"
-                   [(ngModel)]="element.FasceOrarie[0][hourTextMap[hour]]"
-                   type="checkbox"
-                   [id]="'hour-' + hour">
+      <!-- Time Slots Section -->
+      <div class="row mb-3">
+        <div class="col-2">
+          <label>Fasce Orarie:</label>
+        </div>
+        <div class="col d-flex flex-wrap justify-content-start">
+          <div *ngFor="let hour of [7, 8, 10, 12, 16, 17, 18, 20, 22, 23]" class="me-2">
+            <div class="form-check form-switch d-flex flex-column align-items-center" style="width: 40px;">
+              <!-- Label centrata sopra lo switch -->
+              <label class="form-check-label mb-1" [for]="'hour-' + hour"
+                     style="text-align: center; width: 100%; font-size: 14px;">
+                {{ hour < 10 ? '0' + hour : hour }}
+              </label>
+              <!-- Switch centrato -->
+              <input class="form-check-input"
+                     [(ngModel)]="element.FasceOrarie[0][hourTextMap[hour]]"
+                     type="checkbox"
+                     [id]="'hour-' + hour"
+                     style="margin: 0 auto;">
+            </div>
           </div>
         </div>
+      </div>
 
-
+      <!-- Notes Section -->
+      <div class="row mb-3">
+        <div class="col-1">
+          <mat-label>Note:</mat-label>
+        </div>
+        <div class="col-11">
+          <mat-form-field class="w-100">
+            <textarea matInput rows="2" [(ngModel)]="element.Note" placeholder="Note"></textarea>
+          </mat-form-field>
+        </div>
       </div>
     </div>
+  </mat-dialog-content>
 
-    <!-- Notes Section -->
-    <div class="row mb-3">
-      <div class="col-1">
-        <mat-label>Note:</mat-label>
+  <mat-dialog-actions>
+    <div class="bottom-actions d-flex justify-content-end">
+      <button mat-button color="warn" [mat-dialog-close]="true">Chiudi</button>
+      <button mat-button color="primary" (click)="salva()">Salva</button>
+    </div>
+  </mat-dialog-actions>
+
+</ng-container>
+
+<!-- Alvo -->
+
+<ng-container *ngIf="data.alvo">
+  <div mat-dialog-title>
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col">
+          <h3>{{ data.edit ? 'Alvo' : 'Nuovo Alvo' }}</h3>
+        </div>
       </div>
-      <div class="col-11">
-        <mat-form-field class="w-100">
-          <textarea matInput rows="2" [(ngModel)]="element.Note" placeholder="Note"></textarea>
-        </mat-form-field>
-      </div>
+      <hr>
     </div>
   </div>
-</mat-dialog-content>
 
-<mat-dialog-actions>
-  <div class="bottom-actions d-flex justify-content-end">
-    <button mat-button color="warn" [mat-dialog-close]="true">Chiudi</button>
-    <button mat-button color="primary" (click)="salva()">Salva</button>
-  </div>
-</mat-dialog-actions>
+  <mat-dialog-content>
+    <div class="container-fluid">
+      <!-- Date Section -->
+      <div class="row align-items-center mb-3">
+        <div class="col-2">
+          <mat-label>Data:</mat-label>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Scegli una data</mat-label>
+            <input matInput [matDatepicker]="dataPicker" [(ngModel)]="element2.data" [disabled]="data.edit" [max]="maxDate">
+            <mat-datepicker-toggle matSuffix [for]="dataPicker"></mat-datepicker-toggle>
+            <mat-datepicker #dataPicker></mat-datepicker>
+          </mat-form-field>
+        </div>
+        <div class="col-6"></div>
+      </div>
+
+      <!-- Numero di Alvi Normali -->
+      <div class="row mb-3 align-items-center">
+
+        <div class="col-2">
+          <mat-label>Alvi Normali:</mat-label>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Normali</mat-label>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="element2.numeroAlviNormali"
+                   min="0"
+                   max="5"
+                   placeholder="Quantità">
+          </mat-form-field>
+        </div>
+
+        <!-- Numero di Alvi Diarroici -->
+        <div class="col-2">
+          <mat-label>Alvi Diarroici:</mat-label>
+        </div>
+        <div class="col-4">
+          <mat-form-field appearance="fill" class="w-100">
+            <mat-label>Diarroici</mat-label>
+            <input matInput
+                   type="number"
+                   [(ngModel)]="element2.numeroAlviDiarroici"
+                   min="0"
+                   max="5"
+                   placeholder="Quantità">
+          </mat-form-field>
+        </div>
+
+        <div class="col-6"></div>
+
+      </div>
+
+    </div>
+  </mat-dialog-content>
+
+  <mat-dialog-actions>
+    <div class="bottom-actions d-flex justify-content-end">
+      <button mat-button color="warn" [mat-dialog-close]="true">Chiudi</button>
+      <button mat-button color="primary" (click)="salva()">Salva</button>
+    </div>
+  </mat-dialog-actions>
+</ng-container>
+

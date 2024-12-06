@@ -2,220 +2,379 @@
 <div class="container">
   <mat-tab-group mat-align-tabs="start">
 
+    <!-- Scheda per il Registro -->
+    <mat-tab label="Registro">
+      <div class="table-title">Firme</div>
+
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceFirme" class="mat-table">
+          <!-- Data Colonna -->
+          <ng-container matColumnDef="data">
+            <th mat-header-cell *matHeaderCellDef> Data </th>
+            <td mat-cell *matCellDef="let firma">
+              {{ firma.data | date: 'dd/MM/yyyy' }}
+            </td>
+          </ng-container>
+
+          <!-- Firma Mattina Colonna -->
+          <ng-container matColumnDef="firmaMattina">
+            <th mat-header-cell *matHeaderCellDef> Firma Mattina </th>
+            <td mat-cell *matCellDef="let firma">
+              <ng-container *ngIf="tm && firma.attivaFirma">
+                <button mat-button color="primary"
+                        (click)="firmaTurno('mattutino')" title="Firma turno mattutino">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color:black;" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+                  </svg>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!tm || !firma.attivaFirma">{{ firma.firmaMattina.trim() != '' ? firma.firmaMattina : '---' }}</ng-container>
+            </td>
+          </ng-container>
+
+          <!-- Firma Pomeriggio Colonna -->
+          <ng-container matColumnDef="firmaPomeriggio">
+            <th mat-header-cell *matHeaderCellDef> Firma Pomeriggio </th>
+            <td mat-cell *matCellDef="let firma">
+              <ng-container *ngIf="tp && firma.attivaFirma">
+                <button mat-button color="primary"
+                        (click)="firmaTurno('pomeridiano')" title="Firma turno pomeridiano">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color:black;" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+                  </svg>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!tp || !firma.attivaFirma">
+                {{ firma.firmaPomeriggio.trim() != '' ? firma.firmaPomeriggio : '---' }}
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <!-- Firma Notte Colonna -->
+          <ng-container matColumnDef="firmaNotte">
+            <th mat-header-cell *matHeaderCellDef> Firma Notte </th>
+            <td mat-cell *matCellDef="let firma">
+              <ng-container *ngIf="tn && firma.attivaFirma">
+                <button mat-button color="primary"
+                        (click)="firmaTurno('notturno')" title="Firma turno notturno">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" style="color:black;" class="bi bi-pen-fill" viewBox="0 0 16 16">
+                    <path d="m13.498.795.149-.149a1.207 1.207 0 1 1 1.707 1.708l-.149.148a1.5 1.5 0 0 1-.059 2.059L4.854 14.854a.5.5 0 0 1-.233.131l-4 1a.5.5 0 0 1-.606-.606l1-4a.5.5 0 0 1 .131-.232l9.642-9.642a.5.5 0 0 0-.642.056L6.854 4.854a.5.5 0 1 1-.708-.708L9.44.854A1.5 1.5 0 0 1 11.5.796a1.5 1.5 0 0 1 1.998-.001" />
+                  </svg>
+                </button>
+              </ng-container>
+              <ng-container *ngIf="!tn || !firma.attivaFirma">
+                {{ firma.firmaNotte.trim() != '' ? firma.firmaNotte : '---' }}
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+
+        <!-- Paginator -->
+        <div>
+          <mat-paginator #paginatorFirme [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+
+      </div>
+    </mat-tab>
+
+
     <!-- Scheda per la Terapia Orale -->
     <mat-tab label="Orale">
-      <table mat-table [dataSource]="dataSourceOrale" class="mat-elevation-z8" style="width: 100%; border: none;">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceOrale" class="mat-table" style="width: 100%;">
 
-        <!-- Definizione delle colonne -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
-            <button class="btn btn-link p-0" (click)="add('orale')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-              </svg>
-            </button>
-          </th>
-          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
-            <button mat-button (click)="edit(row,'orale')" title="Modifica Terapia" aria-label="Modifica Terapia">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-              </svg>
-            </button>
-          </td>
-        </ng-container>
+          <!-- Definizione delle colonne -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center;">
+              <button class="btn btn-link p-0" (click)="add('orale')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                </svg>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">
+              <button mat-button (click)="edit(row,'orale')" title="Modifica Terapia" aria-label="Modifica Terapia">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                </svg>
+              </button>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataInizio">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="dataInizio">
+            <th mat-header-cell *matHeaderCellDef> Data Inizio </th>
+            <td mat-cell *matCellDef="let element">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="terapiaOrale">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia Orale </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
-        </ng-container>
+          <ng-container matColumnDef="terapiaOrale">
+            <th mat-header-cell *matHeaderCellDef> Terapia Orale </th>
+            <td mat-cell *matCellDef="let element">{{element.Terapia}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="fasceOrarie">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">
-            <!-- Correzione errori di sintassi nelle fasce orarie -->
-            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="fasceOrarie">
+            <th mat-header-cell *matHeaderCellDef> Fasce Orarie </th>
+            <td mat-cell *matCellDef="let element">
+              <!-- Correzione errori di sintassi nelle fasce orarie -->
+              <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataFine">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="dataFine">
+            <th mat-header-cell *matHeaderCellDef> Data Fine </th>
+            <td mat-cell *matCellDef="let element">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="note">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
-        </ng-container>
+          <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef> Note </th>
+            <td mat-cell *matCellDef="let element">{{element.Note}}</td>
+          </ng-container>
 
-        <!-- Definizione delle righe -->
-        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-      </table>
+          <!-- Definizione delle righe -->
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+        </table>
 
-      <!-- Paginator -->
-      <div>
-        <mat-paginator #paginatorOrale [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <!-- Paginator -->
+        <div>
+          <mat-paginator #paginatorOrale [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
       </div>
     </mat-tab>
 
     <!-- Schede aggiuntive -->
     <mat-tab label="IMEVSC">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceIMEVSC" class="mat-table" style="width: 100%;">
 
-      <table mat-table [dataSource]="dataSourceIMEVSC" class="mat-elevation-z8" style="width: 100%; border: none;">
+          <!-- Definizione delle colonne -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center;">
+              <button class="btn btn-link p-0" (click)="add('IMEVSC')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                </svg>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">
+              <button mat-button (click)="edit(row,'IMEVSC')" title="Modifica Terapia" aria-label="Modifica Terapia">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                </svg>
+              </button>
+            </td>
+          </ng-container>
 
-        <!-- Definizione delle colonne -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
-            <button class="btn btn-link p-0" (click)="add('IMEVSC')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-              </svg>
-            </button>
-          </th>
-          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
-            <button mat-button (click)="edit(row,'IMEVSC')" title="Modifica Terapia" aria-label="Modifica Terapia">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-              </svg>
-            </button>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="dataInizio">
+            <th mat-header-cell *matHeaderCellDef> Data Inizio </th>
+            <td mat-cell *matCellDef="let element">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataInizio">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="terapiaOrale">
+            <th mat-header-cell *matHeaderCellDef> Terapia IMEVSC </th>
+            <td mat-cell *matCellDef="let element">{{element.Terapia}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="terapiaOrale">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia IMEVSC </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
-        </ng-container>
+          <ng-container matColumnDef="fasceOrarie">
+            <th mat-header-cell *matHeaderCellDef> Fasce Orarie </th>
+            <td mat-cell *matCellDef="let element">
+              <!-- Correzione errori di sintassi nelle fasce orarie -->
+              <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="fasceOrarie">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">
-            <!-- Correzione errori di sintassi nelle fasce orarie -->
-            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="dataFine">
+            <th mat-header-cell *matHeaderCellDef> Data Fine </th>
+            <td mat-cell *matCellDef="let element">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataFine">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef> Note </th>
+            <td mat-cell *matCellDef="let element">{{element.Note}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="note">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
-        </ng-container>
+          <!-- Definizione delle righe -->
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+        </table>
 
-        <!-- Definizione delle righe -->
-        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-      </table>
-
-      <!-- Paginator -->
-      <div>
-        <mat-paginator #paginatorImevsc [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        <!-- Paginator -->
+        <div>
+          <mat-paginator #paginatorImevsc [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
       </div>
 
 
     </mat-tab>
     <mat-tab label="Estemporanea">
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceEstemporanea" class="mat-table" style="width: 100%;">
 
-      <table mat-table [dataSource]="dataSourceEstemporanea" class="mat-elevation-z8" style="width: 100%; border: none;">
+          <!-- Definizione delle colonne -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center;">
+              <button class="btn btn-link p-0" (click)="add('estemporanea')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                  <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                </svg>
+              </button>
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">
+              <button mat-button (click)="edit(row,'estemporanea')" title="Modifica Terapia" aria-label="Modifica Terapia">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                  <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                  <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                </svg>
+              </button>
+            </td>
+          </ng-container>
 
-        <!-- Definizione delle colonne -->
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef style="text-align:center; border: none;">
-            <button class="btn btn-link p-0" (click)="add('estemporanea')" title="Aggiungi evento Terapia Orale" aria-label="Aggiungi Terapia Orale">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-              </svg>
-            </button>
-          </th>
-          <td mat-cell *matCellDef="let row" style="text-align: center; border: none;">
-            <button mat-button (click)="edit(row,'estemporanea')" title="Modifica Terapia" aria-label="Modifica Terapia">
-              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-              </svg>
-            </button>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="dataInizio">
+            <th mat-header-cell *matHeaderCellDef> Data Inizio </th>
+            <td mat-cell *matCellDef="let element">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataInizio">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Inizio </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataInizio | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="terapiaOrale">
+            <th mat-header-cell *matHeaderCellDef> Terapia Estemporanea </th>
+            <td mat-cell *matCellDef="let element">{{element.Terapia}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="terapiaOrale">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Terapia Estemporanea </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Terapia}}</td>
-        </ng-container>
+          <ng-container matColumnDef="fasceOrarie">
+            <th mat-header-cell *matHeaderCellDef> Fasce Orarie </th>
+            <td mat-cell *matCellDef="let element">
+              <!-- Correzione errori di sintassi nelle fasce orarie -->
+              <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
+              <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
+            </td>
+          </ng-container>
 
-        <ng-container matColumnDef="fasceOrarie">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Fasce Orarie </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">
-            <!-- Correzione errori di sintassi nelle fasce orarie -->
-            <ng-container *ngIf="element.FasceOrarie[0]['sette']"> 07 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['otto']"> 08 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dieci']"> 10 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['dodici']"> 12 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['sedici']"> 16 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciassette']"> 17 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['diciotto']"> 18 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['venti']"> 20 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventidue']"> 22 -</ng-container>
-            <ng-container *ngIf="element.FasceOrarie[0]['ventitre']"> 23 -</ng-container>
-          </td>
-        </ng-container>
+          <ng-container matColumnDef="dataFine">
+            <th mat-header-cell *matHeaderCellDef> Data Fine </th>
+            <td mat-cell *matCellDef="let element">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="dataFine">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Data Fine </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.DataFine | date: 'dd/MM/yyyy'}}</td>
-        </ng-container>
+          <ng-container matColumnDef="note">
+            <th mat-header-cell *matHeaderCellDef> Note </th>
+            <td mat-cell *matCellDef="let element">{{element.Note}}</td>
+          </ng-container>
 
-        <ng-container matColumnDef="note">
-          <th mat-header-cell *matHeaderCellDef style="border: none;"> Note </th>
-          <td mat-cell *matCellDef="let element" style="border: none;">{{element.Note}}</td>
-        </ng-container>
+          <!-- Definizione delle righe -->
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+        </table>
 
-        <!-- Definizione delle righe -->
-        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-      </table>
+        <!-- Paginator -->
+        <div>
+          <mat-paginator #paginatorEstemporanea [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
+      </div>
+    </mat-tab>
 
-      <!-- Paginator -->
-      <div>
-        <mat-paginator #paginatorEstemporanea [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    <mat-tab label="Altro">
+
+      <!-- Alvo -->
+      <div class="table-title">Tabella Alvo</div>
+      <div class="mat-elevation-z8">
+        <table mat-table [dataSource]="dataSourceAlvo" class="mat-table" style="width: 100%;">
+
+          <!-- Colonna Azione -->
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef style="text-align:center;">
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align: center;">
+              <ng-container *ngIf="row.attivo">
+                <button mat-button (click)="edit(row,'alvo')" title="Modifica Alvo" aria-label="Modifica Alvo">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
+                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
+                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
+                  </svg>
+                </button>
+              </ng-container>
+            </td>
+          </ng-container>
+
+          <!-- Colonna Data -->
+          <ng-container matColumnDef="data">
+            <th mat-header-cell *matHeaderCellDef> Data </th>
+            <td mat-cell *matCellDef="let element">{{element.data | date: 'dd/MM/yyyy'}}</td>
+          </ng-container>
+
+          <!-- Colonna Alvi Normali -->
+          <ng-container matColumnDef="numeroAlviNormali">
+            <th mat-header-cell *matHeaderCellDef> Numero Alvi Normali</th>
+            <td mat-cell *matCellDef="let element">{{element.numeroAlviNormali}}</td>
+          </ng-container>
+
+          <!-- Colonna Alvi Diarroici -->
+          <ng-container matColumnDef="numeroAlviDiarroici">
+            <th mat-header-cell *matHeaderCellDef> Numero Alvi Diarroici</th>
+            <td mat-cell *matCellDef="let element">{{element.numeroAlviDiarroici}}</td>
+          </ng-container>
+
+          <!-- Definizione delle righe -->
+          <tr mat-header-row *matHeaderRowDef="DisplayedColumns2"></tr>
+          <tr mat-row *matRowDef="let row; columns: DisplayedColumns2;"></tr>
+        </table>
+
+        <!-- Paginator -->
+        <div>
+          <mat-paginator #paginatorAlvo [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+        </div>
       </div>
 
+      <br />
+
+      <div class="row">
+        <!-- Campo Allergie -->
+        <div class="col-1">
+          <mat-label>Allergie</mat-label>
+        </div>
+        <div class="col-11">
+          <mat-form-field class="w-100">
+            <textarea matInput rows="1" [(ngModel)]="element.allergie" placeholder="Allergie"></textarea>
+          </mat-form-field>
+        </div>
+
+        <!-- Campo Note -->
+        <div class="col-1">
+          <mat-label>Note</mat-label>
+        </div>
+        <div class="col-11">
+          <mat-form-field class="w-100">
+            <textarea matInput rows="1" [(ngModel)]="element.note" placeholder="Note"></textarea>
+          </mat-form-field>
+        </div>
+      </div>
     </mat-tab>
 
   </mat-tab-group>

@@ -110,5 +110,67 @@ router.put("/:id", async (req, res) => {
     }
 });
 
+// Add a new firma to a scheda
+router.post("/:id/firme", async (req, res) => {
+    const { id } = req.params;
+    const { data, firmaMattina, firmaPomeriggio, firmaNotte, attivaFirma } = req.body;
+
+    // Validazione ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ Error: "Invalid scheda ID format" });
+    }
+
+    // Validazione dati firma
+    if (!data) {
+        return res.status(400).json({ Error: "Missing required field: data" });
+    }
+
+    try {
+        const scheda = await SchedaTer.findById(id);
+        if (!scheda) {
+            return res.status(404).json({ Error: "Scheda not found" });
+        }
+
+        // Aggiungere una nuova firma
+        const nuovaFirma = {
+            data,
+            firmaMattina: firmaMattina || null,
+            firmaPomeriggio: firmaPomeriggio || null,
+            firmaNotte: firmaNotte || null,
+            attivaFirma: attivaFirma !== undefined ? attivaFirma : true,
+        };
+
+        scheda.firme.push(nuovaFirma);
+        await scheda.save();
+
+        res.status(201).json({ message: "Firma added successfully", firma: nuovaFirma });
+    } catch (err) {
+        console.error("Error adding firma: ", err);
+        res.status(500).json({ Error: err.message });
+    }
+});
+
+
+// Get all firme for a specific scheda
+router.get("/:id/firme", async (req, res) => {
+    const { id } = req.params;
+
+    // Validazione ID
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+        return res.status(400).json({ Error: "Invalid scheda ID format" });
+    }
+
+    try {
+        const scheda = await SchedaTer.findById(id, "firme");
+        if (!scheda) {
+            return res.status(404).json({ Error: "Scheda not found" });
+        }
+
+        res.status(200).json(scheda.firme);
+    } catch (err) {
+        console.error("Error fetching firme: ", err);
+        res.status(500).json({ Error: err.message });
+    }
+});
 
 module.exports = router;

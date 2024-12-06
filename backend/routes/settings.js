@@ -17,6 +17,7 @@ router.post("/", async (req, res) => {
     try {
         const settings = new Settings({
             alertContratto: req.body.alertContratto,
+            alertFarmaci: req.body.alertFarmaci,
             alertDiarioClinico: req.body.alertDiarioClinico,
             menuInvernaleStart: req.body.menuInvernaleStart,
             menuInvernaleEnd: req.body.menuInvernaleEnd,
@@ -46,8 +47,10 @@ router.put("/:id", async (req, res) => {
                     menuInvernaleStart: req.body.menuInvernaleStart,
                     menuInvernaleEnd: req.body.menuInvernaleEnd,
                     menuEstivoStart: req.body.menuEstivoStart,
+                    alertFarmaci: req.body.alertFarmaci,
                     menuEstivoEnd: req.body.menuEstivoEnd,
                     ScadenzaPersonalizzato: req.body.ScadenzaPersonalizzato,
+                    turni: req.body.turni,
                 },
             }
         );

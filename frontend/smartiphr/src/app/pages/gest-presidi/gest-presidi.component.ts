@@ -11,6 +11,8 @@ import { GestPresidiService } from "src/app/service/gest-presidi.service";
 import { MessagesService } from "src/app/service/messages.service";
 import { AttivitaFarmaciPresidi } from "../../models/attivitaFarmaciPresidi";
 import { AttivitafarmacipresidiService } from "../../service/attivitafarmacipresidi.service";
+import { Settings } from "../../models/settings";
+import { SettingsService } from "../../service/settings.service";
 @Component({
   selector: 'app-gest-presidi',
   templateUrl: './gest-presidi.component.html',
@@ -36,6 +38,7 @@ export class GestPresidiComponent implements OnInit {
   presidi: Presidi[];
   presidiScad: Presidi[];
   public attivita: AttivitaFarmaciPresidi[];
+  settings: Settings;
 
   @ViewChild("presidi", { static: false }) paginator: MatPaginator;
   @ViewChild("scaduti", { static: false }) paginatorS: MatPaginator;
@@ -48,6 +51,7 @@ export class GestPresidiComponent implements OnInit {
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
     public messageService: MessagesService,
+    private settServ: SettingsService,
     public AFPS: AttivitafarmacipresidiService
   ) {
     this.presidi = [];
@@ -62,8 +66,33 @@ export class GestPresidiComponent implements OnInit {
       this.dataSourceS = new MatTableDataSource<Presidi>(this.presidiScad);
       this.dataSource.paginator = this.paginator;
       this.dataSourceS.paginator = this.paginatorS;
-    });
 
+      this.settings = new Settings();
+      this.settServ.getSettings().then((res) => {
+        this.settings = res[0];
+        let farmListName: string = "";
+        let numScad: number = 0;
+
+        console.log("settings:", this.settings);
+        console.log("presidi:", this.presidi);
+
+        this.presidi.forEach(x => {
+          numScad = this.dateDiff(new Date(), new Date(x.scadenza));
+          if (numScad <= this.settings.alertFarmaci.valueOf()) {
+            if (numScad < 1) {
+              farmListName += `Il presidio ${x.nome} è scaduto\n`;
+            } else {
+              farmListName += `Il presidio ${x.nome} scadrà tra ${numScad} ${numScad === 1 ? 'giorno' : 'giorni'}\n`;
+            }
+          }
+        });
+
+        if (farmListName !== "") {
+          this.messageService.showMessage(farmListName);
+        }
+      });
+    });
+    
     this.getAttivita();
   }
 
@@ -91,6 +120,13 @@ export class GestPresidiComponent implements OnInit {
     });
   }
 
+  dateDiff(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
 
 
   ngAfterViewInit() {

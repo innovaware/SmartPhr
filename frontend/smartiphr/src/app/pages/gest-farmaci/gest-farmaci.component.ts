@@ -13,6 +13,8 @@ import { MessagesService } from "src/app/service/messages.service";
 import { Paziente } from "../../models/paziente";
 import { AttivitaFarmaciPresidi } from "../../models/attivitaFarmaciPresidi";
 import { AttivitafarmacipresidiService } from "../../service/attivitafarmacipresidi.service";
+import { Settings } from "../../models/settings";
+import { SettingsService } from "../../service/settings.service";
 
 @Component({
   selector: 'app-gest-farmaci',
@@ -52,13 +54,16 @@ export class GestFarmaciComponent implements OnInit {
   dipendente: Dipendenti ;
   OperatorID: String;
   Operator: String;
+
+  settings: Settings;
   constructor(
     public dialog: MatDialog,
     public farmaciService: GestFarmaciService,
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
     public messageService: MessagesService,
-    public AFPS: AttivitafarmacipresidiService
+    private settServ: SettingsService,
+    public AFPS: AttivitafarmacipresidiService,
   ) {
     this.type = "Farmaci";
     this.paziente = new Paziente();
@@ -67,22 +72,60 @@ export class GestFarmaciComponent implements OnInit {
     this.farmaciScad = [];
     this.dataSource = new MatTableDataSource<Farmaci>();
     this.dataSourceS = new MatTableDataSource<Farmaci>();
+
     this.farmaciService.getFarmaci().then((result) => {
       console.log(result); // Log per verificare il contenuto di result
 
-      this.farmaci = result.filter(x => new Date(x.scadenza) < new Date());
-      this.farmaciScad = result.filter(x => new Date(x.scadenza) >= new Date());
+
+      this.farmaci = result.filter(x => new Date(x.scadenza) > new Date());
+      this.farmaciScad = result.filter(x => new Date(x.scadenza) <= new Date());
+
 
       this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
       this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
 
       // Assicurati che i paginator siano stati inizializzati
-      this.dataSourceS.paginator = this.paginatorS;
-      this.dataSource.paginator = this.paginator;
+      if (this.paginatorS) {
+        this.dataSourceS.paginator = this.paginatorS;
+      }
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
     });
+
+    this.settings = new Settings();
+    this.settServ.getSettings().then((res) => { this.settings = res[0]; });
+    let farmListName: string = "";
+    let numScad: number = 0;
+
+    console.log("settings:", this.settings);
+    console.log("farmaci:", this.farmaci);
+    this.farmaci.forEach(x => {
+      numScad = this.dateDiff(new Date(), new Date(x.scadenza));
+      if (numScad <= this.settings.alertFarmaci.valueOf()) {
+        if (numScad < 1) {
+          farmListName += `Il farmaco ${x.nome} è scaduto\n`;
+        } else {
+          farmListName += `Il farmaco ${x.nome} scadrà tra ${numScad} ${numScad === 1 ? 'giorno' : 'giorni'}\n`;
+        }
+      }
+    });
+    if (farmListName !== "") {
+      this.messageService.showMessage(farmListName);
+    }
+
     this.dipendente = new Dipendenti();
     this.getAttivita();
     this.loadUser();
+  }
+
+
+  dateDiff(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
 
   ngOnInit(): void {
@@ -94,21 +137,54 @@ export class GestFarmaciComponent implements OnInit {
   ngAfterViewInit() {
     this.dipendente = new Dipendenti();
     this.loadUser();
+
+    // Carica i farmaci
     this.farmaciService.getFarmaci().then((result) => {
       console.log(result); // Log per verificare il contenuto di result
 
-      this.farmaci = result.filter(x => new Date(x.scadenza) >= new Date());
-      this.farmaciScad = result.filter(x => new Date(x.scadenza) < new Date());
+      this.farmaci = result.filter(x => new Date(x.scadenza) > new Date());
+      this.farmaciScad = result.filter(x => new Date(x.scadenza) <= new Date());
 
       this.dataSource = new MatTableDataSource<Farmaci>(this.farmaci);
       this.dataSourceS = new MatTableDataSource<Farmaci>(this.farmaciScad);
 
-      // Assicurati che i paginator siano stati inizializzati
-      this.dataSourceS.paginator = this.paginatorS;
-      this.dataSource.paginator = this.paginator;
+      if (this.paginatorS) {
+        this.dataSourceS.paginator = this.paginatorS;
+      }
+      if (this.paginator) {
+        this.dataSource.paginator = this.paginator;
+      }
+
+      // Carica le impostazioni e mostra l'allerta se necessario
+      this.settings = new Settings();
+      this.settServ.getSettings().then((res) => {
+        this.settings = res[0];
+        let farmListName: string = "";
+        let numScad: number = 0;
+
+        console.log("settings:", this.settings);
+        console.log("farmaci:", this.farmaci);
+
+        this.farmaci.forEach(x => {
+          numScad = this.dateDiff(new Date(), new Date(x.scadenza));
+          if (numScad <= this.settings.alertFarmaci.valueOf()) {
+            if (numScad < 1) {
+              farmListName += `Il farmaco ${x.nome} è scaduto\n`;
+            } else {
+              farmListName += `Il farmaco ${x.nome} scadrà tra ${numScad} ${numScad === 1 ? 'giorno' : 'giorni'}\n`;
+            }
+          }
+        });
+
+        if (farmListName !== "") {
+          this.messageService.showMessage(farmListName);
+        }
+      });
     });
+
     this.getAttivita();
   }
+
 
 
 

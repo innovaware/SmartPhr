@@ -34,6 +34,7 @@ export class SettingsComponent implements OnInit {
     public settingService: SettingsService) {
     this.setting = new Settings();
     this.setting.alertContratto = 0;
+    this.setting.alertFarmaci = 0;
     this.setting.alertDiarioClinico = 0;
     this.loadUser();
     this.getSettings();
@@ -73,8 +74,10 @@ export class SettingsComponent implements OnInit {
   {
     if (!this.setting.alertDiarioClinico) this.setting.alertDiarioClinico = 0;
     if (!this.setting.alertContratto) this.setting.alertContratto = 0;
+    if (!this.setting.alertFarmaci) this.setting.alertFarmaci = 0;
     //if (!this.setting.ScadenzaPersonalizzato) this.setting.ScadenzaPersonalizzato = 0;
     this.setting.alertContratto = Math.abs(this.setting.alertContratto.valueOf());
+    this.setting.alertFarmaci = Math.abs(this.setting.alertFarmaci.valueOf());
     this.setting.alertDiarioClinico = Math.abs(this.setting.alertDiarioClinico.valueOf());
     //this.setting.ScadenzaPersonalizzato = Math.abs(this.setting.ScadenzaPersonalizzato.valueOf());
     this.settingService.updateSettings(this.setting).then(() => {

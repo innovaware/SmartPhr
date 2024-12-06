@@ -45,6 +45,20 @@
             <p>Indicare il numero di giorni preavviso della scadenza contratto consulenti</p>
           </div>
         </div>
+        <div class="row">
+          <div class="col-2">
+              <label>Alert scadenza Farmaci e Presidi: </label>
+          </div>
+          <div class="col-3">
+            <mat-form-field>
+                <input matInput type="number" placeholder="Alert scadenza farmaci e presidi" [(ngModel)]="setting.alertFarmaci" min="0">
+            </mat-form-field>
+          </div>
+          <div class="col-2"></div>
+          <div class="col-5">
+            <p>Indicare il numero di giorni preavviso della scadenza dei farmaci e dei presidi</p>
+          </div>
+        </div>
         <br />
         <div class="row">
           <div class="col-2">
