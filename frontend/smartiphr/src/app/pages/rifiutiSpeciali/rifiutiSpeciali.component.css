@@ -1,0 +1,98 @@
+.container {
+  margin: 5px auto;
+  max-width: auto;
+}
+
+.title {
+  padding-top: 20px;
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+
+.custom-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 15px;
+}
+
+  .custom-table th,
+  .custom-table td {
+    border: 1px solid #ddd;
+    padding: 4px;
+    text-align: center;
+    line-height: 1.2; /* Ridotta l'altezza della linea */
+  }
+
+  .custom-table th {
+    background-color: #f4f4f4;
+    font-weight: bold;
+  }
+
+input, textarea {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 2px; /* Riduce il padding interno */
+  font-size: 14px; /* Riduce il font */
+  line-height: 1.2; /* Riduce l'altezza della linea */
+}
+
+textarea {
+  resize: none; /* Impedisce il ridimensionamento verticale */
+  height: 10px; /* Altezza ridotta */
+}
+
+.anno-riferimento {
+  font-size: 18px;
+  font-weight: bold;
+  margin: 0 10px;
+}
+
+.arrow-button {
+  background: none; /* Rimuove il colore di sfondo */
+  border: none; /* Rimuove i bordi */
+  padding: 0; /* Rimuove il padding */
+  cursor: pointer; /* Cambia il cursore */
+}
+
+  .arrow-button svg {
+    color: black; /* Cambia il colore delle frecce */
+    transition: transform 0.2s; /* Effetto di zoom */
+  }
+
+  .arrow-button:hover svg {
+    transform: scale(1.1); /* Effetto ingrandimento al passaggio */
+  }
+
+.container-wide {
+  max-width: 90%; /* Aumenta la larghezza al 90% dello schermo */
+  margin: auto;
+}
+
+.text-center {
+  text-align: center; /* Centra il testo */
+}
+
+.mat-form-field {
+  margin: 0; /* Rimosso margine esterno */
+  padding: 0; /* Rimosso padding interno */
+  min-height: 32px; /* Altezza minima ridotta */
+}
+
+.mat-form-field-wrapper {
+  padding: 0 4px; /* Ridotto il padding interno del contenitore */
+}
+
+.mat-input-element {
+  line-height: 1.2; /* Altezza compatta per gli input */
+  font-size: 14px; /* Font più piccolo */
+}
+
+.custom-table tr {
+  height: auto; /* Imposta l'altezza dinamica in base al contenuto */
+}
+
+.custom-table td textarea {
+  height: 20px; /* Altezza ridotta per i textarea */
+}

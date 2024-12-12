@@ -117,6 +117,7 @@ import { AgendaClinicaComponent } from "./pages/agendaClinica/agendaClinica.comp
 import { SettingsComponent } from "./pages/settings/settings.component";
 import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
 import { CarrelloComponent } from "./pages/carrello/carrello.component";
+import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -273,6 +274,7 @@ const routes: Routes = [
   { path: "Ascensori", component: VerificaAscensoriComponent, canActivate: [AuthGuard] },
   { path: "PrevenzioneRischi", component: PrevenzioneRischiComponent, canActivate: [AuthGuard] },
   { path: "ControlloLegionellosi", component: ControlloLegionellosiComponent, canActivate: [AuthGuard] },
+  { path: "RifiutiSpeciali", component: RifiutiSpecialiComponent, canActivate: [AuthGuard] },
   //Impostazioni
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
   { path: "settings", component: SettingsComponent, canActivate: [AuthGuard] },

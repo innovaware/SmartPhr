@@ -295,6 +295,7 @@ import { CarrelloComponent } from "./pages/carrello/carrello.component";
 import { DialogCartComponent } from "./dialogs/dialog-cart/dialog-cart.component";
 import { DialogCartItemComponent } from "./dialogs/dialog-cart-item/dialog-cart-item.component";
 import { DialogSchedaTerapeuticaComponent } from "./dialogs/dialog-schedaTerapeutica/dialog-schedaTerapeutica.component";
+import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
 
 const materialModules = [
   MatTableModule,
@@ -465,6 +466,7 @@ const pipes = [
     FarmaciComponent,
     AdminPazientiComponent,
     UploadComponent,
+    RifiutiSpecialiComponent,
     LoginComponent,
     TableDipendentiComponent,
     FerieComponent,

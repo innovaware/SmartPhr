@@ -464,6 +464,12 @@ const InitApiFunctions = () => {
     app.use(apiArmadio.path, logHandler, authorizationHandler, ArmadioRouter);
     routesList.push(apiArmadio);
 
+    // Rifiuti Speciali API
+    var RifiutiSpecialiRouter = require("./routes/rifiutiSpeciali");
+    var apiRifiutiSpeciali = { key: 'rifiutiSpeciali', path: '/api/rifiutiSpeciali' }
+    app.use(apiRifiutiSpeciali.path, logHandler, authorizationHandler, RifiutiSpecialiRouter);
+    routesList.push(apiRifiutiSpeciali);
+
 
     var ArmadioFarmaciRouter = require("./routes/armadioFarmaci");
     var apiArmadioFarmaci = { key: 'armadioFarmaci', path: '/api/armadioFarmaci' }
