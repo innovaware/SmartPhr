@@ -4,6 +4,9 @@ import { DiarioAssSociale } from 'src/app/models/diarioAssSociale';
 import { Paziente } from 'src/app/models/paziente';
 import { CartellaAssSocialeService } from 'src/app/service/cartella-ass-sociale.service';
 import { MessagesService } from 'src/app/service/messages.service';
+import { Dipendenti } from '../../models/dipendenti';
+import { DipendentiService } from '../../service/dipendenti.service';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-dialog-diario-asssociale',
@@ -14,12 +17,15 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
 
   @Input() disable : boolean;
   @Input() isNew: boolean;
+    dipendente: Dipendenti;
 
   constructor(public casService: CartellaAssSocialeService,
     public dialogRef: MatDialogRef<DialogDiarioAsssocialeComponent>, public messageService: MessagesService,
+    private dipendenteService: DipendentiService,
+    private authenticationService: AuthenticationService,
     @Inject(MAT_DIALOG_DATA)
     public data: { paziente: Paziente; readonly: boolean; newItem: boolean }, @Inject(MAT_DIALOG_DATA) public item: DiarioAssSociale) {
-
+    this.loadUser();
     }
 
 
@@ -28,8 +34,10 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
 
 
   async salva() {
-    if(this.item.contenuto == undefined || this.item.contenuto == "")
+    if (this.item.contenuto == undefined || this.item.contenuto == "") {
       this.messageService.showMessageError("Alcuni campi obbligatori sono mancanti!");
+      return;
+    }
     
     else{
       //ADD
@@ -39,6 +47,8 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
         diario.user = this.data.paziente._id;
         diario.data = new Date();
         diario.contenuto = this.item.contenuto;
+        diario.firma = this.dipendente.nome + " " + this.dipendente.cognome;
+
 
         console.log("salva diario sociale: " + JSON.stringify(diario));
         this.casService
@@ -57,6 +67,7 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
       }else{
         console.log("modifica diario sociale: " + JSON.stringify(this.item));
 
+        this.item.firma = this.dipendente.nome + " " + this.dipendente.cognome;
         this.casService
         .saveDiario(this.item)
         .then((x) => {
@@ -70,6 +81,25 @@ export class DialogDiarioAsssocialeComponent implements OnInit {
         });
       }
     }
+  }
+
+  loadUser() {
+    this.dipendente = new Dipendenti();
+    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
+      console.log("get dipendente");
+      this.dipendenteService
+        .getByIdUser(user.dipendenteID)
+        .then((x) => {
+
+          this.dipendente = x[0];
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+    });
   }
 
 

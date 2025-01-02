@@ -118,6 +118,7 @@ import { SettingsComponent } from "./pages/settings/settings.component";
 import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contratti-consulenti.component";
 import { CarrelloComponent } from "./pages/carrello/carrello.component";
 import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
+import { AreaLogComponent } from "./pages/log/area-log.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -278,6 +279,7 @@ const routes: Routes = [
   //Impostazioni
   { path: "authorization", component: AuthorizationComponent, canActivate: [AuthGuard] },
   { path: "settings", component: SettingsComponent, canActivate: [AuthGuard] },
+  { path: "logs", component: AreaLogComponent, canActivate: [AuthGuard] },
 
 
   { path: "", component: DashboardComponent, canActivate: [AuthGuard]  },

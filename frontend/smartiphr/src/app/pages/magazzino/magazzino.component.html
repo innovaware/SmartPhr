@@ -14,8 +14,10 @@
 
         <div class="row">
           <div class="col">
-            <button mat-button class="button-insert" (click)="addNewMaterialeMagazzino()">Nuovo
-              Materiale/Presidio</button>
+            <button mat-button class="button-insert" (click)="addNewMaterialeMagazzino()">
+              Nuovo
+              Materiale/Presidio
+            </button>
           </div>
         </div>
 
@@ -43,15 +45,14 @@
                     <img src="../../../assets/scarico_carico.svg" class="actionIcon" (click)="carico(row)"
                       matTooltip="Carico">
                   </button>
-
                   <button mat-button class="btnAction">
-                    <img src="../../../assets/scarico_carico.svg" class="actionIcon"  (click)="scarico(row)"
-                      matTooltip="Scarico">
+                    <img src="../../../assets/scarico_carico.svg" class="actionIcon" (click)="scarico(row)"
+                         matTooltip="Scarico">
                   </button>
 
                   <button mat-button class="btnAction">
-                    <img src="../../../assets/menu.png" class="actionIcon"  (click)="details(row)"
-                      matTooltip="Apri dettaglio">
+                    <img src="../../../assets/menu.png" class="actionIcon" (click)="details(row)"
+                         matTooltip="Apri dettaglio">
                   </button>
 
                 </td>
@@ -97,7 +98,7 @@
             </table>
 
             <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-              aria-label="Select page of periodic elements">
+                           aria-label="Select page of periodic elements">
             </mat-paginator>
           </div>
         </div>
@@ -136,7 +137,7 @@
             </table>
 
             <mat-paginator #paginatorOperazioni [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-              aria-label="Select page of periodic elements">
+                           aria-label="Select page of periodic elements">
             </mat-paginator>
           </div>
         </div>

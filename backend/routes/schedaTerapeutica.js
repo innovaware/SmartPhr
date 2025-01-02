@@ -2,6 +2,9 @@ const express = require("express");
 const router = express.Router();
 const mongoose = require("mongoose");  // Added mongoose for objectId validation
 const SchedaTer = require("../models/schedaTerapeutica");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
+
 
 // Get all schede terapeutiche
 router.get("/", async (req, res) => {
@@ -72,6 +75,25 @@ router.post("/", async (req, res) => {
     try {
         const scheda = new SchedaTer(req.body);
         const result = await scheda.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "SchedaTerapeutica",
+            operazione: "Inserimento nuova scheda terapeutica",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(201).json(result);
     } catch (err) {
         console.error("Error: ", err);
@@ -102,6 +124,24 @@ router.put("/:id", async (req, res) => {
         if (scheda.matchedCount === 0) {
             return res.status(404).json({ Error: "Scheda not found or no changes made" });
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "SchedaTerapeutica",
+            operazione: "Modifica scheda terapeutica",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(scheda);
     } catch (err) {
@@ -142,6 +182,24 @@ router.post("/:id/firme", async (req, res) => {
 
         scheda.firme.push(nuovaFirma);
         await scheda.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "SchedaTerapeutica",
+            operazione: "Inserimento firma scheda terapeutica",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(201).json({ message: "Firma added successfully", firma: nuovaFirma });
     } catch (err) {

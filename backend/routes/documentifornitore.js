@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const DocumentiFornitore = require("../models/documentifornitore");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 async function getDocumentiFornitoreByIdFornitore(req, res) {
     try {
@@ -105,6 +107,24 @@ async function insertDocumentoFornitoreByFornitoreId(req, res) {
             redisclient.del(`documentiFornitore${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentoFornitore",
+            operazione: "Inserimento documento fornitore " + documentiFornitore.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -134,6 +154,24 @@ async function modifyDocumentoFornitoreByFornitoreId(req, res) {
             redisclient.del(`documentifornitoreby${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentoFornitore",
+            operazione: "Modifica documento fornitore " + documentiFornitore.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(documentiFornitore);
     } catch (err) {
@@ -156,6 +194,24 @@ async function deleteDocumentoFornitore(req, res) {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`documentiFornitore*`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentoFornitore",
+            operazione: "Eliminazione documento fornitore " + documentiFornitore.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(documentiFornitore);

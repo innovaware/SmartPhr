@@ -59,7 +59,7 @@
         </div>
         <div class="col d-flex flex-wrap justify-content-start">
           <div *ngFor="let hour of [7, 8, 10, 12, 16, 17, 18, 20, 22, 23]" class="me-2">
-            <div class="form-check form-switch d-flex flex-column align-items-center" style="width: 40px;">
+            <div class="form-check form-switch d-flex flex-column align-items-center clickable-switch" style="width: 40px;">
               <!-- Label centrata sopra lo switch -->
               <label class="form-check-label mb-1" [for]="'hour-' + hour"
                      style="text-align: center; width: 100%; font-size: 14px;">

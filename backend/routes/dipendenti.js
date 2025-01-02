@@ -5,6 +5,7 @@ const redis = require("redis");
 const { ObjectId } = require("bson");
 const bcrypt = require('bcrypt');
 const router = express.Router();
+const Log = require("../models/log");
 //const redisPort = process.env.REDISPORT || 6379;
 //const redisHost = process.env.REDISHOST || "redis";
 //const redisDisabled = process.env.REDISDISABLE === "true" || false;
@@ -101,7 +102,8 @@ router.post("/", async (req, res) => {
             password: pwd,
             active: false,
             role: newDip.mansione,
-            dipendenteID: result._id
+            dipendenteID: result._id,
+            firma: result.nome + " " + result.cognome
         });
         const userResult = await user.save();
 
@@ -119,6 +121,24 @@ router.post("/", async (req, res) => {
                 }
             });
         }
+
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dip.nome + " " + dip.cognome,
+            operatoreID: usr.dipendenteID,
+            className: "Dipendente",
+            operazione: "Inserimento dipendente: " + dipendente.cognome + " " + dipendente.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(result);
     } catch (err) {
@@ -155,6 +175,24 @@ router.put("/:id", async (req, res) => {
             )
         );
 
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dip.nome + " " + dip.cognome,
+            operatoreID: usr.dipendenteID,
+            className: "Dipendente",
+            operazione: "Modifica dipendente: " + dipendente.cognome + " " + dipendente.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         // Rispondi con il risultato dell'aggiornamento
         res.status(200).json(dipendenti);
     } catch (err) {
@@ -164,44 +202,62 @@ router.put("/:id", async (req, res) => {
 
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const dipendente = await Dipendenti.remove({ _id: id });
+    try {
+        const { id } = req.params;
+        const dipendente = await Dipendenti.remove({ _id: id });
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    clientMailerService = req.app.get("mailer");
-    clientMailerTopic = req.app.get("mailerTopic");
-    clientMailerDiabled = req.app.get("mailerDisabled");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+        clientMailerService = req.app.get("mailer");
+        clientMailerTopic = req.app.get("mailerTopic");
+        clientMailerDiabled = req.app.get("mailerDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      let searchTerm = `DIPENDENTEBY${id}`;
-      redisClient.del(searchTerm);
-      searchTerm = `DIPENDENTE${id}`;
-      redisClient.del(searchTerm);
-    }
+        if (redisClient != undefined && !redisDisabled) {
+            let searchTerm = `DIPENDENTEBY${id}`;
+            redisClient.del(searchTerm);
+            searchTerm = `DIPENDENTE${id}`;
+            redisClient.del(searchTerm);
+        }
 
-    if (clientMailerService != undefined && !clientMailerDiabled) {
+        if (clientMailerService != undefined && !clientMailerDiabled) {
 
-      clientMailerService.publish(
-        clientMailerTopic,
-        JSON.stringify({
-          message: dipendente,
-          operation: "remove",
-        }),
-        { qos: 0, retain: false },
-        (error) => {
-          if (error) {
-            console.error(error);
-          }
+            clientMailerService.publish(
+                clientMailerTopic,
+                JSON.stringify({
+                    message: dipendente,
+                    operation: "remove",
+                }),
+                { qos: 0, retain: false },
+                (error) => {
+                    if (error) {
+                        console.error(error);
+                    }
+                });
+        }
+
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dip.nome + " " + dip.cognome,
+            operatoreID: usr.dipendenteID,
+            className: "Dipendente",
+            operazione: "Eliminazione dipendente: " + dipendente.cognome + " " + dipendente.nome,
         });
-    }
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
-    res.status(200);
-    res.json(dipendente);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        res.status(200);
+        res.json(dipendente);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
 module.exports = router;

@@ -296,6 +296,8 @@ import { DialogCartComponent } from "./dialogs/dialog-cart/dialog-cart.component
 import { DialogCartItemComponent } from "./dialogs/dialog-cart-item/dialog-cart-item.component";
 import { DialogSchedaTerapeuticaComponent } from "./dialogs/dialog-schedaTerapeutica/dialog-schedaTerapeutica.component";
 import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
+import { AreaLogComponent } from "./pages/log/area-log.component";
+import { DialogLogComponent } from "./dialogs/dialog-log/dialog-log.component";
 
 const materialModules = [
   MatTableModule,
@@ -409,6 +411,7 @@ const pipes = [
     AreaMedicaComponent,
     AreaInfermieristicaComponent,
     GestUtentiComponent,
+    AreaLogComponent,
     GeneralePersonaleComponent,
     GestStanzeComponent,
     CalendarComponent,
@@ -567,6 +570,7 @@ const pipes = [
     AttivitaPresidiComponent,
     AreaPaiComponent,
     DialogPaiComponent,
+    DialogLogComponent,
     GestionePuliziaAmbientiComponent,
     DialogPuliziaAmbientiComponent,
     LavanderiaComponent,

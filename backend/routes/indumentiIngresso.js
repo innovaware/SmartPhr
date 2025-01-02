@@ -1,5 +1,7 @@
 const express = require("express");
 const IndumentiIngresso = require("../models/indumentiIngresso");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 const router = express.Router();
 
@@ -66,6 +68,24 @@ router.post("/", async (req, res) => {
         console.log(req.body);
 
         const result = await indumenti.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "IndumentiIngresso",
+            operazione: "Inserimento indumento: " + indumenti.nome + ". Quantita': " + indumenti.quantita + ". Paziente: " + indumenti.nomePaziente + " (" + indumenti.paziente + ")",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(result);

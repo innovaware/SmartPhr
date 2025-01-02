@@ -12,6 +12,9 @@ import { AuthenticationService } from 'src/app/service/authentication.service';
 import { CucinaService } from 'src/app/service/cucina.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { UsersService } from 'src/app/service/users.service';
+import { Dipendenti } from '../../models/dipendenti';
+import { DipendentiService } from '../../service/dipendenti.service';
+import { SettingsService } from '../../service/settings.service';
 
 export class CucinaAmbientiStoricoView extends CucinaDerrateAlimentiStorico {
   user: User
@@ -32,6 +35,7 @@ export class CucinaDerrateAlimentariComponent implements OnInit {
   public derrantiAlimentiStoricoDataSource: MatTableDataSource<CucinaAmbientiStoricoView>;
   @ViewChild("paginatorDerranteAlimentiStorico", {static: false})  paginatorDerranteAlimentiStorico: MatPaginator;
   derrantiAlimentiStoricoDisplayedColumns: string[] = ["nome", "dateInsert", "quantita", "note", "operazione", "user"];
+    dipendente: Dipendenti;
 
 
   constructor(
@@ -40,7 +44,10 @@ export class CucinaDerrateAlimentariComponent implements OnInit {
     private messageService: MessagesService,
     private authenticationService: AuthenticationService,
     private userService: UsersService,
-  ) { }
+    private dipendenteService: DipendentiService,
+  ) {
+    this.loadUser();
+  }
 
   ngOnInit(): void {
     this.load();
@@ -160,6 +167,25 @@ export class CucinaDerrateAlimentariComponent implements OnInit {
           });
         }
       });
+  }
+
+  loadUser() {
+    this.dipendente = new Dipendenti();
+    this.authenticationService.getCurrentUserAsync().subscribe((user) => {
+      console.log("get dipendente");
+      this.dipendenteService
+        .getByIdUser(user.dipendenteID)
+        .then((x) => {
+
+          this.dipendente = x[0];
+
+        })
+        .catch((err) => {
+          this.messageService.showMessageError(
+            "Errore Caricamento dipendente (" + err["status"] + ")"
+          );
+        });
+    });
   }
 
 }

@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const RichiestePresidi = require("../models/richiestePresidi");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 router.get("/", async (req, res) => {
@@ -71,6 +73,24 @@ router.post("/", async (req, res) => {
         console.log(req.body);
 
         const result = await richieste.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "RichiestePresidi",
+            operazione: "Inserimento richieste presidi: " + richieste.materiale + ", Quantita': " + richieste.quantita,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
         
         res.status(200);
         res.json(result);
@@ -92,6 +112,24 @@ router.put('/:id', async (req, res) => {
         if (!updatedRichiestePresidi) {
             return res.status(404).send({ message: 'Segnalazione non trovata' });
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "RichiestePresidi",
+            operazione: "Modifica richieste presidi: " + richieste.materiale + ", Quantita': " + richieste.quantita,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.send(updatedRichiestePresidi);
     } catch (error) {

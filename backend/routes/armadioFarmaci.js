@@ -2,7 +2,8 @@ const { ObjectId } = require("bson");
 const express = require("express");
 const router = express.Router();
 const Armadio = require("../models/armadioFarmaci");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -63,7 +64,24 @@ router.put("/:id", async (req, res) => {
         }
 
         const armadio = await Armadio.updateOne({ _id: id }, { $set: req.body });
-        
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "ArmadioFarmaci",
+            operazione: "Modifica farmaco dell'armadio effettuata. ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         console.log("Aggiornamento completato:", armadio);
         res.status(200).json({ message: "Aggiornamento riuscito", data: armadio });
@@ -91,7 +109,25 @@ router.post("/", async (req, res) => {
         //    firma: req.body.armadio.lastChecked.idUser
         //});
 
-       /* const resultRegistro = await registro.save();*/
+        /* const resultRegistro = await registro.save();*/
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "ArchivioMenuCucinaPersonalizzato",
+            operazione: "Inserimento " + armadio.farmaci.nome + "nell'armadio dei farmaci.",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(armadio);
     } catch (err) {

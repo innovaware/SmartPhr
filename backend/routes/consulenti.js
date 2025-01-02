@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Consulenti = require("../models/consulenti");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 //const redis = require("redis");
 //const redisPort = process.env.REDISPORT || 6379;
@@ -108,6 +110,24 @@ router.post("/", async (req, res) => {
             redisClient.del(`CONSULENTIALL`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Consulenti",
+            operazione: "Inserimento consulente " + consulente.nome + " " + consulente.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -158,6 +178,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Consulenti",
+            operazione: "Modifica consulente " + consulente.nome + " " + consulente.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(consulenti);
     } catch (err) {
@@ -196,6 +234,24 @@ router.delete("/:id", async (req, res) => {
             redisClient.del(`CONSULENTIBY${id}`);
             redisClient.del(`CONSULENTIALL`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Consulenti",
+            operazione: "Eliminazione consulente " + consulente.nome + " " + consulente.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(consulente);

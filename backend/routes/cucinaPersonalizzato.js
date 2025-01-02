@@ -1,5 +1,7 @@
 const express = require("express");
 const Menu = require("../models/cucinaPersonalizzato");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 const router = express.Router();
@@ -109,6 +111,24 @@ router.post("/", async (req, res) => {
         const result = await menu.save();
         console.log("Menu salvato con successo:", result);
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "CucinaPersonalizzato",
+            operazione: "Inserimento menù personalizzato per il paziente " + menu.pazienteName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(result);
 
     } catch (err) {
@@ -130,6 +150,24 @@ router.put('/:id', async (req, res) => {
         if (!updatedMenu) {
             return res.status(404).send({ message: 'menu personalizzato non trovato' });
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "CucinaPersonalizzato",
+            operazione: "Modifica menù personalizzato per il paziente " + menu.pazienteName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.send(updatedMenu);
     } catch (error) {

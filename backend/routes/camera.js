@@ -1,6 +1,8 @@
 const express = require("express");
 const Camere = require("../models/camere");
 const registroSanificazione = require("../models/registroSanificazione");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
@@ -90,6 +92,24 @@ router.put("/:id", async (req, res) => {
             }
         );
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Camera",
+            operazione: "Modifiche sulla camera: " + Camere.camera,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         console.log("Update Camera result:", camera);
 
         res.status(200).json(camera);
@@ -128,6 +148,24 @@ router.post("/", async (req, res) => {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`CAMERE*`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Camera",
+            operazione: "Inserimento all'interno della camera: " + Camere.camera,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(result);
@@ -186,6 +224,23 @@ router.put("/sanifica/:id", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Camera",
+            operazione: "Sanificazione camera: " + Camere.camera,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(camera);
@@ -202,6 +257,24 @@ router.delete("/:id", async (req, res) => {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`CAMERE*`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Camera",
+            operazione: "Eliminazione camera " + Camere.camera,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(camera);

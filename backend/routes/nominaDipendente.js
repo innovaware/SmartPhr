@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const NominaDipendente = require("../models/nominaDipendente");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 router.get("/", async (req, res) => {
@@ -63,8 +64,26 @@ router.post("/", async (req, res) => {
             nominato: false,
         });
 
-
         const result = await nominaDipendente.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "NominaDipendente",
+            operazione: "Inserimento nomina dipendente: " + nominaDipendente.nomina,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {

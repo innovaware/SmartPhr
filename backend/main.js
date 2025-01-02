@@ -545,6 +545,11 @@ const InitApiFunctions = () => {
     var apisegnalazione = { key: 'segnalazione', path: '/api/segnalazione' }
     app.use(apisegnalazione.path, logHandler, authorizationHandler, roleHandler, segnalazioneRouter);
     routesList.push(apisegnalazione);
+
+    var LogRouter = require("./routes/log")
+    var apiLog = { key: 'log', path: '/api/log' }
+    app.use(apiLog.path, logHandler, authorizationHandler, roleHandler, LogRouter);
+    routesList.push(apiLog);
     
 
     var materialiRouter = require("./routes/materiali")

@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const AttivitaFarmaciPresidi = require("../models/attivitaFarmaciPresidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/farmaci", async (req, res) => {
     try {
@@ -94,6 +96,25 @@ router.post("/armadiofarmaci", async (req, res) => {
             pazienteName: req.body.pazienteName,
         });
         await attivitaF.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "AttivitaFarmaciPresidi",
+            operazione: "Inserimento Armadio Farmaci del paziente " + attivitaF.pazienteName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(attivitaF);
     } catch (err) {
         console.error("Error: ", err);
@@ -118,6 +139,25 @@ router.post("/farmaci", async (req, res) => {
             pazienteName: req.body.pazienteName,
         });
         await attivitaF.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "AttivitaFarmaciPresidi",
+            operazione: "Inserimento Farmaci del paziente " + attivitaF.pazienteName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(attivitaF);
     } catch (err) {
         console.error("Error: ", err);
@@ -142,6 +182,25 @@ router.post("/presidi", async (req, res) => {
             pazienteName: req.body.pazienteName,
         });
         await attivitaF.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "AttivitaFarmaciPresidi",
+            operazione: "Inserimento Presidi del paziente " + attivitaF.pazienteName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(attivitaF);
     } catch (err) {
         console.error("Error: ", err);

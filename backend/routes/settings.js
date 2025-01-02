@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const Settings = require("../models/settings");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -26,6 +28,24 @@ router.post("/", async (req, res) => {
         });
         
         const result = await settings.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Settings",
+            operazione: "Inserimento settings ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(result);
@@ -54,6 +74,24 @@ router.put("/:id", async (req, res) => {
                 },
             }
         );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Settings",
+            operazione: "Modifica settings ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
         
         res.status(200).json(settings);
     } catch (err) {

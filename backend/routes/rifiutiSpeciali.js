@@ -1,6 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const RifiutiSpeciali = require("../models/rifiutiSpeciali");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 // POST: Crea un nuovo anno con i dati iniziali
 router.post("/", async (req, res) => {
@@ -9,6 +11,25 @@ router.post("/", async (req, res) => {
     try {
         const nuovoAnno = new RifiutiSpeciali({ anno, mesi });
         await nuovoAnno.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "RifiutiSpeciali",
+            operazione: "Inserimento rifiuti speciali in data " + nuovoAnno.data,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(201).json({ message: "Anno creato con successo!", nuovoAnno });
     } catch (error) {
         res.status(500).json({ message: "Errore durante la creazione dell'anno.", error });
@@ -26,6 +47,24 @@ router.put("/:id", async (req, res) => {
                 $set: req.body,
             }
         );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "RifiutiSpeciali",
+            operazione: "Modifica rifiuti speciali in data " + nuovoAnno.data,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(rifiuti);

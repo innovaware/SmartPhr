@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Contratto = require("../models/contratto");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/consulente/:id", async (req, res) => {
     try {
@@ -97,6 +99,24 @@ router.post("/consulente/:id", async (req, res) => {
             redisClient.del(`CONTRATTOCONSULENTE${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Contratto",
+            operazione: "Inserimento contratto del consulente: " + contratto.consulenteNome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -127,6 +147,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(`CONTRATTOBY${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Contratto",
+            operazione: "Modifica contratto del consulente: " + contratto.consulenteNome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(contratto);
     } catch (err) {
         res.status(500).json({ Error: err });
@@ -147,6 +185,24 @@ router.delete("/:id", async (req, res) => {
             redisClient.del(`CONTRATTOBY${id}`);
             redisClient.del(`CONTRATTOCONSULENTE${idConsulente}`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Contratto",
+            operazione: "Eliminazione contratto del consulente: " + contratto.consulenteNome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(contratto);
     } catch (err) {

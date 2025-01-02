@@ -8,25 +8,27 @@
   <hr>
 
   <div class="row" *ngFor="let itemMenu of menu">
-    <div class="col-3">
-      {{itemMenu.title}}
+    <ng-container *ngIf="itemMenu.title!='Logs'">
+      <div class="col-3">
+        {{itemMenu.title}}
 
-    </div>
-    <!-- <div class="col">
-      {{menuXmansione[itemMenu._id]}}
-    </div> -->
+      </div>
+      <!-- <div class="col">
+    {{menuXmansione[itemMenu._id]}}
+  </div> -->
 
-    <div class="col">
-      <mat-form-field appearance="fill">
-        <mat-label>Seleziona una mansione</mat-label>
-        <mat-select [(ngModel)]="menuXmansione[itemMenu._id]" multiple>
-          <mat-option *ngFor="let itemMansione of mansioni" value="{{itemMansione._id}}">
-            {{itemMansione.codice}} - {{itemMansione.descrizione}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
+      <div class="col">
+        <mat-form-field appearance="fill">
+          <mat-label>Seleziona una mansione</mat-label>
+          <mat-select [(ngModel)]="menuXmansione[itemMenu._id]" multiple>
+            <mat-option *ngFor="let itemMansione of mansioni" value="{{itemMansione._id}}">
+              {{itemMansione.codice}} - {{itemMansione.descrizione}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
 
-    </div>
+      </div>
+    </ng-container>
   </div>
 
 </div>

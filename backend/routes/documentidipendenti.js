@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const DocDipendente = require("../models/documentidipendenti");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/dipendente/:id/:type", async (req, res) => {
     try {
@@ -111,6 +113,24 @@ router.post("/:id", async (req, res) => {
             redisClient.del(`documentiDipendente${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentiDipendenti",
+            operazione: "Inserimento documento dipendente: " + doc.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -144,6 +164,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(`documentiDipendenteBY${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentiDipendenti",
+            operazione: "Modifica documento dipendente: " + doc.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(doc);
     } catch (err) {
@@ -167,6 +205,24 @@ router.delete("/documento/:id", async (req, res) => {
             redisClient.del(`documentiDipendenteBY${id}`);
             redisClient.del(`documentiDipendente${idDipendente}`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentiDipendenti",
+            operazione: "Eliminazione documento dipendente: " + doc.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(doc);

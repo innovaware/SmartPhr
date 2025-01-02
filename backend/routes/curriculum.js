@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Curriculum = require("../models/curriculum");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -108,6 +110,24 @@ router.post("/", async (req, res) => {
             redisClient.del(`CURRICULUM*`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Curriculum",
+            operazione: "Inserimento CV " + curriculum.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -147,6 +167,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(`CURRICULUMBY${id}`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Curriculum",
+            operazione: "Modifica CV " + curriculum.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(curriculum);
     } catch (err) {
         res.status(500).json({ Error: err });
@@ -176,6 +214,24 @@ router.delete("/:id", async (req, res) => {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`CURRICULUM*`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Curriculum",
+            operazione: "Eliminazione CV " + curriculum.filename,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(curriculum);
     } catch (err) {

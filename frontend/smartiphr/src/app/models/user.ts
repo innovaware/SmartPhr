@@ -12,4 +12,5 @@ export class User {
   password?: string;
   active: boolean;
   dipendenteID?: string;
+  firma?: String;
 }

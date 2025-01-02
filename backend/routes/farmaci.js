@@ -3,6 +3,8 @@ const router = express.Router();
 const Farmaci = require("../models/farmaci");
 const AttivitaFarmaciPresidi = require("../models/attivitaFarmaciPresidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 router.get("/", async (req, res) => {
@@ -93,25 +95,6 @@ router.post("/", async (req, res) => {
 
         const result = await farmaci.save();
 
-        /*if(req.body._id != "" && req.body._id != null){
-          console.log('req.body._id: ' + req.body._id);
-          const getData = () => {
-            return Farmaci.findById(req.body._id);
-          };
-          const farmaco = await getData();
-          console.log('farmaco.qty: ' + farmaco.qty);
-          const farmaci = await Farmaci.updateOne(
-            { _id: req.body._id },
-            {
-              $set: {
-                qty: farmaco.qty != null ?  farmaco.qty - req.body.qty : null,
-                giacenza : farmaco.giacenza != null ? farmaco.giacenza - req.body.giacenza : null,
-              },
-            }
-            );
-          }*/
-
-
         redisClient = req.app.get("redis");
         redisDisabled = req.app.get("redisDisabled");
 
@@ -119,6 +102,24 @@ router.post("/", async (req, res) => {
             const searchTerm = `FARMACIALL`;
             redisClient.del(searchTerm);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Farmaci",
+            operazione: "Inserimento farmaco: " + farmaci.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(result);
@@ -149,6 +150,24 @@ router.put("/:id", async (req, res) => {
             const searchTerm = `FARMACIBY${id}`;
             redisClient.del(searchTerm);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Farmaci",
+            operazione: "Modifica farmaco: " + farmaci.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(presidi);

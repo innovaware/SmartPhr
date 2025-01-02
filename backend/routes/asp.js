@@ -1,5 +1,7 @@
 const express = require("express");
 const ASP = require("../models/asp");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
@@ -72,7 +74,25 @@ router.post("/", async (req, res) => {
     if (redisClient != undefined && !redisDisabled) {
       const searchTerm = "ASPALL";
       redisClient.del(searchTerm);
-    }
+      }
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "ASP",
+          operazione: "Inserimento ASP. ",
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(result);
@@ -104,7 +124,25 @@ router.put("/:id", async (req, res) => {
     if (redisClient != undefined && !redisDisabled) {
       const searchTerm = `ASPBY${id}`;
       redisClient.del(searchTerm);
-    }
+      }
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "ASP",
+          operazione: "Modifica ASP. ",
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(asp);

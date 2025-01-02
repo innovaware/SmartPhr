@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Eventi = require("../models/eventi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -9,7 +11,7 @@ router.get("/", async (req, res) => {
         const getData = () => {
             return Eventi.find();
         };
-        
+
         const eventi = await getData();
         res.status(200).json(eventi);
 
@@ -49,70 +51,70 @@ router.get("/tipo/:tipo", async (req, res) => {
 
 //YYYYMMDD
 router.get("/search/:data", async (req, res) => {
-  const { data } = req.params;
-  const { user } = req.query;
+    const { data } = req.params;
+    const { user } = req.query;
 
-  try {
-    const searchTerm = `EVENTISEARCH${data}${user}`;
+    try {
+        const searchTerm = `EVENTISEARCH${data}${user}`;
 
-    if (data == undefined) {
-      res.status(400);
-      res.json({ Error: "data not defined" });
-      return;
+        if (data == undefined) {
+            res.status(400);
+            res.json({ Error: "data not defined" });
+            return;
+        }
+
+        if (user == undefined) {
+            res.status(400);
+            res.json({ Error: "user not defined" });
+            return;
+        }
+
+        const year = data.substring(0, 4);
+        const month = data.substring(4, 6);
+        const day = data.substring(6, 8);
+
+        const query = {
+            $and: [
+                {
+                    data: {
+                        $gte: new Date(year, month - 1, day, "00", "00", "00"),
+                        $lt: new Date(year, month - 1, day, "23", "59", "59"),
+                    },
+                    utente: user,
+                },
+            ],
+        };
+
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+
+        const getData = () => {
+            return Eventi.findById(query);
+        };
+
+        if (redisClient == undefined || redisDisabled) {
+            const eventi = await getData();
+            res.status(200).json(eventi);
+            return;
+        }
+
+        redisClient.get(searchTerm, async (err, data) => {
+            if (err) throw err;
+
+            if (data) {
+                //console.log(`Event Buffered - ${searchTerm}`);
+                res.status(200).send(JSON.parse(data));
+            } else {
+                const eventi = await getData();
+
+                client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
+                res.status(200).json(eventi);
+            }
+        });
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
     }
-
-    if (user == undefined) {
-      res.status(400);
-      res.json({ Error: "user not defined" });
-      return;
-    }
-
-    const year = data.substring(0, 4);
-    const month = data.substring(4, 6);
-    const day = data.substring(6, 8);
-
-    const query = {
-      $and: [
-        {
-          data: {
-            $gte: new Date(year, month - 1, day, "00", "00", "00"),
-            $lt: new Date(year, month - 1, day, "23", "59", "59"),
-          },
-          utente: user,
-        },
-      ],
-    };
-
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return Eventi.findById(query);
-    };
-
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
-    }
-
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        //console.log(`Event Buffered - ${searchTerm}`);
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const eventi = await getData();
-
-        client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
-        res.status(200).json(eventi);
-      }
-    });
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
 });
 
 router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => {
@@ -203,66 +205,102 @@ router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
-  try {
-    const eventi = new Eventi({
-      data: req.body.data,
-      descrizione: req.body.descrizione,
-      tipo: req.body.tipo,
-        utente: req.body.utente,
-        visibile: req.body.visibile,
-        effettuato: false,
-        dataCreazione: new Date(),
-    });
+    try {
+        const eventi = new Eventi({
+            data: req.body.data,
+            descrizione: req.body.descrizione,
+            tipo: req.body.tipo,
+            utente: req.body.utente,
+            visibile: req.body.visibile,
+            effettuato: false,
+            dataCreazione: new Date(),
+        });
 
-    const result = await eventi.save();
+        const result = await eventi.save();
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `EVENTIALL`;
-      redisClient.del(searchTerm);
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `EVENTIALL`;
+            redisClient.del(searchTerm);
+        }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Eventi",
+            operazione: "Inserimento evento status corsi: " + eventi.descrizione,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(result);
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
     }
-
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
 });
 
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const eventi = await Eventi.updateOne(
-      { _id: id },
-      {
-        $set: {
-          data: req.body.data,
-          descrizione: req.body.descrizione,
-          tipo: req.body.tipo,
-              utente: req.body.utente,
-              visibile: req.body.visibile,
-              finito: req.body.finito,
-              dataCompletato: new Date(),
-        },
-      }
-    );
+    try {
+        const { id } = req.params;
+        const eventi = await Eventi.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    data: req.body.data,
+                    descrizione: req.body.descrizione,
+                    tipo: req.body.tipo,
+                    utente: req.body.utente,
+                    visibile: req.body.visibile,
+                    finito: req.body.finito,
+                    dataCompletato: new Date(),
+                },
+            }
+        );
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `EVENTIBY${id}`;
-      redisClient.del(searchTerm);
+        if (redisClient != undefined && !redisDisabled) {
+            const searchTerm = `EVENTIBY${id}`;
+            redisClient.del(searchTerm);
+        }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "EventiStatusCorsi",
+            operazione: "Modifica evento status corsi: " + eventi.descrizione,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(eventi);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    res.status(200);
-    res.json(eventi);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 module.exports = router;

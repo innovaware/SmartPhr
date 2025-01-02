@@ -1,6 +1,7 @@
 const express = require("express");
 const TestRiabilitativo = require("../models/testRiabilitativo");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 const router = express.Router();
 
@@ -68,6 +69,24 @@ router.post("/", async (req, res) => {
         });
 
         const result = await test.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "TestRiabilitativo",
+            operazione: "Inserimento test riabilitativo in data: " + test.data,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(result);
 

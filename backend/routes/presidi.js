@@ -3,6 +3,8 @@ const router = express.Router();
 const Presidi = require("../models/presidi");
 const AttivitaFarmaciPresidi = require("../models/attivitaFarmaciPresidi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 
@@ -113,6 +115,24 @@ router.post("/", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Presidi",
+            operazione: "Inserimento presidio: " + presidi.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
 
@@ -143,6 +163,24 @@ router.put("/:id", async (req, res) => {
             const searchTerm = `PRESIDIBY${id}`;
             redisClient.del(searchTerm);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Presidi",
+            operazione: "Modifica presidio: " + presidi.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(presidi);

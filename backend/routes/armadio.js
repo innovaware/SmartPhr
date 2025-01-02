@@ -8,6 +8,8 @@ const Camere = require("../models/camere");
 const Paziente = require("../models/pazienti");
 const registroArmadi = require("../models/registroArmadi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 
@@ -304,6 +306,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Armadio",
+            operazione: "Modifica armadio del paziente " + armadio.pazienteId,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(armadio);
     } catch (err) {
@@ -370,6 +390,24 @@ router.delete("/:id", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Armadio",
+            operazione: "Eliminazione armadio del paziente " + armadio.pazienteId,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(armadio);
     } catch (err) {
@@ -426,6 +464,24 @@ router.post("/", async (req, res) => {
         });
 
         await attivitaF.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Armadio",
+            operazione: "Inserimento armadio del paziente " + armadio.pazienteId,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         // Risposta con il documento 'armadio' salvato
         res.status(200).json(resultArmadio);

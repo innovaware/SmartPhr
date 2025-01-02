@@ -1,0 +1,54 @@
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-action {
+  width: 32px;
+}
+
+.custom-table {
+  table-layout: fixed; /* Distribuisce equamente lo spazio */
+  width: 100%;
+}
+
+th.mat-header-cell, td.mat-cell {
+  text-align: center; /* Centra il contenuto */
+  padding: 8px;
+}
+
+th.mat-header-cell {
+  font-weight: bold;
+}
+
+.center-column {
+  text-align: center;
+}
+
+.mat-column-data {
+  width: 30%; /* Imposta la larghezza della colonna */
+}
+
+.mat-column-numLog {
+  width: 30%;
+}
+
+.mat-column-action {
+  width: 30%;
+}

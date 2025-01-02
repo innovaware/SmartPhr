@@ -1,6 +1,7 @@
 const express = require("express");
 const ControlloMensile = require("../models/controllomensile");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 const router = express.Router();
 
@@ -72,9 +73,27 @@ router.post("/", async (req, res) => {
             note: req.body.note
         });
 
-        console.log("Dati della controlloMensile:", controlloMensile);
+        console.log("Dati del controlloMensile:", controlloMensile);
 
         const result = await controlloMensile.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "ControlloMensile",
+            operazione: "Inserimento controllo mensile per l'utente: " + controlloMensile.utente,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(result);
 

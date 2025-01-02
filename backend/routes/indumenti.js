@@ -1,6 +1,7 @@
 const express = require("express");
 const Indumenti = require("../models/indumenti");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 const router = express.Router();
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
@@ -86,7 +87,25 @@ router.post("/", async (req, res) => {
     const indumenti = new Indumenti(req.body);
     console.log(req.body);
 
-    const result = await indumenti.save();
+      const result = await indumenti.save();
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Indumenti",
+          operazione: "Inserimento indumento: " + indumenti.nome + ". Quantità: " + indumenti.quantita,
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(result);

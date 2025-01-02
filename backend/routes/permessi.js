@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Permessi = require("../models/permessi");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -67,6 +69,24 @@ router.post("/", async (req, res) => {
             redisClient.del(`PERMESSIALL`);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Permessi",
+            operazione: "Inserimento permesso per il dipendente: " + permessi.cognome + " " + permessi.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -102,6 +122,24 @@ router.put("/:id", async (req, res) => {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`PERMESSIBY${id}`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Permessi",
+            operazione: "Modifica permesso per il dipendente: " + permessi.cognome + " " + permessi.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(permessi);
     } catch (err) {
@@ -139,6 +177,24 @@ router.delete("/:id", async (req, res) => {
             redisClient.del(`PERMESSIBY${id}`);
             redisClient.del(`PERMESSIALL`);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Permessi",
+            operazione: "Eliminazione permesso per il dipendente: " + permessi.cognome + " " + permessi.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(richiesta);

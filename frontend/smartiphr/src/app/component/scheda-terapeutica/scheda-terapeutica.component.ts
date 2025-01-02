@@ -55,6 +55,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   public firme: ItemsArrayFirme[];
   public alvo: ItemsArrayAlvo[];
   public allergie: string;
+  public note: string;
   private scheda: SchedaTerapeutica;
   private settings: Settings;
   public tm: Boolean;
@@ -91,6 +92,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.firme = [];
     this.alvo = [];
     this.allergie = "";
+    this.note = "";
     this.settings = new Settings();
 
     pazienteService.getPaziente(this.id).then((x: Paziente) => {
@@ -121,6 +123,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.firme = [];
     this.alvo = [];
     this.allergie = "";
+    this.note = "";
     this.getDati();
     this.startCheckingTime(); // Avvia il controllo all'accesso
 
@@ -142,6 +145,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.firme = [];
     this.alvo = [];
     this.allergie = "";
+    this.note = "";
     this.getDati();
   }
 
@@ -157,6 +161,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.firme = [];
     this.alvo = [];
     this.allergie = "";
+    this.note = "";
     this.getDati();
   }
 
@@ -207,9 +212,27 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
 
     return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
+
+  save(): void {
+    // Qui inserisci la logica per salvare il dato
+    console.log('Allergie salvate automaticamente:', this.allergie);
+    console.log('Note salvate automaticamente:', this.note);
+
+  }
+
   async getDati() {
     this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
     this.scheda = await this.schedaServ.getByPaziente(this.id);
+    if (this.scheda == null || this.scheda == undefined) {
+      this.scheda = new SchedaTerapeutica();
+      this.scheda.firme = [];
+      this.scheda.Orale = [];
+      this.scheda.IMEVSC = [];
+      this.scheda.Estemporanea = [];
+      this.scheda.alvo = [];
+      this.scheda.idPaziente = this.id;
+      this.scheda.allergie = "";
+    }
     console.log(this.scheda);
     this.orali = this.scheda.Orale.sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
     this.dataSourceOrale.data = this.orali;
@@ -224,6 +247,8 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.dataSourceEstemporanea.paginator = this.paginatorE;
 
     this.firme = this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()) || [];
+    console.log(this.firme, this.firme[0]);
+
     if ((this.firme[0] == null || this.firme[0] == undefined) || this.dateDiffInDays(new Date(this.firme[0].data), (new Date())) != 0) {
       if (this.firme[0] != null && this.firme[0] != undefined) {
         console.log("Disattivando il precedente record.");
@@ -258,6 +283,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       await this.schedaServ.update(this.scheda).toPromise().then();
     }
     this.allergie = this.scheda.allergie || "";
+    this.note = this.scheda.note || "";
     this.dataSourceFirme.paginator = this.paginatorF;
     this.dataSourceFirme.data = this.firme;
 

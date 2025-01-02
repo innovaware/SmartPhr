@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const { ObjectId } = require("bson");
 const bcrypt = require('bcrypt');
-
+const Log = require("../models/log");
 const User = require("../models/user");
 const Dipendenti = require("../models/dipendenti");
 const Presenze = require("../models/presenze");
@@ -154,6 +154,22 @@ router.post("/authenticate", async (req, res) => {
     const currentDate = new Date();
     currentDate.setHours(currentDate.getHours()+1);
 
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Login",
+          operazione: "Login",
+      });
+      console.log("log: ", log);
+      const result = await log.save();
+
     const query = {
       user: mongoose.Types.ObjectId(user._id),
       dataRifInizio: { $lte: currentDate },
@@ -162,13 +178,6 @@ router.post("/authenticate", async (req, res) => {
       turnoFine: { $gte: currentDate.getHours() },
     };
     const turno = await Turnimensili.findOne(query);
-
-    //if (turno == null && user.username !== "admin") {
-    //  res.status(401);
-    //  res.json({ Error: 'Not Authorized - Fuori turno' });
-
-    //  return;
-    //}
 
     const presenzeFind = await Dipendenti.aggregate([
       {
@@ -260,7 +269,9 @@ router.post("/authenticate", async (req, res) => {
       const searchTerm = `PRESENZEALL`;
       redisClient.del(searchTerm);
     }
-    
+
+     
+
     res.status(200);
     res.json(user);
 
@@ -277,7 +288,25 @@ router.post("/authenticate", async (req, res) => {
  */
 router.post("/logout", async (req, res) => {
   try {
-    const user = res.locals.auth;
+      const user = res.locals.auth;
+
+      const getData = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getData();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Logout",
+          operazione: "Logout",
+      });
+      console.log("log: ", log);
+      const result = await log.save();
+
+
       console.log("Logout");
       console.log(res.locals.auth);
     redisClient = req.app.get("redis");

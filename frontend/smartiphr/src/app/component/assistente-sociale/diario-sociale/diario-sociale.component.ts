@@ -19,13 +19,13 @@ import { MessagesService } from 'src/app/service/messages.service';
 export class DiarioSocialeComponent implements OnInit {
 
   @Input() data: Paziente;
-  public dataDiario : any[] = [];
+  public dataDiario: any[] = [];
 
 
   DisplayedColumns: string[] = ["data", "contenuto", "firma", "action"];
 
 
-  @ViewChild("paginatorDC", {static: false}) diarioAssSocialePaginator: MatPaginator;
+  @ViewChild("paginatorDC", { static: false }) diarioAssSocialePaginator: MatPaginator;
   public diarioAssSocialeDataSource: MatTableDataSource<DiarioAssSociale>;
 
   constructor(public dialogRef: MatDialogRef<DialogCartellaAssistenteSocialeComponent>,
@@ -41,7 +41,7 @@ export class DiarioSocialeComponent implements OnInit {
 
   async getDataDiario() {
     this.cartellaService
-      .getDiarioByUser( String(this.data._id) )
+      .getDiarioByUser(String(this.data._id))
       .then((f) => {
 
         this.dataDiario = f;
@@ -58,7 +58,7 @@ export class DiarioSocialeComponent implements OnInit {
 
 
   async addDiario() {
-    
+
     var dialogRef = this.dialog.open(DialogDiarioAsssocialeComponent, {
       data: { paziente: this.data, readonly: false },
       width: "600px",
@@ -67,9 +67,8 @@ export class DiarioSocialeComponent implements OnInit {
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
-        if(result != null && result != undefined){
-        this.dataDiario.push(result);
-        this.diarioAssSocialeDataSource = new MatTableDataSource<DiarioAssSociale>(this.dataDiario);
+        if (result != null && result != undefined) {
+          this.getDataDiario();
         }
       });
   }
@@ -91,16 +90,8 @@ export class DiarioSocialeComponent implements OnInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result != undefined ) {
-          const data = this.dataDiario;
-
-          const index = data.indexOf(diario, 0);
-          if (index > -1) {
-            data.splice(index, 1);
-          }
-
-          data.push(result);
-          this.diarioAssSocialeDataSource.data = this.dataDiario;
+        if (result != undefined) {
+          this.getDataDiario();
         }
       });
   }

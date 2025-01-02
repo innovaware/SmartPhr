@@ -2,7 +2,8 @@ const User = require("../models/user");
 const Mansioni = require("../models/mansioni");
 const express = require("express");
 const redis = require("redis");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 const router = express.Router();
 //const redisPort = process.env.REDISPORT || 6379;
 //const redisHost = process.env.REDISHOST || "redis";
@@ -11,19 +12,19 @@ const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 //const client = redis.createClient(redisPort, redisHost);
 
 router.get("/", async (req, res) => {
-  try {
-    const getData = () => {
-      return Mansioni.find();
-    };
+    try {
+        const getData = () => {
+            return Mansioni.find();
+        };
 
-    // Se non usamu Redis
-    const mansioni = await getData();
-    res.status(200).json(mansioni);
+        // Se non usamu Redis
+        const mansioni = await getData();
+        res.status(200).json(mansioni);
 
-  } catch (err) {
-    console.error("Errore: ", err);
-    res.status(500).json({ Errore: err });
-  }
+    } catch (err) {
+        console.error("Errore: ", err);
+        res.status(500).json({ Errore: err });
+    }
 });
 
 
@@ -49,66 +50,116 @@ router.get("/:id", async (req, res) => {
 // http://[HOST]:[PORT]/api/mansioni (POST)
 // INSERT mansioni su DB
 router.post("/", async (req, res) => {
-  try {
+    try {
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-    clientMailerService = req.app.get("mailer");
-    clientMailerTopic = req.app.get("mailerTopic");
-    clientMailerDiabled = req.app.get("mailerDisabled");
-
-
-    const mansione = new Mansioni({
-        descrizione: req.body.descrizione,
-        codice: req.body.codice
-    });
-
-    const result = await mansione.save();
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
+        clientMailerService = req.app.get("mailer");
+        clientMailerTopic = req.app.get("mailerTopic");
+        clientMailerDiabled = req.app.get("mailerDisabled");
 
 
+        const mansione = new Mansioni({
+            descrizione: req.body.descrizione,
+            codice: req.body.codice
+        });
 
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
+        const result = await mansione.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Mansioni",
+            operazione: "Inserimento mansione ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(result);
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
+    }
 });
 
 // http://[HOST]:[PORT]/api/dipendenti/[ID_DIPENDENTE]
 // Modifica del dipendente
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    // Aggiorna il documento su mongodb
-    const mansione = await Mansioni.updateOne(
-      { _id: id },
-      {
-        $set: {
-            descrizione: req.body.descrizione,
-            codice: req.body.codice
-        },
-      }
-    );
+    try {
+        const { id } = req.params;
+        // Aggiorna il documento su mongodb
+        const mansione = await Mansioni.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    descrizione: req.body.descrizione,
+                    codice: req.body.codice
+                },
+            }
+        );
 
+        const user = res.locals.auth;
 
-    res.status(200).json(mansione);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Mansioni",
+            operazione: "Modifica mansione ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200).json(mansione);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const mansione = await Mansioni.remove({ _id: id });
+    try {
+        const { id } = req.params;
+        const mansione = await Mansioni.remove({ _id: id });
 
+        const user = res.locals.auth;
 
-    res.status(200);
-    res.json(mansione);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Mansioni",
+            operazione: "Eliminazione mansione ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(mansione);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 });
 
 module.exports = router;

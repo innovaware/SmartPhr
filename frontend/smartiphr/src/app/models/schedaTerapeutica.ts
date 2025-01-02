@@ -60,5 +60,6 @@ export class SchedaTerapeutica {
   Estemporanea?: ItemsArray[] = []; // Inizializzazione come array vuoto
   firme: ItemsArrayFirme[] = [];
   alvo: ItemsArrayAlvo[] = [];
-  allergie: string;
+  allergie?: string;
+  note?: string;
 }

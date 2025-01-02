@@ -16,6 +16,8 @@ import { PazienteService } from "src/app/service/paziente.service";
 import { UploadService } from "src/app/service/upload.service";
 import CodiceFiscale from "codice-fiscale-js";
 import { DialogMessageErrorComponent } from "../dialog-message-error/dialog-message-error.component";
+import { SchedaTerapeutica } from "../../models/schedaTerapeutica";
+import { SchedaTerapeuticaService } from "../../service/schedaTerapeutica.service";
 
 @Component({
   selector: "app-dialog-paziente",
@@ -66,6 +68,7 @@ export class DialogPazienteComponent implements OnInit {
     public bonficoService: BonificoService,
     public pazienteService: PazienteService,
     public messageService: MessagesService,
+    public schedaServ: SchedaTerapeuticaService,
     public dialog: MatDialog
   ) {
     this.uploading = false;
@@ -90,82 +93,158 @@ export class DialogPazienteComponent implements OnInit {
 
     return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
+
   async save(saveAndClose: boolean) {
     console.log("this.newItem: " + this.newItem);
     this.data.paziente = this.paziente;
 
+    // Helper per controllare campi vuoti o nulli
+    const isEmpty = (value: any) => value == null || value === "";
 
-    if (
-      this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined ||
-      this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined ||
-      this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined ||
-      this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined
-    ) {
+    // Controllo campi obbligatori
+    const missingFields: string[] = [];
+    if (isEmpty(this.data.paziente.cognome)) missingFields.push("Cognome");
+    if (isEmpty(this.data.paziente.nome)) missingFields.push("Nome");
+    if (isEmpty(this.data.paziente.codiceFiscale)) missingFields.push("Codice Fiscale");
+    if (isEmpty(this.data.paziente.sesso)) missingFields.push("Sesso");
 
-      var campi = "";
-      if (this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined) {
-        campi = campi + " Cognome"
-      }
-
-      if (this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined) {
-        campi = campi + " Nome"
-      }
-
-      if (this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined) {
-        campi = campi + " Codice Fiscale"
-      }
-
-      if (this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined) {
-        campi = campi + " Sesso"
-      }
-
-      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+    if (missingFields.length > 0) {
+      this.messageService.showMessageError(`I campi ${missingFields.join(", ")} sono obbligatori!!`);
       return;
-    } else {
+    }
 
-      if (this.dateDiffInDays(new Date(this.data.paziente.dataNascita), new Date()) < 10) {
-        this.messageService.showMessageError("Data di nascita Errata!!!");
-        return;
-      }
+    // Controllo sulla data di nascita
+    if (this.dateDiffInDays(new Date(this.data.paziente.dataNascita), new Date()) < 10) {
+      this.messageService.showMessageError("Data di nascita Errata!!!");
+      return;
     }
-    if (saveAndClose) {
-      this.dialogRef.close(this.data.paziente);
-    } else {
+
+    try {
       this.uploading = true;
+
+      if (this.newItem) {
+        // Inserimento nuovo paziente
+        this.data.paziente = await this.pazienteService.insert(this.data.paziente);
+        this.paziente = this.data.paziente;
+
+        // Creazione scheda terapeutica associata
+        const scheda: SchedaTerapeutica = {
+            firme: [],
+            Orale: [],
+            IMEVSC: [],
+            Estemporanea: [],
+            alvo: [],
+            idPaziente: this.paziente._id,
+            allergie: ""
+        };
+        await this.schedaServ.add(scheda);
+      } else {
+        // Salvataggio paziente esistente
+        this.data.paziente = await this.pazienteService.save(this.data.paziente);
+      }
+
+      console.log("Save paziente: ", this.data.paziente);
+      this.newItem = false;
+
+      if (saveAndClose) {
+        this.dialogRef.close(this.data.paziente);
+      }
+    } catch (err) {
+      const errorMessage = this.newItem
+        ? "Errore Inserimento Paziente"
+        : "Errore Salvataggio Paziente";
+      this.messageService.showMessageError(`${errorMessage} (${err["status"]})`);
+    } finally {
+      this.uploading = false;
     }
-    if (this.newItem) {
-      this.pazienteService
-        .insert(this.data.paziente)
-        .then((x) => {
-          console.log("Save paziente: ", x);
-          this.data.paziente = x;
-          this.paziente = x;
-          this.uploading = false;
-          this.newItem = false;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Inserimento Paziente (" + err["status"] + ")"
-          );
-          this.uploading = false;
-        });
-    } else {
-      this.pazienteService
-        .save(this.data.paziente)
-        .then((x) => {
-          console.log("Save paziente: ", x);
-          this.uploading = false;
-          this.newItem = false;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore salvataggio Paziente (" + err["status"] + ")"
-          );
-          this.uploading = false;
-        });
-    }
-    if (saveAndClose == true) this.dialogRef.close(this.data.paziente);
   }
+
+  //async save(saveAndClose: boolean) {
+  //  console.log("this.newItem: " + this.newItem);
+  //  this.data.paziente = this.paziente;
+
+
+  //  if (
+  //    this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined ||
+  //    this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined ||
+  //    this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined ||
+  //    this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined
+  //  ) {
+
+  //    var campi = "";
+  //    if (this.data.paziente.cognome == "" || this.data.paziente.cognome == null || this.data.paziente.cognome === undefined) {
+  //      campi = campi + " Cognome"
+  //    }
+
+  //    if (this.data.paziente.nome == "" || this.data.paziente.nome == null || this.data.paziente.nome === undefined) {
+  //      campi = campi + " Nome"
+  //    }
+
+  //    if (this.data.paziente.codiceFiscale == "" || this.data.paziente.codiceFiscale == null || this.data.paziente.codiceFiscale === undefined) {
+  //      campi = campi + " Codice Fiscale"
+  //    }
+
+  //    if (this.data.paziente.sesso == "" || this.data.paziente.sesso == null || this.data.paziente.sesso === undefined) {
+  //      campi = campi + " Sesso"
+  //    }
+
+  //    this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+  //    return;
+  //  } else {
+
+  //    if (this.dateDiffInDays(new Date(this.data.paziente.dataNascita), new Date()) < 10) {
+  //      this.messageService.showMessageError("Data di nascita Errata!!!");
+  //      return;
+  //    }
+  //  }
+  //  if (saveAndClose) {
+  //    this.dialogRef.close(this.data.paziente);
+  //  } else {
+  //    this.uploading = true;
+  //  }
+  //  if (this.newItem) {
+  //    this.pazienteService
+  //      .insert(this.data.paziente)
+  //      .then((x) => {
+  //        console.log("Save paziente: ", x);
+  //        this.data.paziente = x;
+  //        this.paziente = x;
+          
+  //        this.uploading = false;
+  //        this.newItem = false;
+  //      })
+  //      .catch((err) => {
+  //        this.messageService.showMessageError(
+  //          "Errore Inserimento Paziente (" + err["status"] + ")"
+  //        );
+  //        this.uploading = false;
+  //      });
+  //    let scheda: SchedaTerapeutica;
+  //    scheda = new SchedaTerapeutica();
+  //    scheda.firme = [];
+  //    scheda.Orale = [];
+  //    scheda.IMEVSC = [];
+  //    scheda.Estemporanea = [];
+  //    scheda.alvo = [];
+  //    scheda.idPaziente = this.paziente._id;
+  //    await this.schedaServ.add(scheda).then();
+  //  } else {
+  //    this.pazienteService
+  //      .save(this.data.paziente)
+  //      .then((x) => {
+  //        console.log("Save paziente: ", x);
+  //        this.uploading = false;
+  //        this.newItem = false;
+  //      })
+  //      .catch((err) => {
+  //        this.messageService.showMessageError(
+  //          "Errore salvataggio Paziente (" + err["status"] + ")"
+  //        );
+  //        this.uploading = false;
+  //      });
+  //  }
+  //  if (saveAndClose == true) this.dialogRef.close(this.data.paziente);
+  //}
 
   showDocument(document: any) {
     console.log("ShowDocument: ", document);

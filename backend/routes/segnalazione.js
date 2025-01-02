@@ -1,5 +1,7 @@
 const express = require("express");
 const Segnalazione = require("../models/segnalazione");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 const router = express.Router();
@@ -63,6 +65,24 @@ router.post("/", async (req, res) => {
 
         const result = await segnalazione.save();
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Segnalazione",
+            operazione: "Inserimento segnalazione: " + segnalazione.numTicket + ". Data: " + segnalazione.dataSegnalazione,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(result);
 
     } catch (err) {
@@ -83,6 +103,24 @@ router.put('/:id', async (req, res) => {
         if (!updatedSegnalazione) {
             return res.status(404).send({ message: 'Segnalazione non trovata' });
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Segnalazione",
+            operazione: "Modifica segnalazione: " + segnalazione.numTicket + ". Data: " + segnalazione.dataSegnalazione,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.send(updatedSegnalazione);
     } catch (error) {

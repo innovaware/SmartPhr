@@ -3,6 +3,7 @@ const mongoose = require("mongoose");
 const router = express.Router();
 const Turnimensili = require("../models/turnimensili");
 const Dipendenti = require("../models/dipendenti");
+const Log = require("../models/log");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
@@ -180,6 +181,24 @@ router.post("/", async (req, res) => {
             redisClient.del(`TURNIMENSILIALL`);
         }
 
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dip.nome + " " + dip.cognome,
+            operatoreID: usr.dipendenteID,
+            className: "TurniMensili",
+            operazione: "Inserimento turno mensile ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
     } catch (err) {
@@ -216,6 +235,24 @@ router.put("/:id", async (req, res) => {
         if (redisClient != undefined && !redisDisabled) {
             redisClient.del(`TURNIMENSILIBY${id}`);
         }
+
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dip.nome + " " + dip.cognome,
+            operatoreID: usr.dipendenteID,
+            className: "TurniMensili",
+            operazione: "Modifica turno mensile ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200).json(turnimensili);
     } catch (err) {

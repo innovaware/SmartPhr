@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const Bonifici = require("../models/bonifici");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get('/:id', async (req, res) => {
     try {
@@ -41,7 +43,25 @@ async function insertBonifico(req, res) {
 
     if (redisClient != undefined && !redisDisabled) {
       redisClient.del(`bonifici${id}`);
-    }
+      }
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Bonifici",
+          operazione: "Inserimento bonifico. ",
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(result);
@@ -69,7 +89,25 @@ async function modifyBonifico(req, res) {
 
     if (redisClient != undefined && !redisDisabled) {
       redisClient.del(`bonificiBY${id}`);
-    }
+      }
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Bonifici",
+          operazione: "Modifica bonifico. ",
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(bonifici);
@@ -93,7 +131,25 @@ async function deleteBonifico(req, res) {
     if (redisClient != undefined && !redisDisabled) {
       redisClient.del(`bonificiBY${id}`);
       redisClient.del(`bonifici${identifyUser}`);
-    }
+      }
+
+      const user = res.locals.auth;
+
+      const getDipendente = () => {
+          return Dipendenti.findById(user.dipendenteID);
+      };
+
+      const dipendenti = await getDipendente();
+
+      const log = new Log({
+          data: new Date(),
+          operatore: dipendenti.nome + " " + dipendenti.cognome,
+          operatoreID: user.dipendenteID,
+          className: "Bonifici",
+          operazione: "Cancellazione bonifico. ",
+      });
+      console.log("log: ", log);
+      const resultLog = await log.save();
 
     res.status(200);
     res.json(bonifici);

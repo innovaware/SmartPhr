@@ -1,6 +1,8 @@
 const express = require("express");
 const Cart = require("../models/carrello");
 const router = express.Router();
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
@@ -89,6 +91,24 @@ router.put("/:id", async (req, res) => {
         if (carrelloAggiornato.modifiedCount === 0) {
             return res.status(200).json({ message: "Nessun cambiamento apportato ai dati esistenti" });
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Carrello",
+            operazione: "Modifica" + Cart.nomeCarrello + " da parte di " + Cart.operatoreName,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         console.log("Aggiornamento completato:", carrelloAggiornato);
         res.status(200).json({ message: "Aggiornamento riuscito", data: carrelloAggiornato });

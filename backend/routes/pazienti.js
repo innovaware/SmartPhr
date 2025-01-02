@@ -7,6 +7,8 @@ const parametriVitali = require("../models/parametriVitali");
 // const redisHost = process.env.REDISHOST || "redis";
 // const redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 // const client = redis.createClient(redisPort, redisHost);
 const searchTerm = `PAZIENTIALL`;
@@ -182,6 +184,24 @@ router.post("/", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Inserimento paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(result);
 
@@ -260,6 +280,24 @@ router.put("/:id", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Modifica paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(pazienti);
     } catch (err) {
@@ -297,6 +335,24 @@ router.delete("/:id", async (req, res) => {
             const searchTerm = `PAZIENTIBY${id}`;
             redisClient.del(searchTerm);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Eliminazione paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(pazienti);
@@ -399,6 +455,24 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
             redisClient.del(searchTerm);
         }
 
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "ParametriVitali",
+            operazione: "Modifica parametri vitali ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200);
         res.json(parametri);
     } catch (err) {
@@ -487,6 +561,24 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
             const searchTerm = `PAZIENTIBY${id}`;
             redisClient.del(searchTerm);
         }
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "SchedaPsicologica",
+            operazione: "Modifica scheda psicologica del paziente: " + parametri.cognome + " " + parametri.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
         res.status(200);
         res.json(parametri);

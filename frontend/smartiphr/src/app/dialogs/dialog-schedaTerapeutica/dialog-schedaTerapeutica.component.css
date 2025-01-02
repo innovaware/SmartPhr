@@ -72,3 +72,29 @@ table {
 .mat-column-action {
   width: 32px;
 }
+
+.clickable-switch {
+  width: 60px; /* Aumenta la larghezza del contenitore */
+  height: 60px; /* Aumenta l'altezza del contenitore */
+  justify-content: center; /* Centra verticalmente gli elementi */
+}
+
+  .clickable-switch label {
+    text-align: center;
+    width: 100%; /* Assicura che la label sia completamente centrata */
+    font-size: 14px;
+  }
+
+  .clickable-switch input {
+    margin: 0 auto; /* Centra lo switch */
+    cursor: pointer; /* Aggiunge un puntatore per indicare che è cliccabile */
+  }
+
+.form-check {
+  padding: 8px; /* Aumenta il padding per migliorare l'area cliccabile */
+  border-radius: 6px; /* Angoli arrotondati per migliorare la visibilità */
+}
+
+  .form-check:hover {
+    background-color: white; /* Aggiunge un effetto hover per migliorare l'interattività */
+  }

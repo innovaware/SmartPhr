@@ -1,7 +1,8 @@
 const express = require("express");
 const router = express.Router();
 const FormazioneDipendente = require("../models/formazioneDipendente");
-
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
 
 router.get("/", async (req, res) => {
@@ -64,6 +65,25 @@ router.post("/", async (req, res) => {
         });
 
         const result = await formazioneDipendente.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "FormazioneDipendente",
+            operazione: "Inserimento formazione dipendente",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
         res.status(200).json(result);
     } catch (err) {
         res.status(500).json({ Error: err });
