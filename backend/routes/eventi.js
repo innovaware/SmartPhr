@@ -9,7 +9,12 @@ router.get("/", async (req, res) => {
     try {
 
         const getData = () => {
-            return Eventi.find();
+            return Eventi.find({
+                $or: [
+                    { cancellato: { $exists: false } },
+                    { cancellato: false }
+                ]
+            });
         };
 
         const eventi = await getData();
@@ -21,12 +26,17 @@ router.get("/", async (req, res) => {
     }
 });
 
-
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
         const getData = () => {
-            return Eventi.findById(id);
+            return Eventi.findOne({
+                _id: id,
+                $or: [
+                    { cancellato: { $exists: false } },
+                    { cancellato: false }
+                ]
+            });
         };
 
         const eventi = await getData();
@@ -39,33 +49,32 @@ router.get("/:id", async (req, res) => {
 router.get("/tipo/:tipo", async (req, res) => {
     const { tipo } = req.params;
     try {
-        const eventi = await Eventi.find({ tipo: tipo });
+        const eventi = await Eventi.find({
+            tipo: tipo,
+            $or: [
+                { cancellato: { $exists: false } },
+                { cancellato: false }
+            ]
+        });
         res.status(200).json(eventi);
     } catch (err) {
-        console.error("Errore durante il recupero degli eventi:", err); // Log dell'errore
-        res.status(500).json({ error: err.message || "Errore del server" }); // Risposta più chiara
+        console.error("Errore durante il recupero degli eventi:", err);
+        res.status(500).json({ error: err.message || "Errore del server" });
     }
 });
 
-
-
-//YYYYMMDD
 router.get("/search/:data", async (req, res) => {
     const { data } = req.params;
     const { user } = req.query;
 
     try {
-        const searchTerm = `EVENTISEARCH${data}${user}`;
-
         if (data == undefined) {
-            res.status(400);
-            res.json({ Error: "data not defined" });
+            res.status(400).json({ Error: "data not defined" });
             return;
         }
 
         if (user == undefined) {
-            res.status(400);
-            res.json({ Error: "user not defined" });
+            res.status(400).json({ Error: "user not defined" });
             return;
         }
 
@@ -82,40 +91,110 @@ router.get("/search/:data", async (req, res) => {
                     },
                     utente: user,
                 },
+                {
+                    $or: [
+                        { cancellato: { $exists: false } },
+                        { cancellato: false },
+                    ],
+                },
             ],
         };
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = () => {
-            return Eventi.findById(query);
-        };
-
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                //console.log(`Event Buffered - ${searchTerm}`);
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const eventi = await getData();
-
-                client.setex(searchTerm, redisTimeCache, JSON.stringify(eventi));
-                res.status(200).json(eventi);
-            }
-        });
+        const eventi = await Eventi.find(query);
+        res.status(200).json(eventi);
     } catch (err) {
-        res.status(500);
-        res.json({ Error: err });
+        res.status(500).json({ Error: err });
     }
 });
+
+
+router.get("/searchByDay/:data", async (req, res) => {
+    const { data } = req.params;
+
+    try {
+        if (!data || data.length !== 8 || isNaN(data)) {
+            return res.status(400).json({ Error: "Parametro 'data' non valido. Deve essere nel formato YYYYMMDD." });
+        }
+
+        const year = parseInt(data.substring(0, 4), 10);
+        const month = parseInt(data.substring(4, 6), 10) - 1;
+        const day = parseInt(data.substring(6, 8), 10);
+
+        const startDate = new Date(year, month, day, 0, 0, 0);
+        const endDate = new Date(year, month, day, 23, 59, 59);
+
+        const query = {
+            $and: [
+                {
+                    data: {
+                        $gte: startDate,
+                        $lt: endDate,
+                    },
+                },
+                {
+                    $or: [
+                        { cancellato: { $exists: false } },
+                        { cancellato: false }
+                    ]
+                }
+            ]
+        };
+
+        const eventi = await Eventi.find(query);
+        return res.status(200).json(eventi);
+    } catch (err) {
+        console.error("Errore durante la ricerca degli eventi:", err);
+        return res.status(500).json({ Error: "Errore interno del server." });
+    }
+});
+
+router.get("/searchByDayType/:data/:type", async (req, res) => {
+    const { data, type } = req.params;
+
+    try {
+        if (!data || data.length !== 8 || isNaN(data)) {
+            return res.status(400).json({ Error: "Parametro 'data' non valido. Deve essere nel formato YYYYMMDD." });
+        }
+
+        if (!type) {
+            return res.status(400).json({ Error: "Parametro 'type' non valido o mancante." });
+        }
+
+        const year = parseInt(data.substring(0, 4), 10);
+        const month = parseInt(data.substring(4, 6), 10) - 1;
+        const day = parseInt(data.substring(6, 8), 10);
+
+        const startDate = new Date(year, month, day, 0, 0, 0);
+        const endDate = new Date(year, month, day, 23, 59, 59);
+
+        const query = {
+            $and: [
+                {
+                    data: {
+                        $gte: startDate,
+                        $lt: endDate,
+                    },
+                },
+                {
+                    tipo: type,
+                },
+                {
+                    $or: [
+                        { cancellato: { $exists: false } },
+                        { cancellato: false }
+                    ]
+                }
+            ]
+        };
+
+        const eventi = await Eventi.find(query);
+        return res.status(200).json(eventi);
+    } catch (err) {
+        console.error("Errore durante la ricerca degli eventi:", err);
+        return res.status(500).json({ Error: "Errore interno del server." });
+    }
+});
+
 
 router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => {
     const { dataStart, dataEnd, type } = req.params;
@@ -146,6 +225,12 @@ router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => 
                 },
                 {
                     tipo: type
+                },
+                {
+                    $or: [
+                        { cancellato: false },
+                        { cancellato: { $exists: false } }
+                    ]
                 }
             ]
         };
@@ -158,6 +243,7 @@ router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => 
         res.status(500).json({ Error: err.message });
     }
 });
+
 router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
     const { dataStart, dataEnd } = req.params;
     const { user } = req.query;
@@ -192,6 +278,12 @@ router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
                         { utente: user },
                         { visibile: true }
                     ]
+                },
+                {
+                    $or: [
+                        { cancellato: false },
+                        { cancellato: { $exists: false } }
+                    ]
                 }
             ]
         };
@@ -203,6 +295,7 @@ router.get("/searchInterval/:dataStart/:dataEnd", async (req, res) => {
         res.status(500).json({ Error: err.message });
     }
 });
+
 
 router.post("/", async (req, res) => {
     try {
@@ -300,6 +393,45 @@ router.put("/:id", async (req, res) => {
         res.json(eventi);
     } catch (err) {
         res.status(500).json({ Error: err });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const evento = await Eventi.findOneAndUpdate(
+            { _id: id },
+            { cancellato: true, DataCancellazione: new Date() },
+            { new: true }
+        );
+
+        if (!evento) {
+            return res.status(404).json({ message: "Evento non trovato" });
+        }
+
+
+        const usr = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(usr.dipendenteID);
+        };
+
+        const dip = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: `${dip.nome} ${dip.cognome}`,
+            operatoreID: usr.dipendenteID,
+            className: "Evento",
+            operazione: `Cancellazione evento: ${evento.descrizione}`,
+        });
+
+        console.log("log: ", log);
+        await log.save();
+
+        res.status(200).json(evento);
+    } catch (err) {
+        res.status(500).json({ Error: err.message });
     }
 });
 

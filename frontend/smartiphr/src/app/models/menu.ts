@@ -1,6 +1,7 @@
 import { SubMenu } from "./subItem";
 
 export class Menu {
+  expanded: boolean;
   static clone(obj: Menu) {
     return JSON.parse(JSON.stringify(obj));
   }

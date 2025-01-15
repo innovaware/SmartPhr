@@ -59,6 +59,17 @@ select {
   border-color: #1ab394;
 }
 
+label {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: #676a6c;
+}
+
+span {
+  font-size: 10px
+}
+
 .mat-card-content > :last-child:not(.mat-card-footer),
 .mat-card > :last-child:not(.mat-card-footer) {
   width: 100%;
@@ -72,17 +83,83 @@ select {
   width: 100%;
 }
 
-label {
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
-  font-weight: 600;
-  color: #676a6c;
-}
-
-span {
-  font-size: 10px
-}
-
 ::ng-deep .mat-dialog-container {
   min-width: 800px !important;
+}
+
+
+.event_type {
+  padding: 3px;
+  margin: 2px 0;
+  font-size: 0.8em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  transition: background-color 0.2s;
+}
+
+  .event_type:hover {
+    background-color: #e9ecef;
+  }
+
+.event_type_medico {
+  background-color: #ff9100;
+  color: white;
+}
+
+.event_type_admin {
+  background-color: #ff0000;
+  color: white;
+}
+
+.event_type_infermiere {
+  background-color: #ffd000;
+  color: black;
+}
+
+.event_type_oss {
+  background-color: #34bb1a;
+  color: white;
+}
+
+.event_type_psicologo {
+  background-color: #9b32c4;
+  color: white;
+}
+
+.event_type_sociale {
+  background-color: #000000;
+  color: white;
+}
+
+.event_type_ausiliare {
+  background-color: #0084ff;
+  color: white;
+}
+
+.event_type_cuoco {
+  background-color: #8a575e;
+  color: white;
+}
+
+.event_type_corsi {
+  background-color: dodgerblue;
+  color: white;
+}
+
+.event_type_corsiFormazione {
+  background-color: blue;
+  color: white;
+}
+
+.event_type_controlli {
+  background-color: orange;
+  color: black;
+}
+
+.event_type_agendaClinica {
+  background-color: royalblue;
+  color: white;
 }

@@ -45,7 +45,11 @@
             </ng-container>
 
             <!-- Elemento con sottomenu -->
-            <mat-expansion-panel hideToggle *ngIf="item.subMenu.length > 0">
+            <mat-expansion-panel hideToggle
+                                 *ngIf="item.subMenu.length > 0"
+                                 (opened)="onPanelOpen(item)"
+                                 (closed)="onPanelClose(item)"
+                                 [expanded]="item.expanded">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <app-menu-item link="{{ item.link }}"
@@ -66,7 +70,11 @@
                   </ng-container>
 
                   <!-- Subitem con sottomenu -->
-                  <mat-expansion-panel hideToggle *ngIf="subItem.subMenu && subItem.subMenu.length > 0">
+                  <mat-expansion-panel hideToggle
+                                       *ngIf="subItem.subMenu && subItem.subMenu.length > 0"
+                                       (opened)="onPanelOpen(subItem)"
+                                       (closed)="onPanelClose(subItem)"
+                                       [expanded]="subItem.expanded">
                     <mat-expansion-panel-header>
                       <mat-panel-title>
                         <app-menu-item link="{{ subItem.link }}"
@@ -78,34 +86,10 @@
 
                     <ng-template matExpansionPanelContent>
                       <ul *ngFor="let item1 of subItem.subMenu">
-                        <!-- Livello più profondo di sottomenu -->
-                        <ng-container *ngIf="!item1.subMenu || item1.subMenu.length === 0">
-                          <app-menu-item link="{{ item1.link }}"
-                                         icon="{{ item1.icon }}"
-                                         content-title="{{ item1.title }}">
-                          </app-menu-item>
-                        </ng-container>
-
-                        <!-- Ancora un altro livello di sottomenu -->
-                        <mat-expansion-panel hideToggle *ngIf="item1.subMenu && item1.subMenu.length > 0">
-                          <mat-expansion-panel-header>
-                            <mat-panel-title>
-                              <app-menu-item link="{{ item1.link }}"
-                                             icon="{{ item1.icon }}"
-                                             content-title="{{ item1.title }}">
-                              </app-menu-item>
-                            </mat-panel-title>
-                          </mat-expansion-panel-header>
-
-                          <ng-template matExpansionPanelContent>
-                            <ul *ngFor="let item2 of item1.subMenu">
-                              <app-menu-item link="{{ item2.link }}"
-                                             icon="{{ item2.icon }}"
-                                             content-title="{{ item2.title }}">
-                              </app-menu-item>
-                            </ul>
-                          </ng-template>
-                        </mat-expansion-panel>
+                        <app-menu-item link="{{ item1.link }}"
+                                       icon="{{ item1.icon }}"
+                                       content-title="{{ item1.title }}">
+                        </app-menu-item>
                       </ul>
                     </ng-template>
                   </mat-expansion-panel>

@@ -1,647 +1,576 @@
 <div class="container-fluid">
-    <div class="row">
-        <div class="col-1">
-            <button mat-button (click)="prev()" title="Precedente">
-                <fa-icon icon="chevron-left"></fa-icon>
-            </button>
-        </div>
-        <div class="col">
-            <h2 class="title">{{calendar_day.format('MMMM YYYY')}}</h2>
-        </div>
-        <div class="col-1">
-            <button mat-button (click)="succ()" title="Successivo">
-                <fa-icon icon="chevron-right"></fa-icon>
-            </button>
-        </div>
 
-        <div class="col-1">
-            <button mat-button (click)="calendarWeek()" title="Visualiz. Settimana">
-                <fa-icon icon="calendar-week"></fa-icon>
-            </button>
-        </div>
-        <div class="col-1">
-            <button mat-button (click)="calendarMonth()" title="Visualiz. Mensile">
-                <fa-icon icon="calendar-alt"></fa-icon>
-            </button>
-        </div>
+  <div class="row">
+    <div class="col-1" style="padding-top: 14px;">
+      <button mat-button (click)="prev()" title="Precedente" >
+        <fa-icon icon="chevron-left"></fa-icon>
+      </button>
     </div>
-</div>
+    <div class="col" style="padding-top: 14px;">
+      <h2 class="title">{{calendar_day.format('MMMM YYYY')}}</h2>
+    </div>
+    <div class="col-1" style="padding-top: 14px;">
+      <button mat-button (click)="succ()" title="Successivo">
+        <fa-icon icon="chevron-right"></fa-icon>
+      </button>
+    </div>
 
-<div *ngIf="!isTurni">
+    <div class="col-1">
+      <button mat-button (click)="calendarWeek()" title="Visualiz. Settimana" class="calendar-button">
+        <div class="button-content">
+          <fa-icon icon="calendar-week" class="icon"></fa-icon>
+          <span class="button-text">Settimanale</span>
+        </div>
+      </button>
+    </div>
+    <div class="col-1">
+      <button mat-button (click)="calendarMonth()" title="Visualiz. Mensile" class="calendar-button">
+        <div class="button-content">
+          <fa-icon icon="calendar-alt" class="icon"></fa-icon>
+          <span class="button-text">Mensile</span>
+        </div>
+      </button>
+    </div>
+
+    <div class="col-1">
+      <button mat-button (click)="newEvent()" style=" padding-top: 9px;" title="Crea nuovo evento" class="calendar-button">
+        <div class="button-content">
+          <svg xmlns="http://www.w3.org/2000/svg" width="27" height="27" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+          </svg>
+          <span class="button-text">Nuovo Evento</span>
+        </div>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!isTurni">
+    <table class="table_mese" *ngIf="isCalendarMonthEnabled">
+      <tbody>
+        <tr>
+
+          <td>
+            <div class="cal_head">Lun</div>
+          </td>
+          <td>
+            <div class="cal_head">Mar</div>
+          </td>
+          <td>
+            <div class="cal_head">Mer</div>
+          </td>
+          <td>
+            <div class="cal_head">Gio</div>
+          </td>
+          <td>
+            <div class="cal_head">Ven</div>
+          </td>
+          <td>
+            <div class="cal_head">Sab</div>
+          </td>
+          <td>
+            <div class="cal_head festivo_day">Dom</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[0]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[0], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[0], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[0], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[0], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[1]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[1], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[1], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[1], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[1], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[2]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[2], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[2], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[2], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[2], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[3]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[3], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[3], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[3], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[3], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[4]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[4], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[4], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[4], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[4], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[5]?.days; let indexOfelement=index;">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !== 0, 'festivo_day': item.toDate().getDay() === 0}">
+              {{item.format("DD")}}
+            </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <div class="events-container">
+                <ng-container *ngIf="getVisibleEvents(this.calendar[5], indexOfelement)?.length>0">
+                  <div class="eventsBar" (click)="viewEvents(item)">
+                    <b><span class="badge">{{getVisibleEvents(this.calendar[5], indexOfelement)?.length}}</span></b>
+                    <span *ngIf="getVisibleEvents(this.calendar[5], indexOfelement)?.length==1">Evento</span>
+                    <span *ngIf="getVisibleEvents(this.calendar[5], indexOfelement)?.length>1">Eventi</span>
+                  </div>
+                </ng-container>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr></tr>
+      </tbody>
+    </table>
+
+
+    <table class="table_mese" *ngIf="isCalendarWeekEnabled">
+      <thead>
+        <tr>
+          <ng-container *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]; let i = index">
+            <td [ngClass]="{
+              'disabled': calendar[index_week]?.days[day]?.isBefore(today, 'day') || !calendar[index_week]?.days[day]?.isValid(),
+              'empty': !calendar[index_week]?.days[day]?.isValid(),
+              'sunday': i === 6
+            }">
+              <div class="cal_head">
+                <div class="conteiner-fluid">
+                  <div class="row">
+                    <div class="col" [ngClass]="{ 'text-red': i === 6 }">{{ ['Lun', 'Mar', 'Mer', 'Gio', 'Ven', 'Sab', 'Dom'][i] }}</div>
+                  </div>
+                  <div class="row">
+                    <div class="col" [ngClass]="{ 'text-red': i === 6 }">
+                      {{ calendar[index_week]?.days[day]?.isValid() ? (calendar[index_week]?.days[day] | date: 'dd MMM') : '' }}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <ng-container *ngFor="let day of [0, 1, 2, 3, 4, 5, 6]; let i = index">
+            <td class="cal_day"
+                [ngClass]="{
+              'disabled': calendar[index_week]?.days[day]?.isBefore(today, 'day') || !calendar[index_week]?.days[day]?.isValid(),
+              'empty': !calendar[index_week]?.days[day]?.isValid(),
+              'sunday': i === 6
+            }">
+              <div *ngIf="calendar[index_week]?.days[day]?.isValid()" class="container_event droppable" tipo_cont="mese">
+                <div class="events-container">
+                  <ng-container *ngIf="getEvent(calendar[index_week], day)?.length>0">
+                    <div class="eventsBar" (click)="viewEvents(calendar[index_week]?.days[day])">
+                      <b><span class="badge">{{getEvent(calendar[index_week], day)?.length}}</span></b>
+                      <span *ngIf="getEvent(calendar[index_week], day)?.length==1">Evento</span>
+                      <span *ngIf="getEvent(calendar[index_week], day)?.length>1">Eventi</span>
+                    </div>
+                  </ng-container>
+                </div>
+              </div>
+            </td>
+          </ng-container>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+
+
+  <div *ngIf="isTurni">
 
     <table class="table_mese" *ngIf="isCalendarMonthEnabled">
-        <tbody>
-            <tr>
+      <tbody>
+        <tr>
 
-                <td>
-                    <div class="cal_head">Lun</div>
-                </td>
-                <td>
-                    <div class="cal_head">Mar</div>
-                </td>
-                <td>
-                    <div class="cal_head">Mer</div>
-                </td>
-                <td>
-                    <div class="cal_head">Gio</div>
-                </td>
-                <td>
-                    <div class="cal_head">Ven</div>
-                </td>
-                <td>
-                    <div class="cal_head">Sab</div>
-                </td>
-                <td>
-                    <div class="cal_head festivo_day">Dom</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[0]?.days; let indexOfelement=index;"
-                    (click)="createEvent(item, this.calendar[0], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
+          <td>
+            <div class="cal_head">Lun</div>
+          </td>
+          <td>
+            <div class="cal_head">Mar</div>
+          </td>
+          <td>
+            <div class="cal_head">Mer</div>
+          </td>
+          <td>
+            <div class="cal_head">Gio</div>
+          </td>
+          <td>
+            <div class="cal_head">Ven</div>
+          </td>
+          <td>
+            <div class="cal_head">Sab</div>
+          </td>
+          <td>
+            <div class="cal_head festivo_day">Dom</div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[0]?.days; let indexOfelement=index;"
+              (click)="showturni(item, this.calendar[0], indexOfelement)">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+              {{item.format("DD")}}
+            </div>
 
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' +event?.tipo}}" *ngFor="let event of getEvent(this.calendar[0], indexOfelement )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[1]?.days; let indexOfelement=index;"
-                    (click)="createEvent(item, this.calendar[1], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[1]?.days; let indexOfelement=index;"
+              (click)="showturni(item, this.calendar[1], indexOfelement)">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+              {{item.format("DD")}}
+            </div>
 
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[1], indexOfelement )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[2]?.days; let indexOfelement=index;"
-                    (click)="createEvent(item, this.calendar[2], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[2]?.days; let indexOfelement=index;"
+              (click)="showturni(item, this.calendar[2], indexOfelement)">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+              {{item.format("DD")}}
+            </div>
 
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[2], indexOfelement )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[3]?.days; let indexOfelement=index;"
-                    (click)="createEvent(item, this.calendar[3], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[3]?.days; let indexOfelement=index;"
+              (click)="showturni(item, this.calendar[3], indexOfelement)">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+              {{item.format("DD")}}
+            </div>
 
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[3], indexOfelement )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[4]?.days; let indexOfelement=index;"
-                    (click)="createEvent(item, this.calendar[4], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
+              *ngFor="let item of this.calendar[4]?.days; let indexOfelement=index;"
+              (click)="showturni(item, this.calendar[4], indexOfelement)">
+            <div class="label_day ferial_day"
+                 [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
+              {{item.format("DD")}}
+            </div>
 
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[4], indexOfelement )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-            <tr></tr>
-        </tbody>
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+        <tr>
+        </tr>
+      </tbody>
     </table>
 
 
 
     <table class="table_mese" *ngIf="isCalendarWeekEnabled">
-        <thead>
-            <tr>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Lun</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[0] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Mar</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[1] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Mer</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[2] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Gio</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[3] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Ven</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[4] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Sab</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[5] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}">
-                    <div class="cal_head festivo_day">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Dom</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[6] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[0], this.calendar[index_week], 0)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[index_week], 0)">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
+      <thead>
+        <tr>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Lun</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[0] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Mar</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[1] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Mer</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[2] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Gio</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[3] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Ven</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[4] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}">
+            <div class="cal_head">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Sab</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[5] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}">
+            <div class="cal_head festivo_day">
+              <div class="conteiner-fluid">
+                <div class="row">
+                  <div class="col">Dom</div>
+                </div>
+                <div class="row">
+                  <div class="col">
+                    {{this.calendar[index_week]?.days[6] | date: 'dd' }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[0], this.calendar[index_week], 0)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[1], this.calendar[index_week], 1)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[index_week], 1 )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[1], this.calendar[index_week], 1)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[2], this.calendar[index_week], 2)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[index_week], 2)">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[2], this.calendar[index_week], 2)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[3], this.calendar[index_week], 3)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[index_week], 3 )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[3], this.calendar[index_week], 3)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[4], this.calendar[index_week], 4)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}" *ngFor="let event of getEvent(this.calendar[index_week], 4 )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span><span>{{event?.descrizione}} </span>
-                        </div>
-                    </div>
-                </td>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[4], this.calendar[index_week], 4)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[5], this.calendar[index_week], 5)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}"
-                             *ngFor="let event of getEvent(this.calendar[index_week], 5 ); let indexEvent=index;">
-                            <div>
-                                <span class="badge ">{{event?.data | date: 'HH:mm'}}</span>
-                                <span>{{event?.descrizione}}</span>
-                            </div>
-                        </div>
-                    </div>
-                </td>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[5], this.calendar[index_week], 5)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
 
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}"
-                    (click)="createEvent(this.calendar[index_week]?.days[6], this.calendar[index_week], 6)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <div class="event_type {{'event_type_' + event?.tipo}}"
-                             *ngFor="let event of getEvent(this.calendar[index_week], 6 )">
-                            <span class="badge ">{{event?.data | date: 'HH:mm'}}</span>
-                            <span>{{event?.descrizione}}</span>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
+          <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}"
+              (click)="showturni(this.calendar[index_week]?.days[6], this.calendar[index_week], 6)">
+            <div class="container_event droppable" tipo_cont="mese">
+              <button type="button" class="btn btn-primary">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                  <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
+                </svg>
+                Vedi turni
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
     </table>
 
-</div>
-
-
-
-<div *ngIf="isTurni">
-
-    <table class="table_mese" *ngIf="isCalendarMonthEnabled">
-        <tbody>
-            <tr>
-
-                <td>
-                    <div class="cal_head">Lun</div>
-                </td>
-                <td>
-                    <div class="cal_head">Mar</div>
-                </td>
-                <td>
-                    <div class="cal_head">Mer</div>
-                </td>
-                <td>
-                    <div class="cal_head">Gio</div>
-                </td>
-                <td>
-                    <div class="cal_head">Ven</div>
-                </td>
-                <td>
-                    <div class="cal_head">Sab</div>
-                </td>
-                <td>
-                    <div class="cal_head festivo_day">Dom</div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[0]?.days; let indexOfelement=index;"
-                    (click)="showturni(item, this.calendar[0], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
-
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[1]?.days; let indexOfelement=index;"
-                    (click)="showturni(item, this.calendar[1], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
-
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[2]?.days; let indexOfelement=index;"
-                    (click)="showturni(item, this.calendar[2], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
-
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[3]?.days; let indexOfelement=index;"
-                    (click)="showturni(item, this.calendar[3], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
-
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': item?.isBefore(today,'day')}"
-                    *ngFor="let item of this.calendar[4]?.days; let indexOfelement=index;"
-                    (click)="showturni(item, this.calendar[4], indexOfelement)">
-                    <div class="label_day ferial_day"
-                         [ngClass]="{'ferial_day': item.toDate().getDay() !==0, 'festivo_day': item.toDate().getDay() ===0 }">
-                        {{item.format("DD")}}
-                    </div>
-
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-            <tr>
-            </tr>
-        </tbody>
-    </table>
-
-
-
-    <table class="table_mese" *ngIf="isCalendarWeekEnabled">
-        <thead>
-            <tr>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Lun</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[0] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Mar</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[1] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Mer</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[2] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Gio</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[3] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Ven</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[4] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}">
-                    <div class="cal_head">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Sab</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[5] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                <td [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}">
-                    <div class="cal_head festivo_day">
-                        <div class="conteiner-fluid">
-                            <div class="row">
-                                <div class="col">Dom</div>
-                            </div>
-                            <div class="row">
-                                <div class="col">
-                                    {{this.calendar[index_week]?.days[6] | date: 'dd' }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-            </tr>
-        </thead>
-        <tbody>
-            <tr>
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[0].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[0], this.calendar[index_week], 0)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[1].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[1], this.calendar[index_week], 1)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[2].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[2], this.calendar[index_week], 2)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[3].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[3], this.calendar[index_week], 3)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[4].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[4], this.calendar[index_week], 4)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[5].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[5], this.calendar[index_week], 5)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-
-                <td class="cal_day" [ngClass]="{'disabled': this.calendar[index_week]?.days[6].isBefore(today,'day')}"
-                    (click)="showturni(this.calendar[index_week]?.days[6], this.calendar[index_week], 6)">
-                    <div class="container_event droppable" tipo_cont="mese">
-                        <button type="button" class="btn btn-primary">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
-                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001q.044.06.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1 1 0 0 0-.115-.1zM12 6.5a5.5 5.5 0 1 1-11 0 5.5 5.5 0 0 1 11 0"></path>
-                            </svg>
-                            Vedi turni
-                        </button>
-                    </div>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-
-</div>
+  </div>

@@ -9,6 +9,8 @@ const EventiSchema = mongoose.Schema({
     visibile: Boolean,
     finito: Boolean,
     dataCompletato: Date,
+    cancellato: Boolean,
+    DataCancellazione: Date,
 });
 
 module.exports = mongoose.model('Eventi', EventiSchema, 'eventi');

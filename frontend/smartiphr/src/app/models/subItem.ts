@@ -1,4 +1,5 @@
 export class SubMenu {
+  expanded: boolean;
   static clone(obj: SubMenu) {
     return JSON.parse(JSON.stringify(obj));
   }

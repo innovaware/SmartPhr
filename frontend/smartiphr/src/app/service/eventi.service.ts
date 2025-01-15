@@ -5,6 +5,7 @@ import { environment } from 'src/environments/environment';
 import { Evento } from '../models/evento';
 import { UserInfo } from '../models/userInfo';
 import { catchError } from "rxjs/operators";
+import * as moment from "moment";
 
 @Injectable({
   providedIn: "root",
@@ -37,6 +38,29 @@ export class EventiService {
     return this.http.get<Evento[]>(this.api + "/api/eventi/search/"+ data, {headers, params}).toPromise();
   }
 
+  async getEventsByDay(day: moment.Moment): Promise<Evento[]> {
+    const data: string = day.format("YYYYMMDD");
+    const headers = new HttpHeaders().append('Authorization', 'Basic ZGQ6ZGQ=');
+
+    try {
+      return await this.http.get<Evento[]>(this.api + "/api/eventi/searchByDay/" + data, { headers }).toPromise();
+    } catch (error) {
+      console.error("Errore durante la richiesta degli eventi per giorno:", error);
+      throw new Error("Impossibile recuperare gli eventi per il giorno specificato.");
+    }
+  }
+  async getEventsByDayType(day: moment.Moment,type: String): Promise<Evento[]> {
+    const data: string = day.format("YYYYMMDD");
+    const headers = new HttpHeaders().append('Authorization', 'Basic ZGQ6ZGQ=');
+
+    try {
+      return await this.http.get<Evento[]>(this.api + "/api/eventi/searchByDayType/" + data+"/"+type, { headers }).toPromise();
+    } catch (error) {
+      console.error("Errore durante la richiesta degli eventi per giorno:", error);
+      throw new Error("Impossibile recuperare gli eventi per il giorno specificato.");
+    }
+  }
+
   getEventiByIntervalDayType(dayStart: moment.Moment, dayEnd: moment.Moment, tipo: string): Observable<Evento[]> {
     const dataStart: string = dayStart.format("YYYYMMDD");
     const dataEnd: string = dayEnd.format("YYYYMMDD");
@@ -63,6 +87,10 @@ export class EventiService {
   async updateEvento(evento: Evento) {
     var body = evento;
     return this.http.put(this.api + "/api/eventi/" + evento._id, body).toPromise();
+  }
+
+  async deleteEvento(evento: Evento) {
+    return this.http.delete(this.api + "/api/eventi/" + evento._id).toPromise();
   }
 
   private handleError(error: any): Observable<never> {

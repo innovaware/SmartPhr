@@ -19,7 +19,7 @@ export class AreaLogComponent implements OnInit, AfterViewInit {
 
   dataSource: MatTableDataSource<LogList>;
   groupedLogs: LogList[];
-  DisplayedColumns: string[] = ["data","numLog","action"];
+  DisplayedColumns: string[] = ["data", "numLog", "action"];
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
   dipendente: Dipendenti;
   sa: Boolean;
@@ -40,8 +40,8 @@ export class AreaLogComponent implements OnInit, AfterViewInit {
 
 
   ngAfterViewInit() {
-    this.dataSource.paginator = this.paginator;
     this.getDati();
+    this.dataSource.paginator = this.paginator;
   }
 
   viewLog(log: LogList) {
@@ -55,13 +55,13 @@ export class AreaLogComponent implements OnInit, AfterViewInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-      
+
     });
 
   }
 
   ngOnInit() {
-    
+
   }
 
   public inputSearchField;

@@ -26,22 +26,22 @@ export class MenuComponent implements OnInit {
   }
 
   ngOnInit() {
-
-
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
       if (user !== undefined && user !== null) {
         this.username = user.username;
         this.menuService.getMenu().subscribe((items: Menu[]) => {
-          this.menu = items.sort((a: Menu, b: Menu) => {
-            return a.order - b.order;
+          this.menu = items.map((item) => {
+            item.expanded = false; // Aggiungi proprietà expanded
+            if (item.subMenu) {
+              item.subMenu.forEach((subItem) => {
+                subItem.expanded = false;
+                if (subItem.subMenu) {
+                  subItem.subMenu.forEach((subSubItem) => (subSubItem.expanded = false));
+                }
+              });
+            }
+            return item;
           });
-
-          this.menu.map(m=> {
-            m.subMenu.sort((a: Menu, b: Menu) => {
-              return a.order - b.order;
-            });
-            return m;
-          })
         });
 
         const userId = user._id;
@@ -66,6 +66,25 @@ export class MenuComponent implements OnInit {
           });
       }
     });
+  }
+
+  // Metodo chiamato quando un pannello viene chiuso
+  onPanelClose(menuItem: Menu | SubMenu) {
+    menuItem.expanded = false;
+
+    if (menuItem.subMenu) {
+      menuItem.subMenu.forEach((subItem) => {
+        subItem.expanded = false;
+        if (subItem.subMenu) {
+          this.onPanelClose(subItem); // Chiudi ricorsivamente
+        }
+      });
+    }
+  }
+
+  // Metodo chiamato quando un pannello viene aperto
+  onPanelOpen(menuItem: Menu | SubMenu) {
+    menuItem.expanded = true;
   }
 
   closeAllSubItem(subMenu: SubMenu[]) {
