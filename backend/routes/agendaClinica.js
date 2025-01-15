@@ -3,7 +3,6 @@ const router = express.Router();
 const Agenda = require("../models/agendaClinica");
 const Log = require("../models/log");
 const Dipendenti = require("../models/dipendenti");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
     try {

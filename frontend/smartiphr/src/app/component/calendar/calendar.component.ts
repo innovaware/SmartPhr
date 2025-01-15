@@ -96,7 +96,7 @@ export class CalendarComponent implements OnInit {
     this.calendar = [];
     if (!this.turni) {
         const eventiObservable = this.tipo ?
-          this.eventiService.getEventiByIntervalDayType(date, this.endDay, this.tipo) :
+          this.eventiService.getEventiByIntervalDayType(date, this.endDay, this.tipo, this.user) :
           this.eventiService.getEventiByIntervalDay(date, this.endDay, this.user);
 
         eventiObservable.subscribe(
@@ -258,7 +258,7 @@ export class CalendarComponent implements OnInit {
 
     try {
       // Aspetta il risultato degli eventi
-      const items: Evento[] = this.tipo ? await this.eventiService.getEventsByDayType(item,this.tipo) : await this.eventiService.getEventsByDay(item).then();
+      const items: Evento[] = this.tipo ? await this.eventiService.getEventsByDayType(item, this.tipo, this.user) : await this.eventiService.getEventsByDay(item, this.user).then();
       items.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
       console.log(items);
 
@@ -266,7 +266,9 @@ export class CalendarComponent implements OnInit {
       const dialogRef = this.dialog.open(DialogEventComponent, {
         data: {
           items: items, // Passa gli eventi ottenuti
-          create: false
+          create: false,
+          user: this.user,
+          tipo: this.tipo
         },
         width: '90%',  // Larghezza del dialog responsiva
         maxWidth: '600px', // Larghezza massima

@@ -6,6 +6,10 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator/paginator';
 import { DialogQuestionComponent } from '../dialog-question/dialog-question.component';
 import { EventiService } from '../../service/eventi.service';
+import { ScrollingVisibility } from '@angular/cdk/overlay';
+import { UserInfo } from '../../models/userInfo';
+
+import * as moment from "moment";
 
 @Component({
   selector: 'app-dialog-event',
@@ -31,6 +35,8 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       items: Evento[],
       create: Boolean,
       edit: Boolean,
+      user: UserInfo,
+      tipo: String
     }
   ) {
     this.data.items = this.data.items || []; // Assicurati che sia sempre un array
@@ -40,6 +46,7 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
     }
     console.log("item: ", data.item);
     this.visible = false;
+    if (this.data.edit) this.visible = data.item.visibile;
   }
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -113,7 +120,8 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
           // Controlla se la descrizione o la data/orario sono stati modificati
           if (
             result.descrizione?.trim() !== evento.descrizione || // Descrizione modificata
-            resultData.getTime() !== eventoData.getTime() // Data (o orario) modificata
+            resultData.getTime() !== eventoData.getTime() || // Data (o orario) modificata
+            result.visibile !== evento.visibile 
           ) {
             const index = this.data.items.indexOf(evento);
             if (index !== -1) {
@@ -125,6 +133,7 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
                 const response = await this.eventServ.updateEvento(result);
                 console.log('Evento aggiornato con successo:', response);
                 this.messageServ.showMessage('Evento aggiornato con successo');
+
               } catch (error) {
                 console.error('Errore durante l\'aggiornamento dell\'evento:', error);
               }
@@ -135,6 +144,9 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
         } else {
           console.log('Dialog chiusa senza salvare o dati non validi.');
         }
+        const items: Evento[] = this.data.tipo ? await this.eventServ.getEventsByDayType(moment(this.data.item.data), this.data.tipo, this.data.user) : await this.eventServ.getEventsByDay(moment(this.data.item.data), this.data.user).then();
+        this.dataSource.data = items.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
+        this.dataSource.paginator = this.paginator;
       });
     }
   }

@@ -110,10 +110,15 @@ router.get("/search/:data", async (req, res) => {
 
 router.get("/searchByDay/:data", async (req, res) => {
     const { data } = req.params;
+    const { user } = req.query;
 
     try {
         if (!data || data.length !== 8 || isNaN(data)) {
             return res.status(400).json({ Error: "Parametro 'data' non valido. Deve essere nel formato YYYYMMDD." });
+        }
+
+        if (!user) {
+            return res.status(400).json({ Error: "user not defined" });
         }
 
         const year = parseInt(data.substring(0, 4), 10);
@@ -136,6 +141,12 @@ router.get("/searchByDay/:data", async (req, res) => {
                         { cancellato: { $exists: false } },
                         { cancellato: false }
                     ]
+                },
+                {
+                    $or: [
+                        { utente: user },
+                        { visibile: true }
+                    ]
                 }
             ]
         };
@@ -150,6 +161,7 @@ router.get("/searchByDay/:data", async (req, res) => {
 
 router.get("/searchByDayType/:data/:type", async (req, res) => {
     const { data, type } = req.params;
+    const { user } = req.query;
 
     try {
         if (!data || data.length !== 8 || isNaN(data)) {
@@ -158,6 +170,10 @@ router.get("/searchByDayType/:data/:type", async (req, res) => {
 
         if (!type) {
             return res.status(400).json({ Error: "Parametro 'type' non valido o mancante." });
+        }
+
+        if (!user) {
+            return res.status(400).json({ Error: "user not defined" });
         }
 
         const year = parseInt(data.substring(0, 4), 10);
@@ -183,6 +199,12 @@ router.get("/searchByDayType/:data/:type", async (req, res) => {
                         { cancellato: { $exists: false } },
                         { cancellato: false }
                     ]
+                },
+                {
+                    $or: [
+                        { utente: user },
+                        { visibile: true }
+                    ]
                 }
             ]
         };
@@ -198,6 +220,7 @@ router.get("/searchByDayType/:data/:type", async (req, res) => {
 
 router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => {
     const { dataStart, dataEnd, type } = req.params;
+    const { user } = req.query;
 
     if (!dataStart || !dataEnd) {
         return res.status(400).json({ Error: "dataStart or dataEnd not defined" });
@@ -230,6 +253,12 @@ router.get("/searchIntervaltype/:dataStart/:dataEnd/:type", async (req, res) => 
                     $or: [
                         { cancellato: false },
                         { cancellato: { $exists: false } }
+                    ]
+                },
+                {
+                    $or: [
+                        { utente: user },
+                        { visibile: true }
                     ]
                 }
             ]
