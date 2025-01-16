@@ -138,7 +138,7 @@ tbody {
   text-overflow: ellipsis;
   background-color: lightgreen;
   color: green;
-  border-radius: 4px;
+  border-radius: 5px;
   transition: background-color 0.2s;
   cursor: pointer;
 }
@@ -261,5 +261,14 @@ tbody {
 .button-text {
   font-size: 12px; /* Dimensione del testo */
   text-align: center;
+}
+
+.cal_day.disabled .eventsBar {
+  pointer-events: auto; /* Rende cliccabile la barra eventi anche se il genitore è disabilitato */
+  cursor: pointer; /* Cambia il cursore per indicare che è cliccabile */
+}
+
+.cal_day.disabled {
+  pointer-events: none; /* Rende non cliccabili gli altri elementi */
 }
 

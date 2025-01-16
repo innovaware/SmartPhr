@@ -36,7 +36,8 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       create: Boolean,
       edit: Boolean,
       user: UserInfo,
-      tipo: String
+      tipo: String,
+      old: Boolean,
     }
   ) {
     this.data.items = this.data.items || []; // Assicurati che sia sempre un array
@@ -109,47 +110,77 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       },
     });
 
-    if (dialogRef) {
-      dialogRef.afterClosed().subscribe(async (result) => {
-        // Controlla che result sia valido
-        if (result) {
-          // Verifica se `result.data` è una stringa o una data e convertila in un oggetto Date se necessario
-          const resultData = result.data instanceof Date ? result.data : new Date(result.data);
-          const eventoData = evento.data instanceof Date ? evento.data : new Date(evento.data);
+    if (!dialogRef) return;
 
-          // Controlla se la descrizione o la data/orario sono stati modificati
-          if (
-            result.descrizione?.trim() !== evento.descrizione || // Descrizione modificata
-            resultData.getTime() !== eventoData.getTime() || // Data (o orario) modificata
-            result.visibile !== evento.visibile 
-          ) {
-            const index = this.data.items.indexOf(evento);
-            if (index !== -1) {
-              this.data.items[index] = { ...result, data: resultData }; // Aggiorna con i nuovi dati restituiti
-              this.dataSource.data = [...this.data.items.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime())]; // Ricrea la lista per forzare il refresh della tabella
-              this.dataSource.paginator = this.paginator;
+    dialogRef.afterClosed().subscribe(async (result) => {
+      if (!result) {
+        console.log('Dialog chiusa senza salvare o dati non validi.');
+        return; // Uscire subito se il dialog è stato chiuso senza salvare
+      }
 
-              try {
-                const response = await this.eventServ.updateEvento(result);
-                console.log('Evento aggiornato con successo:', response);
-                this.messageServ.showMessage('Evento aggiornato con successo');
-
-              } catch (error) {
-                console.error('Errore durante l\'aggiornamento dell\'evento:', error);
-              }
-            }
-          } else {
-            console.log('Nessuna modifica rilevata.');
-          }
-        } else {
-          console.log('Dialog chiusa senza salvare o dati non validi.');
+      try {
+        // Verifica e normalizzazione dei dati
+        const resultData = result.data instanceof Date ? result.data : new Date(result.data);
+        if (isNaN(resultData.getTime())) {
+          return; // Se la data è invalida, usciamo
         }
-        const items: Evento[] = this.data.tipo ? await this.eventServ.getEventsByDayType(moment(this.data.item.data), this.data.tipo, this.data.user) : await this.eventServ.getEventsByDay(moment(this.data.item.data), this.data.user).then();
-        this.dataSource.data = items.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
-        this.dataSource.paginator = this.paginator;
-      });
+
+        const eventoData = evento.data instanceof Date ? evento.data : new Date(evento.data);
+
+        // Controlla se ci sono modifiche nei campi dell'evento
+        const isModified =
+          result.descrizione?.trim() !== evento.descrizione ||
+          resultData.getTime() !== eventoData.getTime() ||
+          result.visibile !== evento.visibile;
+
+        if (isModified) {
+          const index = this.data.items.indexOf(evento);
+
+          if (index !== -1) {
+            // Aggiorna l'evento nella lista locale
+            this.data.items[index] = { ...result, data: resultData };
+
+            // Ordina e aggiorna la tabella
+            this.dataSource.data = this.data.items.sort(
+              (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
+            );
+            this.dataSource.paginator = this.paginator;
+
+            // Effettua l'aggiornamento remoto
+            const response = await this.eventServ.updateEvento(result);
+            console.log('Evento aggiornato con successo:', response);
+            this.messageServ.showMessage('Evento aggiornato con successo');
+          }
+        }
+      } catch (error) {
+        console.error("Errore durante l'aggiornamento dell'evento:", error);
+        this.messageServ.showMessage('Errore durante l\'aggiornamento dell\'evento');
+      } 
+    });
+
+    // Aggiorna la lista degli eventi dal server
+    await this.refreshEventList(evento);
+  }
+
+  /**
+   * Aggiorna la lista degli eventi.
+   * @param evento Evento di riferimento per il giorno/tipo.
+   */
+  private async refreshEventList(evento: Evento) {
+    try {
+      const items: Evento[] = this.data.tipo
+        ? await this.eventServ.getEventsByDayType(moment(evento.data), this.data.tipo, this.data.user)
+        : await this.eventServ.getEventsByDay(moment(evento.data), this.data.user);
+
+      this.dataSource.data = items.sort(
+        (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
+      );
+      this.dataSource.paginator = this.paginator;
+    } catch (error) {
+      console.error("Errore durante l'aggiornamento della lista degli eventi:", error);
     }
   }
+
 
 
 

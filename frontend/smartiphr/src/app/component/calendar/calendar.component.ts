@@ -45,7 +45,7 @@ export class CalendarComponent implements OnInit {
   calendar = [];
   public user: UserInfo;
   utente: User;
-
+  old: Boolean;
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
@@ -60,6 +60,7 @@ export class CalendarComponent implements OnInit {
     this.utente = new User();
     this.isCalendarMonthEnabled = true;
     this.user = { identify: '', mansione: '' };
+    this.old = false;
 
     this.utente = this.authenticationService.getCurrentUser();
 
@@ -68,7 +69,6 @@ export class CalendarComponent implements OnInit {
     });
 
     this.mansioniService.getById(this.utente.role).then((x: Mansione) => {
-      console.log(x);
       this.mansione = x;
       // Sposta l'assegnazione qui, dopo aver risolto la promessa
       this.user.mansione = this.mansione.descrizione;
@@ -76,7 +76,6 @@ export class CalendarComponent implements OnInit {
     console.log(this.tipo);
     this.user.identify = this.utente.username;
   }
-
 
 
 
@@ -260,7 +259,11 @@ export class CalendarComponent implements OnInit {
       // Aspetta il risultato degli eventi
       const items: Evento[] = this.tipo ? await this.eventiService.getEventsByDayType(item, this.tipo, this.user) : await this.eventiService.getEventsByDay(item, this.user).then();
       items.sort((a, b) => new Date(a.data).getTime() - new Date(b.data).getTime());
-      console.log(items);
+      if (item.isBefore(this.today, 'day')) {
+        this.old = true;
+      } else {
+        this.old = false;
+      }
 
       // Apri il dialog dopo aver ottenuto i dati
       const dialogRef = this.dialog.open(DialogEventComponent, {
@@ -268,7 +271,8 @@ export class CalendarComponent implements OnInit {
           items: items, // Passa gli eventi ottenuti
           create: false,
           user: this.user,
-          tipo: this.tipo
+          tipo: this.tipo,
+          old:this.old,
         },
         width: '90%',  // Larghezza del dialog responsiva
         maxWidth: '600px', // Larghezza massima
