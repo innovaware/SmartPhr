@@ -1,104 +1,106 @@
 <div class="body">
-  <div class="container-flex header_menu header-pad">
-    <div class="row">
-      <div class="col">
-        <div class="container">
-          <div class="row">
-            <div class="col">
-              <img src="../../../assets/logo.png" />
-            </div>
-          </div>
+    <!-- Fixed header section -->
+    <div class="fixed-header">
+        <div class="container-flex header_menu header-pad">
+            <div class="row">
+                <div class="col">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col">
+                                <img src="../../../assets/logo.png" />
+                            </div>
+                        </div>
 
-          <div class="row pad">
-            <div class="col">
-              <span class="font-bold">La Rinascita</span>
-            </div>
-          </div>
+                        <div class="row pad">
+                            <div class="col">
+                                <span class="font-bold" style="padding-left: 46px;">La Rinascita</span>
+                            </div>
+                        </div>
 
-          <div class="row pad">
-            <div class="col">
-              <span class="font-bold">{{username}}</span>
+                        <div class="row pad">
+                            <div class="col">
+                                <span class="font-bold">Ciao, {{username}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
-  </div>
 
-  <div class="container-flex">
-    <div class="row">
-      <div class="col">
-        <ul>
-          <!-- Elementi del menu -->
-          <app-menu-item link="/"
-                         icon="gem"
-                         content-title="Home"
-                         home="true"></app-menu-item>
+    <!-- Scrollable menu section -->
+    <div class="scrollable-menu">
+        <div class="container-flex">
+            <div class="row">
+                <div class="col">
+                    <ul>
+                        <app-menu-item link="/"
+                                       icon="gem"
+                                       content-title="Home"
+                                       home="true"></app-menu-item>
 
-          <ng-container *ngFor="let item of menu">
-            <!-- Elemento senza sottomenu -->
-            <ng-container *ngIf="item.subMenu.length === 0">
-              <app-menu-item link="{{ item.link }}"
-                             icon="{{ item.icon }}"
-                             content-title="{{ item.title }}">
-              </app-menu-item>
-            </ng-container>
+                        <ng-container *ngFor="let item of menu">
+                            <!-- Rest of the menu items code remains the same -->
+                            <ng-container *ngIf="item.subMenu.length === 0">
+                                <app-menu-item link="{{ item.link }}"
+                                               icon="{{ item.icon }}"
+                                               content-title="{{ item.title }}">
+                                </app-menu-item>
+                            </ng-container>
 
-            <!-- Elemento con sottomenu -->
-            <mat-expansion-panel hideToggle
-                                 *ngIf="item.subMenu.length > 0"
-                                 (opened)="onPanelOpen(item)"
-                                 (closed)="onPanelClose(item)"
-                                 [expanded]="item.expanded">
-              <mat-expansion-panel-header>
-                <mat-panel-title>
-                  <app-menu-item link="{{ item.link }}"
-                                 icon="{{ item.icon }}"
-                                 content-title="{{ item.title }}">
-                  </app-menu-item>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+                            <mat-expansion-panel hideToggle
+                                                 *ngIf="item.subMenu.length > 0"
+                                                 (opened)="onPanelOpen(item)"
+                                                 (closed)="onPanelClose(item)"
+                                                 [expanded]="item.expanded">
+                                <mat-expansion-panel-header>
+                                    <mat-panel-title>
+                                        <app-menu-item link="{{ item.link }}"
+                                                       icon="{{ item.icon }}"
+                                                       content-title="{{ item.title }}">
+                                        </app-menu-item>
+                                    </mat-panel-title>
+                                </mat-expansion-panel-header>
 
-              <ng-template matExpansionPanelContent>
-                <ul *ngFor="let subItem of item.subMenu">
-                  <!-- Subitem senza sottomenu -->
-                  <ng-container *ngIf="!subItem.subMenu || subItem.subMenu.length === 0">
-                    <app-menu-item link="{{ subItem.link }}"
-                                   icon="{{ subItem.icon }}"
-                                   content-title="{{ subItem.title }}">
-                    </app-menu-item>
-                  </ng-container>
+                                <ng-template matExpansionPanelContent>
+                                    <ul *ngFor="let subItem of item.subMenu">
+                                        <ng-container *ngIf="!subItem.subMenu || subItem.subMenu.length === 0">
+                                            <app-menu-item link="{{ subItem.link }}"
+                                                           icon="{{ subItem.icon }}"
+                                                           content-title="{{ subItem.title }}">
+                                            </app-menu-item>
+                                        </ng-container>
 
-                  <!-- Subitem con sottomenu -->
-                  <mat-expansion-panel hideToggle
-                                       *ngIf="subItem.subMenu && subItem.subMenu.length > 0"
-                                       (opened)="onPanelOpen(subItem)"
-                                       (closed)="onPanelClose(subItem)"
-                                       [expanded]="subItem.expanded">
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <app-menu-item link="{{ subItem.link }}"
-                                       icon="{{ subItem.icon }}"
-                                       content-title="{{ subItem.title }}">
-                        </app-menu-item>
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
+                                        <mat-expansion-panel hideToggle
+                                                             *ngIf="subItem.subMenu && subItem.subMenu.length > 0"
+                                                             (opened)="onPanelOpen(subItem)"
+                                                             (closed)="onPanelClose(subItem)"
+                                                             [expanded]="subItem.expanded">
+                                            <mat-expansion-panel-header>
+                                                <mat-panel-title>
+                                                    <app-menu-item link="{{ subItem.link }}"
+                                                                   icon="{{ subItem.icon }}"
+                                                                   content-title="{{ subItem.title }}">
+                                                    </app-menu-item>
+                                                </mat-panel-title>
+                                            </mat-expansion-panel-header>
 
-                    <ng-template matExpansionPanelContent>
-                      <ul *ngFor="let item1 of subItem.subMenu">
-                        <app-menu-item link="{{ item1.link }}"
-                                       icon="{{ item1.icon }}"
-                                       content-title="{{ item1.title }}">
-                        </app-menu-item>
-                      </ul>
-                    </ng-template>
-                  </mat-expansion-panel>
-                </ul>
-              </ng-template>
-            </mat-expansion-panel>
-          </ng-container>
-        </ul>
-      </div>
+                                            <ng-template matExpansionPanelContent>
+                                                <ul *ngFor="let item1 of subItem.subMenu">
+                                                    <app-menu-item link="{{ item1.link }}"
+                                                                   icon="{{ item1.icon }}"
+                                                                   content-title="{{ item1.title }}">
+                                                    </app-menu-item>
+                                                </ul>
+                                            </ng-template>
+                                        </mat-expansion-panel>
+                                    </ul>
+                                </ng-template>
+                            </mat-expansion-panel>
+                        </ng-container>
+                    </ul>
+                </div>
+            </div>
+        </div>
     </div>
-  </div>
 </div>

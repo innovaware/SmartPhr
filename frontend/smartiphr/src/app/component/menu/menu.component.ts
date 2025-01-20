@@ -28,7 +28,8 @@ export class MenuComponent implements OnInit {
   ngOnInit() {
     this.authenticationService.getCurrentUserAsync().subscribe((user: User) => {
       if (user !== undefined && user !== null) {
-        this.username = user.username;
+        this.username = user.firma;
+        console.log(user);
         this.menuService.getMenu().subscribe((items: Menu[]) => {
           this.menu = items.map((item) => {
             item.expanded = false; // Aggiungi proprietà expanded

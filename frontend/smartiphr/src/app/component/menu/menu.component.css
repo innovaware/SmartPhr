@@ -1,31 +1,68 @@
-.header_menu {
-  background-image: url("../../../assets/header.png");
-  background-size: cover;
-}
-
-.header-pad {
-  padding-top: 30px;
-  padding-bottom: 30px;
-}
-
 .body {
   background-color: #2f4050;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
   font-size: 13px;
-  height:100%;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
+/* Fixed header styles */
+.fixed-header {
+  position: sticky;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 98;
+  background-color: #2f4050;
+}
+
+/* Header del menu */
+.header_menu {
+  background-image: url("../../../assets/header.png");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.header-pad {
+  padding: 30px 15px;
+}
+
+/* Scrollable menu styles */
+.scrollable-menu {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(255, 255, 255, 0.2) transparent;
+  margin-top: 0;
+  padding-bottom: 20px;
+}
+
+  .scrollable-menu::-webkit-scrollbar {
+    width: 6px;
+  }
+
+  .scrollable-menu::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  .scrollable-menu::-webkit-scrollbar-thumb {
+    background-color: rgba(255, 255, 255, 0.2);
+    border-radius: 3px;
+  }
+
+/* Spaziature */
 .pad {
   padding-top: 10px;
 }
 
+/* Stili testo */
 .font-bold {
   font-weight: 600;
-  color: #dfe4ed;
-}
-
-.center {
-  text-align: center;
+  color: #ffffff;
 }
 
 .text-muted {
@@ -33,69 +70,96 @@
   display: block !important;
 }
 
-.caret {
-  display: inline-block;
-  width: 0;
-  height: 0;
-  margin-left: 2px;
-  vertical-align: middle;
-  border-top: 4px dashed;
-  border-right: 4px solid transparent;
-  border-left: 4px solid transparent;
-}
-
-li > a {
-  color: #a7b1c2;
-  font-weight: 600;
-  padding: 6px 3px 6px 3px;
-  display: block;
-  text-decoration: none;
-  background-color: transparent;
-}
-
+/* Stili lista menu */
 ul {
   list-style-type: none;
   padding: 0;
+  margin: 0;
 }
 
+/* Stili link menu */
+li > a {
+  color: #a7b1c2;
+  font-weight: 600;
+  padding: 10px 15px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  transition: all 0.3s ease;
+}
+
+  li > a:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: #ffffff;
+  }
+
+/* Icone */
 fa-icon {
-  margin-right: 6px;
+  margin-right: 10px;
+  width: 16px;
+  text-align: center;
+}
+
+/* Stili expansion panel */
+.mat-expansion-panel {
+  background: transparent !important;
+  box-shadow: none !important;
+  color: #a7b1c2 !important;
+}
+
+.mat-expansion-panel-header {
+  padding: 0;
+  height: auto !important;
 }
 
 .mat-expansion-panel-header-title {
-  color: white;
-  margin: unset;
-}
-
-.mat-expansion-panel {
-  background: transparent;
-  color: rgba(0, 0, 0, 0.87);
-  display: unset;
-}
-
-.mat-expansion-panel-header {
-  padding: 0px;
-}
-
-.mat-expansion-panel-header {
-  font-family: inherit;
-  font-size: inherit;
-  font-weight: inherit;
+  color: #a7b1c2;
+  margin: 0;
 }
 
 ::ng-deep .mat-expansion-panel-body {
+  padding: 0 0 0 15px !important;
   color: #a7b1c2;
 }
 
+/* Indicatore menu attivo */
 .menuExpander {
   border-left: 4px solid #19aa8d;
-  border-radius: 0px !important;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-/* .subMenuExpander {
-  border-left: 4px solid transparent !important;
-} */
+/* Container immagine */
+.container img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
 
-/* ::ng-deep .mat-expansion-panel-content {
-  border-left: 4px solid #19aa8d;
-} */
+/* Rimozione bordi default expansion panel */
+::ng-deep .mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: none;
+}
+
+/* Stili per sottomenu */
+::ng-deep .mat-expansion-indicator::after {
+  color: #a7b1c2;
+}
+
+::ng-deep .mat-expansion-panel-header:hover {
+  background: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Rimozione padding default dei panel */
+::ng-deep .mat-expansion-panel-content {
+  margin: 0 !important;
+}
+
+/* Override stili Material per mantenere consistenza colori */
+::ng-deep .mat-expansion-panel-header.mat-expanded {
+  height: auto !important;
+}
+
+  ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
+    background: rgba(255, 255, 255, 0.1) !important;
+  }
