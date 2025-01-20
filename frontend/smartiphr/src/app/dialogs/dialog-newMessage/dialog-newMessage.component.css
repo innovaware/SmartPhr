@@ -1,0 +1,85 @@
+.example-card {
+  min-width: 500px;
+  margin: 0px;
+}
+
+h3 {
+  margin-top: 5px;
+  font-weight: 600;
+  font-size: 16px;
+  color: #676a6c;
+}
+
+.close-icon {
+  transition: 1s ease-in-out;
+}
+
+.close-icon:hover {
+  transform: rotate(180deg);
+}
+
+::ng-deep .icon-outside .close-button {
+  float: right;
+  top: -52px;
+  right: -52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+  overflow: unset;
+}
+
+button,
+select {
+  text-transform: none;
+}
+
+.bottom-actions {
+  width: 100%;
+  text-align: right;
+}
+
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  /* background-color: rgba(0, 0, 0, 0.04); */
+  background-color: white;
+}
+
+.input-full {
+  width: 100%;
+}
+
+
+.pad {
+  padding-left: 6%;
+  padding-top: 3%;
+}
+
+.title {
+  font-size: 30px;
+  line-height: 1.2;
+  color: #676a6c;
+}
+
+
+table {
+  width: 100%;
+}
+
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
+}
+
+.mat-column-action {
+  width: 32px;
+}
+
+
+/* Riga per i messaggi non letti (bianco) */
+.unread-row {
+  background-color: white;
+}
+
+/* Riga per i messaggi letti (grigio chiaro chiaro) */
+.read-row {
+  background-color: lightgrey; /* Un colore grigio chiaro */
+}

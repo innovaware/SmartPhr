@@ -298,6 +298,7 @@ import { DialogSchedaTerapeuticaComponent } from "./dialogs/dialog-schedaTerapeu
 import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
 import { AreaLogComponent } from "./pages/log/area-log.component";
 import { DialogLogComponent } from "./dialogs/dialog-log/dialog-log.component";
+import { DialogNewMessageComponent } from "./dialogs/dialog-newMessage/dialog-newMessage.component";
 
 const materialModules = [
   MatTableModule,
@@ -346,6 +347,7 @@ const dialogModule = [
   DialogDipendenteComponent,
   DialogConsulenteComponent,
   DialogFornitoreComponent,
+  DialogNewMessageComponent,
   DialogCartComponent,
   DialogCartItemComponent,
   DialogAspComponent,
@@ -625,6 +627,7 @@ const pipes = [
     DialogDipendenteComponent,
     DialogConsulenteComponent,
     DialogFornitoreComponent,
+    DialogNewMessageComponent,
     DialogAspComponent,
     DialogMessageErrorComponent,
     DialogPazienteComponent,

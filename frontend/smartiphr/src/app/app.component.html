@@ -1,47 +1,74 @@
 <!-- <app-debug></app-debug> -->
 
-<div class="container-fluid" *ngIf="isAuthenticated">
-  <div class="row">
+<div *ngIf="isAuthenticated" class="app-container">
+    <!-- Header fisso -->
+    <header class="head">
+        <!-- Hamburger Menu -->
+        <button class="hamburger-menu" (click)="toggleMenu()" title="Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-list" viewBox="0 0 16 16">
+                <path fill-rule="evenodd" d="M2.5 12a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5m0-4a.5.5 0 0 1 .5-.5h10a.5.5 0 0 1 0 1H3a.5.5 0 0 1-.5-.5" />
+            </svg>
+        </button>
 
-    <div class="col-3 col-md-2 col-lg-2 col-xl-2 col-xxl-2  without_padding fill-menu" >
-      <app-menu style="width: 100%;"></app-menu>
-    </div>
-
-
-    <div class="col without_padding" style="padding-right: calc(var(--bs-gutter-x) / 2);">
-      <div class="container-flud ">
-        <div class="row head">
-          <div class="col">
-            <input type="text" placeholder="Cerca qualcosa..." class="form-control">
-          </div>
-
-          <div class="col-md-6 col-sm-8" style="text-align: right; padding-right: 30px;">
-            <div class="container-flud ">
-              <div class="row">
-                <div class="col">
-                  <a routerLink="/" routerLinkActive="active" title="Nuovo Messaggio" class="btnAddMess pad pointer"
-                    (click)="newMessage()"> Nuovo Messaggio </a>
-                  <span class="pad welcome-message">Benvenuto in SmartiPHR</span>
-                  <a class="pointer" (click)="logout()" routerLinkActive="active" title="Chiudi Sessione">
-                    <fa-icon icon="sign-out-alt"></fa-icon>
-                    Log out
-                  </a>
-                </div>
-              </div>
+        <!-- Area Azioni -->
+        <div class="actions-area">
+            <!-- Notifiche -->
+            <div class="notification-icon">
+                <fa-icon [icon]="['fas', 'bell']"
+                         size="lg"
+                         class="pointer"
+                         (click)="openNotifications()"
+                         title="Notifiche">
+                </fa-icon>
+                <span *ngIf="numNotifiche > 0" class="notification-badge">
+                    {{ numNotifiche }}
+                </span>
             </div>
-          </div>
-        </div>
 
-        <div class="row">
-          <router-outlet class="content-page"></router-outlet>
+            <!-- Nuovo Messaggio -->
+            <button mat-button
+                    class="btn btn-primary"
+                    (click)="newMessage()"
+                    title="Nuovo Messaggio">
+                <fa-icon [icon]="['fas', 'envelope']"></fa-icon>
+                <span>Nuovo Messaggio</span>
+            </button>
+
+            <!-- Logout -->
+            <a class="text-danger"
+               (click)="logout()"
+               title="Chiudi Sessione">
+                <fa-icon [icon]="['fas', 'sign-out-alt']"></fa-icon>
+                <span>Log out</span>
+            </a>
         </div>
-      </div>
-    </div>
-  </div>
+    </header>
+
+    <!-- Menu Laterale -->
+    <nav class="side-menu" [class.open]="isMenuOpen">
+        <!-- Pulsante chiusura menu -->
+        <button class="close-menu" (click)="toggleMenu()" title="Chiudi menu">
+            <fa-icon [icon]="['fas', 'times']"></fa-icon>
+        </button>
+        <app-menu></app-menu>
+    </nav>
+
+    <!-- Contenuto Principale -->
+    <main class="main-content">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-12">
+                    <router-outlet></router-outlet>
+                </div>
+            </div>
+        </div>
+    </main>
 </div>
 
+
+
 <div *ngIf="!isAuthenticated">
-  <router-outlet class="content-page"></router-outlet>
+    <router-outlet class="content-page"></router-outlet>
 </div>
 
 

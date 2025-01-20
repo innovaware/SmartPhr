@@ -1,0 +1,214 @@
+<div mat-dialog-title>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col">
+                <h3 *ngIf="data.new">Nuovo Messaggio</h3>
+                <h3 *ngIf="data.view">Centro Messaggi</h3>
+                <h3 *ngIf="data.read"> Da: {{data.messaggio.mittente}}:{{data.messaggio.oggetto}}</h3>
+            </div>
+            <div class="col right">
+                <button mat-button mat-dialog-close *ngIf="!data.auto">X</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col">
+                <hr>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-container *ngIf="data.new">
+    <mat-dialog-content>
+        <mat-tab-group mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
+            <mat-tab label="Invia a Singoli destinatari">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field class="w-100">
+                                <mat-label>Seleziona Destinatari</mat-label>
+                                <mat-select multiple [(ngModel)]="destinatari" [compareWith]="compareDipendenti">
+                                    <mat-option *ngFor="let dip of dipendenti" [value]="dip">
+                                        {{dip.nome}} {{dip.cognome}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-label>Oggetto*: </mat-label>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput type="text" placeholder="Oggetto" [(ngModel)]="mess.oggetto">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-label>Corpo*: </mat-label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <textarea matInput rows="2" [(ngModel)]="mess.corpo" placeholder="Corpo del messaggio"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <hr>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </mat-tab>
+            <mat-tab label="Invio per Gruppi">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field class="w-100">
+                                <mat-label>Seleziona Destinatari</mat-label>
+                                <mat-select multiple [(ngModel)]="DestinatariMansioni">
+                                    <mat-option *ngFor="let man of mansioni" [value]="man._id">
+                                        {{man.descrizione}}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-label>Oggetto: </mat-label>
+                        </div>
+                        <div class="col">
+                            <mat-form-field>
+                                <input matInput type="text" placeholder="Oggetto" [(ngModel)]="mess.oggetto">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-label>Corpo: </mat-label>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <mat-form-field>
+                                <textarea matInput rows="2" [(ngModel)]="mess.corpo" placeholder="Corpo del messaggio"></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <hr>
+                        </div>
+                    </div>
+                    <br />
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </mat-dialog-content>
+
+    <div mat-dialog-actions>
+        <div class="bottom-actions">
+            <button mat-button class="btn btn-primary" [mat-dialog-close]="true" (click)="invia()" *ngIf="data.new">Invia</button>
+            <button mat-button [mat-dialog-close]="true" *ngIf="!data.auto">Chiudi</button>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="data.view">
+
+
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8" style="width: 100%;">
+
+        <!-- Definizione delle colonne -->
+        <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef>
+            </th>
+            <td mat-cell *matCellDef="let row" style="text-align: right;">
+                <button mat-button (click)="readMessage(row)" title="Leggi">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-eye-fill" viewBox="0 0 16 16">
+                        <path d="M10.5 8a2.5 2.5 0 1 1-5 0 2.5 2.5 0 0 1 5 0" />
+                        <path d="M0 8s3-5.5 8-5.5S16 8 16 8s-3 5.5-8 5.5S0 8 0 8m8 3.5a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7" />
+                    </svg>
+
+                </button>
+            </td>
+        </ng-container>
+
+        <ng-container matColumnDef="data">
+            <th mat-header-cell *matHeaderCellDef> Data </th>
+            <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy':'UTC'}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="mittente">
+            <th mat-header-cell *matHeaderCellDef> Mittente </th>
+            <td mat-cell *matCellDef="let element"> {{element.mittente}} </td>
+        </ng-container>
+
+        <ng-container matColumnDef="oggetto">
+            <th mat-header-cell *matHeaderCellDef> Oggetto </th>
+            <td mat-cell *matCellDef="let element"> {{element.oggetto}} </td>
+        </ng-container>
+
+        <!-- Definizione delle righe -->
+        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;" [ngClass]="{'unread-row': !row.letto, 'read-row': row.letto}"></tr>
+    </table>
+    <div *ngIf="dataSource.data.length === 0" class="text-center">
+        Nessun messaggio disponibile
+    </div>
+    <div>
+        <mat-paginator #paginatorMessaggi [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+    </div>
+    <div mat-dialog-actions>
+        <div class="bottom-actions">
+            <button mat-button [mat-dialog-close]="true" *ngIf="!data.auto">Chiudi</button>
+        </div>
+    </div>
+</ng-container>
+
+<ng-container *ngIf="data.read">
+    <div class="row">
+        <div class="col-2">
+            <mat-label>Da:</mat-label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" [ngModel]="data.messaggio.mittente" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <mat-label>A:</mat-label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" [ngModel]="data.messaggio.destinatario" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <mat-label>Oggetto:</mat-label>
+        </div>
+        <div class="col">
+            <input type="text" class="form-control" [ngModel]="data.messaggio.oggetto" readonly>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-2">
+            <mat-label>Messaggio:</mat-label>
+        </div>
+        <div class="col">
+            <textarea class="form-control" [ngModel]="data.messaggio.corpo" readonly></textarea>
+        </div>
+    </div>
+    <div mat-dialog-actions>
+        <div class="bottom-actions">
+            <button mat-button [mat-dialog-close]="true" *ngIf="!data.auto">Chiudi</button>
+        </div>
+    </div>
+</ng-container>

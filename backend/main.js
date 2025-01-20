@@ -271,6 +271,12 @@ const InitApiFunctions = () => {
     app.use(apiMansioni.path, logHandler, authorizationHandler, roleHandler, mansioniRouter);
     routesList.push(apiMansioni);
 
+    // newMessage API
+    var newMessageRouter = require("./routes/newMessage");
+    var apiNewMessage = { key: 'newMessage', path: '/api/newMessage' }
+    app.use(apiNewMessage.path, logHandler, authorizationHandler, roleHandler, newMessageRouter);
+    routesList.push(apiNewMessage);
+
     // Upload and Download
     var uploadRouter = require("./routes/upload");
     var apiUpload = { key: 'upload', path: '/api/upload' }
