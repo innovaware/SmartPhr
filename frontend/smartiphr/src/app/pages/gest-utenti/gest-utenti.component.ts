@@ -6,6 +6,7 @@ import { Dipendenti } from "src/app/models/dipendenti";
 import { MessagesService } from "src/app/service/messages.service";
 import { DipendentiService } from "src/app/service/dipendenti.service";
 import { DialogQuestionComponent } from "../../dialogs/dialog-question/dialog-question.component";
+import { AuthenticationService } from "../../service/authentication.service";
 
 @Component({
   selector: "app-gest-utenti",
@@ -106,7 +107,8 @@ export class GestUtentiComponent implements OnInit {
   constructor(
     public dialog: MatDialog,
     public messageService: MessagesService,
-    public dipendentiService: DipendentiService
+    public dipendentiService: DipendentiService,
+    private AuthServ: AuthenticationService,
   ) {
     this.dipendenti = [];
   }
@@ -115,7 +117,10 @@ export class GestUtentiComponent implements OnInit {
 
   ngAfterViewInit() {
     this.dipendentiService.get().then((dip: Dipendenti[]) => {
-      this.dipendenti = dip;
+      if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+        this.dipendenti = dip;
+      else
+        this.dipendenti = dip.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
 
       this.eventsSubject.next(this.dipendenti);
     });
@@ -194,7 +199,10 @@ export class GestUtentiComponent implements OnInit {
       }
       else {
         this.dipendentiService.get().then((paz: Dipendenti[]) => {
-          this.dipendenti = paz;
+          if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+            this.dipendenti = paz;
+          else
+            this.dipendenti = paz.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
           this.eventsSubject.next(this.dipendenti);
         });
       }

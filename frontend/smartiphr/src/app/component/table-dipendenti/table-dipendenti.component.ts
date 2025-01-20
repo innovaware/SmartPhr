@@ -13,6 +13,7 @@ import { MessagesService } from 'src/app/service/messages.service';
 import { User } from "src/app/models/user";
 import { UsersService } from "src/app/service/users.service";
 import { DinamicButton } from "../../models/dinamicButton";
+import { AuthenticationService } from "../../service/authentication.service";
 
 @Component({
   selector: 'app-table-dipendenti',
@@ -64,10 +65,13 @@ export class TableDipendentiComponent implements OnInit {
     public messageService: MessagesService,
     public dipendentiService: DipendentiService,
     public usersService: UsersService,
+    private AuthServ: AuthenticationService,
   ) {
     this.dipendentiService.get().then((result) => {
+      if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010") 
       this.dipendenti = result;
-
+      else
+        this.dipendenti = result.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
       this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
       this.dataSource.paginator = this.paginator;
     });
@@ -167,7 +171,10 @@ ngOnDestroy() {
     dialogRef.afterClosed().subscribe((result) => {
       
       this.dipendentiService.get().then((resulta) => {
-        this.dipendenti = resulta;
+        if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+          this.dipendenti = resulta;
+        else
+          this.dipendenti = resulta.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
         this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
         this.dataSource.paginator = this.paginator;
       });

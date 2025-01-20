@@ -1,3 +1,4 @@
+/* menu.component.css */
 .body {
   background-color: #2f4050;
   font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -86,6 +87,7 @@ li > a {
   align-items: center;
   text-decoration: none;
   transition: all 0.3s ease;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
   li > a:hover {
@@ -105,6 +107,7 @@ fa-icon {
   background: transparent !important;
   box-shadow: none !important;
   color: #a7b1c2 !important;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .mat-expansion-panel-header {
@@ -115,11 +118,13 @@ fa-icon {
 .mat-expansion-panel-header-title {
   color: #a7b1c2;
   margin: 0;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 ::ng-deep .mat-expansion-panel-body {
   padding: 0 0 0 15px !important;
   color: #a7b1c2;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 /* Indicatore menu attivo */
@@ -163,3 +168,23 @@ fa-icon {
   ::ng-deep .mat-expansion-panel-header.mat-expanded:hover {
     background: rgba(255, 255, 255, 0.1) !important;
   }
+
+/* menu-item.component.css */
+li > a {
+  color: #a7b1c2;
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 600;
+  padding: 6px 3px 6px 10px;
+  display: block;
+  text-decoration: none;
+  background-color: transparent;
+}
+
+ul {
+  list-style-type: none;
+  padding: 0
+}
+
+fa-icon {
+  margin-right: 6px;
+}

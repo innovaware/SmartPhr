@@ -5,6 +5,7 @@ import { DipendentiService } from 'src/app/service/dipendenti.service';
 import { Mansione } from 'src/app/models/mansione';
 import { MansioniService } from 'src/app/service/mansioni.service';
 import { MatDialogRef } from '@angular/material/dialog';
+import { AuthenticationService } from '../../service/authentication.service';
 
 @Component({
   selector: 'app-dipendente-generale',
@@ -20,7 +21,11 @@ export class DipendenteGeneraleComponent implements OnInit {
 
   mansioni: Mansione[] = [];
 
-  constructor(public mansioniService: MansioniService, public dialogRef: MatDialogRef<DipendenteGeneraleComponent>,)
+  constructor(
+    public mansioniService: MansioniService,
+    public dialogRef: MatDialogRef<DipendenteGeneraleComponent>,
+    private AuthServ: AuthenticationService,
+  )
   {
     dialogRef.disableClose = true;
   }
@@ -28,7 +33,11 @@ export class DipendenteGeneraleComponent implements OnInit {
 
   ngOnInit() {
     this.mansioniService.get().then((result) => {
-      this.mansioni = result;
+     
+      if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+        this.mansioni = result;
+      else
+        this.mansioni = result.filter(x => x._id != "66aa1532b6f9db707c1c2010");
     });
   }
 
