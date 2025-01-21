@@ -71,6 +71,9 @@ export class DialogPazienteComponent implements OnInit {
     public schedaServ: SchedaTerapeuticaService,
     public dialog: MatDialog
   ) {
+    this.dialogRef.addPanelClass('fornitore-dialog-container');
+    this.dialogRef.updateSize('90%', '90%');
+    this.dialogRef.updatePosition({ top: '24px' });
     this.uploading = false;
     this.paziente = this.data.paziente;
     this.newItem = this.data.newItem || false;

@@ -36,7 +36,16 @@ export class AdminFornitoriComponent implements OnInit {
     console.log("Show scheda fornitore:", data);
     var dialogRef = this.dialog.open(DialogFornitoreComponent, {
       data: { fornitore: data, readonly: false },
-      width: "1024px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
   }
 
@@ -54,6 +63,16 @@ export class AdminFornitoriComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogFornitoreComponent, {
       data: { fornitore: fornitore, readonly: true, newItem: true },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
 
     dialogRef.afterClosed().subscribe((result) => {

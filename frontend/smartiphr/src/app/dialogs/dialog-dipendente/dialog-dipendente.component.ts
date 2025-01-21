@@ -201,6 +201,9 @@ export class DialogDipendenteComponent implements OnInit {
     private presenzeService: PresenzeService,
 
   ) {
+    this.dialogRef.addPanelClass('fornitore-dialog-container');
+    this.dialogRef.updateSize('90%', '90%');
+    this.dialogRef.updatePosition({ top: '24px' });
     this.uploading = false;
     this.dipendente = this.data.dipendente;
     this.newItem = this.data.newItem || false;

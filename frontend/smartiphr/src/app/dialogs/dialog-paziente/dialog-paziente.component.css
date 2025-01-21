@@ -1,3 +1,51 @@
+/* Stili per il container della dialog */
+::ng-deep .mat-dialog-container {
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Stile per l'header della dialog */
+:host ::ng-deep .mat-dialog-title {
+  margin: 0;
+  padding: 16px;
+  background-color: white;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+}
+
+/* Contenitore principale per il contenuto scrollabile */
+:host ::ng-deep .mat-dialog-content {
+  max-height: 75vh !important;
+  margin: 0;
+  padding: 0;
+  overflow: auto !important;
+}
+
+/* Stile per il tab group */
+:host ::ng-deep .mat-tab-body-wrapper {
+  padding: 16px;
+}
+
+/* Stile per mantenere i tabs sempre visibili */
+:host ::ng-deep .mat-tab-header {
+  background-color: white;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Stile per il footer con i pulsanti */
+:host ::ng-deep .mat-dialog-actions {
+  padding: 16px;
+  margin: 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  background-color: white;
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+}
+
 .success {
   color: green;
 }
@@ -79,4 +127,20 @@ input[type="file" i] {
 
 .upload-button {
   top: -12px;
+}
+
+.table-container {
+  overflow-x: auto;
+  margin: 16px 0;
+}
+
+mat-tab-group {
+  height: 100%;
+}
+
+.bottom-actions {
+  width: 100%;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
 }

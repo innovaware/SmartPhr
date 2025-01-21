@@ -68,6 +68,9 @@ export class DialogFornitoreComponent implements OnInit {
     public messageService: MessagesService,
     public dialog: MatDialog
   ) {
+    this.dialogRef.addPanelClass('fornitore-dialog-container');
+    this.dialogRef.updateSize('90%', '90%');
+    this.dialogRef.updatePosition({ top: '24px' });
     this.uploading = false;
     this.fornitore = this.data.fornitore;
     this.newItem = this.data.newItem || false;
