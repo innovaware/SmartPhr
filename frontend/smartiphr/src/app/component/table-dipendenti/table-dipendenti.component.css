@@ -36,4 +36,117 @@
   .action-button {
     margin-right: 10px
   }
-  
+
+/* Stili globali per il dialog */
+.large-dialog {
+  .mat-dialog-container
+
+{
+  padding: 24px;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.mat-dialog-content {
+  max-height: calc(95vh - 120px); /* Altezza massima considerando header e footer */
+  overflow-x: hidden;
+  margin: 0;
+  padding: 20px 0;
+}
+
+/* Adattamenti responsive */
+@media screen and (min-width: 1200px) {
+  .mat-dialog-container {
+    padding: 32px;
+  }
+}
+
+@media screen and (max-width: 1199px) {
+  .mat-dialog-container {
+    padding: 24px;
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .mat-dialog-container {
+    padding: 16px;
+  }
+}
+
+}
+
+/* Aggiornamento degli stili del form all'interno del dialog */
+.employee-form-container {
+  max-width: 100%; /* Rimuove il limite di larghezza precedente */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.form-section {
+  margin: 0;
+  height: 100%;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1.5rem;
+}
+
+/* Migliora la leggibilità dei campi di input */
+.form-input, mat-form-field {
+  font-size: 1.1rem;
+  line-height: 1.5;
+}
+
+/* Styling per i titoli delle sezioni */
+.form-header h4 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-field h5 {
+  font-size: 1.1rem;
+  margin-bottom: 0.5rem;
+}
+
+/* Migliora la visibilità dei radio button */
+.gender-radio-group {
+  .mat-radio-button
+
+{
+  margin-right: 20px;
+  .mat-radio-label-content
+
+{
+  font-size: 1.1rem;
+}
+
+}
+}
+
+/* Ottimizzazioni per schermi molto grandi */
+@media screen and (min-width: 1600px) {
+  .form-input, mat-form-field {
+    font-size: 1.2rem;
+  }
+
+  .form-header h4 {
+    font-size: 1.8rem;
+  }
+
+  .form-field h5 {
+    font-size: 1.3rem;
+  }
+}
+
+::ng-deep .scrollable-dialog .mat-dialog-container {
+  overflow: auto;
+  padding: 24px;
+}
+
+::ng-deep .scrollable-dialog {
+  display: flex;
+  flex-direction: column;
+}

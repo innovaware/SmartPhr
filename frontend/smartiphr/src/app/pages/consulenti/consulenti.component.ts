@@ -116,6 +116,16 @@ export class ConsulentiComponent implements OnInit {
         isNew: true,
         readonly: false,
       },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
 
     if (dialogRef != undefined)
@@ -134,6 +144,15 @@ export class ConsulentiComponent implements OnInit {
     var dialogRef = this.dialog.open(DialogConsulenteComponent, {
       data: { consulente: consulente, readonly: false },
       width: "1024px",
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
   }
 

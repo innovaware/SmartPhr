@@ -138,7 +138,16 @@ export class GestUtentiComponent implements OnInit {
     console.log("Show scheda dipendente:", dipendente);
     var dialogRef = this.dialog.open(DialogDipendenteComponent, {
       data: { dipendente: dipendente, readonly: false },
-      width: "1024px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
   }
 
@@ -180,6 +189,16 @@ export class GestUtentiComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogDipendenteComponent, {
       data: { dipendenti: dataDip, readonly: true, newItem: true },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
 
     dialogRef.afterClosed().subscribe((result) => {

@@ -55,3 +55,127 @@ input:disabled {
 .mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex {
   background-color: rgb(255, 255, 255);
 }
+
+/* Container principale */
+.ospite-form-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Header del form */
+.form-header {
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
+}
+
+  .form-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+  }
+
+/* Contenuto del form */
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Sezioni del form */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 16px;
+  background-color: #f9f9f9;
+  border-radius: 6px;
+}
+
+/* Righe del form */
+.form-row {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+/* Campi del form */
+.form-field {
+  flex: 1;
+  min-width: 250px;
+}
+
+  .form-field h5 {
+    margin: 0 0 8px 0;
+    color: #555;
+    font-size: 0.9rem;
+    font-weight: 500;
+  }
+
+/* Input e textarea */
+.form-input {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+.form-textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  resize: vertical;
+  min-height: 80px;
+}
+
+/* Campo a larghezza piena */
+.full-width {
+  flex: 0 0 100%;
+}
+
+/* Gruppo radio per il genere */
+.gender-radio-group {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* Stili per mat-form-field (date picker) */
+mat-form-field {
+  width: 100%;
+}
+
+/* Footer del form */
+.form-footer {
+  margin-top: 24px;
+  padding-top: 16px;
+  border-top: 1px solid #eee;
+}
+
+.required-note {
+  color: #666;
+  font-size: 0.85rem;
+}
+
+/* Stili per gli input disabilitati */
+.form-input:disabled,
+.form-textarea:disabled {
+  background-color: #f5f5f5;
+  cursor: not-allowed;
+}
+
+/* Stili responsive */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-field {
+    min-width: 100%;
+  }
+}

@@ -86,28 +86,6 @@ export class TableDipendentiComponent implements OnInit {
     if (this.deletePatientEmiter !== undefined) {
       this.deletePatientEmiter.emit(row);
     }
-  //const index = i;
-  //console.log("Dipendente da cancellare index: ", index);
-  //if (window.confirm("Sei sicuro di voler eliminare questo dipendente?")) {
-  //  this.dipendentiService
-  //  .remove(row)
-  //  .then((x) => {
-  //    console.log("Dipendente cancellato");
-      
-      
-  //      if (index > -1) {
-  //        this.dipendenti.splice(index, 1);
-  //      }
-
-  //      this.dataSource.data = this.dipendenti;
-  //  })
-  //  .catch((err) => {
-  //    this.messageService.showMessageError(
-  //      "Errore nella cancellazione Dipendente"
-  //    );
-  //    console.error(err);
-  //  });
-  //}
 }
 
 ngOnInit() {
@@ -147,8 +125,7 @@ ngOnDestroy() {
       dataNascita: undefined,
       indirizzoResidenza: "",
       comuneResidenza: "",
-      //luogoResidenza: "",
-      sesso:"",
+      sesso: "",
       provinciaResidenza: "",
       titoloStudio: "",
       mansione: "",
@@ -166,10 +143,19 @@ ngOnDestroy() {
 
     const dialogRef = this.dialog.open(DialogDipendenteComponent, {
       data: { dipendente: dipendente, readonly: false, newItem: true },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
 
     dialogRef.afterClosed().subscribe((result) => {
-      
       this.dipendentiService.get().then((resulta) => {
         if (this.AuthServ.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
           this.dipendenti = resulta;
@@ -178,67 +164,26 @@ ngOnDestroy() {
         this.dataSource = new MatTableDataSource<Dipendenti>(this.dipendenti);
         this.dataSource.paginator = this.paginator;
       });
-
-      //if (dialogRef != undefined)
-      //  dialogRef.afterClosed().subscribe((result) => {
-      //    console.log("The dialog was closed");
-      //    if (result != undefined) {
-      //      this.dipendenti.push(result);
-      //      this.dataSource.data = this.dipendenti;
-      //      console.log("Inserito consulente", result);
-      //    }
-      //  });
-      //else {
-      //  this.dipendentiService.get().then((paz: Dipendenti[]) => {
-      //    this.dipendenti = paz;
-      //    this.eventsSubject.next(this.dipendenti);
-      //  });
-      //}
     });
-
   }
 
   async show(dipendente: Dipendenti) {
-
     console.log("Show scheda dipendente:", dipendente);
     var dialogRef = this.dialog.open(DialogDipendenteComponent, {
       data: { dipendente: dipendente, readonly: false },
-      width: "1024px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
   }
 
-
-  //async deleteDipendente(dipendente: Dipendenti) {
-  //  console.log("Cancella dipendente:", dipendente);
-
-  //  this.dialog
-  //    .open(DialogQuestionComponent, {
-  //      data: { message: "Cancellare il dipendente?" },
-  //      //width: "600px",
-  //    })
-  //    .afterClosed()
-  //    .subscribe((result) => {
-  //      if (result == true) {
-  //        this.dipendentiService
-  //          .remove(dipendente)
-  //          .then(() => {
-  //            console.log("Eliminazione eseguita con successo", result);
-  //            const index = this.dipendenti.indexOf(dipendente);
-  //            if (index > -1) {
-  //              this.dipendenti.splice(index, 1);
-  //            }
-  //            this.dataSource.data = this.dipendenti;
-  //            //this.dataSource.paginator = this.paginator;
-  //          }),
-  //          (err) => {
-  //            console.error("Errore nell'eliminazione", err);
-  //          };
-  //      } else {
-  //        console.log("Cancellazione dipendente annullata");
-  //        this.messageService.showMessageError("Cancellazione dipendente Annullata");
-  //      }
-  //    });
-  //}
 
   cleanSearchField() {
     this.dataSource.filter = undefined;

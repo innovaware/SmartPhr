@@ -141,3 +141,221 @@ table {
   margin-bottom: 10px; /* Added */
   box-shadow: 0px 2px 1px -1px rgba(0, 0, 0, 0.2), 0px 1px 1px 0px rgba(0, 0, 0, 0.14), 3px 2px 16px 0px rgba(0, 0, 0, 0.48);
 }
+
+/* Dialog Container */
+.dialog-container {
+  max-height: 85vh;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Header */
+.dialog-header {
+  padding: 16px 24px;
+  background-color: #f5f5f5;
+  border-bottom: 1px solid #e0e0e0;
+  .consultant-name
+
+{
+  margin: 0;
+  font-size: 1.5rem;
+  color: #333;
+}
+
+}
+
+/* Tab Content */
+.tab-content {
+  padding: 24px;
+}
+
+/* Form Grid */
+.form-grid {
+  display: grid;
+  gap: 20px;
+  .form-row
+
+{
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+}
+
+/* Form Fields */
+.mat-form-field {
+  width: 100%;
+  &.search-field
+
+{
+  margin-bottom: 16px;
+}
+
+}
+
+/* Gender Group */
+.gender-group {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  .gender-label
+
+{
+  color: rgba(0, 0, 0, 0.6);
+  margin-right: 8px;
+}
+
+.mat-radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+}
+
+/* Action Area */
+.action-area {
+  margin-bottom: 24px;
+  button
+
+{
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+}
+
+/* Upload Form */
+.upload-form {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+  padding: 24px;
+  margin-bottom: 24px;
+  .upload-area
+
+{
+  display: grid;
+  gap: 16px;
+}
+
+.file-input {
+  padding: 16px;
+  border: 2px dashed #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  &:hover
+
+{
+  border-color: #2196F3;
+  background-color: rgba(33, 150, 243, 0.04);
+}
+
+}
+}
+
+/* Loading Indicator */
+.loading-indicator {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background-color: #fff;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+/* Table Container */
+.table-container {
+  margin-top: 24px;
+  .mat-table
+
+{
+  width: 100%;
+  background: white;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  .mat-header-cell
+
+{
+  background-color: #f5f5f5;
+  color: rgba(0, 0, 0, 0.87);
+  font-weight: 500;
+}
+
+.mat-cell {
+  color: rgba(0, 0, 0, 0.87);
+}
+
+.action-cell {
+  width: 100px;
+  text-align: right;
+  padding-right: 16px;
+}
+
+}
+}
+
+/* No Data Message */
+.no-data {
+  text-align: center;
+  padding: 32px;
+  color: rgba(0, 0, 0, 0.54);
+  background-color: #f5f5f5;
+  border-radius: 4px;
+  font-style: italic;
+}
+
+/* Search Bar */
+.search-bar {
+  margin-bottom: 24px;
+}
+
+/* Dialog Actions */
+.mat-dialog-actions {
+  padding: 16px 24px;
+  border-top: 1px solid #e0e0e0;
+  margin: 0;
+  gap: 8px;
+}
+
+/* Responsive Adjustments */
+@media (max-width: 768px) {
+  .dialog-container {
+    max-height: 100vh;
+  }
+
+  .form-grid .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .mat-dialog-actions {
+    flex-direction: column;
+    padding: 16px;
+    button
+
+{
+  width: 100%;
+}
+
+}
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #888;
+  border-radius: 4px;
+}
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #555;
+  }

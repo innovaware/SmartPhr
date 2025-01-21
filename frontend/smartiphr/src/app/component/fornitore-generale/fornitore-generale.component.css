@@ -55,4 +55,144 @@
   .mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex {
     background-color: rgb(255, 255, 255);
   }
-  
+
+
+.employee-form-container {
+  padding: 1.5rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.form-header {
+  margin-bottom: 2rem;
+}
+
+  .form-header h4 {
+    color: #333;
+    margin: 0;
+  }
+
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  padding: 1.5rem;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+  .form-field h5 {
+    margin: 0;
+    color: #555;
+    font-weight: 500;
+    font-size: 12px;
+  }
+
+.form-input {
+  padding: 0.75rem;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 1rem;
+  width: 100%;
+  transition: border-color 0.2s;
+}
+
+  .form-input:focus {
+    border-color: #1976d2;
+    outline: none;
+  }
+
+  .form-input:disabled {
+    background-color: #fff;
+    cursor: default;
+    border: unset;
+    color: #000;
+  }
+
+.gender-radio-group {
+  display: flex;
+  gap: 1rem;
+  padding: 0.5rem 0;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.form-footer {
+  margin-top: 2rem;
+  padding: 1rem;
+  background-color: #fff;
+  border-radius: 4px;
+}
+
+.required-note {
+  color: #f44336;
+  font-size: 0.9rem;
+}
+
+/* Material Design Overrides */
+::ng-deep .mat-input-element:disabled,
+.mat-form-field-type-mat-native-select.mat-form-field-disabled
+.mat-form-field-infix::after {
+  color: #000;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-inner-circle {
+  background-color: #000;
+}
+
+::ng-deep
+.mat-radio-button.mat-radio-disabled.mat-radio-checked
+.mat-radio-outer-circle,
+.mat-radio-button.mat-radio-disabled .mat-radio-outer-circle {
+  border-color: #000;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+  color: #000;
+}
+
+::ng-deep .mat-radio-label {
+  padding-right: 20px;
+}
+
+::ng-deep
+.mat-form-field-appearance-fill.mat-form-field-disabled .mat-form-field-flex {
+  background-color: #fff;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .employee-form-container {
+    padding: 1rem;
+  }
+
+  .form-section {
+    padding: 1rem;
+  }
+
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+}

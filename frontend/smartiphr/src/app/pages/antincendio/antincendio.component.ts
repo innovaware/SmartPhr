@@ -59,10 +59,14 @@ export class AntincendioComponent implements OnInit {
 
   constructor(
     public dialog: MatDialog,
-    public messageService: MessagesService, public docService: DocumentiService,
-    public uploadService: UploadService, public dipendenteService: DipendentiService, public authenticationService: AuthenticationService,
+    public messageService: MessagesService,
+    public docService: DocumentiService,
+    public uploadService: UploadService,
+    public dipendenteService: DipendentiService,
+    public authenticationService: AuthenticationService,
     public nominaService: NominaDipendentiService,
-    public mansioniService: MansioniService) {
+    public mansioniService: MansioniService)
+  {
     this.loadUser();
     this.allDipendenti = [];
     this.dataSource = [];
@@ -107,7 +111,10 @@ export class AntincendioComponent implements OnInit {
 
   loadDipendenti() {
     this.dipendenteService.get().then((res) => {
-      this.allDipendenti = res;
+      if (this.authenticationService.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+        this.allDipendenti = res;
+      else
+        this.allDipendenti = res.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
     });
     this.dataSource.forEach((data) => {
       const index = this.allDipendenti.findIndex(d => d._id === data.dipendente._id);
@@ -128,7 +135,10 @@ export class AntincendioComponent implements OnInit {
         ))
       )
       .subscribe(filteredDipendenti => {
-        this.allDipendenti = filteredDipendenti;
+          if (this.authenticationService.getCurrentUser().role == "66aa1532b6f9db707c1c2010")
+            this.allDipendenti = filteredDipendenti;
+          else
+            this.allDipendenti = filteredDipendenti.filter(x => x.mansione != "66aa1532b6f9db707c1c2010");
       });
   }
 

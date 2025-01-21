@@ -42,7 +42,16 @@ export class AdminPazientiComponent implements OnInit {
     console.log("Show scheda paziente:", paziente);
     var dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: false },
-      width: "1024px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
   }
 
@@ -60,6 +69,17 @@ export class AdminPazientiComponent implements OnInit {
 
     const dialogRef = this.dialog.open(DialogPazienteComponent, {
       data: { paziente: paziente, readonly: true, newItem: true },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
+    });
+
+    dialogRef.backdropClick().subscribe(() => {
+      dialogRef.close();  // This ensures the dialog closes on backdrop click
     });
 
     dialogRef.afterClosed().subscribe((result) => {
@@ -136,6 +156,16 @@ export class AdminPazientiComponent implements OnInit {
         console.log("Area amministrativa pazienti");
         const dialogRef = this.dialog.open(DialogPazienteComponent, {
           data: { paziente: paziente, readonly: true },
+          width: '95%',
+          maxWidth: '800px',
+          height: 'auto',
+          maxHeight: '90vh',
+          panelClass: ['large-dialog', 'scrollable-dialog'],
+          disableClose: false,
+          autoFocus: true
+        });
+        dialogRef.backdropClick().subscribe(() => {
+          dialogRef.close();  // This ensures the dialog closes on backdrop click
         });
 
         if (dialogRef != undefined)

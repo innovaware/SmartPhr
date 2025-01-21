@@ -1,9 +1,4 @@
 <div class="containter pad">
-  <div class="row" *ngIf="showInsert">
-    <div class="col">
-      <button mat-raised-button class="button-insert" (click)="insert()">Inserisci Dipendente</button>
-    </div>
-  </div>
 
 
   <div class="row">
@@ -25,8 +20,13 @@
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
+            <th mat-header-cell *matHeaderCellDef>
+                <button mat-button class="btn" (click)="insert()" title="Crea nuovo dipendente" style="margin-left: 33px;">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
+                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
+                    </svg>
+                </button>
+            </th>
           <td mat-cell *matCellDef="let row;let i = index;">
             <!--                 <button *ngFor="let item of buttons" mat-raised-button color="accent" class="action-button" (click)="call(row, item)">{{item}}</button>
 
