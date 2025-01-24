@@ -139,65 +139,34 @@ router.post("/", async (req, res) => {
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        if (id == undefined || id === "undefined") {
-            console.log("Error id is not defined ", id);
-            res.status(404).json({ Error: "Id not defined" });
-            return;
+        if (!id || id === "undefined") {
+            return res.status(404).json({ Error: "Id not defined" });
         }
-
 
         const consulenti = await Consulenti.updateOne(
             { _id: id },
             {
                 $set: {
-                    cognome: req.body.cognome,
-                    nome: req.body.nome,
-                    codiceFiscale: req.body.codiceFiscale,
-                    dataNascita: req.body.dataNascita,
-                    comuneNascita: req.body.comuneNascita,
-                    provinciaNascita: req.body.provinciaNascita,
-                    indirizzoNascita: req.body.indirizzoNascita,
-                    indirizzoResidenza: req.body.indirizzoResidenza,
-                    comuneResidenza: req.body.comuneResidenza,
-                    provinciaResidenza: req.body.provinciaResidenza,
-                    mansione: req.body.mansione,
-                    tipologiaContratto: req.body.tipologiaContratto,
-                    telefono: req.body.telefono,
-                    email: req.body.email,
-                    sesso: req.body.sesso,
+                    ...req.body,
                     dataUltimaModifica: new Date()
-                },
+                }
             }
         );
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `CONSULENTIBY${id}`;
-            redisClient.del(searchTerm);
-        }
-
         const user = res.locals.auth;
-
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendente = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
-            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatore: `${dipendente.nome} ${dipendente.cognome}`,
             operatoreID: user.dipendenteID,
             className: "Consulenti",
-            operazione: "Modifica consulente " + consulente.nome + " " + consulente.cognome,
+            operazione: `Modifica consulente ${consulente.nome} ${consulente.cognome}`,
         });
-        console.log("log: ", log);
-        const resultLog = await log.save();
 
-        res.status(200);
-        res.json(consulenti);
+        await log.save();
+        res.status(200).json(consulenti);
+
     } catch (err) {
         res.status(500).json({ Error: err });
     }

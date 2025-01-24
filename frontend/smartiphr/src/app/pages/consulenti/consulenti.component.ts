@@ -131,11 +131,11 @@ export class ConsulentiComponent implements OnInit {
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         console.log("The dialog was closed");
-        if (result != undefined) {
-          this.data.push(result);
-          this.dataSource.data = this.data;
-          console.log("Inserito consulente", result);
-        }
+        this.consulentiService.getConsulenti().then((result) => {
+          this.data = result;
+          this.dataSource = new MatTableDataSource<Consulenti>(this.data);
+          this.dataSource.paginator = this.paginator;
+        });
       });
   }
 

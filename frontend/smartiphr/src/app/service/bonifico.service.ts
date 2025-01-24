@@ -23,10 +23,10 @@ export class BonificoService {
       .toPromise();
   }
 
-  async insert(bonifico: Bonifico, id: string) {
+  async insert(bonifico: Bonifico, id: string): Promise<Bonifico> {
     console.log("Insert bonifico: ", bonifico);
     var body = bonifico;
-    return this.http.post(`${this.api}/api/bonifici/${id}`, body).toPromise();
+    return this.http.post<Bonifico>(`${this.api}/api/bonifici/${id}`, body).toPromise();
   }
 
 /*   async updateBonifico(bonifico: Bonifico) {

@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
@@ -15,47 +15,45 @@ import { MessagesService } from "src/app/service/messages.service";
 import { UploadService } from "src/app/service/upload.service";
 import { SettingsService } from "../../service/settings.service";
 import { Settings } from "../../models/settings";
-import { addDays } from "date-fns/esm/fp";
 
 @Component({
   selector: "app-dialog-consulente",
   templateUrl: "./dialog-consulente.component.html",
   styleUrls: ["./dialog-consulente.component.css"],
 })
-export class DialogConsulenteComponent implements OnInit {
+export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   disable: boolean;
   public result: Consulenti;
+  public uploading: boolean = false;
 
-  public uploading: boolean;
+  inputSearchFieldBon: string = '';
+  inputSearchFieldFat: string = '';
 
-  inputSearchFieldBon: String;
-  inputSearchFieldFat: String;
-
-  addingContratto: boolean;
-  uploadingContratto: boolean;
+  addingContratto: boolean = false;
+  uploadingContratto: boolean = false;
   nuovaContratto: Contratto;
-  contratto: Contratto[];
+  contratto: Contratto[] = [];
   public ContrattoDataSource: MatTableDataSource<Contratto>;
-  @ViewChild("paginatorContratto", { static: false })
-  contrattoPaginator: MatPaginator;
+  @ViewChild("paginatorC", { static: false }) contrattoPaginator: MatPaginator;
   contrattoDisplayedColumns: string[] = ["namefile", "date", "dataScadenza", "note", "action"];
 
-  addingFattura: boolean;
-  uploadingFattura: boolean;
+  addingFattura: boolean = false;
+  uploadingFattura: boolean = false;
   public nuovaFattura: Fatture;
-  public fatture: Fatture[];
+  public fatture: Fatture[] = [];
   fattureDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
   public fattureDataSource: MatTableDataSource<Fatture>;
-  @ViewChild("paginatorFatture", { static: false })
-  fatturePaginator: MatPaginator;
+  @ViewChild("paginatorF", { static: false }) fatturePaginator: MatPaginator;
 
   private settings: Settings;
-  public addingBonifici: boolean;
+  public addingBonifici: boolean = false;
   public nuovaBonifico: Bonifico;
-  public uploadingBonifici: boolean;
-  public bonifici: Bonifico[];
-  @ViewChild("paginatorBonifici", { static: false })
-  bonificiPaginator: MatPaginator;
+  public uploadingBonifici: boolean = false;
+  public bonifici: Bonifico[] = [];
+  bonificiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
+
+  //@ViewChild("paginatorB", { static: false }) bonificiPaginator: MatPaginator;
+  @ViewChild('paginatorB') bonificiPaginator!: MatPaginator;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   constructor(
@@ -65,7 +63,7 @@ export class DialogConsulenteComponent implements OnInit {
     public consulenteService: ConsulentiService,
     public contrattoService: ContrattoService,
     public fattureService: FattureService,
-    public bonficoService: BonificoService,
+    public bonificoService: BonificoService,
     private settingService: SettingsService,
     @Inject(MAT_DIALOG_DATA)
     public item: {
@@ -78,375 +76,287 @@ export class DialogConsulenteComponent implements OnInit {
     this.result = undefined;
     this.settings = new Settings();
 
-    this.settingService.getSettings().then((res) => {
-      this.settings = res[0];
-    });
-    this.fatture = [];
-
-    this.addingContratto = false;
-    this.uploadingContratto = false;
-
-    this.uploading = false;
-    this.uploadingFattura = false;
-    this.addingFattura = false;
-    this.contratto = [];
     this.ContrattoDataSource = new MatTableDataSource<Contratto>();
-    this.uploadingBonifici = false;
+    this.fattureDataSource = new MatTableDataSource<Fatture>();
+    this.bonificiDataSource = new MatTableDataSource<Bonifico>();
+    this.ContrattoDataSource.paginator = null; // Aggiungi questa riga
+    this.fattureDataSource.paginator = null; // Aggiungi questa riga
+    this.bonificiDataSource.paginator = null; // Aggiungi questa riga
   }
 
   ngOnInit() {
-    this.settings = new Settings();
     this.settingService.getSettings().then((res) => {
       this.settings = res[0];
     });
+
     if (this.item.consulente._id != undefined) {
       this.getContratto();
       this.getFatture();
       this.getBonificiAssegniContanti();
     }
+
   }
 
-
-
-  dateDiff(a, b) {
-    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
-    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
-
-    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  ngAfterViewInit() {
+    if (this.contrattoPaginator) {
+      console.log('Paginator trovato:', this.contrattoPaginator);
+      this.ContrattoDataSource.paginator = this.contrattoPaginator;
+    }
+    if (this.bonificiPaginator) {
+      console.log('Paginator trovato:', this.bonificiPaginator);
+      this.bonificiDataSource.paginator = this.bonificiPaginator;
+    }
+    if (this.fatturePaginator) {
+      console.log('Paginator trovato:', this.fatturePaginator);
+      this.fattureDataSource.paginator = this.fatturePaginator;
+    }
   }
 
-  dateDiffInDays(a, b) {
-    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
-    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  dateDiff(a: Date, b: Date): number {
+    const _MS_PER_DAY = 1000 * 60 * 60 * 24;
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
+  }
 
-    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  dateDiffInDays(a: Date, b: Date): number {
+    const _MS_PER_YEAR = 1000 * 60 * 60 * 24 * 365;
+    const utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    const utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+    return Math.floor((utc2 - utc1) / _MS_PER_YEAR);
   }
 
   addDays(date: Date, days: number): Date {
-    // Crea una nuova data copiando l'originale
     const newDate = new Date(date);
-
-    // Aggiunge i giorni specificati
     newDate.setDate(newDate.getDate() + days);
-
-    // Ritorna la nuova data
     return newDate;
   }
 
-  save() {
-    //this.dialogRef.close(this.item);
-    if (
-      this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined ||
-      this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined ||
-      this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined ||
-      this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined
-    ) {
-
-      var campi = "";
-      if (this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined) {
-        campi = campi + " Cognome"
-      }
-
-      if (this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined) {
-        campi = campi + " Nome"
-      }
-
-      if (this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined) {
-        campi = campi + " Codice Fiscale"
-      }
-
-      if (this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined) {
-        campi = campi + " Sesso"
-      }
-
-      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+  async save() {
+    if (!this.validateConsulente()) {
       return;
-    } else {
-
-      if (this.dateDiffInDays(new Date(this.item.consulente.dataNascita), new Date()) < 10) {
-        this.messageService.showMessageError("Data di nascita Errata!!!");
-        return;
-      }
     }
 
     if (this.item.isNew) {
-      this.item.isNew = false;
-      this.insert().subscribe(
-        (consulente: Consulenti) => {
-          this.item.consulente = consulente;
-          this.result = this.item.consulente;
-        },
-        (err) => console.error("Error:", err)
-      );
+      await this.consulenteService.insert(this.item.consulente).toPromise();
     } else {
-      this.update().subscribe(
-        (x) => {
-          console.log("Save");
-          this.result = this.item.consulente;
-        },
-        (e) => console.error(e)
-      );
+      await this.consulenteService.update(this.item.consulente).toPromise();
     }
   }
 
+  private validateConsulente(): boolean {
+    const requiredFields = [
+      { field: 'cognome', label: 'Cognome' },
+      { field: 'nome', label: 'Nome' },
+      { field: 'codiceFiscale', label: 'Codice Fiscale' },
+      { field: 'sesso', label: 'Sesso' }
+    ];
 
-  private insert(): Observable<Consulenti> {
-    return new Observable<Consulenti>((subscriber) => {
-      this.consulenteService.insert(this.item.consulente).subscribe(
-        (consulente: Consulenti) => {
-          console.log("Inserito consulente", consulente);
-          subscriber.next(consulente);
-        },
-        (err) => {
-          console.error("Error:", err);
-          subscriber.error(err);
-        }
-      );
-    });
-  }
+    const missingFields = requiredFields
+      .filter(({ field }) => !this.item.consulente[field])
+      .map(({ label }) => label);
 
-  private update(): Observable<Consulenti> {
-    return new Observable<Consulenti>((subscriber) => {
-      this.consulenteService.update(this.item.consulente).subscribe(
-        (result) => {
-          console.log("Aggiornato consulente", result);
-          subscriber.next(this.item.consulente);
-        },
-        (err) => {
-          console.error("Error:", err);
-          subscriber.error(err);
-        }
-      );
-    });
-  }
-
-  saveAndClose() {
-
-    if (
-      this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined ||
-      this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined ||
-      this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined ||
-      this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined
-    ) {
-
-      var campi = "";
-      if (this.item.consulente.cognome == "" || this.item.consulente.cognome == null || this.item.consulente.cognome === undefined) {
-        campi = campi + " Cognome"
-      }
-
-      if (this.item.consulente.nome == "" || this.item.consulente.nome == null || this.item.consulente.nome === undefined) {
-        campi = campi + " Nome"
-      }
-
-      if (this.item.consulente.codiceFiscale == "" || this.item.consulente.codiceFiscale == null || this.item.consulente.codiceFiscale === undefined) {
-        campi = campi + " Codice Fiscale"
-      }
-
-      if (this.item.consulente.sesso == "" || this.item.consulente.sesso == null || this.item.consulente.sesso === undefined) {
-        campi = campi + " Sesso"
-      }
-
-      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
-      return;
-    } else {
-
-      if (this.dateDiffInDays(new Date(this.item.consulente.dataNascita), new Date()) < 10) {
-        this.messageService.showMessageError("Data di nascita Errata!!!");
-        return;
-      }
+    if (missingFields.length > 0) {
+      this.messageService.showMessageError(`I campi ${missingFields.join(', ')} sono obbligatori!!`);
+      return false;
     }
 
-
-
-    if (this.item.isNew) {
-      this.insert().subscribe((consulente: Consulenti) => {
-        this.dialogRef.close(consulente);
-      });
-    } else {
-      this.update().subscribe((consulente: Consulenti) => {
-        this.dialogRef.close(consulente);
-      });
+    if (this.dateDiffInDays(new Date(this.item.consulente.dataNascita), new Date()) < 10) {
+      this.messageService.showMessageError("Data di nascita Errata!!!");
+      return false;
     }
+
+    return true;
   }
 
   async getContratto() {
-    console.log(`Get Contratto consulente: ${this.item.consulente._id}`);
+    if (!this.item.consulente._id) return;
 
-    if (this.item.consulente._id != undefined) {
-      this.contrattoService
-        .getContratto(this.item.consulente._id)
-        .then((f: Contratto[]) => {
-          if (f.length > 0) {
-            f = f.filter(x => new Date(x.dataScadenza) > new Date());
-            this.contratto[0] = f.length > 0 ? f[0] : undefined;
-            //this.contratto.dataupload = new Date(this.contratto.dataupload);
+    try {
+      const contracts = await this.contrattoService.getContratto(this.item.consulente._id);
+      if (contracts.length > 0) {
+        const validContracts = contracts.filter(x => new Date(x.dataScadenza) > new Date());
+        this.contratto = validContracts.length > 0 ? [validContracts[0]] : [];
+
+        if (this.contratto[0]) {
+          const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
+          if (numScad < this.settings.alertContratto) {
+            this.messageService.showMessage(`Mancano ${numScad} giorni alla scadenza del contratto`);
           }
-          else {
-            this.contratto = [];
-          }
-          if (this.contratto[0] != undefined) {
-            const numScad = this.dateDiff(new Date(),new Date(this.contratto[0].dataScadenza));
-            console.log("numero scadenza: ",numScad);
-            if (numScad < this.settings.alertContratto.valueOf()) {
-              this.messageService.showMessage("Mancano " + numScad + " giorni alla scadenza del contratto");
-            }
-          }
-          this.ContrattoDataSource.data = this.contratto[0] != undefined ? this.contratto : [];
-          this.ContrattoDataSource.paginator = this.contrattoPaginator;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore caricamento lista contratto"
-          );
-          console.error(err);
-        });
+        }
+      }
+      this.ContrattoDataSource.data = this.contratto;
+      this.ContrattoDataSource.paginator = this.contrattoPaginator;
+      this.ContrattoDataSource._updateChangeSubscription();
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento lista contratto");
+      console.error(err);
     }
   }
 
-  async addContratto() {
+  async getFatture() {
+    if (!this.item.consulente._id) return;
+
+    try {
+      const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
+      this.fatture = fatture || [];
+      this.fattureDataSource.data = this.fatture;
+      this.fattureDataSource.paginator = this.fatturePaginator;
+      this.fattureDataSource._updateChangeSubscription();
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento lista fatture");
+      console.error(err);
+    }
+  }
+
+  async getBonificiAssegniContanti() {
+    if (!this.item.consulente._id) return;
+    try {
+      const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+      console.log('Bonifici ricevuti:', bonifici);
+      this.bonifici = bonifici || [];
+      this.bonificiDataSource.data = this.bonifici;
+      this.bonificiDataSource.paginator.length = this.bonifici.length;
+      this.bonificiDataSource._updateChangeSubscription();
+      console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
+    } catch (err) {
+      console.error(err);
+      this.messageService.showMessageError("Errore caricamento lista bonifici");
+    }
+  }
+
+  //async getContratto(): Promise<void> {
+  //  if (!this.item.consulente._id) return;
+
+  //  try {
+  //    const contracts = await this.contrattoService.getContratto(this.item.consulente._id);
+  //    if (contracts.length > 0) {
+  //      const validContracts = contracts.filter(x => new Date(x.dataScadenza) > new Date());
+  //      this.contratto = validContracts.length > 0 ? [validContracts[0]] : [];
+
+  //      if (this.contratto[0]) {
+  //        const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
+  //        if (numScad < this.settings.alertContratto) {
+  //          this.messageService.showMessage(`Mancano ${numScad} giorni alla scadenza del contratto`);
+  //        }
+  //      }
+  //    }
+  //    this.ContrattoDataSource.data = this.contratto;
+  //    this.ContrattoDataSource.paginator = this.contrattoPaginator;
+  //  } catch (err) {
+  //    this.messageService.showMessageError("Errore caricamento lista contratto");
+  //    console.error(err);
+  //  }
+  //}
+
+  async addContratto(): Promise<void> {
     this.addingContratto = true;
     this.nuovaContratto = {
-
       filename: undefined,
       note: "",
     };
   }
 
-  async showContratto(contratto: Contratto) {
-    this.uploadService
-      .download(contratto.filename, this.item.consulente._id, 'contratti')
-      .then((x) => {
-        
-        x.subscribe((data) => {
-          
-          const newBlob = new Blob([data as BlobPart], {
-            type: "application/pdf",
-          });
+  async showContratto(contratto: Contratto): Promise<void> {
+    try {
+      const response = await this.uploadService.download(contratto.filename, this.item.consulente._id, 'contratti');
+      response.subscribe((data) => {
+        const newBlob = new Blob([data as BlobPart], { type: "application/pdf" });
 
-          // IE doesn't allow using a blob object directly as link href
-          // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
-            return;
-          }
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(newBlob);
+          return;
+        }
 
-          // For other browsers:
-          // Create a link pointing to the ObjectURL containing the blob.
-          const downloadURL = URL.createObjectURL(newBlob);
-          window.open(downloadURL);
-        });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore caricamento file");
-        console.error(err);
+        const downloadURL = URL.createObjectURL(newBlob);
+        window.open(downloadURL);
       });
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento file");
+      console.error(err);
+    }
   }
 
-  async deleteContratto(contratto: Contratto) {
-    console.log("Cancella contratto: ", contratto);
-
-    this.contrattoService
-      .remove(contratto)
-      .then((x) => {
-        console.log("Contratto cancellato");
-        this.contratto = undefined;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore nella cancellazione Contratto"
-        );
-        console.error(err);
-      });
+  async deleteContratto(contratto: Contratto): Promise<void> {
+    try {
+      await this.contrattoService.remove(contratto);
+      this.contratto = undefined;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nella cancellazione Contratto");
+      console.error(err);
+    }
   }
 
-  async uploadContratto($event) {
-    let fileList: FileList = $event.target.files;
+  async uploadContratto($event: any): Promise<void> {
+    const fileList: FileList = $event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      
+      const file: File = fileList[0];
       this.nuovaContratto.filename = file.name;
       this.nuovaContratto.file = file;
     } else {
       this.messageService.showMessageError("File non valido");
-      console.error("File non valido o non presente");
     }
   }
 
-  async saveContratto(contratto: Contratto) {
+  async saveContratto(contratto: Contratto): Promise<void> {
     if (!contratto.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
     }
+
     if (!contratto.dataScadenza) {
       this.messageService.showMessageError("Inserire una data di scadenza");
       return;
     }
-    const typeDocument = "CONTRATTO";
-    const path = "contratti";
-    const file: File = contratto.file;
+
     this.uploadingContratto = true;
     this.addingContratto = true;
-    contratto.consulenteNome = this.item.consulente.cognome + "/" + this.item.consulente.nome + "/" + this.item.consulente.codiceFiscale;
-    console.log("Invio contratto: ", contratto);
-    this.contrattoService
-      .insert(contratto, this.item.consulente._id)
-      .then((result: Contratto) => {
-        console.log("Insert contratto: ", result);
 
-        let formData: FormData = new FormData();
-        const nameDocument: string = contratto.filename;
+    contratto.consulenteNome = `${this.item.consulente.cognome}/${this.item.consulente.nome}/${this.item.consulente.codiceFiscale}`;
 
-        formData.append("file", file);
-        formData.append("typeDocument", typeDocument);
-        formData.append("path", `${this.item.consulente._id}/${path}`);
-        formData.append("name", nameDocument);
-        this.uploadService
-          .uploadDocument(formData)
-          .then((x) => {
-            this.addingContratto = false;
-            this.uploadingContratto = false;
-            this.uploading = false;
-            this.contratto[0] = result;
-            this.ContrattoDataSource.data = this.contratto;
-            this.ContrattoDataSource.paginator = this.contrattoPaginator;
+    try {
+      // Initialize array if undefined
+      if (!this.contratto) {
+        this.contratto = [];
+      }
 
-            console.log("Uploading completed: ", x);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore nel caricamento file");
-            console.error(err);
-            this.uploading = false;
-          });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore Inserimento fattura");
-        console.error(err);
-      });
-  }
+      const result: Contratto = await this.contrattoService.insert(contratto, this.item.consulente._id);
 
-  async getFatture() {
-    console.log(`Get Fatture consulente: ${this.item.consulente._id}`);
+      const formData = new FormData();
+      formData.append("file", contratto.file);
+      formData.append("typeDocument", "CONTRATTO");
+      formData.append("path", `${this.item.consulente._id}/contratti`);
+      formData.append("name", contratto.filename);
 
-    if (this.item.consulente._id != undefined) {
-      this.fattureService
-        .getByUserId(this.item.consulente._id)
-        .then((f: Fatture[]) => {
-          this.fatture = f.length > 0 ? f : [];
+      await this.uploadService.uploadDocument(formData);
 
-          this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
-          this.fattureDataSource.paginator = this.fatturePaginator;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore caricamento lista fatture");
-          console.error(err);
-        });
+      this.contratto[0] = result;
+      this.ContrattoDataSource.data = this.contratto;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nell'inserimento o caricamento del contratto");
+      console.error(err);
+    } finally {
+      this.addingContratto = false;
+      this.uploadingContratto = false;
+      this.uploading = false;
     }
   }
 
-  async addFattura() {
+  //async getFatture(): Promise<void> {
+  //  if (!this.item.consulente._id) return;
+
+  //  try {
+  //    const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
+  //    this.fatture = fatture || [];
+  //    this.fattureDataSource.data = this.fatture;
+  //    this.fattureDataSource.paginator = this.fatturePaginator;
+  //  } catch (err) {
+  //    this.messageService.showMessageError("Errore caricamento lista fatture");
+  //    console.error(err);
+  //  }
+  //}
+
+  async addFattura(): Promise<void> {
     this.addingFattura = true;
     this.nuovaFattura = {
       identifyUser: this.item.consulente._id,
@@ -455,121 +365,83 @@ export class DialogConsulenteComponent implements OnInit {
     };
   }
 
-  async uploadFattura($event) {
-    let fileList: FileList = $event.target.files;
+  async uploadFattura($event: any): Promise<void> {
+    const fileList: FileList = $event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      console.log("upload fattura: ", $event);
+      const file: File = fileList[0];
       this.nuovaFattura.filename = file.name;
       this.nuovaFattura.file = file;
     } else {
       this.messageService.showMessageError("File non valido");
-      console.error("File non valido o non presente");
     }
   }
 
-  async saveFattura(fattura: Fatture) {
+  async saveFattura(fattura: Fatture): Promise<void> {
     if (!fattura.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
     }
-    const typeDocument = "FATTURE";
-    const path = "fatture";
-    const file: File = fattura.file;
+
     this.uploadingFattura = true;
 
-    console.log("Invio fattura: ", fattura);
-    this.fattureService
-      .insert(fattura, this.item.consulente._id)
-      .then((result: Fatture) => {
-        console.log("Insert fattura: ", result);
-        this.addingFattura = false;
+    try {
+      const result = await this.fattureService.insert(fattura, this.item.consulente._id);
+      this.addingFattura = false;
 
-        let formData: FormData = new FormData();
-        const nameDocument: string = fattura.filename;
+      const formData = new FormData();
+      formData.append("file", fattura.file);
+      formData.append("typeDocument", "FATTURE");
+      formData.append("path", `${this.item.consulente._id}/fatture`);
+      formData.append("name", fattura.filename);
 
-        formData.append("file", file);
-        formData.append("typeDocument", typeDocument);
-        formData.append("path", `${this.item.consulente._id}/${path}`);
-        formData.append("name", nameDocument);
-        this.uploadService
-          .uploadDocument(formData)
-          .then((x) => {
-            this.fatture.push(result);
-            this.fattureDataSource.data = this.fatture;
-            this.uploadingFattura = false;
-            this.uploading = false;
+      await this.uploadService.uploadDocument(formData);
 
-            console.log("Uploading completed: ", x);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore nel caricamento file");
-            console.error(err);
-            this.uploading = false;
-          });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore Inserimento fattura");
-        console.error(err);
-      });
-  }
-  async showFattureDocument(fattura: Fatture) {
-    this.uploadService
-      .download(fattura.filename, this.item.consulente._id, 'fatture')
-      .then((x) => {
-        
-        x.subscribe((data) => {
-          
-          const newBlob = new Blob([data as BlobPart], {
-            type: "application/pdf",
-          });
-
-          // IE doesn't allow using a blob object directly as link href
-          // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
-            return;
-          }
-
-          // For other browsers:
-          // Create a link pointing to the ObjectURL containing the blob.
-          const downloadURL = URL.createObjectURL(newBlob);
-          window.open(downloadURL);
-        });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore caricamento file");
-        console.error(err);
-      });
+      this.fatture.push(result);
+      this.fattureDataSource.data = this.fatture;
+      this.uploadingFattura = false;
+      this.uploading = false;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nell'inserimento o caricamento della fattura");
+      console.error(err);
+      this.uploading = false;
+    }
   }
 
-  async deleteFattura(fattura: Fatture) {
-    console.log("Cancella fattura: ", fattura);
+  async showFattureDocument(fattura: Fatture): Promise<void> {
+    try {
+      const response = await this.uploadService.download(fattura.filename, this.item.consulente._id, 'fatture');
+      response.subscribe((data) => {
+        const newBlob = new Blob([data as BlobPart], { type: "application/pdf" });
 
-    this.fattureService
-      .remove(fattura)
-      .then((x) => {
-        console.log("Fattura cancellata");
-        const index = this.fatture.indexOf(fattura);
-        console.log("Fattura cancellata index: ", index);
-        if (index > -1) {
-          this.fatture.splice(index, 1);
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(newBlob);
+          return;
         }
 
-        console.log("Fattura cancellata this.fatture: ", this.fatture);
-        this.fattureDataSource.data = this.fatture;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore nella cancellazione Fattura"
-        );
-        console.error(err);
+        const downloadURL = URL.createObjectURL(newBlob);
+        window.open(downloadURL);
       });
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento file");
+      console.error(err);
+    }
   }
 
-  async addBonifico() {
-    console.log("Add Bonifico");
+  async deleteFattura(fattura: Fatture): Promise<void> {
+    try {
+      await this.fattureService.remove(fattura);
+      const index = this.fatture.indexOf(fattura);
+      if (index > -1) {
+        this.fatture.splice(index, 1);
+      }
+      this.fattureDataSource.data = this.fatture;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nella cancellazione Fattura");
+      console.error(err);
+    }
+  }
+
+  async addBonifico(): Promise<void> {
     this.addingBonifici = true;
     this.nuovaBonifico = {
       identifyUser: this.item.consulente._id,
@@ -578,163 +450,118 @@ export class DialogConsulenteComponent implements OnInit {
     };
   }
 
-  async uploadBonifico($event) {
-    let fileList: FileList = $event.target.files;
+  async uploadBonifico($event: any): Promise<void> {
+    const fileList: FileList = $event.target.files;
     if (fileList.length > 0) {
-      let file: File = fileList[0];
-
-      console.log("upload bonifico: ", $event);
+      const file: File = fileList[0];
       this.nuovaBonifico.filename = file.name;
       this.nuovaBonifico.file = file;
     } else {
       this.messageService.showMessageError("File non valido");
-      console.error("File non valido o non presente");
     }
   }
 
-  async saveBonifico(bonifico: Bonifico) {
+  async saveBonifico(bonifico: Bonifico): Promise<void> {
     if (!bonifico.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
     }
-    const typeDocument = "BONIFICO";
-    const path = "bonifico";
-    const file: File = bonifico.file;
+
     this.uploadingBonifici = true;
 
-    this.bonficoService
-      .insert(bonifico, this.item.consulente._id)
-      .then((result: Bonifico) => {
-        console.log("Insert bonifico: ", result);
-        this.bonifici.push(result);
-        this.bonificiDataSource.data = this.bonifici;
-        this.addingBonifici = false;
-        this.uploadingBonifici = false;
+    try {
+      const result = await this.bonificoService.insert(bonifico, this.item.consulente._id);
+      this.bonifici.push(result);
+      this.bonificiDataSource.data = this.bonifici;
+      this.addingBonifici = false;
+      this.uploadingBonifici = false;
 
-        let formData: FormData = new FormData();
+      const formData = new FormData();
+      formData.append("file", bonifico.file);
+      formData.append("typeDocument", "BONIFICO");
+      formData.append("path", `${this.item.consulente._id}/bonifico`);
+      formData.append("name", bonifico.filename);
 
-        const nameDocument: string = bonifico.filename;
-
-        formData.append("file", file);
-        formData.append("typeDocument", typeDocument);
-        formData.append("path", `${this.item.consulente._id}/${path}`);
-        formData.append("name", nameDocument);
-        this.uploadService
-          .uploadDocument(formData)
-          .then((x) => {
-            this.uploading = false;
-
-            console.log("Uploading completed: ", x);
-          })
-          .catch((err) => {
-            this.messageService.showMessageError("Errore nel caricamento file");
-            console.error(err);
-            this.uploading = false;
-          });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore Inserimento Nota Credito");
-        console.error(err);
-      });
+      await this.uploadService.uploadDocument(formData);
+      this.uploading = false;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nell'inserimento o caricamento del bonifico");
+      console.error(err);
+      this.uploading = false;
+    }
   }
 
-  async getBonificiAssegniContanti() {
-    console.log(`Get Bonifici e altro: ${this.item.consulente._id}`);
-    this.bonficoService
-      .getByUserId(this.item.consulente._id)
-      .then((f: Bonifico[]) => {
-        this.bonifici = f.length > 0 ? f : [];
+  //async getBonificiAssegniContanti(): Promise<void> {
+  //  if (!this.item.consulente._id) return;
 
-        this.bonificiDataSource = new MatTableDataSource<Bonifico>(
-          this.bonifici
-        );
-        this.bonificiDataSource.paginator = this.bonificiPaginator;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore caricamento lista bonifici e altri"
-        );
-        console.error(err);
-      });
-  }
+  //  try {
+  //    const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+  //    this.bonifici = bonifici || [];
+  //    this.bonificiDataSource.data = this.bonifici;
+  //    this.bonificiDataSource.paginator = this.bonificiPaginator;
+  //  } catch (err) {
+  //    this.messageService.showMessageError("Errore caricamento lista bonifici");
+  //    console.error(err);
+  //  }
+  //}
 
-  async showBonificoDocument(bonifico: Bonifico) {
-    this.uploadService
-      .download(bonifico.filename, this.item.consulente._id, 'bonifico')
-      .then((x) => {
-        
-        x.subscribe((data) => {
-          
-          const newBlob = new Blob([data as BlobPart], {
-            type: "application/pdf",
-          });
+  async showBonificoDocument(bonifico: Bonifico): Promise<void> {
+    try {
+      const response = await this.uploadService.download(bonifico.filename, this.item.consulente._id, 'bonifico');
+      response.subscribe((data) => {
+        const newBlob = new Blob([data as BlobPart], { type: "application/pdf" });
 
-          // IE doesn't allow using a blob object directly as link href
-          // instead it is necessary to use msSaveOrOpenBlob
-          if (window.navigator && window.navigator.msSaveOrOpenBlob) {
-            window.navigator.msSaveOrOpenBlob(newBlob);
-            return;
-          }
-          // For other browsers:
-          // Create a link pointing to the ObjectURL containing the blob.
-          const downloadURL = URL.createObjectURL(newBlob);
-          window.open(downloadURL);
-        });
-      })
-      .catch((err) => {
-        this.messageService.showMessageError("Errore caricamento file");
-        console.error(err);
-      });
-  }
-
-  async deleteBonifico(bonifico: Bonifico) {
-    console.log("Cancella bonifico: ", bonifico);
-
-    this.bonficoService
-      .remove(bonifico)
-      .then((x) => {
-        console.log("Bonifici cancellata");
-        const index = this.bonifici.indexOf(bonifico);
-        console.log("Bonifici cancellata index: ", index);
-        if (index > -1) {
-          this.bonifici.splice(index, 1);
+        if (window.navigator && window.navigator.msSaveOrOpenBlob) {
+          window.navigator.msSaveOrOpenBlob(newBlob);
+          return;
         }
 
-        console.log("Bonifici cancellata this.fatture: ", this.bonifici);
-        this.bonificiDataSource.data = this.bonifici;
-      })
-      .catch((err) => {
-        this.messageService.showMessageError(
-          "Errore nella cancellazione Bonifici e altro"
-        );
-        console.error(err);
+        const downloadURL = URL.createObjectURL(newBlob);
+        window.open(downloadURL);
       });
-  }
-
-
-
-  cleanSearchField(type: String) {
-    if (type == "Bonifici") {
-      this.bonificiDataSource.filter = undefined;
-      this.inputSearchFieldBon = undefined;
-    }
-    if (type == "Fattura") {
-      this.fattureDataSource.filter = undefined;
-      this.inputSearchFieldFat = undefined;
-    }
-
-
-  }
-
-  applyFilter(event: Event, type: String) {
-    const filterValue = (event.target as HTMLInputElement).value;
-    if (type == "Bonifici") {
-      this.bonificiDataSource.filter = filterValue.trim().toLowerCase();
-    }
-    if (type == "Fattura") {
-      this.fattureDataSource.filter = filterValue.trim().toLowerCase();
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento file");
+      console.error(err);
     }
   }
 
+  async deleteBonifico(bonifico: Bonifico): Promise<void> {
+    try {
+      await this.bonificoService.remove(bonifico);
+      const index = this.bonifici.indexOf(bonifico);
+      if (index > -1) {
+        this.bonifici.splice(index, 1);
+      }
+      this.bonificiDataSource.data = this.bonifici;
+    } catch (err) {
+      this.messageService.showMessageError("Errore nella cancellazione Bonifico");
+      console.error(err);
+    }
+  }
 
+  applyFilter(event: Event, type: string): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    switch (type) {
+      case "Bonifici":
+        this.bonificiDataSource.filter = filterValue;
+        break;
+      case "Fattura":
+        this.fattureDataSource.filter = filterValue;
+        break;
+    }
+  }
+
+  cleanSearchField(type: string): void {
+    switch (type) {
+      case "Bonifici":
+        this.bonificiDataSource.filter = '';
+        this.inputSearchFieldBon = '';
+        break;
+      case "Fattura":
+        this.fattureDataSource.filter = '';
+        this.inputSearchFieldFat = '';
+        break;
+    }
+  }
 }

@@ -22,9 +22,9 @@ export class FattureService {
       .toPromise();
   }
 
-  async insert(fattura: Fatture, id: string) {
+  async insert(fattura: Fatture, id: string): Promise<Fatture> {
     var body = fattura;
-    return this.http.post(`${this.api}/api/fatture/${id}`, body).toPromise();
+    return this.http.post<Fatture>(`${this.api}/api/fatture/${id}`, body).toPromise();
   }
 
 /*   async update(fattura: Fatture) {

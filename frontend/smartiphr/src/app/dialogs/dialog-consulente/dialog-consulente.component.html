@@ -1,7 +1,7 @@
 <mat-dialog-content class="dialog-container">
-    <header class="dialog-header">
+    <div class="dialog-header">
         <h2 class="consultant-name">Consulente: {{item.consulente.nome}} {{item.consulente.cognome}}</h2>
-    </header>
+    </div>
 
     <mat-tab-group mat-align-tabs="start" class="main-tabs">
         <!-- Tab Generale -->
@@ -21,16 +21,9 @@
                         </mat-form-field>
                     </div>
 
-                    <!-- Email -->
+                    <!-- Codice Fiscale e Sesso  -->
                     <div class="form-row">
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Email</mat-label>
-                            <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable name="email">
-                        </mat-form-field>
-                    </div>
 
-                    <!-- Codice Fiscale e Sesso -->
-                    <div class="form-row">
                         <mat-form-field appearance="outline">
                             <mat-label>Codice Fiscale</mat-label>
                             <input matInput [(ngModel)]="item.consulente.codiceFiscale" [disabled]=disable name="codiceFiscale">
@@ -44,7 +37,6 @@
                             </mat-radio-group>
                         </div>
                     </div>
-
                     <!-- Data e Indirizzo di Nascita -->
                     <div class="form-row">
                         <mat-form-field appearance="outline">
@@ -73,6 +65,14 @@
                             <input matInput [(ngModel)]="item.consulente.provinciaNascita" [disabled]=disable name="provinciaNascita">
                         </mat-form-field>
                     </div>
+
+                    <!-- Email -->
+                    <div class="form-row">
+                        <mat-form-field appearance="outline" class="full-width">
+                            <mat-label>Email</mat-label>
+                            <input type="email" matInput [(ngModel)]="item.consulente.email" [disabled]=disable name="email">
+                        </mat-form-field>
+                    </div>
                 </form>
             </div>
         </mat-tab>
@@ -80,96 +80,95 @@
         <!-- Tab Contratto -->
         <mat-tab label="Contratto" [disabled]="!item.consulente?._id">
             <div class="tab-content">
-                <!-- Area Aggiunta Contratto -->
-                <div class="action-area" *ngIf="!addingContratto">
-                    <button mat-raised-button color="primary" (click)="addContratto()">
-                        <mat-icon>add</mat-icon>
-                        Aggiungi Contratto
-                    </button>
-                </div>
-
-                <!-- Form Nuovo Contratto -->
-                <div class="upload-form" *ngIf="addingContratto">
-                    <div class="upload-area" *ngIf="!uploadingContratto">
-                        <input type="file" (change)="uploadContratto($event)" accept=".pdf" class="file-input">
-
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Note</mat-label>
-                            <input matInput [(ngModel)]="nuovaContratto.note" placeholder="Inserisci delle note">
-                        </mat-form-field>
-
-                        <mat-form-field appearance="outline">
-                            <mat-label>Data Scadenza</mat-label>
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="nuovaContratto.dataScadenza">
-                            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                            <mat-datepicker #picker></mat-datepicker>
-                        </mat-form-field>
-
-                        <button mat-raised-button color="primary" (click)="saveContratto(nuovaContratto)">
-                            <mat-icon>save</mat-icon>
-                            Salva
+                <div class="content-wrapper">
+                    <!-- Area Aggiunta Contratto -->
+                    <div class="action-area" *ngIf="!addingContratto">
+                        <button mat-raised-button color="primary" (click)="addContratto()">
+                            <mat-icon>add</mat-icon>
+                            Aggiungi Contratto
                         </button>
                     </div>
 
-                    <!-- Loading Spinner -->
-                    <div class="loading-indicator" *ngIf="uploadingContratto">
-                        <mat-spinner [diameter]="24"></mat-spinner>
-                        <span>Caricamento in corso...</span>
+                    <!-- Form Nuovo Contratto -->
+                    <div class="upload-form" *ngIf="addingContratto">
+                        <div class="upload-area" *ngIf="!uploadingContratto">
+                            <input type="file" (change)="uploadContratto($event)" accept=".pdf" class="file-input">
+
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Note</mat-label>
+                                <input matInput [(ngModel)]="nuovaContratto.note" placeholder="Inserisci delle note">
+                            </mat-form-field>
+
+                            <mat-form-field appearance="outline">
+                                <mat-label>Data Scadenza</mat-label>
+                                <input matInput [matDatepicker]="picker" [(ngModel)]="nuovaContratto.dataScadenza">
+                                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                                <mat-datepicker #picker></mat-datepicker>
+                            </mat-form-field>
+
+                            <button mat-raised-button color="primary" (click)="saveContratto(nuovaContratto)">
+                                <mat-icon>save</mat-icon>
+                                Salva
+                            </button>
+                        </div>
+
+                        <!-- Loading Spinner -->
+                        <div class="loading-indicator" *ngIf="uploadingContratto">
+                            <mat-spinner [diameter]="24"></mat-spinner>
+                            <span>Caricamento in corso...</span>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Tabella Contratti -->
-                <div class="table-container" *ngIf="contratto?.length > 0">
-                    <table mat-table [dataSource]="ContrattoDataSource" class="mat-elevation-z8">
-                        <!-- Colonne della tabella -->
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef></th>
-                            <td mat-cell *matCellDef="let row" class="action-cell">
-                                <button mat-icon-button (click)="showContratto(row)" color="warn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                                    </svg>
-                                </button>
-                                <button mat-icon-button (click)="deleteContratto(row)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </ng-container>
+                    <!-- Tabella Contratti -->
+                    <div class="table-container" *ngIf="contratto?.length > 0">
+                        <table mat-table [dataSource]="ContrattoDataSource" class="mat-elevation-z8">
+                            <!-- Colonne della tabella -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef></th>
+                                <td mat-cell *matCellDef="let row" class="action-cell">
+                                    <button mat-icon-button (click)="showContratto(row)" color="warn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                                        </svg>
+                                    </button>
+                                    <button mat-icon-button (click)="deleteContratto(row)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="namefile">
-                            <th mat-header-cell *matHeaderCellDef>Nome file</th>
-                            <td mat-cell *matCellDef="let element">{{element.filename}}</td>
-                        </ng-container>
+                            <ng-container matColumnDef="namefile">
+                                <th mat-header-cell *matHeaderCellDef>Nome file</th>
+                                <td mat-cell *matCellDef="let element">{{element.filename}}</td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef>Data Inserimento</th>
-                            <td mat-cell *matCellDef="let element">{{element.dateupload | date: 'dd/MM/yyyy'}}</td>
-                        </ng-container>
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef>Data Inserimento</th>
+                                <td mat-cell *matCellDef="let element">{{element.dateupload | date: 'dd/MM/yyyy'}}</td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="dataScadenza">
-                            <th mat-header-cell *matHeaderCellDef>Data Scadenza</th>
-                            <td mat-cell *matCellDef="let element">{{element.dataScadenza | date: 'dd/MM/yyyy'}}</td>
-                        </ng-container>
+                            <ng-container matColumnDef="dataScadenza">
+                                <th mat-header-cell *matHeaderCellDef>Data Scadenza</th>
+                                <td mat-cell *matCellDef="let element">{{element.dataScadenza | date: 'dd/MM/yyyy'}}</td>
+                            </ng-container>
 
-                        <ng-container matColumnDef="note">
-                            <th mat-header-cell *matHeaderCellDef>Note</th>
-                            <td mat-cell *matCellDef="let element">{{element.note}}</td>
-                        </ng-container>
+                            <ng-container matColumnDef="note">
+                                <th mat-header-cell *matHeaderCellDef>Note</th>
+                                <td mat-cell *matCellDef="let element">{{element.note}}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="contrattoDisplayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: contrattoDisplayedColumns;"></tr>
+                        </table>
 
-                        <tr mat-header-row *matHeaderRowDef="contrattoDisplayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: contrattoDisplayedColumns;"></tr>
-                    </table>
+                        <mat-paginator #paginatorC [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
 
-                    <mat-paginator #paginatorContratto
-                                   [pageSizeOptions]="[5, 10, 20]"
-                                   showFirstLastButtons>
-                    </mat-paginator>
-                </div>
-
-                <div class="no-data" *ngIf="contratto?.length === 0">
-                    Nessun contratto presente
+                    <div class="no-data" *ngIf="contratto?.length === 0">
+                        Nessun contratto presente
+                    </div>
                 </div>
             </div>
         </mat-tab>
@@ -177,96 +176,95 @@
         <!-- Tab Fatture -->
         <mat-tab label="Fatture" [disabled]="!item.consulente?._id">
             <div class="tab-content">
-                <!-- Search Bar -->
-                <div class="search-bar">
-                    <mat-form-field appearance="outline" class="search-field">
-                        <mat-label>Cerca</mat-label>
-                        <input matInput (keyup)="applyFilter($event,'Fattura')" [(ngModel)]="inputSearchFieldFat">
-                        <button mat-icon-button matSuffix (click)="cleanSearchField('Fattura')">
-                            <mat-icon>clear</mat-icon>
-                        </button>
-                    </mat-form-field>
-                </div>
-
-                <!-- Add Button -->
-                <div class="action-area" *ngIf="!addingFattura">
-                    <button mat-raised-button color="primary" (click)="addFattura()">
-                        <mat-icon>add</mat-icon>
-                        Aggiungi Fattura
-                    </button>
-                </div>
-
-                <!-- Upload Form -->
-                <div class="upload-form" *ngIf="addingFattura && !uploadingFattura">
-                    <div class="upload-area">
-                        <input type="file" (change)="uploadFattura($event)" accept=".pdf" class="file-input">
-
-                        <mat-form-field appearance="outline" class="full-width">
-                            <mat-label>Note</mat-label>
-                            <input matInput [(ngModel)]="nuovaFattura.note" placeholder="Inserisci delle note">
+                <div class="content-wrapper">
+                    <!-- Search Bar -->
+                    <div class="search-bar">
+                        <mat-form-field appearance="outline" class="search-field">
+                            <mat-label>Cerca</mat-label>
+                            <input matInput (keyup)="applyFilter($event,'Fattura')" [(ngModel)]="inputSearchFieldFat">
+                            <button mat-icon-button matSuffix (click)="cleanSearchField('Fattura')">
+                                <mat-icon>clear</mat-icon>
+                            </button>
                         </mat-form-field>
+                    </div>
 
-                        <button mat-raised-button color="primary" (click)="saveFattura(nuovaFattura)">
-                            <mat-icon>save</mat-icon>
-                            Salva
+                    <!-- Area Aggiunta Fattura -->
+                    <div class="action-area" *ngIf="!addingFattura">
+                        <button mat-raised-button color="primary" (click)="addFattura()">
+                            <mat-icon>add</mat-icon>
+                            Aggiungi Fattura
                         </button>
                     </div>
-                </div>
 
-                <!-- Loading Indicator -->
-                <div class="loading-indicator" *ngIf="uploadingFattura">
-                    <mat-spinner [diameter]="24"></mat-spinner>
-                    <span>Caricamento in corso...</span>
-                </div>
+                    <!-- Form Nuova Fattura -->
+                    <div class="upload-form" *ngIf="addingFattura">
+                        <div class="upload-area" *ngIf="!uploadingFattura">
+                            <input type="file" (change)="uploadFattura($event)" accept=".pdf" class="file-input">
 
-                <!-- Table -->
-                <div class="table-container" *ngIf="fatture?.length > 0">
-                    <table mat-table [dataSource]="fattureDataSource" class="mat-elevation-z8">
-                        <!-- Action Column -->
-                        <ng-container matColumnDef="action">
-                            <th mat-header-cell *matHeaderCellDef></th>
-                            <td mat-cell *matCellDef="let row" class="action-cell">
-                                <button mat-icon-button (click)="showFattureDocument(row)" color="warn">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                                        <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                                    </svg>
-                                </button>
-                                <button mat-icon-button (click)="deleteFattura(row)">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                                        <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                                    </svg>
-                                </button>
-                            </td>
-                        </ng-container>
+                            <mat-form-field appearance="outline" class="full-width">
+                                <mat-label>Note</mat-label>
+                                <input matInput [(ngModel)]="nuovaFattura.note" placeholder="Inserisci delle note">
+                            </mat-form-field>
 
-                        <!-- Other Columns -->
-                        <ng-container matColumnDef="namefile">
-                            <th mat-header-cell *matHeaderCellDef>Nome file</th>
-                            <td mat-cell *matCellDef="let element">{{element.filename}}</td>
-                        </ng-container>
+                            <button mat-raised-button color="primary" (click)="saveFattura(nuovaFattura)">
+                                <mat-icon>save</mat-icon>
+                                Salva
+                            </button>
+                        </div>
 
-                        <ng-container matColumnDef="date">
-                            <th mat-header-cell *matHeaderCellDef>Data Inserimento</th>
-                            <td mat-cell *matCellDef="let element">{{element.dateupload | date: 'dd/MM/yyyy'}}</td>
-                        </ng-container>
+                        <!-- Loading Spinner -->
+                        <div class="loading-indicator" *ngIf="uploadingFattura">
+                            <mat-spinner [diameter]="24"></mat-spinner>
+                            <span>Caricamento in corso...</span>
+                        </div>
+                    </div>
 
-                        <ng-container matColumnDef="note">
-                            <th mat-header-cell *matHeaderCellDef>Note</th>
-                            <td mat-cell *matCellDef="let element">{{element.note}}</td>
-                        </ng-container>
+                    <!-- Tabella Fatture -->
+                    <div class="table-container" *ngIf="fatture?.length > 0">
+                        <table mat-table [dataSource]="fattureDataSource" class="mat-elevation-z8">
+                            <!-- Action Column -->
+                            <ng-container matColumnDef="action">
+                                <th mat-header-cell *matHeaderCellDef></th>
+                                <td mat-cell *matCellDef="let row" class="action-cell">
+                                    <button mat-icon-button (click)="showFattureDocument(row)" color="warn">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
+                                        </svg>
+                                    </button>
+                                    <button mat-icon-button (click)="deleteFattura(row)">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+                                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
+                                        </svg>
+                                    </button>
+                                </td>
+                            </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
-                    </table>
+                            <!-- Other Columns -->
+                            <ng-container matColumnDef="namefile">
+                                <th mat-header-cell *matHeaderCellDef>Nome file</th>
+                                <td mat-cell *matCellDef="let element">{{element.filename}}</td>
+                            </ng-container>
 
-                    <mat-paginator #paginatorFatture
-                                   [pageSizeOptions]="[5, 10, 20]"
-                                   showFirstLastButtons>
-                    </mat-paginator>
-                </div>
+                            <ng-container matColumnDef="date">
+                                <th mat-header-cell *matHeaderCellDef>Data Inserimento</th>
+                                <td mat-cell *matCellDef="let element">{{element.dateupload | date: 'dd/MM/yyyy'}}</td>
+                            </ng-container>
 
-                <div class="no-data" *ngIf="fatture?.length === 0">
-                    Nessuna fattura presente
+                            <ng-container matColumnDef="note">
+                                <th mat-header-cell *matHeaderCellDef>Note</th>
+                                <td mat-cell *matCellDef="let element">{{element.note}}</td>
+                            </ng-container>
+                            <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns; sticky: true"></tr>
+                            <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
+                        </table>
+
+                        <mat-paginator #paginatorF [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+                        </mat-paginator>
+                    </div>
+
+                    <div class="no-data" *ngIf="fatture?.length === 0">
+                        Nessuna fattura presente
+                    </div>
                 </div>
             </div>
         </mat-tab>
@@ -353,14 +351,14 @@
                             <td mat-cell *matCellDef="let element">{{element.note}}</td>
                         </ng-container>
 
-                        <tr mat-header-row *matHeaderRowDef="fattureDisplayedColumns"></tr>
-                        <tr mat-row *matRowDef="let row; columns: fattureDisplayedColumns;"></tr>
-                    </table>
+                        <tr mat-header-row *matHeaderRowDef="bonificiDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: bonificiDisplayedColumns;"></tr>
 
-                    <mat-paginator #paginatorBonifici
-                                   [pageSizeOptions]="[5, 10, 20]"
-                                   showFirstLastButtons>
+                    </table>
+                    <mat-paginator #paginatorB [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
+                                   aria-label="Select page of periodic elements">
                     </mat-paginator>
+
                 </div>
 
                 <div class="no-data" *ngIf="bonifici?.length === 0">

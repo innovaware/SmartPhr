@@ -32,10 +32,10 @@ export class ContrattoService {
       .get<Contratto[]>(`${this.api}/api/contratto`, {headers}).toPromise();
   }
 
-  async insert(contratto: Contratto, id: string) {
-    var body = contratto;
-    return this.http.post(`${this.api}/api/contratto/consulente/${id}`, body).toPromise();
+  async insert(contratto: Contratto, id: string): Promise<Contratto> {
+    return this.http.post<Contratto>(`${this.api}/api/contratto/consulente/${id}`, contratto).toPromise();
   }
+
 
   async update(contratto: Contratto) {
     var body = contratto;

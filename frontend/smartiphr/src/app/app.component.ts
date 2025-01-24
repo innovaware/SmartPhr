@@ -46,10 +46,8 @@ export class AppComponent  {
       (user: User) => {
         this.isAuthenticated = user !== undefined && user !== null;
         this.user = user;
-        console.log(user);
 
         newMessServ.getMessagesForDip(user.dipendenteID).subscribe((x: NewMessage[] | null) => {
-          console.log(x);
           if (x) {
             if (x.filter(y => !y.letto).length>0) {
               this.numNotifiche = x.filter(y => !y.letto).length;
@@ -98,7 +96,6 @@ export class AppComponent  {
     this.user = this.authenticationService.getCurrentUser();
 
     this.newMessServ.getMessagesForDip(this.user.dipendenteID).subscribe((x: NewMessage[] | null) => {
-      console.log(x);
       if (x) {
         this.numNotifiche = x.filter(y => !y.letto).length;
       } else {
@@ -117,7 +114,6 @@ export class AppComponent  {
       log.className = "Logout";
       log.operazione = "Logout";
       log.data = new Date();
-      console.log("Log inizializzato:", log); // Verifica il log
 
       // Ottieni l'utente corrente
       const user = await this.authenticationService.getCurrentUser();
@@ -130,7 +126,6 @@ export class AppComponent  {
 
       // Ottieni i dettagli del dipendente
       const dipendente = await this.dipendenteService.getByIdUser(user.dipendenteID);
-      console.log("Dipendente ottenuto:", dipendente); // Debug dipendente
 
       if (dipendente && dipendente[0]) {
         log.operatore = `${dipendente[0].nome} ${dipendente[0].cognome}`;
