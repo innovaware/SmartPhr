@@ -1,79 +1,128 @@
-.tabcontent {
-  padding-top: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
+/* Layout di base */
+.ospite-form-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-select.custom-select {
-  width: 100%;
-  color: #495057;
-  background-size: 8px 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  -webkit-appearance: none;
-  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+/* Header del form */
+.form-header {
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
 }
 
-::ng-deep .mat-card-header-text {
-  margin: 0px !important;
-  font-size: 14px;
-  color: #676a6c;
+  .form-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+    font-weight: 600;
+  }
+
+/* Contenuto del form */
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
 }
 
-::ng-deep .mat-card-header .mat-card-title {
-  font-size: 14px;
+/* Sezioni del form */
+.form-section {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
 }
 
-.mat-card {
-  padding: 0px;
-  box-shadow: unset;
-}
-
-.mat-radio-button {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-::ng-deep .mat-card-content {
+/* Titoli delle sezioni */
+.section-title {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+  border-bottom: 1px solid #e0e0e0;
   padding-bottom: 10px;
 }
 
-.mat-form-field {
+/* Contenitore delle tabelle */
+.table-container {
+  overflow-x: auto;
+  margin-top: 16px;
+}
+
+/* Stili per le tabelle personalizzate */
+.custom-table {
   width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 16px;
 }
 
-.mat-checkbox {
-  margin-right: 10px
+  .custom-table th,
+  .custom-table td {
+    padding: 12px;
+    border: 1px solid #ddd;
+    text-align: left;
+    font-size: 0.9rem;
+    color: #555;
+    vertical-align: middle;
+  }
+
+  .custom-table th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+    color: #333;
+  }
+
+/* Stili per select */
+.custom-select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  background-color: #fff;
+  font-size: 0.9rem;
+  color: #333;
+  transition: border-color 0.2s ease;
 }
 
-.mat-card-content {
-  margin-bottom: 0;
-  padding: 10px;
+  .custom-select:focus {
+    outline: none;
+    border-color: #007bff;
+  }
+
+  .custom-select:disabled {
+    background-color: #f5f5f5;
+    cursor: not-allowed;
+  }
+
+/* Material Components Overrides */
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #fff !important;
+  padding: 8px 12px !important;
 }
 
-h4 {
-  font-size: 17px;
-  color: #676a6c;
+::ng-deep .mat-form-field-disabled .mat-form-field-flex {
+  background-color: #f5f5f5 !important;
 }
 
-label {
-  font-size: 13px;
-  color: #676a6c;
+/* Responsive Design */
+@media (max-width: 768px) {
+  .custom-table {
+    font-size: 0.8rem;
+  }
+
+    .custom-table th,
+    .custom-table td {
+      padding: 8px;
+    }
+
+  .section-title {
+    font-size: 1rem;
+  }
 }
 
-
-.table > thead > tr > th {
-  border-bottom: 1px solid #DDDDDD;
-  vertical-align: bottom;
-}
-
-
-.table {
-
-  font-size: 13px;
-  color: #676a6c;
-}
-
-input {
+/* Utility Classes */
+.full-width {
   width: 100%;
 }

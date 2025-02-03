@@ -1,3 +1,115 @@
+/* Stili base del container dialog */
+::ng-deep .mat-dialog-container {
+  padding: 0 !important;
+  overflow: hidden !important;
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+/* Header della dialog */
+:host ::ng-deep .mat-dialog-title {
+  margin: 0;
+  padding: 16px;
+  background-color: white;
+  border-bottom: 1px solid rgba(0,0,0,0.12);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+}
+
+/* Contenuto scrollabile */
+:host ::ng-deep .mat-dialog-content {
+  max-height: 75vh !important;
+  margin: 0;
+  padding: 16px;
+  overflow-y: auto !important;
+}
+
+/* Footer con azioni */
+:host ::ng-deep .mat-dialog-actions {
+  padding: 16px;
+  margin: 0;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  background-color: white;
+  position: sticky;
+  bottom: 0;
+  z-index: 1000;
+}
+
+/* Layout responsive per form fields */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8px;
+  gap: 16px;
+}
+
+.col {
+  flex: 1 1 300px;
+  min-width: 0;
+  padding: 8px;
+}
+
+/* Form fields full width */
+.full {
+  width: 100%;
+}
+
+/* Responsività per select */
+select {
+  width: 100%;
+  padding: 8px;
+  border: 1px solid rgba(0,0,0,0.12);
+  border-radius: 4px;
+  background-color: white;
+}
+
+/* Container per lo spinner */
+.container-flex {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/* Responsività per input file */
+input[type="file"] {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+}
+
+/* Miglioramenti per schermi piccoli */
+@media screen and (max-width: 600px) {
+  .col {
+    flex: 1 1 100%;
+  }
+
+  :host ::ng-deep .mat-dialog-content {
+    padding: 8px;
+  }
+
+  .row {
+    gap: 8px;
+  }
+}
+
+/* Stili per i bottoni nel footer */
+.button-insert {
+  margin-left: 8px;
+}
+
+/* Spinner container */
+mat-spinner {
+  margin: 0 8px;
+}
+
+/* Separatori */
+hr {
+  margin: 16px 0;
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.12);
+}
+
 .title {
   font-size: 30px;
   line-height: 1.2;

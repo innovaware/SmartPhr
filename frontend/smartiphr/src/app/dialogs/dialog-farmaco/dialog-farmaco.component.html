@@ -162,13 +162,11 @@
 
   </div>
 
-
 </mat-dialog-content>
-
 
 <div mat-dialog-actions>
   <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="false">Chiudi</button>
-    <button mat-button class="button-save" *ngIf="!disabled" (click)="save()">Salva</button>
+    <button mat-raised-button color="primary" *ngIf="!disabled" (click)="save()">Salva</button>
   </div>
 </div>

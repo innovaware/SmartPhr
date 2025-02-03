@@ -1,237 +1,196 @@
-<!-- <div mat-dialog-title>
-  <div class="container-fluid" >
-    <div class="row">
-      <div class="col">
-        <h3>CARTELLA CLINICA</h3>
-      </div>
-
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">×
-        </button>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
-    </div>
-  </div>
-</div> -->
-
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>Ospite: {{paziente.cognome}} {{paziente. nome}}</h3>
-      </div>
-    </div>
-    <hr>
-  </div>
-</div>
-
+<h2 mat-dialog-title><strong>Ospite: {{paziente.nome}} {{paziente.cognome}}</strong></h2>
 <mat-dialog-content>
   <div class="container-fluid">
     <div class="row">
       <div class="col">
 
-          <mat-tab-group mat-align-tabs="start" (selectedTabChange)="changeTab($event)">
-              <mat-tab label="Generale">
-                  <div class="container-fluid" style="padding: unset;">
-                      <div class="row">
-                          <div class="col">
-                              <app-paziente-generale [data]=data.paziente [disable]=true></app-paziente-generale>
-                          </div>
-                      </div>
+        <mat-tab-group mat-align-tabs="start" (selectedTabChange)="changeTab($event)">
+          <mat-tab label="Generale">
+            <div class="container-fluid" style="padding: unset;">
+              <div class="form-content">
+                <div class="form-section">
+                  <app-paziente-generale [data]=data.paziente [disable]=true></app-paziente-generale>
+                </div>
+              </div>
 
-                      <div class="row">
-                          <div class="col">
-
-                              <div class="container-fluid" style="padding: unset;">
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>DIAGNOSI</label>
-                                          <textarea class="form-control" rows="5" cols="150"
-                                                    [(ngModel)]="paziente.schedaInfermeristica.diagnosi"></textarea>
-                                      </div>
-                                  </div>
-                                  <hr>
-
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>INTOLLERANZE ALIMENTARI</label>
-                                          <textarea class="form-control" rows="5" cols="150"
-                                                    [(ngModel)]="paziente.schedaInfermeristica.intolleranzeAlimentari"></textarea>
-                                      </div>
-                                  </div>
-                                  <hr>
-
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>ALLERGIE</label>
-                                          <textarea class="form-control" rows="5" cols="150"
-                                                    [(ngModel)]="paziente.schedaInfermeristica.allergie"></textarea>
-                                      </div>
-                                  </div>
-                                  <hr>
-
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>INFEZIONI</label>
-                                          <textarea class="form-control" rows="5" cols="150"
-                                                    [(ngModel)]="paziente.schedaInfermeristica.infezioni"></textarea>
-                                      </div>
-                                  </div>
-                                  <hr>
-
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>TERAPIA IN ATTO</label>
-                                          <textarea class="form-control" rows="5" cols="150"
-                                                    [(ngModel)]="paziente.schedaInfermeristica.terapiaAtto"></textarea>
-                                      </div>
-                                  </div>
-
-                                  <hr>
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>CATETERE VESCICALE</label>
-                                      </div>
-                                      <div class="col">
-                                          <mat-radio-group [(ngModel)]="paziente.schedaInfermeristica.catetereVescicale">
-                                              <mat-radio-button [value]="false">No</mat-radio-button>
-                                              <mat-radio-button [value]="true">Si</mat-radio-button>
-                                          </mat-radio-group>
-                                      </div>
-                                  </div>
-
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>Data Inserimento</label>
-                                      </div>
-                                  </div>
-                                  <div class="row">
-                                      <div class="col">
-                                          <mat-form-field appearance="fill">
-                                              <mat-label>Scegli una date</mat-label>
-                                              <input matInput [matDatepicker]="dataInserimento"
-                                                     [(ngModel)]="paziente.schedaInfermeristica.dataInserimentoCatetereVescicale">
-                                              <mat-datepicker-toggle matSuffix [for]="dataInserimento"></mat-datepicker-toggle>
-                                              <mat-datepicker #dataInserimento></mat-datepicker>
-                                          </mat-form-field>
-                                      </div>
-
-                                      <div class="col">
-                                          <mat-form-field appearance="fill">
-                                              <mat-label>Calibro</mat-label>
-                                              <textarea matInput
-                                                        [(ngModel)]="paziente.schedaInfermeristica.calibroCatetereVescicale"></textarea>
-                                          </mat-form-field>
-
-                                      </div>
-                                      <div class="col">
-                                          <mat-form-field appearance="fill">
-                                              <mat-label>Diurisi</mat-label>
-                                              <textarea matInput
-                                                        [(ngModel)]="paziente.schedaInfermeristica.diurisiCatetereVescicale"></textarea>
-                                          </mat-form-field>
-                                      </div>
-                                  </div>
-
-                                  <hr>
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>MEZZI DI CONTENZIONE</label>
-                                      </div>
-                                      <div class="col">
-                                          <mat-radio-group [(ngModel)]="paziente.schedaInfermeristica.mezziContenzione">
-                                              <mat-radio-button [value]="false">No</mat-radio-button>
-                                              <mat-radio-button [value]="true">Si</mat-radio-button>
-                                          </mat-radio-group>
-                                      </div>
-                                  </div>
-
-                                  <hr>
-                                  <div class="row">
-                                      <div class="col">
-                                          <label>DIMISSIONE:</label>
-                                      </div>
-                                      <div class="col">
-                                          <mat-form-field appearance="fill">
-                                              <mat-label>Scegli una date</mat-label>
-                                              <input matInput [matDatepicker]="dataDimissione"
-                                                     [(ngModel)]="paziente.schedaInfermeristica.dimissione">
-                                              <mat-datepicker-toggle matSuffix [for]="dataDimissione"></mat-datepicker-toggle>
-                                              <mat-datepicker #dataDimissione></mat-datepicker>
-                                          </mat-form-field>
-                                      </div>
-                                  </div>
-
-
-                              </div>
-
-                          </div>
-                      </div>
-
+              <!-- Sezione diagnosi -->
+              <div class="form-section">
+                <h5 class="section-title">DIAGNOSI</h5>
+                <div class="form-row">
+                  <div class="form-field full-width">
+                    <textarea class="form-input" rows="5" [(ngModel)]="paziente.schedaInfermeristica.diagnosi" [disabled]="data.readonly"></textarea>
                   </div>
-              </mat-tab>
+                </div>
+              </div>
 
-              <mat-tab label="B.A.I.">
-                  <app-scheda-bai [data]=schedaBAI [disable]=data.readonly></app-scheda-bai>
-              </mat-tab>
+              <!-- Sezione intolleranze -->
+              <div class="form-section">
+                <h5 class="section-title">INTOLLERANZE ALIMENTARI</h5>
+                <div class="form-row">
+                  <div class="form-field full-width">
+                    <textarea class="form-input" rows="5" [(ngModel)]="paziente.schedaInfermeristica.intolleranzeAlimentari" [disabled]="data.readonly"></textarea>
+                  </div>
+                </div>
+              </div>
 
-              <mat-tab label="Norton">
-                  <app-scheda-ulcere [data]=schedaUlcere [disable]=data.readonly></app-scheda-ulcere>
-              </mat-tab>
+              <!-- Sezione allergie -->
+              <div class="form-section">
+                <h5 class="section-title">ALLERGIE</h5>
+                <div class="form-row">
+                  <div class="form-field full-width">
+                    <textarea class="form-input" rows="5" [(ngModel)]="paziente.schedaInfermeristica.allergie" [disabled]="data.readonly"></textarea>
+                  </div>
+                </div>
+              </div>
 
-              <mat-tab label="MNA">
-                  <app-scheda-mnar [data]=schedaMnar [disable]=data.readonly></app-scheda-mnar>
-              </mat-tab>
+              <!-- Sezione infezioni -->
+              <div class="form-section">
+                <h5 class="section-title">INFEZIONI</h5>
+                <div class="form-row">
+                  <div class="form-field full-width">
+                    <textarea class="form-input" rows="5" [(ngModel)]="paziente.schedaInfermeristica.infezioni" [disabled]="data.readonly"></textarea>
+                  </div>
+                </div>
+              </div>
 
-              <mat-tab label="VAS">
-                  <app-scheda-vas [data]=schedaVas [disable]=data.readonly></app-scheda-vas>
-              </mat-tab>
+              <!-- Sezione terapia -->
+              <div class="form-section">
+                <h5 class="section-title">TERAPIA IN ATTO</h5>
+                <div class="form-row">
+                  <div class="form-field full-width">
+                    <textarea class="form-input" rows="5" [(ngModel)]="paziente.schedaInfermeristica.terapiaAtto" [disabled]="data.readonly"></textarea>
+                  </div>
+                </div>
+              </div>
 
-              <mat-tab label="Ulcere diabetiche">
-                  <app-scheda-ulcere-diabete [data]=schedaUlcereDiabete [disable]=data.readonly></app-scheda-ulcere-diabete>
-              </mat-tab>
+              <!-- Sezione catetere -->
+              <div class="form-section">
+                <h5 class="section-title">CATETERE VESCICALE</h5>
+                <div class="form-row align-center">
+                  <div class="radio-group">
+                    <mat-radio-group [(ngModel)]="paziente.schedaInfermeristica.catetereVescicale" [disabled]="data.readonly">
+                      <mat-radio-button [value]="false">No</mat-radio-button>
+                      <mat-radio-button [value]="true">Si</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
 
-              <mat-tab label="Lesioni cutanee">
-                  <app-scheda-lesioni-cutanee [data]=schedaLesioni [disable]=data.readonly></app-scheda-lesioni-cutanee>
-              </mat-tab>
+                <div class="form-row" *ngIf="paziente.schedaInfermeristica.catetereVescicale">
+                  <div class="form-field">
+                    <h5>Data Inserimento</h5>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Scegli una data</mat-label>
+                      <input matInput [matDatepicker]="dataInserimento"
+                             [(ngModel)]="paziente.schedaInfermeristica.dataInserimentoCatetereVescicale" [disabled]="data.readonly">
+                      <mat-datepicker-toggle matSuffix [for]="dataInserimento"></mat-datepicker-toggle>
+                      <mat-datepicker #dataInserimento></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                  <div class="form-field">
+                    <h5>Calibro</h5>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Calibro</mat-label>
+                      <input matInput [(ngModel)]="paziente.schedaInfermeristica.calibroCatetereVescicale" [disabled]="data.readonly">
+                    </mat-form-field>
+                  </div>
+                  <div class="form-field">
+                    <h5>Diurisi</h5>
+                    <mat-form-field appearance="fill">
+                      <mat-label>Diurisi</mat-label>
+                      <input matInput [(ngModel)]="paziente.schedaInfermeristica.diurisiCatetereVescicale" [disabled]="data.readonly">
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
 
-              <mat-tab label="Lesioni da decubito">
-                  <app-scheda-lesioni-decubito [data]=schedaLesioniDecubito [disable]=data.readonly>
-                  </app-scheda-lesioni-decubito>
-              </mat-tab>
+              <!-- Sezione contenzione -->
+              <div class="form-section">
+                <h5 class="section-title">MEZZI DI CONTENZIONE</h5>
+                <div class="form-row align-center">
+                  <div class="radio-group">
+                    <mat-radio-group [(ngModel)]="paziente.schedaInfermeristica.mezziContenzione" [disabled]="data.readonly">
+                      <mat-radio-button [value]="false">No</mat-radio-button>
+                      <mat-radio-button [value]="true">Si</mat-radio-button>
+                    </mat-radio-group>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Sezione dimissione -->
+              <div class="form-section">
+                <h5 class="section-title">DIMISSIONE</h5>
+                <div class="form-row">
+                  <div class="form-field">
+                    <mat-form-field appearance="fill">
+                      <mat-label>Scegli una data</mat-label>
+                      <input matInput [matDatepicker]="dataDimissione"
+                             [(ngModel)]="paziente.schedaInfermeristica.dimissione" [disabled]="data.readonly">
+                      <mat-datepicker-toggle matSuffix [for]="dataDimissione"></mat-datepicker-toggle>
+                      <mat-datepicker #dataDimissione></mat-datepicker>
+                    </mat-form-field>
+                  </div>
+                </div>
+              </div>
+
+            </div>
+          </mat-tab>
+
+          <mat-tab label="B.A.I.">
+            <app-scheda-bai [data]=schedaBAI [disable]=data.readonly></app-scheda-bai>
+          </mat-tab>
+
+          <mat-tab label="Norton">
+            <app-scheda-ulcere [data]=schedaUlcere [disable]=data.readonly></app-scheda-ulcere>
+          </mat-tab>
+
+          <mat-tab label="MNA">
+            <app-scheda-mnar [data]=schedaMnar [disable]=data.readonly></app-scheda-mnar>
+          </mat-tab>
+
+          <mat-tab label="VAS">
+            <app-scheda-vas [data]=schedaVas [disable]=data.readonly></app-scheda-vas>
+          </mat-tab>
+
+          <mat-tab label="Ulcere diabetiche">
+            <app-scheda-ulcere-diabete [data]=schedaUlcereDiabete [disable]=data.readonly></app-scheda-ulcere-diabete>
+          </mat-tab>
+
+          <mat-tab label="Lesioni cutanee">
+            <app-scheda-lesioni-cutanee [data]=schedaLesioni [disable]=data.readonly></app-scheda-lesioni-cutanee>
+          </mat-tab>
+
+          <mat-tab label="Lesioni da decubito">
+            <app-scheda-lesioni-decubito [data]=schedaLesioniDecubito [disable]=data.readonly>
+            </app-scheda-lesioni-decubito>
+          </mat-tab>
 
 
-              <mat-tab label="Interventi">
-                  <app-scheda-interventi [data]=schedaInterventi [disable]=data.readonly></app-scheda-interventi>
-              </mat-tab>
+          <mat-tab label="Interventi">
+            <app-scheda-interventi [data]=schedaInterventi [disable]=data.readonly></app-scheda-interventi>
+          </mat-tab>
 
-              <mat-tab label="Diario">
-                  <app-diario [diario]=schedaDiario.diario [disable]=data.readonly></app-diario>
-              </mat-tab>
+          <mat-tab label="Diario">
+            <app-diario [diario]=schedaDiario.diario [disable]=data.readonly></app-diario>
+          </mat-tab>
 
-              <mat-tab label="Parametri vitali">
-                  <app-parametri-vitali [id]=this.paziente._id [saveEvent]="saveParametriVitali" [inLettura]=false></app-parametri-vitali>
-              </mat-tab>
+          <mat-tab label="Parametri vitali">
+            <app-parametri-vitali [id]=this.paziente._id [saveEvent]="saveParametriVitali" [inLettura]=false></app-parametri-vitali>
+          </mat-tab>
 
-              <mat-tab label="Esiti esami">
-                  <app-esiti-strumentali [id]=this.paziente._id [inLettura]=false></app-esiti-strumentali>
-              </mat-tab>
+          <mat-tab label="Esiti esami">
+            <app-esiti-strumentali [id]=this.paziente._id [inLettura]=false></app-esiti-strumentali>
+          </mat-tab>
 
-              <mat-tab label="Autorizzazioni uscita">
-                  <app-autorizzazione-uscita [id]=this.paziente._id></app-autorizzazione-uscita>
-              </mat-tab>
+          <mat-tab label="Autorizzazioni uscita">
+            <app-autorizzazione-uscita [id]=this.paziente._id></app-autorizzazione-uscita>
+          </mat-tab>
 
-              <mat-tab label="Scheda terapeutica">
-                  <app-scheda-terapeutica *ngIf="paziente && paziente._id" [id]="paziente._id" [inLettura]="false"></app-scheda-terapeutica>
-              </mat-tab>
+          <mat-tab label="Scheda terapeutica">
+            <app-scheda-terapeutica *ngIf="paziente && paziente._id" [id]="paziente._id" [inLettura]="false"></app-scheda-terapeutica>
+          </mat-tab>
 
 
-          </mat-tab-group>
+        </mat-tab-group>
 
       </div>
     </div>
@@ -242,6 +201,6 @@
 <div mat-dialog-actions>
   <div class="bottom-actions">
     <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
-    <button mat-button class="button-insert" [disabled]=data.readonly (click)="save()">Salva</button>
+    <button mat-raised-button color="primary" (click)="save()">Salva</button>
   </div>
 </div>

@@ -1,317 +1,183 @@
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-content>
+<div class="ospite-form-container">
+  <!-- Form Header -->
+  <div class="form-header">
+    <h4>Mini Nutritional Assessment (MNA-R)</h4>
+  </div>
 
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-                <h4>Mini Nutritional Assessment(MNAR)</h4>
-              </div>
-            </div>
+  <!-- Form Content -->
+  <div class="form-content">
+    <!-- Sezione Misure Base -->
+    <div class="form-section">
+      <div class="form-row">
+        <div class="form-field">
+          <h5>Peso (Kg)</h5>
+          <input type="number" class="form-input" [disabled]="disable" [(ngModel)]="data.peso">
+        </div>
+        <div class="form-field">
+          <h5>Statura (cm)</h5>
+          <input type="number" class="form-input" [disabled]="disable" [(ngModel)]="data.statura">
+        </div>
+      </div>
+    </div>
 
-            <div class="row">
-              <div class="col">
-                <label>Peso Kg</label>
-              </div>
-              <div class="col">
-                <input type="text" [disabled]=disable [(ngModel)]="data.peso">
-              </div>
+    <!-- Sezione A -->
+    <div class="form-section">
+      <h5 class="section-title">A) Presenta una perdita dell'appetito? Ha mangiato meno negli ultimi 3 mesi?</h5>
+      <p class="section-subtitle">Valutare: perdita d'appetito, problemi digestivi, difficoltà di masticazione o deglutizione</p>
 
-              <div class="col">
-                <label>Statura cm</label>
-              </div>
-              <div class="col">
-                <input type="text" [disabled]=disable [(ngModel)]="data.statura">
-              </div>
-            </div>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = Grave riduzione dell'assunzione di cibo</div>
+          <div class="option-item">1 = Moderata riduzione dell'assunzione di cibo</div>
+          <div class="option-item">2 = Nessuna riduzione dell'assunzione di cibo</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio A</mat-label>
+            <input matInput type="number" min="0" max="2" [disabled]="disable" [(ngModel)]="data.punteggioA">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-            <hr>
+    <!-- Sezione B -->
+    <div class="form-section">
+      <h5 class="section-title">B) Perdita di peso recente (< 3 mesi)</h5>
 
-            <div class="row">
-              <div class="col">
-                <h4>A) Presenta una perdita dell'appetito?Ha mangiato meno negli ultimi 3 mesi?(perdita
-                  d'appetito,problemi digestivi,difficolotà di masticazione o deglutizione)</h4>
-              </div>
-            </div>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = perdita di peso > 3 kg</div>
+          <div class="option-item">1 = non sa</div>
+          <div class="option-item">2 = perdita di peso tra 1 e 3 kg</div>
+          <div class="option-item">3 = nessuna perdita di peso</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio B</mat-label>
+            <input matInput type="number" min="0" max="3" [disabled]="disable" [(ngModel)]="data.punteggioB">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = Grave riduzione dell'assunzione di cibo</div>
-                  </div>
+    <!-- Sezione C -->
+    <div class="form-section">
+      <h5 class="section-title">C) Motricità</h5>
 
-                  <div class="row">
-                    <div class="col">1 = Moderata riduzione dell'assunzione di cibo</div>
-                  </div>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = dal letto alla poltrona</div>
+          <div class="option-item">1 = autonomo a domicilio</div>
+          <div class="option-item">2 = esce di casa</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio C</mat-label>
+            <input matInput type="number" min="0" max="2" [disabled]="disable" [(ngModel)]="data.punteggioC">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-                  <div class="row">
-                    <div class="col">2 = Nessuna riduzione dell'assunzione di cibo</div>
-                  </div>
-                </div>
-              </div>
+    <!-- Sezione D -->
+    <div class="form-section">
+      <h5 class="section-title">D) Nell'arco degli ultimi 3 mesi: malattie acute o stress psicologici?</h5>
 
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioA">
-                </mat-form-field>
-              </div>
-            </div>
-            <hr>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = si</div>
+          <div class="option-item">2 = no</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio D</mat-label>
+            <input matInput type="number" min="0" max="2" [disabled]="disable" [(ngModel)]="data.punteggioD">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-            <div class="row">
-              <div class="col">
-                <h4>B) Perdita di peso recente(&lt; 3 mesi)</h4>
-              </div>
-            </div>
+    <!-- Sezione E -->
+    <div class="form-section">
+      <h5 class="section-title">E) Problemi neuropsicologici</h5>
 
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = perdita di peso &gt; 3</div>
-                  </div>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = demenza o depressione grave</div>
+          <div class="option-item">1 = demenza moderata</div>
+          <div class="option-item">2 = nessun problema psicologico</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio E</mat-label>
+            <input matInput type="number" min="0" max="2" [disabled]="disable" [(ngModel)]="data.punteggioE">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-                  <div class="row">
-                    <div class="col">1 = non sa</div>
-                  </div>
+    <!-- Sezione F1 -->
+    <div class="form-section">
+      <h5 class="section-title">F1) Indice di massa corporea (IMC = peso/(altezza)² in kg/m²)</h5>
 
-                  <div class="row">
-                    <div class="col">2 = perdita di peso tra 1 e 3 Kg</div>
-                  </div>
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = IMC < 19</div>
+          <div class="option-item">1 = 19 ≤ IMC < 21</div>
+          <div class="option-item">2 = 21 ≤ IMC < 23</div>
+          <div class="option-item">3 = IMC ≥ 23</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio F1</mat-label>
+            <input matInput type="number" min="0" max="3" [disabled]="disable" [(ngModel)]="data.punteggioF1">
+          </mat-form-field>
+        </div>
+      </div>
 
-                  <div class="row">
-                    <div class="col">3 = nessuna perdita di peso</div>
-                  </div>
-                </div>
-              </div>
+      <div class="note-box">
+        <p>
+          SE L'IMC NON È DISPONIBILE, SOSTITUIRE LA DOMANDA F1 CON LA DOMANDA F2.
+          NON RISPONDERE ALLA DOMANDA F2 SE LA DOMANDA F1 È GIÀ STATA COMPLETATA.
+        </p>
+      </div>
+    </div>
 
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioB">
-                </mat-form-field>
-              </div>
-            </div>
+    <!-- Sezione F2 -->
+    <div class="form-section">
+      <h5 class="section-title">F2) Circonferenza del polpaccio (CP in cm)</h5>
 
+      <div class="form-row">
+        <div class="options-list">
+          <div class="option-item">0 = CP inferiore a 31</div>
+          <div class="option-item">3 = CP 31 o superiore</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio F2</mat-label>
+            <input matInput type="number" min="0" max="3" [disabled]="disable" [(ngModel)]="data.punteggioF2">
+          </mat-form-field>
+        </div>
+      </div>
+    </div>
 
-            <hr>
+    <!-- Sezione Punteggio Totale -->
+    <div class="form-section total-score">
+      <h5 class="section-title">Valutazione di screening (max 14 punti)</h5>
 
-
-
-            <div class="row">
-              <div class="col">
-                <h4>C) Motricit&agrave;</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = dal letto alla poltrona</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">1 = autonomo a domicilio</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">2 = esce di casa</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioC">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-              <div class="col">
-                <h4>D) Nell'arco degli utlimi 3 mesi:malattie acute o stress psicologici? </h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = si</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">2 = no</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioD">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <hr>
-
-
-            <div class="row">
-              <div class="col">
-                <h4>E) Problemi neuropsicologici</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = demenza o depressione grave</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">1 = demenza moderata</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">2 = nessun problema psicologico</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioE">
-                </mat-form-field>
-              </div>
-            </div>
-
-
-            <hr>
-
-
-            <div class="row">
-              <div class="col">
-                <h4>F1) Indice di massa corporea (IMC = peso/(altezza)2 in Kg/m2)</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = IMC &lt; 19</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">1 = 19&lt; IMC &lt; 21 </div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">2 = 21 &lt; IMC &lt; 23</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">3 = IMC &gt; 23</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioF1">
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <label>SE L'IMC NON E' DISPONIBILE,SOSTITUIRE LA DOMANDA F1 CON LA DOMANDA F2.NON RISPONDERE ALLA
-                  DOMANDA F2 SE LA DOMANDA F1 E' GIA' STATA COMPLETATA.</label>
-              </div>
-            </div>
-
-            <hr>
-
-
-
-
-            <div class="row">
-              <div class="col">
-                <h4>F2) Circonferenza del polpaccio(CP in cm)</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">0 = CP inferiore a 31</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">3 = CP 31 o superiore</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioF2">
-                </mat-form-field>
-              </div>
-            </div>
-
-
-
-            <hr>
-
-
-            <div class="row">
-              <div class="col">
-                <h4>Valutazione di screening(max 14 punti)</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <div class="container-fluid">
-                  <div class="row">
-                    <div class="col">12-14 punti: stato nutrizionale normale</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">8-11 punti: a rischio di malnutrizione</div>
-                  </div>
-
-                  <div class="row">
-                    <div class="col">0-7 punti: malnutrito</div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <mat-label>Punteggio</mat-label>
-                  <input matInput placeholder="Punteggio" [disabled]=disable [(ngModel)]="data.punteggioScreening">
-                </mat-form-field>
-              </div>
-            </div>
-          </div>
-        </mat-card-content>
-      </mat-card>
+      <div class="form-row">
+        <div class="score-ranges">
+          <div class="score-range">12-14 punti: stato nutrizionale normale</div>
+          <div class="score-range">8-11 punti: a rischio di malnutrizione</div>
+          <div class="score-range">0-7 punti: malnutrito</div>
+        </div>
+        <div class="score-input">
+          <mat-form-field appearance="fill">
+            <mat-label>Punteggio Totale</mat-label>
+            <input matInput type="number" min="0" max="14" [disabled]="disable" [(ngModel)]="data.punteggioScreening">
+          </mat-form-field>
+        </div>
+      </div>
     </div>
   </div>
 </div>

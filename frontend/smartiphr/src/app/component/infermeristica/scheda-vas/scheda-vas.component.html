@@ -1,47 +1,35 @@
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-content>
+<div class="ospite-form-container">
+  <!-- Form Header -->
+  <div class="form-header">
+    <h4>Scala Valutazione del Dolore VAS (Visual Analogic Scale)</h4>
+  </div>
 
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-                <h4>SCALA VALUTAZONE DEL DOLORE VAS(Visual Analogic Scale)</h4>
-
-              </div>
-
-
-              <div class="row">
-                <div class="col">
-                  <label>Indicare qual'è la quantità di dolore che si sta sperimentando partendo da 0 (nessun dolore) a
-                    10
-                    (massimo dolore)</label>
-                  <select class="custom-select" [disabled]=disable  [(ngModel)]="data.punteggio">
-                    <option selected="" value="">Seleziona ...</option>
-                    <option value="0 - 1">0 - 1 </option>
-                    <option value="1 - 2">1 - 2 </option>
-                    <option value="2 - 3">2 - 3 </option>
-
-                    <option value="3 - 4">3 - 4 </option>
-                    <option value="4 - 5">4 - 5 </option>
-                    <option value="5 - 6">5 - 6 </option>
-
-                    <option value="6 - 7">6 - 7 </option>
-                    <option value="7 -8">7 -8 </option>
-                    <option value="8 - 9">8 - 9 </option>
-                    <option value="9 - 10">9 - 10 </option>
-                  </select>
-                </div>
-              </div>
-
-            </div>
+  <!-- Form Content -->
+  <div class="form-content">
+    <div class="form-section">
+      <div class="form-row">
+        <div class="form-field full-width">
+          <h5>Valutazione del dolore</h5>
+          <p class="description-text">
+            Indicare qual è la quantità di dolore che si sta sperimentando partendo da 0 (nessun dolore) a 10 (massimo dolore)
+          </p>
+          <div>
+            <select class="form-select" [disabled]="disable" [(ngModel)]="data.punteggio">
+              <option selected="" value="">Seleziona ...</option>
+              <option value="0 - 1">0 - 1 </option>
+              <option value="1 - 2">1 - 2 </option>
+              <option value="2 - 3">2 - 3 </option>
+              <option value="3 - 4">3 - 4 </option>
+              <option value="4 - 5">4 - 5 </option>
+              <option value="5 - 6">5 - 6 </option>
+              <option value="6 - 7">6 - 7 </option>
+              <option value="7 -8">7 - 8 </option>
+              <option value="8 - 9">8 - 9 </option>
+              <option value="9 - 10">9 - 10 </option>
+            </select>
           </div>
-
-
-
-        </mat-card-content>
-      </mat-card>
+        </div>
+      </div>
     </div>
   </div>
 </div>

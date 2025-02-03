@@ -7,496 +7,118 @@
           <div class="container-fluid">
             <div class="row">
               <div class="col">
-                <h4>SCALA VALUTAZONE DELLE LESIONI CUTANEE</h4>
+                <h4>SCALA VALUTAZIONE DELLE LESIONI CUTANEE</h4>
               </div>
             </div>
 
-            <div class="row">
-              <div class="col">
-                <label>STADIAZIONE</label>
+            <!-- Form Content -->
+            <div class="form-content">
+              <!-- Sezione Stadiazione -->
+              <div class="form-section">
+                <h5 class="section-title">STADIAZIONE</h5>
+                <div class="checkbox-group">
+                  <mat-checkbox class="full-width" [disabled]="disable" [(ngModel)]="data.stadio1">
+                    Stadio I arrossamento della cute intatta, eritema irreversibile
+                  </mat-checkbox>
+                  <mat-checkbox class="full-width" [disabled]="disable" [(ngModel)]="data.stadio2">
+                    Stadio II lesione superficiale, abrasione, flittene, lieve cavità
+                  </mat-checkbox>
+                  <mat-checkbox class="full-width" [disabled]="disable" [(ngModel)]="data.stadio3">
+                    Stadio III profonda cavità nel tessuno sottocutaneo con estensione fino alla fascia muscolare
+                  </mat-checkbox>
+                  <mat-checkbox class="full-width" [disabled]="disable" [(ngModel)]="data.stadio4">
+                    Stadio IV profonda cavità con interessamento di muscoli, ossa, tendini, articolazioni
+                  </mat-checkbox>
+                </div>
               </div>
-            </div>
 
-
-            <div class="row">
-              <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio1">Stadio I arrossamento della cute intatta,eritema irreversibile
-                </mat-checkbox>
+              <!-- Sezione Varianti -->
+              <div class="form-section">
+                <h5 class="section-title">VARIANTI</h5>
+                <div class="varianti-group">
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti1">Escara</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti2">Emoraggia</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti3">Essudativa</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti4">Necrotica</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti5">Fibrinosa</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti6">Cavitaria</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti7">Granulleggiante</mat-checkbox>
+                  <mat-checkbox [disabled]="disable" [(ngModel)]="data.varianti8">Infetta</mat-checkbox>
+                </div>
               </div>
-            </div>
 
-            <div class="row">
-              <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio2">Stadio II lesione superficiale,abrasione,flittene,lieve cavità
-                </mat-checkbox>
+              <!-- Sezione Sede e Grado -->
+              <div class="form-section">
+                <h5 class="section-title">SEDE E GRADO</h5>
+
+                <!-- Prima tabella -->
+                <div class="table-container">
+                  <table class="custom-table">
+                    <tbody>
+                      <tr>
+                        <td>OCCIPITE</td>
+                        <td>
+                          <select class="custom-select" [disabled]="disable" [(ngModel)]="data.occipite">
+                            <option value="">Seleziona ...</option>
+                            <option value="1">I</option>
+                            <option value="2">II</option>
+                            <option value="3">III</option>
+                            <option value="4">IV</option>
+                            <option value="E">E</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <!-- Ripeti per altri campi simili -->
+                    </tbody>
+                  </table>
+                </div>
+
+                <!-- Seconda tabella -->
+                <div class="table-container">
+                  <table class="custom-table bilateral">
+                    <thead>
+                      <tr>
+                        <th></th>
+                        <th>DX</th>
+                        <th>SX</th>
+                        <th>GRADO</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr>
+                        <td>ORECCHIO</td>
+                        <td>
+                          <div class="checkbox-wrapper">
+                            <input type="checkbox" [disabled]="disable" [(ngModel)]="data.orecchioDx">
+                          </div>
+                        </td>
+                        <td>
+                          <div class="checkbox-wrapper">
+                            <input type="checkbox" [disabled]="disable" [(ngModel)]="data.orecchioSx">
+                          </div>
+                        </td>
+                        <td>
+                          <select class="custom-select" [disabled]="disable" [(ngModel)]="data.orecchioVariante">
+                            <option value="">Seleziona ...</option>
+                            <option value="I">I Variante</option>
+                            <option value="II">II Variante</option>
+                            <option value="III">III Variante</option>
+                            <option value="IV">IV Variante</option>
+                            <option value="E">E Variante</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <!-- Ripeti per altri campi simili -->
+                    </tbody>
+                  </table>
+                </div>
               </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio3">Stadio III profonda cavità nel tessuno sottocutaneo con estensione
-                  fino alla fascia muscolare</mat-checkbox>
-              </div>
-            </div>
-            <div class="row">
-              <div class="col">
-                <mat-checkbox class="example-margin" [disabled]=disable [(ngModel)]="data.stadio4">Stadio IV profonda cavità con interessamento di
-                  muscoli,ossa,tendini,articolazioni</mat-checkbox>
-              </div>
-            </div>
 
-            <hr>
-
-            <div class="row">
-              <div class="col">
-                <label>Varianti: </label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <section class="example-section" >
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti1"> Escara</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti2"> Emoraggia</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti3"> Essudativa</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti4"> Necrotica</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti5"> Fibrinosa</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti6"> Cavitaria</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti7"> Granulleggiante</mat-checkbox>
-                  <mat-checkbox type="checkbox" [disabled]=disable [(ngModel)]="data.varianti8"> Infetta</mat-checkbox>
-                </section>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col">
-                <h4>SEDE E GRADO:</h4>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <table class="table">
-                  <tbody>
-                    <tr>
-                      <td>OCCIPITE</td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.occipite">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1">I</option>
-                          <option value="2">II</option>
-                          <option value="3">III</option>
-                          <option value="4">IV</option>
-                          <option value="4">E</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>STERNO</td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.sterno">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1">I</option>
-                          <option value="2">II</option>
-                          <option value="3">III</option>
-                          <option value="4">IV</option>
-                          <option value="4">E</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>PROMINENZE VERTEBRALI</td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.prominenzeVertebrali">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1">I</option>
-                          <option value="2">II</option>
-                          <option value="3">III</option>
-                          <option value="4">IV</option>
-                          <option value="4">E</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>SACRO</td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.sacro">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1">I</option>
-                          <option value="2">II</option>
-                          <option value="3">III</option>
-                          <option value="4">IV</option>
-                          <option value="4">E</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>PUBE</td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.pube">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I</option>
-                          <option value="II">II</option>
-                          <option value="III">III</option>
-                          <option value="IV">IV</option>
-                          <option value="E">E</option>
-                        </select>
-                      </td>
-
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <table class="table">
-                  <thead>
-                    <tr>
-                      <td></td>
-                      <td>DX</td>
-                      <td>SX</td>
-                      <td>GRADO</td>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <tr>
-                      <td>ORECCHIO</td>
-                      <td>
-                        <input type="checkbox" value="dx_orecchio" [disabled]=disable [(ngModel)]="data.orecchioDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_orecchio" [disabled]=disable [(ngModel)]="data.orecchioSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.orecchioVariante">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-                    <tr>
-                      <td>ZIGOMI</td>
-                      <td>
-                        <input type="checkbox" value="dx_zigomi" [disabled]=disable [(ngModel)]="data.zigomiDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_zigomi" [disabled]=disable [(ngModel)]="data.zigomiSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" id="grado-zigomi" [disabled]=disable> [(ngModel)]="data.zigomiVariante">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-                    <tr>
-                      <td>CLAVICOLE</td>
-                      <td>
-                        <input type="checkbox" value="dx_clavicole" [disabled]=disable [(ngModel)]="data.clavicoleDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_clavicole" [disabled]=disable [(ngModel)]="data.clavicoleSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.clavicoleVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-                    <tr>
-                      <td>SPALLA</td>
-                      <td>
-                        <input type="checkbox" value="dx_spalla" [disabled]=disable [(ngModel)]="data.spallaDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_spalla" [disabled]=disable [(ngModel)]="data.spallaSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.spallaVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-
-                    <tr>
-                      <td>SCAPOLE</td>
-                      <td>
-                        <input type="checkbox" value="dx_scapole" [disabled]=disable [(ngModel)]="data.scapoleDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_scapole" [disabled]=disable [(ngModel)]="data.scapoleSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.scapoleVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-
-
-                    <tr>
-                      <td>COSTATO</td>
-                      <td>
-                        <input type="checkbox" value="dx_costato" [disabled]=disable [(ngModel)]="data.costatoDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_costato" [disabled]=disable [(ngModel)]="data.costatoSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.costatoVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-
-                    <tr>
-                      <td>CRESTE ILIACHE</td>
-                      <td>
-                        <input type="checkbox" value="dx_creste" [disabled]=disable [(ngModel)]="data.cresteIliacheDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_creste" [disabled]=disable [(ngModel)]="data.cresteIliacheSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.cresteIliacheVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-                    <tr>
-                      <td>TROCANTIERI</td>
-                      <td>
-                        <input type="checkbox" value="dx_trocantieri" [disabled]=disable [(ngModel)]="data.troncatieriDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_trocantieri" [disabled]=disable [(ngModel)]="data.troncatieriSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.troncatieriVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-
-                    <tr>
-                      <td>PROMINENZE ISCHIATRICHE</td>
-                      <td>
-                        <input type="checkbox" value="dx_prominenze" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_prominenze" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.prominenzeIschiatricheVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-                    <tr>
-                      <td>GINOCCHIO</td>
-                      <td>
-                        <input type="checkbox" value="dx_ginocchio" [disabled]=disable [(ngModel)]="data.ginocchioDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_ginocchio" [disabled]=disable [(ngModel)]="data.ginocchioSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.ginocchioVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>MALLEOLI TIBIALI MEDIALI</td>
-                      <td>
-                        <input type="checkbox" value="dx_tibia_med" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_tibia_med" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.malleoliTribialiMedialiVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>MALLEOLI TIBIALI LATERALI</td>
-                      <td>
-                        <input type="checkbox" value="dx_tibia_lat" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_tibia_lat" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.malleoliTribialiLateraliVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-                    <tr>
-                      <td>DORSO PIEDE</td>
-                      <td>
-                        <input type="checkbox" value="dx_piede" [disabled]=disable [(ngModel)]="data.dorsoPiedeDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_piede" [disabled]=disable [(ngModel)]="data.dorsoPiedeSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.dorsoPiedeVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-                    <tr>
-                      <td>TALLONI</td>
-                      <td>
-                        <input type="checkbox" value="dx_talloni" [disabled]=disable [(ngModel)]="data.talloniDx">
-                      </td>
-                      <td>
-                        <input type="checkbox" value="sx_talloni" [disabled]=disable [(ngModel)]="data.talloniSx">
-                      </td>
-                      <td>
-                        <select class="custom-select" [disabled]=disable [(ngModel)]="data.talloniVarianti">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="I">I Variante</option>
-                          <option value="II">II Variante</option>
-                          <option value="III">III Variante</option>
-                          <option value="IV">IV Variante</option>
-                          <option value="E">E Variante</option>
-                        </select>
-                      </td>
-
-                    </tr>
-
-
-                  </tbody>
-                </table>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <label>DESCRIZIONE</label>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <mat-form-field class="example-full-width" appearance="fill">
-                  <textarea matInput placeholder="" [disabled]=disable  [(ngModel)]="data.descrizione"></textarea>
+              <!-- Sezione Descrizione -->
+              <div class="form-section">
+                <h5 class="section-title">DESCRIZIONE</h5>
+                <mat-form-field class="full-width" appearance="fill">
+                  <textarea matInput [disabled]="disable" [(ngModel)]="data.descrizione" rows="4"></textarea>
                 </mat-form-field>
               </div>
             </div>

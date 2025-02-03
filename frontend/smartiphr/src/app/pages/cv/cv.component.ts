@@ -58,8 +58,16 @@ export class CvComponent implements OnInit {
     var dialogRef = this.dialog.open(DialogCvComponent, {
       data: {
         cv: new Curriculum(),
-        disabled: false
-      }
+        disabled: false,
+        new: true
+      },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
     });
 
     if (dialogRef != undefined)
@@ -77,8 +85,16 @@ export class CvComponent implements OnInit {
     var dialogRef = this.dialog.open(DialogCvComponent, {
       data: {
         cv: row,
-        disabled: true
-      }
+        disabled: true,
+        new: false
+      },
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
       });
 
     if (dialogRef != undefined)

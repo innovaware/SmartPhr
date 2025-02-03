@@ -1,79 +1,229 @@
-.tabcontent {
-  padding-top: 10px;
-  padding-left: 0px;
-  padding-right: 0px;
+/* Layout di base */
+.ospite-form-container {
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
-select.custom-select {
+/* Header del form */
+.form-header {
+  margin-bottom: 24px;
+  border-bottom: 2px solid #eee;
+  padding-bottom: 12px;
+}
+
+  .form-header h4 {
+    margin: 0;
+    color: #333;
+    font-size: 1.25rem;
+  }
+
+/* Contenuto del form */
+.form-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+/* Sezioni del form */
+.form-section {
+  background-color: #f9f9f9;
+  border-radius: 6px;
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+/* Righe del form */
+.form-row {
+  display: flex;
+  gap: 20px;
+  margin-bottom: 16px;
+}
+
+/* Campi del form */
+.form-field {
+  flex: 1;
+  min-width: 200px;
+}
+
+/* Titoli e sottotitoli */
+h5 {
+  color: #555;
+  font-size: 1rem;
+  font-weight: 500;
+  margin: 0 0 12px 0;
+}
+
+.section-title {
+  color: #333;
+  font-size: 1.1rem;
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+
+.section-subtitle {
+  color: #666;
+  font-size: 0.9rem;
+  margin-bottom: 16px;
+}
+
+/* Input e Form Fields */
+.form-input {
   width: 100%;
-  color: #495057;
-  background-size: 8px 10px;
-  border: 1px solid #ced4da;
-  border-radius: 0.25rem;
-  -webkit-appearance: none;
-  padding: 0.375rem 1.75rem 0.375rem 0.75rem;
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 0.9rem;
 }
 
-::ng-deep .mat-card-header-text {
-  margin: 0px !important;
-  font-size: 14px;
-  color: #676a6c;
+  .form-input:disabled {
+    background-color: #fff !important;
+    border: 1px solid #eee;
+    color: #000;
+    cursor: not-allowed;
+  }
+
+/* Lista delle opzioni */
+.options-list {
+  flex: 2;
 }
 
-::ng-deep .mat-card-header .mat-card-title {
-  font-size: 14px;
+.option-item {
+  padding: 8px 12px;
+  color: #555;
+  font-size: 0.9rem;
+  background-color: #fff;
+  border-radius: 4px;
+  margin-bottom: 4px;
 }
 
-.mat-card {
-  padding: 0px;
-  box-shadow: unset;
+/* Input del punteggio */
+.score-input {
+  flex: 1;
+  min-width: 150px;
 }
 
-.mat-radio-button {
-  padding-left: 5px;
-  padding-right: 5px;
-}
-
-::ng-deep .mat-card-content {
-  padding-bottom: 10px;
-}
-
+/* Material Form Field customization */
 .mat-form-field {
   width: 100%;
 }
 
-.mat-checkbox {
-  margin-right: 10px
+::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
+  background-color: #fff !important;
+  padding: 8px 12px !important;
 }
 
-.mat-card-content {
-  margin-bottom: 0;
-  padding: 10px;
+::ng-deep .mat-form-field-disabled .mat-form-field-flex {
+  background-color: #f5f5f5 !important;
 }
 
-h4 {
-  font-size: 17px;
-  color: #676a6c;
+/* Note box */
+.note-box {
+  background-color: #f5f5f5;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-top: 16px;
+  border-left: 4px solid #ddd;
 }
 
-label {
-  font-size: 13px;
-  color: #676a6c;
+  .note-box p {
+    color: #666;
+    font-size: 0.85rem;
+    margin: 0;
+  }
+
+/* Sezione punteggio totale */
+.total-score {
+  background-color: #f8f9fa;
+  border: 1px solid #e9ecef;
 }
 
-
-.table > thead > tr > th {
-  border-bottom: 1px solid #DDDDDD;
-  vertical-align: bottom;
+.score-ranges {
+  flex: 2;
 }
 
-
-.table {
-
-  font-size: 13px;
-  color: #676a6c;
+.score-range {
+  padding: 8px 0;
+  color: #555;
+  font-size: 0.9rem;
+  font-weight: 500;
 }
 
-input {
+/* Material Design Overrides */
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-label-content {
+  color: #000;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-outer-circle {
+  border-color: #000;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled.mat-radio-checked .mat-radio-outer-circle {
+  border-color: #000;
+}
+
+::ng-deep .mat-radio-button.mat-radio-disabled .mat-radio-inner-circle {
+  background-color: #000;
+}
+
+/* Input disabilitati */
+::ng-deep .mat-input-element:disabled {
+  color: #000;
+}
+
+::ng-deep .mat-form-field-type-mat-native-select.mat-form-field-disabled .mat-form-field-infix::after {
+  color: #000;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+  }
+
+  .form-field {
+    min-width: 100%;
+  }
+
+  .score-input {
+    margin-top: 16px;
+    width: 100%;
+  }
+
+  .options-list {
+    margin-bottom: 16px;
+  }
+}
+
+/* Utility Classes */
+.full-width {
   width: 100%;
 }
+
+.required-note {
+  color: #666;
+  font-size: 0.85rem;
+  margin-top: 16px;
+}
+
+/* Fix per Material Components */
+mat-form-field {
+  width: 100%;
+}
+
+.mat-radio-group {
+  display: flex;
+  gap: 16px;
+}
+
+/* Fix per input numerici */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+  input[type="number"]::-webkit-outer-spin-button,
+  input[type="number"]::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }

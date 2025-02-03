@@ -46,6 +46,9 @@ export class DialogCartellaInfermeristicaComponent implements OnInit {
       readonly: boolean;
     }
   ) {
+    this.dialogRef.addPanelClass('fornitore-dialog-container');
+    this.dialogRef.updateSize('90%', '90%');
+    this.dialogRef.updatePosition({ top: '24px' });
     console.log("Dialog Cartella Infermeristica");
 
     this.paziente = Paziente.clone(data.paziente);
