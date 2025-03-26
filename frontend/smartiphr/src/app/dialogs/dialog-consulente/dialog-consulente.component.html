@@ -1,8 +1,17 @@
 <mat-dialog-content class="dialog-container">
     <div class="dialog-header">
-        <h2 class="consultant-name">Consulente: {{item.consulente.nome}} {{item.consulente.cognome}}</h2>
+        <div class="row">
+            <div class="col-10">
+                <h2 class="consultant-name">Consulente: {{item.consulente.nome}} {{item.consulente.cognome}}</h2>
+            </div>
+            <div class="col-1">
+                <button mat-raised-button color="primary" (click)="save()" title="Salva" [disabled]=uploading><mat-icon>save</mat-icon></button>
+            </div>
+            <div class="col-1">
+                <button mat-button title="Chiudi" [mat-dialog-close]="false"><mat-icon>close</mat-icon></button>
+            </div>
+        </div>
     </div>
-
     <mat-tab-group mat-align-tabs="start" class="main-tabs">
         <!-- Tab Generale -->
         <mat-tab label="Generale">
@@ -368,8 +377,3 @@
         </mat-tab>
     </mat-tab-group>
 </mat-dialog-content>
-
-<mat-dialog-actions align="end">
-    <button mat-button [mat-dialog-close]="result">Chiudi</button>
-    <button mat-raised-button color="primary" (click)="save()">Salva</button>
-</mat-dialog-actions>

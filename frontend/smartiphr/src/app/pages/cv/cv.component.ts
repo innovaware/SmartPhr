@@ -62,7 +62,7 @@ export class CvComponent implements OnInit {
         new: true
       },
       width: '95%',
-      maxWidth: '800px',
+      maxWidth: '900px',
       height: 'auto',
       maxHeight: '90vh',
       panelClass: ['large-dialog', 'scrollable-dialog'],
@@ -89,7 +89,7 @@ export class CvComponent implements OnInit {
         new: false
       },
       width: '95%',
-      maxWidth: '800px',
+      maxWidth: '900px',
       height: 'auto',
       maxHeight: '90vh',
       panelClass: ['large-dialog', 'scrollable-dialog'],

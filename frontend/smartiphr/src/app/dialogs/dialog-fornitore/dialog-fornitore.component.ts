@@ -45,16 +45,19 @@ export class DialogFornitoreComponent implements OnInit {
   public documentiFornitoreDataSource: MatTableDataSource<DocumentoFornitore>;
 
   // @ViewChild(MatPaginator, { static: false }) fatturePaginator: MatPaginator;
-  @ViewChild("paginatorFatture", {static: false})
+  @ViewChild("paginatorFatture", { static: false })
   fatturePaginator: MatPaginator;
-  @ViewChild("paginatorBonifici", {static: false})
+  @ViewChild("paginatorBonifici", { static: false })
   bonificiPaginator: MatPaginator;
-  @ViewChild("paginatorDocumentiFornitori", {static: false})
+  @ViewChild("paginatorDocumentiFornitori", { static: false })
   documentiFornitorePaginator: MatPaginator;
 
   public fatture: Fatture[];
   public bonifici: Bonifico[];
   public documentiFornitore: DocumentoFornitore[];
+  inputSearchFieldBon: string;
+  inputSearchFieldFat: string;
+  inputSearchFieldDoc: string;
 
   constructor(
     public uploadService: UploadService,
@@ -88,14 +91,14 @@ export class DialogFornitoreComponent implements OnInit {
 
 
 
-// a e b sono oggetti Data
- dateDiffInDays(a, b) {
-  var _MS_PER_ANNO = 1000 * 60 * 60 * 24*365;
-  var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
-  var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
+  // a e b sono oggetti Data
+  dateDiffInDays(a, b) {
+    var _MS_PER_ANNO = 1000 * 60 * 60 * 24 * 365;
+    var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
+    var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-   return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
-}
+    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+  }
 
   async save(saveAndClose: boolean) {
     // this.data.fornitore = this.fornitore;
@@ -131,7 +134,7 @@ export class DialogFornitoreComponent implements OnInit {
       return;
     } else {
 
-      if (this.dateDiffInDays(new Date(this.fornitore.dataNascita),new Date())<10) {
+      if (this.dateDiffInDays(new Date(this.fornitore.dataNascita), new Date()) < 10) {
         this.messageService.showMessageError("Data di nascita Errata!!!");
         return;
       }
@@ -173,9 +176,9 @@ export class DialogFornitoreComponent implements OnInit {
           this.uploading = false;
         });
     }
-  if(saveAndClose == true) this.dialogRef.close(this.data.fornitore);
+    if (saveAndClose == true) this.dialogRef.close(this.data.fornitore);
   }
-  
+
 
   async changeData($event: Fornitore) {
     console.log("Change fornitore info", $event);
@@ -224,9 +227,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(fattura.filename, this.fornitore._id, 'fatture')
       .then((x) => {
-        
+
         x.subscribe((data) => {
-          
+
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -278,7 +281,7 @@ export class DialogFornitoreComponent implements OnInit {
     if (!fattura.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
-    } 
+    }
     const typeDocument = "FATTURE";
     const path = "fatture";
     const file: File = fattura.file;
@@ -286,39 +289,39 @@ export class DialogFornitoreComponent implements OnInit {
 
     console.log("Invio fattura: ", fattura);
     this.fattureService
-    .insert(fattura, this.fornitore._id)
-    .then((result: Fatture) => {
-      console.log("Insert fattura: ", result);
+      .insert(fattura, this.fornitore._id)
+      .then((result: Fatture) => {
+        console.log("Insert fattura: ", result);
 
-      this.addingFattura = false;
+        this.addingFattura = false;
 
-      let formData: FormData = new FormData();
-      const nameDocument: string = fattura.filename;
+        let formData: FormData = new FormData();
+        const nameDocument: string = fattura.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.fornitore._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.fatture.push(result);
-          this.fattureDataSource.data = this.fatture;
-          this.uploadingFattura = false;
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.fornitore._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.fatture.push(result);
+            this.fattureDataSource.data = this.fatture;
+            this.uploadingFattura = false;
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.messageService.showMessageError("Errore Inserimento fattura");
-      console.error(err);
-    });
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento fattura");
+        console.error(err);
+      });
   }
 
   async addBonifico() {
@@ -330,7 +333,19 @@ export class DialogFornitoreComponent implements OnInit {
       note: ""
     };
   }
-
+  annulla(type:string) {
+    switch (type) {
+      case "Bonifico":
+        this.addingBonifici = false;
+        break;
+      case "Fattura":
+        this.addingFattura = false;
+        break;
+      case "Documento":
+        this.addingDocumentoFornitore = false;
+        break;
+    }
+  }
   async uploadBonifico($event) {
 
     let fileList: FileList = $event.target.files;
@@ -338,7 +353,7 @@ export class DialogFornitoreComponent implements OnInit {
       let file: File = fileList[0];
 
       console.log("upload bonifico: ", $event);
-      this.nuovaBonifico.filename= file.name;
+      this.nuovaBonifico.filename = file.name;
       this.nuovaBonifico.file = file;
 
     } else {
@@ -351,46 +366,46 @@ export class DialogFornitoreComponent implements OnInit {
     if (!bonifico.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
-    } 
+    }
     const typeDocument = "BONIFICO";
     const path = "bonifico";
     const file: File = bonifico.file;
     this.uploadingBonifici = true;
 
     this.bonficoService
-        .insert(bonifico, this.fornitore._id)
-        .then((result: Bonifico) => {
-          console.log("Insert bonifico 1: ", result);
-          this.bonifici.push(result);
-          this.bonificiDataSource.data = this.bonifici;
-          this.addingBonifici = false;
-          this.uploadingBonifici = false;
+      .insert(bonifico, this.fornitore._id)
+      .then((result: Bonifico) => {
+        console.log("Insert bonifico 1: ", result);
+        this.bonifici.push(result);
+        this.bonificiDataSource.data = this.bonifici;
+        this.addingBonifici = false;
+        this.uploadingBonifici = false;
 
-          let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-          const nameDocument: string = bonifico.filename;
+        const nameDocument: string = bonifico.filename;
 
-          formData.append("file", file);
-          formData.append("typeDocument", typeDocument);
-          formData.append("path", `${this.fornitore._id}/${path}`);
-          formData.append("name", nameDocument);
-          this.uploadService
-            .uploadDocument(formData)
-            .then((x) => {
-              this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.fornitore._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-              console.log("Uploading completed: ", x);
-            })
-            .catch((err) => {
-              this.messageService.showMessageError("Errore nel caricamento file");
-              console.error(err);
-              this.uploading = false;
-            });
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore Inserimento Bonifico");
-          console.error(err);
-        });
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento Bonifico");
+        console.error(err);
+      });
   }
 
   async getBonificiAssegniContanti() {
@@ -413,9 +428,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(bonifico.filename, this.fornitore._id, 'bonifico')
       .then((x) => {
-        
+
         x.subscribe((data) => {
-          
+
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -558,7 +573,7 @@ export class DialogFornitoreComponent implements OnInit {
       .then((x) => {
         console.log("Documento cancellato");
         const index = this.documentiFornitore.indexOf(documentoFornitore);
-        
+
         if (index > -1) {
           this.documentiFornitore.splice(index, 1);
         }
@@ -576,9 +591,9 @@ export class DialogFornitoreComponent implements OnInit {
     this.uploadService
       .download(documentoFornitore.filename, this.fornitore._id, 'documentoFornitore')
       .then((x) => {
-        
+
         x.subscribe((data) => {
-          
+
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -616,7 +631,7 @@ export class DialogFornitoreComponent implements OnInit {
     if (fileList.length > 0) {
       let file: File = fileList[0];
 
-      
+
       this.nuovoDocumentoFornitore.filename = file.name;
       this.nuovoDocumentoFornitore.file = file;
 
@@ -630,7 +645,7 @@ export class DialogFornitoreComponent implements OnInit {
     if (!documentoFornitore.file) {
       this.messageService.showMessageError("Selezionare il file");
       return;
-    } 
+    }
     const typeDocument = "DOCUMENTO FORNITORE";
     const path = "documentoFornitore";
     const file: File = documentoFornitore.file;
@@ -638,39 +653,71 @@ export class DialogFornitoreComponent implements OnInit {
 
     console.log("Invio documento: ", documentoFornitore);
     this.documentoFornitoreService
-    .insertDocumentoFornitore(documentoFornitore, this.fornitore._id)
-    .then((result: DocumentoFornitore) => {
-      console.log("Insert documento 2: ", result);
-      this.documentiFornitore.push(result);
-      this.documentiFornitoreDataSource.data = this.documentiFornitore;
-      this.addingDocumentoFornitore = false;
-      this.uploadingDocumentoFornitore = false;
+      .insertDocumentoFornitore(documentoFornitore, this.fornitore._id)
+      .then((result: DocumentoFornitore) => {
+        console.log("Insert documento 2: ", result);
+        this.documentiFornitore.push(result);
+        this.documentiFornitoreDataSource.data = this.documentiFornitore;
+        this.addingDocumentoFornitore = false;
+        this.uploadingDocumentoFornitore = false;
 
-      let formData: FormData = new FormData();
+        let formData: FormData = new FormData();
 
-      const nameDocument: string = documentoFornitore.filename;
+        const nameDocument: string = documentoFornitore.filename;
 
-      formData.append("file", file);
-      formData.append("typeDocument", typeDocument);
-      formData.append("path", `${this.fornitore._id}/${path}`);
-      formData.append("name", nameDocument);
-      this.uploadService
-        .uploadDocument(formData)
-        .then((x) => {
-          this.uploading = false;
+        formData.append("file", file);
+        formData.append("typeDocument", typeDocument);
+        formData.append("path", `${this.fornitore._id}/${path}`);
+        formData.append("name", nameDocument);
+        this.uploadService
+          .uploadDocument(formData)
+          .then((x) => {
+            this.uploading = false;
 
-          console.log("Uploading completed: ", x);
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore nel caricamento file");
-          console.error(err);
-          this.uploading = false;
-        });
-    })
-    .catch((err) => {
-      this.messageService.showMessageError("Errore Inserimento documento");
-      console.error(err);
-    });
+            console.log("Uploading completed: ", x);
+          })
+          .catch((err) => {
+            this.messageService.showMessageError("Errore nel caricamento file");
+            console.error(err);
+            this.uploading = false;
+          });
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore Inserimento documento");
+        console.error(err);
+      });
   }
 
+  cleanSearchField(type: string): void {
+    switch (type) {
+      case "Bonifici":
+        this.bonificiDataSource.filter = '';
+        this.inputSearchFieldBon = '';
+        break;
+      case "Fattura":
+        this.fattureDataSource.filter = '';
+        this.inputSearchFieldFat = '';
+        break;
+      case "Documenti":
+        this.documentiFornitoreDataSource.filter = '';
+        this.inputSearchFieldDoc = '';
+        break;
+    }
+  }
+
+  applyFilter(event: Event, type: string): void {
+    const filterValue = (event.target as HTMLInputElement).value.trim().toLowerCase();
+
+    switch (type) {
+      case "Bonifici":
+        this.bonificiDataSource.filter = filterValue;
+        break;
+      case "Fattura":
+        this.fattureDataSource.filter = filterValue;
+        break;
+      case "Documenti":
+        this.documentiFornitoreDataSource.filter = filterValue;
+        break;
+    }
+  }
 }

@@ -1,5 +1,16 @@
-
-<h2 mat-dialog-title><strong>Dipendente: {{dipendente.nome}} {{dipendente.cognome}}</strong></h2>
+<div class="dialog-header">
+    <div class="row">
+        <div class="col">
+            <h4><b>Dipendente: {{dipendente.nome}} {{dipendente.cognome}}</b></h4>
+        </div>
+        <div class="col-1">
+            <button mat-raised-button color="primary" (click)="save(false)" [disabled]=uploading title="Salva"><mat-icon>save</mat-icon></button>
+        </div>
+        <div class="col-1">
+            <button mat-button title="Chiudi" [mat-dialog-close]="false"><mat-icon>close</mat-icon></button>
+        </div>
+    </div>
+</div>
 <mat-dialog-content>
   <mat-tab-group mat-align-tabs="start" (selectedTabChange)="tabChanged($event)">
     <mat-tab label="{{tabLabels[0].label}}">
@@ -957,9 +968,9 @@
 </mat-dialog-content>
 
 
-  <div mat-dialog-actions>
+  <!-- <div mat-dialog-actions>
     <div class="bottom-actions">
       <button mat-button (click)="Close()" [mat-dialog-close]="undefined">Chiudi</button>
       <button mat-raised-button color="primary" (click)="save(false)" [disabled]=uploading>Salva</button>
     </div>
-  </div>
+  </div> -->

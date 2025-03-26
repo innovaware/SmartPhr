@@ -1,4 +1,16 @@
-<h2 mat-dialog-title><strong>Curriculum Vitae: {{ data.cv.cognome }} {{ data.cv.nome }}</strong></h2>
+<div class="dialog-header">
+    <div class="row">
+        <div class="col">
+            <h4><b>Curriculum Vitae: {{ data.cv.cognome }} {{ data.cv.nome }}</b></h4>
+        </div>
+        <div class="col-1">
+            <button mat-raised-button color="primary" (click)="save()" title="Salva"><mat-icon>save</mat-icon></button>
+        </div>
+        <div class="col-1">
+            <button mat-button title="Chiudi" [mat-dialog-close]="false"><mat-icon>close</mat-icon></button>
+        </div>
+    </div>
+</div>
 <mat-dialog-content>
     <ng-container *ngIf="data.disabled">
         <h1 class="title"></h1>
@@ -105,9 +117,3 @@
 
 </mat-dialog-content>
 
-<mat-dialog-actions align="end">
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
-    <button mat-raised-button color="primary" (click)="save()">Salva</button>
-  </div>
-</mat-dialog-actions>
