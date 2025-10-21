@@ -1,33 +1,15 @@
 const express = require("express");
 const router = express.Router();
 const Fornitori = require("../models/fornitori");
-//const redis = require("redis");
-//const redisPort = process.env.REDISPORT || 6379;
-//const redisHost = process.env.REDISHOST || 'redis';
-//const redisDisabled = process.env.REDISDISABLE === "true" || false;
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
-//const client = redis.createClient(redisPort, redisHost);
-const searchTerm = `FORNITORIALL`;
-const Log = require("../models/log");
-const Dipendenti = require("../models/dipendenti");
 
 router.get("/", async (req, res) => {
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        //redisDisabled = false;
-        const showOnlyCancellati = req.query.show == "deleted";
-        const showAll = req.query.show == "all";
-
-        const query = {
-            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-        };
+        const showOnlyCancellati = req.query.show === "deleted";
+        const showAll = req.query.show === "all";
 
         const getData = (query) => {
             return Fornitori.find(query);
         };
-
 
         if (showOnlyCancellati || showAll) {
             console.log("Show all or deleted");
@@ -35,38 +17,20 @@ router.get("/", async (req, res) => {
             if (showOnlyCancellati) {
                 query = { cancellato: true };
             }
-
             const data = await getData(query);
             res.status(200).json(data);
-        }
-        else {
-            if (redisClient == undefined || redisDisabled) {
-                const data = await getData(query)
+        } else {
+            const query = {
+                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+            };
 
-                if (data.length > 0) res.status(200).json(data);
-                else res.status(404).json({ error: "No supplier found" });
+            const data = await getData(query);
 
-                return;
+            if (data.length > 0) {
+                res.status(200).json(data);
+            } else {
+                res.status(404).json({ error: "No suppliers found" });
             }
-
-            redisClient.get(searchTerm, async (err, data) => {
-                if (err) throw err;
-
-                if (data) {
-                    res.status(200).send(JSON.parse(data));
-                } else {
-                    const data = await getData(query);
-
-                    if (data.length > 0) res.status(200).json(data);
-                    else res.status(404).json({ error: "No suppliers found" });
-
-                    redisClient.setex(
-                        searchTerm,
-                        redisTimeCache,
-                        JSON.stringify(data)
-                    );
-                }
-            });
         }
     } catch (err) {
         console.error("Error: ", err);
@@ -77,21 +41,14 @@ router.get("/", async (req, res) => {
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
 
-    const getData = (query) => {
-        return Pazienti.find(query);
-    };
-
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
         if (id == undefined || id === "undefined") {
             console.log("Error id is not defined ", id);
             res.status(404).json({ Error: "Id not defined" });
             return;
         }
 
-        query = {
+        const query = {
             $and: [
                 {
                     $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
@@ -100,27 +57,17 @@ router.get("/:id", async (req, res) => {
             ],
         };
 
-        if (redisClient == undefined || redisDisabled) {
-            const data = await getData(query);
+        const getData = () => {
+            return Fornitori.find(query);
+        };
 
-            if (data != null) res.status(200).json(pazienti);
-            else res.status(404).json({ error: "No supplier found" });
+        const fornitoridata = await getData();
+
+        if (fornitoridata != null && fornitoridata.length > 0) {
+            res.status(200).json(fornitoridata);
+        } else {
+            res.status(404).json({ error: "No supplier found" });
         }
-        console.log("\nCiao\n");
-        const searchTerm = `FORNITORIBY${id}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const fornitoridata = await getData(query);
-
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(fornitoridata));
-                if (fornitoridata != null) res.status(200).json(fornitoridata);
-                else res.status(404).json({ error: "No suppliers found" });
-            }
-        });
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -151,38 +98,9 @@ router.post("/", async (req, res) => {
 
         const result = await fornitore.save();
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `FORNITORIALL`;
-            redisClient.del(searchTerm);
-        }
-
-        const user = res.locals.auth;
-
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
-
-        const log = new Log({
-            data: new Date(),
-            operatore: dipendenti.nome + " " + dipendenti.cognome,
-            operatoreID: user.dipendenteID,
-            className: "Fornitori",
-            operazione: "Inserimento fornitore: " + fornitore.cognome + " " + fornitore.nome,
-        });
-        console.log("log: ", log);
-        const resultLog = await log.save();
-
-        res.status(200);
-        res.json(result);
-
+        res.status(200).json(result);
     } catch (err) {
-        res.status(500);
-        res.json({ "Error": err });
+        res.status(500).json({ Error: err });
     }
 });
 
@@ -194,6 +112,7 @@ router.put("/:id", async (req, res) => {
             res.status(404).json({ Error: "Id not defined" });
             return;
         }
+
         const data = await Fornitori.updateOne(
             { _id: id },
             {
@@ -218,34 +137,7 @@ router.put("/:id", async (req, res) => {
             }
         );
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `FORNITORIBY${id}`;
-            redisClient.del(searchTerm);
-        }
-
-        const user = res.locals.auth;
-
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
-
-        const log = new Log({
-            data: new Date(),
-            operatore: dipendenti.nome + " " + dipendenti.cognome,
-            operatoreID: user.dipendenteID,
-            className: "Fornitori",
-            operazione: "Modifica fornitore: " + fornitore.cognome + " " + fornitore.nome,
-        });
-        console.log("log: ", log);
-        const resultLog = await log.save();
-
-        res.status(200);
-        res.json(data);
+        res.status(200).json(data);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -273,36 +165,8 @@ router.delete("/:id", async (req, res) => {
                 },
             }
         );
-        console.log("\n" + data.cancellato + "\n");
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
 
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `FORNITORIBY${id}`;
-            console.log(searchTerm);
-            redisClient.del(searchTerm);
-        }
-
-        const user = res.locals.auth;
-
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
-
-        const log = new Log({
-            data: new Date(),
-            operatore: dipendenti.nome + " " + dipendenti.cognome,
-            operatoreID: user.dipendenteID,
-            className: "Fornitori",
-            operazione: "Eliminazione fornitore: " + fornitore.cognome + " " + fornitore.nome,
-        });
-        console.log("log: ", log);
-        const resultLog = await log.save();
-
-        res.status(200);
-        res.json(data);
+        res.status(200).json(data);
     } catch (err) {
         res.status(500).json({ Error: err });
     }

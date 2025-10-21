@@ -99,84 +99,77 @@ export class DialogFornitoreComponent implements OnInit {
 
     return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
   }
-
   async save(saveAndClose: boolean) {
-    // this.data.fornitore = this.fornitore;
     console.log("update fornitore");
-
     this.data.fornitore = this.fornitore;
 
-    if (
-      this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined ||
-      this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined ||
-      this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined ||
-      this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined
-    ) {
-
-      var campi = "";
-      if (this.fornitore.cognome == "" || this.fornitore.cognome == null || this.fornitore.cognome === undefined) {
-        campi = campi + " Cognome"
-      }
-
-      if (this.fornitore.nome == "" || this.fornitore.nome == null || this.fornitore.nome === undefined) {
-        campi = campi + " Nome"
-      }
-
-      if (this.fornitore.codiceFiscale == "" || this.fornitore.codiceFiscale == null || this.fornitore.codiceFiscale === undefined) {
-        campi = campi + " Codice Fiscale"
-      }
-
-      if (this.fornitore.sesso == "" || this.fornitore.sesso == null || this.fornitore.sesso === undefined) {
-        campi = campi + " Sesso"
-      }
-
-      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+    // Validazione campi obbligatori
+    const validationError = this.validateRequiredFields();
+    if (validationError) {
+      this.messageService.showMessageError(validationError);
       return;
-    } else {
-
-      if (this.dateDiffInDays(new Date(this.fornitore.dataNascita), new Date()) < 10) {
-        this.messageService.showMessageError("Data di nascita Errata!!!");
-        return;
-      }
     }
 
+    // Validazione data di nascita
+    if (this.dateDiffInDays(new Date(this.fornitore.dataNascita), new Date()) < 10) {
+      this.messageService.showMessageError("Data di nascita Errata!!!");
+      return;
+    }
+
+    // Chiusura anticipata del dialog se richiesto
     if (saveAndClose) {
       this.dialogRef.close(this.data.fornitore);
-    } else {
-      this.uploading = true;
+      return;
     }
-    if (this.newItem) {
-      this.fornitoreService
-        .insert(this.data.fornitore)
-        .then((x) => {
-          console.log("Save fornitore: ", x);
-          this.data.fornitore = x;
-          this.fornitore = x;
-          this.uploading = false;
-          this.newItem = false;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Inserimento fornitore (" + err["status"] + ")"
-          );
-          this.uploading = false;
-        });
-    } else {
-      this.fornitoreService
-        .save(this.data.fornitore)
-        .then((x) => {
-          console.log("Save fornitore: ", x);
-          this.uploading = false;
-          this.newItem = false;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore salvataggio fornitore (" + err["status"] + ")"
-          );
-          this.uploading = false;
-        });
+
+    this.uploading = true;
+
+    try {
+      const result = await (this.newItem
+        ? this.fornitoreService.insert(this.data.fornitore)
+        : this.fornitoreService.save(this.data.fornitore));
+
+      console.log("Save fornitore: ", result);
+
+      if (this.newItem) {
+        this.data.fornitore = result;
+        this.fornitore = result;
+      }
+
+      this.newItem = false;
+      this.messageService.showMessage("Salvataggio Effettuato!!");
+
+    } catch (err) {
+      const action = this.newItem ? "Inserimento" : "salvataggio";
+      this.messageService.showMessageError(
+        `Errore ${action} fornitore (${err["status"]})`
+      );
+    } finally {
+      this.uploading = false;
     }
-    if (saveAndClose == true) this.dialogRef.close(this.data.fornitore);
+  }
+
+  private validateRequiredFields(): string | null {
+    const fields = [
+      { value: this.fornitore.cognome, name: "Cognome" },
+      { value: this.fornitore.nome, name: "Nome" },
+      { value: this.fornitore.codiceFiscale, name: "Codice Fiscale" },
+      { value: this.fornitore.sesso, name: "Sesso" }
+    ];
+
+    const missingFields = fields
+      .filter(field => !field.value || field.value.trim() === "")
+      .map(field => field.name);
+
+    if (missingFields.length > 0) {
+      return `I campi ${missingFields.join(", ")} sono obbligatori!!`;
+    }
+
+    return null;
+  }
+
+  private isEmpty(value: any): boolean {
+    return value === "" || value === null || value === undefined;
   }
 
 
