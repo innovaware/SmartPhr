@@ -1,15 +1,14 @@
-const express = require("express");
+﻿const express = require("express");
 const router = express.Router();
 const Bonifici = require("../models/bonifici");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
     try {
-        // Get the redisDisabled flag from the app settings
         const redisDisabled = req.app.get("redisDisabled");
 
         const getData = () => {
-            return Bonifici.aggregate([ 
+            return Bonifici.aggregate([
                 {
                     $project: {
                         identifyUserObj: { $toObjectId: "$identifyUser" },
@@ -20,10 +19,15 @@ router.get("/", async (req, res) => {
                 },
                 {
                     $lookup: {
-                        localField: "identifyUserObj",
                         from: "consulenti",
+                        localField: "identifyUserObj",
                         foreignField: "_id",
                         as: "fromConsulenti",
+                    },
+                },
+                {
+                    $match: {
+                        "fromConsulenti.0": { $exists: true }, // 🔹 mantiene solo i bonifici con consulente associato
                     },
                 },
                 {
@@ -55,7 +59,6 @@ router.get("/", async (req, res) => {
             ]);
         };
 
-        // Fetch data directly from MongoDB if Redis is disabled or undefined
         const eventi = await getData();
         res.status(200).json(eventi);
     } catch (err) {
@@ -63,6 +66,5 @@ router.get("/", async (req, res) => {
         res.status(500).json({ Error: err.message });
     }
 });
-
 
 module.exports = router;

@@ -1,4 +1,4 @@
-const express = require("express");
+﻿const express = require("express");
 const router = express.Router();
 const Bonifici = require("../models/bonifici");
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
@@ -20,10 +20,15 @@ router.get("/", async (req, res) => {
                 },
                 {
                     $lookup: {
-                        localField: "identifyUserObj",
                         from: "fornitori",
+                        localField: "identifyUserObj",
                         foreignField: "_id",
                         as: "fromFornitori",
+                    },
+                },
+                {
+                    $match: {
+                        "fromFornitori.0": { $exists: true }, // ✅ solo bonifici con fornitore associato
                     },
                 },
                 {
@@ -55,7 +60,6 @@ router.get("/", async (req, res) => {
             ]);
         };
 
-        // Fetch data directly from MongoDB if Redis is disabled or undefined
         const eventi = await getData();
         res.status(200).json(eventi);
     } catch (err) {
@@ -65,3 +69,4 @@ router.get("/", async (req, res) => {
 });
 
 module.exports = router;
+
