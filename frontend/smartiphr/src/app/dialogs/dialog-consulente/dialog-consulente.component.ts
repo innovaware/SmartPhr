@@ -75,7 +75,12 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.disable = item.readonly;
     this.result = undefined;
     this.settings = new Settings();
-
+    this.bonifici = [];
+    this.addingBonifici = false;
+    this.fatture = [];
+    this.addingFattura = false;
+    this.contratto = [];
+    this.addingContratto = false;
     this.ContrattoDataSource = new MatTableDataSource<Contratto>();
     this.fattureDataSource = new MatTableDataSource<Fatture>();
     this.bonificiDataSource = new MatTableDataSource<Bonifico>();
@@ -142,6 +147,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     } else {
       await this.consulenteService.update(this.item.consulente).toPromise();
     }
+    this.messageService.showMessageError(`Salvataggio Effettuato`);
   }
 
   private validateConsulente(): boolean {
@@ -170,60 +176,106 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   }
 
   async getContratto() {
-    if (!this.item.consulente._id) return;
+    console.log(`Get Contratto consulente: ${this.item.consulente._id}`);
+
+    if (!this.item.consulente._id) {
+      console.log("ID consulente non definito");
+      return;
+    }
 
     try {
-      const contracts = await this.contrattoService.getContratto(this.item.consulente._id);
-      if (contracts.length > 0) {
-        const validContracts = contracts.filter(x => new Date(x.dataScadenza) > new Date());
-        this.contratto = validContracts.length > 0 ? [validContracts[0]] : [];
+      let f: Contratto[] = await this.contrattoService.getContratto(this.item.consulente._id);
 
-        if (this.contratto[0]) {
-          const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
-          if (numScad < this.settings.alertContratto) {
-            this.messageService.showMessage(`Mancano ${numScad} giorni alla scadenza del contratto`);
-          }
+      if (f && f.length > 0) {
+        f = f.filter(x => new Date(x.dataScadenza) > new Date());
+        this.contratto = f.length > 0 ? [f[0]] : [];
+      } else {
+        this.contratto = [];
+      }
+
+      if (this.contratto[0]) {
+        const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
+        console.log("numero scadenza: ", numScad);
+        if (numScad < this.settings.alertContratto.valueOf()) {
+          this.messageService.showMessage("Mancano " + numScad + " giorni alla scadenza del contratto");
         }
       }
+
       this.ContrattoDataSource.data = this.contratto;
-      this.ContrattoDataSource.paginator = this.contrattoPaginator;
-      this.ContrattoDataSource._updateChangeSubscription();
+
+      setTimeout(() => {
+        if (this.contrattoPaginator) {
+          this.ContrattoDataSource.paginator = this.contrattoPaginator;
+        }
+      }, 0);
+
     } catch (err) {
+      console.error("Errore caricamento contratto:", err);
       this.messageService.showMessageError("Errore caricamento lista contratto");
-      console.error(err);
+      this.contratto = [];
+      this.ContrattoDataSource.data = [];
     }
   }
 
   async getFatture() {
-    if (!this.item.consulente._id) return;
+    console.log(`Get Fatture consulente: ${this.item.consulente._id}`);
+
+    if (!this.item.consulente._id) {
+      console.log("ID consulente non definito");
+      return;
+    }
 
     try {
-      const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
-      this.fatture = fatture || [];
-      this.fattureDataSource.data = this.fatture;
-      this.fattureDataSource.paginator = this.fatturePaginator;
-      this.fattureDataSource._updateChangeSubscription();
+      const f: Fatture[] = await this.fattureService.getByUserId(this.item.consulente._id);
+      this.fatture = f && f.length > 0 ? f : [];
+
+      this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
+
+      setTimeout(() => {
+        if (this.fatturePaginator) {
+          this.fattureDataSource.paginator = this.fatturePaginator;
+        }
+      }, 0);
+
     } catch (err) {
+      console.error("Errore caricamento fatture:", err);
       this.messageService.showMessageError("Errore caricamento lista fatture");
-      console.error(err);
+      this.fatture = [];
+      this.fattureDataSource = new MatTableDataSource<Fatture>([]);
     }
   }
 
   async getBonificiAssegniContanti() {
-    if (!this.item.consulente._id) return;
-    try {
-      const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
-      console.log('Bonifici ricevuti:', bonifici);
-      this.bonifici = bonifici || [];
-      this.bonificiDataSource.data = this.bonifici;
-      this.bonificiDataSource.paginator.length = this.bonifici.length;
-      this.bonificiDataSource._updateChangeSubscription();
-      console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
-    } catch (err) {
-      console.error(err);
-      this.messageService.showMessageError("Errore caricamento lista bonifici");
-    }
+  console.log(`Get Bonifici e altro: ${this.item.consulente._id}`);
+  
+  if (!this.item.consulente._id) {
+    console.log("ID consulente non definito");
+    return;
   }
+  
+  try {
+    const f: Bonifico[] = await this.bonificoService.getByUserId(this.item.consulente._id);
+    this.bonifici = f && f.length > 0 ? f : [];
+    
+    this.bonificiDataSource = new MatTableDataSource<Bonifico>(this.bonifici);
+    
+    // Assegnare il paginator dopo un breve delay per assicurarsi che il ViewChild sia inizializzato
+    setTimeout(() => {
+      if (this.bonificiPaginator) {
+        this.bonificiDataSource.paginator = this.bonificiPaginator;
+      }
+    }, 0);
+    
+  } catch (err) {
+    console.error("Errore caricamento bonifici:", err);
+    this.messageService.showMessageError(
+      "Errore caricamento lista bonifici e altri"
+    );
+    // Inizializzare comunque con array vuoto
+    this.bonifici = [];
+    this.bonificiDataSource = new MatTableDataSource<Bonifico>([]);
+  }
+}
 
   //async getContratto(): Promise<void> {
   //  if (!this.item.consulente._id) return;
