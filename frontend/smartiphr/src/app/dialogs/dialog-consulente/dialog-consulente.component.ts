@@ -53,7 +53,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   bonificiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
   //@ViewChild("paginatorB", { static: false }) bonificiPaginator: MatPaginator;
-  @ViewChild('paginatorB') bonificiPaginator!: MatPaginator;
+  @ViewChild('paginatorB', { static: false }) bonificiPaginator!: MatPaginator;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   constructor(
@@ -79,9 +79,9 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.ContrattoDataSource = new MatTableDataSource<Contratto>();
     this.fattureDataSource = new MatTableDataSource<Fatture>();
     this.bonificiDataSource = new MatTableDataSource<Bonifico>();
-    this.ContrattoDataSource.paginator = null; // Aggiungi questa riga
-    this.fattureDataSource.paginator = null; // Aggiungi questa riga
-    this.bonificiDataSource.paginator = null; // Aggiungi questa riga
+    //this.ContrattoDataSource.paginator = null; // Aggiungi questa riga
+    //this.fattureDataSource.paginator = null; // Aggiungi questa riga
+    //this.bonificiDataSource.paginator = null; // Aggiungi questa riga
   }
 
   ngOnInit() {
@@ -97,18 +97,39 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
   }
 
+  //ngAfterViewInit() {
+  //  if (this.contrattoPaginator) {
+  //    console.log('Paginator trovato:', this.contrattoPaginator);
+  //    this.ContrattoDataSource.paginator = this.contrattoPaginator;
+  //  }
+  //  if (this.bonificiPaginator) {
+  //    console.log('Paginator trovato:', this.bonificiPaginator);
+  //    this.bonificiDataSource.paginator = this.bonificiPaginator;
+  //  }
+  //  if (this.fatturePaginator) {
+  //    console.log('Paginator trovato:', this.fatturePaginator);
+  //    this.fattureDataSource.paginator = this.fatturePaginator;
+  //  }
+  //}
+
   ngAfterViewInit() {
+    console.log("Consulente: ", this.item.consulente);
+    if (this.item.consulente._id != undefined) {
+      this.getContratto();
+      this.getFatture();
+      this.getBonificiAssegniContanti();
+    }
     if (this.contrattoPaginator) {
-      console.log('Paginator trovato:', this.contrattoPaginator);
       this.ContrattoDataSource.paginator = this.contrattoPaginator;
+      this.ContrattoDataSource.data = this.contratto;
     }
     if (this.bonificiPaginator) {
-      console.log('Paginator trovato:', this.bonificiPaginator);
       this.bonificiDataSource.paginator = this.bonificiPaginator;
+      this.bonificiDataSource.data = this.bonifici; // Aggiorna il conteggio (es. 1 of 1)
     }
     if (this.fatturePaginator) {
-      console.log('Paginator trovato:', this.fatturePaginator);
       this.fattureDataSource.paginator = this.fatturePaginator;
+      this.fattureDataSource.data = this.fatture;
     }
   }
 
@@ -169,6 +190,20 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     return true;
   }
 
+  async getFatture() {
+    if (!this.item.consulente._id) return;
+
+    try {
+      const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
+      this.fatture = fatture || [];
+      this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
+      this.fattureDataSource.paginator = this.fatturePaginator;
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento lista fatture");
+      console.error(err);
+    }
+  }
+
   async getContratto() {
     if (!this.item.consulente._id) return;
 
@@ -185,45 +220,31 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
           }
         }
       }
-      this.ContrattoDataSource.data = this.contratto;
+      this.ContrattoDataSource = new MatTableDataSource<Contratto>(this.contratto);
       this.ContrattoDataSource.paginator = this.contrattoPaginator;
-      this.ContrattoDataSource._updateChangeSubscription();
     } catch (err) {
       this.messageService.showMessageError("Errore caricamento lista contratto");
       console.error(err);
     }
   }
 
-  async getFatture() {
-    if (!this.item.consulente._id) return;
+  //async getBonificiAssegniContanti() {
+  //  if (!this.item.consulente._id) return;
+  //  try {
+  //    const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+  //    console.log('Bonifici ricevuti:', bonifici);
+  //    this.bonifici = bonifici || [];
+  //    this.bonificiDataSource.data = this.bonifici;
+  //    this.bonificiDataSource.paginator.length = this.bonifici.length;
+  //    this.bonificiDataSource._updateChangeSubscription();
+  //    console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
+  //  } catch (err) {
+  //    console.error(err);
+  //    this.messageService.showMessageError("Errore caricamento lista bonifici");
+  //  }
+  //}
 
-    try {
-      const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
-      this.fatture = fatture || [];
-      this.fattureDataSource.data = this.fatture;
-      this.fattureDataSource.paginator = this.fatturePaginator;
-      this.fattureDataSource._updateChangeSubscription();
-    } catch (err) {
-      this.messageService.showMessageError("Errore caricamento lista fatture");
-      console.error(err);
-    }
-  }
 
-  async getBonificiAssegniContanti() {
-    if (!this.item.consulente._id) return;
-    try {
-      const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
-      console.log('Bonifici ricevuti:', bonifici);
-      this.bonifici = bonifici || [];
-      this.bonificiDataSource.data = this.bonifici;
-      this.bonificiDataSource.paginator.length = this.bonifici.length;
-      this.bonificiDataSource._updateChangeSubscription();
-      console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
-    } catch (err) {
-      console.error(err);
-      this.messageService.showMessageError("Errore caricamento lista bonifici");
-    }
-  }
 
   //async getContratto(): Promise<void> {
   //  if (!this.item.consulente._id) return;
@@ -248,6 +269,24 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   //    console.error(err);
   //  }
   //}
+
+  async getBonificiAssegniContanti() {
+    if (!this.item.consulente._id) return;
+    try {
+      const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+      console.log('Bonifici ricevuti:', bonifici);
+      this.bonifici = bonifici || [];
+
+      // Inizializza il DataSource con i dati e assegna il paginatore
+      this.bonificiDataSource = new MatTableDataSource<Bonifico>(this.bonifici);
+      this.bonificiDataSource.paginator = this.bonificiPaginator;
+
+      console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
+    } catch (err) {
+      console.error(err);
+      this.messageService.showMessageError("Errore caricamento lista bonifici");
+    }
+  }
 
   async addContratto(): Promise<void> {
     this.addingContratto = true;
@@ -332,6 +371,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
       this.contratto[0] = result;
       this.ContrattoDataSource.data = this.contratto;
+      this.ContrattoDataSource.paginator = this.contrattoPaginator;
     } catch (err) {
       this.messageService.showMessageError("Errore nell'inserimento o caricamento del contratto");
       console.error(err);
@@ -361,6 +401,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.nuovaFattura = {
       identifyUser: this.item.consulente._id,
       filename: undefined,
+      typology:"FattureConsulenti",
       note: "",
     };
   }
@@ -398,6 +439,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
       this.fatture.push(result);
       this.fattureDataSource.data = this.fatture;
+      this.fattureDataSource.paginator = this.fatturePaginator;
       this.uploadingFattura = false;
       this.uploading = false;
     } catch (err) {
@@ -446,6 +488,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.nuovaBonifico = {
       identifyUser: this.item.consulente._id,
       filename: undefined,
+      typology:"BonificoConsulenti",
       note: "",
     };
   }

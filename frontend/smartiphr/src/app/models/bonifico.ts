@@ -10,6 +10,6 @@ export class Bonifico {
   filename: string;
   dataupload?: Date;
   note?: string;
-
+  typology?: string;
   file?: File;
 }

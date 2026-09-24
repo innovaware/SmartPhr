@@ -5,70 +5,62 @@ const mongoose = require("mongoose");
 
 router.get("/", async (req, res) => {
     try {
-        // Funzione per ottenere i dati da MongoDB
-        const getData = () => {
-            return Fatture.aggregate([
-                {
-                    $project: {
-                        identifyUserObj: {
-                            $cond: {
-                                if: { $eq: [{ $strLenCP: "$identifyUser" }, 24] },
-                                then: { $toObjectId: "$identifyUser" },
-                                else: null,
+        const fattureFornitori = await Fatture.aggregate([
+            // 1. Filtra per typology = "FattureFornitori"
+            {
+                $match: {
+                    typology: "FattureFornitori",
+                },
+            },
+            // 2. Converte identifyUser in ObjectId se salvato come stringa
+            {
+                $addFields: {
+                    identifyUserObj: {
+                        $cond: {
+                            if: { $eq: [{ $type: "$identifyUser" }, "string"] },
+                            then: {
+                                $convert: {
+                                    input: "$identifyUser",
+                                    to: "objectId",
+                                    onError: null,
+                                    onNull: null,
+                                },
                             },
-                        },
-                        filename: 1,
-                        dateupload: 1,
-                        note: 1,
-                    },
-                },
-                {
-                    $lookup: {
-                        localField: "identifyUserObj",
-                        from: "fornitori",
-                        foreignField: "_id",
-                        as: "fromFornitori",
-                    },
-                },
-                {
-                    $replaceRoot: {
-                        newRoot: {
-                            $mergeObjects: [
-                                { $arrayElemAt: ["$fromFornitori", 0] },
-                                "$$ROOT",
-                            ],
+                            else: "$identifyUser",
                         },
                     },
                 },
-                {
-                    $project: {
-                        dataNascita: 0,
-                        comuneNascita: 0,
-                        provinciaNascita: 0,
-                        indirizzoNascita: 0,
-                        indirizzoResidenza: 0,
-                        comuneResidenza: 0,
-                        provinciaResidenza: 0,
-                        mansione: 0,
-                        tipoContratto: 0,
-                        telefono: 0,
-                        email: 0,
-                        fromFornitori: 0,
-                    },
+            },
+            // 3. Join ($lookup) con la collezione 'fornitori'
+            {
+                $lookup: {
+                    from: "fornitori",
+                    localField: "identifyUserObj",
+                    foreignField: "_id",
+                    as: "fornitoreData",
                 },
-                {
-                    $match: { identifyUserObj: { $ne: null } }, // Esclude documenti con ObjectId non valido
+            },
+            // 4. Estrai i campi del fornitore trovati
+            {
+                $addFields: {
+                    nome: { $arrayElemAt: ["$fornitoreData.nome", 0] },
+                    cognome: { $arrayElemAt: ["$fornitoreData.cognome", 0] },
+                    codiceFiscale: { $arrayElemAt: ["$fornitoreData.codiceFiscale", 0] },
                 },
-            ]);
-        };
-
-        // Recupera i dati direttamente da MongoDB
-        const eventi = await getData();
-        res.status(200).json(eventi);
+            },
+            // 5. Rimuovi i campi temporanei di servizio
+            {
+                $project: {
+                    identifyUserObj: 0,
+                    fornitoreData: 0,
+                },
+            },
+        ]);
+        console.log(fattureFornitori);
+        return res.status(200).json(fattureFornitori);
     } catch (err) {
-        console.error("Error: ", err);
-        res.status(500).json({ Error: err.message });
+        console.error("Errore durante il recupero delle fatture fornitori:", err);
+        return res.status(500).json({ Error: err.message });
     }
 });
-
 module.exports = router;

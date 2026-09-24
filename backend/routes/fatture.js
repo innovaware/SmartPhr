@@ -1,166 +1,191 @@
 const express = require("express");
 const router = express.Router();
 const Fatture = require("../models/fatture");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 const Log = require("../models/log");
 const Dipendenti = require("../models/dipendenti");
 
+// GET fatture per ID utente/fornitore
 router.get("/:id", async (req, res) => {
     try {
         const { id } = req.params;
 
-        // Function to get data from the database
-        const getData = () => {
-            return Fatture.find({
-                identifyUser: id,
-            });
-        };
+        const fatture = await Fatture.find({
+            identifyUser: id,
+        });
 
-        // Fetch data from the database
-        const fatture = await getData();
-
-        // Send the data in the response
         res.status(200).json(fatture);
     } catch (err) {
-        console.error("Error: ", err);
-        res.status(500).json({ Error: err.message });
+        console.error("Error GET fatture: ", err);
+        res.status(500).json({ Error: err.message || err });
     }
 });
 
+// POST inserimento fattura
 router.post("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const fatture = new Fatture({
-      identifyUser: id,
-      filename: req.body.filename,
-      dateupload: Date.now(),
-      note: req.body.note,
-    });
+    try {
+        const { id } = req.params;
 
-    console.log("Insert fattura: ", fatture);
+        if (!id || id === "undefined") {
+            return res.status(400).json({ Error: "ID utente/fornitore non valido" });
+        }
 
-    const result = await fatture.save();
+        const fattura = new Fatture({
+            identifyUser: id,
+            filename: req.body.filename,
+            typology: req.body.typology,
+            dateupload: Date.now(),
+            note: req.body.note,
+        });
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        console.log("Insert fattura: ", fattura);
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `fatture${id}`;
-      redisClient.del(searchTerm);
-      }
+        const result = await fattura.save();
 
-      const user = res.locals.auth;
+        // Gestione Cache Redis
+        const redisClient = req.app.get("redis");
+        const redisDisabled = req.app.get("redisDisabled");
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        if (redisClient && !redisDisabled) {
+            const searchTerm = `fatture${id}`;
+            redisClient.del(searchTerm);
+        }
 
-      const dipendenti = await getDipendente();
+        // Gestione sicura Log Operatore
+        const user = res.locals ? res.locals.auth : null;
+        let operatoreNome = "Sistema";
+        let operatoreID = null;
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Fatture",
-          operazione: "Inserimento fattura: " + fatturre.filename,
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        if (user && user.dipendenteID) {
+            const dipendenti = await Dipendenti.findById(user.dipendenteID);
+            if (dipendenti) {
+                operatoreNome = `${dipendenti.nome} ${dipendenti.cognome}`;
+                operatoreID = user.dipendenteID;
+            }
+        }
 
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
+        const log = new Log({
+            data: new Date(),
+            operatore: operatoreNome,
+            operatoreID: operatoreID,
+            className: "Fatture",
+            operazione: "Inserimento fattura: " + (fattura.filename || ""),
+        });
+
+        await log.save();
+
+        res.status(200).json(result);
+    } catch (err) {
+        console.error("Error POST fattura: ", err);
+        res.status(500).json({ Error: err.message || err });
+    }
 });
 
+// PUT modifica fattura
 router.put("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
-    const fatture = await Fatture.updateOne(
-      { _id: id },
-      {
-        $set: {
-          identifyUser: req.body.identifyUser,
-          filename: req.body.filename,
-          note: req.body.note,
-        },
-      }
-    );
+    try {
+        const { id } = req.params;
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const fatturaAggiornata = await Fatture.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    identifyUser: req.body.identifyUser,
+                    filename: req.body.filename,
+                    typology: req.body.typology,
+                    note: req.body.note,
+                },
+            }
+        );
 
-    if (redisClient != undefined && !redisDisabled) {
-      const searchTerm = `fattureBY${id}`;
-      redisClient.del(searchTerm);
-      }
+        const redisClient = req.app.get("redis");
+        const redisDisabled = req.app.get("redisDisabled");
 
-      const user = res.locals.auth;
+        if (redisClient && !redisDisabled) {
+            const searchTerm = `fattureBY${id}`;
+            redisClient.del(searchTerm);
+        }
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        // Gestione sicura Log Operatore
+        const user = res.locals ? res.locals.auth : null;
+        let operatoreNome = "Sistema";
+        let operatoreID = null;
 
-      const dipendenti = await getDipendente();
+        if (user && user.dipendenteID) {
+            const dipendenti = await Dipendenti.findById(user.dipendenteID);
+            if (dipendenti) {
+                operatoreNome = `${dipendenti.nome} ${dipendenti.cognome}`;
+                operatoreID = user.dipendenteID;
+            }
+        }
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Fatture",
-          operazione: "Modifica fattura: " + fatturre.filename,
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        const log = new Log({
+            data: new Date(),
+            operatore: operatoreNome,
+            operatoreID: operatoreID,
+            className: "Fatture",
+            operazione: "Modifica fattura: " + (req.body.filename || ""),
+        });
 
-    res.status(200);
-    res.json(fatture);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        await log.save();
+
+        res.status(200).json(fatturaAggiornata);
+    } catch (err) {
+        console.error("Error PUT fattura: ", err);
+        res.status(500).json({ Error: err.message || err });
+    }
 });
 
+// DELETE eliminazione fattura
 router.delete("/:id", async (req, res) => {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const item = await Fatture.findById(id);
-    const identifyUser = item.identifyUser;
-    const fatture = await Fatture.remove({ _id: id });
+        const item = await Fatture.findById(id);
+        if (!item) {
+            return res.status(404).json({ Error: "Fattura non trovata" });
+        }
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const identifyUser = item.identifyUser;
+        const filename = item.filename;
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`fattureBY${id}`);
-      redisClient.del(`fatture${identifyUser}`);
-      }
+        const resultDelete = await Fatture.deleteOne({ _id: id });
 
-      const user = res.locals.auth;
+        const redisClient = req.app.get("redis");
+        const redisDisabled = req.app.get("redisDisabled");
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        if (redisClient && !redisDisabled) {
+            redisClient.del(`fattureBY${id}`);
+            redisClient.del(`fatture${identifyUser}`);
+        }
 
-      const dipendenti = await getDipendente();
+        // Gestione sicura Log Operatore
+        const user = res.locals ? res.locals.auth : null;
+        let operatoreNome = "Sistema";
+        let operatoreID = null;
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Fatture",
-          operazione: "Eliminazione fattura: " + fatturre.filename,
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        if (user && user.dipendenteID) {
+            const dipendenti = await Dipendenti.findById(user.dipendenteID);
+            if (dipendenti) {
+                operatoreNome = `${dipendenti.nome} ${dipendenti.cognome}`;
+                operatoreID = user.dipendenteID;
+            }
+        }
 
-    res.status(200);
-    res.json(fatture);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        const log = new Log({
+            data: new Date(),
+            operatore: operatoreNome,
+            operatoreID: operatoreID,
+            className: "Fatture",
+            operazione: "Eliminazione fattura: " + (filename || ""),
+        });
+
+        await log.save();
+
+        res.status(200).json(resultDelete);
+    } catch (err) {
+        console.error("Error DELETE fattura: ", err);
+        res.status(500).json({ Error: err.message || err });
+    }
 });
 
 module.exports = router;

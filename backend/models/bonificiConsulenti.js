@@ -7,7 +7,7 @@ const BonificiConsulentiSchema = mongoose.Schema({
   cognome: String,
   nome: String,
   codiceFiscale: String,
-  identifyUserObj: String
+  identifyUser: String
 });
 
 module.exports = mongoose.model(

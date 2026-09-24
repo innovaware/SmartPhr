@@ -161,7 +161,7 @@ router.put("/:id", async (req, res) => {
             operatore: `${dipendente.nome} ${dipendente.cognome}`,
             operatoreID: user.dipendenteID,
             className: "Consulenti",
-            operazione: `Modifica consulente ${consulente.nome} ${consulente.cognome}`,
+            operazione: `Modifica consulente ${req.body.nome || ''} ${req.body.cognome || ''}`,
         });
 
         await log.save();
