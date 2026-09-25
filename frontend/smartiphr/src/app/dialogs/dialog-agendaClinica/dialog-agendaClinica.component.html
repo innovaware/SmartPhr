@@ -1,146 +1,157 @@
-<div mat-dialog-title>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h3>Dati Evento</h3>
-            </div>
-        </div>
+<div mat-dialog-title class="d-flex align-items-center justify-content-between border-bottom pb-3 px-4 px-md-5 pt-4 mb-0">
+    <h2 class="m-0 font-weight-bold text-primary fs-4">DATI EVENTO</h2>
 
-        <div class="row">
-            <div class="col">
-                <hr>
-            </div>
-        </div>
+    <div class="d-flex align-items-center gap-2">
+        <button mat-flat-button color="primary" (click)="salva()" title="Salva">
+            <mat-icon class="me-1">save</mat-icon>
+            Salva
+        </button>
+
+        <button mat-icon-button [mat-dialog-close]="undefined" title="Chiudi">
+            <mat-icon>close</mat-icon>
+        </button>
     </div>
 </div>
 
-<mat-dialog-content>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <mat-label>Paziente: </mat-label>
-                <ng-container *ngIf="data.add">
-                    <mat-form-field class="example-full-width" appearance="fill">
-                        <input matInput
-                               type="text"
-                               placeholder="Seleziona Paziente"
-                               [matAutocomplete]="auto"
-                               (keyup)="applyFilter($event)"
-                               [(ngModel)]="PazienteSelect">
-                        <mat-autocomplete autoActiveFirstOption
-                                          #auto="matAutocomplete"
-                                          [displayWith]="displayFn">
-                            <mat-option *ngFor="let option of AllPazienti" [value]="option">
-                                {{option.nome}} {{option.cognome}}
-                            </mat-option>
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </ng-container>
-                <ng-container *ngIf="!data.add">
-                    <input type="text" [(ngModel)]="PazienteName" disabled="disabled" readonly />
-                </ng-container>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <mat-label>Evento: </mat-label>
-                <br />
-                <mat-form-field>
-                    <input matInput type="text" placeholder="Evento" [(ngModel)]="evento">
+<mat-dialog-content class="px-4 px-md-5 py-4">
+    <div class="mx-auto" style="max-width: 650px;">
+
+        <form class="d-flex flex-column gap-2">
+
+            <!-- Sezione Paziente -->
+            <div *ngIf="data.add">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Paziente</mat-label>
+                    <input matInput
+                           type="text"
+                           placeholder="Seleziona Paziente"
+                           [matAutocomplete]="auto"
+                           (keyup)="applyFilter($event)"
+                           [(ngModel)]="PazienteSelect"
+                           name="pazienteSelect">
+                    <mat-autocomplete autoActiveFirstOption
+                                      #auto="matAutocomplete"
+                                      [displayWith]="displayFn">
+                        <mat-option *ngFor="let option of AllPazienti" [value]="option">
+                            {{option.nome}} {{option.cognome}}
+                        </mat-option>
+                    </mat-autocomplete>
                 </mat-form-field>
             </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <label>Tipologia Evento: </label>
-          </div>
-          <div class="col">
-            <ng-container *ngIf="data.add">
-             
-              <select class="form-select" matNativeControl [(ngModel)]="tipo" (change)="onSelectionChange()">
-                <option selected="" value="">Seleziona ...</option>
-                <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
-                <option value="Altra visita specialistica">Altra visita specialistica</option>
-                <option value="Esame ematochimico">Esame ematochimico</option>
-                <option value="Uscita con familiari">Uscita con familiari</option>
-                <option value="Uscita per visita esterna">Uscita per visita esterna</option>
-                <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
-                <option value="Uscita per esame">Uscita per esame</option>
-                <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
-                <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
-              </select>
-            </ng-container>
-            <ng-container *ngIf="!data.add">
-              <select class="form-select" matNativeControl [(ngModel)]="tipo" disabled="disabled" readonly>
-                <option selected="" value="">Seleziona ...</option>
-                <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
-                <option value="Altra visita specialistica">Altra visita specialistica</option>
-                <option value="Esame ematochimico">Esame ematochimico</option>
-                <option value="Uscita con familiari">Uscita con familiari</option>
-                <option value="Uscita per visita esterna">Uscita per visita esterna</option>
-                <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
-                <option value="Uscita per esame">Uscita per esame</option>
-                <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
-                <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
-              </select>
-            </ng-container>
-          </div>
-        </div>
-      <br />
-        <div class="row">
-          <div class="col">
-            <label>Status: </label>
-          </div>
-            <div class="col">
-                <select class="form-select" matNativeControl [(ngModel)]="stato" (change)="onSelectionChange()">
-                    <option selected="" value="">Seleziona ...</option>
-                    <option value="Richiesta inviata">Richiesta inviata</option>
-                    <option value="Impegnativa ricevuta">Impegnativa ricevuta</option>
-                    <option value="Richiesta ASP">Richiesta ASP</option>
-                    <option value="Visita fissata con data">Visita fissata con data</option>
-                </select>
+
+            <div *ngIf="!data.add">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Paziente</mat-label>
+                    <input matInput
+                           type="text"
+                           [(ngModel)]="PazienteName"
+                           name="pazienteName"
+                           disabled />
+                </mat-form-field>
             </div>
-        </div>
-        <ng-container *ngIf="enabled">
-            <div class="row">
-                <div class="col">
-                    <div class="form-group">
-                        <mat-form-field appearance="fill">
-                            <mat-label>DataEvento: </mat-label>
-                            <input matInput [matDatepicker]="picker" [(ngModel)]="dataEvento">
+
+            <!-- Sezione Evento -->
+            <div>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Evento</mat-label>
+                    <input matInput
+                           type="text"
+                           placeholder="Inserisci evento"
+                           [(ngModel)]="evento"
+                           name="evento">
+                </mat-form-field>
+            </div>
+
+            <!-- Sezione Tipologia Evento -->
+            <div>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Tipologia Evento</mat-label>
+
+                    <select *ngIf="data.add" matNativeControl [(ngModel)]="tipo" name="tipo" (change)="onSelectionChange()">
+                        <option value="">Seleziona ...</option>
+                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                        <option value="Altra visita specialistica">Altra visita specialistica</option>
+                        <option value="Esame ematochimico">Esame ematochimico</option>
+                        <option value="Uscita con familiari">Uscita con familiari</option>
+                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                        <option value="Uscita per esame">Uscita per esame</option>
+                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+                    </select>
+
+                    <select *ngIf="!data.add" matNativeControl [(ngModel)]="tipo" name="tipo" disabled>
+                        <option value="">Seleziona ...</option>
+                        <option value="Visita domiciliare cardiologica">Visita domiciliare cardiologica</option>
+                        <option value="Altra visita specialistica">Altra visita specialistica</option>
+                        <option value="Esame ematochimico">Esame ematochimico</option>
+                        <option value="Uscita con familiari">Uscita con familiari</option>
+                        <option value="Uscita per visita esterna">Uscita per visita esterna</option>
+                        <option value="Uscita per attività all'aperto">Uscita per attività all'aperto</option>
+                        <option value="Uscita per esame">Uscita per esame</option>
+                        <option value="Accesso C.S.M. (Centro Salute Mentale)">Accesso C.S.M. (Centro Salute Mentale)</option>
+                        <option value="Visita domiciliare psichiatrica">Visita domiciliare psichiatrica</option>
+                    </select>
+                </mat-form-field>
+            </div>
+
+            <!-- Sezione Status -->
+            <div>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Status</mat-label>
+                    <select matNativeControl [(ngModel)]="stato" name="stato" (change)="onSelectionChange()">
+                        <option value="">Seleziona ...</option>
+                        <option value="Richiesta inviata">Richiesta inviata</option>
+                        <option value="Impegnativa ricevuta">Impegnativa ricevuta</option>
+                        <option value="Richiesta ASP">Richiesta ASP</option>
+                        <option value="Visita fissata con data">Visita fissata con data</option>
+                    </select>
+                </mat-form-field>
+            </div>
+
+            <!-- Sezione Data & Orario Evento -->
+            <ng-container *ngIf="enabled">
+                <div class="row g-2">
+                    <!-- Campo Data Evento -->
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Data Evento</mat-label>
+                            <input matInput
+                                   [matDatepicker]="picker"
+                                   [(ngModel)]="dataEvento"
+                                   name="dataEvento"
+                                   readonly
+                                   (keydown)="$event.preventDefault()"
+                                   (click)="picker.open()">
                             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                             <mat-datepicker #picker></mat-datepicker>
                         </mat-form-field>
                     </div>
+
+                    <!-- Campo Orario Evento -->
+                    <div class="col-md-6">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Orario</mat-label>
+                            <input matInput
+                                   type="time"
+                                   [(ngModel)]="time"
+                                   name="time"
+                                   (keydown)="$event.preventDefault()"
+                                   (click)="$event.target.showPicker && $event.target.showPicker()">
+                        </mat-form-field>
+                    </div>
                 </div>
-                <div class="col">
-                  <div class="col">
-                    <label>Orario: </label>
-                    <input type="time" class="form-control" [(ngModel)]="time">
-                  </div>
-                </div>
-            </div>
-        </ng-container>
-        <div class="row">
-            <div class="col">
-                <mat-form-field>
-                    <mat-label>Note: </mat-label>
-                    <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+            </ng-container>
+
+            <!-- Sezione Note -->
+            <div>
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Note</mat-label>
+                    <textarea matInput rows="3" [(ngModel)]="note" name="note" placeholder="Inserisci eventuali note..."></textarea>
                 </mat-form-field>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <hr>
-            </div>
-        </div>
-        <br />
+
+        </form>
+
     </div>
 </mat-dialog-content>
-
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
-    <button mat-raised-button color="primary" (click)="salva()">Salva</button>
-  </div>
-</div>

@@ -8,21 +8,20 @@ import { Diario } from 'src/app/models/diario';
   styleUrls: ['./dialog-diario.component.css'],
 })
 export class DialogDiarioComponent implements OnInit {
-  @Input() disable : boolean;
+  @Input() disable: boolean;
   @Input() isNew: boolean;
 
   constructor(
     public dialogRef: MatDialogRef<DialogDiarioComponent>,
-    @Inject(MAT_DIALOG_DATA) public item: Diario) {
+    @Inject(MAT_DIALOG_DATA) public item: Diario) { }
 
-    }
-
-
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   saveDiario() {
     this.dialogRef.close(this.item);
   }
 
+  close() {
+    this.dialogRef.close(null);
+  }
 }

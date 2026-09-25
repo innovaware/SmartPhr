@@ -42,7 +42,7 @@ export class DialogSchedaTerapeuticaComponent implements OnInit {
     public data: {
       scheda: SchedaTerapeutica,
       paziente: Paziente,
-      type: String,
+      type: string,
       id: String,
       edit: Boolean,
       item: any,

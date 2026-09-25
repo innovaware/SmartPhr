@@ -1,98 +1,85 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>Nuovo*</h3>
-      </div>
+<!-- CANCELLO [mat-dialog-close]="true" E USO (click)="close()" -->
+<div mat-dialog-title class="d-flex align-items-center justify-content-between border-bottom pb-3 px-4 px-md-5 pt-4 mb-0">
+    <h2 class="m-0 font-weight-bold text-primary fs-4">DIARIO</h2>
 
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">×
+    <div class="d-flex align-items-center gap-2">
+        <button mat-flat-button color="primary" (click)="saveDiario()" title="Salva">
+            <mat-icon class="me-1">save</mat-icon>
+            Salva
         </button>
-      </div>
-    </div>
 
-    <div class="row">
-      <div class="col">
-        <span>Tutti i campi indicati con * sono obbligatori.</span>
-        <hr>
-      </div>
+        <!-- Modificato qui: uso (click)="close()" anziché [mat-dialog-close]="true" -->
+        <button mat-icon-button (click)="close()" title="Chiudi">
+            <mat-icon>close</mat-icon>
+        </button>
     </div>
-  </div>
 </div>
 
-<mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <label>Data*</label>
-      </div>
+<mat-dialog-content class="px-4 px-md-5 py-4">
+    <div class="mx-auto" style="max-width: 720px;">
+
+        <form class="d-flex flex-column gap-4">
+
+            <!-- DATA -->
+            <div>
+                <label class="form-label font-weight-bold text-uppercase text-secondary mb-2">
+                    Data <span class="text-danger">*</span>
+                </label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <input matInput
+                           [matDatepicker]="pickerData"
+                           [(ngModel)]="item.data"
+                           name="data"
+                           [disabled]="disable"
+                           placeholder="Scegli una data"
+                           readonly
+                           (click)="pickerData.open()"
+                           required>
+                    <mat-datepicker-toggle matSuffix [for]="pickerData"></mat-datepicker-toggle>
+                    <mat-datepicker #pickerData></mat-datepicker>
+                </mat-form-field>
+            </div>
+
+            <!-- CONTENUTO -->
+            <div>
+                <label class="form-label font-weight-bold text-uppercase text-secondary mb-2">
+                    Contenuto <span class="text-danger">*</span>
+                </label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <textarea matInput
+                              cdkTextareaAutosize
+                              [cdkAutosizeMinRows]="3"
+                              placeholder="Inserisci il contenuto..."
+                              [(ngModel)]="item.valore"
+                              name="valore"
+                              [disabled]="disable"
+                              required>
+                    </textarea>
+                </mat-form-field>
+            </div>
+
+            <!-- FIRMA -->
+            <div>
+                <label class="form-label font-weight-bold text-uppercase text-secondary mb-2">
+                    Firma
+                </label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <textarea matInput
+                              cdkTextareaAutosize
+                              [cdkAutosizeMinRows]="2"
+                              placeholder="Firma..."
+                              [(ngModel)]="item.firma"
+                              name="firma"
+                              [disabled]="disable">
+                    </textarea>
+                </mat-form-field>
+            </div>
+
+            <p class="text-muted text-center small mb-0 mt-1">
+                I campi indicati con <span class="text-danger font-weight-bold">*</span> sono obbligatori.
+            </p>
+
+        </form>
+
     </div>
-    <div class="row">
-      <div class="col">
-
-
-
-        <mat-form-field appearance="fill">
-          <mat-label>Scegli una date</mat-label>
-          <input matInput [matDatepicker]="data" [(ngModel)]="item.data" [disabled]=disable>
-          <mat-datepicker-toggle matSuffix [for]="data"></mat-datepicker-toggle>
-          <mat-datepicker #data></mat-datepicker>
-        </mat-form-field>
-
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <label>Contenuto*</label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.valore"
-            [disabled]=disable></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-
-    <div class="row" *ngIf="isNew">
-      <div class="col">
-        <label>Nuovo Contenuto*</label>
-      </div>
-    </div>
-    <div class="row" *ngIf="isNew">
-      <div class="col">
-
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="item.valore"></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-
-
-    <div class="row">
-      <div class="col">
-        <label>Firma</label>
-      </div>
-    </div>
-
-    <div class="row">
-      <div class="col">
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Firma" [(ngModel)]="item.firma"
-            [disabled]=disable></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-  </div>
 </mat-dialog-content>
-
-
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="false">Chiudi</button>
-    <button mat-button class="button-save" (click)="saveDiario()">Salva</button>
-  </div>
-</div>

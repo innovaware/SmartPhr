@@ -5,7 +5,6 @@ import { ItemsArray, ItemsArrayAlvo, ItemsArrayFirme, SchedaTerapeutica } from "
 import { Paziente } from "../../models/paziente";
 import { MatTableDataSource } from "@angular/material/table";
 import { MatPaginator } from "@angular/material/paginator";
-import { DataSource } from "@angular/cdk/collections";
 import { MatDialog } from '@angular/material/dialog';
 import { DialogSchedaTerapeuticaComponent } from "../../dialogs/dialog-schedaTerapeutica/dialog-schedaTerapeutica.component";
 import { SettingsService } from "../../service/settings.service";
@@ -17,18 +16,15 @@ import { User } from "../../models/user";
 import { MessagesService } from "../../service/messages.service";
 import * as moment from "moment";
 import { Subscription, interval } from "rxjs";
-import { Router, NavigationStart } from "@angular/router";
 import { DialogQuestionComponent } from "../../dialogs/dialog-question/dialog-question.component";
-
 
 @Component({
   selector: "app-scheda-terapeutica",
   templateUrl: "./scheda-terapeutica.component.html",
   styleUrls: ["./scheda-terapeutica.component.css"],
 })
-
 export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChanges, OnDestroy {
-  @Input() id: string; //Id paziente
+  @Input() id: string; // Id paziente
   @Input() inLettura: boolean;
 
   element = {
@@ -44,11 +40,13 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   DisplayedColumns: string[] = ["dataInizio", "terapiaOrale", "fasceOrarie", "dataFine", "note", "action"];
   DisplayedColumns2: string[] = ["data", "numeroAlviNormali", "numeroAlviDiarroici", "action"];
   displayedColumns: string[] = ["data", "firmaMattina", "firmaPomeriggio", "firmaNotte"];
+
   public dataSourceOrale: MatTableDataSource<ItemsArray>;
   public dataSourceIMEVSC: MatTableDataSource<ItemsArray>;
   public dataSourceEstemporanea: MatTableDataSource<ItemsArray>;
   public dataSourceFirme: MatTableDataSource<ItemsArrayFirme>;
   public dataSourceAlvo: MatTableDataSource<ItemsArrayAlvo>;
+
   public orali: ItemsArray[];
   public IMEVSC: ItemsArray[];
   public Estemporanea: ItemsArray[];
@@ -56,6 +54,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   public alvo: ItemsArrayAlvo[];
   public allergie: string;
   public note: string;
+
   private scheda: SchedaTerapeutica;
   private settings: Settings;
   public tm: Boolean;
@@ -70,6 +69,7 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   @ViewChild("paginatorEstemporanea", { static: false }) paginatorE: MatPaginator;
   @ViewChild("paginatorFirme", { static: false }) paginatorF: MatPaginator;
   @ViewChild("paginatorAlvo", { static: false }) paginatorA: MatPaginator;
+
   constructor(
     public dialog: MatDialog,
     public pazienteService: PazienteService,
@@ -94,24 +94,12 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.allergie = "";
     this.note = "";
     this.settings = new Settings();
-
-    pazienteService.getPaziente(this.id).then((x: Paziente) => {
-      this.paziente = x[0];
-    });
-
-    setServ.getSettings().then((x: Settings) => {
-      this.settings = x[0];
-    });
     this.tm = false;
     this.tp = false;
     this.tn = false;
-    this.getDati();
-    this.loadUser();
-
   }
 
-  ngOnInit() {
-
+  async ngOnInit() {
     this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
     this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
     this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
@@ -124,9 +112,26 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     this.alvo = [];
     this.allergie = "";
     this.note = "";
-    this.getDati();
-    this.startCheckingTime(); // Avvia il controllo all'accesso
 
+    if (this.id) {
+      try {
+        const xPaziente = await this.pazienteService.getPaziente(this.id);
+        this.paziente = xPaziente?.[0] || new Paziente();
+      } catch (e) {
+        console.error("Errore recupero paziente", e);
+      }
+    }
+
+    try {
+      const xSettings = await this.setServ.getSettings();
+      this.settings = xSettings?.[0] || new Settings();
+    } catch (e) {
+      console.error("Errore recupero impostazioni", e);
+    }
+
+    await this.getDati();
+    this.loadUser();
+    this.startCheckingTime();
   }
 
   ngOnDestroy(): void {
@@ -134,35 +139,17 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   }
 
   ngOnChanges() {
-    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
-    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
-    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
-    this.dataSourceFirme = new MatTableDataSource<ItemsArrayFirme>();
-    this.dataSourceAlvo = new MatTableDataSource<ItemsArrayAlvo>();
-    this.orali = [];
-    this.IMEVSC = [];
-    this.Estemporanea = [];
-    this.firme = [];
-    this.alvo = [];
-    this.allergie = "";
-    this.note = "";
-    this.getDati();
+    if (this.id) {
+      this.getDati();
+    }
   }
 
   ngAfterViewInit() {
-    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
-    this.dataSourceIMEVSC = new MatTableDataSource<ItemsArray>();
-    this.dataSourceEstemporanea = new MatTableDataSource<ItemsArray>();
-    this.dataSourceFirme = new MatTableDataSource<ItemsArrayFirme>();
-    this.dataSourceAlvo = new MatTableDataSource<ItemsArrayAlvo>();
-    this.orali = [];
-    this.IMEVSC = [];
-    this.Estemporanea = [];
-    this.firme = [];
-    this.alvo = [];
-    this.allergie = "";
-    this.note = "";
-    this.getDati();
+    this.dataSourceOrale.paginator = this.paginatorO;
+    this.dataSourceIMEVSC.paginator = this.paginatorI;
+    this.dataSourceEstemporanea.paginator = this.paginatorE;
+    this.dataSourceFirme.paginator = this.paginatorF;
+    this.dataSourceAlvo.paginator = this.paginatorA;
   }
 
   add(type: string) {
@@ -205,7 +192,8 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       this.getDati();
     });
   }
-  dateDiffInDays(a, b) {
+
+  dateDiffInDays(a: Date, b: Date) {
     var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
     var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
@@ -214,16 +202,15 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
   }
 
   save(): void {
-    // Qui inserisci la logica per salvare il dato
-    console.log('Allergie salvate automaticamente:', this.allergie);
-    console.log('Note salvate automaticamente:', this.note);
-
+    console.log('Allergie salvate automaticamente:', this.element.allergie);
+    console.log('Note salvate automaticamente:', this.element.note);
   }
 
   async getDati() {
-    this.dataSourceOrale = new MatTableDataSource<ItemsArray>();
+    if (!this.id) return;
+
     this.scheda = await this.schedaServ.getByPaziente(this.id);
-    if (this.scheda == null || this.scheda == undefined) {
+    if (!this.scheda) {
       this.scheda = new SchedaTerapeutica();
       this.scheda.firme = [];
       this.scheda.Orale = [];
@@ -232,26 +219,22 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       this.scheda.alvo = [];
       this.scheda.idPaziente = this.id;
       this.scheda.allergie = "";
+      this.scheda.note = "";
     }
-    console.log(this.scheda);
-    this.orali = this.scheda.Orale.sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
+
+    this.orali = (this.scheda.Orale || []).sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
     this.dataSourceOrale.data = this.orali;
-    this.dataSourceOrale.paginator = this.paginatorO;
 
-    this.IMEVSC = this.scheda.IMEVSC.sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
+    this.IMEVSC = (this.scheda.IMEVSC || []).sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
     this.dataSourceIMEVSC.data = this.IMEVSC;
-    this.dataSourceIMEVSC.paginator = this.paginatorI;
 
-    this.Estemporanea = this.scheda.Estemporanea.sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
+    this.Estemporanea = (this.scheda.Estemporanea || []).sort((a, b) => new Date(b.DataInizio).getTime() - new Date(a.DataInizio).getTime());
     this.dataSourceEstemporanea.data = this.Estemporanea;
-    this.dataSourceEstemporanea.paginator = this.paginatorE;
 
-    this.firme = this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()) || [];
-    console.log(this.firme, this.firme[0]);
+    this.firme = (this.scheda.firme || []).sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
 
-    if ((this.firme[0] == null || this.firme[0] == undefined) || this.dateDiffInDays(new Date(this.firme[0].data), (new Date())) != 0) {
-      if (this.firme[0] != null && this.firme[0] != undefined) {
-        console.log("Disattivando il precedente record.");
+    if (this.firme.length === 0 || this.dateDiffInDays(new Date(this.firme[0].data), new Date()) !== 0) {
+      if (this.firme[0]) {
         this.firme[0].attivaFirma = false;
       }
       let newFirma: ItemsArrayFirme = new ItemsArrayFirme();
@@ -263,13 +246,12 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       this.firme.push(newFirma);
       this.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
       this.scheda.firme = this.firme;
-      await this.schedaServ.update(this.scheda).toPromise().then();
+      await this.schedaServ.update(this.scheda).toPromise();
     }
 
-    this.alvo = this.scheda.alvo.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime()) || [];
-    if ((this.alvo[0] == null || this.alvo[0] == undefined) || this.dateDiffInDays(new Date(this.alvo[0].data), (new Date())) != 0) {
-      if (this.alvo[0] != null && this.alvo[0] != undefined) {
-        console.log("Disattivando il precedente record.");
+    this.alvo = (this.scheda.alvo || []).sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
+    if (this.alvo.length === 0 || this.dateDiffInDays(new Date(this.alvo[0].data), new Date()) !== 0) {
+      if (this.alvo[0]) {
         this.alvo[0].attivo = false;
       }
       let newAlvo: ItemsArrayAlvo = new ItemsArrayAlvo();
@@ -280,85 +262,72 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       this.alvo.push(newAlvo);
       this.alvo.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
       this.scheda.alvo = this.alvo;
-      await this.schedaServ.update(this.scheda).toPromise().then();
+      await this.schedaServ.update(this.scheda).toPromise();
     }
-    this.allergie = this.scheda.allergie || "";
-    this.note = this.scheda.note || "";
-    this.dataSourceFirme.paginator = this.paginatorF;
+
+    this.element.allergie = this.scheda.allergie || "";
+    this.element.note = this.scheda.note || "";
     this.dataSourceFirme.data = this.firme;
-
     this.dataSourceAlvo.data = this.alvo;
-    this.dataSourceAlvo.paginator = this.paginatorA;
 
-    if ((new Date()).getHours() >= this.settings.turni[0].mattina[0].inizio.valueOf() && (new Date()).getHours() < this.settings.turni[0].mattina[0].fine.valueOf()) {
-      if (this.firme[0].firmaMattina == "") this.tm = true;
-      else this.tm = false;
+    this.checkTurnoAttivo();
+  }
+
+  checkTurnoAttivo() {
+    if (!this.settings?.turni?.[0] || !this.firme?.[0]) return;
+
+    const currentHour = (new Date()).getHours();
+    const mattina = this.settings.turni[0].mattina?.[0];
+    const pomeriggio = this.settings.turni[0].pomeriggio?.[0];
+
+    this.tm = false;
+    this.tp = false;
+    this.tn = false;
+
+    if (mattina && currentHour >= mattina.inizio.valueOf() && currentHour < mattina.fine.valueOf()) {
+      this.tm = this.firme[0].firmaMattina === "";
+    } else if (pomeriggio && currentHour >= pomeriggio.inizio.valueOf() && currentHour < pomeriggio.fine.valueOf()) {
+      this.tp = this.firme[0].firmaPomeriggio === "";
+    } else {
+      this.tn = this.firme[0].firmaNotte === "";
     }
-    else {
-      if ((new Date()).getHours() >= this.settings.turni[0].pomeriggio[0].inizio.valueOf() && (new Date()).getHours() < this.settings.turni[0].pomeriggio[0].fine.valueOf()) {
-        if (this.firme[0].firmaPomeriggio == "") this.tp = true;
-        else this.tp = false;
-      }
-      else {
-        if (this.firme[0].firmaNotte == "") this.tn = true;
-        else this.tn = false;
-      }
-    }
-
-
-
   }
 
   loadUser() {
     this.dipendente = new Dipendenti();
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
-      console.log("get dipendente");
-      this.dipendenteService
-        .getByIdUser(user.dipendenteID)
-        .then((x) => {
-
-          this.dipendente = x[0];
-
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Caricamento dipendente (" + err["status"] + ")"
-          );
-        });
+      if (user?.dipendenteID) {
+        this.dipendenteService
+          .getByIdUser(user.dipendenteID)
+          .then((x) => {
+            this.dipendente = x[0];
+          })
+          .catch((err) => {
+            this.messageService.showMessageError(
+              "Errore Caricamento dipendente (" + err["status"] + ")"
+            );
+          });
+      }
     });
   }
 
   async newDay() {
-
-
-    if ((new Date()).getHours() >= this.settings.turni[0].mattina[0].inizio.valueOf() && (new Date()).getHours() < this.settings.turni[0].mattina[0].fine.valueOf()) {
-      if (this.firme[0].firmaMattina == "") this.tm = true;
-      else this.tm = false;
-    }
-    else {
-      if ((new Date()).getHours() >= this.settings.turni[0].pomeriggio[0].inizio.valueOf() && (new Date()).getHours() < this.settings.turni[0].pomeriggio[0].fine.valueOf()) {
-        if (this.firme[0].firmaPomeriggio == "") this.tp = true;
-        else this.tp = false;
-      }
-      else {
-        if (this.firme[0].firmaNotte == "") this.tn = true;
-        else this.tn = false;
-      }
+    if (!this.settings?.turni?.[0] || !this.firme || this.firme.length === 0) {
+      return;
     }
 
+    this.checkTurnoAttivo();
 
     const now = new Date();
+    const mattinaInizio = this.settings.turni[0].mattina?.[0]?.inizio?.valueOf() ?? 7;
     const targetTime = new Date();
-    targetTime.setHours(this.settings.turni[0].mattina[0].inizio.valueOf(), 0, 0, 0); // Orario target
+    targetTime.setHours(mattinaInizio, 0, 0, 0);
 
-    const diff = Math.abs(now.getTime() - targetTime.getTime()); // Differenza in millisecondi
-    const tolerance = 10; // Margine di tolleranza
+    const diff = Math.abs(now.getTime() - targetTime.getTime());
+    const tolerance = 1000; // Margine portato a 1 secondo
 
     if (diff <= tolerance && !this.alreadyExecuted) {
-      // Imposta il flag per evitare duplicazioni
       this.alreadyExecuted = true;
-
-      console.log("Esecuzione: Orario target raggiunto!", now);
 
       let newAlvo: ItemsArrayAlvo = new ItemsArrayAlvo();
       newAlvo.data = now;
@@ -373,52 +342,42 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       newFirma.firmaNotte = "";
       newFirma.attivaFirma = true;
 
-      // Disattiva il precedente record firme (se esiste)
       this.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
-      if (this.firme[0] != null && this.firme[0] != undefined) {
-        console.log("Disattivando il precedente record.");
+      if (this.firme[0]) {
         this.firme[0].attivaFirma = false;
       }
 
-      // Disattiva il precedente record alvo (se esiste)
       this.alvo.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
-      if (this.alvo[0] != null && this.alvo[0] != undefined) {
-        console.log("Disattivando il precedente record.");
+      if (this.alvo[0]) {
         this.alvo[0].attivo = false;
       }
 
-      // Inserisce il nuovo record
       this.alvo.push(newAlvo);
       this.alvo.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
       this.dataSourceAlvo.data = this.alvo;
-      this.dataSourceAlvo.paginator = this.paginatorA;
       this.scheda.alvo = this.alvo;
 
-      // Inserisce il nuovo record
       this.firme.push(newFirma);
       this.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime());
       this.dataSourceFirme.data = this.firme;
-      this.dataSourceFirme.paginator = this.paginatorA;
       this.scheda.firme = this.firme;
 
       try {
         await this.schedaServ.update(this.scheda).toPromise();
-        console.log("Aggiornamento completato con successo.");
       } catch (error) {
         console.error("Errore durante l'aggiornamento:", error);
       }
     } else if (diff > tolerance) {
-      // Reimposta il flag quando l'istante è passato
       this.alreadyExecuted = false;
     }
   }
 
   private startCheckingTime(): void {
-    console.log("DENTRO START");
     if (this.timerSubscription) {
-      return; // Evita duplicazioni
+      return;
     }
-    this.timerSubscription = interval(1).subscribe(() => this.newDay());
+    // Esegue il controllo ogni 1 secondo (1000 ms)
+    this.timerSubscription = interval(1000).subscribe(() => this.newDay());
   }
 
   private stopCheckingTime(): void {
@@ -428,11 +387,14 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
     }
   }
 
-
- async firmaTurno(type: String) {
+  async firmaTurno(type: String) {
+    if (!this.scheda?.firme || this.scheda.firme.length === 0) {
+      this.messageService.showMessageError("Nessun registro firme valido disponibile.");
+      return;
+    }
 
     const dialogData = {
-      data: { message: "Vuoi firmare il turno "+type+" ?" }
+      data: { message: "Vuoi firmare il turno " + type + " ?" }
     };
 
     const result = await this.dialog.open(DialogQuestionComponent, dialogData).afterClosed().toPromise();
@@ -441,29 +403,29 @@ export class SchedaTerapeuticaComponent implements OnInit, AfterViewInit, OnChan
       return;
     }
 
+    const ultimaFirma = this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())[0];
+    const nomeFirma = (this.dipendente?.nome || '') + " " + (this.dipendente?.cognome || '');
 
     switch (type) {
       case "mattutino":
-        this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())[0].firmaMattina = this.dipendente.nome + " " + this.dipendente.cognome;
+        ultimaFirma.firmaMattina = nomeFirma;
         this.tm = false;
         break;
       case "pomeridiano":
-        this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())[0].firmaPomeriggio = this.dipendente.nome + " " + this.dipendente.cognome;
+        ultimaFirma.firmaPomeriggio = nomeFirma;
         this.tp = false;
         break;
       case "notturno":
-        this.scheda.firme.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())[0].firmaNotte = this.dipendente.nome + " " + this.dipendente.cognome;
+        ultimaFirma.firmaNotte = nomeFirma;
         this.tn = false;
         break;
-   }
+    }
 
-   try {
-     await this.schedaServ.update(this.scheda).toPromise();
-     console.log("Firmato con successo.");
-   } catch (error) {
-     console.error("Errore durante la firma:", error);
-   }
-
+    try {
+      await this.schedaServ.update(this.scheda).toPromise();
+      console.log("Firmato con successo.");
+    } catch (error) {
+      console.error("Errore durante la firma:", error);
+    }
   }
-
 }

@@ -1,21 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const Pazienti = require("../models/pazienti");
-const redis = require("redis");
 const parametriVitali = require("../models/parametriVitali");
-// const redisPort = process.env.REDISPORT || 6379;
-// const redisHost = process.env.REDISHOST || "redis";
-// const redisDisabled = process.env.REDISDISABLE === "true" || false;
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 const Log = require("../models/log");
 const Dipendenti = require("../models/dipendenti");
 
-// const client = redis.createClient(redisPort, redisHost);
-const searchTerm = `PAZIENTIALL`;
-
 router.get("/", async (req, res) => {
     try {
-
         const showOnlyCancellati = req.query.show == "deleted";
         const showAll = req.query.show == "all";
 
@@ -49,7 +40,6 @@ router.get("/", async (req, res) => {
         res.status(500).json({ Error: err });
     }
 });
-
 
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
@@ -86,27 +76,22 @@ router.get("/:id", async (req, res) => {
     }
 });
 
-
 // Recupera lista pazienti associati alla camera
 router.get("/camera/:idCamera", async (req, res) => {
     const { idCamera } = req.params;
 
     const getData = (query) => {
-        //console.log("Search by camera: ", query);
         return Pazienti.find(query);
     };
 
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
         if (idCamera == undefined || idCamera === "undefined") {
             console.log("Error id is not defined ", idCamera);
             res.status(404).json({ Error: "Id not defined" });
             return;
         }
 
-        query = {
+        const query = {
             $and: [
                 {
                     $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
@@ -120,16 +105,13 @@ router.get("/camera/:idCamera", async (req, res) => {
         if (pazienti != null) res.status(200).json(pazienti);
         else res.status(404).json({ error: "No patient found" });
 
-
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
 
-
 router.post("/", async (req, res) => {
     try {
-
         console.log('schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSociale));
         const pazienti = new Pazienti({
             cognome: req.body.cognome,
@@ -175,14 +157,6 @@ router.post("/", async (req, res) => {
         console.log(req.body);
 
         const result = await pazienti.save();
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `PAZIENTIALL`;
-            redisClient.del(searchTerm);
-        }
 
         const user = res.locals.auth;
 
@@ -270,16 +244,6 @@ router.put("/:id", async (req, res) => {
             }
         );
 
-        //console.log("Update paziente: ", pazienti);
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `PAZIENTIBY${id}`;
-            redisClient.del(searchTerm);
-        }
-
         const user = res.locals.auth;
 
         const getDipendente = () => {
@@ -328,14 +292,6 @@ router.delete("/:id", async (req, res) => {
             }
         );
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `PAZIENTIBY${id}`;
-            redisClient.del(searchTerm);
-        }
-
         const user = res.locals.auth;
 
         const getDipendente = () => {
@@ -363,52 +319,22 @@ router.delete("/:id", async (req, res) => {
 
 // PARAMETRI VITALI
 
-// id = idPaziente
-// TODO find to date
 router.get("/parametriVitali/:id/:dateRif", async (req, res) => {
     const { id, dateRif } = req.params;
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = () => {
-            return parametriVitali.find({
-                $and: [{ idPaziente: id }, { dateRif: dateRif }],
-            });
-        };
-
         if (id == undefined || id === "undefined") {
             console.log("Error id is not defined ", id);
             res.status(404).json({ Error: "Id not defined" });
             return;
         }
 
-        if (redisClient == undefined || redisDisabled) {
-            const parametri = await getData();
-
-            if (parametri != null) res.status(200).json(parametri);
-            else res.status(404).json({ error: "No parametriVitali found" });
-            return;
-        }
-
-        const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const parametri = await getData();
-
-                redisClient.setex(
-                    searchTerm,
-                    redisTimeCache,
-                    JSON.stringify(parametri)
-                );
-                if (parametri != null) res.status(200).json(parametri);
-                else res.status(404).json({ error: "No parametriVitali found" });
-            }
+        const parametri = await parametriVitali.find({
+            $and: [{ idPaziente: id }, { dateRif: dateRif }],
         });
+
+        if (parametri != null) res.status(200).json(parametri);
+        else res.status(404).json({ error: "No parametriVitali found" });
+
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -447,14 +373,6 @@ router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
             { upsert: true }
         );
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `PARAMETRIVITALI${id}${dateRif}`;
-            redisClient.del(searchTerm);
-        }
-
         const user = res.locals.auth;
 
         const getDipendente = () => {
@@ -490,40 +408,18 @@ router.get("/schedaPsicologica/:id", async (req, res) => {
             return;
         }
 
-        const getData = () => {
-            return Pazienti.findOne({
-                $and: [
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                    { _id: id },
-                ],
-            });
-        };
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient == undefined || redisDisabled) {
-            const pazienti = await getData();
-            if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
-            else res.status(404).json({ error: "No patient found" });
-            return;
-        }
-
-        const searchTerm = `PAZIENTIBY${id}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data && !redisDisabled) {
-                res.status(200).send(JSON.parse(data.schedaPsico));
-            } else {
-                const pazienti = await getData();
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
-                else res.status(404).json({ error: "No patient found" });
-            }
+        const pazienti = await Pazienti.findOne({
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+                { _id: id },
+            ],
         });
+
+        if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
+        else res.status(404).json({ error: "No patient found" });
+
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -553,14 +449,6 @@ router.put("/schedaPsicologica/:id", async (req, res) => {
                 },
             }
         );
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            const searchTerm = `PAZIENTIBY${id}`;
-            redisClient.del(searchTerm);
-        }
 
         const user = res.locals.auth;
 

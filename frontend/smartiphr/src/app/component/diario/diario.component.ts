@@ -56,10 +56,10 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
       })
       .afterClosed()
       .subscribe((result) => {
-        if (result != undefined && result) {
-          
+        // Verifica che result sia un oggetto valido e non boolean/null
+        if (result && typeof result === 'object') {
           this.diario.push(result);
-          this.dataSource.data = this.diario;
+          this.dataSource.data = [...this.diario];
         }
       });
   }
@@ -71,19 +71,14 @@ export class DiarioPisicoComponent implements OnInit, AfterViewInit {
         data: Diario.clone(diario),
       })
       .afterClosed()
-      .subscribe((result) => {
-        
-        if (result != undefined && result) {
-          const data = this.diario;
-
-          const index = data.indexOf(diario, 0);
+      .subscribe((result: Diario) => {
+        // Aggiorna solo se il risultato ritornato è un oggetto Diario valido
+        if (result && typeof result === 'object' && result.valore !== undefined) {
+          const index = this.diario.indexOf(diario);
           if (index > -1) {
-            data.splice(index, 1);
-            console.log("Removed item");
+            this.diario[index] = result;
           }
-
-          data.push(result);
-          this.dataSource.data = this.diario;
+          this.dataSource.data = [...this.diario];
         }
       });
   }
