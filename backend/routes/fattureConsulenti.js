@@ -1,87 +1,66 @@
 const express = require("express");
 const router = express.Router();
-const Fatture = require("../models/fatture");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
+const FattureConsulenti = require("../models/fatture");
 
 router.get("/", async (req, res) => {
-  try {
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
-
-    const getData = () => {
-      return Fatture.aggregate([
-          {
-            $project: {
-              identifyUserObj: { $toObjectId: "$identifyUser" },
-              filename: 1,
-              dateupload: 1,
-              note: 1,
+    try {
+        const fattureConsulenti = await FattureConsulenti.aggregate([
+            // 1. Filtra per typology = "FattureConsulenti"
+            {
+                $match: {
+                    typology: "FattureConsulenti",
+                },
             },
-          },
-          {
-            $lookup: {
-              localField: "identifyUserObj",
-              from: "consulenti",
-              foreignField: "_id",
-              as: "fromConsulenti",
+            // 2. Converte identifyUser in ObjectId se salvato come stringa
+            {
+                $addFields: {
+                    identifyUserObj: {
+                        $cond: {
+                            if: { $eq: [{ $type: "$identifyUser" }, "string"] },
+                            then: {
+                                $convert: {
+                                    input: "$identifyUser",
+                                    to: "objectId",
+                                    onError: null,
+                                    onNull: null,
+                                },
+                            },
+                            else: "$identifyUser",
+                        },
+                    },
+                },
             },
-          },
-          {
-            $replaceRoot: {
-              newRoot: {
-                $mergeObjects: [
-                  { $arrayElemAt: ["$fromConsulenti", 0] },
-                  "$$ROOT",
-                ],
-              },
+            // 3. Join ($lookup) con la collezione 'consulenti'
+            {
+                $lookup: {
+                    from: "consulenti",
+                    localField: "identifyUserObj",
+                    foreignField: "_id",
+                    as: "consulenteData",
+                },
             },
-          },
-          {
-            $project: {
-              dataNascita: 0,
-              comuneNascita: 0,
-              provinciaNascita: 0,
-              indirizzoNascita: 0,
-              indirizzoResidenza: 0,
-              comuneResidenza: 0,
-              provinciaResidenza: 0,
-              mansione: 0,
-              tipoContratto: 0,
-              telefono: 0,
-              email: 0,
-              fromConsulenti: 0,
+            // 4. Estrai nome e cognome dal primo elemento dell'array 'consulenteData'
+            {
+                $addFields: {
+                    nome: { $arrayElemAt: ["$consulenteData.nome", 0] },
+                    cognome: { $arrayElemAt: ["$consulenteData.cognome", 0] },
+                    codiceFiscale: { $arrayElemAt: ["$consulenteData.codiceFiscale", 0] },
+                },
             },
-          },
+            // 5. Rimuovi i campi di servizio temporanei
+            {
+                $project: {
+                    identifyUserObj: 0,
+                    consulenteData: 0,
+                },
+            },
         ]);
-;
-    };
 
-    if (redisClient == undefined || redisDisabled) {
-      const eventi = await getData();
-      res.status(200).json(eventi);
-      return;
+        return res.status(200).json(fattureConsulenti);
+    } catch (err) {
+        console.error("Errore durante il recupero delle fatture:", err);
+        return res.status(500).json({ Error: err.message });
     }
-
-    const searchTerm = `FATTURECONSULENTIALL`;
-
-    redisClient.get(searchTerm, async (err, data) => {
-      if (err) throw err;
-
-      if (data) {
-        res.status(200).send(JSON.parse(data));
-      } else {
-        const fattureConsulenti = await getData();
-        redisClient.setex(
-          searchTerm,
-          redisTimeCache,
-          JSON.stringify(fattureConsulenti)
-        );
-        res.status(200).json(fattureConsulenti);
-      }
-    });
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
 });
 
 module.exports = router;

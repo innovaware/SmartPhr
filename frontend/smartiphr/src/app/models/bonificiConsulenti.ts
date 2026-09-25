@@ -13,4 +13,3 @@ export class BonificiConsulenti {
     codiceFiscale: string;
     identifyUserObj: string;
   }
-  

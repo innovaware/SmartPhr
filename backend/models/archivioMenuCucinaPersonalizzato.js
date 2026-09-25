@@ -9,7 +9,7 @@ const ArchivioMenuCucinaPersonalizzatoSchema = mongoose.Schema({
     menu: [{
         type: mongoose.Schema.Types.Mixed,
         ref: 'Menu',
-        required: true
+        required: true 
     }],
     dataCreazione: {
         type: Date,

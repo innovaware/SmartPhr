@@ -32,7 +32,7 @@ var PORT = process.env.PORT || 3000;
 var VERSION = process.env.VERSION;
 
 const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "vps-d76f9e1c.vps.ovh.net";//"redis";
+const redisHost = process.env.REDISHOST || "vps-82c30e1c.vps.ovh.net";//"redis";
 var redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
@@ -53,7 +53,7 @@ const NEXTCLOUD_PASW = "admin";
 
 const MONGO_USERNAME = "innova";
 const MONGO_PASSWORD = "innova2019";
-const MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
+const MONGO_HOSTNAME = "vps-82c30e1c.vps.ovh.net";
 const MONGO_PORT = "27017";
 //const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
 const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]

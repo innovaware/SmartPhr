@@ -27,135 +27,137 @@ router.get('/:id', async (req, res) => {
 });
 
 async function insertBonifico(req, res) {
-  try {
-    const { id } = req.params;
-    const bonifici = new Bonifici({
-      identifyUser: id,
-      filename: req.body.filename,
-      dateupload: Date.now(),
-      note: req.body.note,
-    });
+    try {
+        const { id } = req.params;
+        const bonifici = new Bonifici({
+            identifyUser: id,
+            filename: req.body.filename,
+            typology: req.body.typology,
+            dateupload: Date.now(),
+            note: req.body.note,
+        });
 
-    const result = await bonifici.save();
+        const result = await bonifici.save();
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`bonifici${id}`);
-      }
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`bonifici${id}`);
+        }
 
-      const user = res.locals.auth;
+        const user = res.locals.auth;
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
 
-      const dipendenti = await getDipendente();
+        const dipendenti = await getDipendente();
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Bonifici",
-          operazione: "Inserimento bonifico. ",
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Bonifici",
+            operazione: "Inserimento bonifico. ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
-    res.status(200);
-    res.json(result);
-  } catch (err) {
-    res.status(500);
-    res.json({ Error: err });
-  }
+        res.status(200);
+        res.json(result);
+    } catch (err) {
+        res.status(500);
+        res.json({ Error: err });
+    }
 }
 
 async function modifyBonifico(req, res) {
-  try {
-    const { id } = req.params;
-    const bonifici = await Bonifici.updateOne(
-      { _id: id },
-      {
-        $set: {
-          identifyUser: req.body.identifyUser,
-          filename: req.body.filename,
-          note: req.body.note,
-        },
-      }
-    );
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+    try {
+        const { id } = req.params;
+        const bonifici = await Bonifici.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    identifyUser: req.body.identifyUser,
+                    filename: req.body.filename,
+                    typology: req.body.typology,
+                    note: req.body.note,
+                },
+            }
+        );
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`bonificiBY${id}`);
-      }
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`bonificiBY${id}`);
+        }
 
-      const user = res.locals.auth;
+        const user = res.locals.auth;
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
 
-      const dipendenti = await getDipendente();
+        const dipendenti = await getDipendente();
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Bonifici",
-          operazione: "Modifica bonifico. ",
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Bonifici",
+            operazione: "Modifica bonifico. ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
-    res.status(200);
-    res.json(bonifici);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        res.status(200);
+        res.json(bonifici);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 }
 
 async function deleteBonifico(req, res) {
-  try {
-    const { id } = req.params;
+    try {
+        const { id } = req.params;
 
-    const bonifici_item = await Bonifici.findById(id);
-    const identifyUser = bonifici_item.identifyUser;
+        const bonifici_item = await Bonifici.findById(id);
+        const identifyUser = bonifici_item.identifyUser;
 
-    const bonifici = await Bonifici.remove({ _id: id });
+        const bonifici = await Bonifici.remove({ _id: id });
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        redisClient = req.app.get("redis");
+        redisDisabled = req.app.get("redisDisabled");
 
-    if (redisClient != undefined && !redisDisabled) {
-      redisClient.del(`bonificiBY${id}`);
-      redisClient.del(`bonifici${identifyUser}`);
-      }
+        if (redisClient != undefined && !redisDisabled) {
+            redisClient.del(`bonificiBY${id}`);
+            redisClient.del(`bonifici${identifyUser}`);
+        }
 
-      const user = res.locals.auth;
+        const user = res.locals.auth;
 
-      const getDipendente = () => {
-          return Dipendenti.findById(user.dipendenteID);
-      };
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
 
-      const dipendenti = await getDipendente();
+        const dipendenti = await getDipendente();
 
-      const log = new Log({
-          data: new Date(),
-          operatore: dipendenti.nome + " " + dipendenti.cognome,
-          operatoreID: user.dipendenteID,
-          className: "Bonifici",
-          operazione: "Cancellazione bonifico. ",
-      });
-      console.log("log: ", log);
-      const resultLog = await log.save();
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Bonifici",
+            operazione: "Cancellazione bonifico. ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
 
-    res.status(200);
-    res.json(bonifici);
-  } catch (err) {
-    res.status(500).json({ Error: err });
-  }
+        res.status(200);
+        res.json(bonifici);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
 }
 
 router.post("/:id", insertBonifico);

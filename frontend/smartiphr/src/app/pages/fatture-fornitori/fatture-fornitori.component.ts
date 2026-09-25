@@ -73,7 +73,7 @@ import { UploadService } from "src/app/service/upload.service";
 
     async show(fattura: FattureFornitori) {
         this.uploadService
-          .download(fattura.filename, fattura.identifyUserObj, "fatture")
+          .download(fattura.filename, fattura.identifyUser, "fatture")
           .then((x) => {
             
             x.subscribe(

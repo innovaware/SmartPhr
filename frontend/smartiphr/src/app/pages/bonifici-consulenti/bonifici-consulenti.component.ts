@@ -63,7 +63,8 @@ import { UploadService } from "src/app/service/upload.service";
         });
     } */
 
-    async show(bonifico: BonificiConsulenti) {
+  async show(bonifico: BonificiConsulenti) {
+    console.log(bonifico);
         this.uploadService
           .download(bonifico.filename, bonifico.identifyUserObj, "bonifico")
           .then((x) => {
@@ -122,4 +123,3 @@ import { UploadService } from "src/app/service/upload.service";
     } */
 
   }
-  

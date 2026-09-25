@@ -10,6 +10,5 @@ export class FattureConsulenti {
     cognome: string;
     nome: string;
     codiceFiscale: string;
-    identifyUserObj: string;
+    identifyUser: string;
   }
-  

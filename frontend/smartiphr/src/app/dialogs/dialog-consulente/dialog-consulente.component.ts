@@ -53,7 +53,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   bonificiDisplayedColumns: string[] = ["namefile", "date", "note", "action"];
 
   //@ViewChild("paginatorB", { static: false }) bonificiPaginator: MatPaginator;
-  @ViewChild('paginatorB') bonificiPaginator!: MatPaginator;
+  @ViewChild('paginatorB', { static: false }) bonificiPaginator!: MatPaginator;
   public bonificiDataSource: MatTableDataSource<Bonifico>;
 
   constructor(
@@ -75,18 +75,13 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.disable = item.readonly;
     this.result = undefined;
     this.settings = new Settings();
-    this.bonifici = [];
-    this.addingBonifici = false;
-    this.fatture = [];
-    this.addingFattura = false;
-    this.contratto = [];
-    this.addingContratto = false;
+
     this.ContrattoDataSource = new MatTableDataSource<Contratto>();
     this.fattureDataSource = new MatTableDataSource<Fatture>();
     this.bonificiDataSource = new MatTableDataSource<Bonifico>();
-    this.ContrattoDataSource.paginator = null; // Aggiungi questa riga
-    this.fattureDataSource.paginator = null; // Aggiungi questa riga
-    this.bonificiDataSource.paginator = null; // Aggiungi questa riga
+    //this.ContrattoDataSource.paginator = null; // Aggiungi questa riga
+    //this.fattureDataSource.paginator = null; // Aggiungi questa riga
+    //this.bonificiDataSource.paginator = null; // Aggiungi questa riga
   }
 
   ngOnInit() {
@@ -102,18 +97,39 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
   }
 
+  //ngAfterViewInit() {
+  //  if (this.contrattoPaginator) {
+  //    console.log('Paginator trovato:', this.contrattoPaginator);
+  //    this.ContrattoDataSource.paginator = this.contrattoPaginator;
+  //  }
+  //  if (this.bonificiPaginator) {
+  //    console.log('Paginator trovato:', this.bonificiPaginator);
+  //    this.bonificiDataSource.paginator = this.bonificiPaginator;
+  //  }
+  //  if (this.fatturePaginator) {
+  //    console.log('Paginator trovato:', this.fatturePaginator);
+  //    this.fattureDataSource.paginator = this.fatturePaginator;
+  //  }
+  //}
+
   ngAfterViewInit() {
+    console.log("Consulente: ", this.item.consulente);
+    if (this.item.consulente._id != undefined) {
+      this.getContratto();
+      this.getFatture();
+      this.getBonificiAssegniContanti();
+    }
     if (this.contrattoPaginator) {
-      console.log('Paginator trovato:', this.contrattoPaginator);
       this.ContrattoDataSource.paginator = this.contrattoPaginator;
+      this.ContrattoDataSource.data = this.contratto;
     }
     if (this.bonificiPaginator) {
-      console.log('Paginator trovato:', this.bonificiPaginator);
       this.bonificiDataSource.paginator = this.bonificiPaginator;
+      this.bonificiDataSource.data = this.bonifici; // Aggiorna il conteggio (es. 1 of 1)
     }
     if (this.fatturePaginator) {
-      console.log('Paginator trovato:', this.fatturePaginator);
       this.fattureDataSource.paginator = this.fatturePaginator;
+      this.fattureDataSource.data = this.fatture;
     }
   }
 
@@ -147,7 +163,6 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     } else {
       await this.consulenteService.update(this.item.consulente).toPromise();
     }
-    this.messageService.showMessageError(`Salvataggio Effettuato`);
   }
 
   private validateConsulente(): boolean {
@@ -175,107 +190,61 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     return true;
   }
 
-  async getContratto() {
-    console.log(`Get Contratto consulente: ${this.item.consulente._id}`);
-
-    if (!this.item.consulente._id) {
-      console.log("ID consulente non definito");
-      return;
-    }
-
-    try {
-      let f: Contratto[] = await this.contrattoService.getContratto(this.item.consulente._id);
-
-      if (f && f.length > 0) {
-        f = f.filter(x => new Date(x.dataScadenza) > new Date());
-        this.contratto = f.length > 0 ? [f[0]] : [];
-      } else {
-        this.contratto = [];
-      }
-
-      if (this.contratto[0]) {
-        const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
-        console.log("numero scadenza: ", numScad);
-        if (numScad < this.settings.alertContratto.valueOf()) {
-          this.messageService.showMessage("Mancano " + numScad + " giorni alla scadenza del contratto");
-        }
-      }
-
-      this.ContrattoDataSource.data = this.contratto;
-
-      setTimeout(() => {
-        if (this.contrattoPaginator) {
-          this.ContrattoDataSource.paginator = this.contrattoPaginator;
-        }
-      }, 0);
-
-    } catch (err) {
-      console.error("Errore caricamento contratto:", err);
-      this.messageService.showMessageError("Errore caricamento lista contratto");
-      this.contratto = [];
-      this.ContrattoDataSource.data = [];
-    }
-  }
-
   async getFatture() {
-    console.log(`Get Fatture consulente: ${this.item.consulente._id}`);
-
-    if (!this.item.consulente._id) {
-      console.log("ID consulente non definito");
-      return;
-    }
+    if (!this.item.consulente._id) return;
 
     try {
-      const f: Fatture[] = await this.fattureService.getByUserId(this.item.consulente._id);
-      this.fatture = f && f.length > 0 ? f : [];
-
+      const fatture = await this.fattureService.getByUserId(this.item.consulente._id);
+      this.fatture = fatture || [];
       this.fattureDataSource = new MatTableDataSource<Fatture>(this.fatture);
-
-      setTimeout(() => {
-        if (this.fatturePaginator) {
-          this.fattureDataSource.paginator = this.fatturePaginator;
-        }
-      }, 0);
-
+      this.fattureDataSource.paginator = this.fatturePaginator;
     } catch (err) {
-      console.error("Errore caricamento fatture:", err);
       this.messageService.showMessageError("Errore caricamento lista fatture");
-      this.fatture = [];
-      this.fattureDataSource = new MatTableDataSource<Fatture>([]);
+      console.error(err);
     }
   }
 
-  async getBonificiAssegniContanti() {
-  console.log(`Get Bonifici e altro: ${this.item.consulente._id}`);
-  
-  if (!this.item.consulente._id) {
-    console.log("ID consulente non definito");
-    return;
-  }
-  
-  try {
-    const f: Bonifico[] = await this.bonificoService.getByUserId(this.item.consulente._id);
-    this.bonifici = f && f.length > 0 ? f : [];
-    
-    this.bonificiDataSource = new MatTableDataSource<Bonifico>(this.bonifici);
-    
-    // Assegnare il paginator dopo un breve delay per assicurarsi che il ViewChild sia inizializzato
-    setTimeout(() => {
-      if (this.bonificiPaginator) {
-        this.bonificiDataSource.paginator = this.bonificiPaginator;
+  async getContratto() {
+    if (!this.item.consulente._id) return;
+
+    try {
+      const contracts = await this.contrattoService.getContratto(this.item.consulente._id);
+      if (contracts.length > 0) {
+        const validContracts = contracts.filter(x => new Date(x.dataScadenza) > new Date());
+        this.contratto = validContracts.length > 0 ? [validContracts[0]] : [];
+
+        if (this.contratto[0]) {
+          const numScad = this.dateDiff(new Date(), new Date(this.contratto[0].dataScadenza));
+          if (numScad < this.settings.alertContratto) {
+            this.messageService.showMessage(`Mancano ${numScad} giorni alla scadenza del contratto`);
+          }
+        }
       }
-    }, 0);
-    
-  } catch (err) {
-    console.error("Errore caricamento bonifici:", err);
-    this.messageService.showMessageError(
-      "Errore caricamento lista bonifici e altri"
-    );
-    // Inizializzare comunque con array vuoto
-    this.bonifici = [];
-    this.bonificiDataSource = new MatTableDataSource<Bonifico>([]);
+      this.ContrattoDataSource = new MatTableDataSource<Contratto>(this.contratto);
+      this.ContrattoDataSource.paginator = this.contrattoPaginator;
+    } catch (err) {
+      this.messageService.showMessageError("Errore caricamento lista contratto");
+      console.error(err);
+    }
   }
-}
+
+  //async getBonificiAssegniContanti() {
+  //  if (!this.item.consulente._id) return;
+  //  try {
+  //    const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+  //    console.log('Bonifici ricevuti:', bonifici);
+  //    this.bonifici = bonifici || [];
+  //    this.bonificiDataSource.data = this.bonifici;
+  //    this.bonificiDataSource.paginator.length = this.bonifici.length;
+  //    this.bonificiDataSource._updateChangeSubscription();
+  //    console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
+  //  } catch (err) {
+  //    console.error(err);
+  //    this.messageService.showMessageError("Errore caricamento lista bonifici");
+  //  }
+  //}
+
+
 
   //async getContratto(): Promise<void> {
   //  if (!this.item.consulente._id) return;
@@ -300,6 +269,24 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
   //    console.error(err);
   //  }
   //}
+
+  async getBonificiAssegniContanti() {
+    if (!this.item.consulente._id) return;
+    try {
+      const bonifici = await this.bonificoService.getByUserId(this.item.consulente._id);
+      console.log('Bonifici ricevuti:', bonifici);
+      this.bonifici = bonifici || [];
+
+      // Inizializza il DataSource con i dati e assegna il paginatore
+      this.bonificiDataSource = new MatTableDataSource<Bonifico>(this.bonifici);
+      this.bonificiDataSource.paginator = this.bonificiPaginator;
+
+      console.log('DataSource dopo aggiornamento:', this.bonificiDataSource);
+    } catch (err) {
+      console.error(err);
+      this.messageService.showMessageError("Errore caricamento lista bonifici");
+    }
+  }
 
   async addContratto(): Promise<void> {
     this.addingContratto = true;
@@ -384,6 +371,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
       this.contratto[0] = result;
       this.ContrattoDataSource.data = this.contratto;
+      this.ContrattoDataSource.paginator = this.contrattoPaginator;
     } catch (err) {
       this.messageService.showMessageError("Errore nell'inserimento o caricamento del contratto");
       console.error(err);
@@ -413,6 +401,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.nuovaFattura = {
       identifyUser: this.item.consulente._id,
       filename: undefined,
+      typology:"FattureConsulenti",
       note: "",
     };
   }
@@ -450,6 +439,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
 
       this.fatture.push(result);
       this.fattureDataSource.data = this.fatture;
+      this.fattureDataSource.paginator = this.fatturePaginator;
       this.uploadingFattura = false;
       this.uploading = false;
     } catch (err) {
@@ -498,6 +488,7 @@ export class DialogConsulenteComponent implements OnInit, AfterViewInit {
     this.nuovaBonifico = {
       identifyUser: this.item.consulente._id,
       filename: undefined,
+      typology:"BonificoConsulenti",
       note: "",
     };
   }

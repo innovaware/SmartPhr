@@ -116,6 +116,7 @@ export class FattureSSComponent implements OnInit {
     this.addingFattura = true;
     this.nuovaFattura = {
       identifyUser: "ASPSSCZ01",
+      typology: "FattureSS",
       filename: undefined,
       note: ""
     };

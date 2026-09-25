@@ -10,5 +10,5 @@ export class FattureFornitori {
   cognome: string;
   nome: string;
   codiceFiscale: string;
-  identifyUserObj: string;
+  identifyUser: string;
 }

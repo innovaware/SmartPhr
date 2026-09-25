@@ -1,51 +1,46 @@
 const express = require("express");
 const router = express.Router();
 const Fornitori = require("../models/fornitori");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
 
+// GET all
 router.get("/", async (req, res) => {
     try {
         const showOnlyCancellati = req.query.show === "deleted";
         const showAll = req.query.show === "all";
 
-        const getData = (query) => {
-            return Fornitori.find(query);
+        let query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
         };
 
-        if (showOnlyCancellati || showAll) {
-            console.log("Show all or deleted");
-            let query = {};
-            if (showOnlyCancellati) {
-                query = { cancellato: true };
-            }
-            const data = await getData(query);
+        if (showOnlyCancellati) {
+            query = { cancellato: true };
+        } else if (showAll) {
+            query = {};
+        }
+
+        const data = await Fornitori.find(query);
+
+        if (data && data.length > 0) {
             res.status(200).json(data);
         } else {
-            const query = {
-                $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-            };
-
-            const data = await getData(query);
-
-            if (data.length > 0) {
-                res.status(200).json(data);
-            } else {
-                res.status(404).json({ error: "No suppliers found" });
-            }
+            res.status(404).json({ error: "No supplier found" });
         }
     } catch (err) {
-        console.error("Error: ", err);
+        console.error("Error GET fornitori: ", err);
         res.status(500).json({ Error: err });
     }
 });
 
+// GET by ID
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
 
     try {
-        if (id == undefined || id === "undefined") {
+        if (!id || id === "undefined") {
             console.log("Error id is not defined ", id);
-            res.status(404).json({ Error: "Id not defined" });
-            return;
+            return res.status(404).json({ Error: "Id not defined" });
         }
 
         const query = {
@@ -57,22 +52,20 @@ router.get("/:id", async (req, res) => {
             ],
         };
 
-        const getData = () => {
-            return Fornitori.find(query);
-        };
+        const fornitoridata = await Fornitori.find(query);
 
-        const fornitoridata = await getData();
-
-        if (fornitoridata != null && fornitoridata.length > 0) {
+        if (fornitoridata && fornitoridata.length > 0) {
             res.status(200).json(fornitoridata);
         } else {
             res.status(404).json({ error: "No supplier found" });
         }
     } catch (err) {
+        console.error("Error GET fornitore by id: ", err);
         res.status(500).json({ Error: err });
     }
 });
 
+// POST
 router.post("/", async (req, res) => {
     try {
         const fornitore = new Fornitori({
@@ -94,23 +87,36 @@ router.post("/", async (req, res) => {
             dataCreazione: new Date()
         });
 
-        console.log(req.body);
-
         const result = await fornitore.save();
 
+        const user = res.locals.auth;
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Fornitori",
+            operazione: "Inserimento fornitore: " + fornitore.cognome + " " + fornitore.nome,
+        });
+
+        await log.save();
+
         res.status(200).json(result);
+
     } catch (err) {
+        console.error("Error POST fornitore: ", err);
         res.status(500).json({ Error: err });
     }
 });
 
+// PUT
 router.put("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        if (id == undefined || id === "undefined") {
+        if (!id || id === "undefined") {
             console.log("Error id is not defined ", id);
-            res.status(404).json({ Error: "Id not defined" });
-            return;
+            return res.status(404).json({ Error: "Id not defined" });
         }
 
         const data = await Fornitori.updateOne(
@@ -137,23 +143,33 @@ router.put("/:id", async (req, res) => {
             }
         );
 
+        const user = res.locals.auth;
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Fornitori",
+            operazione: "Modifica fornitore: " + (req.body.cognome || '') + " " + (req.body.nome || ''),
+        });
+
+        await log.save();
+
         res.status(200).json(data);
     } catch (err) {
+        console.error("Error PUT fornitore: ", err);
         res.status(500).json({ Error: err });
     }
 });
 
+// DELETE
 router.delete("/:id", async (req, res) => {
     try {
         const { id } = req.params;
-        if (id == undefined || id === "undefined") {
+        if (!id || id === "undefined") {
             console.log("Error id is not defined ", id);
-            res.status(404).json({ Error: "Id not defined" });
-            return;
-        }
-
-        if (id == null) {
-            res.status(400).json({ error: "id not valid" });
+            return res.status(404).json({ Error: "Id not defined" });
         }
 
         const data = await Fornitori.updateOne(
@@ -166,8 +182,22 @@ router.delete("/:id", async (req, res) => {
             }
         );
 
+        const user = res.locals.auth;
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Fornitori",
+            operazione: "Eliminazione fornitore ID: " + id,
+        });
+
+        await log.save();
+
         res.status(200).json(data);
     } catch (err) {
+        console.error("Error DELETE fornitore: ", err);
         res.status(500).json({ Error: err });
     }
 });

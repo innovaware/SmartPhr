@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, ViewChild } from "@angular/core";
+import { AfterViewInit, Component, Inject, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
@@ -89,7 +89,7 @@ export class DialogFornitoreComponent implements OnInit {
     console.log("Dialog fornitore generale", this.data);
   }
 
-
+  
 
   // a e b sono oggetti Data
   dateDiffInDays(a, b) {
@@ -251,6 +251,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.nuovaFattura = {
       identifyUser: this.fornitore._id,
       filename: undefined,
+      typology:"FattureFornitori",
       note: ""
     };
   }
@@ -323,6 +324,7 @@ export class DialogFornitoreComponent implements OnInit {
     this.nuovaBonifico = {
       identifyUser: this.fornitore._id,
       filename: undefined,
+      typology: "BonificoFornitori",
       note: ""
     };
   }

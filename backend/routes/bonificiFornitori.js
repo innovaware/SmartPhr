@@ -1,15 +1,17 @@
 ﻿const express = require("express");
 const router = express.Router();
 const Bonifici = require("../models/bonifici");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
 router.get("/", async (req, res) => {
     try {
-        // Get the redisDisabled flag from the app settings
-        const redisDisabled = req.app.get("redisDisabled");
 
         const getData = () => {
             return Bonifici.aggregate([
+                {
+                    $match: {
+                        typology: "BonificoFornitori",
+                    },
+                },
                 {
                     $project: {
                         identifyUserObj: { $toObjectId: "$identifyUser" },

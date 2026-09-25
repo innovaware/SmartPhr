@@ -5,6 +5,7 @@ export class Fatture {
   _id?: string;
   identifyUser?: string;
   filename: string;
+  typology?: string;
   dataupload?: Date;
   note?: string;
   file?: File;

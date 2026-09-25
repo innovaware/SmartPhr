@@ -1,14 +1,15 @@
 const mongoose = require("mongoose");
 
 const FattureSchema = mongoose.Schema({
-  identifyUser: String,
-  filename: String,
-  dateupload: Date,
-  note: String,
+    identifyUser: String,
+    filename: String,
+    dateupload: Date,
+    typology: String,
+    note: String,
 });
 
 module.exports = mongoose.model(
-  "Fatture",
-  FattureSchema,
-  "fatture"
+    "Fatture",
+    FattureSchema,
+    "fatture"
 );
