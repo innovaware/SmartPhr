@@ -11,9 +11,7 @@
             <span>Salva</span>
         </button>
         <!-- RIMOSSO [mat-dialog-close]="true" -->
-        <button mat-icon-button
-                (click)="dialogRef.close()"
-                title="Chiudi">
+        <button mat-icon-button [mat-dialog-close]="true" title="Chiudi">
             <mat-icon>close</mat-icon>
         </button>
     </div>
