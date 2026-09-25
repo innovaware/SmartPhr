@@ -299,6 +299,7 @@ import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpecial
 import { AreaLogComponent } from "./pages/log/area-log.component";
 import { DialogLogComponent } from "./dialogs/dialog-log/dialog-log.component";
 import { DialogNewMessageComponent } from "./dialogs/dialog-newMessage/dialog-newMessage.component";
+import { DialogCartellaClinicaAltroComponent } from "./dialogs/dialog-cartella-clinica-altro/dialog-cartella-clinica-altro.component";
 
 const materialModules = [
   MatTableModule,
@@ -338,6 +339,7 @@ const dialogModule = [
   DialogDiarioComponent,
   DialogTestRiabilitativoComponent,
   DialogStanzaComponent,
+  DialogCartellaClinicaAltroComponent,
   DialogCartellaClinicaComponent,
   DialogCartellaInfermeristicaComponent,
   DialogEventComponent,
@@ -618,6 +620,7 @@ const pipes = [
     DialogTestRiabilitativoComponent,
     DialogStanzaComponent,
     DialogCartellaClinicaComponent,
+    DialogCartellaClinicaAltroComponent,
     DialogCartellaInfermeristicaComponent,
     DialogCartellaAssistenteSocialeComponent,
     DialogCartellaEducativaComponent,

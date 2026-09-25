@@ -62,15 +62,21 @@ export class DiarioClinicoComponent implements OnInit {
     console.log("Show Add Diario:", this.data);
     var dialogRef = this.dialog.open(DialogDiarioClinicoComponent, {
       data: { paziente: this.data, readonly: false },
-      width: "600px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
     });
 
 
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
-        if(result != null && result != undefined){
-        this.dataDiario.push(result);
-        this.diarioClinicoDataSource = new MatTableDataSource<DiarioClinico>(this.dataDiario);
+        console.log("result", result);
+        if (result != null && result != undefined) {
+          this.getDataDiario();
         }
       });
   }

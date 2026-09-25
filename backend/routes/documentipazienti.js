@@ -1,7 +1,6 @@
 const express = require("express");
 const router = express.Router();
 const DocPaziente = require("../models/documentiPazienti");
-const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 const Log = require("../models/log");
 const Dipendenti = require("../models/dipendenti");
 
@@ -13,19 +12,16 @@ router.get("/paziente/:id/:type", async (req, res) => {
         console.log('GET DOCS(id): ' + id);
         console.log('GET DOCS(type): ' + type);
 
-        const getData = () => {
-            return DocPaziente.find({
-                $and: [
-                    { paziente: id },
-                    { type: type },
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                ],
-            });
-        };
+        const documenti = await DocPaziente.find({
+            $and: [
+                { paziente: id },
+                { type: type },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
+        });
 
-        const documenti = await getData();
         console.log("documenti: ", documenti);
         res.status(200).json(documenti);
     } catch (err) {
@@ -34,20 +30,15 @@ router.get("/paziente/:id/:type", async (req, res) => {
     }
 });
 
-
-
 router.get("/pazienteingresso/:id", async (req, res) => {
     try {
         let id = req.params.id;
 
-        const getData = () => {
-            return DocPaziente.find({
-                paziente: id,
-                type: "ingresso",
-            });
-        };
+        const eventi = await DocPaziente.find({
+            paziente: id,
+            type: "ingresso",
+        });
 
-        const eventi = await getData();
         res.status(200).json(eventi);
     } catch (err) {
         console.error("Error: ", err);
@@ -55,23 +46,15 @@ router.get("/pazienteingresso/:id", async (req, res) => {
     }
 });
 
-
-
-
 router.get("/:id", async (req, res) => {
     const { id } = req.params;
     try {
-        const getData = () => {
-            return DocPaziente.findById(id);
-        };
-
-        const eventi = await getData();
+        const eventi = await DocPaziente.findById(id);
         res.status(200).json(eventi);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
-
 
 router.post("/:id", async (req, res) => {
     try {
@@ -88,21 +71,9 @@ router.post("/:id", async (req, res) => {
         });
 
         const result = await doc.save();
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`DOCUMENTIPAZIENTEBY${id}`);
-        }
-
         const user = res.locals.auth;
 
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
@@ -112,13 +83,11 @@ router.post("/:id", async (req, res) => {
             operazione: "Inserimento documento paziente: " + doc.filename,
         });
         console.log("log: ", log);
-        const resultLog = await log.save();
+        await log.save();
 
-        res.status(200);
-        res.json(result);
+        res.status(200).json(result);
     } catch (err) {
-        res.status(500);
-        res.json({ Error: err });
+        res.status(500).json({ Error: err });
     }
 });
 
@@ -137,20 +106,9 @@ router.put("/:id", async (req, res) => {
             }
         );
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`DOCUMENTIPAZIENTEBY${id}`);
-        }
-
         const user = res.locals.auth;
 
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
@@ -160,10 +118,9 @@ router.put("/:id", async (req, res) => {
             operazione: "Modifica documento paziente: " + doc.filename,
         });
         console.log("log: ", log);
-        const resultLog = await log.save();
+        await log.save();
 
-        res.status(200);
-        res.json(doc);
+        res.status(200).json(doc);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -175,23 +132,11 @@ router.delete("/documento/:id", async (req, res) => {
 
         const item = await DocPaziente.findById(id);
         console.log("item:" + item);
-        const idPaziente = item.paziente;
         const doc = await DocPaziente.remove({ _id: id });
-
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`DOCUMENTIPAZIENTE*`);
-        }
 
         const user = res.locals.auth;
 
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
@@ -201,10 +146,9 @@ router.delete("/documento/:id", async (req, res) => {
             operazione: "Eliminazione documento paziente: " + doc.filename,
         });
         console.log("log: ", log);
-        const resultLog = await log.save();
+        await log.save();
 
-        res.status(200);
-        res.json(doc);
+        res.status(200).json(doc);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -214,39 +158,16 @@ router.delete("/documento/:id", async (req, res) => {
 
 router.get("/autorizzazioneUscita/all", async (req, res) => {
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = () => {
-            return DocPaziente.find({
-                $and: [
-                    { type: "AutorizzazioneUscita" },
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                ],
-            });
-        };
-
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        const searchTerm = `AUTORIZZAZIONE_USCITA`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const pazienti = await getData();
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti);
-                else res.status(404).json({ error: "No patient found" });
-            }
+        const eventi = await DocPaziente.find({
+            $and: [
+                { type: "AutorizzazioneUscita" },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
         });
+
+        res.status(200).json(eventi);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -261,88 +182,58 @@ router.get("/autorizzazioneUscita/:id", async (req, res) => {
             return;
         }
 
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = () => {
-            return DocPaziente.find({
-                $and: [
-                    { paziente: id },
-                    { type: "AutorizzazioneUscita" },
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                ],
-            });
-        };
-
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        const searchTerm = `AUTORIZZAZIONE_USCITA_BY${id}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data && !redisDisabled) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const pazienti = await getData();
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti);
-                else res.status(404).json({ error: "No patient found" });
-            }
+        const eventi = await DocPaziente.find({
+            $and: [
+                { paziente: id },
+                { type: "AutorizzazioneUscita" },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
         });
+
+        res.status(200).json(eventi);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
 
 router.post("/autorizzazioneUscita/:id", async (req, res) => {
-    console.log("Autorizzazione uscita insert");
-    const { id } = req.params;
-    const doc = new DocPaziente({
-        paziente: id,
-        filename: req.body.filename,
-        dateupload: Date.now(),
-        note: req.body.note,
-        type: "AutorizzazioneUscita",
-        cancellato: false,
-        dataCancellazione: undefined,
-        descrizione: undefined,
-    });
+    try {
+        console.log("Autorizzazione uscita insert");
+        const { id } = req.params;
+        const doc = new DocPaziente({
+            paziente: id,
+            filename: req.body.filename,
+            dateupload: Date.now(),
+            note: req.body.note,
+            type: "AutorizzazioneUscita",
+            cancellato: false,
+            dataCancellazione: undefined,
+            descrizione: undefined,
+        });
 
-    console.log("Insert doc: ", doc);
-    const result = await doc.save();
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        console.log("Insert doc: ", doc);
+        await doc.save();
 
-    if (redisClient != undefined && !redisDisabled) {
-        redisClient.del(`AUTORIZZAZIONE_USCITA_BY${id}`);
+        const user = res.locals.auth;
+
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentiAutorizzazioneUscitaPazienti",
+            operazione: "Inserimento documento Autorizzazione Uscita: " + doc.filename,
+        });
+        console.log("log: ", log);
+        await log.save();
+
+        res.status(200).json(doc);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    const user = res.locals.auth;
-
-    const getDipendente = () => {
-        return Dipendenti.findById(user.dipendenteID);
-    };
-
-    const dipendenti = await getDipendente();
-
-    const log = new Log({
-        data: new Date(),
-        operatore: dipendenti.nome + " " + dipendenti.cognome,
-        operatoreID: user.dipendenteID,
-        className: "DocumentiAutorizzazioneUscitaPazienti",
-        operazione: "Inserimento documento Autorizzazione Uscita: " + doc.filename,
-    });
-    console.log("log: ", log);
-    const resultLog = await log.save();
-
-    res.status(200);
-    res.json(doc);
 });
 
 router.delete("/autorizzazioneUscita/:id", async (req, res) => {
@@ -357,6 +248,7 @@ router.delete("/autorizzazioneUscita/:id", async (req, res) => {
 
         if (id == null) {
             res.status(400).json({ error: "id not valid" });
+            return;
         }
 
         const pazienti = await DocPaziente.updateOne(
@@ -368,33 +260,22 @@ router.delete("/autorizzazioneUscita/:id", async (req, res) => {
                 },
             }
         );
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`AUTORIZZAZIONE_USCITA*`);
-        }
 
         const user = res.locals.auth;
 
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
             operatore: dipendenti.nome + " " + dipendenti.cognome,
             operatoreID: user.dipendenteID,
             className: "DocumentiAutorizzazioneUscitaPazienti",
-            operazione: "Eliminazione documento Autorizzazione Uscita: " + doc.filename,
+            operazione: "Eliminazione documento Autorizzazione Uscita",
         });
         console.log("log: ", log);
-        const resultLog = await log.save();
+        await log.save();
 
-        res.status(200);
-        res.json(pazienti);
+        res.status(200).json(pazienti);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -403,41 +284,17 @@ router.delete("/autorizzazioneUscita/:id", async (req, res) => {
 /// ESITO STRUMENTALE
 router.get("/esitoStrumentale/all", async (req, res) => {
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = (query) => {
-            return DocPaziente.find(query);
+        const query = {
+            $and: [
+                { type: "EsitoStrumentale" },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
         };
 
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        const searchTerm = `ESITO_STRUMENTALE`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const query = {
-                    $and: [
-                        { type: "EsitoStrumentale" },
-                        {
-                            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                        },
-                    ],
-                };
-
-                const pazienti = await getData(query);
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti);
-                else res.status(404).json({ error: "No patient found" });
-            }
-        });
+        const pazienti = await DocPaziente.find(query);
+        res.status(200).json(pazienti);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -453,91 +310,60 @@ router.get("/esitoStrumentale/:id", async (req, res) => {
         }
 
         console.log("GET Esito Strumentale. Id: ", id);
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
 
-        const getData = (query) => {
-            return DocPaziente.find(query);
+        const query = {
+            $and: [
+                { paziente: id },
+                { type: "EsitoStrumentale" },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
         };
 
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        const searchTerm = `ESITO_STRUMENTALE_BY${id}`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data && !redisDisabled) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const query = {
-                    $and: [
-                        { paziente: id },
-                        { type: "EsitoStrumentale" },
-                        {
-                            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                        },
-                    ],
-                };
-
-                const pazienti = await getData(query);
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti);
-                else res.status(404).json({ error: "No patient found" });
-            }
-        });
+        const pazienti = await DocPaziente.find(query);
+        res.status(200).json(pazienti);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
 });
 
 router.post("/esitoStrumentale/:id", async (req, res) => {
-    console.log("Esito strumentale insert");
-    const { id } = req.params;
-    const doc = new DocPaziente({
-        paziente: id,
-        filename: req.body.filename,
-        dateupload: Date.now(),
-        note: req.body.note,
-        type: "EsitoStrumentale",
-        typeDocument: req.body.typeDocument,
-        cancellato: false,
-        dataCancellazione: undefined,
-        descrizione: undefined,
-    });
+    try {
+        console.log("Esito strumentale insert");
+        const { id } = req.params;
+        const doc = new DocPaziente({
+            paziente: id,
+            filename: req.body.filename,
+            dateupload: Date.now(),
+            note: req.body.note,
+            type: "EsitoStrumentale",
+            typeDocument: req.body.typeDocument,
+            cancellato: false,
+            dataCancellazione: undefined,
+            descrizione: undefined,
+        });
 
-    const result = await doc.save();
+        await doc.save();
 
-    redisClient = req.app.get("redis");
-    redisDisabled = req.app.get("redisDisabled");
+        const user = res.locals.auth;
 
-    if (redisClient != undefined && !redisDisabled) {
-        redisClient.del(`ESITO_STRUMENTALE_BY${id}`);
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "DocumentiEsitoStrumentalePazienti",
+            operazione: "Inserimento documento Esito Strumentale: " + doc.filename,
+        });
+        console.log("log: ", log);
+        await log.save();
+
+        res.status(200).json(doc);
+    } catch (err) {
+        res.status(500).json({ Error: err });
     }
-
-    const user = res.locals.auth;
-
-    const getDipendente = () => {
-        return Dipendenti.findById(user.dipendenteID);
-    };
-
-    const dipendenti = await getDipendente();
-
-    const log = new Log({
-        data: new Date(),
-        operatore: dipendenti.nome + " " + dipendenti.cognome,
-        operatoreID: user.dipendenteID,
-        className: "DocumentiEsitoStrumentalePazienti",
-        operazione: "Inserimento documento Esito Strumentale: " + doc.filename,
-    });
-    console.log("log: ", log);
-    const resultLog = await log.save();
-
-    res.status(200);
-    res.json(doc);
 });
 
 router.delete("/esitoStrumentale/:id", async (req, res) => {
@@ -552,6 +378,7 @@ router.delete("/esitoStrumentale/:id", async (req, res) => {
 
         if (id == null) {
             res.status(400).json({ error: "id not valid" });
+            return;
         }
 
         const pazienti = await DocPaziente.updateOne(
@@ -563,33 +390,22 @@ router.delete("/esitoStrumentale/:id", async (req, res) => {
                 },
             }
         );
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        if (redisClient != undefined && !redisDisabled) {
-            redisClient.del(`ESITO_STRUMENTALE*`);
-        }
 
         const user = res.locals.auth;
 
-        const getDipendente = () => {
-            return Dipendenti.findById(user.dipendenteID);
-        };
-
-        const dipendenti = await getDipendente();
+        const dipendenti = await Dipendenti.findById(user.dipendenteID);
 
         const log = new Log({
             data: new Date(),
             operatore: dipendenti.nome + " " + dipendenti.cognome,
             operatoreID: user.dipendenteID,
             className: "DocumentiEsitoStrumentalePazienti",
-            operazione: "Eliminazione documento Esito Strumentale: " + doc.filename,
+            operazione: "Eliminazione documento Esito Strumentale",
         });
         console.log("log: ", log);
-        const resultLog = await log.save();
+        await log.save();
 
-        res.status(200);
-        res.json(pazienti);
+        res.status(200).json(pazienti);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -599,39 +415,16 @@ router.delete("/esitoStrumentale/:id", async (req, res) => {
 
 router.get("/refertoEmatochimico/all", async (req, res) => {
     try {
-        redisClient = req.app.get("redis");
-        redisDisabled = req.app.get("redisDisabled");
-
-        const getData = () => {
-            return DocPaziente.find({
-                $and: [
-                    { type: "RefertoEsameEmatochimico" },
-                    {
-                        $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
-                    },
-                ],
-            });
-        };
-
-        if (redisClient == undefined || redisDisabled) {
-            const eventi = await getData();
-            res.status(200).json(eventi);
-            return;
-        }
-
-        const searchTerm = `REFERTO_EMATOCHIMICO`;
-        redisClient.get(searchTerm, async (err, data) => {
-            if (err) throw err;
-
-            if (data) {
-                res.status(200).send(JSON.parse(data));
-            } else {
-                const pazienti = await getData();
-                redisClient.setex(searchTerm, redisTimeCache, JSON.stringify(pazienti));
-                if (pazienti != null) res.status(200).json(pazienti);
-                else res.status(404).json({ error: "No patient found" });
-            }
+        const pazienti = await DocPaziente.find({
+            $and: [
+                { type: "RefertoEsameEmatochimico" },
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+            ],
         });
+
+        res.status(200).json(pazienti);
     } catch (err) {
         res.status(500).json({ Error: err });
     }
@@ -642,10 +435,6 @@ router.get("/refertoEmatochimico/all", async (req, res) => {
 router.get("/documentoType/:type", async (req, res) => {
     const { type } = req.params;
     try {
-        const getData = (query) => {
-            return DocPaziente.find(query);
-        };
-
         const query = {
             $and: [
                 { type: type },
@@ -655,7 +444,7 @@ router.get("/documentoType/:type", async (req, res) => {
             ],
         };
 
-        const pazienti = await getData(query);
+        const pazienti = await DocPaziente.find(query);
 
         if (pazienti != null) {
             res.status(200).json(pazienti);
@@ -666,6 +455,5 @@ router.get("/documentoType/:type", async (req, res) => {
         res.status(500).json({ Error: err });
     }
 });
-
 
 module.exports = router;

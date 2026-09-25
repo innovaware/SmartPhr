@@ -8,6 +8,7 @@ import { DinamicButton } from "src/app/models/dinamicButton";
 import { Paziente } from "src/app/models/paziente";
 import { MessagesService } from "src/app/service/messages.service";
 import { PazienteService } from "src/app/service/paziente.service";
+import { DialogCartellaClinicaAltroComponent } from "../../dialogs/dialog-cartella-clinica-altro/dialog-cartella-clinica-altro.component";
 
 @Component({
   selector: "app-area-medica",
@@ -42,17 +43,23 @@ export class AreaMedicaComponent implements OnInit {
       tooltip: "Cartella Clinica",
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogCartellaClinicaComponent, {
-            data: { paziente: paziente, readonly: false, altro: false },
-            width: "1024px",
-          })
+          data: { paziente: paziente, readonly: false, altro: false },
+          width: '95%',
+          maxWidth: '800px',
+          height: 'auto',
+          maxHeight: '90vh',
+          panelClass: ['large-dialog', 'scrollable-dialog'],
+          disableClose: false,
+          autoFocus: true
+        })
           .afterClosed()
           .subscribe((data: Paziente) => {
             if (!data) {
-              console.log("Data: ",data);
+              console.log("Data: ", data);
               window.location.reload();
             }
             if (data != undefined || data) {
-              
+
               //   this.pazienti.push(data);
 
               //   const index = this.pazienti.indexOf(paziente, 0);
@@ -68,7 +75,7 @@ export class AreaMedicaComponent implements OnInit {
               });
             }
             else {
-             
+
             }
           }),
       //css: "mat-raised-button raised-button action-button",
@@ -81,6 +88,13 @@ export class AreaMedicaComponent implements OnInit {
       cmd: (paziente: Paziente) =>
         this.dialog.open(DialogCartellaInfermeristicaComponent, {
           data: { paziente: paziente, readonly: true },
+          width: '95%',
+          maxWidth: '800px',
+          height: 'auto',
+          maxHeight: '90vh',
+          panelClass: ['large-dialog', 'scrollable-dialog'],
+          disableClose: false,
+          autoFocus: true
         }),
       //css: "mat-raised-button raised-button action-button",
     });
@@ -92,8 +106,15 @@ export class AreaMedicaComponent implements OnInit {
       label: "",
       tooltip: "Altro",
       cmd: (paziente: Paziente) =>
-        this.dialog.open(DialogCartellaClinicaComponent, {
+        this.dialog.open(DialogCartellaClinicaAltroComponent, {
           data: { paziente: paziente, readonly: true, altro: true },
+          width: '95%',
+          maxWidth: '800px',
+          height: 'auto',
+          maxHeight: '90vh',
+          panelClass: ['large-dialog', 'scrollable-dialog'],
+          disableClose: false,
+          autoFocus: true
         }),
       //css: "mat-raised-button raised-button action-button",
     });

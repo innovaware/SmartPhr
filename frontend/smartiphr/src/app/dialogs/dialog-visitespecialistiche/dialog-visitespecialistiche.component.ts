@@ -15,43 +15,32 @@ export class DialogVisitespecialisticheComponent implements OnInit {
   constructor(
     @Inject(MAT_DIALOG_DATA)
     public data: {
+      user: string,
       visitaSpecialistica: VisiteSpecialistiche;
+      ccService: CartellaclinicaService,
       readonly: boolean;
     },
-    // public ccService: CartellaclinicaService,
+     public ccService: CartellaclinicaService,
     public messageService: MessagesService,
     private dialogRef: MatDialogRef<DialogVisitespecialisticheComponent>
-  ) {}
+  ) { }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   async salva() {
-    // const visitaSpecialistica: VisiteSpecialistiche = {
-    //   user: this.data.patientId,
-    //   dataReq: this.dataReq,
-    //   contenuto: this.contenuto,
-    //   dataEsec: this.dataEsec,
-    // };
+    var v = this.data.visitaSpecialistica;
 
-    this.dialogRef.close(this.data.visitaSpecialistica);
-
-    // var v = new VisiteSpecialistiche();
-    // v.user = this.data.paziente._id;
-    // v.dataReq = this.dataReq;
-    // v.contenuto = this.contenuto;
-    // v.dataEsec = this.dataEsec;
-
-    // this.ccService
-    //   .insertVisita(v)
-    //   .then((x) => {
-    //     console.log("Save visita: ", x);
-
-    //     this.dialogRef.close();
-    //   })
-    //   .catch((err) => {
-    //     this.messageService.showMessageError(
-    //       "Errore Inserimento visita (" + err["status"] + ")"
-    //     );
-    //   });
+    this.ccService
+      .insertVisita(v)
+      .then((x) => {
+        console.log("Save visita: ", x);
+        // Chiudi la dialog passando l'oggetto salvato come risultato
+        this.dialogRef.close(x);
+      })
+      .catch((err) => {
+        this.messageService.showMessageError(
+          "Errore Inserimento visita (" + err["status"] + ")"
+        );
+      });
   }
 }

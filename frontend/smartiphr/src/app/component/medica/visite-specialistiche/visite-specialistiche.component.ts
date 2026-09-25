@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { ChangeDetectorRef, Component, Input, OnInit, ViewChild } from "@angular/core";
 import { MatDialog, MatDialogRef } from "@angular/material/dialog";
 import { MatPaginator } from "@angular/material/paginator";
 import { MatTableDataSource } from "@angular/material/table";
@@ -24,6 +24,7 @@ export class VisiteSpecialisticheComponent implements OnInit {
   public visiteSpecialisticheDataSource: MatTableDataSource<VisiteSpecialistiche>;
 
   constructor(
+    private cdRef: ChangeDetectorRef,
     public dialogRef: MatDialogRef<VisiteSpecialisticheComponent>,
     public cartellaclinicaService: CartellaclinicaService,
     public ccService: CartellaclinicaService,
@@ -47,13 +48,18 @@ export class VisiteSpecialisticheComponent implements OnInit {
     this.cartellaclinicaService
       .getVisiteByUser(String(this.data._id))
       .then((f) => {
-        //console.log(JSON.stringify(f));
-
         this.visiteSpecialistiche = f;
-        this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(
-          this.visiteSpecialistiche
-        );
-        this.visiteSpecialisticheDataSource.paginator = this.visiteSpecialistichePaginator;
+
+        // Ricrea la fonte dati in modo che Angular e MatTable rilevino subito la modifica della lunghezza
+        this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(this.visiteSpecialistiche);
+
+        // Collega il paginator
+        if (this.visiteSpecialistichePaginator) {
+          this.visiteSpecialisticheDataSource.paginator = this.visiteSpecialistichePaginator;
+        }
+
+        // Forza la Change Detection di Angular
+        this.cdRef.detectChanges();
       })
       .catch((err) => {
         this.messageService.showMessageError("Errore caricamento visite");
@@ -61,7 +67,8 @@ export class VisiteSpecialisticheComponent implements OnInit {
       });
   }
 
-  async add() {
+
+  add() {
     console.log("Show Add visita:", this.data);
     const visitaSpecialistica: VisiteSpecialistiche = {
       user: this.data._id,
@@ -70,31 +77,22 @@ export class VisiteSpecialisticheComponent implements OnInit {
       dataEsec: undefined,
     };
 
-    var dialogRef = this.dialog.open(DialogVisitespecialisticheComponent, {
+    const dialogRef = this.dialog.open(DialogVisitespecialisticheComponent, {
       data: { visitaSpecialistica, readonly: false },
-      width: "600px",
+      width: '95%',
+      maxWidth: '800px',
+      height: 'auto',
+      maxHeight: '90vh',
+      panelClass: ['large-dialog', 'scrollable-dialog'],
+      disableClose: false,
+      autoFocus: true
     });
 
-    if (dialogRef != undefined)
-      dialogRef.afterClosed().subscribe((result: VisiteSpecialistiche) => {
-        if (result != null && result != undefined) {
-          this.ccService
-            .insertVisita(result)
-            .then((x) => {
-              console.log("Save visitaSpecialistica: ", x);
-              this.visiteSpecialistiche.push(result);
-              this.visiteSpecialisticheDataSource = new MatTableDataSource<VisiteSpecialistiche>(
-                this.visiteSpecialistiche
-              );
-            })
-            .catch((err) => {
-              this.messageService.showMessageError(
-                "Errore Inserimento visita (" + err["status"] + ")"
-              );
-            });
-
-
-        }
-      });
+    dialogRef.afterClosed().subscribe((result) => {
+      console.log("result", result);
+      if (result) {
+        this.getList();
+      }
+    });
   }
 }

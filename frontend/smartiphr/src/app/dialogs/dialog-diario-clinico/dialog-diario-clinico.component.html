@@ -1,70 +1,62 @@
-<div mat-dialog-title>
-    <div class="container-fluid" >
-      <div class="row">
-        <div class="col">
-          <h3>DIARIO CLINICO</h3>
-        </div>
-  
-        <div class="col">
-          <button class="close-button" [mat-dialog-close]="true" style="float:right">×
-          </button>
-        </div>
-      </div>
-  
-      <div class="row">
-        <div class="col">
-          <hr>
-        </div>
-      </div>
+<div mat-dialog-title class="d-flex align-items-center justify-content-between border-bottom pb-3 px-4 px-md-5 pt-4 mb-0">
+    <h2 class="m-0 font-weight-bold text-primary fs-4">DIARIO CLINICO</h2>
+
+    <div class="d-flex align-items-center gap-2">
+        <button mat-flat-button color="primary" (click)="salva()" title="Salva">
+            <mat-icon class="me-1">save</mat-icon>
+            Salva
+        </button>
+
+        <button mat-icon-button [mat-dialog-close]="true" title="Chiudi">
+            <mat-icon>close</mat-icon>
+        </button>
     </div>
-  </div>
-  
-  <mat-dialog-content>
+</div>
 
-      <div class="container-fluid tabcontent">
-        <div class="row">
-          <div class="col">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>CONTENUTO*</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="contenuto"></textarea>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-      </div>
-      
-      <div class="container-fluid tabcontent">
-        <div class="row">
-          <div class="col">
-            <mat-card>
-              <mat-card-header>
-                <mat-card-title>TERAPIA*</mat-card-title>
-              </mat-card-header>
-              <mat-card-content>
-                <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="terapia"></textarea>
-              </mat-card-content>
-            </mat-card>
-          </div>
-        </div>
-      </div>
+<mat-dialog-content class="px-4 px-md-5 py-4">
+    <!-- Contenitore a larghezza controllata e centrato -->
+    <div class="mx-auto" style="max-width: 720px;">
 
-      <strong>I campi indicati con * sono obbligatori!</strong>
-  </mat-dialog-content>
-  
-  
-  <div mat-dialog-actions>
-    <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-    <button mat-button (click)="salva()" class="button-insert">Salva</button>
-  </div>
-  </div>
-  
+        <form class="d-flex flex-column gap-4">
 
+            <!-- Sezione Contenuto -->
+            <div>
+                <label class="form-label font-weight-bold text-uppercase text-secondary mb-2">
+                    Contenuto <span class="text-danger">*</span>
+                </label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <textarea matInput
+                              placeholder="Inserisci il contenuto..."
+                              rows="3"
+                              [(ngModel)]="contenuto"
+                              name="contenuto"
+                              required>
+          </textarea>
+                </mat-form-field>
+            </div>
 
+            <!-- Sezione Terapia -->
+            <div>
+                <label class="form-label font-weight-bold text-uppercase text-secondary mb-2">
+                    Terapia <span class="text-danger">*</span>
+                </label>
+                <mat-form-field appearance="outline" class="w-100">
+                    <textarea matInput
+                              placeholder="Inserisci la terapia..."
+                              rows="3"
+                              [(ngModel)]="terapia"
+                              name="terapia"
+                              required>
+          </textarea>
+                </mat-form-field>
+            </div>
 
-  
+            <!-- Avviso campi obbligatori -->
+            <p class="text-muted text-center small mb-0 mt-1">
+                I campi indicati con <span class="text-danger font-weight-bold">*</span> sono obbligatori.
+            </p>
 
-  
+        </form>
+
+    </div>
+</mat-dialog-content>
