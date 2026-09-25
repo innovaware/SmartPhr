@@ -54,3 +54,18 @@ select.custom-select {
 select {
   background-color: white;
 }
+
+mat-card {
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+mat-card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #333;
+}
+
+.w-100 {
+  width: 100%;
+}

@@ -1,4 +1,4 @@
-import { Component, Input, OnInit} from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { Paziente } from 'src/app/models/paziente';
 import { CartellaEducativa } from '../../../models/cartellaEducativa';
 import { ValutazioneMotoria } from '../../../models/ValutazioneMotoria';
@@ -13,6 +13,10 @@ export class ValutazioneTecnicheComponent implements OnInit {
   @Input() data: Paziente;
 
   constructor() {
+
+  }
+
+  ngOnInit() {
     if (this.data.schedaEducativa == undefined || this.data.schedaEducativa == null) {
       this.data.schedaEducativa = new CartellaEducativa();
     }
@@ -20,9 +24,6 @@ export class ValutazioneTecnicheComponent implements OnInit {
     if (this.data.valutazioneMotoria == undefined || this.data.valutazioneMotoria == null) {
       this.data.valutazioneMotoria = new ValutazioneMotoria();
     }
-  }
-
-  ngOnInit() {
   }
 
 
