@@ -300,6 +300,7 @@ import { AreaLogComponent } from "./pages/log/area-log.component";
 import { DialogLogComponent } from "./dialogs/dialog-log/dialog-log.component";
 import { DialogNewMessageComponent } from "./dialogs/dialog-newMessage/dialog-newMessage.component";
 import { DialogCartellaClinicaAltroComponent } from "./dialogs/dialog-cartella-clinica-altro/dialog-cartella-clinica-altro.component";
+import { ChiaviOssComponent } from "./pages/chiavi-oss/chiavi-oss.component";
 
 const materialModules = [
   MatTableModule,
@@ -553,7 +554,7 @@ const pipes = [
     AltreinfoCartellasocialeComponent,
     DialogAttivitaQuotidianeComponent,
     IndumentiListComponent,
-    //ChiaviOssComponent,
+    ChiaviOssComponent,
     //RifacimentoLettiOssComponent,
     LavanderiaInternaComponent,
     LavanderiaEsternaComponent,

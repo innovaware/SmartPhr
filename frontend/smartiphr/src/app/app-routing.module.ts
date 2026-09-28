@@ -70,7 +70,7 @@ import { ArmadiListComponent } from "./pages/armadi-list/armadi-list.component";
 import { IndumentiListComponent } from "./pages/indumenti-list/indumenti-list.component";
 
 
-//import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
+import { ChiaviOssComponent } from './pages/chiavi-oss/chiavi-oss.component';
 //import { RifacimentoLettiOssComponent } from "./pages/rifacimento-letti-oss/rifacimento-letti-oss.component";
 import { LavanderiaInternaComponent } from "./pages/lavanderia-interna/lavanderia-interna.component";
 import { LavanderiaEsternaComponent } from './pages/lavanderia-esterna/lavanderia-esterna.component';
@@ -162,7 +162,7 @@ const routes: Routes = [
   // AREA OSS
   { path: "gest_pazienti_oss", component: AreaOssComponent, canActivate: [AuthGuard]  },
   { path: "attivita_oss", component: AttivitaOssComponent, canActivate: [AuthGuard]  },
-  //{ path: "gest_chiavi", component: ChiaviOssComponent, canActivate: [AuthGuard]  },
+  { path: "gest_chiavi", component: ChiaviOssComponent, canActivate: [AuthGuard]  },
   //{ path: "rifacimento_letti", component: RifacimentoLettiOssComponent, canActivate: [AuthGuard]  },
   { path: "Report_Controllo_Mensile", component: ReportControlloMensileComponent, canActivate: [AuthGuard]  },
   { path: "lavanderia_in", component: LavanderiaInternaComponent, canActivate: [AuthGuard]  },

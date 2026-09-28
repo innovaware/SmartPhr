@@ -1,281 +1,438 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>Ingresso</h3>
-      </div>
-
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">
-          ×
+<!-- Intestazione della Dialog -->
+<div class="dialog-header">
+    <h2 class="dialog-title">Ingresso</h2>
+    <div class="header-actions">
+        <button type="button" class="btn-save" *ngIf="update" (click)="updateIngresso()" aria-label="Salva">
+            <mat-icon>save</mat-icon>
         </button>
-      </div>
+        <button type="button" class="btn-close" [mat-dialog-close]="true" aria-label="Chiudi">
+            &times;
+        </button>
     </div>
-
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
-    </div>
-  </div>
 </div>
 
-<mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
+<mat-dialog-content class="dialog-content-container">
+    <mat-tab-group mat-align-tabs="start" class="custom-tab-group">
 
+        <!-- TAB 1: Indumenti Consigliati -->
+        <mat-tab label="Indumenti Consigliati">
+            <div class="tab-content-inner">
 
-
-        <mat-tab-group mat-align-tabs="start">
-
-          <mat-tab label="Indumenti Consigliati">
-
-            <div class="notPresent" style="margin-bottom: 10px;">
-              <button mat-button class="button-insert" (click)="addDocumentoIndumentiConsigliati()">Aggiungi Documento</button>
-            </div>
-
-            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-                 *ngIf="addingDocumentoIndumentiConsigliati && !uploadingDocumentoIndumentiConsigliati">
-              <div class="row">
-                <div class="col">
-                  <input type="file" (change)="uploadDocumentoIndumentiConsigliati($event)" accept=".pdf" *ngIf="!uploadingDocumentoIndumentiConsigliati">
-                  <label *ngIf="uploadingDocumentoIndumentiConsigliati">Caricamento in corso ...</label>
+                <!-- Header Sezione con Pulsante -->
+                <div class="section-toolbar">
+                    <button mat-flat-button color="primary" class="btn-primary-custom" (click)="addDocumentoIndumentiConsigliati()">
+                        <mat-icon>add</mat-icon> Aggiungi Documento
+                    </button>
                 </div>
-                <div class="col">
+
+                <!-- Form di Caricamento Documento -->
+                <div class="card-form" *ngIf="addingDocumentoIndumentiConsigliati && !uploadingDocumentoIndumentiConsigliati">
+                    <h4 class="card-title">Carica Nuovo Documento</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Seleziona File (PDF)</label>
+                            <input type="file" class="form-control-custom" (change)="uploadDocumentoIndumentiConsigliati($event)" accept=".pdf">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Note</mat-label>
+                                <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumentoIndumentiConsigliati.note">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button mat-raised-button color="primary" class="btn-primary-custom" (click)="saveDocumento(nuovoDocumentoIndumentiConsigliati)">
+                            Salva Documento
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
-                    <mat-label>Note</mat-label>
-                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumentoIndumentiConsigliati.note">
-                  </mat-form-field>
+
+                <!-- Loader di Caricamento -->
+                <div class="spinner-container" *ngIf="uploadingDocumentoIndumentiConsigliati">
+                    <mat-spinner [diameter]="32"></mat-spinner>
+                    <span>Caricamento in corso...</span>
                 </div>
-                <div class="col-2">
-                  <button mat-button class="button-insert" (click)="saveDocumento(nuovoDocumentoIndumentiConsigliati)">Salva</button>
+
+                <!-- Stato Vuoto -->
+                <div *ngIf="!documentiIndumentiConsigliati || documentiIndumentiConsigliati.length === 0" class="empty-state">
+                    <mat-icon>description</mat-icon>
+                    <p>Nessun documento presente</p>
                 </div>
-              </div>
-            </div>
 
-            <div>
-              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingDocumentoIndumentiConsigliati">
-                <div class="row">
-                  <div class="col-1">
-                    <mat-spinner [diameter]="24"></mat-spinner>
-                  </div>
-                  <div class="col">
-                    <label>Caricamento in corso ...</label>
-                  </div>
+                <!-- Tabella dei Documenti -->
+                <div class="table-card-container" *ngIf="documentiIndumentiConsigliati && documentiIndumentiConsigliati.length > 0">
+                    <table mat-table [dataSource]="DocumentIndumentiConsigliatiDataSource" class="custom-table">
+
+                        <ng-container matColumnDef="namefile">
+                            <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                            <td mat-cell *matCellDef="let element" class="font-weight-medium"> {{element.filename}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="note">
+                            <th mat-header-cell *matHeaderCellDef> Note </th>
+                            <td mat-cell *matCellDef="let element" class="text-muted"> {{element.note || '-'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="text-end"> Azioni </th>
+                            <td mat-cell *matCellDef="let row" class="text-end">
+                                <button mat-icon-button color="primary" matTooltip="Visualizza PDF" (click)="showDocument(row)">
+                                    <mat-icon>picture_as_pdf</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" matTooltip="Elimina" (click)="deleteDocumento(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator #paginatorDocumentIndumentiConsigliati
+                                   [pageSizeOptions]="[5, 10, 20]"
+                                   showFirstLastButtons
+                                   class="custom-paginator">
+                    </mat-paginator>
                 </div>
-              </div>
+
             </div>
+        </mat-tab>
 
+        <!-- TAB 2: Indumenti da integrare -->
+        <mat-tab label="Indumenti da integrare">
+            <div class="tab-content-inner">
 
-            <div *ngIf="this.documentiIndumentiConsigliati?.length <= 0" class="notPresent">
-              Nessun documento presente
-            </div>
-
-            <table mat-table [dataSource]="DocumentIndumentiConsigliatiDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.documentiIndumentiConsigliati?.length > 0">
-              <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-                <td mat-cell *matCellDef="let row" style="text-align: right;">
-                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
-                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-
-                  <button mat-button (click)="showDocument(row)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                    </svg>
-                  </button>
-
-                  <button mat-button (click)="deleteDocumento(row)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                    </svg>
-                  </button>
-
-
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="namefile">
-                <th mat-header-cell *matHeaderCellDef> Nome file </th>
-                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-            </table>
-
-            <div class="paginator-container">
-
-              <mat-paginator #paginatorDocumentIndumentiConsigliati [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                             aria-label="Select page of periodic elements">
-              </mat-paginator>
-            </div>
-
-          </mat-tab>
-
-
-
-
-
-          <mat-tab label="Indumenti da integrare">
-
-            <div class="notPresent" style="margin-bottom: 10px;">
-              <button mat-button class="button-insert" (click)="addDocumentoIndumenti()">Aggiungi Documento</button>
-            </div>
-
-            <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-                 *ngIf="addingDocumentoIndumenti && !uploadingDocumentoIndumenti">
-              <div class="row">
-                <div class="col">
-                  <input type="file" (change)="uploadDocumentoIndumenti($event)" accept=".pdf" *ngIf="!uploadingDocumentoIndumenti">
-                  <label *ngIf="uploadingDocumentoIndumenti">Caricamento in corso ...</label>
+                <div class="section-toolbar">
+                    <button mat-flat-button color="primary" class="btn-primary-custom" (click)="addDocumentoIndumenti()">
+                        <mat-icon>add</mat-icon> Aggiungi Documento
+                    </button>
                 </div>
-                <div class="col">
+
+                <div class="card-form" *ngIf="addingDocumentoIndumenti && !uploadingDocumentoIndumenti">
+                    <h4 class="card-title">Carica Nuovo Documento</h4>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label-custom">Seleziona File (PDF)</label>
+                            <input type="file" class="form-control-custom" (change)="uploadDocumentoIndumenti($event)" accept=".pdf">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <mat-form-field appearance="outline" class="w-100">
+                                <mat-label>Note</mat-label>
+                                <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumentoIndumenti.note">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-end">
+                        <button mat-raised-button color="primary" class="btn-primary-custom" (click)="saveDocumentoIndumenti(nuovoDocumentoIndumenti)">
+                            Salva Documento
+                        </button>
+                    </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col">
-                  <mat-form-field class="full" appearance="fill" style="width: 100%;">
-                    <mat-label>Note</mat-label>
-                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoDocumentoIndumenti.note">
-                  </mat-form-field>
+
+                <div class="spinner-container" *ngIf="uploadingDocumentoIndumenti">
+                    <mat-spinner [diameter]="32"></mat-spinner>
+                    <span>Caricamento in corso...</span>
                 </div>
-                <div class="col-2">
-                  <button mat-button class="button-insert" (click)="saveDocumentoIndumenti(nuovoDocumentoIndumenti)">Salva</button>
+
+                <div *ngIf="!documentiIndumenti || documentiIndumenti.length === 0" class="empty-state">
+                    <mat-icon>description</mat-icon>
+                    <p>Nessun documento presente</p>
                 </div>
-              </div>
-            </div>
 
-            <div>
-              <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingDocumentoIndumenti">
-                <div class="row">
-                  <div class="col-1">
-                    <mat-spinner [diameter]="24"></mat-spinner>
-                  </div>
-                  <div class="col">
-                    <label>Caricamento in corso ...</label>
-                  </div>
+                <div class="table-card-container" *ngIf="documentiIndumenti && documentiIndumenti.length > 0">
+                    <table mat-table [dataSource]="DocumentIndumentiDataSource" class="custom-table">
+
+                        <ng-container matColumnDef="namefile">
+                            <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                            <td mat-cell *matCellDef="let element" class="font-weight-medium"> {{element.filename}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="date">
+                            <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="note">
+                            <th mat-header-cell *matHeaderCellDef> Note </th>
+                            <td mat-cell *matCellDef="let element" class="text-muted"> {{element.note || '-'}} </td>
+                        </ng-container>
+
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="text-end"> Azioni </th>
+                            <td mat-cell *matCellDef="let row" class="text-end">
+                                <button mat-icon-button color="primary" matTooltip="Visualizza PDF" (click)="showDocument(row)">
+                                    <mat-icon>picture_as_pdf</mat-icon>
+                                </button>
+                                <button mat-icon-button color="warn" matTooltip="Elimina" (click)="deleteDocumentoIndumenti(row)">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
+
+                        <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
+                    </table>
+
+                    <mat-paginator #paginatorDocumentIndumenti
+                                   [pageSizeOptions]="[5, 10, 20]"
+                                   showFirstLastButtons
+                                   class="custom-paginator">
+                    </mat-paginator>
                 </div>
-              </div>
+
             </div>
+        </mat-tab>
 
-
-            <div *ngIf="this.documentiIndumenti?.length <= 0" class="notPresent">
-              Nessun documento presente
+        <!-- TAB 3: CheckList Indumenti in Entrata -->
+        <mat-tab label="CheckList Indumenti in Entrata">
+            <div class="tab-content-inner">
+                <app-indumenti-ingresso [data]="data.paziente"></app-indumenti-ingresso>
             </div>
+        </mat-tab>
 
-            <table mat-table [dataSource]="DocumentIndumentiDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.documentiIndumenti?.length > 0">
-              <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-                <td mat-cell *matCellDef="let row" style="text-align: right;">
-                  <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
-                  <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-
-                  <button mat-button (click)="showDocument(row)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                      <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                    </svg>
-                  </button>
-
-                  <button mat-button (click)="deleteDocumentoIndumenti(row)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                      <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                    </svg>
-                  </button>
-
-
-                </td>
-              </ng-container>
-
-              <ng-container matColumnDef="namefile">
-                <th mat-header-cell *matHeaderCellDef> Nome file </th>
-                <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="date">
-                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
-
-              <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-              </ng-container>
-
-              <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-            </table>
-
-            <div class="paginator-container">
-
-              <mat-paginator #paginatorDocumentIndumenti [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                             aria-label="Select page of periodic elements">
-              </mat-paginator>
+        <!-- TAB 4: Assegnazione Letto -->
+        <mat-tab label="Assegnazione Letto">
+            <div class="tab-content-inner">
+                <app-assegnazione-letto data="data.paziente"></app-assegnazione-letto>
             </div>
+        </mat-tab>
 
-          </mat-tab>
+        <!-- TAB 5: Controlli -->
+        <mat-tab label="Controlli">
+            <div class="tab-content-inner">
+                <div class="card-form max-w-500">
+                    <h4 class="card-title">Verifiche e Controlli d'Ingresso</h4>
 
-          <mat-tab label="CheckList Indumenti in Entrata">
-            <app-indumenti-ingresso [data]="data.paziente"></app-indumenti-ingresso>
-          </mat-tab>
+                    <div class="custom-switch-row">
+                        <span class="switch-label">Sanificazione Stanza</span>
+                        <div class="form-check form-switch m-0 p-0">
+                            <input class="form-check-input custom-toggle" type="checkbox" id="sanificazioneStanza" [(ngModel)]="ingresso.sanificazione">
+                        </div>
+                    </div>
 
-          <mat-tab label="Assegnazione Letto ">
-            <app-assegnazione-letto data-="data.paziente"></app-assegnazione-letto>
-            <!-- <app-parametri-vitali [id]=data.paziente._id [inLettura]=true></app-parametri-vitali> -->
-            <!-- <app-parametri-vitali [id]=data.paziente._id [saveEvent]="saveParametriVitali" [inLettura]=true></app-parametri-vitali> -->
-          </mat-tab>
+                    <div class="custom-switch-row">
+                        <span class="switch-label">Sistemazione letto</span>
+                        <div class="form-check form-switch m-0 p-0">
+                            <input class="form-check-input custom-toggle" type="checkbox" id="sistemazioneLetto" [(ngModel)]="ingresso.sistemazione_letto">
+                        </div>
+                    </div>
 
-          <mat-tab label="Controlli">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sanificazioneStanza" [(ngModel)]="ingresso.sanificazione">
-              <label class="form-check-label" for="sanificazioneStanza">Sanificazione Stanza</label>
+                    <div class="custom-switch-row">
+                        <span class="switch-label">Trattamento igienico</span>
+                        <div class="form-check form-switch m-0 p-0">
+                            <input class="form-check-input custom-toggle" type="checkbox" id="trattamentoIgienico" [(ngModel)]="ingresso.trattamento_igienico">
+                        </div>
+                    </div>
+                </div>
             </div>
+        </mat-tab>
 
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="sistemazioneLetto" [(ngModel)]="ingresso.sistemazione_letto">
-              <label class="form-check-label" for="sistemazioneLetto">Sistemazione letto</label>
-            </div>
-
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="trattamentoIgienico" [(ngModel)]="ingresso.trattamento_igienico">
-              <label class="form-check-label" for="trattamentoIgienico">Trattamento igienico</label>
-            </div>
-            <button *ngIf="!update" mat-button (click)="saveIngresso()" class="button-insert">Salva</button>
-            <button *ngIf="update" mat-button (click)="updateIngresso()" class="button-insert">Salva</button>
-            <!-- <mat-form-field class="full" appearance="fill" style="width: 100%;">
-              <mat-label>Armadio Indumenti</mat-label>
-              <input matInput placeholder="Inserisci delle note" [(ngModel)]="ingresso.armadio">
-            </mat-form-field> -->
-          </mat-tab>
-
-
-
-        </mat-tab-group>
-
-      </div>
-    </div>
-  </div>
+    </mat-tab-group>
 </mat-dialog-content>
 
+<!-- CSS Stili Dedicati -->
+<style>
+    /* Contenitore Dialog */
+    .dialog-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 24px;
+        background-color: #ffffff;
+        border-bottom: 1px solid #e0e0e0;
+    }
 
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-  </div>
-</div>
+    .dialog-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        color: #4a5568;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .header-actions {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+
+    .btn-save {
+        background-color: #3b5998;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        padding: 6px 12px;
+        display: flex;
+        align-items: center;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+        .btn-save:hover {
+            background-color: #2d4373;
+        }
+
+    .btn-close {
+        background: transparent;
+        border: none;
+        font-size: 1.5rem;
+        color: #718096;
+        cursor: pointer;
+        line-height: 1;
+        padding: 0 4px;
+    }
+
+        .btn-close:hover {
+            color: #1a202c;
+        }
+
+    .dialog-content-container {
+        padding: 0 !important;
+        background-color: #f8fafc;
+        min-height: 450px;
+    }
+
+    .tab-content-inner {
+        padding: 24px;
+    }
+
+    /* Schede (Card Style) */
+    .card-form {
+        background: #ffffff;
+        border-radius: 8px;
+        padding: 20px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid #edf2f7;
+        margin-bottom: 20px;
+    }
+
+    .card-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: #2d3748;
+        margin-bottom: 20px;
+    }
+
+    .form-label-custom {
+        font-size: 0.85rem;
+        font-weight: 500;
+        color: #4a5568;
+        margin-bottom: 6px;
+        display: block;
+    }
+
+    .form-control-custom {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #cbd5e0;
+        border-radius: 6px;
+        background-color: #fff;
+        font-size: 0.9rem;
+    }
+
+    .section-toolbar {
+        margin-bottom: 16px;
+        display: flex;
+        justify-content: flex-start;
+    }
+
+    .btn-primary-custom {
+        background-color: #3b5998 !important;
+        color: #ffffff !important;
+        border-radius: 6px !important;
+        font-weight: 500 !important;
+    }
+
+    /* Tabelle e Contenitori */
+    .table-card-container {
+        background: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+        border: 1px solid #edf2f7;
+        overflow: hidden;
+    }
+
+    .custom-table {
+        width: 100%;
+    }
+
+        .custom-table th {
+            background-color: #f7fafc;
+            color: #4a5568;
+            font-weight: 600;
+            font-size: 0.85rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        .custom-table td {
+            color: #2d3748;
+            font-size: 0.9rem;
+            border-bottom: 1px solid #edf2f7;
+        }
+
+    /* Layout Flessibile per gli Switch */
+    .custom-switch-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+        border-bottom: 1px solid #edf2f7;
+    }
+
+        .custom-switch-row:last-child {
+            border-bottom: none;
+        }
+
+    .switch-label {
+        font-size: 0.95rem;
+        font-weight: 500;
+        color: #4a5568;
+    }
+
+    /* Reset e Dimensione personalizzata dell'input Bootstrap Switch */
+    .custom-toggle {
+        float: none !important;
+        margin: 0 !important;
+        width: 2.25rem !important;
+        height: 1.25rem !important;
+        cursor: pointer;
+    }
+
+    .max-w-500 {
+        max-width: 500px;
+    }
+
+    /* Altri Elementi */
+    .spinner-container {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px;
+        background: #ffffff;
+        border-radius: 8px;
+        margin-bottom: 16px;
+    }
+
+    .empty-state {
+        text-align: center;
+        padding: 40px 20px;
+        background: #ffffff;
+        border-radius: 8px;
+        border: 1px dashed #cbd5e0;
+        color: #a0aec0;
+    }
+
+        .empty-state mat-icon {
+            font-size: 48px;
+            width: 48px;
+            height: 48px;
+            margin-bottom: 8px;
+        }
+</style>

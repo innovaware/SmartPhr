@@ -1,109 +1,131 @@
-
-<div class="containter pad">
-    <div class="row">
-      <div class="col ">
-        <h1 class="title">Gestione Chiavi</h1>
-
-      </div>
+<div class="container pad">
+    <!-- Intestazione Pagina -->
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">Gestione Chiavi</h1>
+        </div>
+        <div class="col-auto" *ngIf="!addingRecordChiavi">
+            <button mat-raised-button color="primary" (click)="addRecordChiavi()">
+                <mat-icon>vpn_key</mat-icon>
+                <span class="ms-1">Preleva Chiave</span>
+            </button>
+        </div>
     </div>
 
-    <hr>
+    <hr class="mb-4">
 
     <div class="row">
         <div class="col">
 
+            <!-- Form d'inserimento -->
+            <mat-card class="mb-4 p-3 mat-elevation-z2" *ngIf="addingRecordChiavi && !uploadingRecordChiavi">
+                <mat-card-header class="mb-2">
+                    <mat-card-title style="font-size: 1.1rem; color: #1976d2;">Nuovo Prelievo Chiavi</mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="row align-items-center">
+                        <div class="col-md-8 col-sm-12">
+                            <mat-form-field appearance="outline" style="width: 100%;">
+                                <mat-label>N. Mazzo Chiavi</mat-label>
+                                <input matInput type="number" placeholder="Inserisci N. Mazzo Chiavi" [(ngModel)]="nuovoRecordChiavi.chiave">
+                                <mat-icon matSuffix>key</mat-icon>
+                            </mat-form-field>
+                        </div>
+                        <div class="col-md-4 col-sm-12 d-flex gap-2 justify-content-end mb-3 mb-md-0">
+                            <button mat-raised-button color="primary" (click)="save(nuovoRecordChiavi)" title="Salva">
+                                <mat-icon>save</mat-icon>
+                                <span class="ms-1">Salva</span>
+                            </button>
+                            <button mat-button (click)="addingRecordChiavi = false" title="Annulla">
+                                <mat-icon>close</mat-icon>
+                                <span class="ms-1">Annulla</span>
+                            </button>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
 
+            <!-- Spinner caricamento -->
+            <div class="container-flex my-4" *ngIf="uploadingRecordChiavi">
+                <div class="row align-items-center">
+                    <div class="col-auto">
+                        <mat-spinner [diameter]="28"></mat-spinner>
+                    </div>
+                    <div class="col">
+                        <span class="text-muted">Caricamento in corso...</span>
+                    </div>
+                </div>
+            </div>
 
-    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingRecordChiavi">
-      <button mat-button class="button-insert" (click)="addRecordChiavi()">Preleva</button>
-    </div>
+            <!-- Messaggio Lista Vuota -->
+            <div *ngIf="!recordsChiavi || recordsChiavi.length === 0" class="alert alert-info text-center my-3" role="alert">
+                <mat-icon class="align-middle me-1">info</mat-icon>
+                Nessun elemento presente in archivio.
+            </div>
 
-    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-      *ngIf="addingRecordChiavi && !uploadingRecordChiavi">
-      <div class="row">
-        <div class="col">
-          <mat-form-field class="full" appearance="fill" style="width: 100%;">
-            <mat-label>N. Mazzo Chiavi</mat-label>
-            <input matInput placeholder="Inserisci N. Mazzo Chiavi" [(ngModel)]="nuovoRecordChiavi.chiave">
-          </mat-form-field>
+            <!-- Tabella Registri Chiavi -->
+            <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden" *ngIf="recordsChiavi && recordsChiavi.length > 0">
+                <table mat-table [dataSource]="recordChiaviDataSource" style="width: 100%;">
+
+                    <!-- N. Mazzo -->
+                    <ng-container matColumnDef="n_mazzi">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> N. Mazzo </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="badge bg-light text-dark border px-2 py-1 fs-6">
+                                <mat-icon style="font-size: 16px; height: 16px; width: 16px;" class="align-middle me-1">key</mat-icon>
+                                {{element.chiave}}
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Operatore Prelievo -->
+                    <ng-container matColumnDef="operatorPrelievo">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Operatore Prelievo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.operatorPrelievoName || '-'}} </td>
+                    </ng-container>
+
+                    <!-- Data Prelievo -->
+                    <ng-container matColumnDef="datePrelievo">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Prelievo </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dataPrelievo | date: 'dd/MM/yyyy HH:mm'}} </td>
+                    </ng-container>
+
+                    <!-- Operatore Riconsegna -->
+                    <ng-container matColumnDef="operatorRiconsegna">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Operatore Riconsegna </th>
+                        <td mat-cell *matCellDef="let element"> {{element.operatorRiconsegnaName || '-'}} </td>
+                    </ng-container>
+
+                    <!-- Data Riconsegna -->
+                    <ng-container matColumnDef="dateRiconsegna">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Riconsegna </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dataRiconsegna | date: 'dd/MM/yyyy HH:mm'}} </td>
+                    </ng-container>
+
+                    <!-- Azioni -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Stato / Azioni </th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-raised-button color="primary" *ngIf="!row.dataRiconsegna" (click)="riconsegna(row)" title="Riconsegna Chiave">
+                                <mat-icon>assignment_return</mat-icon>
+                                <span class="ms-1">Riconsegna</span>
+                            </button>
+                            <span class="badge bg-success text-white px-2 py-1" *ngIf="row.dataRiconsegna">
+                                <mat-icon style="font-size: 14px; height: 14px; width: 14px;" class="align-middle me-1">check_circle</mat-icon>
+                                Riconsegnata
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-hover"></tr>
+                </table>
+
+                <!-- Paginatore -->
+                <mat-paginator #paginatorRecordChiavi [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
+                </mat-paginator>
+            </div>
+
         </div>
-        <div class="col-2">
-          <button mat-button class="button-insert" (click)="save(nuovoRecordChiavi)">Salva</button>
-        </div>
-      </div>
     </div>
-
-    <div>
-      <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingRecordChiavi">
-        <div class="row">
-          <div class="col-1">
-            <mat-spinner [diameter]="24"></mat-spinner>
-          </div>
-          <div class="col">
-            <label>Caricamento in corso ...</label>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-    <div *ngIf="this.recordsChiavi?.length <= 0" class="notPresent">
-      Nessuna elemento presente
-    </div>
-
-    <table mat-table [dataSource]="RecordChiaviDataSource" class="mat-elevation-z8" style="width: 100%;" *ngIf="this.recordsChiavi?.length > 0">
-      <ng-container matColumnDef="action">
-        <th mat-header-cell *matHeaderCellDef>
-        </th>
-        <td mat-cell *matCellDef="let row" style="text-align: right;">
-
-          <button mat-button *ngIf="row.dataRiconsegna == null" (click)="riconsegna(row)">
-            Riconsegna
-          </button>
-
-
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="n_mazzi">
-        <th mat-header-cell *matHeaderCellDef> N. Mazzo Chiavi</th>
-        <td mat-cell *matCellDef="let element"> {{element.chiave}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="operatorPrelievo">
-        <th mat-header-cell *matHeaderCellDef> Operatore Prelievo </th>
-        <td mat-cell *matCellDef="let element"> {{element.operatorPrelievoName}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="datePrelievo">
-        <th mat-header-cell *matHeaderCellDef> Data Prelievo </th>
-        <td mat-cell *matCellDef="let element"> {{element.dataPrelievo | date: 'dd/MM/yyyy'}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="operatorRiconsegna">
-        <th mat-header-cell *matHeaderCellDef> Operatore Riconsegna </th>
-        <td mat-cell *matCellDef="let element"> {{element.operatorRiconsegnaName}} </td>
-      </ng-container>
-
-      <ng-container matColumnDef="dateRiconsegna">
-        <th mat-header-cell *matHeaderCellDef> Data Riconsegna </th>
-        <td mat-cell *matCellDef="let element"> {{element.dataRiconsegna | date: 'dd/MM/yyyy'}} </td>
-      </ng-container>
-
-
-      <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-    </table>
-
-    <div class="paginator-container">
-
-      <mat-paginator #paginatorRecordChiavi [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-        aria-label="Select page of periodic elements">
-      </mat-paginator>
-    </div>
-
-
-
-</div>
-</div>
 </div>

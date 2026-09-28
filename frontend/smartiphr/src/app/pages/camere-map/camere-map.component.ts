@@ -110,9 +110,15 @@ export class CamereMapComponent implements OnInit {
           x.filter(c => c.forPatient === true).sort((o1, o2) => o1.order - o2.order)),
         map((x: Camere[]) =>
           x.map(c => {
+            let parsedGeo = null;
+            try {
+              parsedGeo = c.geometry ? JSON.parse(c.geometry) : null;
+            } catch (e) {
+              console.error(`Errore nel parsing JSON della camera ${c.camera}:`, e);
+            }
             return {
               ...c,
-              geometryObject: JSON.parse(c.geometry)
+              geometryObject: parsedGeo
             };
           }))
       );
@@ -208,6 +214,11 @@ export class CamereMapComponent implements OnInit {
 
 
   addLayer(camera: Camere) {
+    if (!camera.geometryObject || !camera.geometryObject.type) {
+      console.warn(`Camera "${camera.camera}" saltata: GeoJSON/Geometria non valida o assente.`, camera);
+      return;
+    }
+
     const vectorSource = new VectorSource({
       features: new GeoJSON().readFeatures(camera.geometryObject),
     });

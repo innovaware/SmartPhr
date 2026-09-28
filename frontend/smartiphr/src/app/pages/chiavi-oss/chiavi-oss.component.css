@@ -22,4 +22,43 @@
   .mat-column-action {
     width: 32px;
   }
-  
+
+.container.pad {
+  padding: 24px;
+}
+
+.title {
+  color: #1976d2;
+  font-weight: 600;
+}
+
+table {
+  width: 100%;
+}
+
+th.mat-header-cell {
+  background-color: #f8f9fa;
+  color: #495057;
+  font-size: 0.85rem;
+}
+
+td.mat-cell {
+  padding-top: 8px;
+  padding-bottom: 8px;
+}
+
+.table-row-hover:hover {
+  background-color: #f1f5f9;
+  transition: background-color 0.2s ease;
+}
+
+.mat-elevation-z8 {
+  border: 1px solid #e0e0e0;
+  box-shadow: 0px 3px 6px rgba(0, 0, 0, 0.08) !important;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  font-weight: 500;
+}
