@@ -1,62 +1,59 @@
-<div class="containter pad">
-  <div class="row">
-    <div class="col ">
-      <h4 class="title">
-        <label>
-          {{data.type == 0 ? 'Carico Materiale o Presidio' : 'Scarico Materiale o Presidio'}}
-        </label>
-      </h4>
-    </div>
-
-    <div class="col right">
-      <div class="container">
-        <div class="row">
-          <div class="col right">
-            <label>Data di Riferimento</label>
-          </div>
-          <div class="col1">
-            {{data.magazzino.dateInsert | date: 'dd/MM/yyyy'}}
-          </div>
+<div class="dialog-header p-3 border-bottom">
+    <div class="row align-items-center">
+        <div class="col">
+            <h4 class="m-0 fw-bold text-uppercase" [style.color]="data.type === 0 ? '#1976d2' : '#d32f2f'">
+                {{data.type === 0 ? 'Carico Materiale o Presidio' : 'Scarico Materiale o Presidio'}}
+            </h4>
         </div>
-      </div>
+        <div class="col-auto d-flex align-items-center gap-3">
+            <div class="text-end text-muted fs-6" *ngIf="data.magazzino?.dateInsert">
+                <span class="fw-bold">Data di Riferimento:</span>
+                {{data.magazzino.dateInsert | date: 'dd/MM/yyyy'}}
+            </div>
+            <button mat-icon-button (click)="cancel()" title="Chiudi">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     </div>
-  </div>
-  <hr>
-
-
-
-  <div class="row">
-    <div class="col"><h3>Nome</h3></div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <label>{{data.magazzino.nome}}</label>
-    </div>
-  </div>
-
-  <hr>
-
-  <div class="row">
-    <div class="col">
-      <h3>Quantit&aacute;: <label style="font-size: var(--bs-body-font-size);">{{data.magazzino.quantita}}</label></h3>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <mat-form-field class="full" appearance="fill" >
-        <mat-label>Quantit&aacute;</mat-label>
-        <input matInput type="number" min="0" placeholder="Inserisci quantità" [(ngModel)]="quantita">
-      </mat-form-field>
-    </div>
-  </div>
-
-
-  <hr>
-  <div class="row">
-    <div class="col">
-    <button mat-button (click)="save()">Salva</button>
-    <button mat-button (click)="cancel()">Cancella</button>
-  </div>
 </div>
 
+<mat-dialog-content class="pt-4">
+    <div class="container-fluid p-0">
+        <!-- Dettagli Elemento -->
+        <mat-card class="mb-4 p-3 mat-elevation-z1 bg-light">
+            <div class="row align-items-center">
+                <div class="col-md-8 col-sm-12">
+                    <span class="text-muted text-uppercase fw-bold d-block style-label" style="font-size: 0.8rem;">Nome Materiale / Presidio</span>
+                    <span class="fs-5 fw-bold text-dark">{{data.magazzino?.nome}}</span>
+                </div>
+                <div class="col-md-4 col-sm-12 text-md-end mt-2 mt-md-0">
+                    <span class="text-muted text-uppercase fw-bold d-block style-label" style="font-size: 0.8rem;">Giacenza Attuale</span>
+                    <span class="badge bg-light text-dark border px-3 py-2 fs-6">
+                        {{data.magazzino?.quantita}}
+                    </span>
+                </div>
+            </div>
+        </mat-card>
+
+        <!-- Campo Quantità di Carico/Scarico -->
+        <div class="row">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Quantità da {{data.type === 0 ? 'caricare' : 'scaricare'}}</mat-label>
+                    <input matInput type="number" min="0" placeholder="Inserisci quantità" [(ngModel)]="quantita">
+                    <mat-icon matSuffix [style.color]="data.type === 0 ? '#2e7d32' : '#d32f2f'">
+                        {{data.type === 0 ? 'add_circle' : 'remove_circle'}}
+                    </mat-icon>
+                </mat-form-field>
+            </div>
+        </div>
+    </div>
+</mat-dialog-content>
+
+<div mat-dialog-actions class="d-flex justify-content-end gap-2 p-3 border-top m-0">
+    <button mat-button (click)="cancel()">Annulla</button>
+    <button mat-raised-button color="primary" (click)="save()">
+        <mat-icon>save</mat-icon>
+        <span class="ms-1">Salva</span>
+    </button>
+</div>

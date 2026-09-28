@@ -1,137 +1,171 @@
-<div class="containter pad">
-  <div class="row">
-    <div class="col ">
-      <h1 class="title">HACCP - Derrate Alimentari</h1>
+<div class="container pad">
+    <!-- Intestazione Pagina -->
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">HACCP - Derrate Alimentari</h1>
+        </div>
     </div>
-  </div>
 
-  <hr>
+    <hr class="mb-4">
 
+    <mat-tab-group mat-align-tabs="start">
 
+        <!-- TAB ALIMENTI -->
+        <mat-tab label="Alimenti">
+            <div class="py-3">
 
-  <mat-tab-group>
-    <mat-tab label="Alimenti">
-      <div class="container-flex">
+                <!-- Barra superiore: Inserisci e Cerca -->
+                <div class="row align-items-center g-3 mb-3">
+                    <div class="col-md-6 col-sm-12">
+                        <mat-form-field appearance="outline" class="w-100">
+                            <mat-label>Cerca alimento...</mat-label>
+                            <input matInput (keyup)="applyFilter($event)" placeholder="Cerca per nome o note..." #input>
+                            <mat-icon matSuffix>search</mat-icon>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-md-6 col-sm-12 text-md-end">
+                        <button mat-raised-button color="primary" (click)="AddAlimento()">
+                            <mat-icon>add</mat-icon>
+                            <span class="ms-1">Inserisci Alimento</span>
+                        </button>
+                    </div>
+                </div>
 
-        <hr>
-        <div class="row">
-          <div class="col">
-            <button mat-button class="button-insert" (click)="AddAlimento()">Inserisci</button>
-          </div>
-        </div>
-        <div class="row">
-          <div class="col">
-            <mat-form-field appearance="standard">
-              <mat-label>Cerca</mat-label>
-              <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
-            </mat-form-field>
-          </div>
-        </div>
+                <!-- Tabella Alimenti -->
+                <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
+                    <table mat-table [dataSource]="derrantiAlimentiDataSource" style="width: 100%;">
 
-        <div class="row">
-          <div class="col">
-            <table mat-table [dataSource]="derrantiAlimentiDataSource" class="mat-elevation-z8">
+                        <!-- Nome -->
+                        <ng-container matColumnDef="nome">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Nome </th>
+                            <td mat-cell *matCellDef="let element" class="fw-medium"> {{element.nome}} </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="action">
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-                <td mat-cell *matCellDef="let row">
-                  <div>
+                        <!-- Data Inserimento -->
+                        <ng-container matColumnDef="dateInsert">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Inserimento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dateInsert | date: 'dd/MM/yyyy'}} </td>
+                        </ng-container>
 
-                    <button mat-button (click)="modify(row)" matTooltip="Modifica">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                        <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                        <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                      </svg>
-                    </button>
+                        <!-- Quantità -->
+                        <ng-container matColumnDef="quantita">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Quantità </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="badge bg-light text-dark border px-2 py-1 fs-6">
+                                    {{element.quantita}} {{element.unita}}
+                                </span>
+                            </td>
+                        </ng-container>
 
-                    <button mat-button (click)="carico(row)" matTooltip="Carico/Scarico">
-                      <img src="../../../assets/scarico_carico.svg" style="width: 26px;">
-                    </button>
+                        <!-- Note -->
+                        <ng-container matColumnDef="note">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Note </th>
+                            <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
+                        </ng-container>
 
-                 </div>
-                </td>
-              </ng-container>
+                        <!-- Azioni -->
+                        <ng-container matColumnDef="action">
+                            <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Azioni </th>
+                            <td mat-cell *matCellDef="let row" class="text-end">
+                                <button mat-icon-button color="primary" (click)="modify(row)" title="Modifica">
+                                    <mat-icon>edit</mat-icon>
+                                </button>
+                                <button mat-icon-button color="accent" (click)="carico(row)" title="Carico/Scarico">
+                                    <mat-icon>swap_vert</mat-icon>
+                                </button>
+                            </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="nome">
-                <th mat-header-cell *matHeaderCellDef> Nome </th>
-                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
-              </ng-container>
+                        <tr mat-header-row *matHeaderRowDef="derrantiAlimentiDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: derrantiAlimentiDisplayedColumns;" class="table-row-hover"></tr>
 
-              <ng-container matColumnDef="dateInsert">
-                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateInsert | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
+                        <!-- Stato vuoto -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center p-4 text-muted" [attr.colspan]="derrantiAlimentiDisplayedColumns.length">
+                                <mat-icon class="align-middle me-1">info</mat-icon>
+                                Nessuna derrata alimentare presente.
+                            </td>
+                        </tr>
+                    </table>
 
-              <ng-container matColumnDef="quantita">
-                <th mat-header-cell *matHeaderCellDef> Quantità </th>
-                <td mat-cell *matCellDef="let element"> {{element.quantita}} {{element.unita}}</td>
-              </ng-container>
+                    <!-- Paginatore -->
+                    <mat-paginator #paginatorDerranteAlimenti [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
+                    </mat-paginator>
+                </div>
 
-              <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-              </ng-container>
+            </div>
+        </mat-tab>
 
-              <tr mat-header-row *matHeaderRowDef="derrantiAlimentiDisplayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: derrantiAlimentiDisplayedColumns;"></tr>
-            </table>
-            <mat-paginator #paginatorDerranteAlimenti [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-              aria-label="Select page of periodic elements">
-            </mat-paginator>
-          </div>
-        </div>
+        <!-- TAB STORICO -->
+        <mat-tab label="Storico">
+            <div class="py-3">
 
-      </div>
-    </mat-tab>
-    <mat-tab label="Storico">
-      <div class="container-flex">
-        <div class="row">
-          <div class="col">
-            <table mat-table [dataSource]="derrantiAlimentiStoricoDataSource" class="mat-elevation-z8">
+                <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
+                    <table mat-table [dataSource]="derrantiAlimentiStoricoDataSource" style="width: 100%;">
 
-              <ng-container matColumnDef="nome">
-                <th mat-header-cell *matHeaderCellDef> Nome </th>
-                <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
-              </ng-container>
+                        <!-- Nome -->
+                        <ng-container matColumnDef="nome">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Nome </th>
+                            <td mat-cell *matCellDef="let element" class="fw-medium"> {{element.nome}} </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="dateInsert">
-                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateInsert | date: 'dd/MM/yyyy'}} </td>
-              </ng-container>
+                        <!-- Data Inserimento -->
+                        <ng-container matColumnDef="dateInsert">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Inserimento </th>
+                            <td mat-cell *matCellDef="let element"> {{element.dateInsert | date: 'dd/MM/yyyy HH:mm'}} </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="quantita">
-                <th mat-header-cell *matHeaderCellDef> Quantità </th>
-                <td mat-cell *matCellDef="let element"> {{element.quantita}} {{element.unita}}</td>
-              </ng-container>
+                        <!-- Quantità -->
+                        <ng-container matColumnDef="quantita">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Quantità </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="badge bg-light text-dark border px-2 py-1 fs-6">
+                                    {{element.quantita}} {{element.unita}}
+                                </span>
+                            </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-              </ng-container>
+                        <!-- Operazione -->
+                        <ng-container matColumnDef="operazione">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Operazione </th>
+                            <td mat-cell *matCellDef="let element">
+                                <span class="badge" [ngClass]="element.operazione === 'CARICO' ? 'bg-success' : 'bg-warning text-dark'">
+                                    {{element.operazione}}
+                                </span>
+                            </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="operazione">
-                <th mat-header-cell *matHeaderCellDef> Operazione </th>
-                <td mat-cell *matCellDef="let element"> {{element.operazione}} </td>
-              </ng-container>
+                        <!-- Utente -->
+                        <ng-container matColumnDef="user">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Utente </th>
+                            <td mat-cell *matCellDef="let element"> {{element.user?.username || '-'}} </td>
+                        </ng-container>
 
-              <ng-container matColumnDef="user">
-                <th mat-header-cell *matHeaderCellDef> Utente </th>
-                <td mat-cell *matCellDef="let element"> {{element.user?.username}} </td>
-              </ng-container>
+                        <!-- Note -->
+                        <ng-container matColumnDef="note">
+                            <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Note </th>
+                            <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
+                        </ng-container>
 
-              <tr mat-header-row *matHeaderRowDef="derrantiAlimentiStoricoDisplayedColumns"></tr>
-              <tr mat-row *matRowDef="let row; columns: derrantiAlimentiStoricoDisplayedColumns;"></tr>
-            </table>
-            <mat-paginator #paginatorDerranteAlimentiStorico [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-              aria-label="Select page of periodic elements">
-            </mat-paginator>
-          </div>
-        </div>
+                        <tr mat-header-row *matHeaderRowDef="derrantiAlimentiStoricoDisplayedColumns"></tr>
+                        <tr mat-row *matRowDef="let row; columns: derrantiAlimentiStoricoDisplayedColumns;" class="table-row-hover"></tr>
 
+                        <!-- Stato vuoto -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell text-center p-4 text-muted" [attr.colspan]="derrantiAlimentiStoricoDisplayedColumns.length">
+                                <mat-icon class="align-middle me-1">info</mat-icon>
+                                Nessuno storico presente.
+                            </td>
+                        </tr>
+                    </table>
 
-      </div>
-    </mat-tab>
-  </mat-tab-group>
+                    <!-- Paginatore -->
+                    <mat-paginator #paginatorDerranteAlimentiStorico [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
+                    </mat-paginator>
+                </div>
 
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
 </div>
