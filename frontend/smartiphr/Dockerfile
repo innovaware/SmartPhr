@@ -4,10 +4,9 @@ WORKDIR /app
 COPY . .
 
 RUN npm install
-RUN npm install -g @angular/cli
+RUN npm install -g @angular/cli@10.2.4
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
-RUN ng build --prod
 RUN ng build --prod --optimization=false
 
 FROM nginx:latest
