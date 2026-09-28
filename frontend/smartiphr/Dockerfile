@@ -7,7 +7,8 @@ RUN npm install
 RUN npm install -g @angular/cli
 
 ENV NODE_OPTIONS=--openssl-legacy-provider
-RUN ng build --prod
+#RUN ng build --prod
+RUN ng build --prod --build-optimizer=true --optimization.styles=false
 
 FROM nginx:latest
 
