@@ -84,6 +84,7 @@ export class DialogCartItemComponent implements OnInit {
 
   private loadPazienteData(pazienteID: string, elementoType: string, elementoID: string): void {
     this.PS.getPaziente(pazienteID).then((result: Paziente) => {
+      console.log("result paziente: ", result[0]);
       this.paziente = result[0];
       this.nomePaziente = `${this.paziente.nome} ${this.paziente.cognome}`;
 

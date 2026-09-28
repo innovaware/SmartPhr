@@ -1,0 +1,478 @@
+const express = require("express");
+const router = express.Router();
+const Pazienti = require("../models/pazienti");
+const parametriVitali = require("../models/parametriVitali");
+const Log = require("../models/log");
+const Dipendenti = require("../models/dipendenti");
+
+router.get("/", async (req, res) => {
+    try {
+        const showOnlyCancellati = req.query.show == "deleted";
+        const showAll = req.query.show == "all";
+
+        const query = {
+            $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+        };
+
+        const getData = (query) => {
+            return Pazienti.find(query);
+        };
+
+        if (showOnlyCancellati || showAll) {
+            console.log("Show all or deleted");
+            let query = {};
+            if (showOnlyCancellati) {
+                query = { cancellato: true };
+            }
+
+            const pazienti = await getData(query);
+            res.status(200).json(pazienti);
+        } else {
+            const pazienti = await getData(query);
+
+            if (pazienti.length > 0) res.status(200).json(pazienti);
+            else res.status(404).json({ error: "No patients found" });
+
+            return;
+        }
+    } catch (err) {
+        console.error("Error: ", err);
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.get("/:id", async (req, res) => {
+    const { id } = req.params;
+
+    const getData = (query) => {
+        return Pazienti.find(query);
+    };
+
+    try {
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        const query = {
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+                { _id: id },
+            ],
+        };
+
+        const pazienti = await getData(query);
+
+        if (pazienti != null) {
+            res.status(200).json(pazienti);
+        } else {
+            res.status(404).json({ error: "No patient found" });
+        }
+    } catch (err) {
+        res.status(500).json({ Error: err.message });
+    }
+});
+
+// Recupera lista pazienti associati alla camera
+router.get("/camera/:idCamera", async (req, res) => {
+    const { idCamera } = req.params;
+
+    const getData = (query) => {
+        return Pazienti.find(query);
+    };
+
+    try {
+        if (idCamera == undefined || idCamera === "undefined") {
+            console.log("Error id is not defined ", idCamera);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        const query = {
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+                { idCamera: idCamera },
+            ],
+        };
+
+        const pazienti = await getData(query);
+
+        if (pazienti != null) res.status(200).json(pazienti);
+        else res.status(404).json({ error: "No patient found" });
+
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.post("/", async (req, res) => {
+    try {
+        console.log('schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSociale));
+        const pazienti = new Pazienti({
+            cognome: req.body.cognome,
+            nome: req.body.nome,
+            sesso: req.body.sesso,
+            luogoNascita: req.body.luogoNascita,
+            dataNascita: req.body.dataNascita,
+            indirizzoResidenza: req.body.indirizzoResidenza,
+            comuneResidenza: req.body.comuneResidenza,
+            provinciaResidenza: req.body.provinciaResidenza,
+            statoCivile: req.body.statoCivile,
+            figli: req.body.figli,
+            scolarita: req.body.scolarita,
+            situazioneLavorativa: req.body.situazioneLavorativa,
+            personeRiferimento: req.body.personeRiferimento,
+            telefono: req.body.telefono,
+            dataIngresso: req.body.dataIngresso,
+            indirizzoNascita: req.body.indirizzoNascita,
+            comuneNascita: req.body.comuneNascita,
+            provinciaNascita: req.body.provinciaNascita,
+            codiceFiscale: req.body.codiceFiscale,
+
+            ricovero: req.body.ricovero,
+            numstanza: req.body.numstanza,
+            numletto: req.body.numletto,
+            diagnosiingresso: req.body.diagnosiingresso,
+            allergie: req.body.allergie,
+
+            idCamera: req.body.idCamera,
+
+            schedaInfermeristica: req.body.schedaInfermeristica,
+            schedaClinica: req.body.schedaClinica,
+
+            schedaAssSociale: req.body.schedaAssSociale,
+            schedaEducativa: req.body.schedaEducativa,
+            valutazioneMotoria: req.body.valutazioneMotoria,
+            areaRiabilitativa: req.body.areaRiabilitativa,
+            areaRiabilitativaProgramma: req.body.areaRiabilitativaProgramma,
+            areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
+            obiettiviPAI: "",
+        });
+
+        console.log(req.body);
+
+        const result = await pazienti.save();
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Inserimento paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(result);
+
+    } catch (err) {
+        res.status(500);
+        res.json({ "Error": err });
+    }
+});
+
+router.put("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        console.log("Obiettivi: ", req.body.obiettiviPAI);
+        console.log('req.body.schedaAssSociale: ' + JSON.stringify(req.body.schedaAssSociale));
+        const pazienti = await Pazienti.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    cognome: req.body.cognome,
+                    nome: req.body.nome,
+                    sesso: req.body.sesso,
+                    luogoNascita: req.body.luogoNascita,
+                    dataNascita: req.body.dataNascita,
+                    indirizzoResidenza: req.body.indirizzoResidenza,
+                    comuneResidenza: req.body.comuneResidenza,
+                    provinciaResidenza: req.body.provinciaResidenza,
+                    statoCivile: req.body.statoCivile,
+                    figli: req.body.figli,
+                    scolarita: req.body.scolarita,
+                    situazioneLavorativa: req.body.situazioneLavorativa,
+                    personeRiferimento: req.body.personeRiferimento,
+                    telefono: req.body.telefono,
+                    dataIngresso: req.body.dataIngresso,
+                    indirizzoNascita: req.body.indirizzoNascita,
+                    comuneNascita: req.body.comuneNascita,
+                    provinciaNascita: req.body.provinciaNascita,
+                    codiceFiscale: req.body.codiceFiscale,
+
+                    obiettiviPAI: req.body.obiettiviPAI,
+
+                    ricovero: req.body.ricovero,
+                    numstanza: req.body.numstanza,
+                    numletto: req.body.numletto,
+                    diagnosiingresso: req.body.diagnosiingresso,
+                    allergie: req.body.allergie,
+
+                    idCamera: req.body.idCamera,
+
+                    schedaInfermeristica: req.body.schedaInfermeristica,
+                    schedaClinica: req.body.schedaClinica,
+                    schedaPsico: req.body.schedaPsico,
+
+                    schedaAssSociale: req.body.schedaAssSociale,
+                    schedaEducativa: req.body.schedaEducativa,
+                    valutazioneMotoria: req.body.valutazioneMotoria,
+                    areaRiabilitativa: req.body.areaRiabilitativa,
+                    areaRiabilitativaProgramma: req.body.areaRiabilitativaProgramma,
+                    areaRiabilitativaDiario: req.body.areaRiabilitativaDiario,
+                },
+            }
+        );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Modifica paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(pazienti);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.delete("/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        if (id == null) {
+            res.status(400).json({ error: "id not valid" });
+        }
+
+        const pazienti = await Pazienti.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    cancellato: true,
+                    dataCancellazione: new Date(),
+                },
+            }
+        );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "Pazienti",
+            operazione: "Eliminazione paziente: " + pazienti.cognome + " " + pazienti.cognome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(pazienti);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+// PARAMETRI VITALI
+
+router.get("/parametriVitali/:id/:dateRif", async (req, res) => {
+    const { id, dateRif } = req.params;
+    try {
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        const parametri = await parametriVitali.find({
+            $and: [{ idPaziente: id }, { dateRif: dateRif }],
+        });
+
+        if (parametri != null) res.status(200).json(parametri);
+        else res.status(404).json({ error: "No parametriVitali found" });
+
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.put("/parametriVitali/:id/:dateRif", async (req, res) => {
+    try {
+        const { id, dateRif } = req.params;
+        const data = req.body;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        if (dateRif == undefined || dateRif === "undefined") {
+            console.log("Error dateRif is not defined ", dateRif);
+            res.status(404).json({ Error: "dateRif not defined" });
+            return;
+        }
+
+        if (data == undefined || data === "undefined") {
+            console.log("Error data is not defined ", id);
+            res.status(404).json({ Error: "Data not defined" });
+            return;
+        }
+
+        const parametri = await parametriVitali.updateOne(
+            { $and: [{ idPaziente: id }, { dateRif: dateRif }] },
+            {
+                $set: {
+                    dateRif: dateRif,
+                    data: data,
+                },
+            },
+            { upsert: true }
+        );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "ParametriVitali",
+            operazione: "Modifica parametri vitali ",
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(parametri);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+// SCHEDA PSICOLOGICA
+router.get("/schedaPsicologica/:id", async (req, res) => {
+    const { id } = req.params;
+    try {
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        const pazienti = await Pazienti.findOne({
+            $and: [
+                {
+                    $or: [{ cancellato: { $exists: false } }, { cancellato: false }],
+                },
+                { _id: id },
+            ],
+        });
+
+        if (pazienti != null) res.status(200).json(pazienti.schedaPsico);
+        else res.status(404).json({ error: "No patient found" });
+
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+router.put("/schedaPsicologica/:id", async (req, res) => {
+    try {
+        const { id } = req.params;
+        const data = req.body;
+        if (id == undefined || id === "undefined") {
+            console.log("Error id is not defined ", id);
+            res.status(404).json({ Error: "Id not defined" });
+            return;
+        }
+
+        if (data == undefined || data === "undefined") {
+            console.log("Error data is not defined ", id);
+            res.status(404).json({ Error: "Data not defined" });
+            return;
+        }
+
+        const parametri = await Pazienti.updateOne(
+            { _id: id },
+            {
+                $set: {
+                    schedaPsico: data,
+                },
+            }
+        );
+
+        const user = res.locals.auth;
+
+        const getDipendente = () => {
+            return Dipendenti.findById(user.dipendenteID);
+        };
+
+        const dipendenti = await getDipendente();
+
+        const log = new Log({
+            data: new Date(),
+            operatore: dipendenti.nome + " " + dipendenti.cognome,
+            operatoreID: user.dipendenteID,
+            className: "SchedaPsicologica",
+            operazione: "Modifica scheda psicologica del paziente: " + parametri.cognome + " " + parametri.nome,
+        });
+        console.log("log: ", log);
+        const resultLog = await log.save();
+
+        res.status(200);
+        res.json(parametri);
+    } catch (err) {
+        res.status(500).json({ Error: err });
+    }
+});
+
+module.exports = router;

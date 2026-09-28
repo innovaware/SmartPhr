@@ -1,143 +1,123 @@
-<div class="container pad">
-  <div class="row">
-    <div class="col">
-      <h1 class="title">Carrello {{title}}</h1>
+<div class="main-container">
+    <div class="header-section">
+        <h1>Gestione Carrelli <span class="badge-title" *ngIf="title">{{title}}</span></h1>
     </div>
-  </div>
-  <div class="row">
-    <div class="col">
-      <hr />
-    </div>
-  </div>
-  <mat-tab-group mat-align-tabs="start">
-    <mat-tab label="Gestione Carrelli">
-      <div class="row">
-        <div class="col">
-          <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
+    <mat-tab-group animationDuration="200ms">
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="nome">
-              <th mat-header-cell *matHeaderCellDef> Carrello </th>
-              <td mat-cell *matCellDef="let element"> {{element.nomeCarrello}} </td>
-            </ng-container>
+        <!-- Tab 1: Gestione Carrelli -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="me-2">shopping_cart</mat-icon>
+                Gestione Carrelli
+            </ng-template>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Status">
-              <th mat-header-cell *matHeaderCellDef> Stato </th>
-              <td mat-cell *matCellDef="let element">
+            <div class="table-container mat-elevation-z2 mt-3">
+                <table mat-table [dataSource]="dataSource" class="full-width-table">
 
-                <ng-container *ngIf="element.inUso">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red;" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-                  </svg>
-                </ng-container>
-                <ng-container *ngIf="!element.inUso">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:green;" fill="currentColor" class="bi bi-cart-fill" viewBox="0 0 16 16">
-                    <path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5M5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4m7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4m-7 1a1 1 0 1 1 0 2 1 1 0 0 1 0-2m7 0a1 1 0 1 1 0 2 1 1 0 0 1 0-2" />
-                  </svg>
-                </ng-container>
+                    <ng-container matColumnDef="nome">
+                        <th mat-header-cell *matHeaderCellDef> Carrello </th>
+                        <td mat-cell *matCellDef="let element" class="font-weight-bold"> {{element.nomeCarrello}} </td>
+                    </ng-container>
 
-              </td>
-            </ng-container>
-            
-            <!-- Name Column -->
-            <ng-container matColumnDef="totElementi">
-              <th mat-header-cell *matHeaderCellDef> Contenuto </th>
-              <td mat-cell *matCellDef="let element"> {{element.contenuto.length}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Status">
+                        <th mat-header-cell *matHeaderCellDef> Stato </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="status-chip" [ngClass]="element.inUso ? 'status-busy' : 'status-available'">
+                                <mat-icon>{{element.inUso ? 'lock' : 'check_circle'}}</mat-icon>
+                                {{element.inUso ? 'In Uso' : 'Disponibile'}}
+                            </span>
+                        </td>
+                    </ng-container>
 
+                    <ng-container matColumnDef="totElementi">
+                        <th mat-header-cell *matHeaderCellDef> Elementi </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="count-badge">{{element.contenuto ? element.contenuto.length : 0}} articoli</span>
+                        </td>
+                    </ng-container>
 
-            <!-- Weight Column -->
-            <ng-container matColumnDef="Ultimo">
-              <th mat-header-cell *matHeaderCellDef>Data ultimo utilizzo </th>
-              <td mat-cell *matCellDef="let element"> {{element.dataUtilizzo  | date: 'dd/MM/yyyy'}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Ultimo">
+                        <th mat-header-cell *matHeaderCellDef> Ultimo Utilizzo </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.dataUtilizzo ? (element.dataUtilizzo | date: 'dd/MM/yyyy HH:mm') : '-'}}
+                        </td>
+                    </ng-container>
 
-            <ng-container matColumnDef="action">
-              <th mat-header-cell *matHeaderCellDef> </th>
-              <td mat-cell *matCellDef="let row" style="text-align: right;">
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="text-end"> Azioni </th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-icon-button color="primary" (click)="openDialog(row)" matTooltip="Gestisci Carrello">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-                <button mat-button (click)="openDialog(row)">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                    <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                    <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                  </svg>
-                </button>
-              </td>
-            </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                </table>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          </table>
+                <mat-paginator #paginatorNonUso [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
 
+        <!-- Tab 2: Registro Attività -->
+        <mat-tab>
+            <ng-template mat-tab-label>
+                <mat-icon class="me-2">history</mat-icon>
+                Registro Attività
+            </ng-template>
 
-          <mat-paginator #NonInUso [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-          </mat-paginator>
-        </div>
-      </div>
-    </mat-tab>
+            <div class="table-container mat-elevation-z2 mt-3">
+                <table mat-table [dataSource]="dataSourceReg" class="full-width-table">
 
-    <mat-tab label="Registro Attività">
-      <div class="row">
-        <div class="col">
-          <table mat-table [dataSource]="dataSourceReg" class="mat-elevation-z8">
+                    <ng-container matColumnDef="Carrello">
+                        <th mat-header-cell *matHeaderCellDef> Carrello </th>
+                        <td mat-cell *matCellDef="let element"> {{element.carrelloName}} </td>
+                    </ng-container>
 
-            <!-- Position Column -->
-            <ng-container matColumnDef="Carrello">
-              <th mat-header-cell *matHeaderCellDef> Carrello</th>
-              <td mat-cell *matCellDef="let element"> {{element.carrelloName}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Elemento">
+                        <th mat-header-cell *matHeaderCellDef> Elemento </th>
+                        <td mat-cell *matCellDef="let element"> {{element.elemento ? element.elemento : '-'}} </td>
+                    </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Elemento">
-              <th mat-header-cell *matHeaderCellDef> Elemento </th>
-              <td mat-cell *matCellDef="let element"> {{element.elemento}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Operazione">
+                        <th mat-header-cell *matHeaderCellDef> Operazione </th>
+                        <td mat-cell *matCellDef="let element">
+                            <span class="operation-tag">{{element.operation}}</span>
+                        </td>
+                    </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Operazione">
-              <th mat-header-cell *matHeaderCellDef> Operazione </th>
-              <td mat-cell *matCellDef="let element"> {{element.operation}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Quantita">
+                        <th mat-header-cell *matHeaderCellDef> Q.tà </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.quantita != null ? element.quantita : '-'}}
+                        </td>
+                    </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Quantita">
-              <th mat-header-cell *matHeaderCellDef> Quantita </th>
-              <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="Res">
+                        <th mat-header-cell *matHeaderCellDef> Q.tà Res. </th>
+                        <td mat-cell *matCellDef="let element">
+                            {{element.quantitaRes != null ? element.quantitaRes : '-'}}
+                        </td>
+                    </ng-container>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Res">
-              <th mat-header-cell *matHeaderCellDef> Quantita Residua </th>
-              <td mat-cell *matCellDef="let element"> {{element.quantitaRes}} </td>
-            </ng-container>
+                    <ng-container matColumnDef="DataModifica">
+                        <th mat-header-cell *matHeaderCellDef> Data e Ora </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dataModifica | date: 'dd/MM/yyyy HH:mm'}} </td>
+                    </ng-container>
 
-            <!-- Weight Column -->
-            <ng-container matColumnDef="DataModifica">
-              <th mat-header-cell *matHeaderCellDef>Data Modifica</th>
-              <td mat-cell *matCellDef="let element">
-                {{ element.dataModifica | date: 'dd/MM/yyyy, HH:mm':'UTC+2' }}
-              </td>
-            </ng-container>
+                    <ng-container matColumnDef="Operatore">
+                        <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                        <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
+                    </ng-container>
 
+                    <tr mat-header-row *matHeaderRowDef="displayedColumnsReg"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumnsReg;"></tr>
+                </table>
 
-            <!-- Name Column -->
-            <ng-container matColumnDef="Operatore">
-              <th mat-header-cell *matHeaderCellDef> Operatore </th>
-              <td mat-cell *matCellDef="let element"> {{element.operatorName}} </td>
-            </ng-container>
-
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsReg"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsReg;"></tr>
-          </table>
-
-
-          <mat-paginator #Registro [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-          </mat-paginator>
-        </div>
-      </div>
-    </mat-tab>
-  </mat-tab-group>
-  
+                <mat-paginator #paginatorReg [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
+            </div>
+        </mat-tab>
+    </mat-tab-group>
 </div>

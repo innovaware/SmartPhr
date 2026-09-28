@@ -1,8 +1,7 @@
-import { AfterViewInit, Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
 import { CarrelloItem } from '../../models/carrelloItem';
 import { Carrello } from '../../models/carrello';
-import { title } from 'process';
 import { CarrelloService } from '../../service/carrello.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator';
@@ -20,55 +19,44 @@ import { DialogCartItemComponent } from '../dialog-cart-item/dialog-cart-item.co
   templateUrl: './dialog-cart.component.html',
   styleUrls: ['./dialog-cart.component.css']
 })
-export class DialogCartComponent implements OnInit, AfterViewInit {
+export class DialogCartComponent implements OnInit {
 
-  title: String;
-  items: CarrelloItem[];
-  uso: Boolean;
-  displayedColumns: string[] = ["nome", "tipo", "quantita", "paziente", "note","somministra","scarta", "action"];
-  dataSource: MatTableDataSource<CarrelloItem>;
-  dipendente: Dipendenti;
-  @ViewChild("Contenuto", { static: false }) paginator: MatPaginator;
+  title: string;
+  uso: boolean;
+  displayedColumns: string[] = ["nome", "tipo", "quantita", "paziente", "note", "actions"];
+  dataSource = new MatTableDataSource<CarrelloItem>();
+  dipendente!: Dipendenti;
+
+  @ViewChild("Contenuto", { static: true }) paginator!: MatPaginator;
+
   constructor(
     public dialog: MatDialog,
-    private CartServ: CarrelloService,
+    private dialogRef: MatDialogRef<DialogCartComponent>,
+    private cartServ: CarrelloService,
     private dipendenteService: DipendentiService,
     private authenticationService: AuthenticationService,
     private messageService: MessagesService,
     private regServ: RegistroCarrelloService,
-    @Inject(MAT_DIALOG_DATA)
-    public data: {
-      carrello: Carrello,
-    }) {
-    this.dataSource = new MatTableDataSource<CarrelloItem>();
-    this.title = data.carrello.nomeCarrello;
-    this.items = data.carrello.contenuto;
-    console.log(data.carrello.contenuto);
-    this.dataSource.data = this.items;
-    this.dataSource.paginator = this.paginator;
-    this.uso = data.carrello.inUso;
+    @Inject(MAT_DIALOG_DATA) public data: { carrello: Carrello }
+  ) {
+    this.title = data.carrello.nomeCarrello.valueOf();
+    this.uso = data.carrello.inUso.valueOf();
+  }
+
+  ngOnInit(): void {
+    this.refreshCartData();
     this.loadUser();
   }
 
-  ngAfterViewInit() {
-    this.CartServ.getById(this.data.carrello._id).then((res: Carrello) => {
-      console.log(res);
+  refreshCartData(): void {
+    this.cartServ.getById(this.data.carrello._id).then((res: Carrello) => {
       this.data.carrello = res;
-      this.dataSource.data = this.data.carrello.contenuto;
+      this.dataSource.data = res.contenuto || [];
       this.dataSource.paginator = this.paginator;
     });
   }
-  ngOnInit(): void {
 
-    this.dataSource = new MatTableDataSource<CarrelloItem>();
-    this.title = this.data.carrello.nomeCarrello;
-    this.items = this.data.carrello.contenuto;
-    this.dataSource.data = this.items;
-    this.dataSource.paginator = this.paginator;
-    this.loadUser();
-  }
-
-  add() {
+  add(): void {
     const dialogRef = this.dialog.open(DialogCartItemComponent, {
       data: {
         carrello: this.data.carrello,
@@ -76,21 +64,15 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
         type: this.data.carrello.type,
         dipendente: this.dipendente
       },
-      width: "800px",
-      height: "400px"
-    });
-    dialogRef.afterClosed().subscribe(() => {
-      this.CartServ.getById(this.data.carrello._id).then((res: Carrello) => {
-        console.log(res);
-        this.data.carrello = res;
-        this.dataSource.data = this.data.carrello.contenuto;
-        this.dataSource.paginator = this.paginator;
-      });
+      width: "700px"
     });
 
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) this.refreshCartData();
+    });
   }
 
-  edit(row: CarrelloItem) {
+  edit(row: CarrelloItem): void {
     const dialogRef = this.dialog.open(DialogCartItemComponent, {
       data: {
         carrello: this.data.carrello,
@@ -99,171 +81,113 @@ export class DialogCartComponent implements OnInit, AfterViewInit {
         type: this.data.carrello.type,
         dipendente: this.dipendente
       },
-      width: "800px",
-      height: "400px"
+      width: "700px"
     });
 
-    // Subscribe to dialog close event
-    dialogRef.afterClosed().subscribe(async () => {
-      try {
-        await this.delay(1000); // Aggiungi il delay qui
-        const updatedCarrello = await this.CartServ.getById(this.data.carrello._id);
-        console.log(updatedCarrello);
-
-        this.data.carrello = updatedCarrello;
-        this.dataSource.data = updatedCarrello.contenuto;
-        this.dataSource.paginator = this.paginator;
-      } catch (error) {
-        console.error('Failed to update cart:', error);
-        // Optionally show an error notification to the user
-      }
+    dialogRef.afterClosed().subscribe((updated) => {
+      if (updated) this.refreshCartData();
     });
   }
 
+  async save(): Promise<void> {
+    try {
+      let cart: Carrello = await this.cartServ.getById(this.data.carrello._id);
+      const statoPrecedente = cart.inUso;
+      cart.inUso = this.uso;
 
-
-  async save() {
-    let cart: Carrello = await this.CartServ.getById(this.data.carrello._id);
-    cart.inUso = this.uso;
-    cart.operatoreID = this.dipendente._id;
-    cart.operatoreName = this.dipendente.nome + " " + this.dipendente.cognome;
-    console.log("Carrello: ", cart);
-
-    // Aggiorna il carrello
-    await this.CartServ.update(cart).toPromise();
-
-    if (cart.inUso != this.uso) {
-      let frase = "";
-
-      if (this.uso) {
-        frase = "Carrello Occupato";
+      if (this.dipendente) {
+        cart.operatoreID = this.dipendente._id;
+        cart.operatoreName = `${this.dipendente.nome} ${this.dipendente.cognome}`;
       }
-      else {
-        if (cart.type.toLowerCase() == "oss") {
-          frase = "Carrello ordinato e liberato";
-        }
-        else {
-          frase = "Carrello liberato";
-        }
+
+      await this.cartServ.update(cart).toPromise();
+
+      if (statoPrecedente !== this.uso) {
+        let frase = this.uso
+          ? "Carrello Occupato"
+          : (cart.type.toLowerCase() === "oss" ? "Carrello ordinato e liberato" : "Carrello liberato");
+
+        let reg: RegistroCarrello = {
+          carrelloID: cart._id,
+          carrelloName: cart.nomeCarrello,
+          dataModifica: new Date(),
+          type: cart.type,
+          operator: cart.operatoreID,
+          operatorName: cart.operatoreName,
+          operation: frase
+        };
+
+        await this.regServ.add(reg);
       }
-      // Crea e popola l'oggetto RegistroCarrello
-      let reg: RegistroCarrello = {
-        carrelloID: cart._id,
-        carrelloName: cart.nomeCarrello,
-        dataModifica: new Date(),
-        type: cart.type,
-        operator: cart.operatoreID,
-        operatorName: cart.operatoreName,
-        operation: frase
-      };
 
-      console.log("Registro: ", reg);
-
-      // Aggiunge il registro al servizio
-      await this.regServ.add(reg);
+      this.messageService.showMessage("Salvataggio effettuato con successo");
+      this.dialogRef.close(true);
+    } catch (err) {
+      this.messageService.showMessageError("Errore durante il salvataggio");
     }
-
-    this.messageService.showMessage("Salvataggio effettuato");
   }
 
-  async modificaQuantita(row: CarrelloItem, operazione: string) {
-    let cart: Carrello = await this.CartServ.getById(this.data.carrello._id);
+  async modificaQuantita(row: CarrelloItem, operazione: string): Promise<void> {
+    let cart: Carrello = await this.cartServ.getById(this.data.carrello._id);
     const index = cart.contenuto.findIndex(item => item._id === row._id);
-    if (index === -1) {
-      console.error("Elemento non trovato nel carrello");
-      return; // Uscita dalla funzione se l'elemento non è trovato
-    }
-    // Riduzione della quantità
+
+    if (index === -1) return;
+
     cart.contenuto[index].quantita = Number(cart.contenuto[index].quantita) - 1;
 
-    // Registro della modifica
+    // Conversione sicura per evitare errori di tipo Number/number
+    const qtaCalcolata = Number(cart.contenuto[index].quantita);
+
     let reg: RegistroCarrello = {
       carrelloID: cart._id,
       carrelloName: cart.nomeCarrello,
       elemento: row.elementoName,
       dataModifica: new Date(),
       quantita: 1,
-      quantitaRes: cart.contenuto[index].quantita.valueOf() >= 0 ? cart.contenuto[index].quantita : 0,
+      quantitaRes: qtaCalcolata >= 0 ? qtaCalcolata : 0,
       type: cart.type,
-      operator: this.dipendente._id,
-      operatorName: this.dipendente.nome + " " + this.dipendente.cognome,
+      operator: this.dipendente ? this.dipendente._id : '',
+      operatorName: this.dipendente ? `${this.dipendente.nome} ${this.dipendente.cognome}` : '',
       operation: operazione
     };
-    console.log("Registro: ", reg);
     await this.regServ.add(reg);
 
-    // Rimozione dell'elemento se la quantità è zero o inferiore
-    if (cart.contenuto[index].quantita.valueOf() <= 0) {
-      if (index > -1) {
-        cart.contenuto.splice(index, 1);
-        let reg1: RegistroCarrello = {
-          carrelloID: cart._id,
-          carrelloName: cart.nomeCarrello,
-          elemento: row.elementoName,
-          dataModifica: new Date(),
-          type: cart.type,
-          operator: this.dipendente._id,
-          operatorName: this.dipendente.nome + " " + this.dipendente.cognome,
-          operation: "Elemento rimosso"
-        };
-        console.log("Registro: ", reg1);
-        await this.regServ.add(reg1);
-      }
+    if (Number(cart.contenuto[index].quantita) <= 0) {
+      cart.contenuto.splice(index, 1);
     }
 
-    this.dataSource.data = cart.contenuto;
-    this.dataSource.paginator = this.paginator;
-    await this.CartServ.update(cart).toPromise();
+    await this.cartServ.update(cart).toPromise();
+    this.refreshCartData();
   }
 
-  async scarto(row: CarrelloItem) {
+  async scarto(row: CarrelloItem): Promise<void> {
     await this.modificaQuantita(row, "Elemento compromesso");
     this.messageService.showMessage("Elemento scartato");
   }
 
-  async somministra(row: CarrelloItem) {
+  async somministra(row: CarrelloItem): Promise<void> {
     await this.modificaQuantita(row, "Elemento somministrato");
     this.messageService.showMessage("Elemento somministrato");
   }
 
+  async toggleUso(): Promise<void> {
+    if (this.data.carrello.type.toLowerCase() === "oss" && this.uso) {
+      const dialogRef = this.dialog.open(DialogQuestionComponent, {
+        data: { message: "Hai ordinato il carrello prima di liberarlo?" }
+      });
 
-  async toggleUso() {
-    if (this.data.carrello.type.toLowerCase() == "oss" && this.uso) {
-      const dialogData = {
-        data: { message: "Hai ordinato il carrello?" }
-      };
-
-      const result = await this.dialog.open(DialogQuestionComponent, dialogData).afterClosed().toPromise();
-
-      if (!result) {
-        return;
-      }
+      const result = await dialogRef.afterClosed().toPromise();
+      if (!result) return;
     }
     this.uso = !this.uso;
   }
 
-  loadUser() {
-    this.dipendente = new Dipendenti();
+  loadUser(): void {
     this.authenticationService.getCurrentUserAsync().subscribe((user) => {
-      console.log("get dipendente");
-      this.dipendenteService
-        .getByIdUser(user.dipendenteID)
-        .then((x) => {
-
-          this.dipendente = x[0];
-
-        })
-        .catch((err) => {
-          this.messageService.showMessageError(
-            "Errore Caricamento dipendente (" + err["status"] + ")"
-          );
-        });
+      if (user && user.dipendenteID) {
+        this.dipendenteService.getByIdUser(user.dipendenteID)
+          .then((x) => this.dipendente = x[0]);
+      }
     });
   }
-
-  private delay(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-  }
-
-
 }

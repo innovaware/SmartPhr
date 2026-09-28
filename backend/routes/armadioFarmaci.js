@@ -8,7 +8,7 @@ const Dipendenti = require("../models/dipendenti");
 router.get("/", async (req, res) => {
     try {
         // Get the redisDisabled flag from the app settings
-        redisDisabled = req.app.get("redisDisabled");
+      //  redisDisabled = req.app.get("redisDisabled");
 
         const getData = () => {
             return Armadio.find();
