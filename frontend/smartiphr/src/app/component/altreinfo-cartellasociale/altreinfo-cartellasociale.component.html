@@ -1,556 +1,355 @@
-<div class="tabcontent">
-
-    <table>
-      <tbody>
-        <tr>
-            <td><b>Motivo del ricovero</b></td>
-
-              <td></td>
-
-              <td></td>
-
-              <td></td>
-            </tr> 
-        <tr>
-            <td><input type="checkbox" slot="end" [(ngModel)]="data.perditaautonomia"  />Perdita dell’autonomia</td>
-
-              <td></td>
-
-              <td><input type="checkbox" slot="end" [(ngModel)]="data.alloggioinidoneo"  />Alloggio inidoneo</td>
-
-
-              <td></td>
-            </tr> 
-
-            <tr>
-                <td><input type="checkbox" slot="end" [(ngModel)]="data.statosalute"  />Stato di salute</td>
-    
-                  <td></td>
-    
-                  <td><input type="checkbox" slot="end" [(ngModel)]="data.impossibfamigliaassistere"  />Impossib. famiglia ad assistere</td>
-    
-    
-                  <td></td>
-                </tr> 
-
-
-
-                <tr>
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.rapportifamiliaridifficili"  />Rapporti familiari difficili</td>
-        
-                      <td></td>
-        
-                      <td><input type="checkbox" slot="end" [(ngModel)]="data.trasfdaaltro"  />Trasf.to da altro Istituto <br>
-                        <input class="input-cartelle" type="text" [(ngModel)]="data.istituto" placeholder="Inserisci nome Istituto">
-                    </td>
-        
-        
-                      <td></td>
-                </tr> 
-
-
-                <tr>
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.solitudine"  />Solitudine</td>
-        
-                      <td></td>
-        
-                      <td><input type="checkbox" slot="end" [(ngModel)]="data.altro"  />Altro <br>
-                        <input class="input-cartelle" type="text" [(ngModel)]="data.altrotext" >
-                    </td>
-        
-        
-                      <td></td>
-                </tr> 
-        <tr>
-          <td>
-            <h5>INV.CIVILE</h5>
-          </td>
-          <td>
-            <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-              [(ngModel)]="data.invaliditacivile" (change)="change()" >
-              <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-              <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-            </mat-radio-group>
-          </td>
-  
-          <td>
-            <h5>ASS.DI ACCOMPAGNAMENTO</h5>
-          </td>
-          <td>
-            <select matNativeControl class="custom-select" [(ngModel)]="data.assdiaccompagnamento">
-                <option selected="" value="">Seleziona ...</option>
-                <option value="0">NO</option>
-                <option value="1">IN CORSO</option>
-                <option value="2">SI</option>
-            </select>
-          </td>
-        </tr>
-  
-        <tr>
-          <td>
-            <label>
-              <h5>ACC.INTEGRATA L.104/92 </h5>
-            </label>
-          </td>
-          <td>
-            <select matNativeControl class="custom-select" [(ngModel)]="data.accintegrata">
-                <option selected="" value="">Seleziona ...</option>
-                <option value="0">NON RICHIESTA</option>
-                <option value="1">RICHIESTA</option>
-                <option value="2">OTTENUTA</option>
-            </select>
-          </td>
-  
-          <td>
-          </td>
-          <td>
-          </td>
-        </tr>
-
-
-
-        <tr>
-            <td>
-              <h5>ESENZIONE TICKET</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.esenzioneticket" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>AUSILI</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.ausili" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-              <h5>QUALI</h5>
-              <input class="input-cartelle" type="text" [(ngModel)]="data.ausilialtro" >
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>INTERDIZIONE</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.interdizione" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>INABILITAZIONE</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.inabilitazione" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>AMMINISTRATORE DI SOSTEGNO </h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.ammsostesgno" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-
-  
-        <tr>
-          <td>
-            <label>
-              <h5>MEDICO DI M.G. </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.medicomg" >
-          </td>
-          <td>
-            <label>
-              <h5>TEL: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.tel"  >
-          </td>
-        </tr>
-  
-        <br>
-  
-        <tr>
-          <td>
-            <h5 class="font-normal">REFERENTE : </h5>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.referente">
-          </td>
-          <td>
-            <label>
-              <h5>VIA: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.via" >
-          </td>
-  
-        </tr>
-  
-        <tr>
-          <td>
-            <h5>CITTA’</h5>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.citta" (change)="change()" >
-          </td>
-          <td>
-            <label>
-              <h5>TEL: </h5>
-            </label>
-          </td>
-          <td>
-            <input class="input-cartelle" type="text" [(ngModel)]="data.telref" (change)="change()" >
-          </td>
-        </tr>
-
-
-
-        <tr>
-            <td>
-              <h5>NUCLEO FAMILIARE (specificare Grado di parentela e recapito):</h5>
-            </td>
-            <td>
-                <textarea class="form-control value_input" rows="1" cols="150" [(ngModel)]="data.nucleo"  ></textarea>
-            </td>
-            <td> </td>
-            <td>
-            </td>
-          </tr>
-  
-  
-
-          <tr>
-            <td>
-              <h5>DISPONIBILITA’ ASSISTENZIALE  FAMILIARI </h5>
-            </td>
-            <td>
-                <select matNativeControl class="custom-select" [(ngModel)]="data.dispassFam">
-                    <option selected="" value="">Seleziona ...</option>
-                    <option value="0">ASSENTE</option>
-                    <option value="1">POSSIBILE</option>
-                    <option value="2">PRESENTE</option>
-                </select>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-          <tr>
-            <td>
-                <b>DISPONIBILITA’ DEI FAMILIARI</b>
-              <h5>Per visite in struttura</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.dispvisite" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>Ad ospitarlo per brevi periodi</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.ospiteperperiodi" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>Per accompagnarlo per visite specialistiche </h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.accpervisite" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <label>
-                <h5>ATTUALE ABITAZIONE </h5>
-              </label>
-            </td>
-            <td>
-              <select matNativeControl class="custom-select" [(ngModel)]="data.abitazione">
-                  <option selected="" value="">Seleziona ...</option>
-                  <option value="0">AFFITTO </option>
-                  <option value="1">USUFRUTTO </option>
-                  <option value="2">PROPRIETA’ </option>
-              </select>
-              <h5>Altro</h5>
-              <input class="input-cartelle" type="text" [(ngModel)]="data.abitazionealtro" >
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-          <tr>
-            <td>
-              <label>
-                <h5>DISLOCAZIONE </h5>
-              </label>
-            </td>
-            <td>
-              <select matNativeControl class="custom-select" [(ngModel)]="data.dislocazione">
-                  <option selected="" value="">Seleziona ...</option>
-                  <option value="0">ISOLATA </option>
-                  <option value="1">POCO SERVITA </option>
-                  <option value="2">CENTRALE E SERVITA </option>
-              </select>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-          
-          <tr>
-            <td>
-              <label>
-                <h5>BARRIERE ARCHIT.</h5>
-              </label>
-            </td>
-            <td>
-              <select matNativeControl class="custom-select" [(ngModel)]="data.barriere">
-                  <option selected="" value="">Seleziona ...</option>
-                  <option value="0">INT. ED EST </option>
-                  <option value="1">SOLO ESTERNE  </option>
-                  <option value="2">SOLO INTERNE  </option>
-                  <option value="3">ASSENTI    </option>
-              </select>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-
-
-
-
-
-          <tr>
-            <td>
-                <b>L’abitazione dispone dei seguenti servizi minimi?</b>
-              <h5>Bagno vasca/doccia</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.bagno" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>Telefono</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.telefono" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-          <tr>
-            <td>
-              <h5>Riscaldamento</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.riscaldamento" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-
-
-          <tr>
-            <td>
-                <b>AMBIENTE DI VITA</b>
-              <h5>Durante la sua vita ha cambiato spesso residenza?</h5>
-            </td>
-            <td>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                [(ngModel)]="data.cambiospessoresidenza" (change)="change()" >
-                <mat-radio-button class="example-radio-button" value='1'>SI</mat-radio-button>
-                <mat-radio-button class="example-radio-button" value='0'>NO</mat-radio-button>
-              </mat-radio-group>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-
-
-
-          <tr>
-            <td>
-              <label>
-                <h5>Quali contatti mantiene con il suo ambiente di vita </h5>
-              </label>
-            </td>
-            <td>
-              <select matNativeControl class="custom-select" [(ngModel)]="data.contattimantenuti">
-                  <option selected="" value="">Seleziona ...</option>
-                  <option value="0">Amici </option>
-                  <option value="1">Familiari  </option>
-                  <option value="2">Vicinato</option>
-              </select>
-            </td>
-    
-            <td>
-            </td>
-            <td>
-            </td>
-          </tr>
-
-      </tbody>
-    </table>
-  
-  </div>
-  
-  <!--
-  <div mat-dialog-actions *ngIf="!disable">
-    <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="true">Chiudi</button>
-    <button mat-button class="button-insert" (click)="save()">Salva</button>
-  </div> -->
-  
+<div class="container-fluid py-3 cartella-sociale-container">
+
+    <!-- Motivo del ricovero -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title m-0 text-primary fw-bold">Motivo del Ricovero</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="perditaautonomia" [(ngModel)]="data.perditaautonomia">
+                        <label class="form-check-label" for="perditaautonomia">Perdita dell’autonomia</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="alloggioinidoneo" [(ngModel)]="data.alloggioinidoneo">
+                        <label class="form-check-label" for="alloggioinidoneo">Alloggio inidoneo</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="statosalute" [(ngModel)]="data.statosalute">
+                        <label class="form-check-label" for="statosalute">Stato di salute</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="impossibfamigliaassistere" [(ngModel)]="data.impossibfamigliaassistere">
+                        <label class="form-check-label" for="impossibfamigliaassistere">Impossibilità famiglia ad assistere</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="rapportifamiliaridifficili" [(ngModel)]="data.rapportifamiliaridifficili">
+                        <label class="form-check-label" for="rapportifamiliaridifficili">Rapporti familiari difficili</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <div class="form-check form-switch custom-switch-card">
+                        <input class="form-check-input" type="checkbox" id="solitudine" [(ngModel)]="data.solitudine">
+                        <label class="form-check-label" for="solitudine">Solitudine</label>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-check form-switch custom-switch-card mb-2">
+                        <input class="form-check-input" type="checkbox" id="trasfdaaltro" [(ngModel)]="data.trasfdaaltro">
+                        <label class="form-check-label" for="trasfdaaltro">Trasferimento da altro Istituto</label>
+                    </div>
+                    <div *ngIf="data.trasfdaaltro" class="mt-2">
+                        <input class="form-control" type="text" [(ngModel)]="data.istituto" placeholder="Inserisci il nome dell'Istituto">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-check form-switch custom-switch-card mb-2">
+                        <input class="form-check-input" type="checkbox" id="altro" [(ngModel)]="data.altro">
+                        <label class="form-check-label" for="altro">Altro motivo</label>
+                    </div>
+                    <div *ngIf="data.altro" class="mt-2">
+                        <input class="form-control" type="text" [(ngModel)]="data.altrotext" placeholder="Specificare il motivo">
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Situazione Socio-Sanitaria -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title m-0 text-primary fw-bold">Situazione Socio-Sanitaria e Tutela</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3 align-items-center">
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Invalidità Civile</label>
+                    <mat-radio-group [(ngModel)]="data.invaliditacivile" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Assegno di Accompagnamento</label>
+                    <select class="form-select" [(ngModel)]="data.assdiaccompagnamento">
+                        <option value="">Seleziona...</option>
+                        <option value="0">NO</option>
+                        <option value="1">IN CORSO</option>
+                        <option value="2">SÌ</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Acc. Integrata L.104/92</label>
+                    <select class="form-select" [(ngModel)]="data.accintegrata">
+                        <option value="">Seleziona...</option>
+                        <option value="0">NON RICHIESTA</option>
+                        <option value="1">RICHIESTA</option>
+                        <option value="2">OTTENUTA</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Esenzione Ticket</label>
+                    <mat-radio-group [(ngModel)]="data.esenzioneticket" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-md-6 col-lg-8">
+                    <label class="form-label fw-semibold text-secondary">Ausili</label>
+                    <div class="d-flex align-items-center gap-3">
+                        <mat-radio-group [(ngModel)]="data.ausili" (change)="change()" class="d-flex gap-3">
+                            <mat-radio-button [value]="true">SÌ</mat-radio-button>
+                            <mat-radio-button [value]="false">NO</mat-radio-button>
+                        </mat-radio-group>
+                        <input *ngIf="data.ausili === true " class="form-control" type="text" [(ngModel)]="data.ausilialtro" placeholder="Quali ausili?">
+                    </div>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Interdizione</label>
+                    <mat-radio-group [(ngModel)]="data.interdizione" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Inabilitazione</label>
+                    <mat-radio-group [(ngModel)]="data.inabilitazione" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Amministratore di Sostegno</label>
+                    <mat-radio-group [(ngModel)]="data.ammsostesgno" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Medici e Referenti -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title m-0 text-primary fw-bold">Medici e Referenti</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6 col-lg-4">
+                    <label class="form-label fw-semibold text-secondary">Medico di M.G.</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.medicomg">
+                </div>
+
+                <div class="col-md-6 col-lg-2">
+                    <label class="form-label fw-semibold text-secondary">Tel. Medico</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.tel">
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Referente</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.referente">
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Indirizzo (Via)</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.via">
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Città</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.citta" (change)="change()">
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Tel. Referente</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.telref" (change)="change()">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Famiglia e Supporto -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title m-0 text-primary fw-bold">Famiglia e Supporto Assistenziale</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-12">
+                    <label class="form-label fw-semibold text-secondary">Nucleo Familiare <small class="fw-normal text-muted">(Grado di parentela e recapito)</small></label>
+                    <textarea class="form-control" rows="2" [(ngModel)]="data.nucleo"></textarea>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Disponibilità Assistenziale Familiari</label>
+                    <select class="form-select" [(ngModel)]="data.dispassFam">
+                        <option value="">Seleziona...</option>
+                        <option value="0">ASSENTE</option>
+                        <option value="1">POSSIBILE</option>
+                        <option value="2">PRESENTE</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <h6 class="text-secondary fw-bold mb-3">Disponibilità specifica dei familiari:</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Visite in struttura</label>
+                            <mat-radio-group [(ngModel)]="data.dispvisite" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Ospitare per brevi periodi</label>
+                            <mat-radio-group [(ngModel)]="data.ospiteperperiodi" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Accompagnamento visite</label>
+                            <mat-radio-group [(ngModel)]="data.accpervisite" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <!-- Abitazione e Ambiente di Vita -->
+    <div class="card shadow-sm border-0 mb-4">
+        <div class="card-header bg-white border-bottom py-3">
+            <h5 class="card-title m-0 text-primary fw-bold">Abitazione e Ambiente di Vita</h5>
+        </div>
+        <div class="card-body">
+            <div class="row g-3">
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Attuale Abitazione</label>
+                    <select class="form-select" [(ngModel)]="data.abitazione">
+                        <option value="">Seleziona...</option>
+                        <option value="0">AFFITTO</option>
+                        <option value="1">USUFRUTTO</option>
+                        <option value="2">PROPRIETÀ</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Altro tipo abitazione</label>
+                    <input class="form-control" type="text" [(ngModel)]="data.abitazionealtro">
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Dislocazione</label>
+                    <select class="form-select" [(ngModel)]="data.dislocazione">
+                        <option value="">Seleziona...</option>
+                        <option value="0">ISOLATA</option>
+                        <option value="1">POCO SERVITA</option>
+                        <option value="2">CENTRALE E SERVITA</option>
+                    </select>
+                </div>
+
+                <div class="col-md-6 col-lg-3">
+                    <label class="form-label fw-semibold text-secondary">Barriere Architettoniche</label>
+                    <select class="form-select" [(ngModel)]="data.barriere">
+                        <option value="">Seleziona...</option>
+                        <option value="0">INT. ED EST.</option>
+                        <option value="1">SOLO ESTERNE</option>
+                        <option value="2">SOLO INTERNE</option>
+                        <option value="3">ASSENTI</option>
+                    </select>
+                </div>
+
+                <div class="col-12 mt-4">
+                    <h6 class="text-secondary fw-bold mb-3">Servizi minimi nell'abitazione:</h6>
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Bagno vasca/doccia</label>
+                            <mat-radio-group [(ngModel)]="data.bagno" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Telefono</label>
+                            <mat-radio-group [(ngModel)]="data.telefono" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label class="form-label text-muted d-block fs-7">Riscaldamento</label>
+                            <mat-radio-group [(ngModel)]="data.riscaldamento" (change)="change()" class="d-flex gap-3">
+                                <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                                <mat-radio-button [value]="0">NO</mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                </div>
+
+                <hr class="my-4 text-muted opacity-25">
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary d-block">Ha cambiato spesso residenza?</label>
+                    <mat-radio-group [(ngModel)]="data.cambiospessoresidenza" (change)="change()" class="d-flex gap-3 mt-1">
+                        <mat-radio-button [value]="1">SÌ</mat-radio-button>
+                        <mat-radio-button [value]="0">NO</mat-radio-button>
+                    </mat-radio-group>
+                </div>
+
+                <div class="col-md-6">
+                    <label class="form-label fw-semibold text-secondary">Contatti con ambiente di vita</label>
+                    <select class="form-select" [(ngModel)]="data.contattimantenuti">
+                        <option value="">Seleziona...</option>
+                        <option value="0">Amici</option>
+                        <option value="1">Familiari</option>
+                        <option value="2">Vicinato</option>
+                    </select>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>

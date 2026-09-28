@@ -30,7 +30,8 @@ export class DialogPisicologicaComponent implements OnInit {
   ngOnInit() {}
 
   save() {
-    this.dialogRef.close(this.schedaPsico);
+    this.data.paziente.schedaPsico = this.schedaPsico;
+    this.dialogRef.close(this.data.paziente);
    // this.data.paziente.schedaPsico.update(this.schedaPsico);
   }
 }

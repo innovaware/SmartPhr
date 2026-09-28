@@ -46,22 +46,26 @@ export class PsicologicaComponent implements OnInit {
       width: "1024px",
     });
 
-    dialogRef.afterClosed().subscribe((result: schedaPsico) => {
+    dialogRef.afterClosed().subscribe((result: Paziente) => {
       console.log("result insert paziente", result);
       if (result != undefined) {
-        this.pazienteService
-          .updateschedaPsicologica(paziente._id, result)
-          .subscribe(
-            (succ) => {
-              console.log("Scheda Psicologica Aggiornata. Result:", succ);
-              paziente.schedaPsico = result;
-            },
-            (err) => {
-              this.messageService.showMessageError(
-                "Errore Inserimento Paziente (" + err["status"] + ")"
-              );
-            }
-          );
+        //this.pazienteService
+        //  .updateschedaPsicologica(paziente._id, result)
+        //  .subscribe(
+        //    (succ) => {
+        //      console.log("Scheda Psicologica Aggiornata. Result:", succ);
+        //      paziente.schedaPsico = result;
+        //    },
+        //    (err) => {
+        //      this.messageService.showMessageError(
+        //        "Errore Inserimento Paziente (" + err["status"] + ")"
+        //      );
+        //    }
+        //  );
+        this.pazienteService.save(result).then((value: Paziente) => {
+          console.log(`Patient  saved`, value);
+          //this.dialogRef.close(this.paziente);
+        });
       }
     });
   }

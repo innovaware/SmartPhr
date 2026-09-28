@@ -1,188 +1,208 @@
-<div class="containter pad" *ngIf="!isExternal">
-  <div class="row">
-    <div class="col ">
-      <h1 class="title">GESTIONE PERMESSI</h1>
+<div class="container pad" *ngIf="!isExternal">
+    <!-- Intestazione Pagina -->
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">Gestione Permessi</h1>
+        </div>
     </div>
-  </div>
 
+    <hr class="mb-4">
 
-
-  <div class="row">
-    <div class="col">
-      <mat-form-field appearance="standard">
-        <mat-label>Cerca</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
-      </mat-form-field>
+    <!-- Campo Ricerca -->
+    <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Cerca</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Cerca operatore o data..." #input>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
     </div>
-  </div>
 
+    <!-- Tabella Gestione Permessi -->
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
+                <table mat-table [dataSource]="dataSource" style="width: 100%;">
 
+                    <!-- Nome -->
+                    <ng-container matColumnDef="nome">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Nome </th>
+                        <td mat-cell *matCellDef="let element"> {{dipendente.nome}} </td>
+                    </ng-container>
 
-  <div class="row">
-    <div class="col">
-      <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                    <!-- Cognome -->
+                    <ng-container matColumnDef="cognome">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Cognome </th>
+                        <td mat-cell *matCellDef="let element"> {{dipendente.cognome}} </td>
+                    </ng-container>
 
-        <ng-container matColumnDef="action">
-          <th mat-header-cell *matHeaderCellDef>
-          </th>
-          <td mat-cell *matCellDef="let row">
-            <button mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row)">Invia Risposta</button>
-          </td>
-        </ng-container>
+                    <!-- Codice Fiscale -->
+                    <ng-container matColumnDef="cf">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Cod. Fiscale </th>
+                        <td mat-cell *matCellDef="let element"> {{dipendente.cf}} </td>
+                    </ng-container>
 
+                    <!-- Ora Inizio -->
+                    <ng-container matColumnDef="dataInizio">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Inizio Permesso </th>
+                        <td mat-cell *matCellDef="let element"> {{element.oraInizio}} </td>
+                    </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="nome">
-          <th mat-header-cell *matHeaderCellDef> Nome </th>
-          <td mat-cell *matCellDef="let element"> {{dipendente.nome}} </td>
-        </ng-container>
+                    <!-- Ora Fine -->
+                    <ng-container matColumnDef="dataFine">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Fine Permesso </th>
+                        <td mat-cell *matCellDef="let element"> {{element.oraFine}} </td>
+                    </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="cognome">
-          <th mat-header-cell *matHeaderCellDef> Cognome </th>
-          <td mat-cell *matCellDef="let element"> {{dipendente.cognome}} </td>
-        </ng-container>
+                    <!-- Data Richiesta -->
+                    <ng-container matColumnDef="dataRichiesta">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Richiesta </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
+                    </ng-container>
 
+                    <!-- Approvata Checkbox -->
+                    <ng-container matColumnDef="accettata">
+                        <th mat-header-cell *matHeaderCellDef class="text-center fw-bold text-uppercase"> Approvata </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            <div class="form-check form-switch d-inline-block">
+                                <input class="form-check-input" type="checkbox" role="switch" [(ngModel)]="element.accettata" [disabled]="element.closed" style="cursor: pointer; width: 2.2em; height: 1.1em;">
+                            </div>
+                        </td>
+                    </ng-container>
 
+                    <!-- Azione Invia Risposta -->
+                    <ng-container matColumnDef="action">
+                        <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Azione </th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-raised-button color="primary" [disabled]="row.closed" (click)="sendResp(row)" title="Invia Risposta">
+                                <mat-icon>send</mat-icon>
+                                <span class="ms-1">Invia Risposta</span>
+                            </button>
+                        </td>
+                    </ng-container>
 
-        <!-- Symbol Column -->
-        <ng-container matColumnDef="cf">
-          <th mat-header-cell *matHeaderCellDef> Cod.Fiscale </th>
-          <td mat-cell *matCellDef="let element"> {{dipendente.cf}} </td>
-        </ng-container>
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-hover"></tr>
+                </table>
 
-        <!-- Position Column -->
-        <ng-container matColumnDef="dataInizio">
-          <th mat-header-cell *matHeaderCellDef> Inizio Permesso </th>
-          <td mat-cell *matCellDef="let element"> {{element.oraInizio}} </td>
-        </ng-container>
-
-        <!-- Name Column -->
-        <ng-container matColumnDef="dataFine">
-          <th mat-header-cell *matHeaderCellDef> Fine Permesso </th>
-          <td mat-cell *matCellDef="let element"> {{element.oraFine}} </td>
-        </ng-container>
-
-        <!-- Weight Column -->
-        <ng-container matColumnDef="dataRichiesta">
-          <th mat-header-cell *matHeaderCellDef> Giorno richiesta </th>
-          <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
-        </ng-container>
-
-
-
-
-
-
-        <ng-container matColumnDef="accettata">
-          <th mat-header-cell *matHeaderCellDef> Approvata </th>
-          <td mat-cell *matCellDef="let element">  <input type="checkbox" slot="end" [(ngModel)]="element.accettata" [disabled]=element.closed /></td>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-      </table>
-
-
-      <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
-      </mat-paginator>
+                <!-- Paginatore -->
+                <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
+                </mat-paginator>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
 
-
-
-
-
-
-<div *ngIf="isExternal">
-  <br>
-  <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingPermesso">
-    <button mat-button class="button-insert" (click)="addPermesso()">Aggiungi Richiesta Permesso</button>
-  </div>
-  <br><br>
-
-  <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-       *ngIf="addingPermesso && !uploadingPermesso">
-    <h5>Inserisci le date per effettuare la tua richiesta</h5>
-    <div class="row" style="width: 40%;">
-      <div class="col-4">
-        <mat-form-field appearance="fill">
-          <mat-label>Data permesso</mat-label>
-          <input matInput [matDatepicker]="dataPermesso" [(ngModel)]="nuovoPermesso.dataPermesso">
-          <mat-datepicker-toggle matSuffix [for]="dataPermesso"></mat-datepicker-toggle>
-          <mat-datepicker #dataPermesso></mat-datepicker>
-        </mat-form-field>
-      </div>
-
-      <div class="col-3">
-        <input type="time" [(ngModel)]="nuovoPermesso.oraInizio">
-      </div>
-
-      <div class="col-3">
-        <input type="time" [(ngModel)]="nuovoPermesso.oraFine">
-      </div>
-
-      <div class="col-2">
-        <button mat-button class="button-insert" (click)="savePermesso(nuovoPermesso)">Salva</button>
-      </div>
+<!-- VISTA ESTERNA (RICHIESTA PERMESSO DIPENDENTE) -->
+<div class="container pad" *ngIf="isExternal">
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">Le mie Richieste Permessi</h1>
+        </div>
+        <div class="col-auto" *ngIf="!addingPermesso">
+            <button mat-raised-button color="primary" (click)="addPermesso()">
+                <mat-icon>add_circle</mat-icon>
+                <span class="ms-1">Aggiungi Richiesta Permesso</span>
+            </button>
+        </div>
     </div>
-  </div>
 
+    <hr class="mb-4">
 
+    <!-- Form Inserimento Nuovo Permesso -->
+    <mat-card class="mb-4 p-3 mat-elevation-z2" *ngIf="addingPermesso && !uploadingPermesso">
+        <mat-card-header class="mb-3">
+            <mat-card-title style="font-size: 1.1rem; color: #1976d2;">Inserisci i dettagli del permesso</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row g-3 align-items-center">
+                <!-- Data Permesso -->
+                <div class="col-md-4 col-sm-12">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Data Permesso</mat-label>
+                        <input matInput [matDatepicker]="dataPermesso" [(ngModel)]="nuovoPermesso.dataPermesso" placeholder="Scegli data">
+                        <mat-datepicker-toggle matSuffix [for]="dataPermesso"></mat-datepicker-toggle>
+                        <mat-datepicker #dataPermesso></mat-datepicker>
+                    </mat-form-field>
+                </div>
 
+                <!-- Ora Inizio -->
+                <div class="col-md-3 col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Ora Inizio</mat-label>
+                        <input matInput type="time" [(ngModel)]="nuovoPermesso.oraInizio">
+                        <mat-icon matSuffix>schedule</mat-icon>
+                    </mat-form-field>
+                </div>
 
-  <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+                <!-- Ora Fine -->
+                <div class="col-md-3 col-sm-6">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Ora Fine</mat-label>
+                        <input matInput type="time" [(ngModel)]="nuovoPermesso.oraFine">
+                        <mat-icon matSuffix>schedule</mat-icon>
+                    </mat-form-field>
+                </div>
 
-    <ng-container matColumnDef="action">
-      <th mat-header-cell *matHeaderCellDef>
-      </th>
-      <td mat-cell *matCellDef="let row">
-        <button mat-button (click)="delete(row)">
-          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-          </svg>
-        </button>
-      </td>
-    </ng-container>
+                <!-- Azioni Form -->
+                <div class="col-md-2 col-sm-12 d-flex justify-content-end gap-2 mb-3 mb-md-0">
+                    <button mat-raised-button color="primary" (click)="savePermesso(nuovoPermesso)" title="Salva">
+                        <mat-icon>save</mat-icon>
+                        <span class="ms-1">Salva</span>
+                    </button>
+                    <button mat-button (click)="addingPermesso = false" title="Annulla">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
+    <!-- Tabella Permessi Personali -->
+    <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
+        <table mat-table [dataSource]="dataSource" style="width: 100%;">
 
+            <!-- Data Permesso -->
+            <ng-container matColumnDef="dataPermesso">
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Permesso </th>
+                <td mat-cell *matCellDef="let element"> {{element.dataPermesso | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
 
+            <!-- Ora Inizio -->
+            <ng-container matColumnDef="oraInizio">
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Ora Inizio </th>
+                <td mat-cell *matCellDef="let element"> {{element.oraInizio}} </td>
+            </ng-container>
 
-    <!-- Position Column -->
-    <ng-container matColumnDef="dataPermesso">
-      <th mat-header-cell *matHeaderCellDef> Data Permesso </th>
-      <td mat-cell *matCellDef="let element"> {{element.dataPermesso | date: 'dd/MM/yyyy'}} </td>
-    </ng-container>
+            <!-- Ora Fine -->
+            <ng-container matColumnDef="oraFine">
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Ora Fine </th>
+                <td mat-cell *matCellDef="let element"> {{element.oraFine}} </td>
+            </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="oraInizio">
-      <th mat-header-cell *matHeaderCellDef> Ora Inizio Permesso </th>
-      <td mat-cell *matCellDef="let element"> {{element.oraInizio}} </td>
-    </ng-container>
+            <!-- Data Richiesta -->
+            <ng-container matColumnDef="dataRichiesta">
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Richiesta </th>
+                <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
+            </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="oraFine">
-      <th mat-header-cell *matHeaderCellDef> Ora Fine Permesso </th>
-      <td mat-cell *matCellDef="let element"> {{element.oraFine }} </td>
-    </ng-container>
+            <!-- Azioni -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Azioni </th>
+                <td mat-cell *matCellDef="let row" class="text-end">
+                    <button mat-icon-button color="warn" (click)="delete(row)" title="Elimina Richiesta">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="dataRichiesta">
-      <th mat-header-cell *matHeaderCellDef> Giorno richiesta </th>
-      <td mat-cell *matCellDef="let element"> {{element.dataRichiesta | date: 'dd/MM/yyyy'}} </td>
-    </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsExternal"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsExternal;" class="table-row-hover"></tr>
+        </table>
 
-
-
-    <tr mat-header-row *matHeaderRowDef="displayedColumnsExternal"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumnsExternal;"></tr>
-  </table>
-
-  <div class="paginator-container">
-
-    <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons
-                   aria-label="Select page of periodic elements">
-    </mat-paginator>
-  </div>
+        <!-- Paginatore -->
+        <mat-paginator [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Seleziona pagina">
+        </mat-paginator>
+    </div>
 </div>

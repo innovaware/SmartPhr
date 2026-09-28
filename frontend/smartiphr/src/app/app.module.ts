@@ -178,7 +178,7 @@ import { RegisterComponent } from './pages/register/register.component';
 import { RegisterInformationDipendenteComponent } from './component/register-information-dipendente/register-information-dipendente.component';
 import { GeneralePersonaleComponent } from './pages/generale-personale/generale-personale.component';
 import { EsamiPrivacyPersonaleComponent } from './pages/esami-privacy-personale/esami-privacy-personale.component';
-//import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
+import { LavoroPersonaleComponent } from './pages/lavoro-personale/lavoro-personale.component';
 import { QualitaGeneraleComponent } from "./pages/areaqualita-generale/areaqualita-generale.component";
 import { NominaDPOComponent } from "./pages/nominadpo/nominadpo.component";
 import { NominaResponsabileComponent } from "./pages/nomina-responsabile/nomina-responsabile.component";
@@ -525,7 +525,7 @@ const pipes = [
     RegisterInformationDipendenteComponent,
     GeneralePersonaleComponent,
     EsamiPrivacyPersonaleComponent,
-    //LavoroPersonaleComponent,
+    LavoroPersonaleComponent,
     QualitaGeneraleComponent,
     ElencoModulisticaComponent,
     NominaDPOComponent,

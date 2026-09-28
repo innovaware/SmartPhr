@@ -26,6 +26,7 @@ export class SchedaInfermeristica {
 
 
     this.diagnosi = "";
+    this.rassegnaAnamnestica = "";
     this.intolleranzeAlimentari = "";
     this.allergie = "";
     this.infezioni = "";
@@ -41,6 +42,7 @@ export class SchedaInfermeristica {
 
 
   diagnosi: string;
+  rassegnaAnamnestica?: string;
   intolleranzeAlimentari: string;
   allergie: string;
   infezioni: string;

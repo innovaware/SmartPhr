@@ -1,238 +1,231 @@
-<div class="containter pad" *ngIf="!isExternal">
-  <div class="row">
-    <div class="col ">
-      <h1 class="title">GESTIONE CAMBI TURNI</h1>
+<div class="container pad" *ngIf="!isExternal">
+    <!-- Intestazione Pagina -->
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">Gestione Cambi Turni</h1>
+        </div>
     </div>
-  </div>
 
+    <hr class="mb-4">
 
-
-  <div class="row">
-    <div class="col">
-      <mat-form-field appearance="standard">
-        <mat-label>Cerca</mat-label>
-        <input matInput (keyup)="applyFilter($event)" placeholder="Cerca qui..." #input>
-      </mat-form-field>
+    <!-- Campo Ricerca -->
+    <div class="row mb-3">
+        <div class="col-md-6 col-sm-12">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Cerca</mat-label>
+                <input matInput (keyup)="applyFilter($event)" placeholder="Cerca file o note..." #input>
+                <mat-icon matSuffix>search</mat-icon>
+            </mat-form-field>
+        </div>
     </div>
-  </div>
 
+    <!-- Tabella Gestione Cambi Turni -->
+    <div class="row">
+        <div class="col">
+            <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
+                <table mat-table [dataSource]="cambiDataSource" style="width: 100%;">
 
+                    <!-- Documento PDF -->
+                    <ng-container matColumnDef="file">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Documento </th>
+                        <td mat-cell *matCellDef="let row">
+                            <button mat-icon-button color="primary" (click)="showDocument(row)" title="Visualizza Documento">
+                                <mat-icon color="warn">picture_as_pdf</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
 
-  <div class="row">
-    <div class="col">
-        <table mat-table [dataSource]="cambiDataSource" class="mat-elevation-z8">
+                    <!-- Nome file -->
+                    <ng-container matColumnDef="namefile">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Nome File </th>
+                        <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
+                    </ng-container>
 
+                    <!-- Data Inserimento -->
+                    <ng-container matColumnDef="dateInizio">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Inserimento </th>
+                        <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy HH:mm'}} </td>
+                    </ng-container>
 
-            <ng-container matColumnDef="file">
-                <th mat-header-cell *matHeaderCellDef>
-                    File
-                </th>
-                <td mat-cell *matCellDef="let row" style="text-align: right;">
-                    <button mat-button (click)="showDocument(row)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                        </svg>
+                    <!-- Note -->
+                    <ng-container matColumnDef="note">
+                        <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Note </th>
+                        <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
+                    </ng-container>
+
+                    <!-- Stato Approvazione -->
+                    <ng-container matColumnDef="accettata">
+                        <th mat-header-cell *matHeaderCellDef class="text-center fw-bold text-uppercase"> Stato </th>
+                        <td mat-cell *matCellDef="let element" class="text-center">
+                            <span class="badge bg-success text-white px-2 py-1" *ngIf="element.closed && element.accettata">
+                                <mat-icon style="font-size: 14px; height: 14px; width: 14px;" class="align-middle me-1">check_circle</mat-icon>
+                                Approvata
+                            </span>
+                            <span class="badge bg-danger text-white px-2 py-1" *ngIf="element.closed && !element.accettata">
+                                <mat-icon style="font-size: 14px; height: 14px; width: 14px;" class="align-middle me-1">cancel</mat-icon>
+                                Rifiutata
+                            </span>
+                            <span class="badge bg-warning text-dark px-2 py-1" *ngIf="!element.closed">
+                                In attesa
+                            </span>
+                        </td>
+                    </ng-container>
+
+                    <!-- Azione Accetta -->
+                    <ng-container matColumnDef="accetta">
+                        <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Approva </th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-icon-button color="primary" *ngIf="!row.closed" [disabled]="row.closed" (click)="sendAccetto(row)" title="Accetta Cambio Turno">
+                                <mat-icon class="text-success">check_circle</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <!-- Azione Rifiuta -->
+                    <ng-container matColumnDef="rifiuta">
+                        <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Rifiuta </th>
+                        <td mat-cell *matCellDef="let row" class="text-end">
+                            <button mat-icon-button color="warn" *ngIf="!row.closed" [disabled]="row.closed" (click)="sendResp(row)" title="Rifiuta Cambio Turno">
+                                <mat-icon color="warn">cancel</mat-icon>
+                            </button>
+                        </td>
+                    </ng-container>
+
+                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="table-row-hover"></tr>
+                </table>
+
+                <!-- Paginatore -->
+                <mat-paginator #paginatorCambio [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
+                </mat-paginator>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- VISTA ESTERNA (RICHIESTA CAMBIO TURNO DIPENDENTE) -->
+<div class="container pad" *ngIf="isExternal">
+    <div class="row align-items-center mb-3">
+        <div class="col">
+            <h1 class="title m-0">I miei Cambi Turni</h1>
+        </div>
+        <div class="col-auto" *ngIf="!addingCambio">
+            <button mat-raised-button color="primary" (click)="addCambio()">
+                <mat-icon>add_circle</mat-icon>
+                <span class="ms-1">Aggiungi Documento</span>
+            </button>
+        </div>
+    </div>
+
+    <hr class="mb-4">
+
+    <!-- Form Inserimento Cambio Turno -->
+    <mat-card class="mb-4 p-3 mat-elevation-z2" *ngIf="addingCambio && !uploadingCambio">
+        <mat-card-header class="mb-3">
+            <mat-card-title style="font-size: 1.1rem; color: #1976d2;">Nuova Richiesta Cambio Turno</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+            <div class="row g-3">
+                <div class="col-md-12">
+                    <label class="form-label fw-bold">Seleziona Documento (PDF)</label>
+                    <input class="form-control" type="file" (change)="uploadCambio($event)" accept=".pdf" *ngIf="!uploadingCambio">
+                    <label *ngIf="uploadingCambio" class="text-muted">Caricamento in corso ...</label>
+                </div>
+
+                <div class="col-md-9">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Note</mat-label>
+                        <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCambioTurno.note">
+                        <mat-icon matSuffix>note</mat-icon>
+                    </mat-form-field>
+                </div>
+
+                <div class="col-md-3 d-flex align-items-center justify-content-end gap-2">
+                    <button mat-raised-button color="primary" (click)="saveCambio(nuovoCambioTurno)" title="Salva">
+                        <mat-icon>save</mat-icon>
+                        <span class="ms-1">Salva</span>
                     </button>
-                </td>
-            </ng-container>
+                    <button mat-button (click)="addingCambio = false" title="Annulla">
+                        <mat-icon>close</mat-icon>
+                    </button>
+                </div>
+            </div>
+        </mat-card-content>
+    </mat-card>
 
+    <!-- Spinner Caricamento -->
+    <div class="my-4" *ngIf="uploadingCambio">
+        <div class="d-flex align-items-center gap-3">
+            <mat-spinner [diameter]="28"></mat-spinner>
+            <span class="text-muted">Caricamento in corso ...</span>
+        </div>
+    </div>
 
-            <ng-container matColumnDef="accetta">
-                <th mat-header-cell *matHeaderCellDef>
-                </th>
-                <td mat-cell *matCellDef="let row" style="text-align: right;">
-                    <ng-container *ngIf="!row.closed">
-                        <button mat-button class="action-button" [disabled]=row.closed
-                                (click)="sendAccetto(row)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-check-lg" style="color:green;" viewBox="0 0 16 16">
-                                <path d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z" />
-                            </svg>
-                        </button>
-                    </ng-container>
-                </td>
-            </ng-container>
+    <!-- Avviso Nessun Documento -->
+    <div *ngIf="!cambiturnoDoc || cambiturnoDoc.length === 0" class="alert alert-info text-center my-3" role="alert">
+        <mat-icon class="align-middle me-1">info</mat-icon>
+        Nessun documento presente in archivio.
+    </div>
 
-            <ng-container matColumnDef="rifiuta">
-                <th mat-header-cell *matHeaderCellDef>
+    <!-- Tabella Cambi Turni Personali -->
+    <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3" *ngIf="cambiturnoDoc && cambiturnoDoc.length > 0">
+        <table mat-table [dataSource]="cambiDataSource" style="width: 100%;">
 
-                </th>
-                <td mat-cell *matCellDef="let row" style="text-align: right;">
-                    <ng-container *ngIf="!row.closed">
-                        <button mat-button class="action-button" [disabled]=row.closed
-                                (click)="sendResp(row)">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-x-circle" style="color:red;" viewBox="0 0 16 16">
-                                <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14m0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16" />
-                                <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708" />
-                            </svg>
-                        </button>
-                    </ng-container>
-
-
-                </td>
-            </ng-container>
-
-
-
-
+            <!-- Nome File -->
             <ng-container matColumnDef="namefile">
-                <th mat-header-cell *matHeaderCellDef> Nome file </th>
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Nome File </th>
                 <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
             </ng-container>
 
+            <!-- Data Inserimento -->
             <ng-container matColumnDef="dateInizio">
-                <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy H:mm'}} </td>
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Data Inserimento </th>
+                <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
             </ng-container>
 
+            <!-- Note -->
             <ng-container matColumnDef="note">
-                <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                <th mat-header-cell *matHeaderCellDef class="fw-bold text-uppercase"> Note </th>
+                <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
             </ng-container>
 
+            <!-- Stato Approvata -->
             <ng-container matColumnDef="accettata">
-                <th mat-header-cell *matHeaderCellDef> Approvata </th>
-                <td mat-cell *matCellDef="let element">
-                    <!-- <input type="checkbox" slot="end" [(ngModel)]="element.accettata" (change)="toggleCheckbox(element)"
-            [disabled]=element.closed /> -->
-                    <ng-container *ngIf="element.closed && element.accettata">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" style="color:green;" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                        </svg>
-                    </ng-container>
-                    <ng-container *ngIf="element.closed && !element.accettata">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color: red;" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
-                        </svg>
-                    </ng-container>
-
+                <th mat-header-cell *matHeaderCellDef class="text-center fw-bold text-uppercase"> Stato </th>
+                <td mat-cell *matCellDef="let element" class="text-center">
+                    <span class="badge bg-success text-white px-2 py-1" *ngIf="element.closed && element.accettata">
+                        <mat-icon style="font-size: 14px; height: 14px; width: 14px;" class="align-middle me-1">check_circle</mat-icon>
+                        Approvata
+                    </span>
+                    <span class="badge bg-danger text-white px-2 py-1" *ngIf="element.closed && !element.accettata">
+                        <mat-icon style="font-size: 14px; height: 14px; width: 14px;" class="align-middle me-1">cancel</mat-icon>
+                        Rifiutata
+                    </span>
+                    <span class="badge bg-warning text-dark px-2 py-1" *ngIf="!element.closed">
+                        In attesa
+                    </span>
                 </td>
             </ng-container>
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            <!-- Azioni -->
+            <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef class="text-end fw-bold text-uppercase"> Azioni </th>
+                <td mat-cell *matCellDef="let row" class="text-end">
+                    <button mat-icon-button color="primary" (click)="showDocument(row)" title="Visualizza PDF">
+                        <mat-icon color="warn">picture_as_pdf</mat-icon>
+                    </button>
+                    <button mat-icon-button color="warn" *ngIf="!row.closed" (click)="deleteCambioTurno(row)" title="Elimina Richiesta">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="DisplayedColumns1"></tr>
+            <tr mat-row *matRowDef="let row; columns: DisplayedColumns1;" class="table-row-hover"></tr>
         </table>
 
-
-        <mat-paginator #paginatorCambio [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Select page of periodic elements">
+        <!-- Paginatore -->
+        <mat-paginator #paginatorCambio [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Seleziona pagina">
         </mat-paginator>
     </div>
-  </div>
 </div>
-
-
-
-<div *ngIf="isExternal">
-    <br>
-    <div class="notPresent" style="margin-bottom: 10px;" *ngIf="!addingCambio">
-        <button mat-button class="button-insert" (click)="addCambio()">Aggiungi Documento</button>
-    </div>
-    <br>
-    <br>
-    <div class="container-flex" class="notPresent" style="margin-bottom: 10px;"
-         *ngIf="addingCambio && !uploadingCambio">
-        <div class="row">
-            <div class="col">
-                <input type="file" (change)="uploadCambio($event)" accept=".pdf" *ngIf="!uploadingCambio">
-                <label *ngIf="uploadingCambio">Caricamento in corso ...</label>
-            </div>
-            <div class="col">
-            </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <mat-form-field class="full" appearance="fill">
-                    <mat-label>Note</mat-label>
-                    <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoCambioTurno.note">
-                </mat-form-field>
-            </div>
-            <div class="col-2">
-                <button mat-button class="button-insert" (click)="saveCambio(nuovoCambioTurno)">Salva</button>
-            </div>
-        </div>
-    </div>
-
-    <div>
-        <div class="container-flex" style="margin: 20px 0px 20px 0px;" *ngIf="uploadingCambio">
-            <div class="row">
-                <div class="col-1">
-                    <mat-spinner [diameter]="24"></mat-spinner>
-                </div>
-                <div class="col">
-                    <label>Caricamento in corso ...</label>
-                </div>
-            </div>
-        </div>
-    </div>
-
-
-    <div *ngIf="this.cambiturnoDoc?.length <= 0" class="notPresent">
-        Nessun documento presente
-    </div>
-
-    <table mat-table [dataSource]="cambiDataSource" class="mat-elevation-z8">
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>
-            </th>
-            <td mat-cell *matCellDef="let row" style="text-align: right;">
-                <!-- <input type="file" (change)="uploadFattura($event)" accept=".pdf" *ngIf="!uploadingFattura">
-            <label *ngIf="uploadingFattura">Caricamento in corso ...</label> -->
-
-                <button mat-button (click)="showDocument(row)">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" style="color:red" fill="currentColor" class="bi bi-filetype-pdf" viewBox="0 0 16 16">
-                        <path fill-rule="evenodd" d="M14 4.5V14a2 2 0 0 1-2 2h-1v-1h1a1 1 0 0 0 1-1V4.5h-2A1.5 1.5 0 0 1 9.5 3V1H4a1 1 0 0 0-1 1v9H2V2a2 2 0 0 1 2-2h5.5zM1.6 11.85H0v3.999h.791v-1.342h.803q.43 0 .732-.173.305-.175.463-.474a1.4 1.4 0 0 0 .161-.677q0-.375-.158-.677a1.2 1.2 0 0 0-.46-.477q-.3-.18-.732-.179m.545 1.333a.8.8 0 0 1-.085.38.57.57 0 0 1-.238.241.8.8 0 0 1-.375.082H.788V12.48h.66q.327 0 .512.181.185.183.185.522m1.217-1.333v3.999h1.46q.602 0 .998-.237a1.45 1.45 0 0 0 .595-.689q.196-.45.196-1.084 0-.63-.196-1.075a1.43 1.43 0 0 0-.589-.68q-.396-.234-1.005-.234zm.791.645h.563q.371 0 .609.152a.9.9 0 0 1 .354.454q.118.302.118.753a2.3 2.3 0 0 1-.068.592 1.1 1.1 0 0 1-.196.422.8.8 0 0 1-.334.252 1.3 1.3 0 0 1-.483.082h-.563zm3.743 1.763v1.591h-.79V11.85h2.548v.653H7.896v1.117h1.606v.638z" />
-                    </svg>
-                </button>
-
-                <ng-container *ngIf="!row.closed">
-                    <button mat-button (click)="deleteCambioTurno(row)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
-                            <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5M8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5m3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0" />
-                        </svg>
-                    </button>
-                </ng-container>
-
-            </td>
-        </ng-container>
-
-        <ng-container matColumnDef="namefile">
-            <th mat-header-cell *matHeaderCellDef> Nome file </th>
-            <td mat-cell *matCellDef="let element"> {{element.filename}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="dateInizio">
-            <th mat-header-cell *matHeaderCellDef> Data Inserimento </th>
-            <td mat-cell *matCellDef="let element"> {{element.dateupload | date: 'dd/MM/yyyy'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="note">
-            <th mat-header-cell *matHeaderCellDef> Note </th>
-            <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-        </ng-container>
-        <ng-container matColumnDef="accettata">
-            <th mat-header-cell *matHeaderCellDef> Approvata </th>
-            <td mat-cell *matCellDef="let element">
-                <!-- <input type="checkbox" slot="end" [(ngModel)]="element.accettata" (change)="toggleCheckbox(element)"
-            [disabled]=element.closed /> -->
-                <ng-container *ngIf="element.closed && element.accettata">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-circle-fill" style="color:green;" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0m-3.97-3.03a.75.75 0 0 0-1.08.022L7.477 9.417 5.384 7.323a.75.75 0 0 0-1.06 1.06L6.97 11.03a.75.75 0 0 0 1.079-.02l3.992-4.99a.75.75 0 0 0-.01-1.05z" />
-                    </svg>
-                </ng-container>
-                <ng-container *ngIf="element.closed && !element.accettata">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" style="color: red;" class="bi bi-x-circle-fill" viewBox="0 0 16 16">
-                        <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M5.354 4.646a.5.5 0 1 0-.708.708L7.293 8l-2.647 2.646a.5.5 0 0 0 .708.708L8 8.707l2.646 2.647a.5.5 0 0 0 .708-.708L8.707 8l2.647-2.646a.5.5 0 0 0-.708-.708L8 7.293z" />
-                    </svg>
-                </ng-container>
-        </ng-container>
-
-        <tr mat-header-row *matHeaderRowDef="DisplayedColumns1"></tr>
-        <tr mat-row *matRowDef="let row; columns: DisplayedColumns1;"></tr>
-    </table>
-
-    <div class="paginator-container">
-
-        <mat-paginator #paginatorCambio [pageSizeOptions]="[5,10,20,30]" showFirstLastButtons
-                       aria-label="Select page of periodic elements">
-        </mat-paginator>
-    </div>
-</div> 

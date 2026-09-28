@@ -1,93 +1,112 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>CARTELLA SOCIOPSICOLOGICA</h3>
-      </div>
+<!-- Header Modale con Titolo e Pulsanti di Azione -->
+<div mat-dialog-title class="dialog-header">
+    <div class="d-flex align-items-center justify-content-between w-100">
+        <h3 class="dialog-title-text m-0">CARTELLA SOCIOPSICOLOGICA</h3>
 
-      <div class="col">
-        <button class="close-button" [mat-dialog-close]="true">×
-        </button>
-      </div>
-    </div>
+        <!-- Pulsanti di azione in alto -->
+        <div class="header-actions d-flex align-items-center gap-2">
+            <!-- Bottone Salva con icona Floppy -->
+            <button mat-raised-button color="primary" class="btn-save d-flex align-items-center gap-1" (click)="save()">
+                <mat-icon class="icon-sm">save</mat-icon>
+                <span>Salva</span>
+            </button>
 
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
+            <!-- Bottone Chiudi: solo "X" -->
+            <button mat-icon-button [mat-dialog-close]="undefined" class="btn-close-icon" aria-label="Chiudi" title="Chiudi">
+                <mat-icon>close</mat-icon>
+            </button>
+        </div>
     </div>
-  </div>
 </div>
 
-<mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
+<!-- Contenuto Principale -->
+<mat-dialog-content class="dialog-content">
+    <mat-tab-group animationDuration="150ms" class="custom-tab-group">
 
-        <mat-tab-group mat-align-tabs="start">
-          <mat-tab label="Generale">
-            <div class="container-fluid">
-              <div class="row">
-                <div class="col">
-                  <app-paziente-generale [disable]=true [data]=data.paziente></app-paziente-generale>
-                </div>
-              </div>
+        <!-- Tab 1: Generale -->
+        <mat-tab label="Generale">
+            <div class="tab-body-container py-3">
 
-              <div class="row">
-                <div class="col">
-                  <label>DIAGNOSI D’INGRESSO</label>
-                  <textarea class="form-control" rows="5" cols="150"
-                    [(ngModel)]="data.paziente.schedaInfermeristica.diagnosi"></textarea>
+                <!-- Componente Generale Paziente -->
+                <div class="mb-4">
+                    <app-paziente-generale [disable]="true" [data]="data.paziente"></app-paziente-generale>
                 </div>
-              </div>
 
-              <hr>
-              <div class="row">
-                <div class="col">
-                  <label>RASSEGNA ANAMNESTICA</label>
-                  <textarea class="form-control" rows="5" cols="150"
-                    [(ngModel)]="data.paziente.schedaInfermeristica.diagnosi"></textarea>
-                </div>
-              </div>
+                <!-- Sezione Diagnosi e Anamnesi -->
+                <div class="card border-0 shadow-sm p-3 mb-4 bg-light">
+                    <div class="row g-3">
 
-              <hr>
-              <div class="row">
-                <div class="col">
-                  <label>DIMISSIONE</label>
-                  <div class="form-group" >
-                    <span>{{data.paziente.dimissione?.typeDimissione}}</span>
-                  </div>
+                        <div class="col-12">
+                            <label for="diagnosiIngresso" class="form-label fw-bold text-secondary">
+                                DIAGNOSI D’INGRESSO
+                            </label>
+                            <textarea id="diagnosiIngresso"
+                                      class="form-control custom-textarea"
+                                      rows="4"
+                                      placeholder="Inserisci la diagnosi d'ingresso..."
+                                      [(ngModel)]="data.paziente.schedaInfermeristica.diagnosi">
+              </textarea>
+                        </div>
+
+                        <div class="col-12">
+                            <label for="rassegnaAnamnestica" class="form-label fw-bold text-secondary">
+                                RASSEGNA ANAMNESTICA
+                            </label>
+                            <!-- Ripristinato il binding originale che punta alla proprietà esistente nel model -->
+                            <textarea id="rassegnaAnamnestica"
+                                      class="form-control custom-textarea"
+                                      rows="4"
+                                      placeholder="Inserisci la rassegna anamnestica..."
+                                      [(ngModel)]="data.paziente.schedaInfermeristica.rassegnaAnamnestica">
+              </textarea>
+                        </div>
+
+                    </div>
                 </div>
-                <div class="col">
-                  <label>DATA</label>
-                  <div class="form-group" >
-                      <span>{{data.paziente.schedaInfermeristica.dimissione | date: 'dd/MM/yyyy'}}</span>
-                  </div>
+
+                <!-- Sezione Dimissione -->
+                <div class="card border-0 shadow-sm p-3">
+                    <h6 class="fw-bold text-primary mb-3">Informazioni Dimissione</h6>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-7 mb-1">Tipo Dimissione</label>
+                            <div class="form-control-plaintext font-weight-bold text-dark">
+                                {{ data.paziente.dimissione?.typeDimissione || 'Non specificata' }}
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label text-muted fs-7 mb-1">Data Dimissione</label>
+                            <div class="form-control-plaintext font-weight-bold text-dark">
+                                {{ (data.paziente.schedaInfermeristica.dimissione | date: 'dd/MM/yyyy') || '-' }}
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              </div>
 
             </div>
-          </mat-tab>
-          <mat-tab label="Esame Psichico">
-            <app-esame-pisico [schedaPsico]=schedaPsico></app-esame-pisico>
-          </mat-tab>
-          <mat-tab label="Valutazione Psicologica Clinica">
-            <app-valuta-pisico [schedaPsico]=schedaPsico></app-valuta-pisico>
-          </mat-tab>
-          <mat-tab label="Diario Psicologico Clinico">
-            <app-diario [diario]=schedaPsico.diario></app-diario>
-          </mat-tab>
-        </mat-tab-group>
+        </mat-tab>
 
-      </div>
-    </div>
-  </div>
+        <!-- Tab 2: Esame Psichico -->
+        <mat-tab label="Esame Psichico">
+            <div class="py-3">
+                <app-esame-pisico [schedaPsico]="schedaPsico"></app-esame-pisico>
+            </div>
+        </mat-tab>
+
+        <!-- Tab 3: Valutazione Psicologica Clinica -->
+        <mat-tab label="Valutazione Psicologica Clinica">
+            <div class="py-3">
+                <app-valuta-pisico [schedaPsico]="schedaPsico"></app-valuta-pisico>
+            </div>
+        </mat-tab>
+
+        <!-- Tab 4: Diario Psicologico Clinico -->
+        <mat-tab label="Diario Psicologico Clinico">
+            <div class="py-3">
+                <app-diario [diario]="schedaPsico.diario"></app-diario>
+            </div>
+        </mat-tab>
+
+    </mat-tab-group>
 </mat-dialog-content>
-
-
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
-    <button mat-button class="button-insert" (click)="save()">Salva</button>
-  </div>
-</div>

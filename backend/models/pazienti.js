@@ -44,6 +44,7 @@ const PazienteSchema = mongoose.Schema({
 
     schedaInfermeristica: {
         diagnosi: String,
+        rassegnaAnamnestica: String,
         intolleranzeAlimentari: String,
         allergie: String,
         infezioni: String,

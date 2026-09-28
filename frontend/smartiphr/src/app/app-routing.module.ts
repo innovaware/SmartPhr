@@ -119,6 +119,7 @@ import { ContrattiConsulentiComponent } from "./pages/contratti-consulenti/contr
 import { CarrelloComponent } from "./pages/carrello/carrello.component";
 import { RifiutiSpecialiComponent } from "./pages/rifiutiSpeciali/rifiutiSpeciali.component";
 import { AreaLogComponent } from "./pages/log/area-log.component";
+import { LavoroPersonaleComponent } from "./pages/lavoro-personale/lavoro-personale.component";
 
 const routes: Routes = [
   { path: "login", component: LoginComponent },
@@ -152,7 +153,7 @@ const routes: Routes = [
   // AREA PERSONALE
   { path: "generale", component: GeneralePersonaleComponent, canActivate: [AuthGuard]  },
   { path: "cert_privacy", component: EsamiPrivacyPersonaleComponent, canActivate: [AuthGuard]  },
-  //{ path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard] },
+  { path: "lavoro", component: LavoroPersonaleComponent, canActivate: [AuthGuard] },
   { path: "MaterialRequest", component: RichiestaMaterialeComponent, canActivate: [AuthGuard] },
   { path: "ferie_permessi", component: FerieAltroPersonaleComponent, canActivate: [AuthGuard]  },
 
