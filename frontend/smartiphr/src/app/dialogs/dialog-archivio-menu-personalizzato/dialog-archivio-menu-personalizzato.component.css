@@ -9,7 +9,6 @@
   color: #676a6c;
 }
 
-
 table {
   width: 100%;
 }
@@ -61,124 +60,110 @@ table {
   padding-right: 20px;
 }
 
-
-
-
 .dialog-container {
   padding: 16px 20px;
   max-width: 100%;
+}
+
   /* Intestazione */
-  .dialog-header
+  .dialog-container .dialog-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
 
-{
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  .header-info
+    .dialog-container .dialog-header .header-info {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
 
-{
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  .patient-icon
+      .dialog-container .dialog-header .header-info .patient-icon {
+        color: #1976d2; /* Primary blue */
+        font-size: 28px;
+        width: 28px;
+        height: 28px;
+      }
 
-{
-  color: #1976d2; /* Primary blue */
-  font-size: 28px;
-  width: 28px;
-  height: 28px;
-}
+      .dialog-container .dialog-header .header-info .dialog-title {
+        margin: 0;
+        font-size: 1.25rem;
+        font-weight: 500;
+        color: #2c3e50;
+      }
 
-.dialog-title {
-  margin: 0;
-  font-size: 1.25rem;
-  font-weight: 500;
-  color: #2c3e50;
-  span
+        .dialog-container .dialog-header .header-info .dialog-title span {
+          font-weight: 600;
+          color: #1976d2;
+        }
 
-{
-  font-weight: 600;
-  color: #1976d2;
-}
+    .dialog-container .dialog-header .close-button {
+      color: #757575;
+    }
 
-}
-}
+  /* Divisore senza usare <mat-divider> */
+  .dialog-container .custom-divider {
+    border-bottom: 1px solid #e0e0e0;
+    margin: 16px 0;
+  }
 
-.close-button {
-  color: #757575;
-}
+  /* Contenuto principale */
+  .dialog-container .dialog-content {
+    margin-bottom: 16px;
+  }
 
-}
+  /* Tabella */
+  .dialog-container .table-container {
+    border-radius: 8px;
+    overflow: hidden;
+    background: #ffffff;
+  }
 
-/* Divisore senza usare <mat-divider> */
-.custom-divider {
-  border-bottom: 1px solid #e0e0e0;
-  margin: 16px 0;
-}
+    .dialog-container .table-container table {
+      width: 100%;
+    }
 
-/* Contenuto principale */
-.dialog-content {
-  margin-bottom: 16px;
-}
+      .dialog-container .table-container table th {
+        background-color: #f8f9fa;
+        color: #495057;
+        font-weight: 600;
+        font-size: 0.85rem;
+        border-bottom: 2px solid #e9ecef;
+      }
 
-/* Tabella */
-.table-container {
-  border-radius: 8px;
-  overflow: hidden;
-  background: #ffffff;
-  table
+      .dialog-container .table-container table td {
+        color: #333;
+        font-size: 0.875rem;
+        padding: 12px 16px;
+      }
 
-{
-  width: 100%;
-  th
+      .dialog-container .table-container table .fw-medium {
+        font-weight: 500;
+      }
 
-{
-  background-color: #f8f9fa;
-  color: #495057;
-  font-weight: 600;
-  font-size: 0.85rem;
-  border-bottom: 2px solid #e9ecef;
-}
+      .dialog-container .table-container table .date-column {
+        white-space: nowrap;
+        width: 110px;
+      }
 
-td {
-  color: #333;
-  font-size: 0.875rem;
-  padding: 12px 16px;
-}
+      .dialog-container .table-container table .table-row {
+        transition: background-color 0.2s ease;
+      }
 
-.fw-medium {
-  font-weight: 500;
-}
+        .dialog-container .table-container table .table-row:hover {
+          background-color: #f1f5f9;
+        }
 
-.date-column {
-  white-space: nowrap;
-  width: 110px;
-}
+      .dialog-container .table-container table .empty-table {
+        text-align: center;
+        padding: 24px;
+        color: #888;
+        font-style: italic;
+      }
 
-.table-row {
-  transition: background-color 0.2s ease;
-  &:hover
-
-{
-  background-color: #f1f5f9;
-}
-
-}
-
-.empty-table {
-  text-align: center;
-  padding: 24px;
-  color: #888;
-  font-style: italic;
-}
-
-}
-}
-
-/* Footer e Azioni */
-.dialog-actions {
-  display: flex;
-  justify-content: flex-end;
-  margin-top: 12px;
-}
-}
+  /* Footer e Azioni */
+  .dialog-container .dialog-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 12px;
+  }
