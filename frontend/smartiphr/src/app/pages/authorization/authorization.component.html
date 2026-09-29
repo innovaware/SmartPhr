@@ -1,39 +1,38 @@
-<div class="containter pad">
-  <div class="row">
-    <div class="col ">
-      <h1 class="title">Impostazione voci di Menu per Mansione</h1>
+<div class="authorization-card">
+    <!-- Header della Card con titolo e azione di salvataggio primaria -->
+    <div class="card-header">
+        <h1 class="card-title">Impostazione voci di Menu per Mansione</h1>
+        <button mat-raised-button class="btn-save" (click)="save()">
+            <mat-icon>save</mat-icon>
+            <span>Salva</span>
+        </button>
     </div>
-  </div>
 
-  <hr>
+    <div class="card-body">
+        <!-- Lista delle impostazioni menu -->
+        <ng-container *ngFor="let itemMenu of menu">
+            <div class="menu-row mb-3" *ngIf="itemMenu.title !== 'Logs'">
+                <div class="menu-label">
+                    <span>{{ itemMenu.title }}</span>
+                </div>
 
-  <div class="row" *ngFor="let itemMenu of menu">
-    <ng-container *ngIf="itemMenu.title!='Logs'">
-      <div class="col-3">
-        {{itemMenu.title}}
+                <div class="menu-select">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona una mansione</mat-label>
+                        <mat-select [(ngModel)]="menuXmansione[itemMenu._id]" multiple>
+                            <mat-option *ngFor="let itemMansione of mansioni" [value]="itemMansione._id">
+                                {{ itemMansione.codice }} - {{ itemMansione.descrizione }}
+                            </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+                </div>
+            </div>
+        </ng-container>
 
-      </div>
-      <!-- <div class="col">
-    {{menuXmansione[itemMenu._id]}}
-  </div> -->
-
-      <div class="col">
-        <mat-form-field appearance="fill">
-          <mat-label>Seleziona una mansione</mat-label>
-          <mat-select [(ngModel)]="menuXmansione[itemMenu._id]" multiple>
-            <mat-option *ngFor="let itemMansione of mansioni" value="{{itemMansione._id}}">
-              {{itemMansione.codice}} - {{itemMansione.descrizione}}
-            </mat-option>
-          </mat-select>
-        </mat-form-field>
-
-      </div>
-    </ng-container>
-  </div>
-
-</div>
-
-
-<div class="bottom-actions right">
-  <button mat-button class="button-insert" (click)="save()">Salva</button>
+        <!-- Stato vuoto nel caso in cui non ci siano elementi nel menu -->
+        <div class="empty-state" *ngIf="!menu || menu.length === 0">
+            <mat-icon>menu_open</mat-icon>
+            <p>Nessuna voce di menu disponibile</p>
+        </div>
+    </div>
 </div>

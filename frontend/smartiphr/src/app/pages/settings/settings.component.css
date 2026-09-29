@@ -1,24 +1,122 @@
-.pad {
-    padding-left: 6%;
-    padding-top: 3%;
+/* Contenitore Principale */
+.component-container {
+  width: 100%;
+  padding: 16px 24px;
+}
+
+/* Header della Pagina */
+.page-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.page-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.tab-content-inner {
+  padding: 20px 0;
+}
+
+/* Card Form principale */
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+/* Toolbar della Sezione */
+.section-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #edf2f7;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Pulsanti Custom */
+.btn-primary-custom {
+  background-color: #3b5998 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  height: 44px;
+  padding: 0 20px !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* Singola Riga di Impostazione */
+.setting-row {
+  margin-bottom: 16px;
+  padding: 8px 0;
+}
+
+  .setting-row mat-form-field {
+    margin-bottom: -1.25em;
   }
-  
-  .title {
-    font-size: 30px;
-    line-height: 1.2;
-    color: #676a6c;
+
+.form-label-custom {
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0;
+}
+
+.setting-description {
+  font-size: 0.85rem;
+  color: #718096;
+  margin: 0;
+  line-height: 1.4;
+}
+
+/* Divisore tra Sezioni */
+.section-divider {
+  border-bottom: 1px solid #edf2f7;
+  margin: 24px 0;
+}
+
+/* Utility */
+.w-100 {
+  width: 100%;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+/* Layout Mobile/Responsive */
+@media (max-width: 768px) {
+  .section-toolbar {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
   }
-  
-  
-  table {
-    width: 100%;
+
+  .form-label-custom {
+    margin-bottom: 6px;
   }
-  
-  .mat-form-field {
-    font-size: 14px;
-    width: 100%;
+
+  .setting-description {
+    margin-top: 8px;
+    margin-bottom: 16px;
   }
-  
-  .mat-column-action {
-    width: 32px;
-  }
+}
