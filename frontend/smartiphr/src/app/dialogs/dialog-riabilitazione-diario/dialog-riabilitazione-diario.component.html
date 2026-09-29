@@ -1,89 +1,67 @@
-<div mat-dialog-title>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <h3>DIARIO RIABILITATIVO</h3>
-      </div>
+<!-- Intestazione Modal con pulsante Salva (Floppy) in alto -->
+<div class="dialog-header">
+    <h2 class="dialog-title">DIARIO RIABILITATIVO</h2>
+    <div class="header-actions">
+        <button type="button" class="btn-save" (click)="save()" aria-label="Salva" title="Salva">
+            <mat-icon>save</mat-icon>
+            <span>Salva</span>
+        </button>
+        <button type="button" class="btn-close" [mat-dialog-close]="undefined" aria-label="Chiudi" title="Chiudi">
+            &times;
+        </button>
     </div>
-
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
-    </div>
-  </div>
 </div>
 
-<mat-dialog-content>
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col">
-        <label>Data*</label>
-      </div>
-    </div>
+<!-- Contenuto della Dialog -->
+<mat-dialog-content class="dialog-content-container">
+    <div class="card-form">
 
-    <div class="row">
-      <div class="col">
-        <mat-form-field appearance="fill">
-          <mat-label>Scegli una date</mat-label>
-          <input matInput [matDatepicker]="data" [(ngModel)]="diario.data">
-          <mat-datepicker-toggle matSuffix [for]="data"></mat-datepicker-toggle>
-          <mat-datepicker #data></mat-datepicker>
-        </mat-form-field>
-      </div>
-    </div>
+        <!-- Data -->
+        <div class="mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Data </mat-label>
+                <input matInput [matDatepicker]="pickerData" placeholder="GG/MM/AAAA" [(ngModel)]="diario.data" required>
+                <mat-datepicker-toggle matSuffix [for]="pickerData"></mat-datepicker-toggle>
+                <mat-datepicker #pickerData></mat-datepicker>
+            </mat-form-field>
+        </div>
 
-    <div class="row">
-      <div class="col">
-        <label>CONTROLLO* </label>
-      </div>
-    </div>
-    <div class="row">
-      <div class="col">
-        <mat-radio-group aria-label="Select an option" [(ngModel)]="diario.controllo">
-          <mat-radio-button value="1">&#x25B2;</mat-radio-button>
-          <mat-radio-button value="2">&#x25FC;</mat-radio-button>
-          <mat-radio-button value="3">&#x25BC;</mat-radio-button>
-        </mat-radio-group>
+        <!-- Controllo (Radio Button Stilizzati) -->
+        <div class="mb-4">
+            <label class="form-label-custom">Controllo (Fisioterapista) *</label>
+            <mat-radio-group class="custom-radio-group" aria-label="Seleziona tipo di controllo" [(ngModel)]="diario.controllo">
+                <mat-radio-button value="1" class="radio-up">
+                    <span class="radio-label-content">&#x25B2; Miglioramento</span>
+                </mat-radio-button>
+                <mat-radio-button value="2" class="radio-stable">
+                    <span class="radio-label-content">&#x25FC; Stabile</span>
+                </mat-radio-button>
+                <mat-radio-button value="3" class="radio-down">
+                    <span class="radio-label-content">&#x25BC; Peggioramento</span>
+                </mat-radio-button>
+            </mat-radio-group>
+        </div>
 
-      </div>
-    </div>
+        <!-- Note / Contenuto -->
+        <div class="mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Note </mat-label>
+                <textarea matInput rows="4" placeholder="Inserisci il contenuto delle note..." [(ngModel)]="diario.note" required></textarea>
+            </mat-form-field>
+        </div>
 
-    <div class="row" >
-      <div class="col">
-        <label>Note*</label>
-      </div>
-    </div>
-    <div class="row" >
-      <div class="col">
+        <!-- Firma -->
+        <div class="mb-3">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Firma </mat-label>
+                <input matInput placeholder="Inserisci la firma dell'operatore" [(ngModel)]="diario.firma" required>
+            </mat-form-field>
+        </div>
 
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="diario.note"></textarea>
-        </mat-form-field>
-      </div>
-    </div>
+        <div class="required-info">
+            <mat-icon class="info-icon">info</mat-icon>
+            <span>I campi contrassegnati con l'asterisco (<span class="required-asterisk">*</span>) sono obbligatori.</span>
+        </div>
 
-    <div class="row" >
-      <div class="col">
-        <label>Firma*</label>
-      </div>
     </div>
-    <div class="row" >
-      <div class="col">
-
-        <mat-form-field appearance="fill">
-          <textarea matInput placeholder="Inserisci il contenuto" [(ngModel)]="diario.firma"></textarea>
-        </mat-form-field>
-      </div>
-    </div>
-
-  </div>
 </mat-dialog-content>
-
-
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-    <button mat-button [mat-dialog-close]="undefined">Chiudi</button>
-    <button mat-button class="button-insert" (click)="save()">Salva</button>
-  </div>
-</div>

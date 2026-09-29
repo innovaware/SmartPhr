@@ -276,12 +276,12 @@ export class AreaFormazioneComponent implements OnInit {
       // Create an array of promises to fetch dipendente details for each nomina
       const dataSourcePromises = formazioni.map(async (forma) => {
         const dipendente = await this.dipendenteService.getById(forma.dipendenteID.valueOf());
+        console.log(dipendente);
         return {
           dipendente: dipendente,
           formazione: forma,
         };
       });
-
       // Resolve all promises
       const dataSource: Array<{ dipendente: any, formazione: any, documento?: any, caricato?: Boolean }> = await Promise.all(dataSourcePromises);
 
@@ -311,7 +311,7 @@ export class AreaFormazioneComponent implements OnInit {
       });
     } catch (err) {
       // Show error message to the user and log the error
-      this.messageService.showMessageError("Errore caricamento lista antincendio");
+      this.messageService.showMessageError("Errore di caricamento");
       console.error("Error loading data:", err);
     }
   }

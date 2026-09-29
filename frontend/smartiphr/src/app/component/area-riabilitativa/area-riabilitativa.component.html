@@ -1,195 +1,163 @@
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-content>
+<div class="component-container">
+    <div class="card-form">
 
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-                ANAMNESI RIABILITATIVA
-              </div>
+        <!-- Anamnesi Riabilitativa -->
+        <h3 class="card-title">Anamnesi Riabilitativa</h3>
+        <div class="row mb-4">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Note Anamnesi Riabilitativa</mat-label>
+                    <textarea matInput
+                              rows="4"
+                              placeholder="Inserisci dettagli sull'anamnesi riabilitativa..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.anamnesiRiabilitativa">
+          </textarea>
+                </mat-form-field>
             </div>
+        </div>
 
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable
-                          [(ngModel)]="data.anamnesiRiabilitativa"></textarea>
-              </div>
-            </div>
-
-            <hr>
-
-            <div class="row">
-              <div class="col">
-                TEST COMPILATI
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <table mat-table [dataSource]="dataSourceTest" class="mat-elevation-z8"
-                       class="fill">
-
-                  <ng-container matColumnDef="action">
-                    <th mat-header-cell *matHeaderCellDef>
-                      <button class="btn btn-link p-0" (click)="addTest()" title="Inserisci nuovo test">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                          <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                      </button>
-                    </th>
-                    <td mat-cell *matCellDef="let row">
-                     
-                    </td>
-                  </ng-container>
-
-
-                  <!-- Symbol Column -->
-                  <ng-container matColumnDef="Data">
-                    <th mat-header-cell *matHeaderCellDef> Data Test </th>
-                    <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy'}} </td>
-                  </ng-container>
-
-                  <!-- Symbol Column -->
-                  <ng-container matColumnDef="FIM">
-                    <th mat-header-cell *matHeaderCellDef> FIM </th>
-                    <td mat-cell *matCellDef="let element"> {{element.fim}} </td>
-                  </ng-container>
-
-                  <!-- Symbol Column -->
-                  <ng-container matColumnDef="Tinetti">
-                    <th mat-header-cell *matHeaderCellDef> Tinetti </th>
-                    <td mat-cell *matCellDef="let element"> {{element.tinetti}} </td>
-                  </ng-container>
-                  
-                  <!-- Symbol Column -->
-                  <ng-container matColumnDef="Barthel">
-                    <th mat-header-cell *matHeaderCellDef> Barthel </th>
-                    <td mat-cell *matCellDef="let element"> {{element.barthel}} </td>
-                  </ng-container>
-
-
-                  <tr mat-header-row *matHeaderRowDef="displayTestColumns"></tr>
-                  <tr mat-row *matRowDef="let row; columns: displayTestColumns;"></tr>
-                </table>
-
-
-                <mat-paginator #TestPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                               aria-label="Select page of periodic elements">
-                </mat-paginator>
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col">
-                CUT OFF PER RISCHIO CADUTE SECONDO SCALA TINETTI &le; 18.
-              </div>
-            </div>
-
-
-            <div class="row">
-              <div class="col">
-                Altro
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable [(ngModel)]="data.test.altro"></textarea>
-              </div>
-            </div>
-
-            <hr>
-            <div class="row">
-              <div class="col">
-                <mat-card>
-                  <mat-card-title>
-                    Lesioni
-                    <button mat-button class="button-info" (click)="addNewLesione()" *ngIf="!disable">
-                      <fa-icon icon="plus"></fa-icon>
-                    </button>
-                  </mat-card-title>
-                  <mat-card-content>
-                    <div class="container-fluid">
-
-                      <!-- <div class="row">
-              <div class="col">
-                <button mat-button class="button-info" (click)="addNewLesione()" *ngIf="!disable">
-                  <fa-icon icon="plus"></fa-icon>
+        <!-- Test Compilati -->
+        <div class="section-divider">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="section-subtitle">Test Compilati</h4>
+                <button mat-flat-button color="primary" class="btn-primary-custom" (click)="addTest()" *ngIf="!disable">
+                    <mat-icon>add</mat-icon> Aggiungi Test
                 </button>
-              </div>
-            </div> -->
-
-                      <div class="row">
-                        <div class="col">
-                          <table mat-table [dataSource]="dataSourceAnamnesiRiabilitativa" class="mat-elevation-z8"
-                                 class="fill">
-
-                            <ng-container matColumnDef="action">
-                              <th mat-header-cell *matHeaderCellDef>
-                              </th>
-                              <td mat-cell *matCellDef="let row">
-                                <!-- <button  mat-raised-button color="accent" class="action-button" [disabled]=row.closed (click)="sendResp(row)">Invia Risposta</button> -->
-                              </td>
-                            </ng-container>
-
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="datalesioneEvento">
-                              <th mat-header-cell *matHeaderCellDef> DATA LESIONE/EVENTO </th>
-                              <td mat-cell *matCellDef="let element"> {{element.data | date: 'dd/MM/yyyy':'UTC'}} </td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="tipogia">
-                              <th mat-header-cell *matHeaderCellDef> TIPOLOGIA E SEDE LESIONE </th>
-                              <td mat-cell *matCellDef="let element"> {{element.tipologia}} </td>
-                            </ng-container>
-
-                            <!-- Symbol Column -->
-                            <ng-container matColumnDef="parteCorpo">
-                              <th mat-header-cell *matHeaderCellDef> PARTE DEL CORPO AFFETTA </th>
-                              <td mat-cell *matCellDef="let element"> {{element.parteCorpo}} </td>
-                            </ng-container>
-
-
-                            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                          </table>
-
-
-                          <mat-paginator #paginatorLesioni [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons
-                                         aria-label="Select page of periodic elements">
-                          </mat-paginator>
-                        </div>
-                      </div>
-
-                    </div>
-                  </mat-card-content>
-                </mat-card>
-              </div>
             </div>
+        </div>
 
-            <hr>
-            <div class="row">
-              <div class="col">
-                DIAGNOSI DI FUNZIONAMENTO
-              </div>
+        <!-- Tabella Test -->
+        <div class="table-card-container mb-3">
+            <table mat-table [dataSource]="dataSourceTest" class="custom-table">
+
+                <!-- Azioni Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="col-action"> Azioni </th>
+                    <td mat-cell *matCellDef="let row" class="col-action"></td>
+                </ng-container>
+
+                <!-- Data Column -->
+                <ng-container matColumnDef="Data">
+                    <th mat-header-cell *matHeaderCellDef> Data Test </th>
+                    <td mat-cell *matCellDef="let element" class="font-weight-medium">
+                        {{element.data | date: 'dd/MM/yyyy'}}
+                    </td>
+                </ng-container>
+
+                <!-- FIM Column -->
+                <ng-container matColumnDef="FIM">
+                    <th mat-header-cell *matHeaderCellDef> FIM </th>
+                    <td mat-cell *matCellDef="let element"> {{element.fim || '-'}} </td>
+                </ng-container>
+
+                <!-- Tinetti Column -->
+                <ng-container matColumnDef="Tinetti">
+                    <th mat-header-cell *matHeaderCellDef> Tinetti </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tinetti || '-'}} </td>
+                </ng-container>
+
+                <!-- Barthel Column -->
+                <ng-container matColumnDef="Barthel">
+                    <th mat-header-cell *matHeaderCellDef> Barthel </th>
+                    <td mat-cell *matCellDef="let element"> {{element.barthel || '-'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayTestColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayTestColumns;"></tr>
+            </table>
+
+            <mat-paginator #TestPaginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="custom-paginator">
+            </mat-paginator>
+        </div>
+
+        <!-- Avviso Cut Off -->
+        <div class="info-alert mb-4">
+            <mat-icon class="alert-icon">warning_amber</mat-icon>
+            <span><strong>Cut Off Rischio Cadute:</strong> Secondo la scala Tinetti è &le; 18.</span>
+        </div>
+
+        <!-- Altro -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Altro / Note Aggiuntive Test</mat-label>
+                    <textarea matInput
+                              rows="2"
+                              placeholder="Altre osservazioni..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.test.altro">
+          </textarea>
+                </mat-form-field>
             </div>
+        </div>
 
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable
-                          [(ngModel)]="data.diagnosiFunzionamento"></textarea>
-              </div>
+        <!-- Lesioni -->
+        <div class="section-divider">
+            <div class="d-flex justify-content-between align-items-center">
+                <h4 class="section-subtitle">Lesioni</h4>
+                <button mat-flat-button color="primary" class="btn-primary-custom" (click)="addNewLesione()" *ngIf="!disable">
+                    <mat-icon>add</mat-icon> Nuova Lesione
+                </button>
             </div>
+        </div>
 
+        <!-- Tabella Lesioni -->
+        <div class="table-card-container mb-4">
+            <table mat-table [dataSource]="dataSourceAnamnesiRiabilitativa" class="custom-table">
 
-          </div>
-        </mat-card-content>
-      </mat-card>
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="col-action"> Azioni </th>
+                    <td mat-cell *matCellDef="let row" class="col-action"></td>
+                </ng-container>
+
+                <!-- Data Lesione Column -->
+                <ng-container matColumnDef="datalesioneEvento">
+                    <th mat-header-cell *matHeaderCellDef> Data Lesione / Evento </th>
+                    <td mat-cell *matCellDef="let element" class="font-weight-medium">
+                        {{element.data | date: 'dd/MM/yyyy':'UTC'}}
+                    </td>
+                </ng-container>
+
+                <!-- Tipologia Column -->
+                <ng-container matColumnDef="tipogia">
+                    <th mat-header-cell *matHeaderCellDef> Tipologia e Sede Lesione </th>
+                    <td mat-cell *matCellDef="let element"> {{element.tipologia || '-'}} </td>
+                </ng-container>
+
+                <!-- Parte del Corpo Column -->
+                <ng-container matColumnDef="parteCorpo">
+                    <th mat-header-cell *matHeaderCellDef> Parte del Corpo Affetta </th>
+                    <td mat-cell *matCellDef="let element"> {{element.parteCorpo || '-'}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
+
+            <mat-paginator #paginatorLesioni [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons class="custom-paginator">
+            </mat-paginator>
+        </div>
+
+        <!-- Diagnosi di Funzionamento -->
+        <div class="section-divider">
+            <h4 class="section-subtitle">Diagnosi di Funzionamento</h4>
+        </div>
+
+        <div class="row">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Diagnosi di Funzionamento</mat-label>
+                    <textarea matInput
+                              rows="4"
+                              placeholder="Inserisci la diagnosi di funzionamento..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.diagnosiFunzionamento">
+          </textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
     </div>
-  </div>
 </div>

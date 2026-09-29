@@ -1,54 +1,54 @@
-<div class="container-fluid tabcontent">
-  <div class="row">
-    <div class="col">
-      <mat-card>
-        <mat-card-content>
+<div class="component-container">
+    <div class="card-form">
 
-          <div class="container-fluid">
-            <div class="row">
-              <div class="col">
-                PROGRAMMA RIABILITATIVO
-              </div>
+        <!-- Programma Riabilitativo -->
+        <h3 class="card-title">Programma Riabilitativo</h3>
+        <div class="row mb-4">
+            <div class="col-12">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Dettagli Programma Riabilitativo</mat-label>
+                    <textarea matInput
+                              rows="5"
+                              placeholder="Inserisci qui i dettagli e le note del programma riabilitativo..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.note">
+          </textarea>
+                </mat-form-field>
+            </div>
+        </div>
+
+        <!-- Sezione Ausili -->
+        <div class="section-divider">
+            <h4 class="section-subtitle">Gestione Ausili</h4>
+        </div>
+
+        <div class="row">
+            <!-- Ausili in Dotazione -->
+            <div class="col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Ausili in Dotazione</mat-label>
+                    <textarea matInput
+                              rows="4"
+                              placeholder="Specificare gli ausili in dotazione..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.ausiliDotazione">
+          </textarea>
+                </mat-form-field>
             </div>
 
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable
-                  [(ngModel)]="data.note"></textarea>
-              </div>
+            <!-- Provenienza Ausili -->
+            <div class="col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Provenienza Ausili</mat-label>
+                    <textarea matInput
+                              rows="4"
+                              placeholder="Specificare la provenienza degli ausili..."
+                              [disabled]="disable"
+                              [(ngModel)]="data.ausiliProvenienza">
+          </textarea>
+                </mat-form-field>
             </div>
+        </div>
 
-            <hr>
-
-            <div class="row">
-              <div class="col">
-                AUSILI IN DOTAZIONE
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable
-                  [(ngModel)]="data.ausiliDotazione"></textarea>
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                PROVENIENZA AUSILI
-              </div>
-            </div>
-
-            <div class="row">
-              <div class="col">
-                <textarea class="fill" type="text" [disabled]=disable
-                  [(ngModel)]="data.ausiliProvenienza"></textarea>
-              </div>
-            </div>
-
-          </div>
-        </mat-card-content>
-      </mat-card>
     </div>
-  </div>
 </div>

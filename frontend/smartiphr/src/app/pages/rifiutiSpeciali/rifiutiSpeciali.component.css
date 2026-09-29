@@ -1,98 +1,170 @@
-.container {
-  margin: 5px auto;
-  max-width: auto;
+/* Contenitore Principale */
+.component-container {
+  width: 100%;
+  padding: 16px 24px;
 }
 
-.title {
-  padding-top: 20px;
-  font-size: 30px;
-  line-height: 1.2;
-  color: #676a6c;
+/* Header della Pagina */
+.page-header {
+  margin-bottom: 20px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
+.page-title {
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Card Contenitore */
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+/* Selettore Anno */
+.year-selector-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 24px;
+  padding: 12px;
+  background-color: #f7fafc;
+  border-radius: 8px;
+  border: 1px solid #edf2f7;
+}
+
+.anno-riferimento {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2d3748;
+  min-width: 80px;
+  text-align: center;
+}
+
+.arrow-button {
+  color: #3b5998;
+}
+
+  .arrow-button[disabled] {
+    color: #a0aec0;
+  }
+
+/* Tabella Personalizzata */
+.table-card-container {
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #edf2f7;
+  overflow-x: auto;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+}
 
 .custom-table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 15px;
 }
-
-  .custom-table th,
-  .custom-table td {
-    border: 1px solid #ddd;
-    padding: 4px;
-    text-align: center;
-    line-height: 1.2; /* Ridotta l'altezza della linea */
-  }
 
   .custom-table th {
-    background-color: #f4f4f4;
-    font-weight: bold;
+    background-color: #f7fafc;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e2e8f0;
+    padding: 12px 16px;
+    text-align: left;
   }
 
-input, textarea {
+  .custom-table td {
+    color: #2d3748;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #edf2f7;
+    padding: 8px 16px;
+    vertical-align: middle;
+  }
+
+/* Specifiche Colonne */
+.col-mese {
+  width: 110px;
+}
+
+.col-data {
+  width: 180px;
+}
+
+.col-qty {
+  width: 160px;
+}
+
+.col-firma {
+  width: 140px;
+}
+
+.col-note {
+  min-width: 200px;
+}
+
+/* Inputs e Form Control Custom */
+.form-control-custom {
   width: 100%;
-  box-sizing: border-box;
-  padding: 2px; /* Riduce il padding interno */
-  font-size: 14px; /* Riduce il font */
-  line-height: 1.2; /* Riduce l'altezza della linea */
+  padding: 6px 10px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 0.9rem;
+  transition: border-color 0.2s;
 }
 
-textarea {
-  resize: none; /* Impedisce il ridimensionamento verticale */
-  height: 10px; /* Altezza ridotta */
-}
-
-.anno-riferimento {
-  font-size: 18px;
-  font-weight: bold;
-  margin: 0 10px;
-}
-
-.arrow-button {
-  background: none; /* Rimuove il colore di sfondo */
-  border: none; /* Rimuove i bordi */
-  padding: 0; /* Rimuove il padding */
-  cursor: pointer; /* Cambia il cursore */
-}
-
-  .arrow-button svg {
-    color: black; /* Cambia il colore delle frecce */
-    transition: transform 0.2s; /* Effetto di zoom */
+  .form-control-custom:focus {
+    border-color: #3b5998;
+    outline: none;
   }
 
-  .arrow-button:hover svg {
-    transform: scale(1.1); /* Effetto ingrandimento al passaggio */
+  .form-control-custom[readonly] {
+    background-color: #f7fafc;
+    border-color: #e2e8f0;
+    color: #718096;
   }
 
-.container-wide {
-  max-width: 90%; /* Aumenta la larghezza al 90% dello schermo */
-  margin: auto;
+.note-textarea {
+  resize: vertical;
+  min-height: 38px;
 }
 
+.compact-field {
+  margin-bottom: -1.25em;
+}
+
+.badge-firma {
+  display: inline-block;
+  padding: 4px 8px;
+  background-color: #edf2f7;
+  color: #2d3748;
+  border-radius: 4px;
+  font-weight: 500;
+  font-size: 0.85rem;
+}
+
+/* Classi Utility */
 .text-center {
-  text-align: center; /* Centra il testo */
+  text-align: center;
 }
 
-.mat-form-field {
-  margin: 0; /* Rimosso margine esterno */
-  padding: 0; /* Rimosso padding interno */
-  min-height: 32px; /* Altezza minima ridotta */
+.w-100 {
+  width: 100%;
 }
 
-.mat-form-field-wrapper {
-  padding: 0 4px; /* Ridotto il padding interno del contenitore */
+.font-weight-medium {
+  font-weight: 500;
 }
 
-.mat-input-element {
-  line-height: 1.2; /* Altezza compatta per gli input */
-  font-size: 14px; /* Font più piccolo */
-}
-
-.custom-table tr {
-  height: auto; /* Imposta l'altezza dinamica in base al contenuto */
-}
-
-.custom-table td textarea {
-  height: 20px; /* Altezza ridotta per i textarea */
+.text-muted {
+  color: #718096;
 }

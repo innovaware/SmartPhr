@@ -1,23 +1,49 @@
-.fill {
+/* Contenitore Principale e Card */
+.component-container {
   width: 100%;
 }
 
-.tabcontent {
-  padding-top: 10px;
-  padding-bottom: 10px;
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
 }
 
-.button-info {
-  color: #fff;
-  background-color: #23c6c8;
-  border-color: #23c6c8;
-  margin-bottom: 7px;
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.inputTabel {
-  width: 90%;
+/* Divisore di Sezione */
+.section-divider {
+  border-bottom: 1px solid #edf2f7;
+  margin: 16px 0 20px 0;
+  padding-bottom: 8px;
 }
 
-.paddingRowTable {
-  padding-bottom: 6px;
+.section-subtitle {
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0;
+  text-transform: uppercase;
+}
+
+/* Classi Utility */
+.w-100 {
+  width: 100%;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
 }

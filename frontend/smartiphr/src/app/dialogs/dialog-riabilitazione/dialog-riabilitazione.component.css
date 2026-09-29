@@ -52,3 +52,198 @@ button, select {
   width: 100%;
   text-align: right;
 }
+
+
+/* Intestazione Modal */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 24px;
+  background-color: #ffffff;
+  border-bottom: 1px solid #e0e0e0;
+}
+
+.dialog-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin: 0;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Pulsante Salva con Floppy nell'Header */
+.btn-save {
+  background-color: #3b5998;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  padding: 6px 14px;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+  .btn-save:hover {
+    background-color: #2d4373;
+  }
+
+  .btn-save mat-icon {
+    font-size: 18px;
+    width: 18px;
+    height: 18px;
+  }
+
+/* Pulsante Chiudi */
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  color: #718096;
+  cursor: pointer;
+  line-height: 1;
+  padding: 0 4px;
+}
+
+  .btn-close:hover {
+    color: #1a202c;
+  }
+
+/* Contenitore e Tab */
+.dialog-content-container {
+  padding: 0 !important;
+  background-color: #f8fafc;
+  min-height: 500px;
+}
+
+.tab-content-inner {
+  padding: 24px;
+}
+
+.section-toolbar {
+  margin-bottom: 16px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.btn-primary-custom {
+  background-color: #3b5998 !important;
+  color: #ffffff !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+}
+
+/* Form e Card */
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+  margin-bottom: 20px;
+}
+
+.card-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 16px;
+}
+
+.form-label-custom {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: #4a5568;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.form-control-custom {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid #cbd5e0;
+  border-radius: 6px;
+  background-color: #fff;
+  font-size: 0.9rem;
+}
+
+/* Tabelle */
+.table-card-container {
+  background: #ffffff;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+  overflow: hidden;
+}
+
+.custom-table {
+  width: 100%;
+}
+
+  .custom-table th {
+    background-color: #f7fafc;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.85rem;
+    border-bottom: 1px solid #e2e8f0;
+  }
+
+  .custom-table td {
+    color: #2d3748;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #edf2f7;
+  }
+
+.text-end {
+  text-align: right;
+}
+
+.font-weight-medium {
+  font-weight: 500;
+}
+
+.text-muted {
+  color: #718096;
+}
+
+/* Spinner & Empty State */
+.spinner-container {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px;
+  background: #ffffff;
+  border-radius: 8px;
+  margin-bottom: 16px;
+}
+
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  background: #ffffff;
+  border-radius: 8px;
+  border: 1px dashed #cbd5e0;
+  color: #a0aec0;
+}
+
+  .empty-state mat-icon {
+    font-size: 48px;
+    width: 48px;
+    height: 48px;
+    margin-bottom: 8px;
+  }
+
+.w-100 {
+  width: 100%;
+}

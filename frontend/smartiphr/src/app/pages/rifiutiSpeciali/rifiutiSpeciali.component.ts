@@ -72,8 +72,11 @@ export class RifiutiSpecialiComponent implements OnInit {
 
   // Metodo per cambiare l'anno, con limite minimo
   cambiaAnno(direzione: number): void {
+    const annoCorrente = new Date().getFullYear();
     const nuovoAnno = this.annoRiferimento + direzione;
-    if (nuovoAnno >= 2024) {
+
+    // Permette di andare indietro liberamente, ma blocca la navigazione verso anni futuri
+    if (nuovoAnno <= annoCorrente) {
       this.annoRiferimento = nuovoAnno;
       this.getRifiuti(nuovoAnno);
     }
@@ -135,17 +138,32 @@ export class RifiutiSpecialiComponent implements OnInit {
     });
   }
   aggiornaStatoFreccia(): void {
-    const indiceCorrente = this.anni.indexOf(this.annoRiferimento);
-    console.log("Indice corrente: ", indiceCorrente);
-    console.log("lunghezza: ", this.anni.length);
-    this.prev = indiceCorrente > 0; // True se non è il primo anno
-    this.next = indiceCorrente < this.anni.length - 1; // True se non è l'ultimo anno
+    const annoCorrente = new Date().getFullYear();
+
+    // La freccia indietro è sempre attiva per consultare gli anni passati
+    this.prev = true;
+
+    // La freccia avanti è attiva solo se l'anno di riferimento è precedente a quello corrente
+    this.next = this.annoRiferimento < annoCorrente;
   }
 
   async getRifiuti(anno: Number) {
     try {
       // Reset dello stato iniziale
       this.Find = false;
+      this.mesi = [];
+      this.mesi.push(new Mese("Gennaio", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Febbraio", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Marzo", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Aprile", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Maggio", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Giugno", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Luglio", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Agosto", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Settembre", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Ottobre", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Novembre", '', 0, 0, '', ''));
+      this.mesi.push(new Mese("Dicembre", '', 0, 0, '', ''));
       this.rifiutiSpeciali = new RifiutiSpeciali(this.annoRiferimento, this.mesi);
 
       // Recupero dei rifiuti speciali per anno
