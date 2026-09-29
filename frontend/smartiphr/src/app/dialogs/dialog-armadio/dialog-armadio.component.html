@@ -1,126 +1,122 @@
-<div mat-dialog-title>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h3>Gestione Armadio - {{camera.camera}}</h3>
-            </div>
-
-            <div class="col">
-                <button class="close-button" [mat-dialog-close]="true">
-                    ×
-                </button>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <hr>
-            </div>
-        </div>
+<!-- Header Dialog Personalizzato -->
+<div class="dialog-header">
+    <div class="dialog-title-container">
+        <h2 class="dialog-title">Gestione Armadio - {{camera.camera}}</h2>
+    </div>
+    <div class="dialog-header-actions">
+        <button *ngIf="!verificato" mat-flat-button class="btn-primary-custom me-2" (click)="verifica()">
+            <mat-icon class="me-1">check_circle</mat-icon>
+            Verifica
+        </button>
+        <button type="button" class="close-button" [mat-dialog-close]="true" aria-label="Chiudi">&times;</button>
     </div>
 </div>
 
-<mat-dialog-content>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-5">
-                <button mat-button (click)="previousMonth()" title="Precedente">
-                    <fa-icon icon="chevron-left"></fa-icon>
+<mat-dialog-content class="dialog-content-custom">
+    <div class="container-fluid p-0">
+        <!-- Barra Navigazione Mese -->
+        <div class="row align-items-center mb-3">
+            <div class="col-auto">
+                <button mat-icon-button (click)="previousMonth()" title="Precedente">
+                    <mat-icon>chevron_left</mat-icon>
                 </button>
             </div>
-            <div class="col-6">
-                <span>{{ currentMonth.format('MMMM YYYY') }}</span>
+            <div class="col text-center">
+                <span class="month-label">{{ currentMonth.format('MMMM YYYY') }}</span>
             </div>
-            <div class="col-1">
-                <button mat-button (click)="nextMonth()" title="Successivo">
-                    <fa-icon icon="chevron-right"></fa-icon>
+            <div class="col-auto">
+                <button mat-icon-button (click)="nextMonth()" title="Successivo">
+                    <mat-icon>chevron_right</mat-icon>
                 </button>
             </div>
         </div>
-    </div>
 
-    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-        <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nome indumento </th>
-            <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
-        </ng-container>
+        <!-- Tabella Indumenti -->
+        <div class="table-card-container mb-3">
+            <table mat-table [dataSource]="dataSource">
 
-        <ng-container matColumnDef="quantity">
-            <th mat-header-cell *matHeaderCellDef> Quantità </th>
-            <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="load">
-            <th mat-header-cell *matHeaderCellDef> Carico </th>
-            <td mat-cell *matCellDef="let element"> {{element.carico}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="unload">
-            <th mat-header-cell *matHeaderCellDef> Scarico </th>
-            <td mat-cell *matCellDef="let element"> {{element.scarico}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="notes">
-            <th mat-header-cell *matHeaderCellDef> Note </th>
-            <td mat-cell *matCellDef="let element"> {{element.note}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="date">
-            <th mat-header-cell *matHeaderCellDef> Data </th>
-            <td mat-cell *matCellDef="let element"> {{element.lastChecked.datacheck | date: 'dd/MM/yyyy'}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="operator">
-            <th mat-header-cell *matHeaderCellDef> Operatore </th>
-            <td mat-cell *matCellDef="let element"> {{element.lastChecked.UserName}} </td>
-        </ng-container>
-
-        <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef>
-                <ng-container *ngIf="editEnable">
-                    <button class="btn btn-link p-0" (click)="AddIndumento()">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="black" class="bi bi-plus-circle-fill" viewBox="0 0 16 16">
-                            <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0M8.5 4.5a.5.5 0 0 0-1 0v3h-3a.5.5 0 0 0 0 1h3v3a.5.5 0 0 0 1 0v-3h3a.5.5 0 0 0 0-1h-3z" />
-                        </svg>
-                    </button>
+                <!-- Nome Indumento Column -->
+                <ng-container matColumnDef="name">
+                    <th mat-header-cell *matHeaderCellDef> Nome indumento </th>
+                    <td mat-cell *matCellDef="let element"> {{element.nome}} </td>
                 </ng-container>
-            </th>
-            <td mat-cell *matCellDef="let element">
-                <ng-container *ngIf="editEnable">
-                    <button class="btn btn-link p-0" (click)="details(element)">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-square" viewBox="0 0 16 16">
-                            <path d="M15.502 1.94a.5.5 0 0 1 0 .706L14.459 3.69l-2-2L13.502.646a.5.5 0 0 1 .707 0l1.293 1.293zm-1.75 2.456-2-2L4.939 9.21a.5.5 0 0 0-.121.196l-.805 2.414a.25.25 0 0 0 .316.316l2.414-.805a.5.5 0 0 0 .196-.12l6.813-6.814z" />
-                            <path fill-rule="evenodd" d="M1 13.5A1.5 1.5 0 0 0 2.5 15h11a1.5 1.5 0 0 0 1.5-1.5v-6a.5.5 0 0 0-1 0v6a.5.5 0 0 1-.5.5h-11a.5.5 0 0 1-.5-.5v-11a.5.5 0 0 1 .5-.5H9a.5.5 0 0 0 0-1H2.5A1.5 1.5 0 0 0 1 2.5z" />
-                        </svg>
-                    </button>
+
+                <!-- Quantità Column -->
+                <ng-container matColumnDef="quantity">
+                    <th mat-header-cell *matHeaderCellDef> Quantità </th>
+                    <td mat-cell *matCellDef="let element"> {{element.quantita}} </td>
                 </ng-container>
-            </td>
-        </ng-container>
 
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    <div class="paginator-container">
+                <!-- Carico Column -->
+                <ng-container matColumnDef="load">
+                    <th mat-header-cell *matHeaderCellDef> Carico </th>
+                    <td mat-cell *matCellDef="let element"> {{element.carico}} </td>
+                </ng-container>
 
-        <mat-paginator #Indumenti [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons
-                       aria-label="Select page of periodic elements">
-        </mat-paginator>
-    </div>
-    <div class="legend">
-        <div class="legend-item">
-            Ultima modifica effettuata in data {{lastcheck | date: 'dd/MM/yyyy'}} da: {{lastusercheck}}
+                <!-- Scarico Column -->
+                <ng-container matColumnDef="unload">
+                    <th mat-header-cell *matHeaderCellDef> Scarico </th>
+                    <td mat-cell *matCellDef="let element"> {{element.scarico}} </td>
+                </ng-container>
+
+                <!-- Note Column -->
+                <ng-container matColumnDef="notes">
+                    <th mat-header-cell *matHeaderCellDef> Note </th>
+                    <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                </ng-container>
+
+                <!-- Data Column -->
+                <ng-container matColumnDef="date">
+                    <th mat-header-cell *matHeaderCellDef> Data </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lastChecked?.datacheck | date: 'dd/MM/yyyy'}} </td>
+                </ng-container>
+
+                <!-- Operatore Column -->
+                <ng-container matColumnDef="operator">
+                    <th mat-header-cell *matHeaderCellDef> Operatore </th>
+                    <td mat-cell *matCellDef="let element"> {{element.lastChecked?.UserName}} </td>
+                </ng-container>
+
+                <!-- Azioni Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef class="text-end">
+                        <button *ngIf="editEnable" mat-icon-button color="primary" (click)="AddIndumento()" title="Aggiungi indumento">
+                            <mat-icon>add_circle</mat-icon>
+                        </button>
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-end">
+                        <button *ngIf="editEnable" mat-icon-button color="primary" (click)="details(element)" title="Modifica">
+                            <mat-icon>edit</mat-icon>
+                        </button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Stato Vuoto -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                        <div class="empty-state">
+                            <mat-icon>checkroom</mat-icon>
+                            <span>Nessun indumento presente nell'armadio</span>
+                        </div>
+                    </td>
+                </tr>
+            </table>
         </div>
-      
+
+        <!-- REGOLA TASSATIVA: Paginator non toccato né spostato -->
+        <div class="paginator-container">
+            <mat-paginator #Indumenti [pageSizeOptions]="[5, 10, 20, 30]" showFirstLastButtons aria-label="Seleziona pagina">
+            </mat-paginator>
+        </div>
+
+        <!-- Legenda/Note informative -->
+        <div class="legend-container mt-3">
+            <span class="legend-text">
+                Ultima modifica effettuata in data {{lastcheck | date: 'dd/MM/yyyy'}} da: {{lastusercheck}}
+            </span>
+        </div>
     </div>
 </mat-dialog-content>
-
-
-
-<div mat-dialog-actions>
-    <div class="bottom-actions">
-        <ng-container *ngIf="!verificato">
-            <button mat-button class="button-insert" (click)="verifica()">Verifica</button>
-        </ng-container>
-            <button mat-button [mat-dialog-close]="true">Chiudi</button>
-</div>
-</div>
