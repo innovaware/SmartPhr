@@ -1,72 +1,44 @@
-<div mat-dialog-title>
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col">
-                <h3>Dati Controllo</h3>
-            </div>
-        </div>
-
-        <div class="row">
-            <div class="col">
-                <hr>
-            </div>
+<div class="dialog-container">
+    <!-- Header Personalizzato Modal/Dialog -->
+    <div class="dialog-header">
+        <h2 class="dialog-title">Dati Controllo</h2>
+        <div class="header-actions">
+            <button mat-raised-button class="btn-save" [mat-dialog-close]="true" (click)="salva()">
+                <mat-icon>save</mat-icon>
+                <span>Salva</span>
+            </button>
+            <button type="button" class="btn-close" [mat-dialog-close]="true" aria-label="Chiudi">&times;</button>
         </div>
     </div>
-</div>
 
-
-<mat-dialog-content>
-    <div class="container-fluid">
-      <div class="row">
-        <!-- <div class="col">
-    <mat-form-field appearance="fill">
-      <mat-label>Data di Controllo</mat-label>
-      <input matInput [matDatepicker]="datacontrollo" [(ngModel)]="dataControllo">
-      <mat-datepicker-toggle matSuffix [for]="datacontrollo"></mat-datepicker-toggle>
-      <mat-datepicker #datacontrollo></mat-datepicker>
-    </mat-form-field>
-  </div>-->
-        <div class="col">
-          <mat-form-field appearance="fill">
-            <mat-label>Tipologia di controllo</mat-label>
-            <select matNativeControl class="custom-select" [(ngModel)]="tipologia">
-              <option value="">Seleziona ...</option>
-              <option value="Gestione Infermeria">Gestione Infermeria</option>
-              <option value="Riordino Armadi">Riordino Armadi</option>
-            </select>
-          </mat-form-field>
-        </div>
-        <div class="col">
-          <div class="form-check form-switch">
-            <input class="form-check-input" type="checkbox" id="esito" [(ngModel)]="esito">
-            <label class="form-check-label" for="esito">Esito Positivo</label>
-          </div>
-        </div>
-      </div>
-        <div class="row">
-            <div class="col">
-                <mat-label>Note: </mat-label>
-            </div>
-            <div class="col">
-                <mat-form-field>
-                    <textarea matInput rows="2" [(ngModel)]="note" placeholder="Note"></textarea>
+    <mat-dialog-content class="dialog-body">
+        <!-- Prima Riga: Tipologia di controllo e Switch Esito Positivo -->
+        <div class="form-grid mb-3">
+            <div class="grid-col">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Tipologia di controllo</mat-label>
+                    <mat-select [(ngModel)]="tipologia">
+                        <mat-option value="">Seleziona...</mat-option>
+                        <mat-option value="Gestione Infermeria">Gestione Infermeria</mat-option>
+                        <mat-option value="Riordino Armadi">Riordino Armadi</mat-option>
+                    </mat-select>
                 </mat-form-field>
             </div>
-        </div>
-        <div class="row">
-            <div class="col">
-                <hr>
+
+            <div class="grid-col switch-col">
+                <div class="form-check form-switch custom-switch-wrapper">
+                    <input class="form-check-input" type="checkbox" id="esito" [(ngModel)]="esito">
+                    <label class="form-check-label" for="esito">Esito Positivo</label>
+                </div>
             </div>
         </div>
-        <br />
-    </div>
-</mat-dialog-content>
 
-
-
-<div mat-dialog-actions>
-    <div class="bottom-actions">
-        <button mat-button  [mat-dialog-close]="true" (click)="salva()">Salva</button>
-        <button mat-button [mat-dialog-close]="true">Chiudi</button>
-    </div>
+        <!-- Seconda Riga: Note -->
+        <div class="form-row">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Note</mat-label>
+                <textarea matInput rows="3" [(ngModel)]="note" placeholder="Inserisci eventuali note..."></textarea>
+            </mat-form-field>
+        </div>
+    </mat-dialog-content>
 </div>

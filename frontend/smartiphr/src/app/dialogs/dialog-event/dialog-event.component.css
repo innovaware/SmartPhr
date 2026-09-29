@@ -1,165 +1,195 @@
-.example-card {
-  min-width: 500px;
-  margin: 0px;
+/* Sfondo Contenitore Dialog */
+.dialog-container {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
 }
 
-h3 {
-  margin-top: 5px;
-  font-weight: 600;
-  font-size: 12px;
-  color: #676a6c;
+/* Header Modal Personalizzato */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f7;
+  margin-bottom: 16px;
 }
 
-.close-button {
-  font-size: 1.5rem;
+.header-left {
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-title {
+  color: #4a5568;
+  font-size: 1.125rem;
   font-weight: 700;
-  line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
-  opacity: 0.5;
-  background: transparent;
-  border: transparent;
-
-  float: right;
-  top: -24px;
-  right: -24px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
 }
 
-.close-icon {
-  transition: 1s ease-in-out;
+.required-legend {
+  font-size: 0.75rem;
+  color: #718096;
+  margin-top: 4px;
 }
 
-.close-icon:hover {
-  transform: rotate(180deg);
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
 }
 
-::ng-deep .icon-outside .close-button {
-  float: right;
-  top: -52px;
-  right: -52px;
-}
-
-::ng-deep .icon-outside .mat-dialog-container {
-  overflow: unset;
-}
-
-button,
-select {
-  text-transform: none;
-}
-
-.bottom-actions {
-  width: 100%;
-  text-align: right;
-}
-
-.button-save {
-  color: #fff;
-  background-color: #1ab394;
-  border-color: #1ab394;
-}
-
-label {
-  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-  font-size: 13px;
+/* Pulsante Salva Primario */
+.btn-save {
+  background-color: #3b5998 !important;
+  color: #ffffff !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
-  color: #676a6c;
-}
-
-span {
-  font-size: 10px
-}
-
-.mat-card-content > :last-child:not(.mat-card-footer),
-.mat-card > :last-child:not(.mat-card-footer) {
-  width: 100%;
-}
-
-.mat-dialog-title {
-  margin: 0px;
-}
-
-.mat-form-field {
-  width: 100%;
-}
-
-::ng-deep .mat-dialog-container {
-  min-width: 800px !important;
-}
-
-
-.event_type {
-  padding: 3px;
-  margin: 2px 0;
-  font-size: 0.8em;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  background-color: #f8f9fa;
   border-radius: 4px;
-  transition: background-color 0.2s;
 }
 
-  .event_type:hover {
-    background-color: #e9ecef;
+  .btn-save:hover {
+    background-color: #2d4373 !important;
   }
 
-.event_type_medico {
-  background-color: #ff9100;
-  color: white;
+/* Pulsante Chiusura Dialog */
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #718096;
+  cursor: pointer;
+  padding: 0 4px;
 }
 
-.event_type_admin {
-  background-color: #ff0000;
-  color: white;
+  .btn-close:hover {
+    color: #2d3748;
+  }
+
+/* Body Modal */
+.dialog-body {
+  padding: 8px 0;
+  overflow-x: hidden;
 }
 
-.event_type_infermiere {
-  background-color: #ffd000;
-  color: black;
+/* Layout Form */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+  align-items: center;
 }
 
-.event_type_oss {
-  background-color: #34bb1a;
-  color: white;
+.time-input-container {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin-bottom: 22px;
 }
 
-.event_type_psicologo {
-  background-color: #9b32c4;
-  color: white;
+.input-label {
+  font-size: 0.75rem;
+  color: #718096;
+  font-weight: 600;
 }
 
-.event_type_sociale {
-  background-color: #000000;
-  color: white;
+.custom-time-control {
+  height: 48px;
+  border: 1px solid #cbd5e0;
+  border-radius: 4px;
+  padding: 0 12px;
+  background-color: #ffffff;
+  color: #2d3748;
+  outline: none;
 }
 
-.event_type_ausiliare {
-  background-color: #0084ff;
-  color: white;
+  .custom-time-control:focus {
+    border-color: #3b5998;
+  }
+
+.switch-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 12px;
 }
 
-.event_type_cuoco {
-  background-color: #8a575e;
-  color: white;
+/* Toolbar Filtro */
+.toolbar-container {
+  display: flex;
+  align-items: center;
 }
 
-.event_type_corsi {
-  background-color: dodgerblue;
-  color: white;
+.search-field {
+  width: 100%;
 }
 
-.event_type_corsiFormazione {
-  background-color: blue;
-  color: white;
+/* Tabella */
+.table-card-container {
+  background-color: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  overflow: hidden;
 }
 
-.event_type_controlli {
-  background-color: orange;
-  color: black;
+table.mat-table {
+  width: 100%;
+  box-shadow: none !important;
 }
 
-.event_type_agendaClinica {
-  background-color: royalblue;
-  color: white;
+th.mat-header-cell {
+  background-color: #f7fafc;
+  color: #4a5568;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+td.mat-cell {
+  color: #2d3748;
+  border-bottom: 1px solid #edf2f7;
+}
+
+/* Stato Vuoto */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #718096;
+  background-color: #ffffff;
+  border: 1px dashed #e2e8f0;
+  border-radius: 8px;
+  margin-top: 16px;
+}
+
+  .empty-state mat-icon {
+    font-size: 40px;
+    height: 40px;
+    width: 40px;
+    margin-bottom: 8px;
+    color: #a0aec0;
+  }
+
+  .empty-state p {
+    margin: 0;
+    font-size: 0.875rem;
+    font-weight: 500;
+  }
+
+/* Classi Utility */
+.w-100 {
+  width: 100%;
+}
+
+.mb-3 {
+  margin-bottom: 1rem;
+}
+
+.text-right {
+  text-align: right;
 }

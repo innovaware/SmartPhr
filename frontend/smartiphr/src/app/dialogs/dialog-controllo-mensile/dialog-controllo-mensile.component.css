@@ -1,74 +1,120 @@
-.example-card {
-  min-width: 500px;
-  margin: 0px;
+/* Sfondo e contenitore generale del Dialog */
+.dialog-container {
+  background-color: #f8fafc;
+  padding: 16px;
+  border-radius: 8px;
 }
 
-h3 {
-  margin-top: 5px;
+/* Header Personalizzato Modal */
+.dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #edf2f7;
+  margin-bottom: 20px;
+}
+
+/* Titolo */
+.dialog-title {
+  color: #4a5568;
+  font-size: 1.125rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin: 0;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+/* Pulsante di salvataggio primario nell'header */
+.btn-save {
+  background-color: #3b5998 !important;
+  color: #ffffff !important;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
   font-weight: 600;
-  font-size: 16px;
-  color: #676a6c;
+  border-radius: 4px;
 }
 
-.close-icon {
-  transition: 1s ease-in-out;
+  .btn-save:hover {
+    background-color: #2d4373 !important;
+  }
+
+/* Pulsante di chiusura (&times;) */
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 1.5rem;
+  line-height: 1;
+  color: #718096;
+  cursor: pointer;
+  padding: 0 4px;
 }
 
-.close-icon:hover {
-  transform: rotate(180deg);
+  .btn-close:hover {
+    color: #2d3748;
+  }
+
+/* Body Modal */
+.dialog-body {
+  padding: 8px 0;
+  overflow-x: hidden;
 }
 
-::ng-deep .icon-outside .close-button {
-  float: right;
-  top: -52px;
-  right: -52px;
+/* Form Layout */
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: center;
 }
 
-::ng-deep .icon-outside .mat-dialog-container {
-  overflow: unset;
+.grid-col {
+  display: flex;
+  align-items: center;
 }
 
-button,
-select {
-  text-transform: none;
+.switch-col {
+  margin-bottom: 22px;
 }
 
-.bottom-actions {
+/* Stile Switch personalizzato */
+.custom-switch-wrapper {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+  .custom-switch-wrapper .form-check-input {
+    cursor: pointer;
+    width: 2.5em;
+    height: 1.25em;
+  }
+
+  .custom-switch-wrapper .form-check-label {
+    cursor: pointer;
+    color: #4a5568;
+    font-weight: 600;
+    font-size: 0.875rem;
+    user-select: none;
+  }
+
+.form-row {
   width: 100%;
-  text-align: right;
 }
 
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-  /* background-color: rgba(0, 0, 0, 0.04); */
-  background-color: white;
-}
-
-.input-full {
+/* Classi Utility */
+.w-100 {
   width: 100%;
 }
 
-
-.pad {
-  padding-left: 6%;
-  padding-top: 3%;
-}
-
-.title {
-  font-size: 30px;
-  line-height: 1.2;
-  color: #676a6c;
-}
-
-
-table {
-  width: 100%;
-}
-
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-.mat-column-action {
-  width: 32px;
+.mb-3 {
+  margin-bottom: 1rem;
 }
