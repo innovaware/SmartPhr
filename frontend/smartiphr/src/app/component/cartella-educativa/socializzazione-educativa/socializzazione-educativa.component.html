@@ -1,56 +1,98 @@
-<div class="container-fluid tabcontent">
-    <div class="row">
-      <div class="col">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>SOCIALIZZAZIONE</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
-              <label>E’ interessato a </label>
-              <input  type="text" [(ngModel)]="data.interesse">
-              <br>
+<div class="component-container">
+    <div class="card-form">
 
-              <label>Sta volentieri in compagnia con </label>
-              <textarea class="form-control value_input" rows="1" cols="150"    [(ngModel)]="data.compagnia"></textarea>
-              <br>
-              <label>Ha interesse per: </label>
-              <input  type="text" [(ngModel)]="data.iniziativa">
-              <br>
+        <!-- Titolo della Scheda -->
+        <h3 class="card-title">Socializzazione</h3>
 
-              <h3>HOBBIES</h3>
+        <!-- Campi Informazioni Generali -->
+        <div class="row">
+            <div class="col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>È interessato a</mat-label>
+                    <input matInput placeholder="Inserisci interessi" [(ngModel)]="data.interesse">
+                </mat-form-field>
+            </div>
 
-            <table>
-                <tr>
-                  <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyScrittura"  />Scrittura</td>
+            <div class="col-md-6 mb-3">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Ha interesse per</mat-label>
+                    <input matInput placeholder="Inserisci iniziative o preferenze" [(ngModel)]="data.iniziativa">
+                </mat-form-field>
+            </div>
 
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyBallo"  />Ballo</td>
-  
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyBricolage"  />Bricolage</td>
+            <div class="col-12 mb-4">
+                <mat-form-field appearance="outline" class="w-100">
+                    <mat-label>Sta volentieri in compagnia con</mat-label>
+                    <textarea matInput rows="2" placeholder="Specificare con chi sta volentieri in compagnia..." [(ngModel)]="data.compagnia"></textarea>
+                </mat-form-field>
+            </div>
+        </div>
 
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyLettura"  />Lettura</td>
+        <!-- Sezione Hobbies -->
+        <div class="section-divider">
+            <h4 class="section-subtitle">Hobbies</h4>
+        </div>
 
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyDisegno"  />Disegno</td>
-                  </tr> 
+        <!-- Griglia Checkbox Hobbies -->
+        <div class="hobbies-grid">
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyScrittura">
+                <span>Scrittura</span>
+            </label>
 
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyBallo">
+                <span>Ballo</span>
+            </label>
 
-                  <tr>
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyPittura"  />Pittura</td>
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyBricolage">
+                <span>Bricolage</span>
+            </label>
 
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyAttMotoria"  />Attività motoria</td>
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyLettura">
+                <span>Lettura</span>
+            </label>
 
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyGiochi"  />Giochi</td>
-          
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyTV"  />TV</td>
-             
-                    <td><input type="checkbox" slot="end" [(ngModel)]="data.hobbyCucina"  />Cucina</td>
-                  </tr> 
-            </table>    
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyDisegno">
+                <span>Disegno</span>
+            </label>
 
-            <label>Altro: </label>
-            <textarea class="form-control value_input" rows="1" cols="150"    [(ngModel)]="data.hobbyAltro"></textarea>
-          </mat-card-content>
-        </mat-card>
-      </div>
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyPittura">
+                <span>Pittura</span>
+            </label>
+
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyAttMotoria">
+                <span>Attività motoria</span>
+            </label>
+
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyGiochi">
+                <span>Giochi</span>
+            </label>
+
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyTV">
+                <span>TV</span>
+            </label>
+
+            <label class="hobby-item">
+                <input type="checkbox" class="form-check-input custom-checkbox" [(ngModel)]="data.hobbyCucina">
+                <span>Cucina</span>
+            </label>
+        </div>
+
+        <!-- Campo Altro -->
+        <div class="mt-4">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Altro</mat-label>
+                <textarea matInput rows="2" placeholder="Eventuali altri hobbies o note..." [(ngModel)]="data.hobbyAltro"></textarea>
+            </mat-form-field>
+        </div>
+
     </div>
-  </div>
-
+</div>

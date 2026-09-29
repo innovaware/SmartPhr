@@ -17,7 +17,7 @@ import { MessagesService } from 'src/app/service/messages.service';
   templateUrl: './diario-educativo.component.html',
   styleUrls: ['./diario-educativo.component.css']
 })
-export class DiarioEducativoComponent implements OnInit {
+export class DiarioEducativoComponent implements OnInit, AfterViewInit {
 
   @Input() data: Paziente;
   public dataDiario : any[] = [];
@@ -38,7 +38,13 @@ export class DiarioEducativoComponent implements OnInit {
     this.getDataDiario();
   }
 
+  ngAfterViewInit() {
+    if (this.diarioEducativoPaginator) {
+      this.diarioEducativoDataSource.paginator = this.diarioEducativoPaginator;
+    }
 
+    this.getDataDiario();
+  }
 
   async getDataDiario() {
     console.log(`get DataCartella paziente: ${this.data._id}`);
@@ -71,8 +77,7 @@ export class DiarioEducativoComponent implements OnInit {
     if (dialogRef != undefined)
       dialogRef.afterClosed().subscribe((result) => {
         if(result != null && result != undefined){
-        this.dataDiario.push(result);
-        this.diarioEducativoDataSource = new MatTableDataSource<DiarioEducativo>(this.dataDiario);
+          this.getDataDiario();
         }
       });
   }

@@ -1,51 +1,35 @@
-<div mat-dialog-title>
-  <div class="container-fluid" >
-    <div class="row">
-      <div class="col">
-        <h3>DIARIO</h3>
-      </div>
-
+<!-- Header Modal / Dialog con salvataggio in alto -->
+<div class="dialog-header">
+    <h2 class="dialog-title">Diario Educativo</h2>
+    <div class="header-actions">
+        <button type="button" class="btn-save" (click)="salva()" aria-label="Salva" title="Salva">
+            <mat-icon>save</mat-icon>
+            <span>Salva</span>
+        </button>
+        <button type="button" class="btn-close" [mat-dialog-close]="true" aria-label="Chiudi" title="Chiudi">
+            &times;
+        </button>
     </div>
-
-    <div class="row">
-      <div class="col">
-        <hr>
-      </div>
-    </div>
-  </div>
 </div>
 
-<mat-dialog-content>
+<!-- Contenuto Dialog -->
+<mat-dialog-content class="dialog-content-container">
+    <div class="card-form">
+        <h4 class="card-title">Inserisci Contenuto <span class="required-asterisk">*</span></h4>
 
-    <div class="container-fluid tabcontent">
-      <div class="row">
-        <div class="col">
-          <mat-card>
-            <mat-card-header>
-              <mat-card-title>CONTENUTO*</mat-card-title>
-            </mat-card-header>
-            <mat-card-content>
-              <textarea class="form-control value_input" rows="1" cols="150"   [(ngModel)]="item.contenuto"></textarea>
-            </mat-card-content>
-          </mat-card>
+        <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Contenuto della nota</mat-label>
+            <textarea matInput
+                      rows="6"
+                      placeholder="Scrivi qui le annotazioni del diario..."
+                      [(ngModel)]="item.contenuto"
+                      required>
+      </textarea>
+        </mat-form-field>
+
+        <div class="required-info">
+            <mat-icon class="info-icon">info</mat-icon>
+            <span>I campi contrassegnati con l'asterisco (<span class="required-asterisk">*</span>) sono obbligatori.</span>
         </div>
-      </div>
     </div>
-    <br>
-    <label>Tutti i campi indicati con * sono obbligatori!</label>
-    <br>
 </mat-dialog-content>
-
-
-<div mat-dialog-actions>
-  <div class="bottom-actions">
-  <button mat-button [mat-dialog-close]="true">Chiudi</button>
-  <button mat-button (click)="salva()" class="button-insert">Salva</button>
-</div>
-</div>
-
-
-
-
-
-

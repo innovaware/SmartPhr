@@ -54,4 +54,28 @@
   select {
     background-color: white;
   }
-  
+
+.component-container {
+  width: 100%;
+}
+
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4a5568;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.w-100 {
+  width: 100%;
+}

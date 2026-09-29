@@ -1,127 +1,156 @@
-<div class="container-fluid tabcontent">
-    <div class="row">
-      <div class="col">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>ADL (ACTIVITIES OF DAILY LIVING)</mat-card-title>
-          </mat-card-header>
-          <mat-card-content>
+<div class="component-container">
+    <div class="card-form">
 
+        <!-- Titolo della Scheda -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="card-title m-0">ADL (Activities of Daily Living)</h3>
+            <div class="score-badge">
+                Punteggio Totale: <strong>{{ data.totale || 0 }}/6</strong>
+            </div>
+        </div>
 
-            <table>
-                <tr>
-                  <td>A) FARE IL BAGNO (vasca, doccia, spugnature) </td>
-                  <td>
-                      <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable  [disabled]=disable [(ngModel)]="data.A">
-                        <option selected="" value="">Seleziona ...</option>
-                        <option value="1-1">Fa il bagno da solo (entra ed esce dalla vasca da solo): 1</option>
-                        <option value="2-1">Ha bisogno di assistenza soltanto nella pulizia di una parte del corpo (es. dorso): 1</option>
-                        <option value="3-0">Ha bisogno di assistenza per più di una parte del corpo: 0</option>
+        <!-- Lista Valutazioni -->
+        <div class="adl-questions-list">
 
-                    </select>
-                  </td>
-                </tr>
-                <tr>
-                    <td>B) VESTIRSI (prendere i vestiti dall’armadio e/o cassetti, inclusa biancheria
-                        intima, vestiti, uso delle allacciature e delle bretelle se utilizzate)
-                        </td>
-                    <td>
-                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable  [disabled]=disable [(ngModel)]="data.B">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1-1">Prende i vestiti e si veste completamente senza bisogno di assistenza: 1</option>
-                          <option value="2-1">Prende i vestiti e si veste senza bisogno di assistenza eccetto che per allacciare le scarpe: 1</option>
-                          <option value="3-0">Ha bisogno di assistenza nel prendere i vestiti o nel vestirsi oppure rimane
-                            parzialmente o completamente svestito: 0
-                            </option>
-                      </select>
-                    </td>
-                  </tr>
+            <!-- A) FARE IL BAGNO -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">A</span>
+                    <div class="adl-label-text">
+                        <strong>Fare il bagno</strong>
+                        <small>Vasca, doccia, spugnature</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.A">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Fa il bagno da solo (entra ed esce dalla vasca da solo): 1</option>
+                            <option value="2-1">Ha bisogno di assistenza soltanto nella pulizia di una parte del corpo (es. dorso): 1</option>
+                            <option value="3-0">Ha bisogno di assistenza per più di una parte del corpo: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
+            <!-- B) VESTIRSI -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">B</span>
+                    <div class="adl-label-text">
+                        <strong>Vestirsi</strong>
+                        <small>Prendere i vestiti dall'armadio/cassetti, biancheria, allacciature, ecc.</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.B">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Prende i vestiti e si veste completamente senza bisogno di assistenza: 1</option>
+                            <option value="2-1">Prende i vestiti e si veste senza assistenza eccetto che per allacciare le scarpe: 1</option>
+                            <option value="3-0">Ha bisogno di assistenza nel prendere i vestiti o nel vestirsi / rimane svestito: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
-                  <tr>
-                    <td>C) TOILETTE (andare nella stanza da bagno per la minzione e l'evacuazione,
-                        pulirsi, rivestirsi)
-                        </td>
-                    <td>
-                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable [(ngModel)]="data.C">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1-1">Va in bagno, si pulisce e si riveste senza bisogno di assistenza (può utilizzare
-                            mezzi di supporto come bastone, deambulatore o seggiola a rotelle, può usare vaso
-                            da notte o comoda svuotandoli al mattino): 1
-                            </option>
-                          <option value="2-0">Ha bisogno di assistenza nell’andare in bagno o nel pulirsi o nel rivestirsi o nell’uso
-                            del vaso da notte o della comoda: 0
-                            </option>
-                          <option value="3-0">Non si reca in bagno per l’evacuazione: 0</option>
-                      </select>
-                    </td>
-                  </tr>
+            <!-- C) TOILETTE -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">C</span>
+                    <div class="adl-label-text">
+                        <strong>Toilette</strong>
+                        <small>Andare in bagno per minzione/evacuazione, pulirsi, rivestirsi</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.C">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Va in bagno, si pulisce e si riveste senza bisogno di assistenza: 1</option>
+                            <option value="2-0">Ha bisogno di assistenza nell'andare in bagno, pulirsi o rivestirsi: 0</option>
+                            <option value="3-0">Non si reca in bagno per l'evacuazione: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
+            <!-- D) SPOSTARSI -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">D</span>
+                    <div class="adl-label-text">
+                        <strong>Spostarsi</strong>
+                        <small>Trasferimenti letto, poltrona, deambulazione</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.D">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Si sposta dentro e fuori dal letto e in poltrona senza assistenza: 1</option>
+                            <option value="2-0">Compie questi trasferimenti se aiutato: 0</option>
+                            <option value="3-0">Allettato, non esce dal letto: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
+            <!-- E) CONTINENZA -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">E</span>
+                    <div class="adl-label-text">
+                        <strong>Continente di feci ed urine</strong>
+                        <small>Controllo degli sfinteri</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.E">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Controlla completamente feci e urine: 1</option>
+                            <option value="2-0">"Incidenti" occasionali: 0</option>
+                            <option value="3-0">Necessità di supervisione, usa catetere o incontinente: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
-                  <tr>
-                    <td>D) SPOSTARSI</td>
-                    <td>
-                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable [(ngModel)]="data.D">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1-1">Si sposta dentro e fuori dal letto e in poltrona senza assistenza (eventualmente con
-                            canadesi o deambulatore): 1
-                            </option>
-                          <option value="2-0">Compie questi trasferimenti se aiutato: 0</option>
-                          <option value="3-0">Allettato, non esce dal letto: 0</option>
-                      </select>
-                    </td>
-                  </tr>
+            <!-- F) ALIMENTAZIONE -->
+            <div class="adl-item">
+                <div class="adl-label-container">
+                    <span class="adl-code">F</span>
+                    <div class="adl-label-text">
+                        <strong>Alimentazione</strong>
+                        <small>Capacità di nutrirsi autonomamente</small>
+                    </div>
+                </div>
+                <div class="adl-select-container">
+                    <mat-form-field appearance="outline" class="w-100">
+                        <mat-label>Seleziona valutazione</mat-label>
+                        <select matNativeControl required (change)="valADLChange($event)" [disabled]="disable" [(ngModel)]="data.F">
+                            <option value="">Seleziona...</option>
+                            <option value="1-1">Senza assistenza: 1</option>
+                            <option value="2-1">Assistenza solo per tagliare la carne o imburrare il pane: 1</option>
+                            <option value="3-0">Richiede assistenza per portare il cibo alla bocca o nutrito per via parenterale: 0</option>
+                        </select>
+                    </mat-form-field>
+                </div>
+            </div>
 
+        </div>
 
+        <!-- Riepilogo Punteggio in Calce -->
+        <div class="score-summary-card">
+            <span>Punteggio Totale Calcolato (A+B+C+D+E+F):</span>
+            <span class="total-number">{{ data.totale || 0 }} / 6</span>
+        </div>
 
-
-                  <tr>
-                    <td>E) CONTINENZA DI FECI ED URINE</td>
-                    <td>
-                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable [(ngModel)]="data.E">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1-1">Controlla completamente feci e urine: 1</option>
-                          <option value="2-0">“Incidenti” occasionali: 0</option>
-                          <option value="3-0">Necessità di supervisione per il controllo di feci e urine, usa il catetere, è
-                            Incontinente: 0
-                            </option>
-                      </select>
-                    </td>
-                  </tr>
-
-
-
-                  <tr>
-                    <td>F) ALIMENTAZIONE</td>
-                    <td>
-                        <select matNativeControl required class="custom-select" (change)="valADLChange($event)"  [disabled]=disable [(ngModel)]="data.F">
-                          <option selected="" value="">Seleziona ...</option>
-                          <option value="1-1">Senza assistenza: 1</option>
-                          <option value="2-1">Assistenza solo per tagliare la carne o imburrare il pane: 1</option>
-                          <option value="3-0">Richiede assistenza per portare il cibo alla bocca o viene nutrito parzialmente o
-                            completamente per via parenterale: 0
-                            </option>
-
-                      </select>
-                    </td>
-                  </tr>
-
-
-
-                  <tr>
-                    <td>PUNTEGGIO TOTALE (A+B+C+D+E+F):</td>
-                    <td>
-                        {{ data.totale }}/6                     
-                    </td>
-                  </tr>
-
-              </table>
-
-              
-          </mat-card-content>
-        </mat-card>
-      </div>
     </div>
-  </div>
-
+</div>

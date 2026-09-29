@@ -80,4 +80,151 @@
     border-color: #23c6c8;
     margin-bottom: 7px;
   }
-  
+
+.component-container {
+  width: 100%;
+}
+
+.card-form {
+  background: #ffffff;
+  border-radius: 8px;
+  padding: 24px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  border: 1px solid #edf2f7;
+}
+
+.card-title {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Badge del Punteggio */
+.score-badge {
+  background-color: #e2e8f0;
+  color: #2d3748;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 0.85rem;
+}
+
+/* Lista Voci ADL */
+.adl-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.adl-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 12px 16px;
+  background-color: #f8fafc;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+}
+
+.adl-label-container {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  flex: 1;
+}
+
+.adl-code {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background-color: #3b5998;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.9rem;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.adl-label-text {
+  display: flex;
+  flex-direction: column;
+}
+
+  .adl-label-text strong {
+    font-size: 0.95rem;
+    color: #2d3748;
+  }
+
+  .adl-label-text small {
+    font-size: 0.8rem;
+    color: #718096;
+  }
+
+.adl-select-container {
+  width: 380px;
+  max-width: 100%;
+}
+
+  .adl-select-container mat-form-field {
+    margin-bottom: -1.25em; /* Rimuove lo spazio extra inferiore del form-field */
+  }
+
+/* Box Totale Finale */
+.score-summary-card {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 24px;
+  padding: 16px 20px;
+  background-color: #ebf8ff;
+  border: 1px solid #bee3f8;
+  border-radius: 8px;
+  color: #2b6cb0;
+  font-weight: 600;
+}
+
+.total-number {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #2b6cb0;
+}
+
+/* Responsive Utility */
+@media (max-width: 768px) {
+  .adl-item {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .adl-select-container {
+    width: 100%;
+  }
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem;
+}
+
+.m-0 {
+  margin: 0;
+}
+
+.d-flex {
+  display: flex;
+}
+
+.justify-content-between {
+  justify-content: space-between;
+}
+
+.align-items-center {
+  align-items: center;
+}
