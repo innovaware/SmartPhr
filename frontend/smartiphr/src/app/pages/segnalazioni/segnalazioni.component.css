@@ -1,25 +1,148 @@
-.pad {
-    padding-left: 6%;
-    padding-top: 3%;
+/* Titolo Pagina */
+.page-title {
+  font-size: 24px;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.divider-custom {
+  border: 0;
+  border-top: 1px solid #edf2f7;
+  opacity: 1;
+}
+
+/* Pulsante Primario Personalizzato */
+.btn-primary-custom {
+  background-color: #3b5998 !important;
+  color: #ffffff !important;
+  border-radius: 6px;
+  font-weight: 600;
+  padding: 0 16px;
+  height: 40px;
+}
+
+  .btn-primary-custom:hover {
+    background-color: #2d4373 !important;
   }
-  
-  .title {
-    font-size: 30px;
-    line-height: 1.2;
-    color: #676a6c;
+
+/* Table Container & Mat-Table */
+.table-card-container {
+  background-color: #ffffff;
+  border: 1px solid #edf2f7;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+}
+
+table.mat-table {
+  width: 100%;
+  background-color: #ffffff;
+}
+
+th.mat-header-cell {
+  background-color: #f7fafc;
+  color: #4a5568;
+  font-weight: 600;
+  border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
+}
+
+td.mat-cell {
+  color: #2d3748;
+  border-bottom: 1px solid #edf2f7;
+  font-size: 14px;
+}
+
+.text-end {
+  text-align: right;
+}
+
+.me-1 {
+  margin-right: 0.25rem;
+}
+
+.mb-0 {
+  margin-bottom: 0 !important;
+}
+
+.mb-3 {
+  margin-bottom: 1rem !important;
+}
+
+.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+/* Azioni Tabella */
+.action-buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  gap: 4px;
+}
+
+.btn-action-take {
+  color: #1e88e5 !important;
+}
+
+.btn-action-resolve {
+  color: #2e7d32 !important;
+}
+
+/* Badge di Stato */
+.status-badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.status-aperto {
+  background-color: #feefc3;
+  color: #b06000;
+}
+
+.status-incarico {
+  background-color: #e8f0fe;
+  color: #1a73e8;
+}
+
+.status-risolto {
+  background-color: #e6f4ea;
+  color: #137333;
+}
+
+/* Empty State */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #718096;
+}
+
+  .empty-state mat-icon {
+    font-size: 48px;
+    height: 48px;
+    width: 48px;
+    margin-bottom: 8px;
+    color: #a0aec0;
   }
-  
-  
-  table {
-    width: 100%;
-  }
-  
-  .mat-form-field {
-    font-size: 14px;
-    width: 100%;
-  }
-  
-  .mat-column-action {
-    width: 32px;
-  }
-  
+/* Styling icone d'azione */
+.action-buttons-wrapper {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 4px;
+}
+
+.btn-action-take mat-icon {
+  color: #1e88e5 !important; /* Blu per Presa in Carico */
+}
+
+.btn-action-resolve mat-icon {
+  color: #2e7d32 !important; /* Verde per Risolto */
+}

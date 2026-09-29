@@ -19,15 +19,14 @@ import { interval } from "rxjs/internal/observable/interval";
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.css"],
 })
-export class AppComponent  {
+export class AppComponent {
   title = "smartiphr";
-  isAuthenticated: boolean;
-  numNotifiche: number;
+  isAuthenticated: boolean = false;
+  numNotifiche: number = 0;
   viewDate: Date = new Date();
   events = [];
-  private user: User;
+  private user: User = new User();
   private timerSubscription!: Subscription;
-  private alreadyExecuted: boolean = false;
   isMenuOpen: boolean = false;
 
   constructor(
@@ -40,44 +39,39 @@ export class AppComponent  {
     private newMessServ: NewMessageService,
     private logServ: LogService
   ) {
-    this.numNotifiche = 0;
-    this.user = new User();
     this.authenticationService.isAuthenticateHandler.subscribe(
       (user: User) => {
         this.isAuthenticated = user !== undefined && user !== null;
         this.user = user;
 
-        newMessServ.getMessagesForDip(user.dipendenteID).subscribe((x: NewMessage[] | null) => {
-          if (x) {
-            if (x.filter(y => !y.letto).length>0) {
-              this.numNotifiche = x.filter(y => !y.letto).length;
-              const dialogRef = this.dialog.open(DialogNewMessageComponent, {
-                disableClose: true,
-                data: {
-                  view: true,
-                  auto:true
-                },
-                width: '90%',  // Larghezza del dialog responsiva
-                maxWidth: '600px', // Larghezza massima
-                height: 'auto', // Altezza automatica
-                maxHeight: '90vh' // Altezza massima responsiva
-              });
-              dialogRef.afterClosed().subscribe(() => {
-                this.numNotifiche = 0;
-            });
+        if (this.isAuthenticated && user?.dipendenteID) {
+          newMessServ.getMessagesForDip(user.dipendenteID).subscribe((x: NewMessage[] | null) => {
+            if (x) {
+              if (x.filter(y => !y.letto).length > 0) {
+                this.numNotifiche = x.filter(y => !y.letto).length;
+                const dialogRef = this.dialog.open(DialogNewMessageComponent, {
+                  disableClose: true,
+                  data: {
+                    view: true,
+                    auto: true
+                  },
+                  width: '90%',
+                  maxWidth: '600px',
+                  height: 'auto',
+                  maxHeight: '90vh'
+                });
+                dialogRef.afterClosed().subscribe(() => {
+                  this.numNotifiche = 0;
+                });
+              }
             }
-            
-          } 
-        });
-
+          });
+        }
       },
       err => console.error(err)
     );
     this.startCheckingTime();
     this.authenticationService.refresh();
-
-    
-
   }
 
   toggleMenu() {
@@ -85,46 +79,40 @@ export class AppComponent  {
   }
 
   private startCheckingTime(): void {
-    console.log("DENTRO START");
     if (this.timerSubscription) {
-      return; // Evita duplicazioni
+      return;
     }
     this.timerSubscription = interval(60000).subscribe(() => this.checknotify());
   }
 
   checknotify() {
     this.user = this.authenticationService.getCurrentUser();
-
-    this.newMessServ.getMessagesForDip(this.user.dipendenteID).subscribe((x: NewMessage[] | null) => {
-      if (x) {
-        this.numNotifiche = x.filter(y => !y.letto).length;
-      } else {
-        this.numNotifiche = 0;
-      }
-    });
+    if (this.user?.dipendenteID) {
+      this.newMessServ.getMessagesForDip(this.user.dipendenteID).subscribe((x: NewMessage[] | null) => {
+        if (x) {
+          this.numNotifiche = x.filter(y => !y.letto).length;
+        } else {
+          this.numNotifiche = 0;
+        }
+      });
+    }
   }
 
-
   async logout() {
-
     this.stopCheckingTime();
-    console.log("Funzione logout chiamata!"); // Debug iniziale
     try {
       let log: Log = new Log();
       log.className = "Logout";
       log.operazione = "Logout";
       log.data = new Date();
 
-      // Ottieni l'utente corrente
       const user = await this.authenticationService.getCurrentUser();
-      console.log("Utente corrente:", user); // Debug utente
 
       if (!user || !user.dipendenteID) {
         this.messageService.showMessageError("Utente non valido.");
         return;
       }
 
-      // Ottieni i dettagli del dipendente
       const dipendente = await this.dipendenteService.getByIdUser(user.dipendenteID);
 
       if (dipendente && dipendente[0]) {
@@ -135,19 +123,11 @@ export class AppComponent  {
       }
       log.operatoreID = user.dipendenteID;
 
-      // Salva il log
-      console.log("Log da salvare:", log); // Verifica log finale
       await this.logServ.addLog(log);
-
-      // Logout dell'utente
-      console.log("Effettuando logout...");
       await this.authenticationService.logoutCurrentUser(user);
-
-      // Naviga alla pagina di login
-      console.log("Navigando alla pagina di login...");
       this.route.navigate(["login"]);
-    } catch (error) {
-      console.error("Errore durante il logout:", error); // Log dettagliato
+    } catch (error: any) {
+      console.error("Errore durante il logout:", error);
       this.messageService.showMessageError(
         `Errore durante il logout: ${error?.message || "sconosciuto"}`
       );
@@ -166,38 +146,35 @@ export class AppComponent  {
       data: {
         view: true,
       },
-      width: '90%',  // Larghezza del dialog responsiva
-      maxWidth: '600px', // Larghezza massima
-      height: 'auto', // Altezza automatica
-      maxHeight: '90vh' // Altezza massima responsiva
+      width: '90%',
+      maxWidth: '600px',
+      height: 'auto',
+      maxHeight: '90vh'
     });
+
     dialogRef.afterClosed().subscribe(() => {
-      this.newMessServ.getMessagesForDip(this.authenticationService.getCurrentUser().dipendenteID).subscribe((x: NewMessage[] | null) => {
-        console.log(x);
-        if (x) {
-          if (x.filter(y => !y.letto).length > 0) {
+      const user = this.authenticationService.getCurrentUser();
+      if (user?.dipendenteID) {
+        this.newMessServ.getMessagesForDip(user.dipendenteID).subscribe((x: NewMessage[] | null) => {
+          if (x) {
             this.numNotifiche = x.filter(y => !y.letto).length;
-          }
-          else {
+          } else {
             this.numNotifiche = 0;
           }
-        }
-      });
+        });
+      }
     });
   }
 
   async newMessage() {
-
-    // Apri il dialog dopo aver ottenuto i dati
-    const dialogRef = this.dialog.open(DialogNewMessageComponent, {
+    this.dialog.open(DialogNewMessageComponent, {
       data: {
-       new:true,
-     },
-     width: '90%',  // Larghezza del dialog responsiva
-     maxWidth: '600px', // Larghezza massima
-     height: 'auto', // Altezza automatica
-     maxHeight: '90vh' // Altezza massima responsiva
-   });
+        new: true,
+      },
+      width: '90%',
+      maxWidth: '600px',
+      height: 'auto',
+      maxHeight: '90vh'
+    });
   }
-
 }

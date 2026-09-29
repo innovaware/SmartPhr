@@ -69,7 +69,7 @@ export class SegnalazioneComponent implements OnInit {
           .then((x) => {
             this.dipendente = x[0];
             this.mansioniService.getById(this.dipendente.mansione).then((result) => {
-              if (result.codice == "AU" || result.codice == "DA" || result.codice == "RA") {
+              if (result.codice == "AU" || result.codice == "DA" || result.codice == "RA" || result.codice == "SA") {
                 this.admin = true;
               }
             });
