@@ -6,7 +6,6 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatPaginator } from '@angular/material/paginator/paginator';
 import { DialogQuestionComponent } from '../dialog-question/dialog-question.component';
 import { EventiService } from '../../service/eventi.service';
-import { ScrollingVisibility } from '@angular/cdk/overlay';
 import { UserInfo } from '../../models/userInfo';
 
 import * as moment from "moment";
@@ -17,14 +16,19 @@ import * as moment from "moment";
   styleUrls: ['./dialog-event.component.css']
 })
 export class DialogEventComponent implements OnInit, AfterViewInit {
-  @Input() disable: boolean = false;  // Inizializzazione con valori di default
-  @Input() isNew: boolean = true;  // Inizializzazione con valori di default
-  time: string;  // Usa stringa per l'input di tempo
+  @Input() disable: boolean = false;
+  @Input() isNew: boolean = true;
+  time: string;
   visible: Boolean;
+
+  minDate: Date = new Date(); // Data minima selezionabile (oggi)
+  minTime: string | null = null; // Orario minimo dinamico
+
   displayedColumns: string[] = ['data', 'orario', 'descrizione', 'autore', 'tipo', 'update', 'delete'];
   dataSource = new MatTableDataSource<Evento>();
 
   @ViewChild("paginator", { static: false }) paginator: MatPaginator;
+
   constructor(
     public dialog: MatDialog,
     private eventServ: EventiService,
@@ -40,33 +44,73 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       old: Boolean,
     }
   ) {
-    this.data.items = this.data.items || []; // Assicurati che sia sempre un array
+    this.data.items = this.data.items || [];
     if (!data.create) {
       this.dataSource = new MatTableDataSource<Evento>();
       this.dataSource.data = data.items || [];
     }
-    console.log("item: ", data.item);
     this.visible = false;
     if (this.data.edit) this.visible = data.item.visibile;
   }
+
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
   }
+
   ngOnInit() {
+    // Imposta le ore a 00:00:00 per consentire la selezione del giorno odierno nel datepicker
+    this.minDate.setHours(0, 0, 0, 0);
+
     if (!this.data.item) {
-      this.data.item = new Evento(); // Assicurati che l'data.item non sia undefined
+      this.data.item = new Evento();
     }
-    // Inizializza la variabile time se l'data.item esiste
+
     if (this.data.item.data) {
-      const date = new Date(this.data.item.data); // Converti in Date per sicurezza
+      const date = new Date(this.data.item.data);
       const hours = date.getHours().toString().padStart(2, '0');
       const minutes = date.getMinutes().toString().padStart(2, '0');
       this.time = `${hours}:${minutes}`;
     } else {
-      // Se data non è definito, inizializzalo con un valore predefinito
       this.data.item.data = new Date();
-      this.time = '00:00'; // Orario predefinito
+      const now = new Date();
+      const hours = now.getHours().toString().padStart(2, '0');
+      const minutes = now.getMinutes().toString().padStart(2, '0');
+      this.time = `${hours}:${minutes}`;
     }
+
+    // Calcola l'orario minimo iniziale
+    this.updateMinTime();
+  }
+
+  /**
+   * Aggiorna la variabile `minTime` in base alla data selezionata:
+   * Se la data è oggi, limita l'orario minimo all'orario attuale.
+   * Se la data è futura, non inserisce alcun limite.
+   */
+  updateMinTime() {
+    if (this.data.edit) {
+      this.minTime = null;
+      return;
+    }
+
+    const selectedDate = this.data.item.data ? new Date(this.data.item.data) : new Date();
+    const today = new Date();
+
+    if (
+      selectedDate.getFullYear() === today.getFullYear() &&
+      selectedDate.getMonth() === today.getMonth() &&
+      selectedDate.getDate() === today.getDate()
+    ) {
+      const hours = today.getHours().toString().padStart(2, '0');
+      const minutes = today.getMinutes().toString().padStart(2, '0');
+      this.minTime = `${hours}:${minutes}`;
+    } else {
+      this.minTime = null;
+    }
+  }
+
+  onDateChange() {
+    this.updateMinTime();
   }
 
   save() {
@@ -79,32 +123,36 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       return;
     }
 
+    if (!this.time) {
+      this.messageServ.showMessageError("Inserire l'orario");
+      return;
+    }
+
     const [hours, minutes] = this.time.split(':').map(Number);
 
-    // Assicurati che `this.data.item.data` sia un oggetto Date
     if (this.data.item.data) {
-      // Converte in Date se non lo è già
       this.data.item.data = this.data.item.data instanceof Date
         ? this.data.item.data
         : new Date(this.data.item.data);
 
-      // Imposta ore e minuti
       this.data.item.data.setHours(hours);
       this.data.item.data.setMinutes(minutes);
     }
 
-    // Aggiorna la proprietà visibile
-    this.data.item.visibile = this.visible;
+    // Controllo Blocco Data e Orario Passati
+    if (!this.data.edit && this.data.item.data < new Date()) {
+      this.messageServ.showMessageError("Non è possibile creare un evento in una data o orario passato.");
+      return;
+    }
 
-    // Chiudi il dialog e restituisci l'oggetto aggiornato
+    this.data.item.visibile = this.visible;
     this.dialogRef.close(this.data.item);
   }
-
 
   async updateEvento(evento: Evento) {
     const dialogRef = this.dialog.open(DialogEventComponent, {
       data: {
-        item: { ...evento }, // Passa una copia per evitare modifiche dirette
+        item: { ...evento },
         create: true,
         edit: true,
       },
@@ -113,21 +161,14 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
     if (!dialogRef) return;
 
     dialogRef.afterClosed().subscribe(async (result) => {
-      if (!result) {
-        console.log('Dialog chiusa senza salvare o dati non validi.');
-        return; // Uscire subito se il dialog è stato chiuso senza salvare
-      }
+      if (!result) return;
 
       try {
-        // Verifica e normalizzazione dei dati
         const resultData = result.data instanceof Date ? result.data : new Date(result.data);
-        if (isNaN(resultData.getTime())) {
-          return; // Se la data è invalida, usciamo
-        }
+        if (isNaN(resultData.getTime())) return;
 
         const eventoData = evento.data instanceof Date ? evento.data : new Date(evento.data);
 
-        // Controlla se ci sono modifiche nei campi dell'evento
         const isModified =
           result.descrizione?.trim() !== evento.descrizione ||
           resultData.getTime() !== eventoData.getTime() ||
@@ -137,35 +178,26 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
           const index = this.data.items.indexOf(evento);
 
           if (index !== -1) {
-            // Aggiorna l'evento nella lista locale
             this.data.items[index] = { ...result, data: resultData };
 
-            // Ordina e aggiorna la tabella
             this.dataSource.data = this.data.items.sort(
               (a, b) => new Date(a.data).getTime() - new Date(b.data).getTime()
             );
             this.dataSource.paginator = this.paginator;
 
-            // Effettua l'aggiornamento remoto
             const response = await this.eventServ.updateEvento(result);
-            console.log('Evento aggiornato con successo:', response);
             this.messageServ.showMessage('Evento aggiornato con successo');
           }
         }
       } catch (error) {
         console.error("Errore durante l'aggiornamento dell'evento:", error);
         this.messageServ.showMessage('Errore durante l\'aggiornamento dell\'evento');
-      } 
+      }
     });
 
-    // Aggiorna la lista degli eventi dal server
     await this.refreshEventList(evento);
   }
 
-  /**
-   * Aggiorna la lista degli eventi.
-   * @param evento Evento di riferimento per il giorno/tipo.
-   */
   private async refreshEventList(evento: Evento) {
     try {
       const items: Evento[] = this.data.tipo
@@ -180,10 +212,6 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
       console.error("Errore durante l'aggiornamento della lista degli eventi:", error);
     }
   }
-
-
-
-
 
   async deleteEvento(evento: Evento) {
     const dialogData = {
@@ -204,12 +232,12 @@ export class DialogEventComponent implements OnInit, AfterViewInit {
         this.dataSource.data = this.data.items;
         this.dataSource.paginator = this.paginator;
 
-        const response = await this.eventServ.deleteEvento(evento).then();
+        await this.eventServ.deleteEvento(evento);
       }
     }
     catch (error) {
       console.error(`Errore durante la cancellazione: ${error}`);
-      this.messageServ.showMessageError(`Errore durante l'Eliminazione': ${error}`);
+      this.messageServ.showMessageError(`Errore durante l'Eliminazione: ${error}`);
     }
   }
 

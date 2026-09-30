@@ -20,7 +20,12 @@
             <!-- Data -->
             <mat-form-field appearance="outline" class="w-100">
                 <mat-label>Data*</mat-label>
-                <input matInput [matDatepicker]="date" [(ngModel)]="data.item.data" [disabled]="this.data.edit">
+                <input matInput
+                       [matDatepicker]="date"
+                       [min]="minDate"
+                       [(ngModel)]="data.item.data"
+                       (dateChange)="onDateChange()"
+                       [disabled]="this.data.edit">
                 <mat-datepicker-toggle matSuffix [for]="date"></mat-datepicker-toggle>
                 <mat-datepicker #date></mat-datepicker>
             </mat-form-field>
@@ -28,10 +33,13 @@
             <!-- Orario -->
             <div class="time-input-container">
                 <label class="input-label">Orario*</label>
-                <input type="time" class="custom-time-control" [(ngModel)]="time">
+                <input type="time"
+                       class="custom-time-control"
+                       [(ngModel)]="time"
+                       [attr.min]="minTime">
             </div>
 
-            <!-- Visibile a tutti (Switch Button Custom & Material supportato) -->
+            <!-- Visibile a tutti -->
             <div class="switch-field-wrapper">
                 <label class="custom-switch">
                     <input type="checkbox" [(ngModel)]="visible">
@@ -53,7 +61,6 @@
 
 <!-- CASO LISTA DEGLI EVENTI -->
 <div class="dialog-container" *ngIf="!data.create">
-    <!-- Header Personalizzato Modal -->
     <div class="dialog-header">
         <h2 class="dialog-title">Lista degli Eventi</h2>
         <div class="header-actions">
@@ -159,7 +166,6 @@
             </table>
         </div>
 
-        <!-- Paginatore lasciato integro e nello stesso punto originale -->
         <div>
             <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
         </div>
