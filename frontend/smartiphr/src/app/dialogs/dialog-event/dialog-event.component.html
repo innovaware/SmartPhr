@@ -7,7 +7,7 @@
             <span class="required-legend">Tutti i campi indicati con * sono obbligatori.</span>
         </div>
         <div class="header-actions">
-            <button mat-raised-button class="btn-save" (click)="save()">
+            <button mat-flat-button class="btn-save" (click)="save()">
                 <mat-icon>save</mat-icon>
                 <span>Salva</span>
             </button>
@@ -31,11 +31,13 @@
                 <input type="time" class="custom-time-control" [(ngModel)]="time">
             </div>
 
-            <!-- Visibile a tutti -->
-            <div class="switch-container">
-                <mat-slide-toggle color="primary" [(ngModel)]="visible">
-                    Visibile a tutti
-                </mat-slide-toggle>
+            <!-- Visibile a tutti (Switch Button Custom & Material supportato) -->
+            <div class="switch-field-wrapper">
+                <label class="custom-switch">
+                    <input type="checkbox" [(ngModel)]="visible">
+                    <span class="slider round"></span>
+                </label>
+                <span class="switch-label">Visibile a tutti</span>
             </div>
         </div>
 
@@ -73,7 +75,7 @@
         </div>
 
         <!-- Contenitore Tabella -->
-        <div class="table-card-container">
+        <div class="table-card-container mb-3">
             <table mat-table [dataSource]="dataSource" class="w-100">
                 <!-- Data Column -->
                 <ng-container matColumnDef="data">
@@ -144,18 +146,22 @@
 
                 <!-- Data Row -->
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- State Vuoto -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" [attr.colspan]="displayedColumns.length">
+                        <div class="empty-state">
+                            <mat-icon>event_busy</mat-icon>
+                            <p>Nessun evento disponibile</p>
+                        </div>
+                    </td>
+                </tr>
             </table>
         </div>
 
         <!-- Paginatore lasciato integro e nello stesso punto originale -->
         <div>
             <mat-paginator #paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-        </div>
-
-        <!-- Nessun Evento Messaggio / Stato Vuoto -->
-        <div *ngIf="dataSource.data.length === 0" class="empty-state">
-            <mat-icon>event_busy</mat-icon>
-            <p>Nessun evento disponibile</p>
         </div>
     </mat-dialog-content>
 </div>

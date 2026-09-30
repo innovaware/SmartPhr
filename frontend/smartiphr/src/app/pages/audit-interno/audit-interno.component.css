@@ -36,20 +36,20 @@
   max-width: 400px;
 }
 
-/* Pulsante Primario */
-.btn-primary {
+/* Pulsante Primario Custom (#3b5998) */
+.btn-primary-custom {
   background-color: #3b5998 !important;
   color: #ffffff !important;
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  border-radius: 4px;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
   height: 48px;
-  margin-bottom: 18px;
+  padding: 0 16px !important;
 }
 
-  .btn-primary:hover {
+  .btn-primary-custom:hover {
     background-color: #2d4373 !important;
   }
 
@@ -74,7 +74,7 @@
 }
 
 .form-label {
-  color: #718096;
+  color: #4a5568;
   font-size: 0.875rem;
   font-weight: 600;
 }
@@ -99,10 +99,12 @@
   border: 1px solid #edf2f7;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 table.mat-table {
   width: 100%;
+  background-color: #ffffff;
   box-shadow: none !important;
 }
 
@@ -111,11 +113,13 @@ th.mat-header-cell {
   color: #4a5568;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
 }
 
 td.mat-cell {
   color: #2d3748;
   border-bottom: 1px solid #edf2f7;
+  font-size: 14px;
 }
 
 /* Stato Vuoto */
@@ -124,12 +128,8 @@ td.mat-cell {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  padding: 40px;
+  padding: 32px;
   color: #718096;
-  background-color: #f8fafc;
-  border: 1px dashed #e2e8f0;
-  border-radius: 8px;
-  margin: 16px 0;
 }
 
   .empty-state mat-icon {
@@ -151,11 +151,11 @@ td.mat-cell {
 }
 
 .mb-3 {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
 }
 
 .mb-4 {
-  margin-bottom: 1.5rem;
+  margin-bottom: 1.5rem !important;
 }
 
 .text-right {

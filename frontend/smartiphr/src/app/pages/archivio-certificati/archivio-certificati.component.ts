@@ -9,6 +9,7 @@ import { DocumentiService } from 'src/app/service/documenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { MansioniService } from '../../service/mansioni.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-archivio-certificati',
@@ -37,7 +38,8 @@ export class ArchivioCertificatiComponent implements OnInit {
 
   constructor(public messageService: MessagesService, public docService: DocumentiService,
     public uploadService: UploadService, public dipendenteService: DipendentiService, public authenticationService: AuthenticationService,
-    public mansioniService: MansioniService) {
+    public mansioniService: MansioniService,
+    private datePipe: DatePipe) {
     this.loadUser();
     this.uploadingArchivioCertificati = false;
     this.addingArchivioCertificati = false;
@@ -72,7 +74,22 @@ export class ArchivioCertificatiComponent implements OnInit {
           });
       });
   }
+  eScaduto(dataScadenza: Date | string): boolean {
+    // Conversione in oggetto Date nel caso in cui arrivi una stringa
+    const d = new Date(dataScadenza);
 
+    // Controllo per date non valide (es. stringa vuota o malformata)
+    if (isNaN(d.getTime())) {
+      return false; // o lancia un errore/gestisci a seconda delle esigenze
+    }
+
+    const oggi = new Date();
+
+    const utcScadenza = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+    const utcOggi = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
+
+    return utcScadenza < utcOggi;
+  }
   async showDocument(doc: DocumentoDipendente) {
     this.uploadService
       .downloadDocQuality(doc.filename, doc.type)
@@ -196,13 +213,15 @@ export class ArchivioCertificatiComponent implements OnInit {
         let filename = "";
         this.ArchivioCertificati.forEach((s) => {
           if (this.VerificaMesi(s.dataScadenza)) {
-            if (filename === "") filename += "I File: ";
-            filename += `${s.filename},\n`;
+            const dataFormattata = this.datePipe.transform(s.dataScadenza, 'dd/MM/yyyy');
+            if (!this.eScaduto(s.dataScadenza))
+              filename += `Il file ${s.filename} scadrà il ${dataFormattata}\n`;
+            else filename += `Il file ${s.filename} è scaduto in data ${dataFormattata}\n`;
           }
         });
 
         if (filename !== "") {
-          filename += "Scadranno a Breve\n";
+          //filename += "Scadranno a Breve\n";
           this.messageService.showMessage(filename);
         }
       })
@@ -236,13 +255,15 @@ export class ArchivioCertificatiComponent implements OnInit {
       let file = "";
       this.ArchivioCertificati.forEach((s) => {
         if (this.VerificaMesi(s.dataScadenza)) {
-          if (file === "") file += "I File: ";
-          file += `${s.filename},\n`;
+          const dataFormattata = this.datePipe.transform(s.dataScadenza, 'dd/MM/yyyy');
+          if (!this.eScaduto(s.dataScadenza))
+            file += `Il file ${s.filename} scadrà il ${dataFormattata}\n`;
+          else file += `Il file ${s.filename} è scaduto in data ${dataFormattata}\n`;
         }
       });
 
       if (file !== "") {
-        file += "Scadranno a Breve\n";
+       // file += "Scadranno a Breve\n";
         this.messageService.showMessage(file);
       }
 

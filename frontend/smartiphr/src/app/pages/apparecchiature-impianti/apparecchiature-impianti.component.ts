@@ -9,6 +9,7 @@ import { DocumentiService } from 'src/app/service/documenti.service';
 import { MessagesService } from 'src/app/service/messages.service';
 import { UploadService } from 'src/app/service/upload.service';
 import { MansioniService } from '../../service/mansioni.service';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'app-apparecchiature-impianti',
@@ -39,7 +40,8 @@ export class ApparecchiatureComponent implements OnInit {
 
   constructor(public messageService: MessagesService, public docService: DocumentiService,
     public uploadService: UploadService, public dipendenteService: DipendentiService, public authenticationService: AuthenticationService,
-    public mansioniService: MansioniService) {
+    public mansioniService: MansioniService,
+    private datePipe: DatePipe) {
     this.loadUser();
     this.uploadingApparecchiature = false;
     this.addingApparecchiature = false;
@@ -53,6 +55,23 @@ export class ApparecchiatureComponent implements OnInit {
   ngOnInit() {
   }
 
+  eScaduto(dataScadenza: Date | string): boolean {
+  // Conversione in oggetto Date nel caso in cui arrivi una stringa
+  const d = new Date(dataScadenza);
+
+  // Controllo per date non valide (es. stringa vuota o malformata)
+  if (isNaN(d.getTime())) {
+    return false; // o lancia un errore/gestisci a seconda delle esigenze
+  }
+
+  const oggi = new Date();
+
+  const utcScadenza = Date.UTC(d.getFullYear(), d.getMonth(), d.getDate());
+  const utcOggi = Date.UTC(oggi.getFullYear(), oggi.getMonth(), oggi.getDate());
+
+  return utcScadenza < utcOggi;
+}
+
   loadUser() {
     this.authenticationService.getCurrentUserAsync().subscribe(
       (user) => {
@@ -61,7 +80,7 @@ export class ApparecchiatureComponent implements OnInit {
         this.dipendenteService
           .getByIdUser(user.dipendenteID)
           .then((x) => {
-            
+
             this.dipendente = x[0];
             this.getNomina();
           })
@@ -77,9 +96,9 @@ export class ApparecchiatureComponent implements OnInit {
     this.uploadService
       .downloadDocQuality(doc.filename, doc.type)
       .then((x) => {
-        
+
         x.subscribe((data) => {
-          
+
           const newBlob = new Blob([data as BlobPart], {
             type: "application/pdf",
           });
@@ -196,13 +215,15 @@ export class ApparecchiatureComponent implements OnInit {
         let filename = "";
         this.Apparecchiature.forEach((s) => {
           if (this.VerificaMesi(s.dataScadenza)) {
-            if (filename === "") filename += "I File: ";
-            filename += `${s.filename},\n`;
+            const dataFormattata = this.datePipe.transform(s.dataScadenza, 'dd/MM/yyyy');
+            if (!this.eScaduto(s.dataScadenza))
+              filename += `Il file ${s.filename} scadrà il ${dataFormattata},\n`;
+            else filename += `Il file ${s.filename} è scaduto in data ${dataFormattata},\n`;
           }
         });
 
         if (filename !== "") {
-          filename += "Scadranno a Breve\n";
+          // filename += "Scadranno a Breve\n";
           this.messageService.showMessage(filename);
         }
       })
@@ -236,13 +257,15 @@ export class ApparecchiatureComponent implements OnInit {
       let file = "";
       this.Apparecchiature.forEach((s) => {
         if (this.VerificaMesi(s.dataScadenza)) {
-          if (file === "") file += "I File: ";
-          file += `${s.filename},\n`;
+          const dataFormattata = this.datePipe.transform(s.dataScadenza, 'dd/MM/yyyy');
+          if (!this.eScaduto(s.dataScadenza))
+            file += `Il file ${s.filename} scadrà il ${dataFormattata}\n`;
+          else file += `Il file ${s.filename} è scaduto in data ${dataFormattata}\n`;
         }
       });
-
+      console.log(file);
       if (file !== "") {
-        file += "Scadranno a Breve\n";
+       // file += "Scadranno a Breve\n";
         this.messageService.showMessage(file);
       }
 

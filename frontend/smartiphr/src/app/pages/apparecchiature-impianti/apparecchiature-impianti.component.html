@@ -38,7 +38,7 @@
                         </mat-form-field>
                     </div>
 
-                    <button mat-flat-button color="primary" class="btn-primary-custom" (click)="addApparecchiature()" *ngIf="!addingApparecchiature">
+                    <button mat-flat-button class="btn-primary-custom" (click)="addApparecchiature()" *ngIf="!addingApparecchiature">
                         <mat-icon>add</mat-icon> Aggiungi Documento
                     </button>
                 </div>
@@ -73,9 +73,14 @@
                         </div>
                     </div>
 
-                    <div class="d-flex justify-content-end">
-                        <button mat-raised-button color="primary" class="btn-primary-custom" (click)="saveApparecchiature(nuovoApparecchiature)">
-                            Salva Documento
+                    <div class="d-flex justify-content-end gap-2">
+                        <button mat-flat-button class="btn-primary-custom" (click)="saveApparecchiature(nuovoApparecchiature)">
+                            <mat-icon>save</mat-icon>
+                            <span>Salva Documento</span>
+                        </button>
+                        <button mat-button (click)="addingApparecchiature = false">
+                            <mat-icon>close</mat-icon>
+                            <span>Annulla</span>
                         </button>
                     </div>
                 </div>
@@ -86,14 +91,8 @@
                     <span>Caricamento in corso...</span>
                 </div>
 
-                <!-- Stato Vuoto -->
-                <div *ngIf="!Apparecchiature || Apparecchiature.length === 0" class="empty-state">
-                    <mat-icon class="empty-icon">description</mat-icon>
-                    <p>Nessun documento presente</p>
-                </div>
-
                 <!-- Tabella Apparecchiature -->
-                <div class="table-card-container" *ngIf="Apparecchiature && Apparecchiature.length > 0">
+                <div class="table-card-container mb-3">
                     <table mat-table [dataSource]="ApparecchiatureDataSource" class="custom-table">
 
                         <!-- Nome File Column -->
@@ -137,13 +136,24 @@
 
                         <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-                    </table>
 
-                    <div class="paginator-container">
-                        <mat-paginator #paginatorApparecchiature [pageSizeOptions]="[5,10,20]" showFirstLastButtons
-                                       aria-label="Select page of periodic elements">
-                        </mat-paginator>
-                    </div>
+                        <!-- Stato Vuoto Nativo della Tabella -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" [attr.colspan]="DisplayedColumns.length">
+                                <div class="empty-state">
+                                    <mat-icon class="empty-icon">description</mat-icon>
+                                    <p class="m-0">Nessun documento presente</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- REGOLA TASSATIVA: Paginator sempre presente nel DOM, nello stesso punto originale e privo di *ngIf -->
+                <div>
+                    <mat-paginator #paginatorApparecchiature [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                                   aria-label="Seleziona pagina">
+                    </mat-paginator>
                 </div>
 
             </div>

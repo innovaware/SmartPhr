@@ -15,7 +15,7 @@
             <mat-icon matSuffix *ngIf="!inputSearchField">search</mat-icon>
         </mat-form-field>
 
-        <button mat-raised-button class="btn-primary" *ngIf="admin && !addingAuditInterno" (click)="addAuditInterno()">
+        <button mat-flat-button class="btn-primary-custom" *ngIf="admin && !addingAuditInterno" (click)="addAuditInterno()">
             <mat-icon>add</mat-icon>
             <span>Aggiungi Documento</span>
         </button>
@@ -36,7 +36,7 @@
                 <input matInput placeholder="Inserisci delle note" [(ngModel)]="nuovoAuditInterno.note">
             </mat-form-field>
 
-            <button mat-raised-button class="btn-primary align-self-center" (click)="saveAuditInterno(nuovoAuditInterno)">
+            <button mat-flat-button class="btn-primary-custom align-self-center" (click)="saveAuditInterno(nuovoAuditInterno)">
                 <mat-icon>save</mat-icon>
                 <span>Salva</span>
             </button>
@@ -49,14 +49,8 @@
         <span>Caricamento in corso...</span>
     </div>
 
-    <!-- Stato Vuoto -->
-    <div class="empty-state" *ngIf="!AuditInterno || AuditInterno.length === 0">
-        <mat-icon>description</mat-icon>
-        <p>Nessun documento presente</p>
-    </div>
-
     <!-- Tabella Audit Interno -->
-    <div class="table-card-container" *ngIf="AuditInterno && AuditInterno.length > 0">
+    <div class="table-card-container mb-3">
         <table mat-table [dataSource]="AuditInternoDataSource">
 
             <ng-container matColumnDef="namefile">
@@ -71,7 +65,7 @@
 
             <ng-container matColumnDef="note">
                 <th mat-header-cell *matHeaderCellDef> Note </th>
-                <td mat-cell *matCellDef="let element"> {{element.note}} </td>
+                <td mat-cell *matCellDef="let element"> {{element.note || '-'}} </td>
             </ng-container>
 
             <ng-container matColumnDef="action">
@@ -88,8 +82,21 @@
 
             <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
             <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-        </table>
 
+            <!-- State Vuoto Nativo -->
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell" [attr.colspan]="DisplayedColumns.length">
+                    <div class="empty-state">
+                        <mat-icon>description</mat-icon>
+                        <p>Nessun documento presente</p>
+                    </div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <!-- REGOLA TASSATIVA: Paginator posizionato SEMPRE nello stesso punto DOM originale, senza *ngIf -->
+    <div>
         <mat-paginator #paginatorAuditInterno [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons aria-label="Seleziona pagina">
         </mat-paginator>
     </div>

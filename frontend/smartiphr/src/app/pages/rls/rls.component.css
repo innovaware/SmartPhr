@@ -8,7 +8,7 @@
 .page-header {
   margin-bottom: 20px;
   padding-bottom: 12px;
-  border-bottom: 1px solid #e0e0e0;
+  border-bottom: 1px solid #edf2f7;
 }
 
 .page-title {
@@ -38,22 +38,22 @@
   max-width: 400px;
 }
 
-  .search-field-container mat-form-field {
-    margin-bottom: -1.25em;
-  }
-
-/* Pulsanti Custom */
+/* Pulsanti Custom (#3b5998) */
 .btn-primary-custom {
   background-color: #3b5998 !important;
   color: #ffffff !important;
   border-radius: 6px !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
   height: 48px;
   padding: 0 20px !important;
   display: inline-flex;
   align-items: center;
   gap: 8px;
 }
+
+  .btn-primary-custom:hover {
+    background-color: #2d4373 !important;
+  }
 
 /* Form Card per Aggiunta Documento */
 .card-form {
@@ -67,14 +67,16 @@
 
 .card-title {
   font-size: 1rem;
-  font-weight: 600;
-  color: #2d3748;
+  font-weight: 700;
+  color: #4a5568;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
   margin-bottom: 16px;
 }
 
 .form-label-custom {
   font-size: 0.85rem;
-  font-weight: 500;
+  font-weight: 600;
   color: #4a5568;
   margin-bottom: 6px;
   display: block;
@@ -95,14 +97,15 @@
   border-radius: 8px;
   border: 1px solid #edf2f7;
   overflow: hidden;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 .custom-table {
   width: 100%;
+  background-color: #ffffff;
 }
 
-  .custom-table th {
+  .custom-table th.mat-header-cell {
     background-color: #f7fafc;
     color: #4a5568;
     font-weight: 600;
@@ -111,7 +114,7 @@
     padding: 14px 16px;
   }
 
-  .custom-table td {
+  .custom-table td.mat-cell {
     color: #2d3748;
     font-size: 0.9rem;
     border-bottom: 1px solid #edf2f7;
@@ -142,12 +145,12 @@
 }
 
 .empty-state {
-  text-align: center;
-  padding: 40px 20px;
-  background: #ffffff;
-  border-radius: 8px;
-  border: 1px dashed #cbd5e0;
-  color: #a0aec0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 32px;
+  color: #718096;
 }
 
 .empty-icon {
@@ -155,6 +158,7 @@
   width: 48px;
   height: 48px;
   margin-bottom: 8px;
+  color: #a0aec0;
 }
 
 /* Utility */
@@ -163,7 +167,15 @@
 }
 
 .mb-3 {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
+}
+
+.m-0 {
+  margin: 0 !important;
+}
+
+.gap-2 {
+  gap: 0.5rem;
 }
 
 .d-flex {

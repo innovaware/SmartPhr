@@ -44,9 +44,14 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <button mat-raised-button color="primary" class="btn-primary-custom" (click)="saverspp(nuovorspp)">
-                            Salva Documento
+                    <div class="d-flex justify-content-end gap-2">
+                        <button mat-flat-button class="btn-primary-custom" (click)="saverspp(nuovorspp)">
+                            <mat-icon>save</mat-icon>
+                            <span>Salva Documento</span>
+                        </button>
+                        <button mat-button (click)="addingrspp = false">
+                            <mat-icon>close</mat-icon>
+                            <span>Annulla</span>
                         </button>
                     </div>
                 </div>
@@ -57,14 +62,8 @@
                     <span>Caricamento in corso...</span>
                 </div>
 
-                <!-- Stato Vuoto -->
-                <div *ngIf="!rspp || rspp.length === 0" class="empty-state">
-                    <mat-icon class="empty-icon">description</mat-icon>
-                    <p>Nessun documento presente</p>
-                </div>
-
                 <!-- Tabella Nomina RSPP -->
-                <div class="table-card-container" *ngIf="rspp && rspp.length > 0">
+                <div class="table-card-container mb-3">
                     <table mat-table [dataSource]="rsppDataSource" class="custom-table">
 
                         <ng-container matColumnDef="namefile">
@@ -96,13 +95,24 @@
 
                         <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-                    </table>
 
-                    <div class="paginator-container">
-                        <mat-paginator #paginatorrspp [pageSizeOptions]="[5,10,20]" showFirstLastButtons
-                                       aria-label="Select page of periodic elements">
-                        </mat-paginator>
-                    </div>
+                        <!-- State Vuoto -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" [attr.colspan]="DisplayedColumns.length">
+                                <div class="empty-state">
+                                    <mat-icon class="empty-icon">description</mat-icon>
+                                    <p class="m-0">Nessun documento presente</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- REGOLA TASSATIVA: Paginator posizionato SEMPRE nello stesso punto DOM originale, senza *ngIf -->
+                <div>
+                    <mat-paginator #paginatorrspp [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                                   aria-label="Select page of periodic elements">
+                    </mat-paginator>
                 </div>
 
             </div>
@@ -145,9 +155,14 @@
                             </mat-form-field>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <button mat-raised-button color="primary" class="btn-primary-custom" (click)="savearchivioAggiornamentoFormativo(nuovaarchivioAggiornamentoFormativo)">
-                            Salva Documento
+                    <div class="d-flex justify-content-end gap-2">
+                        <button mat-flat-button class="btn-primary-custom" (click)="savearchivioAggiornamentoFormativo(nuovaarchivioAggiornamentoFormativo)">
+                            <mat-icon>save</mat-icon>
+                            <span>Salva Documento</span>
+                        </button>
+                        <button mat-button (click)="addingarchivioAggiornamentoFormativo = false">
+                            <mat-icon>close</mat-icon>
+                            <span>Annulla</span>
                         </button>
                     </div>
                 </div>
@@ -158,14 +173,8 @@
                     <span>Caricamento in corso...</span>
                 </div>
 
-                <!-- Stato Vuoto -->
-                <div *ngIf="!archivioAggiornamentoFormativo || archivioAggiornamentoFormativo.length === 0" class="empty-state">
-                    <mat-icon class="empty-icon">description</mat-icon>
-                    <p>Nessun documento presente</p>
-                </div>
-
                 <!-- Tabella Archivio Aggiornamento Formativo -->
-                <div class="table-card-container" *ngIf="archivioAggiornamentoFormativo && archivioAggiornamentoFormativo.length > 0">
+                <div class="table-card-container mb-3">
                     <table mat-table [dataSource]="archivioAggiornamentoFormativoDataSource" class="custom-table">
 
                         <ng-container matColumnDef="namefile">
@@ -197,13 +206,24 @@
 
                         <tr mat-header-row *matHeaderRowDef="DisplayedColumns"></tr>
                         <tr mat-row *matRowDef="let row; columns: DisplayedColumns;"></tr>
-                    </table>
 
-                    <div class="paginator-container">
-                        <mat-paginator #paginatorarchivioAggiornamentoFormativo [pageSizeOptions]="[5,10,20]" showFirstLastButtons
-                                       aria-label="Select page of periodic elements">
-                        </mat-paginator>
-                    </div>
+                        <!-- State Vuoto -->
+                        <tr class="mat-row" *matNoDataRow>
+                            <td class="mat-cell" [attr.colspan]="DisplayedColumns.length">
+                                <div class="empty-state">
+                                    <mat-icon class="empty-icon">description</mat-icon>
+                                    <p class="m-0">Nessun documento presente</p>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <!-- REGOLA TASSATIVA: Paginator posizionato SEMPRE nello stesso punto DOM originale, senza *ngIf -->
+                <div>
+                    <mat-paginator #paginatorarchivioAggiornamentoFormativo [pageSizeOptions]="[5,10,20]" showFirstLastButtons
+                                   aria-label="Select page of periodic elements">
+                    </mat-paginator>
                 </div>
 
             </div>

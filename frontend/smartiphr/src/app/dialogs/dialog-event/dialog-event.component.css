@@ -48,8 +48,10 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-weight: 600;
-  border-radius: 4px;
+  font-weight: 600 !important;
+  border-radius: 6px !important;
+  height: 40px;
+  padding: 0 16px !important;
 }
 
   .btn-save:hover {
@@ -60,7 +62,7 @@
 .btn-close {
   background: transparent;
   border: none;
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   line-height: 1;
   color: #718096;
   cursor: pointer;
@@ -112,11 +114,76 @@
     border-color: #3b5998;
   }
 
-.switch-container {
+/* --- SWITCH BUTTON CUSTOM --- */
+.switch-field-wrapper {
   display: flex;
   align-items: center;
-  margin-bottom: 12px;
+  gap: 12px;
+  height: 48px;
+  margin-top: 4px;
 }
+
+.switch-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #4a5568;
+}
+
+.custom-switch {
+  position: relative;
+  display: inline-block;
+  width: 48px;
+  height: 24px;
+  flex-shrink: 0;
+}
+
+  .custom-switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #cbd5e0;
+  transition: 0.3s;
+}
+
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.3s;
+  }
+
+input:checked + .slider {
+  background-color: #3b5998;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #3b5998;
+}
+
+input:checked + .slider:before {
+  transform: translateX(24px);
+}
+
+.slider.round {
+  border-radius: 24px;
+}
+
+  .slider.round:before {
+    border-radius: 50%;
+  }
 
 /* Toolbar Filtro */
 .toolbar-container {
@@ -134,10 +201,12 @@
   border: 1px solid #edf2f7;
   border-radius: 8px;
   overflow: hidden;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
 }
 
 table.mat-table {
   width: 100%;
+  background-color: #ffffff;
   box-shadow: none !important;
 }
 
@@ -146,11 +215,13 @@ th.mat-header-cell {
   color: #4a5568;
   font-weight: 600;
   border-bottom: 1px solid #e2e8f0;
+  font-size: 14px;
 }
 
 td.mat-cell {
   color: #2d3748;
   border-bottom: 1px solid #edf2f7;
+  font-size: 14px;
 }
 
 /* Stato Vuoto */
@@ -161,10 +232,6 @@ td.mat-cell {
   justify-content: center;
   padding: 32px;
   color: #718096;
-  background-color: #ffffff;
-  border: 1px dashed #e2e8f0;
-  border-radius: 8px;
-  margin-top: 16px;
 }
 
   .empty-state mat-icon {
@@ -187,7 +254,7 @@ td.mat-cell {
 }
 
 .mb-3 {
-  margin-bottom: 1rem;
+  margin-bottom: 1rem !important;
 }
 
 .text-right {
