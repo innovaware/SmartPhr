@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
             menuEstivoStart: req.body.menuEstivoStart,
             menuEstivoEnd: req.body.menuEstivoEnd,
             PeriodoFerieInizio: req.body.PeriodoFerieInizio,
-            PeriodoFerieFine: req.body.PeriodoFerieInizio,
+            PeriodoFerieFine: req.body.PeriodoFerieFine,
         });
         
         const result = await settings.save();
@@ -74,7 +74,7 @@ router.put("/:id", async (req, res) => {
                     ScadenzaPersonalizzato: req.body.ScadenzaPersonalizzato,
                     turni: req.body.turni,
                     PeriodoFerieInizio: req.body.PeriodoFerieInizio,
-                    PeriodoFerieFine: req.body.PeriodoFerieInizio,
+                    PeriodoFerieFine: req.body.PeriodoFerieFine,
                 },
             }
         );
