@@ -1,187 +1,173 @@
-<div class="containter pad">
-  <div class="row">
-    <div class="col">
-      <h1 class="title">AREA CAMERE</h1>
-    </div>
-  </div>
-
-  <hr />
-  <div class="row">
-    <div class="col">
-      <mat-form-field appearance="fill">
-        <mat-label>Seleziona Camera</mat-label>
-        <mat-select
-          (selectionChange)="onPlanChange($event)"
-          [(ngModel)]="selectedPiano">
-          <mat-option
-            *ngFor="let piano of pianoList | async"
-            value="{{ piano.code }}"
-            >{{ piano.description }}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col">
-      <div class="left-bar"></div>
-      <div id="ol-map" class="map-container" (click)="getCoord($event)"></div>
+<div class="component-container">
+    <!-- Header della Pagina -->
+    <div class="page-header mb-4">
+        <h1 class="page-title">AREA CAMERE</h1>
     </div>
 
-    <div class="col">
-      <div class="containter pad" *ngIf="(camere| async)?.length > 0; else loading">
-        <div class="row" *ngIf="!editMode">
-          <div class="col ">
-            <button mat-button (click)="editMode = true" class="full mb-2">
-              Modalità modifica
-            </button>
-          </div>
-        </div>
-
-        <div class="row" *ngIf="editMode">
-          <div class="col ">
-            <button mat-button (click)="addCamera()" class="full mb-2">
-              Aggiungi Camera
-            </button>
-          </div>
-        </div>
-
-
-        <div class="row">
-          <div class="col">
-            <mat-form-field appearance="fill">
-              <mat-label>Seleziona Camera </mat-label>
-              <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCamera">
-                <mat-option
-                  *ngFor="let camera of camere | async"
-                  [value]="camera"
-                  >{{ camera.camera }}
-                </mat-option>
-              </mat-select>
+    <!-- Selezione Piano -->
+    <div class="row mb-3">
+        <div class="col-md-6 col-lg-4">
+            <mat-form-field appearance="outline" class="w-100">
+                <mat-label>Seleziona Piano</mat-label>
+                <mat-select (selectionChange)="onPlanChange($event)" [(ngModel)]="selectedPiano">
+                    <mat-option *ngFor="let piano of pianoList | async" [value]="piano.code">
+                        {{ piano.description }}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
-          </div>
-
-          <div class="col-1" *ngIf="selectedCamera !== undefined && editMode">
-            <img src="../../../assets/deselect.png"
-            style="width: 26px" (click)="deselectCamera()"/>
-          </div>
-
-          <div class="col-1" *ngIf="selectedCamera !== undefined && editMode">
-            <img src="../../../assets/cestino.svg"
-            style="width: 26px" (click)="removeCamera()"/>
-          </div>
-
         </div>
-
-        <div *ngIf="this.selectedCamera !== undefined">
-          <div class="row">
-            <div class="col">
-
-              <mat-form-field>
-                <input
-                matInput
-                [(ngModel)]="this.selectedCamera.camera"
-                placeholder="Nome Camera"
-                [disabled]="!editMode"
-                />
-              </mat-form-field>
-            </div>
-            <div class="col-3" *ngIf="editMode">
-              <mat-checkbox [(ngModel)]="this.selectedCamera.forPatient" (change)="saveForPatientFlag($event.checked)">
-                Camera
-              </mat-checkbox>
-            </div>
-          </div>
-
-          <div class="row" *ngIf="editMode">
-            <mat-form-field appearance="fill">
-              <mat-label>Seleziona Camera</mat-label>
-              <mat-select [(ngModel)]="this.selectedCamera.piano">
-                <mat-option
-                  *ngFor="let piano of pianoList | async"
-                  value="{{ piano.code }}"
-                  >{{ piano.description }}
-                </mat-option>
-              </mat-select>
-            </mat-form-field>
-
-            <!-- <mat-form-field>
-              <input
-                matInput
-                [(ngModel)]="this.selectedCamera.piano"
-                placeholder="Numero Piano"
-              />
-            </mat-form-field> -->
-          </div>
-        </div>
-
-        <div *ngIf="editMode">
-          <div
-            *ngFor="
-              let item of this.selectedCamera?.geometryObject.features[0].geometry
-                .coordinates[0];
-              let i = index
-            "
-          >
-            <div class="row">
-              <div class="col">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="number"
-                    [(ngModel)]="item[0]"
-                    placeholder="X"
-                  />
-                </mat-form-field>
-              </div>
-
-              <div class="col">
-                <mat-form-field>
-                  <input
-                    matInput
-                    type="number"
-                    [(ngModel)]="item[1]"
-                    placeholder="Y"
-                  />
-                </mat-form-field>
-              </div>
-
-              <div class="col">
-                <img
-                  src="../../../assets/cestino.svg"
-                  style="width: 26px"
-                  (click)="removePoint(i)"
-                />
-              </div>
-            </div>
-          </div>
-        </div>
-
-
-        <div class="row" *ngIf="editMode">
-          <div class="col ">
-            <button mat-button (click)="saveLayerCamera()" class="full">
-              Aggiorna Camera
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <ng-template #loading>
-        <div class="containter pad">
-          <div class="row">
-            <div class="col center">
-              <img src="../../../assets/empty.svg" style="width: 32px;">
-            </div>
-          </div>
-          <div class="row">
-            <div class="col center">
-              <mat-label>Nessun camera presente in questo piano</mat-label>
-            </div>
-          </div>
-        </div>
-      </ng-template>
     </div>
-  </div>
+
+    <div class="row g-4">
+        <!-- Mappa Interattiva (Colonna Sinistra) -->
+        <div class="col-lg-7">
+            <div class="map-card-container">
+                <div id="ol-map" class="map-container" (click)="getCoord($event)"></div>
+            </div>
+        </div>
+
+        <!-- Pannello Gestione Camere (Colonna Destra) -->
+        <div class="col-lg-5">
+            <div class="card-form" *ngIf="(camere | async)?.length > 0; else loading">
+
+                <!-- Toggle Modalità Modifica -->
+                <div class="row mb-3" *ngIf="!editMode">
+                    <div class="col-12">
+                        <button mat-flat-button class="btn-primary-custom w-100" (click)="enableEditMode()">
+                            <mat-icon>edit</mat-icon>
+                            <span>Modalità modifica</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Azioni in Modalità Modifica (Aggiungi e Annulla/Esci) -->
+                <div class="row mb-3 g-2" *ngIf="editMode">
+                    <div class="col">
+                        <button mat-flat-button class="btn-primary-custom w-100" (click)="addCamera()">
+                            <mat-icon>add</mat-icon>
+                            <span>Aggiungi Camera</span>
+                        </button>
+                    </div>
+                    <div class="col-auto">
+                        <button mat-button color="warn" (click)="cancelEditMode()" matTooltip="Esci senza salvare">
+                            <mat-icon>close</mat-icon>
+                            <span>Annulla</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Selezione ed Azioni Camera -->
+                <div class="row align-items-center mb-3">
+                    <div class="col">
+                        <mat-form-field appearance="outline" class="w-100 mb-0">
+                            <mat-label>Seleziona Camera</mat-label>
+                            <mat-select (selectionChange)="onChangeCamera($event)" [(ngModel)]="selectedCamera">
+                                <mat-option *ngFor="let camera of camere | async" [value]="camera">
+                                    {{ camera.camera }}
+                                </mat-option>
+                            </mat-select>
+                        </mat-form-field>
+                    </div>
+
+                    <!-- Pulsanti Deseleziona ed Elimina -->
+                    <div class="col-auto d-flex gap-1" *ngIf="selectedCamera !== undefined && editMode">
+                        <button mat-icon-button color="primary" (click)="deselectCamera()" matTooltip="Deseleziona camera">
+                            <mat-icon>close</mat-icon>
+                        </button>
+                        <button mat-icon-button color="warn" (click)="removeCamera()" matTooltip="Elimina camera">
+                            <mat-icon>delete</mat-icon>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Dettagli e Modifica Camera Selezionata -->
+                <div *ngIf="selectedCamera !== undefined" class="pt-2">
+                    <!-- Nome Camera e Switch Camera Paziente -->
+                    <div class="row align-items-center mb-3">
+                        <div class="col">
+                            <mat-form-field appearance="outline" class="w-100 mb-0">
+                                <mat-label>Nome Camera</mat-label>
+                                <input matInput [(ngModel)]="selectedCamera.camera" placeholder="Nome Camera" [disabled]="!editMode" />
+                            </mat-form-field>
+                        </div>
+
+                        <!-- Switch Camera per Paziente -->
+                        <div class="col-auto" *ngIf="editMode">
+                            <div class="switch-field-wrapper">
+                                <label class="custom-switch">
+                                    <input type="checkbox" [(ngModel)]="selectedCamera.forPatient" (change)="saveForPatientFlag($event.target.checked)">
+                                    <span class="slider round"></span>
+                                </label>
+                                <span class="switch-label">Camera</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Selezione Piano in Modalità Modifica -->
+                    <div class="row mb-3" *ngIf="editMode">
+                        <div class="col-12">
+                            <mat-form-field appearance="outline" class="w-100 mb-0">
+                                <mat-label>Piano</mat-label>
+                                <mat-select [(ngModel)]="selectedCamera.piano">
+                                    <mat-option *ngFor="let piano of pianoList | async" [value]="piano.code">
+                                        {{ piano.description }}
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+
+                    <!-- Lista Coordinate Geometria (Solo Edit Mode) -->
+                    <div *ngIf="editMode" class="coordinates-section mb-3">
+                        <h5 class="section-subtitle mb-2">Coordinate Poligono</h5>
+                        <div *ngFor="let item of selectedCamera?.geometryObject.features[0].geometry.coordinates[0]; let i = index" class="row align-items-center mb-2">
+                            <div class="col">
+                                <mat-form-field appearance="outline" class="w-100 mb-0">
+                                    <mat-label>X</mat-label>
+                                    <input matInput type="number" [(ngModel)]="item[0]" placeholder="Coordinata X" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col">
+                                <mat-form-field appearance="outline" class="w-100 mb-0">
+                                    <mat-label>Y</mat-label>
+                                    <input matInput type="number" [(ngModel)]="item[1]" placeholder="Coordinata Y" />
+                                </mat-form-field>
+                            </div>
+
+                            <div class="col-auto">
+                                <button mat-icon-button color="warn" (click)="removePoint(i)" matTooltip="Rimuovi punto">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Pulsanti Salvataggio e Annulla Modifiche -->
+                    <div class="row mt-3 g-2" *ngIf="editMode">
+                        <div class="col">
+                            <button mat-flat-button class="btn-primary-custom w-100" (click)="saveLayerCamera()">
+                                <mat-icon>save</mat-icon>
+                                <span>Aggiorna Camera</span>
+                            </button>
+                        </div>
+                        <div class="col-auto">
+                            <button mat-button (click)="cancelEditMode()">
+                                <span>Annulla</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Template Stato Vuoto / Caricamento -->
+            <ng-template #loading>
+                <div class="card-form empty-state">
+                    <mat-icon class="empty-icon">meeting_room</mat-icon>
+                    <p class="m-0">Nessuna camera presente in questo piano</p>
+                </div>
+            </ng-template>
+        </div>
+    </div>
 </div>
