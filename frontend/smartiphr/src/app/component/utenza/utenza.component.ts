@@ -1,5 +1,5 @@
 import { Component, Input, OnInit } from "@angular/core";
-import { Dipendenti } from "../../models/dipendenti";
+import { Router } from "@angular/router";
 import { User } from "../../models/user";
 import { DipendentiService } from "../../service/dipendenti.service";
 import { AuthenticationService } from "../../service/authentication.service";
@@ -13,7 +13,6 @@ import { MessagesService } from "../../service/messages.service";
 })
 export class UtenzaComponent implements OnInit {
 
-  //@Input() dipendente: Dipendenti;
   @Input() utente: User;
   @Input() admin: Boolean;
   disable: Boolean;
@@ -25,22 +24,18 @@ export class UtenzaComponent implements OnInit {
   password: String;
   showPassword: boolean = false;
   showConfirmPassword: boolean = false;
-  //utente: User;
 
   constructor(
     public messageService: MessagesService,
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
-    public usersService: UsersService) {
+    public usersService: UsersService,
+    private router: Router
+  ) {
     this.disable = this.admin ? false : true;
-   // this.utente = new User();
-    //this.loadUserCred();
   }
 
   ngOnInit() {
-   // this.utente = new User();
-    //this.loadUserCred();
-
     this.disable = this.admin ? false : true;
   }
 
@@ -52,68 +47,69 @@ export class UtenzaComponent implements OnInit {
     this.showConfirmPassword = !this.showConfirmPassword;
   }
 
-  ngOnChange() {
-  }
-
   saveCred() {
-    if (this.admin) {
-      this.utente.password = this.password.valueOf();
+    const loggedUser = this.authenticationService.getCurrentUser();
+
+    // Controlla se si sta modificando la propria utenza personale
+    const isSelfUpdate = loggedUser && this.utente &&
+      ((loggedUser._id && loggedUser._id === this.utente._id) ||
+        (loggedUser.username && loggedUser.username === this.utente.username));
+
+    // CASO A: Modifica effettuata da un Admin O per conto di un ALTRO dipendente (es. Dialog Dipendenti)
+    if (this.admin || !isSelfUpdate) {
+      if (this.password) {
+        this.utente.password = this.password.valueOf();
+      }
       this.usersService
         .save(this.utente)
-        .then((x) => {
+        .then(() => {
           this.errorCred = false;
           this.uploadingCred = true;
-          setInterval(() => {
+          setTimeout(() => {
             this.uploadingCred = false;
           }, 3000);
           this.messageService.showMessage("Salvataggio Effettuato");
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore salvataggio utente (" + err["status"] + ")"
+            "Errore salvataggio utente (" + (err?.status || "sconosciuto") + ")"
           );
           this.uploadingCred = false;
         });
       return;
     }
+
+    // CASO B: L'utente sta cambiando le PROPRIE credenziali
     if (this.confirmpassword == this.password) {
-      this.utente.password = this.password.valueOf();
+      if (this.password) {
+        this.utente.password = this.password.valueOf();
+      }
+
       this.usersService
         .save(this.utente)
-        .then((x) => {
+        .then(async () => {
           this.errorCred = false;
-          this.uploadingCred = true;
-          setInterval(() => {
-            this.uploadingCred = false;
-          }, 3000);
-          this.messageService.showMessage("Salvataggio Effettuato");
+
+          this.messageService.showMessage(
+            "Password aggiornata con successo. È necessario effettuare nuovamente il login."
+          );
+
+          // Esegue il logout ed elimina la sessione locale per evitare errori 500 successivi
+          await this.authenticationService.logoutCurrentUser(this.utente);
+
+          setTimeout(() => {
+            this.router.navigate(["login"]);
+          }, 1200);
         })
         .catch((err) => {
           this.messageService.showMessageError(
-            "Errore salvataggio utente (" + err["status"] + ")"
+            "Errore salvataggio utente (" + (err?.status || "sconosciuto") + ")"
           );
           this.uploadingCred = false;
         });
-    }
-    else {
+    } else {
       this.errorCred = true;
       this.messageService.showMessageError("Le due password non corrispondono");
     }
   }
-
-  //loadUserCred() {
-  //  console.log("get cred user for ", this.dipendente);
-  //  this.usersService
-  //    .getByDipendenteId(this.dipendente._id)
-  //    .then((x) => {
-  //      console.log("utente: " + JSON.stringify(x));
-  //      this.utente = x;
-  //    })
-  //    .catch((err) => {
-  //      this.messageService.showMessageError(
-  //        "Errore Caricamento dipendente (" + err["status"] + ")"
-  //      );
-  //    });
-  //}
-
 }

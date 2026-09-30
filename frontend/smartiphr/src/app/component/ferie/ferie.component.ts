@@ -6,6 +6,8 @@ import { Dipendenti } from "src/app/models/dipendenti";
 import { Ferie } from "src/app/models/ferie";
 import { FerieService } from "src/app/service/ferie.service";
 import { MessagesService } from "src/app/service/messages.service";
+import { SettingsService } from "../../service/settings.service";
+import { Settings } from "../../models/settings";
 
 @Component({
   selector: "app-ferie",
@@ -47,6 +49,7 @@ export class FerieComponent implements OnInit, OnChanges {
   public nuovoRichiestaFerie: Ferie;
   public richieste: Ferie[];
   public uploadingRichiestaFerie: boolean;
+  public setting: Settings;
   public addingRichiestaFerie: boolean;
 
   @ViewChild("paginatorFerie", { static: false })
@@ -57,31 +60,48 @@ export class FerieComponent implements OnInit, OnChanges {
 
   constructor(
     public messageService: MessagesService,
-    public ferieService: FerieService
-  ) //public dipendenteService: DipendentiService
-  {
+    public ferieService: FerieService,
+    public settingService: SettingsService
+  ) {
     this.richieste = [];
   }
 
   ngOnChanges(changes) {
+    this.getSettings();
     if (this.data && this.data._id) {
       this.ferieService.getFerieByDipendenteID(this.data._id).then((result) => {
         this.dataSource = new MatTableDataSource<Ferie>(result);
         this.dataSource.paginator = this.paginator;
         this.richieste = result;
       });
-    }
-    else {
+    } else if (this.data) {
       this.ferieService.getFerieByDipendenteID(this.data._id).then((result) => {
         this.richieste = result;
-      });
-      this.dataSource = new MatTableDataSource<Ferie>(this.richieste);
+        this.dataSource = new MatTableDataSource<Ferie>(this.richieste);
         this.dataSource.paginator = this.paginator;
+      });
+    }
+  }
+
+  async getSettings(): Promise<Settings> {
+    if (this.setting) {
+      return this.setting;
+    }
+    try {
+      const res = await this.settingService.getSettings();
+      if (res ) {
+        this.setting = res;
+      }
+      return this.setting;
+    } catch (err) {
+      console.error("Errore caricamento impostazioni: ", err);
+      return null;
     }
   }
 
   ngOnInit() {
     this.nuovoRichiestaFerie = new Ferie();
+    this.getSettings();
   }
 
   applyFilter(event: Event) {
@@ -123,8 +143,7 @@ export class FerieComponent implements OnInit, OnChanges {
 
   // RICHIESTE EXTERNAL
   async addRichiestaFerie() {
-    let dataCurrent = new Date();
-
+    this.nuovoRichiestaFerie = new Ferie();
     this.addingRichiestaFerie = true;
   }
 
@@ -132,76 +151,96 @@ export class FerieComponent implements OnInit, OnChanges {
     console.log("Cancella Ferie: ", ferie);
 
     this.ferieService
-        .remove(ferie)
-        .then((x) => {
-          console.log("richisesta cancellata");
-          const index = this.richieste.indexOf(ferie);
-          console.log("richiesta ferie cancellata index: ", index);
-          if (index > -1) {
-            this.richieste.splice(index, 1);
-          }
-
-          console.log("Richiesta cancellata : ", this.richieste);
-          this.dataSource.data = this.richieste;
-        })
-        .catch((err) => {
-          this.messageService.showMessageError("Errore nella cancellazione della richiesta");
-          console.error(err);
-        });
+      .remove(ferie)
+      .then((x) => {
+        console.log("richiesta cancellata");
+        const index = this.richieste.indexOf(ferie);
+        if (index > -1) {
+          this.richieste.splice(index, 1);
+        }
+        this.dataSource.data = this.richieste;
+      })
+      .catch((err) => {
+        this.messageService.showMessageError("Errore nella cancellazione della richiesta");
+        console.error(err);
+      });
   }
 
-  dateDiffInDays(a, b) {
-    var _MS_PER_ANNO = 1000 * 60 * 60 * 24;
+  dateDiffInDays(a: Date, b: Date) {
+    var _MS_PER_DAY = 1000 * 60 * 60 * 24;
     var utc1 = Date.UTC(a.getFullYear(), a.getMonth(), a.getDate());
     var utc2 = Date.UTC(b.getFullYear(), b.getMonth(), b.getDate());
 
-    return Math.floor((utc2 - utc1) / _MS_PER_ANNO);
+    return Math.floor((utc2 - utc1) / _MS_PER_DAY);
   }
-
-
 
   async saveRichiestaFerie(ferie: Ferie) {
     console.log("Data: ", this.data);
-    ferie.user = this.data._id;
+    if (this.data && this.data._id) {
+      ferie.user = this.data._id;
+    }
+
     var campi = "";
-    if (ferie.dataInizio == undefined || ferie.dataInizio == new Date() || ferie.dataInizio == null) {
-      campi = campi + " data Inizio";
+    if (!ferie.dataInizio) {
+      campi += " Data Inizio";
     }
-    if (ferie.dataFine == undefined || ferie.dataFine == new Date() || ferie.dataFine == null) {
-      campi = campi + " data Fine";
+    if (!ferie.dataFine) {
+      campi += " Data Fine";
     }
-    if (campi != "") {
-      this.messageService.showMessageError(`I campi ${campi} sono obbligatori!!`);
+    if (campi !== "") {
+      this.messageService.showMessageError(`I campi${campi} sono obbligatori!`);
       this.addingRichiestaFerie = true;
       return;
     }
-    if (this.dateDiffInDays(new Date(ferie.dataFine), new Date(ferie.dataInizio)) > 0) {
+
+    const dInizio = new Date(ferie.dataInizio);
+    const dFine = new Date(ferie.dataFine);
+
+    if (dFine < dInizio) {
       this.addingRichiestaFerie = true;
-      this.messageService.showMessageError(`Non puoi impostare la data di fine ferie prima della data inizio ferie!!!`);
+      this.messageService.showMessageError(`Non puoi impostare la data di fine ferie prima della data di inizio!`);
       return;
     }
-    console.log(this.dateDiffInDays(new Date(), new Date((new Date().getFullYear()), 3, 30, 23, 59, 59)));
-    if ((this.dateDiffInDays(new Date(ferie.dataInizio), new Date((new Date().getFullYear()), 5, 1)) < 0)
-      && this.dateDiffInDays(new Date(), new Date((new Date().getFullYear()), 3, 30, 23, 59, 59))<0
-    ) {
-      this.addingRichiestaFerie = true;
-      this.messageService.showMessageError(`Le ferie estive vanno inserite entro e non oltre il 30 Aprile!!!`);
-      return;
+
+    // Assicuriamoci che i settings siano caricati
+    await this.getSettings();
+
+    // Verifico se le impostazioni del periodo ferie sono state configurate
+    if (this.setting && this.setting.PeriodoFerieInizio && this.setting.PeriodoFerieFine) {
+      const periodoInizio = new Date(this.setting.PeriodoFerieInizio);
+      const periodoFine = new Date(this.setting.PeriodoFerieFine);
+      const oggi = new Date();
+
+      // Se le ferie ricadono nel periodo ferie configurato, verifica che la richiesta avvenga entro la data fine inserimento
+      if (dInizio >= periodoInizio) {
+        if (oggi > periodoFine) {
+          this.addingRichiestaFerie = true;
+          this.messageService.showMessageError(
+            `Il periodo per inserire le ferie per questa fascia temporale è scaduto il ${periodoFine.toLocaleDateString()}!`
+          );
+          return;
+        }
+      }
     }
+
     this.uploadingRichiestaFerie = true;
     console.log("Invio Richiesta Ferie: ", ferie);
+
     this.ferieService
       .insertFerie(ferie)
       .then((result: Ferie) => {
         console.log("Insert Ferie: ", result);
         this.richieste.push(result);
-        this.dataSource.data = this.richieste;
+        this.dataSource.data = [...this.richieste];
         this.addingRichiestaFerie = false;
         this.uploadingRichiestaFerie = false;
+        this.nuovoRichiestaFerie = new Ferie();
+        this.messageService.showMessage("Richiesta di ferie inserita con successo");
       })
       .catch((err) => {
+        this.uploadingRichiestaFerie = false;
         this.messageService.showMessageError(
-          "Errore Inserimento RichiestaFerie"
+          "Errore nell'inserimento della richiesta di ferie"
         );
         console.error(err);
       });

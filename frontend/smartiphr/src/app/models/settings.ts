@@ -7,6 +7,8 @@ export class Settings {
   menuInvernaleEnd?: Date;   // Data di fine del menu invernale
   menuEstivoStart?: Date;    // Data di inizio del menu estivo
   menuEstivoEnd?: Date;      // Data di fine del menu estivo
+  PeriodoFerieInizio?: Date;    // Data di inizio periodo inserimento ferie
+  PeriodoFerieFine?: Date;      // Data di fine periodo inserimento ferie
   ScadenzaPersonalizzato?: number; // Numero, valore personalizzato di scadenza
   turni?: Array<{
     mattina: Array<{

@@ -142,6 +142,34 @@
                         </div>
                     </div>
 
+                    <!-- Intervallo Periodo Ferie -->
+                    <div class="setting-row">
+                        <div class="row align-items-center">
+                            <div class="col-md-3">
+                                <label class="form-label-custom">Periodo Inserimento Ferie</label>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Data Inizio</mat-label>
+                                    <input matInput [matDatepicker]="ferieStart" [(ngModel)]="setting.PeriodoFerieInizio">
+                                    <mat-datepicker-toggle matSuffix [for]="ferieStart"></mat-datepicker-toggle>
+                                    <mat-datepicker #ferieStart></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-2">
+                                <mat-form-field appearance="outline" class="w-100">
+                                    <mat-label>Data Fine</mat-label>
+                                    <input matInput [matDatepicker]="ferieEnd" [(ngModel)]="setting.PeriodoFerieFine">
+                                    <mat-datepicker-toggle matSuffix [for]="ferieEnd"></mat-datepicker-toggle>
+                                    <mat-datepicker #ferieEnd></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                            <div class="col-md-5">
+                                <p class="setting-description">Definire il periodo entro cui è consentito l'inserimento delle richieste di ferie.</p>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </mat-tab>

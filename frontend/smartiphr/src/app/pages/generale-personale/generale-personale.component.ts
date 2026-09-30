@@ -12,6 +12,7 @@ import { UploadService } from "src/app/service/upload.service";
 import { UsersService } from "src/app/service/users.service";
 import { MansioniService } from "../../service/mansioni.service";
 import { Mansione } from "../../models/mansione";
+import { Router } from "@angular/router";
 
 @Component({
   selector: "app-generale-personale",
@@ -64,7 +65,8 @@ export class GeneralePersonaleComponent implements OnInit {
     public dipendenteService: DipendentiService,
     public authenticationService: AuthenticationService,
     public usersService: UsersService,
-    public mansioniService: MansioniService
+    public mansioniService: MansioniService,
+    private router: Router
   ) {
     this.dipendente = new Dipendenti();
     this.utente = new User();
@@ -147,13 +149,34 @@ export class GeneralePersonaleComponent implements OnInit {
     if (this.confirmpassword == this.utente.password) {
       this.usersService
         .save(this.utente)
-        .then((x) => {
+        .then(async (x) => {
           this.errorCred = false;
           console.log("Save utente: ", x);
-          this.uploadingCred = true;
-          setInterval(() => {
-            this.uploadingCred = false;
-          }, 3000);
+
+          // Disattiviamo il banner HTML di default ("salvataggio effettuato")
+          this.uploadingCred = false;
+
+          // 1. Mostriamo il messaggio che avvisa l'utente
+          // (Verifica se il tuo messageService usa 'showMessage' o un metodo analogo per gli avvisi)
+          if (typeof this.messageService['showMessage'] === 'function') {
+            this.messageService['showMessage']("Modifica effettuata: è necessario effettuare nuovamente il login.");
+          } else {
+            this.messageService.showMessageError("Modifica effettuata: è necessario effettuare nuovamente il login.");
+          }
+
+          // 2. Attendiamo un istante (es. 1.5 secondi) per far leggere il messaggio all'utente prima del logout
+          setTimeout(async () => {
+            try {
+              // Puliamo la sessione e disconnettiamo l'utente
+              await this.authenticationService.logoutCurrentUser(this.utente);
+            } catch (err) {
+              console.error("Errore durante il logout:", err);
+            } finally {
+              // Forziamo la navigazione alla pagina di login
+              this.router.navigate(["login"]);
+            }
+          }, 1500);
+
         })
         .catch((err) => {
           this.messageService.showMessageError(
@@ -161,7 +184,9 @@ export class GeneralePersonaleComponent implements OnInit {
           );
           this.uploadingCred = false;
         });
-    } else this.errorCred = true;
+    } else {
+      this.errorCred = true;
+    }
   }
 
   async showDocument(doc: DocumentoDipendente) {

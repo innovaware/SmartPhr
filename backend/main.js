@@ -1,4 +1,5 @@
 "use strict";
+require('dotenv').config();
 exports.__esModule = true;
 
 const express = require("express");
@@ -7,6 +8,7 @@ const cors = require("cors");
 const fileUpload = require("express-fileupload");
 const bodyParser = require("body-parser");
 const bcrypt = require('bcrypt');
+const nodemailer = require("nodemailer");
 // LOGGER
 const morgan = require('morgan');
 
@@ -23,29 +25,18 @@ const { ObjectId } = require("bson");
 const Menu = require("./models/menu");
 const puliziaAmbiente = require("./models/puliziaAmbiente");
 
-// var MongoClient = require('mongodb').MongoClient;
-// mongo = undefined;
-
 var app = express();
 var PORT = process.env.PORT || 3000;
 
 var VERSION = process.env.VERSION;
 
 const redisPort = process.env.REDISPORT || 6379;
-const redisHost = process.env.REDISHOST || "vps-82c30e1c.vps.ovh.net";//"redis";
+const redisHost = process.env.REDISHOST || "vps-82c30e1c.vps.ovh.net";
 var redisDisabled = process.env.REDISDISABLE === "true" || false;
 const redisTimeCache = parseInt(process.env.REDISTTL) || 60;
 
-// GESTIONE MAILER SERVICE
+// GESTIONE MAILER SERVICE (SMTP)
 var clientMailerServiceDisabled = false;
-const hostMailerService = process.env.MAILERSERVICEHOST || "localhost";
-const portMailerService = process.env.MAILERSERVICEPORT || "1883";
-const clientIdMailerService = `mqtt_${Math.random().toString(16).slice(3)}`;
-const connectUrlMailerService = `mqtt://${hostMailerService}:${portMailerService}`;
-const mailerUsername = process.env.MAILERSERVICEUSERNAME || "test";
-const mailerPassword = process.env.MAILERSERVICEPASSWORD || "test";
-const mailerConnectionTimeout = process.env.MAILERCONNECTIONTIMEOUT || 4000;
-const mailerReConnectionPeriod = process.env.MAILERRECONNECTIONPERIOD || 1000;
 
 const NEXTCLOUD_HOST = "http://smart-iphr.innovaware.it:8081";
 const NEXTCLOUD_USER = "admin";
@@ -55,8 +46,7 @@ const MONGO_USERNAME = "innova";
 const MONGO_PASSWORD = "innova2019";
 const MONGO_HOSTNAME = "vps-82c30e1c.vps.ovh.net";
 const MONGO_PORT = "27017";
-//const MONGO_DB = "smartphr_prod"; //DB PRODUZIONE
-const MONGO_DB = "smartphr"; ////DB PRE PRODUZIONE [TESTING]
+const MONGO_DB = "smartphr";
 const mongoConnectionString = `mongodb://${MONGO_USERNAME}:${MONGO_PASSWORD}@${MONGO_HOSTNAME}:${MONGO_PORT}/${MONGO_DB}?authSource=admin`;
 
 // LOGGER 
@@ -73,12 +63,11 @@ const metricsMiddleware = promBundle({
     }
 });
 
-app.use(metricsMiddleware)
+app.use(metricsMiddleware);
 app.get("/", (req, res) => res.json({
     "GET /": "All Routes",
     "GET /metrics": "Metrics data",
 }));
-
 
 var clientRedis = undefined;
 var clientMailerService = undefined;
@@ -101,14 +90,8 @@ const PrintInfoService = () => {
     console.log(`*       Disabled  : ${redisDisabled ? 'true' : 'false'}                          `);
     console.log(`*       Time Cache: ${redisTimeCache}                                            `);
     console.log("*                                                                                ");
-    console.log(`* Mailer Service: ${hostMailerService}:${portMailerService}                      `);
-    console.log(`* Mailer Options:                                                                `);
-    console.log(`*        Client Id: ${clientIdMailerService}:                                    `);
-    console.log(`*        Queue url: ${connectUrlMailerService}                                   `);
-    console.log(`*        Username: ${mailerUsername}                                             `);
-    console.log(`*        Password: ${mailerPassword}                                             `);
-    console.log(`*        Connection Timeout: ${mailerConnectionTimeout}                          `);
-    console.log(`*        ReConnection Period: ${mailerReConnectionPeriod}                        `);
+    console.log(`* Mailer Service (SMTP Host): ${process.env.SMTP_HOST || 'mail.innovaware.it'}     `);
+    console.log(`* Mailer User: ${process.env.SMTP_USER || 'n.dimarco@innovaware.it'}             `);
     console.log("*                                                                                ");
     console.log(`* NextCloud Service: ${NEXTCLOUD_HOST}                                           `);
     console.log(`* NextCloud Options:                                                             `);
@@ -154,12 +137,10 @@ const InitRedisService = () => {
         try {
             console.log("Wait to connect Redis...");
             clientRedis = redis.createClient(redisPort, redisHost);
-
             console.log("Connection Redis Service Completed");
         } catch (error) {
             console.error("Error to connect Redis", error);
             clientRedis = undefined;
-
             console.log("Deactivate Redis Service");
             redisDisabled = true;
         }
@@ -175,25 +156,27 @@ const InitRedisService = () => {
 
 const InitMailerService = () => {
     try {
-        console.log("Wait to connect MQTT Service...");
-        clientMailerService = mqtt.connect(connectUrlMailerService, {
-            clientIdMailerService,
-            clean: true,
-            connectTimeout: mailerConnectionTimeout,
-            username: mailerUsername,
-            password: mailerPassword,
-            reconnectPeriod: mailerReConnectionPeriod,
+        console.log("Wait to initialize SMTP Mailer Service (Google)...");
+        clientMailerService = nodemailer.createTransport({
+            host: process.env.SMTP_HOST || "smtp.gmail.com",
+            port: parseInt(process.env.SMTP_PORT) || 587,
+            secure: false, // false per porta 587 (STARTTLS)
+            auth: {
+                user: process.env.SMTP_USER,
+                pass: process.env.SMTP_PASS,
+            },
+            tls: {
+                rejectUnauthorized: false
+            }
         });
-        console.log("Connection MQTT Service Completed");
+        clientMailerServiceDisabled = false;
+        console.log("SMTP Mailer Service Initialized");
     } catch (error) {
-        console.error("Error to connect MQTT Service", error);
+        console.error("Error initializing SMTP Mailer Service", error);
         clientMailerService = undefined;
-
-        console.log("Deactivate Redis Service");
         clientMailerServiceDisabled = true;
     }
     app.set('mailer', clientMailerService);
-    app.set('mailerTopic', "topic/dipendente");
     app.set('mailerDisabled', clientMailerServiceDisabled);
 }
 
@@ -208,7 +191,6 @@ const InitApiFunctions = () => {
         res.status(200).send(data);
     });
     routesList.push(apiInfo);
-
 
     // User api
     var userRouter = require("./routes/user");
@@ -251,7 +233,6 @@ const InitApiFunctions = () => {
     var apiFarmaci = { key: 'farmaci', path: '/api/farmaci' }
     app.use(apiFarmaci.path, logHandler, authorizationHandler, roleHandler, farmaciRouter);
     routesList.push(apiFarmaci);
-
 
     // Presidi API
     var presidiRouter = require("./routes/presidi");
@@ -350,21 +331,17 @@ const InitApiFunctions = () => {
     app.use(apiTurniMensili.path, logHandler, authorizationHandler, roleHandler, turniMensiliRouter);
     routesList.push(apiTurniMensili);
 
-
     // Doc Farmaci API
     var documentiFarmaciRouter = require("./routes/documentifarmaci");
     var apiDocumentiFarmaci = { key: 'documentifarmaci', path: '/api/documentifarmaci' }
     app.use(apiDocumentiFarmaci.path, logHandler, authorizationHandler, roleHandler, documentiFarmaciRouter);
     routesList.push(apiDocumentiFarmaci);
 
-
     // Doc Dipendenti API
     var documentiDipendentiRouter = require("./routes/documentidipendenti");
     var apiDocumentiDipendenti = { key: 'documentidipendenti', path: '/api/documentidipendenti' }
     app.use(apiDocumentiDipendenti.path, logHandler, authorizationHandler, roleHandler, documentiDipendentiRouter);
     routesList.push(apiDocumentiDipendenti);
-
-
 
     // MedicinaLavoro API
     var documentiMedicinaLavoroRouter = require("./routes/documentiMedicinaLavoro");
@@ -449,33 +426,26 @@ const InitApiFunctions = () => {
     app.use(apiDiarioAssSociale.path, logHandler, authorizationHandler, roleHandler, DiarioAssSocialeRouter);
     routesList.push(apiDiarioAssSociale);
 
-
-    //AREA OSS
-    // Ingressi API
+    // AREA OSS
     var IngressiRouter = require("./routes/dataIngresso");
     var apiIngressi = { key: 'dataIngresso', path: '/api/dataIngresso' }
     app.use(apiIngressi.path, logHandler, authorizationHandler, IngressiRouter);
     routesList.push(apiIngressi);
 
-    // Attivita Generiche API
     var AttivitaRouter = require("./routes/attivita");
     var apiAttivita = { key: 'attivita', path: '/api/attivita' }
     app.use(apiAttivita.path, logHandler, authorizationHandler, AttivitaRouter);
     routesList.push(apiAttivita);
 
-
-    // Attivita e elementi armadio API
     var ArmadioRouter = require("./routes/armadio");
     var apiArmadio = { key: 'armadio', path: '/api/armadio' }
     app.use(apiArmadio.path, logHandler, authorizationHandler, ArmadioRouter);
     routesList.push(apiArmadio);
 
-    // Rifiuti Speciali API
     var RifiutiSpecialiRouter = require("./routes/rifiutiSpeciali");
     var apiRifiutiSpeciali = { key: 'rifiutiSpeciali', path: '/api/rifiutiSpeciali' }
     app.use(apiRifiutiSpeciali.path, logHandler, authorizationHandler, RifiutiSpecialiRouter);
     routesList.push(apiRifiutiSpeciali);
-
 
     var ArmadioFarmaciRouter = require("./routes/armadioFarmaci");
     var apiArmadioFarmaci = { key: 'armadioFarmaci', path: '/api/armadioFarmaci' }
@@ -486,46 +456,36 @@ const InitApiFunctions = () => {
     var apiRegistroCarrello = { key: 'registroCarrello', path: '/api/registroCarrello' }
     app.use(apiRegistroCarrello.path, logHandler, authorizationHandler, RegistroCarrelloRouter);
     routesList.push(apiRegistroCarrello);
-    
+
     var CarrelloRouter = require("./routes/carrello");
     var apiCarrello = { key: 'carrello', path: '/api/carrello' }
     app.use(apiCarrello.path, logHandler, authorizationHandler, CarrelloRouter);
     routesList.push(apiCarrello);
 
-    // Attivita e elementi armadio API
     var controlliOSSRouter = require("./routes/controlliOSS");
     var apicontrolliOSS = { key: 'armadiocontrolli', path: '/api/armadiocontrolli' }
     app.use(apicontrolliOSS.path, logHandler, authorizationHandler, controlliOSSRouter);
     routesList.push(apicontrolliOSS);
 
-
-    // Attivita Generiche API
     var AttivitaFarmaciRouter = require("./routes/attivitaFarmaciPresidi");
     var apiAttivitafarmaci = { key: 'attivitafarmaci', path: '/api/attivitafarmaci' }
     app.use(apiAttivitafarmaci.path, logHandler, authorizationHandler, AttivitaFarmaciRouter);
     routesList.push(apiAttivitafarmaci);
 
-    // SchedaTerapeutica
     var SchedaTerapeuticaRouter = require("./routes/schedaTerapeutica");
     var apiSchedaTerapeutica = { key: 'schedaTerapeutica', path: '/api/schedaTerapeutica' }
     app.use(apiSchedaTerapeutica.path, logHandler, authorizationHandler, SchedaTerapeuticaRouter);
     routesList.push(apiSchedaTerapeutica);
 
-
-    // Gestione Chiavi API
     var gestChiaviRouter = require("./routes/gestChiavi");
     var apigestChiavi = { key: 'gestChiavi', path: '/api/gestChiavi' }
     app.use(apigestChiavi.path, logHandler, authorizationHandler, gestChiaviRouter);
     routesList.push(apigestChiavi);
 
-
-    // Gestione Rifacimento Letti API
     var lettoCameraRouter = require("./routes/lettoCamera");
     var apilettoCamera = { key: 'lettoCamera', path: '/api/lettoCamera' }
     app.use(apilettoCamera.path, logHandler, authorizationHandler, lettoCameraRouter);
     routesList.push(apilettoCamera);
-
-
 
     var CameraRouter = require("./routes/camera");
     var apiCamera = { key: 'camere', path: '/api/camera' }
@@ -537,109 +497,98 @@ const InitApiFunctions = () => {
     app.use(apiSanificazione.path, logHandler, authorizationHandler, roleHandler, SanificazioneRouter);
     routesList.push(apiSanificazione);
 
-    var IndumentiRouter = require("./routes/indumenti")
+    var IndumentiRouter = require("./routes/indumenti");
     var apiIndumenti = { key: 'indumenti', path: '/api/indumenti' }
     app.use(apiIndumenti.path, logHandler, authorizationHandler, roleHandler, IndumentiRouter);
     routesList.push(apiIndumenti);
 
-    var IndumentiIngressoRouter = require("./routes/indumentiIngresso")
+    var IndumentiIngressoRouter = require("./routes/indumentiIngresso");
     var apiIndumentiIngresso = { key: 'indumenti', path: '/api/indumentiIngresso' }
     app.use(apiIndumentiIngresso.path, logHandler, authorizationHandler, roleHandler, IndumentiIngressoRouter);
     routesList.push(apiIndumentiIngresso);
 
-    var segnalazioneRouter = require("./routes/segnalazione")
+    var segnalazioneRouter = require("./routes/segnalazione");
     var apisegnalazione = { key: 'segnalazione', path: '/api/segnalazione' }
     app.use(apisegnalazione.path, logHandler, authorizationHandler, roleHandler, segnalazioneRouter);
     routesList.push(apisegnalazione);
 
-    var LogRouter = require("./routes/log")
+    var LogRouter = require("./routes/log");
     var apiLog = { key: 'log', path: '/api/log' }
     app.use(apiLog.path, logHandler, authorizationHandler, roleHandler, LogRouter);
     routesList.push(apiLog);
-    
 
-    var materialiRouter = require("./routes/materiali")
+    var materialiRouter = require("./routes/materiali");
     var apimateriali = { key: 'materiali', path: '/api/materiali' }
     app.use(apimateriali.path, logHandler, authorizationHandler, roleHandler, materialiRouter);
     routesList.push(apimateriali);
 
-
-    var richiestePresidiRouter = require("./routes/richiestePresidi")
+    var richiestePresidiRouter = require("./routes/richiestePresidi");
     var apiRichiestePresidi = { key: 'RichiestePresidi', path: '/api/richiestePresidi' }
     app.use(apiRichiestePresidi.path, logHandler, authorizationHandler, roleHandler, richiestePresidiRouter);
     routesList.push(apiRichiestePresidi);
-    
 
-    var settingsRouter = require("./routes/settings")
+    var settingsRouter = require("./routes/settings");
     var apisettings = { key: 'settings', path: '/api/settings' }
     app.use(apisettings.path, logHandler, authorizationHandler, roleHandler, settingsRouter);
     routesList.push(apisettings);
-    
-    var agendaClinicaRouter = require("./routes/agendaClinica")
+
+    var agendaClinicaRouter = require("./routes/agendaClinica");
     var apiagendaClinica = { key: 'agendaClinica', path: '/api/agendaClinica' }
     app.use(apiagendaClinica.path, logHandler, authorizationHandler, roleHandler, agendaClinicaRouter);
     routesList.push(apiagendaClinica);
 
-    var nominaRouter = require("./routes/nominaDipendente")
+    var nominaRouter = require("./routes/nominaDipendente");
     var apinomina = { key: 'nominaDipendente', path: '/api/nominaDipendente' }
     app.use(apinomina.path, logHandler, authorizationHandler, roleHandler, nominaRouter);
     routesList.push(apinomina);
 
-    var formazioneRouter = require("./routes/formazioneDipendente")
+    var formazioneRouter = require("./routes/formazioneDipendente");
     var apiformazione = { key: 'formazioneDipendente', path: '/api/formazioneDipendente' }
     app.use(apiformazione.path, logHandler, authorizationHandler, roleHandler, formazioneRouter);
     routesList.push(apiformazione);
-    
-    var testRiabilitativoRouter = require("./routes/testRiabilitativo")
+
+    var testRiabilitativoRouter = require("./routes/testRiabilitativo");
     var apitestRiabilitativo = { key: 'testRiabilitativo', path: '/api/testRiabilitativo' }
     app.use(apitestRiabilitativo.path, logHandler, authorizationHandler, roleHandler, testRiabilitativoRouter);
     routesList.push(apitestRiabilitativo);
 
-
-    var controlloMensileRouter = require("./routes/controllomensile")
+    var controlloMensileRouter = require("./routes/controllomensile");
     var apicontrolloMensile = { key: 'controllomensile', path: '/api/controllomensile' }
     app.use(apicontrolloMensile.path, logHandler, authorizationHandler, roleHandler, controlloMensileRouter);
     routesList.push(apicontrolloMensile);
 
-    var PuliziaAmbienteRouter = require("./routes/puliziaAmbiente")
+    var PuliziaAmbienteRouter = require("./routes/puliziaAmbiente");
     var apiPuliziaAmbienti = { key: 'pulizia', path: '/api/puliziaAmbiente' }
     app.use(apiPuliziaAmbienti.path, logHandler, authorizationHandler, roleHandler, PuliziaAmbienteRouter);
     routesList.push(apiPuliziaAmbienti);
 
-    var LavanderiaRouter = require("./routes/lavanderia")
+    var LavanderiaRouter = require("./routes/lavanderia");
     var apiLavanderia = { key: 'lavanderia', path: '/api/lavanderia' }
     app.use(apiLavanderia.path, logHandler, authorizationHandler, roleHandler, LavanderiaRouter);
     routesList.push(apiLavanderia);
 
-    var CucinaRouter = require("./routes/cucina")
+    var CucinaRouter = require("./routes/cucina");
     var apiCucina = { key: 'cucina', path: '/api/cucina' }
     app.use(apiCucina.path, logHandler, authorizationHandler, roleHandler, CucinaRouter);
     routesList.push(apiCucina);
 
-    var CucinaPersonalizzatoRouter = require("./routes/cucinaPersonalizzato")
+    var CucinaPersonalizzatoRouter = require("./routes/cucinaPersonalizzato");
     var apiCucinaPersonalizzato = { key: 'cucinaPersonalizzato', path: '/api/cucinaPersonalizzato' }
     app.use(apiCucinaPersonalizzato.path, logHandler, authorizationHandler, roleHandler, CucinaPersonalizzatoRouter);
     routesList.push(apiCucinaPersonalizzato);
 
-    var archivioMenuCucinaPersonalizzatoRouter = require("./routes/archivioMenuCucinaPersonalizzato")
+    var archivioMenuCucinaPersonalizzatoRouter = require("./routes/archivioMenuCucinaPersonalizzato");
     var apiarchivioMenuCucinaPersonalizzato = { key: 'archivioMenuCucinaPersonalizzato', path: '/api/archivioMenuCucinaPersonalizzato' }
     app.use(apiarchivioMenuCucinaPersonalizzato.path, logHandler, authorizationHandler, roleHandler, archivioMenuCucinaPersonalizzatoRouter);
     routesList.push(apiarchivioMenuCucinaPersonalizzato);
 
-    var MagazzinoRouter = require("./routes/magazzino")
+    var MagazzinoRouter = require("./routes/magazzino");
     var apiMagazzino = { key: 'magazzino', path: '/api/magazzino' }
     app.use(apiMagazzino.path, logHandler, authorizationHandler, roleHandler, MagazzinoRouter);
     routesList.push(apiMagazzino);
-
-
-
-
-    //var usersRouter = require("./routes/users");
-    //app.use("/api/users", logHandler, authorizationHandler, usersRouter);
 }
 
 const InitNextCloud = () => {
-    // uses explicite credentials
     console.log("Init NextCloud");
     var server = new nextcloud_node_client_1.Server({
         basicAuth: { password: NEXTCLOUD_PASW, username: NEXTCLOUD_USER },
@@ -683,7 +632,6 @@ const authorizationHandler = async (req, res, next) => {
 
     var username = userAuth.user;
     var password = userAuth.password;
-    
 
     try {
         const user = await getUser(username, password);
@@ -708,7 +656,7 @@ async function readFromMongo(username, password) {
         const utente = await user.findOne({ username: username });
 
         if (!utente) {
-            return null; // L'utente non esiste
+            return null;
         }
 
         const passwordMatches = await comparePassword(password, utente.password);
@@ -751,8 +699,6 @@ function getUser(username, password) {
 
                 if (data) {
                     const userFind = JSON.parse(data);
-
-                    // Esegui il confronto delle password fuori da Redis
                     const passwordMatches = await comparePassword(password, userFind.password);
                     if (passwordMatches) {
                         resolve(userFind);
@@ -763,8 +709,7 @@ function getUser(username, password) {
                     try {
                         const userFind = await readFromMongo(username, password);
                         if (userFind) {
-                            // Memorizza i dati dell'utente senza la password in Redis
-                            const userWithoutPassword = { ...userFind._doc};
+                            const userWithoutPassword = { ...userFind._doc };
                             clientRedis.setex(searchTerm, redisTimeCache, JSON.stringify(userWithoutPassword));
                             resolve(userFind);
                         } else {
@@ -790,12 +735,9 @@ function getUser(username, password) {
     });
 }
 
-
-
 const checkAuthRole = async (user) => {
     const mansioneRole = user.role;
     const getData = () => {
-        // { roles: { $all: [ObjectId('620d1dbd01df09c08ccd9822')] } }
         return Menu.find({ roles: { $all: [ObjectId(mansioneRole)] } });
     };
 
@@ -807,58 +749,23 @@ const checkAuthRole = async (user) => {
     return false;
 }
 
-// enable files upload
-
-// const {
-//     MONGO_USERNAME,
-//     MONGO_PASSWORD,
-//     MONGO_HOSTNAME,
-//     MONGO_PORT,
-//     MONGO_DB,
-//     NEXTCLOUD_HOST,
-//     NEXTCLOUD_USER,
-//     NEXTCLOUD_PASW
-//   } = process.env;
-
-// var NEXTCLOUD_HOST = "http://smart-iphr.innovaware.it:8081";
-// var NEXTCLOUD_USER = "admin";
-// var NEXTCLOUD_PASW = "admin";
-// 
-// var MONGO_USERNAME = "innova";
-// var MONGO_PASSWORD = "innova2019";
-// var MONGO_HOSTNAME = "vps-d76f9e1c.vps.ovh.net";
-// var MONGO_PORT = "27017";
-// var MONGO_DB = "smartphr";
-//'mongodb://innova:innova2019@192.168.1.10:27017/smartphr?authSource=admin&readPreference=primary&appname=MongoDB%20Compass&ssl=false';
-
-
-
 var logHandler = function (req, res, next) {
-    // console.log(req.method);
     next();
 };
 
 var roleHandler = async (req, res, next) => {
-    // console.log(`[ROLEHANDLER] Check Role for USER`);
-    // console.log(`[ROLEHANDLER] auth:`, res.locals.auth);
-
     const user = res.locals.auth;
-    // console.log(`[ROLEHANDLER] user:`, user);
 
     if (user != undefined && checkAuthRole(user)) {
         next();
     } else {
         console.error(`[ROLEHANDLER] NOT Access:`, user);
-
         res.statusCode = 401;
         res.setHeader("Content-Type", "text/plain");
         res.end("Not Authorizated");
     }
 };
 
-
-
-// Scrittura file su nextCloud
 var writeHandler = function (req, res, next) {
     let result = res.locals.result;
     let root = `${result.path}`;
@@ -869,7 +776,6 @@ var writeHandler = function (req, res, next) {
             folder.createFile(result.name, result.file.data).then((file) => {
                 file.addTag(result.typeDocument);
                 file.addTag(`paziente ${root}`);
-                //file.addComment("");
 
                 res.status(200);
                 res.json({ result: result });
@@ -881,7 +787,6 @@ var writeHandler = function (req, res, next) {
         });
 };
 
-// Lettura file da nextCloud
 var readHandler = function (req, res, next) {
     let fileName = decodeURIComponent(req.query.fileName);
 

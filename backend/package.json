@@ -22,6 +22,7 @@
     "mqtt": "^4.3.4",
     "nextcloud-node-client": "^1.8.1",
     "node-nextcloud": "^1.1.2",
+    "nodemailer": "^6.9.7",
     "nodemon": "^2.0.13",
     "prom-client": "^14.0.1",
     "react-bootstrap": "^2.9.1",

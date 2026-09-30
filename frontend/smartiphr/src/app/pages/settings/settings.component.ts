@@ -19,19 +19,21 @@ import { Settings } from '../../models/settings';
 })
 export class SettingsComponent implements OnInit {
 
-
   public uploading: boolean;
   dipendente: Dipendenti = {} as Dipendenti;
 
   public Regolamento: String;
   public setting: Settings;
 
-
-
-  constructor(public messageService: MessagesService, public docService: DocumentiService,
-    public uploadService: UploadService, public dipendenteService: DipendentiService, public authenticationService: AuthenticationService,
+  constructor(
+    public messageService: MessagesService,
+    public docService: DocumentiService,
+    public uploadService: UploadService,
+    public dipendenteService: DipendentiService,
+    public authenticationService: AuthenticationService,
     public mansioniService: MansioniService,
-    public settingService: SettingsService) {
+    public settingService: SettingsService
+  ) {
     this.setting = new Settings();
     this.setting.alertContratto = 0;
     this.setting.alertFarmaci = 0;
@@ -42,18 +44,15 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-
     this.getSettings();
   }
 
   loadUser() {
     this.authenticationService.getCurrentUserAsync().subscribe(
       (user) => {
-
         this.dipendenteService
           .getByIdUser(user.dipendenteID)
           .then((x) => {
-            
             this.dipendente = x[0];
           })
           .catch((err) => {
@@ -61,25 +60,25 @@ export class SettingsComponent implements OnInit {
               "Errore Caricamento dipendente (" + err["status"] + ")"
             );
           });
-      });
+      }
+    );
   }
 
   getSettings() {
     this.settingService.getSettings().then((res) => {
       this.setting = res[0];
-    })
+    });
   }
 
-  updateSettings()
-  {
+  updateSettings() {
     if (!this.setting.alertDiarioClinico) this.setting.alertDiarioClinico = 0;
     if (!this.setting.alertContratto) this.setting.alertContratto = 0;
     if (!this.setting.alertFarmaci) this.setting.alertFarmaci = 0;
-    //if (!this.setting.ScadenzaPersonalizzato) this.setting.ScadenzaPersonalizzato = 0;
+
     this.setting.alertContratto = Math.abs(this.setting.alertContratto.valueOf());
     this.setting.alertFarmaci = Math.abs(this.setting.alertFarmaci.valueOf());
     this.setting.alertDiarioClinico = Math.abs(this.setting.alertDiarioClinico.valueOf());
-    //this.setting.ScadenzaPersonalizzato = Math.abs(this.setting.ScadenzaPersonalizzato.valueOf());
+
     this.settingService.updateSettings(this.setting).then(() => {
       this.messageService.showMessage("Impostazioni Aggiornate");
     });

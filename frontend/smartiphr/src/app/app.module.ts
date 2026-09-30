@@ -11,7 +11,7 @@ import {
   FontAwesomeModule,
   FaIconLibrary,
 } from "@fortawesome/angular-fontawesome";
-
+import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { MenuItemComponent } from "./component/menu-item/menu-item.component";
 import { fas } from "@fortawesome/free-solid-svg-icons";
 import { far } from "@fortawesome/free-regular-svg-icons";
@@ -610,7 +610,13 @@ const pipes = [
     MatDatepickerModule,
     ThemeService,
     DatePipe,
+    
     { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+    {
+      provide: HTTP_INTERCEPTORS,
+      useClass: ErrorInterceptor,
+      multi: true // Permette l'utilizzo di più interceptor se ce ne sono altri
+    },
     { provide: LOCALE_ID, useValue: 'it' },
     { provide: MAT_DATE_LOCALE, useValue: "it-IT" },
   ],
