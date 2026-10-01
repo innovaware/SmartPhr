@@ -1,74 +1,84 @@
-.example-card {
-  min-width: 500px;
-  margin: 0px;
+:host {
+  display: block;
 }
 
-h3 {
-  margin-top: 5px;
-  font-weight: 600;
-  font-size: 16px;
-  color: #676a6c;
-}
-
-.close-icon {
-  transition: 1s ease-in-out;
-}
-
-.close-icon:hover {
-  transform: rotate(180deg);
-}
-
-::ng-deep .icon-outside .close-button {
-  float: right;
-  top: -52px;
-  right: -52px;
-}
-
-::ng-deep .icon-outside .mat-dialog-container {
-  overflow: unset;
-}
-
-button,
-select {
-  text-transform: none;
-}
-
-.bottom-actions {
+/* Larghezza fluida ma contenuta per evitare scrollbar */
+mat-dialog-content {
   width: 100%;
-  text-align: right;
+  max-width: 900px;
+  max-height: unset !important; /* Disabilita il vincolo di altezza massima che genera la scrollbar */
+  overflow: hidden !important; /* Blocca totalmente la comparsa delle scrollbar */
 }
 
-::ng-deep .mat-form-field-appearance-fill .mat-form-field-flex {
-  /* background-color: rgba(0, 0, 0, 0.04); */
-  background-color: white;
+.compact-form-field {
+  font-size: 13px;
 }
 
-.input-full {
+/* Layout fisso della tabella */
+.log-table {
   width: 100%;
+  table-layout: fixed;
+  border-collapse: separate;
 }
 
-
-.pad {
-  padding-left: 6%;
-  padding-top: 3%;
+th.mat-header-cell {
+  padding: 10px 12px !important;
+  background-color: #f8f9fa;
+  color: #495057;
+  font-size: 12px;
+  letter-spacing: 0.5px;
 }
 
-.title {
-  font-size: 30px;
+td.mat-cell {
+  padding: 8px 12px !important;
+  font-size: 13px;
+  vertical-align: middle;
+}
+
+/* Percentuali ben distribuite per occupare esattamente il 100% della larghezza */
+.col-data {
+  width: 20%;
+}
+
+.col-operatore {
+  width: 23%;
+}
+
+.col-classname {
+  width: 27%;
+}
+
+.col-operazione {
+  width: 30%;
+}
+
+/* Icone compatte e isolate per evitare sovrapposizioni */
+.icon-sm {
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  line-height: 18px !important;
+}
+
+.flex-shrink-0 {
+  flex-shrink: 0 !important;
+}
+
+.text-break {
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+.fs-7 {
+  font-size: 0.8rem;
   line-height: 1.2;
-  color: #676a6c;
 }
 
-
-table {
-  width: 100%;
+.table-row-hover:hover {
+  background-color: rgba(25, 118, 210, 0.04);
 }
 
-.mat-form-field {
-  font-size: 14px;
-  width: 100%;
-}
-
-.mat-column-action {
-  width: 32px;
+::ng-deep .compact-form-field .mat-form-field-wrapper {
+  padding-bottom: 0 !important;
+  margin-bottom: 0 !important;
 }

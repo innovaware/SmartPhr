@@ -48,6 +48,7 @@ export class DialogRichiestaPresidiComponent implements OnInit {
       this.messageServ.showMessageError("Seleziona materiale");
       return;
     }
+    console.log("dipendente dialog: ",this.data.dipendente);
     this.richiesta.dipendente = this.data.dipendente._id;
     this.richiesta.dipendenteName = this.data.dipendente.cognome + " " + this.data.dipendente.nome;
     this.richiesta.type = this.data.type;

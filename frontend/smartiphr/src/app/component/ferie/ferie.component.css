@@ -1,6 +1,7 @@
-.pad {
-  padding-left: 6%;
-  padding-top: 3%;
+:host {
+  display: block;
+  width: 100%;
+  overflow-x: hidden;
 }
 
 .title {
@@ -25,17 +26,9 @@ table {
 .mat-column-title {
   flex: 2;
 }
-/*
-  .mat-column-cognome {
-    width: 100px !important;
-  }
-  .mat-column-nome {
-    width: 100px !important;
-  }
-  .mat-column-email {
-    width: 100px !important;
-  }
-  .mat-column-user {
-    width: 100px !important;
-  }
-   */
+
+/* Nasconde eventuali scrollbar residue generate dalle row di Bootstrap */
+.row {
+  margin-left: 0;
+  margin-right: 0;
+}

@@ -50,8 +50,8 @@ export class AreaLogComponent implements OnInit, AfterViewInit {
         data: log.data,
         logs: log.logList.sort((a, b) => new Date(b.data).getTime() - new Date(a.data).getTime())
       },
-      width: "800px",
-      height: "550px"
+      width: "900px",
+      height: "650px"
     });
 
     dialogRef.afterClosed().subscribe(() => {

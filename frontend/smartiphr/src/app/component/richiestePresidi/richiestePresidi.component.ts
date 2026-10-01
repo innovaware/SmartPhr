@@ -57,6 +57,7 @@ export class RichiestaPresidiComponent implements OnInit {
   }
 
   AddRichiesta() {
+    console.log(this.dipendente);
     const dialogRef = this.dialog.open(DialogRichiestaPresidiComponent, {
       data: {
         dipendente: this.dipendente,

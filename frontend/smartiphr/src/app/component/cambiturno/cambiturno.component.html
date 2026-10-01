@@ -1,4 +1,4 @@
-<div class="container pad" *ngIf="!isExternal">
+<div class="w-100 overflow-hidden" *ngIf="!isExternal">
     <!-- Intestazione Pagina -->
     <div class="row align-items-center mb-3">
         <div class="col">
@@ -21,7 +21,7 @@
 
     <!-- Tabella Gestione Cambi Turni -->
     <div class="row">
-        <div class="col">
+        <div class="col p-0">
             <div class="table-responsive mat-elevation-z8 rounded-2 overflow-hidden mb-3">
                 <table mat-table [dataSource]="cambiDataSource" style="width: 100%;">
 
@@ -104,7 +104,7 @@
 </div>
 
 <!-- VISTA ESTERNA (RICHIESTA CAMBIO TURNO DIPENDENTE) -->
-<div class="container pad" *ngIf="isExternal">
+<div class="w-100 overflow-hidden" *ngIf="isExternal">
     <div class="row align-items-center mb-3">
         <div class="col">
             <h1 class="title m-0">I miei Cambi Turni</h1>

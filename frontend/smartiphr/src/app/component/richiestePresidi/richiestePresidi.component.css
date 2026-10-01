@@ -1,56 +1,7 @@
-h3 {
-  margin-top: 5px;
-  font-weight: 600;
-  font-size: 16px;
-  color: #676a6c;
-}
-
-.close-button {
-  font-size: 1.5rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #000;
-  text-shadow: 0 1px 0 #fff;
-  opacity: 0.5;
-  background: transparent;
-  border: transparent;
-
-  float: right;
-  top: -24px;
-  right: -24px;
-}
-
-.close-icon {
-  transition: 1s ease-in-out;
-}
-
-.close-icon:hover {
-  transform: rotate(180deg);
-}
-
-::ng-deep .icon-outside .close-button {
-  float: right;
-  top: -52px;
-  right: -52px;
-}
-
-::ng-deep .icon-outside .mat-dialog-container {
-  overflow: unset;
-}
-
-button,
-select {
-  text-transform: none;
-}
-
-.bottom-actions {
+:host {
+  display: block;
   width: 100%;
-  text-align: right;
-}
-
-.pad {
-  padding-left: 6%;
-  padding-top: 3%;
+  overflow-x: hidden;
 }
 
 .title {
@@ -63,21 +14,51 @@ table {
   width: 100%;
 }
 
-img {
-  width: 24px;
-  height: 24px;
-  margin-right: 15px;
+.mat-form-field {
+  font-size: 14px;
+  width: 100%;
 }
 
-.mat-dialog-title {
-  margin: unset;
+/* Previene lo scorrimento orizzontale causato dai margini negativi delle row Bootstrap */
+.row {
+  margin-left: 0;
+  margin-right: 0;
 }
 
-#btnVerifica
-button:not(:disabled) {
+/* Effetto hover per le righe della tabella */
+.table-row-hover:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
 
-  border: 1px solid #ff0000;
-  border-radius: 4px;
-  margin: 6px 0;
-  background: #ff8d00ad;
+/* Gestione Pulsanti Dialogo/Chiusura */
+.close-button {
+  font-size: 1.5rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #000;
+  text-shadow: 0 1px 0 #fff;
+  opacity: 0.5;
+  background: transparent;
+  border: transparent;
+  float: right;
+  top: -24px;
+  right: -24px;
+}
+
+.close-icon {
+  transition: 0.3s ease-in-out;
+}
+
+  .close-icon:hover {
+    transform: rotate(180deg);
+  }
+
+::ng-deep .icon-outside .close-button {
+  float: right;
+  top: -52px;
+  right: -52px;
+}
+
+::ng-deep .icon-outside .mat-dialog-container {
+  overflow: unset;
 }
